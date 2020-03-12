@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.FrontendAppConfig
+package controllers.actions
 
-@this(appConfig: FrontendAppConfig, main_template: MainTemplate)
+import com.google.inject.Inject
+import models.requests.DataRequest
+import play.api.mvc.Result
 
-@()(implicit request: Request[_], messages: Messages)
+import scala.concurrent.{ExecutionContext, Future}
 
-@main_template(title = "Hello from maintain-beneficiaries-frontend", bodyClasses = None) {
-    <h1>Hello from maintain-beneficiaries-frontend !</h1>
+class FakePlaybackIdentifierAction @Inject()(
+                                              implicit val executionContext: ExecutionContext
+                                            ) extends PlaybackIdentifierAction {
+
+  override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = Future.successful(Right(request))
+
 }

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.FrontendAppConfig
+package navigation
 
-@this(appConfig: FrontendAppConfig, main_template: MainTemplate)
+import javax.inject.{Inject, Singleton}
+import models.UserAnswers
+import pages.Page
+import play.api.mvc.Call
 
-@()(implicit request: Request[_], messages: Messages)
+@Singleton
+class Navigator @Inject()() {
 
-@main_template(title = "Hello from maintain-beneficiaries-frontend", bodyClasses = None) {
-    <h1>Hello from maintain-beneficiaries-frontend !</h1>
+  private val normalRoutes: Page => UserAnswers => Call = {
+    _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+  }
+
+  def nextPage(page: Page, userAnswers: UserAnswers): Call =
+      normalRoutes(page)(userAnswers)
+
 }

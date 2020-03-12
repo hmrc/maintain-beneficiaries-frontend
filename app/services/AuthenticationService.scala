@@ -16,7 +16,7 @@
 
 package services
 
-import com.google.inject.Inject
+import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import connectors.EnrolmentStoreConnector
 import controllers.routes
