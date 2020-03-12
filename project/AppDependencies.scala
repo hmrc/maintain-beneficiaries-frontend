@@ -4,9 +4,10 @@ import sbt.Keys.libraryDependencies
 import sbt._
 
 object AppDependencies {
+  import play.core.PlayVersion
 
   val compile = Seq(
-
+    play.sbt.PlayImport.ws,
     "uk.gov.hmrc"             %% "govuk-template"           % "5.52.0-play-26",
     "uk.gov.hmrc"             %% "play-ui"                  % "8.8.0-play-26",
     "uk.gov.hmrc"             %% "bootstrap-play-26"        % "1.5.0",
@@ -22,8 +23,10 @@ object AppDependencies {
     "org.jsoup"               %  "jsoup"                    % "1.10.2"                % "test",
     "com.typesafe.play"       %% "play-test"                % current                 % "test",
     "org.mockito"             %  "mockito-all"              % "1.10.19"               % "test",
-    "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test, it",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.2"                 % "test, it"
+    "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test",
+    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.2"                 % "test"
   )
+
+  def apply(): Seq[ModuleID] = compile ++ test
 
 }
