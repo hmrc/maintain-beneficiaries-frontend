@@ -1,0 +1,47 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+    main_template: MainTemplate
+)
+
+@(utr: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = messages("trustNotClaimed.title")
+    ) {
+
+    @components.back_link()
+
+    <span class="govuk-caption-xl">@messages("trustNotClaimed.subheading", utr)</span>
+    @components.heading("trustNotClaimed.heading")
+
+    <p>@messages("trustNotClaimed.p1")</p>
+
+    <ol class="govuk-list--number">
+        <li class="bold">@messages("trustNotClaimed.bullet.1.title")</li>
+        <p>@messages("trustNotClaimed.bullet.1.p1")</p>
+        <p>@messages("trustNotClaimed.bullet.1.p2") <a target="_blank" href="https://www.tax.service.gov.uk/government-gateway-registration-frontend/choose-your-account?continue=%2Ftrusts-forms%2Fform%2Fregistration-of-a-trust%2Fnew&origin=unknown">@messages("trustNotClaimed.bullet.1.p2.a")</a></p>
+        <p>@messages("trustNotClaimed.bullet.1.p3")</p>
+        <p>@messages("trustNotClaimed.bullet.1.p4")</p>
+        <li class="bold">@messages("trustNotClaimed.bullet.2.title")</li>
+        <p>@messages("trustNotClaimed.bullet.2.p1")</p>
+        <p>@messages("trustNotClaimed.bullet.2.p2")</p>
+        <p>@messages("trustNotClaimed.bullet.2.p3") <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts" target="_blank">@messages("trustNotClaimed.bullet.2.p3.a")</a></p>
+        <p>@messages("trustNotClaimed.bullet.2.p4") <a href="@controllers.routes.IndexController.onPageLoad(utr)">@messages("trustNotClaimed.bullet.2.p4.a")</a></p>
+    </ol>
+
+}

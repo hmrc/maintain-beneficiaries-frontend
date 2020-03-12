@@ -1,9 +1,21 @@
 # microservice specific routes
 
-GET        /hello-world             controllers.HelloWorldController.helloWorld
+GET        /hello-world                                                     controllers.HelloWorldController.helloWorld
 
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
 
 GET        /language/:lang                                                  controllers.LanguageSwitchController.switchToLanguage(lang: String)
+
+GET        /this-service-has-been-reset                                     controllers.SessionExpiredController.onPageLoad
+
+GET        /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
+
+GET        /create-agent-services-account                                   controllers.CreateAgentServicesAccountController.onPageLoad()
+
+GET        /trust-not-claimed                                               controllers.TrustNotClaimedController.onPageLoad()
+
+GET        /agent-not-authorised                                            controllers.AgentNotAuthorisedController.onPageLoad()
+
+GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)
