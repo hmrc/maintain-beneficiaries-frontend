@@ -24,7 +24,10 @@ object AppDependencies {
     "com.typesafe.play"       %% "play-test"                % current                 % "test",
     "org.mockito"             %  "mockito-all"              % "1.10.19"               % "test",
     "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.2"                 % "test"
+    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.2"                 % "test",
+    "org.scalacheck"          %% "scalacheck"               % "1.14.0"                % "test",
+    "wolfendale"              %% "scalacheck-gen-regexp"    % "0.1.1"                 % "test",
+    "com.github.tomakehurst"  % "wiremock-standalone"       % "2.17.0"                % "test"
   )
 
   def apply(): Seq[ModuleID] = compile ++ test
