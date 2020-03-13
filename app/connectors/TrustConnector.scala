@@ -32,6 +32,12 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
     http.GET[TrustStartDate](getTrustStartDateUrl(utr))
   }
 
+  private def getBeneficiariesUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/transformed/beneficiaries"
+
+  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Trustees] = {
+    http.GET[Trustees](getBeneficiariesUrl(utr))
+  }
+
 }
 
 
