@@ -16,23 +16,24 @@
 
 package services
 
+import com.google.inject.ImplementedBy
 import connectors.TrustConnector
 import javax.inject.Inject
-import models.{AllTrustees, LeadTrustee, RemoveTrustee, Trustee, Trustees}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import models.Beneficiaries
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait TrustService {
+class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
 
-  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Trustees]
+  override def getBeneficiaries(utr: String)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[Beneficiaries] =
+    connector.getBeneficiaries(utr)
 
 }
 
-class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
+@ImplementedBy(classOf[TrustServiceImpl])
+trait TrustService {
 
-  override def getBeneficiaries(utr: String)(implicit hc:HeaderCarrier, ec:ExecutionContext) = {
-    connector.getBeneficiaries(utr)
-  }
+  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries]
 
 }

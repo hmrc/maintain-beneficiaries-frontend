@@ -19,7 +19,8 @@ package services
 import java.time.LocalDate
 
 import connectors.TrustConnector
-import models.{Name, NationalInsuranceNumber}
+import models.IdentificationDetailOptions.Passport
+import models.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, Name, NationalInsuranceNumber}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -37,66 +38,23 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
   "Trust service" - {
 
-    "get all trustees" in {
+    "get beneficiaries" in {
 
-      val trusteeInd = TrusteeIndividual(
+      val individual = IndividualBeneficiary(
         name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
         dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        phoneNumber = None,
-        identification = Some(TrustIdentification(None, Some("JS123456A"), None, None)),
-        entityStart = LocalDate.parse("2019-02-28"),
-        provisional = true
+        provisional = true,
+        nationalInsuranceNumber = None,
+        address = None,
+        vulnerableYesNo = false,
+        income = None,
+        incomeYesNo = false
       )
 
-      val trustees = List(trusteeInd)
+      val classOf = ClassOfBeneficiary("Test Beneficiary", false)
 
-      val leadTrusteeIndividual = LeadTrusteeIndividual(
-        name = Name(
-          firstName = "First",
-          middleName = None,
-          lastName = "Last"
-        ),
-        dateOfBirth = LocalDate.parse("2010-10-10"),
-        phoneNumber = "+446565657",
-        email = None,
-        identification = NationalInsuranceNumber("JP121212A"),
-        address = None
-      )
-
-      when(mockConnector.getTrustees(any())(any(), any()))
-        .thenReturn(Future.successful(Trustees(trustees)))
-
-      when(mockConnector.getLeadTrustee(any())(any(), any()))
-        .thenReturn(Future.successful(leadTrusteeIndividual))
-
-      val service = new TrustServiceImpl(mockConnector)
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
-
-      val result = service.getAllTrustees("1234567890")
-
-      whenReady(result) { r =>
-        r mustBe AllTrustees(
-          lead = Some(leadTrusteeIndividual),
-          trustees = trustees
-        )
-      }
-
-    }
-
-    "get trustees" in {
-
-      val trusteeInd = TrusteeIndividual(
-        name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
-        dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        phoneNumber = None,
-        identification = Some(TrustIdentification(None, Some("JS123456A"), None, None)),
-        entityStart = LocalDate.parse("2019-02-28"),
-        provisional = true
-      )
-
-      when(mockConnector.getTrustees(any())(any(), any()))
-        .thenReturn(Future.successful(Trustees(List(trusteeInd))))
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.successful(Beneficiaries(List(individual, classOf))))
 
       val service = new TrustServiceImpl(mockConnector)
 
@@ -104,61 +62,8 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
       val result = service.getBeneficiaries("1234567890")
 
-      whenReady(result) { r =>
-        r mustBe Trustees(List(trusteeInd))
-      }
-
-    }
-
-    "remove a trustee" in {
-
-      when(mockConnector.removeTrustee(any(),any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(OK, None)))
-
-      val service = new TrustServiceImpl(mockConnector)
-
-      val trustee : RemoveTrustee =  RemoveTrustee(
-        index = 0,
-        endDate = LocalDate.now()
-      )
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
-
-      val result = service.removeTrustee("1234567890", trustee)
-
-      whenReady(result) { r =>
-        r.status mustBe 200
-      }
-
-    }
-
-
-    "get trustee" in {
-
-      def trusteeInd(id: Int) = TrusteeIndividual(
-        name = Name(firstName = s"First $id", middleName = None, lastName = s"Last $id"),
-        dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        phoneNumber = None,
-        identification = Some(TrustIdentification(None, Some("JS123456A"), None, None)),
-        entityStart = LocalDate.parse("2019-02-28"),
-        provisional = true
-      )
-
-      val expectedResult = trusteeInd(2)
-
-      val trustees = List(trusteeInd(1), trusteeInd(2), trusteeInd(3))
-
-      when(mockConnector.getTrustees(any())(any(), any()))
-        .thenReturn(Future.successful(Trustees(trustees)))
-
-      val service = new TrustServiceImpl(mockConnector)
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
-
-      val result = service.getTrustee("1234567890", 1)
-
-      whenReady(result) { r =>
-        r mustBe expectedResult
+      whenReady(result) {
+        _ mustBe Beneficiaries(List(individual, classOf))
       }
 
     }

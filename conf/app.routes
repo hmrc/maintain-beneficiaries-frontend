@@ -1,7 +1,5 @@
 # microservice specific routes
 
-GET        /hello-world                                                     controllers.HelloWorldController.helloWorld
-
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
@@ -17,5 +15,9 @@ GET        /create-agent-services-account                                   cont
 GET        /trust-not-claimed                                               controllers.TrustNotClaimedController.onPageLoad()
 
 GET        /agent-not-authorised                                            controllers.AgentNotAuthorisedController.onPageLoad()
+
+GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
+POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
+POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

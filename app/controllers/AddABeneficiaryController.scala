@@ -18,19 +18,22 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.StandardActionSets
-import forms.YesNoFormProvider
+import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
-import models.Enumerable
+import models.{AddABeneficiary, Beneficiaries, Enumerable}
 import navigation.Navigator
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.AddABeneficiaryViewHelper
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class AddABeneficiaryController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -38,59 +41,53 @@ class AddABeneficiaryController @Inject()(
                                        navigator: Navigator,
                                        trust: TrustService,
                                        standardActionSets: StandardActionSets,
-                                       addAnotherFormProvider: AddATrusteeFormProvider,
+                                       addAnotherFormProvider: AddABeneficiaryFormProvider,
                                        yesNoFormProvider: YesNoFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       addAnotherView: AddATrusteeView,
-                                       yesNoView: AddATrusteeYesNoView,
+                                       addAnotherView: AddABeneficiaryView,
+                                       yesNoView: AddABeneficiaryYesNoView,
                                        val appConfig: FrontendAppConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val addAnotherForm : Form[AddATrustee] = addAnotherFormProvider()
+  val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
 
-  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addATrusteeYesNo")
+  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
-  private def returnToStart(userAffinityGroup : AffinityGroup): Result = {userAffinityGroup match {
+  private def returnToStart(userAffinityGroup : AffinityGroup): Result = userAffinityGroup match {
     case Agent => Redirect(appConfig.maintainATrustAgentDeclarationUrl)
     case _ => Redirect(appConfig.maintainATrustIndividualDeclarationUrl)
-  }}
+  }
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getAllTrustees(request.userAnswers.utr) map {
-        case AllTrustees(None, Nil) =>
+      trust.getBeneficiaries(request.userAnswers.utr) map {
+        case Beneficiaries(Nil) =>
           Ok(yesNoView(yesNoForm))
-        case all: AllTrustees =>
+        case all: Beneficiaries =>
 
-          val trustees = new AddATrusteeViewHelper(all).rows
+          val beneficiaries = new AddABeneficiaryViewHelper(all).rows
 
           Ok(addAnotherView(
             form = addAnotherForm,
-            inProgressTrustees = trustees.inProgress,
-            completeTrustees = trustees.complete,
-            isLeadTrusteeDefined = all.lead.isDefined,
+            inProgressBeneficiaries = beneficiaries.inProgress,
+            completeBeneficiaries = beneficiaries.complete,
             heading = all.addToHeading
           ))
       }
   }
 
-  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
+  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData {
     implicit request =>
-
       yesNoForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          Future.successful(BadRequest(yesNoView(formWithErrors)))
+          BadRequest(yesNoView(formWithErrors))
         },
         addNow => {
-          for {
-            trustees <- trust.getAllTrustees(request.userAnswers.utr)
-          } yield {
-            if (addNow) {
-              Redirect(controllers.routes.LeadTrusteeOrTrusteeController.onPageLoad())
-            } else {
-              returnToStart(request.user.affinityGroup)
-            }
+          if (addNow) {
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          } else {
+            returnToStart(request.user.affinityGroup)
           }
         }
       )
@@ -99,28 +96,27 @@ class AddABeneficiaryController @Inject()(
   def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trust.getAllTrustees(request.userAnswers.utr).map { trustees =>
+      trust.getBeneficiaries(request.userAnswers.utr).map { beneficiaries =>
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
-            val rows = new AddATrusteeViewHelper(trustees).rows
+            val rows = new AddABeneficiaryViewHelper(beneficiaries).rows
 
             BadRequest(
               addAnotherView(
                 formWithErrors,
                 rows.inProgress,
                 rows.complete,
-                isLeadTrusteeDefined = trustees.lead.isDefined,
-                trustees.addToHeading
+                beneficiaries.addToHeading
               )
             )
           },
           {
-            case AddATrustee.YesNow =>
-              Redirect(controllers.trustee.routes.IndividualOrBusinessController.onPageLoad())
-            case AddATrustee.YesLater =>
+            case AddABeneficiary.YesNow =>
+              Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+            case AddABeneficiary.YesLater =>
               returnToStart(request.user.affinityGroup)
-            case AddATrustee.NoComplete =>
+            case AddABeneficiary.NoComplete =>
               returnToStart(request.user.affinityGroup)
           }
         )

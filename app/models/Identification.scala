@@ -21,6 +21,7 @@ import java.time.LocalDate
 import play.api.libs.json.{Format, Json, Reads, Writes, __}
 
 sealed trait IndividualIdentification
+
 object IndividualIdentification {
   implicit val reads: Reads[IndividualIdentification] =
     (__ \ 'passport).read[CombinedPassportOrIdCard].widen[IndividualIdentification] orElse
