@@ -19,17 +19,7 @@ package models
 import java.time.LocalDate
 
 import play.api.i18n.{Messages, MessagesProvider}
-import play.api.libs.json.{Format, Json}
-
-sealed trait Beneficiary {
-  val provisional : Boolean
-
-  def isNewlyAdded : Boolean = provisional
-}
-
-object Beneficiary {
-  implicit val formats: Format[Beneficiary] = Json.format[Beneficiary]
-}
+import play.api.libs.json.{Format, Json, Reads, __}
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -37,23 +27,22 @@ final case class IndividualBeneficiary(name: Name,
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
-                                       incomeYesNo: Boolean,
-                                       provisional: Boolean
-                                      ) extends Beneficiary
+                                       incomeYesNo: Boolean
+                                      )
 
 object IndividualBeneficiary {
-  implicit val classFormat: Format[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
+  implicit val classReads: Reads[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
 }
 
-final case class ClassOfBeneficiary(description: String, provisional: Boolean) extends Beneficiary
+final case class ClassOfBeneficiary(description: String)
 
 object ClassOfBeneficiary {
   implicit val classFormat : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
 }
 
-case class Beneficiaries(beneficiaries: List[Beneficiary]) {
+case class Beneficiary(individualDetails: List[IndividualBeneficiary]) {
 
-  def addToHeading()(implicit mp: MessagesProvider) = beneficiaries.size match {
+  def addToHeading()(implicit mp: MessagesProvider) = individualDetails.size match {
     case 0 => Messages("addABeneficiary.heading")
     case 1 => Messages("addABeneficiary.singular.heading")
     case l => Messages("addABeneficiary.count.heading", l)
@@ -61,6 +50,7 @@ case class Beneficiaries(beneficiaries: List[Beneficiary]) {
 
 }
 
-object Beneficiaries {
-  implicit val formats: Format[Beneficiaries] = Json.format[Beneficiaries]
+object Beneficiary {
+  implicit val reads: Reads[Beneficiary] =
+    ((__ \ "beneficiary" \ "individualDetails").read[List[IndividualBeneficiary]]).map(Beneficiary(_))
 }

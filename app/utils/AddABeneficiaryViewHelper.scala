@@ -16,39 +16,28 @@
 
 package utils
 
-import models.{Beneficiaries, Beneficiary, ClassOfBeneficiary, IndividualBeneficiary}
+import models.{Beneficiary, IndividualBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
-class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
+class AddABeneficiaryViewHelper(beneficiaries: Beneficiary)(implicit messages: Messages) {
 
-  private def render(beneficiary : (Beneficiary, Int)) : AddRow = {
+  private def render(beneficiary : (IndividualBeneficiary, Int)) : AddRow = {
 
-    beneficiary match {
-      case (individual: IndividualBeneficiary, index) =>
+
         AddRow(
-          name = individual.name.displayName,
+          name = beneficiary._1.name.displayName,
           typeLabel = messages(s"entities.beneficiaries.individual"),
           changeLabel = messages("site.change.details"),
           changeUrl = None,
           removeLabel =  messages("site.delete"),
           removeUrl = None
         )
-      case (classOf : ClassOfBeneficiary, index) =>
-        AddRow(
-          name = classOf.description,
-          typeLabel = messages(s"entities.beneficiaries.organisation"),
-          changeLabel = messages("site.change.details"),
-          changeUrl = None,
-          removeLabel =  messages("site.delete"),
-          removeUrl = None
-        )
-    }
   }
 
   def rows : AddToRows = {
 
-    val complete = beneficiaries.beneficiaries.zipWithIndex.map(render)
+    val complete = beneficiaries.individualDetails.zipWithIndex.map(render)
 
     AddToRows(Nil, complete)
   }
