@@ -54,11 +54,6 @@ class AddABeneficiaryController @Inject()(
 
   val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
-  private def returnToStart(userAffinityGroup : AffinityGroup): Result = userAffinityGroup match {
-    case Agent => Redirect(appConfig.maintainATrustAgentDeclarationUrl)
-    case _ => Redirect(appConfig.maintainATrustIndividualDeclarationUrl)
-  }
-
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
@@ -88,7 +83,7 @@ class AddABeneficiaryController @Inject()(
           if (addNow) {
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           } else {
-            returnToStart(request.user.affinityGroup)
+            Redirect(appConfig.maintainATrustOverview)
           }
         }
       )
@@ -116,9 +111,9 @@ class AddABeneficiaryController @Inject()(
             case AddABeneficiary.YesNow =>
               Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
             case AddABeneficiary.YesLater =>
-              returnToStart(request.user.affinityGroup)
+              Redirect(appConfig.maintainATrustOverview)
             case AddABeneficiary.NoComplete =>
-              returnToStart(request.user.affinityGroup)
+              Redirect(appConfig.maintainATrustOverview)
           }
         )
       }
