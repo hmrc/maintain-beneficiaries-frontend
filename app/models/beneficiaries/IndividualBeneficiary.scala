@@ -39,7 +39,7 @@ object IndividualBeneficiary {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).read[Boolean] and
+      (__ \ 'beneficiaryDiscretion).readWithDefault[Boolean](true) and
       (__ \ "entityStart").read[LocalDate]).apply(IndividualBeneficiary.apply _)
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
