@@ -20,7 +20,8 @@ import config.FrontendAppConfig
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
-import models.{AddABeneficiary, Beneficiary, Enumerable}
+import models.beneficiaries.Beneficiaries
+import models.{AddABeneficiary, Enumerable}
 import navigation.Navigator
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,9 +63,9 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       trust.getBeneficiaries(request.userAnswers.utr) map {
-        case Beneficiary(Nil) =>
+        case Beneficiaries(Nil) =>
           Ok(yesNoView(yesNoForm))
-        case all: Beneficiary =>
+        case all: Beneficiaries =>
 
           val beneficiaries = new AddABeneficiaryViewHelper(all).rows
 

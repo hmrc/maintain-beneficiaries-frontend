@@ -18,7 +18,8 @@ package connectors
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.{Beneficiary, TrustStartDate}
+import models.TrustStartDate
+import models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -34,8 +35,8 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
 
   private def getBeneficiariesUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/transformed/beneficiaries"
 
-  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Beneficiary] = {
-    http.GET[Beneficiary](getBeneficiariesUrl(utr))
+  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Beneficiaries] = {
+    http.GET[Beneficiaries](getBeneficiariesUrl(utr))
   }
 
 }

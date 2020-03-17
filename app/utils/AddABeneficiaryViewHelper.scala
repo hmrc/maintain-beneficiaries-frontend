@@ -16,17 +16,15 @@
 
 package utils
 
-import models.{Beneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
-class AddABeneficiaryViewHelper(beneficiaries: Beneficiary)(implicit messages: Messages) {
+class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def render(beneficiary : (IndividualBeneficiary, Int)) : AddRow = {
-
-
+  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
         AddRow(
-          name = beneficiary._1.name.displayName,
+          name = beneficiary.name.displayName,
           typeLabel = messages(s"entities.beneficiaries.individual"),
           changeLabel = messages("site.change.details"),
           changeUrl = None,
@@ -36,8 +34,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiary)(implicit messages: M
   }
 
   def rows : AddToRows = {
-
-    val complete = beneficiaries.individualDetails.zipWithIndex.map(render)
+    val complete = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
 
     AddToRows(Nil, complete)
   }

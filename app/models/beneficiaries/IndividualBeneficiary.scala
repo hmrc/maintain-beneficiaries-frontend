@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.beneficiaries
 
 import java.time.LocalDate
 
-import play.api.i18n.{Messages, MessagesProvider}
-import play.api.libs.json.{Format, Json, Reads, __}
+import models.{Address, Name}
+import play.api.libs.json.{Json, Reads}
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -27,30 +27,8 @@ final case class IndividualBeneficiary(name: Name,
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
-                                       incomeYesNo: Boolean
-                                      )
+                                       incomeYesNo: Boolean)
 
 object IndividualBeneficiary {
-  implicit val classReads: Reads[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
-}
-
-final case class ClassOfBeneficiary(description: String)
-
-object ClassOfBeneficiary {
-  implicit val classFormat : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
-}
-
-case class Beneficiary(individualDetails: List[IndividualBeneficiary]) {
-
-  def addToHeading()(implicit mp: MessagesProvider) = individualDetails.size match {
-    case 0 => Messages("addABeneficiary.heading")
-    case 1 => Messages("addABeneficiary.singular.heading")
-    case l => Messages("addABeneficiary.count.heading", l)
-  }
-
-}
-
-object Beneficiary {
-  implicit val reads: Reads[Beneficiary] =
-    ((__ \ "beneficiary" \ "individualDetails").read[List[IndividualBeneficiary]]).map(Beneficiary(_))
+  implicit val reads: Reads[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
 }
