@@ -25,20 +25,22 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class FrontendAppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+
   private val contactBaseUrl: String = servicesConfig.baseUrl("contact-frontend")
 
   private val contactHost: String = config.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier: String = "trusts"
+  private val contactFormServiceIdentifier: String = "maintain-beneficiaries-frontend"
 
   private val assetsUrl: String = config.get[String]("assets.url")
-  private val serviceIdentifier: String = "MyService"
+
+  lazy val maintainATrustOverview: String = config.get[String]("urls.maintainATrustOverview")
 
   val assetsPrefix: String   = assetsUrl + config.get[String]("assets.version")
   val analyticsToken: String = config.get[String](s"google-analytics.token")
   val analyticsHost: String  = config.get[String](s"google-analytics.host")
 
-  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$serviceIdentifier"
-  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifier"
+  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   val betaFeedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
@@ -47,9 +49,6 @@ class FrontendAppConfig @Inject()(config: Configuration, servicesConfig: Service
   lazy val loginContinueUrl: String = config.get[String]("urls.loginContinue")
   lazy val lostUtrUrl : String = config.get[String]("urls.lostUtr")
   lazy val logoutUrl: String = config.get[String]("urls.logout")
-
-  val maintainATrustAgentDeclarationUrl: String = config.get[String]("urls.agentDeclaration")
-  val maintainATrustIndividualDeclarationUrl: String = config.get[String]("urls.individualDeclaration")
 
   lazy val trustsUrl: String = config.get[Service]("microservice.services.trusts").baseUrl
   lazy val enrolmentStoreProxyUrl: String = config.get[Service]("microservice.services.enrolment-store-proxy").baseUrl
