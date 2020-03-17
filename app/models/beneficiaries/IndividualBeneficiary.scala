@@ -35,7 +35,7 @@ object IndividualBeneficiary {
   implicit val reads: Reads[IndividualBeneficiary] =
     ((__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
-      (__ \ 'identification \ 'nino).readNullable[String] and
+      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'nino)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and

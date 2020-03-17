@@ -155,6 +155,37 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         entityStart = LocalDate.of(2017, 2, 28)
       )
     }
+    "deserialise from backend JSON with no identification" in {
+      val json = Json.parse(
+        """
+          |{
+          |    "lineNo": "1",
+          |    "bpMatchStatus": "01",
+          |    "name": {
+          |      "firstName": "Nicola",
+          |      "middleName": "Andrey",
+          |      "lastName": "Jackson"
+          |    },
+          |    "dateOfBirth": "1970-02-28",
+          |    "vulnerableBeneficiary": true,
+          |    "beneficiaryType": "Director",
+          |    "beneficiaryDiscretion": true,
+          |    "beneficiaryShareOfIncome": "0",
+          |    "entityStart": "2017-02-28"
+          |}
+          |""".stripMargin)
 
+      val beneficiary = json.as[IndividualBeneficiary]
+      beneficiary mustBe IndividualBeneficiary(
+        name = Name("Nicola", Some("Andrey"), "Jackson"),
+        dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
+        nationalInsuranceNumber = None,
+        address = None,
+        vulnerableYesNo = true,
+        income = Some("0"),
+        incomeYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28)
+      )
+    }
   }
 }
