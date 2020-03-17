@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-package viewmodels.addAnother
+package forms
 
-case class AddRow(name: String, typeLabel: String, changeLabel : String, changeUrl: Option[String], removeLabel: String, removeUrl: Option[String])
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
+class YesNoFormProvider @Inject() extends Mappings {
+
+  def withPrefix(prefix: String): Form[Boolean] =
+    Form(
+      "value" -> boolean(s"$prefix.error.required")
+    )
+}

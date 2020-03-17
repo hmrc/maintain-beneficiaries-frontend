@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.FrontendAppConfig
+package forms
 
-@this(appConfig: FrontendAppConfig, main_template: MainTemplate)
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.AddABeneficiary
+import play.api.data.Form
 
-@()(implicit request: Request[_], messages: Messages)
+class AddABeneficiaryFormProvider @Inject() extends Mappings {
 
-@main_template(title = "Hello from maintain-beneficiaries-frontend", bodyClasses = None) {
-    <h1>Hello from maintain-beneficiaries-frontend !</h1>
+  def apply(): Form[AddABeneficiary] =
+    Form(
+      "value" -> enumerable[AddABeneficiary]("addABeneficiary.error.required")
+    )
 }

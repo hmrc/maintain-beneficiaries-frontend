@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package viewmodels.addAnother
+package models.beneficiaries
 
-case class AddRow(name: String, typeLabel: String, changeLabel : String, changeUrl: Option[String], removeLabel: String, removeUrl: Option[String])
+import play.api.libs.json.{Format, Json}
 
+final case class ClassOfBeneficiary(description: String)
+
+object ClassOfBeneficiary {
+  implicit val formats : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
+}

@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-package connectors
+package services
 
-import config.FrontendAppConfig
+import com.google.inject.ImplementedBy
+import connectors.TrustConnector
 import javax.inject.Inject
-import models.TrustStartDate
 import models.beneficiaries.Beneficiaries
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
+class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
 
-  private def getTrustStartDateUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/trust-start-date"
-
-  def getTrustStartDate(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[TrustStartDate] = {
-    http.GET[TrustStartDate](getTrustStartDateUrl(utr))
-  }
-
-  private def getBeneficiariesUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/transformed/beneficiaries"
-
-  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[Beneficiaries] = {
-    http.GET[Beneficiaries](getBeneficiariesUrl(utr))
-  }
+  override def getBeneficiaries(utr: String)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[Beneficiaries] =
+    connector.getBeneficiaries(utr)
 
 }
 
+@ImplementedBy(classOf[TrustServiceImpl])
+trait TrustService {
 
+  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries]
+
+}
