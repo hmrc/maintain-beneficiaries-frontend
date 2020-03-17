@@ -51,6 +51,9 @@ class FrontendAppConfig @Inject()(config: Configuration, servicesConfig: Service
   lazy val logoutUrl: String = config.get[String]("urls.logout")
 
   lazy val trustsUrl: String = config.get[Service]("microservice.services.trusts").baseUrl
+
+  lazy val trustsStoreUrl: String = config.get[Service]("microservice.services.trusts-store").baseUrl
+
   lazy val enrolmentStoreProxyUrl: String = config.get[Service]("microservice.services.enrolment-store-proxy").baseUrl
 
   lazy val relationshipName: String =

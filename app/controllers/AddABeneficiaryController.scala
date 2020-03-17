@@ -17,6 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
+import connectors.TrustStoreConnector
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
@@ -34,7 +35,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddABeneficiaryController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -47,7 +48,8 @@ class AddABeneficiaryController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddABeneficiaryView,
                                        yesNoView: AddABeneficiaryYesNoView,
-                                       val appConfig: FrontendAppConfig
+                                       val appConfig: FrontendAppConfig,
+                                       trustStoreConnector: TrustStoreConnector
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
@@ -92,28 +94,32 @@ class AddABeneficiaryController @Inject()(
   def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trust.getBeneficiaries(request.userAnswers.utr).map { beneficiaries =>
+      trust.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
             val rows = new AddABeneficiaryViewHelper(beneficiaries).rows
 
-            BadRequest(
+            Future.successful(BadRequest(
               addAnotherView(
                 formWithErrors,
                 rows.inProgress,
                 rows.complete,
                 beneficiaries.addToHeading
               )
-            )
+            ))
           },
           {
             case AddABeneficiary.YesNow =>
-              Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+              Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
             case AddABeneficiary.YesLater =>
-              Redirect(appConfig.maintainATrustOverview)
+              Future.successful(Redirect(appConfig.maintainATrustOverview))
             case AddABeneficiary.NoComplete =>
-              Redirect(appConfig.maintainATrustOverview)
+              for {
+                _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+              } yield {
+                Redirect(appConfig.maintainATrustOverview)
+              }
           }
         )
       }
