@@ -48,8 +48,8 @@ class DescriptionController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getBeneficiary(request.userAnswers.utr, index).flatMap {
-        case ClassOfBeneficiary(description) => Future.successful(Ok(view(form.fill(description), index)))
+      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
+        case ClassOfBeneficiary(description, _) => Future.successful(Ok(view(form.fill(description), index)))
         case _ => Future.successful(Ok(view(form, index)))
       }
   }

@@ -16,6 +16,8 @@
 
 package controllers.classofbeneficiary
 
+import java.time.LocalDate
+
 import base.SpecBase
 import connectors.TrustConnector
 import forms.StandardSingleFieldFormProvider
@@ -38,14 +40,15 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[String] = new StandardSingleFieldFormProvider().withPrefix("classOfBeneficiary.description")
   val index = 0
   lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad(index).url
-  val description = "Description"
+  val description: String = "Description"
+  val date: LocalDate = LocalDate.parse("2019-02-28")
 
   val mockTrustConnector: TrustConnector = mock[TrustConnector]
-  when(mockTrustConnector.getBeneficiaries(any())(any(), any())).thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description)))))
+  when(mockTrustConnector.getBeneficiaries(any())(any(), any())).thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date)))))
   when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
   val mockTrustService: TrustService = mock[TrustService]
-  when(mockTrustService.getBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(ClassOfBeneficiary(description)))
+  when(mockTrustService.getUnidentifiedBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(ClassOfBeneficiary(description, date)))
 
   "Description Controller" must {
 

@@ -78,20 +78,26 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
         address = None,
         vulnerableYesNo = false,
         income = None,
-        incomeYesNo = false
+        incomeYesNo = false,
+        entityStart = LocalDate.parse("2019-02-28")
+      )
+
+      val unidentified = ClassOfBeneficiary(
+        description = "description",
+        entityStart = LocalDate.parse("2019-02-28")
       )
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), Nil)))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified))))
 
       val service = new TrustServiceImpl(mockConnector)
 
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
-      val result = service.getBeneficiary("1234567890", index)
+      val result = service.getUnidentifiedBeneficiary("1234567890", index)
 
       whenReady(result) {
-        _ mustBe individual
+        _ mustBe unidentified
       }
 
     }

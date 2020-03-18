@@ -29,7 +29,7 @@ final case class IndividualBeneficiary(name: Name,
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
                                        incomeYesNo: Boolean,
-                                       entityStart: LocalDate) extends Beneficiary
+                                       entityStart: LocalDate)
 
 object IndividualBeneficiary {
   implicit val reads: Reads[IndividualBeneficiary] =
