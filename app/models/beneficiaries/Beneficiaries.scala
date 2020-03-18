@@ -25,7 +25,7 @@ trait Beneficiary
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          classOf: List[ClassOfBeneficiary]) {
 
-  def addToHeading()(implicit mp: MessagesProvider) = individualDetails.size match {
+  def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf).size match {
     case 0 => Messages("addABeneficiary.heading")
     case 1 => Messages("addABeneficiary.singular.heading")
     case l => Messages("addABeneficiary.count.heading", l)

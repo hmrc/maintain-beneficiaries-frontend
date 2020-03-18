@@ -63,7 +63,7 @@ class AddABeneficiaryController @Inject()(
         case all: Beneficiaries =>
 
           val beneficiaries = new AddABeneficiaryViewHelper(all).rows
-println(">>>>>>>>>")
+
           Ok(addAnotherView(
             form = addAnotherForm,
             inProgressBeneficiaries = beneficiaries.inProgress,

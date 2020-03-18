@@ -46,11 +46,6 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val addTrusteeForm = new AddABeneficiaryFormProvider()()
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
-  val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None)
-  )
-
   private val beneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
@@ -62,9 +57,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     incomeYesNo = false
   )
 
-  private val classOfBeneficiary = ClassOfBeneficiary("Class of beneficiaries", entityStart = LocalDate.of(2019,9,23))
+  private val classOfBeneficiary = ClassOfBeneficiary("Beneficiaries description", entityStart = LocalDate.of(2019,9,23))
 
   val beneficiaries = Beneficiaries(List(beneficiary), List(classOfBeneficiary))
+
+  val beneficiaryRows = List(
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
+    AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None)
+  )
 
   class FakeService(data: Beneficiaries) extends TrustService {
 
