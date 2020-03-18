@@ -55,7 +55,7 @@ class TrustsStoreConnectorSpec extends SpecBase
           |""".stripMargin)
 
       server.stubFor(
-        post(urlEqualTo("/trusts-store/maintain/tasks/trustees/123456789"))
+        post(urlEqualTo("/trusts-store/maintain/tasks/beneficiaries/123456789"))
           .willReturn(okJson(json.toString))
       )
 
@@ -81,7 +81,7 @@ class TrustsStoreConnectorSpec extends SpecBase
       val connector = application.injector.instanceOf[TrustStoreConnector]
 
       server.stubFor(
-        post(urlEqualTo("/trusts-store/maintain/tasks/trustees/123456789"))
+        post(urlEqualTo("/trusts-store/maintain/tasks/beneficiaries/123456789"))
           .willReturn(serverError())
       )
 
