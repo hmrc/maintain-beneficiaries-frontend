@@ -8,13 +8,11 @@ site.change.details = Change details
 site.no = No
 site.yes = Yes
 site.continue = Continue
-site.service_name = Maintain a trustee
+site.service_name = Maintain beneficiaries
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980
-site.inprogress = In Progress
-site.complete = Completed
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -29,6 +27,24 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+addABeneficiaryYesNo.title = Do you want to add a beneficiary?
+addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
+addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiary
+
+addABeneficiary.title = Add a beneficiary
+addABeneficiary.heading = Add a beneficiary
+addABeneficiary.singular.heading = Add a beneficiary
+addABeneficiary.count.heading = The trust has {0} beneficiaries
+addABeneficiary.additional-content = Do you want to add a new beneficiary?
+addABeneficiary.add-them-now = Yes, I want to add them now
+addABeneficiary.add-them-later = No, not now
+addABeneficiary.no-complete = No, all the beneficiaries are up to date
+addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
+addABeneficiary.error.required = Select yes if you want to add a new beneficiary
+
+entities.beneficiary = Beneficiaries
+entities.beneficiaries.individual = Named individual
 
 classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
