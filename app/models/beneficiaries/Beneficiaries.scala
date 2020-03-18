@@ -23,7 +23,8 @@ import play.api.libs.functional.syntax._
 trait Beneficiary
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
-                         classOf: List[ClassOfBeneficiary]) {
+                         classOf: List[ClassOfBeneficiary],
+                         company: List[CompanyBeneficiary]) {
 
   def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf).size match {
     case 0 => Messages("addABeneficiary.heading")
@@ -37,5 +38,6 @@ object Beneficiaries {
   implicit val reads: Reads[Beneficiaries] =
     ((__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
+      and (__ \ "beneficiary" \ "company").readWithDefault[List[CompanyBeneficiary]](Nil)
       ).apply(Beneficiaries.apply _)
 }

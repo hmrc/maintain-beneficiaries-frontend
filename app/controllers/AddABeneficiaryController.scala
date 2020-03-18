@@ -58,7 +58,7 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       trust.getBeneficiaries(request.userAnswers.utr) map {
-        case Beneficiaries(Nil, Nil) =>
+        case Beneficiaries(Nil, Nil, Nil) =>
           Ok(yesNoView(yesNoForm))
         case all: Beneficiaries =>
 

@@ -53,7 +53,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val classOf = ClassOfBeneficiary("Test Beneficiary", LocalDate.of(2019, 9, 23))
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf))))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), List.empty)))
 
       val service = new TrustServiceImpl(mockConnector)
 
@@ -62,7 +62,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val result = service.getBeneficiaries("1234567890")
 
       whenReady(result) {
-        _ mustBe Beneficiaries(List(individual), List(classOf))
+        _ mustBe Beneficiaries(List(individual), List(classOf), List.empty)
       }
 
     }

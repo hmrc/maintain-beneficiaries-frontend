@@ -59,7 +59,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   private val classOfBeneficiary = ClassOfBeneficiary("Beneficiaries description", entityStart = LocalDate.of(2019,9,23))
 
-  val beneficiaries = Beneficiaries(List(beneficiary), List(classOfBeneficiary))
+  val beneficiaries = Beneficiaries(List(beneficiary), List(classOfBeneficiary), List.empty)
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
@@ -78,7 +78,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -116,7 +116,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -138,7 +138,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
