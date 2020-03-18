@@ -16,20 +16,19 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import base.SpecBase
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.classofbeneficiary.DescriptionPage
 
-@Singleton
-class Navigator @Inject()() {
+class ClassOfBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+  val navigator = new Navigator
+
+  "Class of beneficiary navigator" when {
+
+    "What is the description page -> Add a beneficiary page" in {
+      navigator.nextPage(DescriptionPage, emptyUserAnswers)
+        .mustBe(controllers.routes.AddABeneficiaryController.onPageLoad())
+    }
   }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
 }

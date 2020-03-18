@@ -29,3 +29,11 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
+classOfBeneficiary.description.error.required = Enter the description for the class of beneficiaries
+classOfBeneficiary.description.error.invalidFormat = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets, spaces
+classOfBeneficiary.description.error.length = The description of the class in the trust deed must be 56 characters or less
+classOfBeneficiary.description.return.link = Return to add a beneficiary
