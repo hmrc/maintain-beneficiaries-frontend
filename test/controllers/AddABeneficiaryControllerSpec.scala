@@ -48,7 +48,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None)
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
+    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
+    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(1).url), "Remove", None)
   )
 
   private val individualBeneficiary = IndividualBeneficiary(
@@ -63,7 +65,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   )
 
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
-    description = "description",
+    description = "Description",
     entityStart = LocalDate.parse("2019-02-28")
   )
 
@@ -209,7 +211,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 2 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -280,7 +282,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 2 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }

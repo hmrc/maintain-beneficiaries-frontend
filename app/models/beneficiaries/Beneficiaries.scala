@@ -23,11 +23,12 @@ import play.api.libs.functional.syntax._
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          unidentified: List[ClassOfBeneficiary]) {
 
-  def addToHeading()(implicit mp: MessagesProvider) = individualDetails.size match {
-    case 0 => Messages("addABeneficiary.heading")
-    case 1 => Messages("addABeneficiary.singular.heading")
-    case l => Messages("addABeneficiary.count.heading", l)
-  }
+  def addToHeading()(implicit mp: MessagesProvider) =
+    individualDetails.size + unidentified.size match {
+      case 0 => Messages("addABeneficiary.heading")
+      case 1 => Messages("addABeneficiary.singular.heading")
+      case l => Messages("addABeneficiary.count.heading", l)
+    }
 
 }
 
