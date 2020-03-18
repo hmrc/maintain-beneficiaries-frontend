@@ -32,6 +32,7 @@ final case class IndividualBeneficiary(name: Name,
                                        entityStart: LocalDate)
 
 object IndividualBeneficiary {
+
   implicit val reads: Reads[IndividualBeneficiary] =
     ((__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and

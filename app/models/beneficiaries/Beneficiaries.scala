@@ -31,5 +31,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary]) {
 
 object Beneficiaries {
   implicit val reads: Reads[Beneficiaries] =
-    ((__ \ "beneficiary" \ "individualDetails").read[List[IndividualBeneficiary]]).map(Beneficiaries(_))
+    (
+      (__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
+    ).map(Beneficiaries(_))
 }
