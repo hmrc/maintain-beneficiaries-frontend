@@ -54,7 +54,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,
     income = None,
-    incomeYesNo = false
+    incomeDiscretionYesNo = false
   )
 
   private val classOfBeneficiary = ClassOfBeneficiary("Beneficiaries description", entityStart = LocalDate.of(2019,9,23))

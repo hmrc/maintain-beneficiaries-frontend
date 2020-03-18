@@ -25,7 +25,7 @@ import play.api.libs.json.{JsPath, JsResult, JsSuccess, JsValue, Reads, __}
 final case class TrustBeneficiary(name: String,
                                   address : Option[Address],
                                   income: Option[String],
-                                  incomeYesNo: Boolean,
+                                  incomeDiscretionYesNo: Boolean,
                                   entityStart: LocalDate) extends Beneficiary
 
 object TrustBeneficiary {
@@ -36,9 +36,9 @@ object TrustBeneficiary {
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate]).tupled.map {
 
-      case (name, address, None, _, entityStart) => TrustBeneficiary(name, address, None, incomeYesNo = true, entityStart)
-      case (name, address, _, Some(true), entityStart) => TrustBeneficiary(name, address, None, incomeYesNo = true, entityStart)
-      case (name, address, income, _, entityStart) => TrustBeneficiary(name, address, income, incomeYesNo = false, entityStart)
+      case (name, address, None, _, entityStart) => TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, address, _, Some(true), entityStart) => TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, address, income, _, entityStart) => TrustBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart)
     }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (

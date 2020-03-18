@@ -47,7 +47,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Nelson Ltd ",
           address = None,
           income = None,
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -71,7 +71,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Nelson Ltd ",
           address = None,
           income = Some("10000"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -94,7 +94,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Nelson Ltd ",
           address = None,
           income = None,
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }

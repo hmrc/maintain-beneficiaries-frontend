@@ -28,7 +28,7 @@ final case class IndividualBeneficiary(name: Name,
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
-                                       incomeYesNo: Boolean,
+                                       incomeDiscretionYesNo: Boolean,
                                        entityStart: LocalDate) extends Beneficiary
 
 object IndividualBeneficiary {

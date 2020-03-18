@@ -70,7 +70,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -116,7 +116,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -152,7 +152,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -184,12 +184,12 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           vulnerableYesNo = true,
           income = Some("0"),
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
 
-      "implying incomeYesNo" in {
+      "implying incomeDiscretionYesNo" in {
         val json = Json.parse(
           """
             |{
@@ -232,7 +232,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = None,
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }

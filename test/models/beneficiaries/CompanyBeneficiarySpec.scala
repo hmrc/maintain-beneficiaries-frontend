@@ -61,7 +61,7 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           income = Some("98"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2019, 9, 23)
         )
       }
@@ -99,7 +99,7 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             "US"
           )),
           income = Some("98"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2019, 9, 23)
         )
       }
@@ -127,7 +127,7 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           utr = Some("2570719121"),
           address = None,
           income = Some("98"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2019, 9, 23)
         )
       }
@@ -151,12 +151,12 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           utr = None,
           address = None,
           income = Some("98"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2019, 9, 23)
         )
       }
 
-      "implying incomeYesNo" in {
+      "implying incomeDiscretionYesNo" in {
         val json = Json.parse(
           """
             |{
@@ -177,7 +177,7 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           utr = Some("2570719121"),
           address = None,
           income = None,
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2019, 9, 23)
         )
       }

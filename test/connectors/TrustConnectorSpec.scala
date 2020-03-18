@@ -198,7 +198,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   vulnerableYesNo = false,
                   income = None,
-                  incomeYesNo = true,
+                  incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2000-01-01")
                 )
               ),
@@ -218,7 +218,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   name = "Nelson Ltd ",
                   address = None,
                   income = None,
-                  incomeYesNo = true,
+                  incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2017-02-28")
                 )
               )

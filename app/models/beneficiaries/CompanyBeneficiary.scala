@@ -26,7 +26,7 @@ case class CompanyBeneficiary(name: String,
                               utr: Option[String],
                               address: Option[Address],
                               income: Option[String],
-                              incomeYesNo: Boolean,
+                              incomeDiscretionYesNo: Boolean,
                               entityStart: LocalDate
                              ) extends Beneficiary
 
