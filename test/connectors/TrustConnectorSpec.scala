@@ -24,7 +24,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.Name
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -90,7 +90,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           result =>
             result mustBe Beneficiaries(
               individualDetails = Nil,
-              classOf = Nil)
+              classOf = Nil,
+              trust = Nil)
         }
 
         application.stop()
@@ -150,6 +151,19 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |         "description": "Beneficiary Unidentified 23",
             |         "entityStart": "2019-09-23"
             |       }
+            |  ],
+            |  "trust": [
+            |    {
+            |       "lineNo": "1",
+            |       "bpMatchStatus": "01",
+            |       "organisationName": "Nelson Ltd ",
+            |       "beneficiaryDiscretion": true,
+            |       "beneficiaryShareOfIncome": "0",
+            |       "identification": {
+            |         "safeId": "2222200000000"
+            |       },
+            |       "entityStart": "2017-02-28"
+            |    }
             |  ]
             | }
             |}
@@ -195,6 +209,15 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                 ClassOfBeneficiary(
                   description = "Beneficiary Unidentified 23",
                   entityStart = LocalDate.parse("2019-09-23")
+                )
+              ),
+              trust = List(
+                TrustBeneficiary(
+                  name = "Nelson Ltd ",
+                  address = None,
+                  income = None,
+                  incomeYesNo = true,
+                  entityStart = LocalDate.parse("2017-02-28")
                 )
               )
             )
