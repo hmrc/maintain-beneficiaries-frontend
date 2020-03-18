@@ -13,6 +13,8 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980
+site.inprogress = In Progress
+site.complete = Completed
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
