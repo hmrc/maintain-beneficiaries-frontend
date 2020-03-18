@@ -25,7 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TrustStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
-  private def maintainTasksUrl(utr: String) = s"${config.trustsStoreUrl}/trusts-store/maintain/tasks/trustees/$utr"
+  private def maintainTasksUrl(utr: String) = s"${config.trustsStoreUrl}/trusts-store/maintain/tasks/beneficiaries/$utr"
 
   def setTaskComplete(utr: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
     http.POSTEmpty[HttpResponse](maintainTasksUrl(utr))

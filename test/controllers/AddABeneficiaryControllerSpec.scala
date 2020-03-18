@@ -31,7 +31,7 @@ import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import viewmodels.addAnother.AddRow
-import views.html.AddABeneficiaryYesNoView
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,9 +47,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
   val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Beneficiary Individual", "Change details", Some("#"), "Remove", Some("/maintain-a-trust/trustees/trustee/0/remove"))
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None)
   )
-
 
   private val beneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
@@ -64,13 +64,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   val beneficiaries = Beneficiaries(List(beneficiary, beneficiary))
 
-
   class FakeService(data: Beneficiaries) extends TrustService {
 
     override def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
-
-     def getBeneficiary(utr: String, index: Int)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[IndividualBeneficiary] =
-      Future.successful(beneficiary)
 
   }
 
@@ -200,12 +196,11 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddABeneficiaryYesNoView]
+        val view = application.injector.instanceOf[AddABeneficiaryView]
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual
-          view(addTrusteeForm)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 2 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -270,16 +265,13 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         val boundForm = addTrusteeForm.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[AddABeneficiaryYesNoView]
+        val view = application.injector.instanceOf[AddABeneficiaryView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual
-          view(
-            boundForm
-          )(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 2 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
