@@ -18,7 +18,7 @@ package models.beneficiaries
 
 import play.api.libs.json.{Format, Json}
 
-final case class ClassOfBeneficiary(description: String)
+final case class ClassOfBeneficiary(description: String) extends Beneficiary
 
 object ClassOfBeneficiary {
   implicit val formats : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]

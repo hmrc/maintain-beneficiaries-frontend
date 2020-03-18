@@ -17,17 +17,18 @@
 package controllers.classofbeneficiary
 
 import base.SpecBase
+import connectors.TrustConnector
 import forms.StandardSingleFieldFormProvider
-import navigation.Navigator
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.classofbeneficiary.DescriptionPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.PlaybackRepository
+import services.TrustService
+import uk.gov.hmrc.http.HttpResponse
 import views.html.classofbeneficiary.DescriptionView
 
 import scala.concurrent.Future
@@ -35,14 +36,25 @@ import scala.concurrent.Future
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
   val form: Form[String] = new StandardSingleFieldFormProvider().withPrefix("classOfBeneficiary.description")
-  lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad().url
+  val index = 0
+  lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad(index).url
   val description = "Description"
+
+  val mockTrustConnector: TrustConnector = mock[TrustConnector]
+  when(mockTrustConnector.getBeneficiaries(any())(any(), any())).thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description)))))
+  when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+
+  val mockTrustService: TrustService = mock[TrustService]
+  when(mockTrustService.getBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(ClassOfBeneficiary(description)))
 
   "Description Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, descriptionRoute)
 
@@ -53,42 +65,18 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
-
-      application.stop()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-
-      val answers = emptyUserAnswers
-        .set(DescriptionPage, description).success.value
-
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
-
-      val request = FakeRequest(GET, descriptionRoute)
-
-      val view = application.injector.instanceOf[DescriptionView]
-
-      val result = route(application, request).value
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(description))(fakeRequest, messages).toString
+        view(form.fill(description), index)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockPlaybackRepository = mock[PlaybackRepository]
-
-      when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
-
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(fakeNavigator)
+            bind[TrustService].toInstance(mockTrustService),
+            bind[TrustConnector].toInstance(mockTrustConnector)
           )
           .build()
 
@@ -100,7 +88,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
 
       application.stop()
     }
@@ -120,7 +108,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, index)(fakeRequest, messages).toString
 
        application.stop()
     }

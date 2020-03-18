@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package navigation
+package models.beneficiaries
 
-import models.UserAnswers
-import pages.Page
-import pages.classofbeneficiary.DescriptionPage
-import play.api.mvc.Call
-
-object ClassOfBeneficiaryNavigator {
-  private val simpleNavigations : PartialFunction[Page, Call] = {
-    case DescriptionPage => controllers.routes.AddABeneficiaryController.onPageLoad()
-  }
-
-  val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigations andThen (c => (_:UserAnswers) => c)
-
-}
+trait Beneficiary

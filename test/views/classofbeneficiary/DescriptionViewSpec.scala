@@ -28,11 +28,12 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
   val form: Form[String] = new StandardSingleFieldFormProvider().withPrefix(messageKeyPrefix)
   val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
+  val index = 0
 
   "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix, "return.link")
 
@@ -45,7 +46,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
       applyView,
       messageKeyPrefix,
       None,
-      controllers.classofbeneficiary.routes.DescriptionController.onSubmit().url,
+      controllers.classofbeneficiary.routes.DescriptionController.onSubmit(index).url,
       "value"
     )
 

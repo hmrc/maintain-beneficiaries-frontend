@@ -27,7 +27,7 @@ final case class IndividualBeneficiary(name: Name,
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
-                                       incomeYesNo: Boolean)
+                                       incomeYesNo: Boolean) extends Beneficiary
 
 object IndividualBeneficiary {
   implicit val reads: Reads[IndividualBeneficiary] = Json.format[IndividualBeneficiary]

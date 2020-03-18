@@ -20,11 +20,13 @@ import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.StandardSingleFieldFormProvider
 import javax.inject.Inject
+import models.beneficiaries.ClassOfBeneficiary
 import navigation.Navigator
-import pages.classofbeneficiary.DescriptionPage
+import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.classofbeneficiary.DescriptionView
 
@@ -37,35 +39,32 @@ class DescriptionController @Inject()(
                                      repo : PlaybackRepository,
                                      connector: TrustConnector,
                                      view: DescriptionView,
-                                     navigator: Navigator
+                                     navigator: Navigator,
+                                     trustService: TrustService
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("classOfBeneficiary.description")
+  val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DescriptionPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+      trustService.getBeneficiary(request.userAnswers.utr, index).flatMap {
+        case ClassOfBeneficiary(description) => Future.successful(Ok(view(form.fill(description), index)))
+        case _ => Future.successful(Ok(view(form, index)))
       }
-
-      Ok(view(preparedForm))
-
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+          Future.successful(BadRequest(view(formWithErrors, index))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DescriptionPage, value))
-            _ <- repo.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DescriptionPage, updatedAnswers))
+            _ <- connector.amendClassOfBeneficiary(request.userAnswers.utr, index, value)
+          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       )
   }
 }
