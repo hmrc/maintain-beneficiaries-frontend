@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -46,11 +46,6 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val addTrusteeForm = new AddABeneficiaryFormProvider()()
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
-  val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None)
-  )
-
   private val beneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
@@ -62,7 +57,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     incomeYesNo = false
   )
 
-  val beneficiaries = Beneficiaries(List(beneficiary, beneficiary))
+  private val classOfBeneficiary = ClassOfBeneficiary("Beneficiaries description", entityStart = LocalDate.of(2019,9,23))
+
+  val beneficiaries = Beneficiaries(List(beneficiary), List(classOfBeneficiary))
+
+  val beneficiaryRows = List(
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
+    AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None)
+  )
 
   class FakeService(data: Beneficiaries) extends TrustService {
 
@@ -76,7 +78,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -114,7 +116,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -136,7 +138,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)

@@ -24,7 +24,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.Name
-import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -88,7 +88,9 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         whenReady(processed) {
           result =>
-            result mustBe Beneficiaries(Nil)
+            result mustBe Beneficiaries(
+              individualDetails = Nil,
+              classOf = Nil)
         }
 
         application.stop()
@@ -134,7 +136,21 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |         },
             |         "vulnerableBeneficiary": false
             |      }
-            |    ]
+            |    ],
+            |    "unidentified": [
+            |      {
+            |        "lineNo": "311",
+            |        "description": "Beneficiary Unidentified 25",
+            |        "beneficiaryDiscretion": false,
+            |        "beneficiaryShareOfIncome": "25",
+            |        "entityStart": "2019-09-23"
+            |      },
+            |      {
+            |         "lineNo": "309",
+            |         "description": "Beneficiary Unidentified 23",
+            |         "entityStart": "2019-09-23"
+            |       }
+            |  ]
             | }
             |}
             |""".stripMargin)
@@ -169,6 +185,16 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   income = None,
                   incomeYesNo = true,
                   entityStart = LocalDate.parse("2000-01-01")
+                )
+              ),
+              classOf = List(
+                ClassOfBeneficiary(
+                  description = "Beneficiary Unidentified 25",
+                  entityStart = LocalDate.parse("2019-09-23")
+                ),
+                ClassOfBeneficiary(
+                  description = "Beneficiary Unidentified 23",
+                  entityStart = LocalDate.parse("2019-09-23")
                 )
               )
             )

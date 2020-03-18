@@ -18,10 +18,14 @@ package models.beneficiaries
 
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.json.{Reads, __}
+import play.api.libs.functional.syntax._
 
-case class Beneficiaries(individualDetails: List[IndividualBeneficiary]) {
+trait Beneficiary
 
-  def addToHeading()(implicit mp: MessagesProvider) = individualDetails.size match {
+case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
+                         classOf: List[ClassOfBeneficiary]) {
+
+  def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf).size match {
     case 0 => Messages("addABeneficiary.heading")
     case 1 => Messages("addABeneficiary.singular.heading")
     case l => Messages("addABeneficiary.count.heading", l)
@@ -31,7 +35,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary]) {
 
 object Beneficiaries {
   implicit val reads: Reads[Beneficiaries] =
-    (
-      (__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
-    ).map(Beneficiaries(_))
+    ((__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
+      and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
+      ).apply(Beneficiaries.apply _)
 }
