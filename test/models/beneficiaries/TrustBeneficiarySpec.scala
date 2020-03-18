@@ -98,6 +98,45 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
+      "there is a UK address" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "lineNo": "1",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Nelson Ltd ",
+            |  "beneficiaryShareOfIncome": "10000",
+            |  "beneficiaryDiscretion": false,
+            |  "identification": {
+            |    "safeId": "2222200000000",
+            |    "address": {
+            |          "line1": "Suite 10",
+            |          "line2": "Wealthy Arena",
+            |          "line3": "Trafagar Square",
+            |          "line4": "London",
+            |          "postCode": "SE2 2HB",
+            |          "country": "GB"
+            |       }
+            |  },
+            |  "entityStart": "2017-02-28"
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[TrustBeneficiary]
+        beneficiary mustBe TrustBeneficiary(
+          name = "Nelson Ltd ",
+          address = Some(UkAddress(
+            "Suite 10",
+            "Wealthy Arena",
+            Some("Trafagar Square"),
+            Some("London"),
+            "SE2 2HB"
+          )),
+          income = Some("10000"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.of(2017, 2, 28)
+        )
+      }
     }
   }
 }
