@@ -45,3 +45,4 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
+entities.beneficiaries.classOf = Class of beneficiaries

@@ -16,25 +16,36 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
-        AddRow(
-          name = beneficiary.name.displayName,
-          typeLabel = messages(s"entities.beneficiaries.individual"),
-          changeLabel = messages("site.change.details"),
-          changeUrl = None,
-          removeLabel =  messages("site.delete"),
-          removeUrl = None
-        )
-  }
+  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name.displayName,
+      typeLabel = messages(s"entities.beneficiaries.individual"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+  private def renderClassOf(beneficiary: ClassOfBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.description,
+      typeLabel = messages(s"entities.beneficiaries.classOf"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
 
   def rows : AddToRows = {
-    val complete = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
+    val completeIndividuals = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
+    val completeClassOf = beneficiaries.classOf.zipWithIndex.map(x => renderClassOf(x._1, x._2))
+
+    val complete = completeIndividuals ++ completeClassOf
 
     AddToRows(Nil, complete)
   }

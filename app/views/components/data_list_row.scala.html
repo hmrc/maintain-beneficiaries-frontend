@@ -25,16 +25,20 @@
     <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier--light">
         @data.typeLabel
     </dd>
-    <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__change">
-        <a href="@data.changeUrl">
-            <span aria-hidden="true">@data.changeLabel</span>
-            <span class="visually-hidden">@messages("site.hidden-edit", data.name)</span>
-        </a>
-    </dd>
-    <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__remove">
-        <a href="@data.removeUrl">
-            <span aria-hidden="true">@data.removeLabel</span>
-            <span class="visually-hidden">@messages("site.hidden-delete", data.name)</span>
-        </a>
-    </dd>
+    @data.changeUrl.map{ changeUrl =>
+        <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__change">
+            <a href="@changeUrl">
+                <span aria-hidden="true">@data.changeLabel</span>
+                <span class="visually-hidden">@messages("site.hidden-edit", data.name)</span>
+            </a>
+        </dd>
+    }
+    @data.removeUrl.map{ removeUrl =>
+        <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__remove">
+            <a href="@removeUrl">
+                <span aria-hidden="true">@data.removeLabel</span>
+                <span class="visually-hidden">@messages("site.hidden-delete", data.name)</span>
+            </a>
+        </dd>
+    }
 </div>

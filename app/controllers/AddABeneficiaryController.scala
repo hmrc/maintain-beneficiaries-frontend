@@ -58,12 +58,12 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       trust.getBeneficiaries(request.userAnswers.utr) map {
-        case Beneficiaries(Nil) =>
+        case Beneficiaries(Nil, Nil) =>
           Ok(yesNoView(yesNoForm))
         case all: Beneficiaries =>
 
           val beneficiaries = new AddABeneficiaryViewHelper(all).rows
-
+println(">>>>>>>>>")
           Ok(addAnotherView(
             form = addAnotherForm,
             inProgressBeneficiaries = beneficiaries.inProgress,
