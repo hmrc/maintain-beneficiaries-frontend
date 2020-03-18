@@ -44,3 +44,5 @@ addABeneficiary.add-them-later = No, not now
 addABeneficiary.no-complete = No, all the beneficiaries are up to date
 addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
 addABeneficiary.error.required = Select yes if you want to add a new beneficiary
+
+entities.beneficiaries.individual = Named individual
