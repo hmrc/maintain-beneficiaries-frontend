@@ -49,7 +49,7 @@
         }
         @for(input <- inputs) {
             <div class="multiple-choice">
-                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value == Some(input.value)){checked="checked"} @if(trackGa){data-journey-click="maintain-lead-trustee-frontend:click:@{input.id}"} />
+                <input id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}" @if(field.value == Some(input.value)){checked="checked"} @if(trackGa){data-journey-click="maintain-beneficiaries-frontend:click:@{input.id}"} />
 
                 <label class="block-label selection-button-radio" for="@{input.id}">
                     @messages(input.messageKey)
