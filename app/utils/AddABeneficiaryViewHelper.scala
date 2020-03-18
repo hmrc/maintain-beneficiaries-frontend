@@ -16,7 +16,7 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
@@ -41,11 +41,22 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = None
     )
 
+  private def renderTrustBeneficiary(beneficiary: TrustBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages(s"entities.beneficiaries.trust"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
   def rows : AddToRows = {
     val completeIndividuals = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
     val completeClassOf = beneficiaries.classOf.zipWithIndex.map(x => renderClassOf(x._1, x._2))
+    val completeTrust = beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2))
 
-    val complete = completeIndividuals ++ completeClassOf
+    val complete = completeIndividuals ++ completeClassOf ++ completeTrust
 
     AddToRows(Nil, complete)
   }

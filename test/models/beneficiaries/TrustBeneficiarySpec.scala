@@ -18,7 +18,7 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Name, NonUkAddress, UkAddress}
+import models.UkAddress
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
