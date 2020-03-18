@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.TrustConnector
 import models.Name
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -52,8 +52,15 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
       val classOf = ClassOfBeneficiary("Test Beneficiary", LocalDate.of(2019, 9, 23))
 
+      val trustBeneficiary = TrustBeneficiary(
+        name = "Trust Beneficiary Name",
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28))
+
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), List.empty, List.empty)))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), List.empty, List(trustBeneficiary))))
 
       val service = new TrustServiceImpl(mockConnector)
 
@@ -62,7 +69,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val result = service.getBeneficiaries("1234567890")
 
       whenReady(result) {
-        _ mustBe Beneficiaries(List(individual), List(classOf), List.empty, List.empty)
+        _ mustBe Beneficiaries(List(individual), List(classOf), List.empty, List(trustBeneficiary))
       }
 
     }
