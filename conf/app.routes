@@ -20,7 +20,7 @@ GET        /add                                                             cont
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
 
-GET        /class-of-beneficiary/:index/description                         controllers.classofbeneficiary.DescriptionController.onPageLoad(index: Int)
-POST       /class-of-beneficiary/:index/description                         controllers.classofbeneficiary.DescriptionController.onSubmit(index: Int)
+GET        /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.DescriptionController.onPageLoad(index: Int)
+POST       /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.DescriptionController.onSubmit(index: Int)
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

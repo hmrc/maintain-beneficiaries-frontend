@@ -25,7 +25,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
   private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
         AddRow(
           name = beneficiary.name.displayName,
-          typeLabel = messages(s"entities.beneficiaries.individual"),
+          typeLabel = messages("entities.beneficiaries.individual"),
           changeLabel = messages("site.change.details"),
           changeUrl = None,
           removeLabel =  messages("site.delete"),
@@ -36,7 +36,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
   private def render(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
     AddRow(
       name = beneficiary.description,
-      typeLabel = messages(s"entities.beneficiaries.unidentified"),
+      typeLabel = messages("entities.beneficiaries.unidentified"),
       changeLabel = messages("site.change.details"),
       changeUrl = Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(index).url),
       removeLabel =  messages("site.delete"),
