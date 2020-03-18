@@ -33,7 +33,7 @@ $(document).ready(function() {
   //======================================================
     if(document.querySelectorAll('select[data-non-uk-countries]').length > 0){
 
-        var graphUrl = '/maintain-a-trust/trustees/assets/javascripts/autocomplete/location-non-uk-autocomplete-graph.json'
+        var graphUrl = '/maintain-a-trust/beneficiaries/assets/javascripts/autocomplete/location-non-uk-autocomplete-graph.json'
 
         openregisterLocationPicker({
             defaultValue: '',
@@ -48,7 +48,7 @@ $(document).ready(function() {
   //======================================================
     if(document.querySelectorAll('select[data-all-countries]').length > 0){
 
-        var graphUrl = '/maintain-a-trust/trustees/assets/javascripts/autocomplete/location-autocomplete-graph.json'
+        var graphUrl = '/maintain-a-trust/beneficiaries/assets/javascripts/autocomplete/location-autocomplete-graph.json'
 
         openregisterLocationPicker({
             defaultValue: '',

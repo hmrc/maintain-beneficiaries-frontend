@@ -19,7 +19,8 @@ package models.beneficiaries
 import java.time.LocalDate
 
 import models.{Address, Name}
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -27,8 +28,24 @@ final case class IndividualBeneficiary(name: Name,
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
-                                       incomeYesNo: Boolean)
+                                       incomeYesNo: Boolean,
+                                       entityStart: LocalDate)
 
 object IndividualBeneficiary {
-  implicit val reads: Reads[IndividualBeneficiary] = Json.format[IndividualBeneficiary]
+  implicit val reads: Reads[IndividualBeneficiary] =
+    ((__ \ 'name).read[Name] and
+      (__ \ 'dateOfBirth).readNullable[LocalDate] and
+      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'nino)) and
+      __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
+      (__ \ 'vulnerableBeneficiary).read[Boolean] and
+      (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
+      (__ \ 'beneficiaryDiscretion).readWithDefault[Boolean](true) and
+      (__ \ "entityStart").read[LocalDate]).apply(IndividualBeneficiary.apply _)
+
+  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
+    _.transform(subPath.json.pick)
+      .flatMap(_.validate[T])
+      .map(Some(_))
+      .recoverWith(_ => JsSuccess(None))
+  )
 }

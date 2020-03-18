@@ -31,9 +31,9 @@ class AddABeneficiarySpec extends WordSpec with MustMatchers with PropertyChecks
       val gen = Gen.oneOf(AddABeneficiary.values.toSeq)
 
       forAll(gen) {
-        addATrustee =>
+        addABeneficiary =>
 
-          JsString(addATrustee.toString).validate[AddABeneficiary].asOpt.value mustEqual addATrustee
+          JsString(addABeneficiary.toString).validate[AddABeneficiary].asOpt.value mustEqual addABeneficiary
       }
     }
 
@@ -53,9 +53,9 @@ class AddABeneficiarySpec extends WordSpec with MustMatchers with PropertyChecks
       val gen = Gen.oneOf(AddABeneficiary.values.toSeq)
 
       forAll(gen) {
-        addATrustee =>
+        addABeneficiary =>
 
-          Json.toJson(addATrustee) mustEqual JsString(addATrustee.toString)
+          Json.toJson(addABeneficiary) mustEqual JsString(addABeneficiary.toString)
       }
     }
   }
