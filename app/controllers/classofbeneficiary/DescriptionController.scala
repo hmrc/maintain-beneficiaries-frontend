@@ -21,11 +21,9 @@ import controllers.actions.StandardActionSets
 import forms.StandardSingleFieldFormProvider
 import javax.inject.Inject
 import models.beneficiaries.ClassOfBeneficiary
-import navigation.Navigator
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.classofbeneficiary.DescriptionView
@@ -36,10 +34,8 @@ class DescriptionController @Inject()(
                                      val controllerComponents: MessagesControllerComponents,
                                      standardActionSets: StandardActionSets,
                                      formProvider: StandardSingleFieldFormProvider,
-                                     repo : PlaybackRepository,
                                      connector: TrustConnector,
                                      view: DescriptionView,
-                                     navigator: Navigator,
                                      trustService: TrustService
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
