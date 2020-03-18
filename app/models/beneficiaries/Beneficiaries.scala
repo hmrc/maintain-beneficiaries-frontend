@@ -24,9 +24,10 @@ trait Beneficiary
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          classOf: List[ClassOfBeneficiary],
+                         company: List[CompanyBeneficiary],
                          trust: List[TrustBeneficiary]) {
 
-  def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf ++ trust).size match {
+  def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf ++ company ++ trust).size match {
     case 0 => Messages("addABeneficiary.heading")
     case 1 => Messages("addABeneficiary.singular.heading")
     case l => Messages("addABeneficiary.count.heading", l)
@@ -38,6 +39,7 @@ object Beneficiaries {
   implicit val reads: Reads[Beneficiaries] =
     ((__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
+      and (__ \ "beneficiary" \ "company").readWithDefault[List[CompanyBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "trust").readWithDefault[List[TrustBeneficiary]](Nil)
       ).apply(Beneficiaries.apply _)
 }

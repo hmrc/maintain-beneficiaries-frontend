@@ -91,6 +91,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             result mustBe Beneficiaries(
               individualDetails = Nil,
               classOf = Nil,
+              company = Nil,
               trust = Nil)
         }
 
@@ -211,6 +212,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   entityStart = LocalDate.parse("2019-09-23")
                 )
               ),
+              company = Nil,
               trust = List(
                 TrustBeneficiary(
                   name = "Nelson Ltd ",
