@@ -71,7 +71,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
     AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None),
-    AddRow("Trust Beneficiary Name", typeLabel = "Trust beneficiaries", "Change details", None, "Remove", None)
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None)
   )
 
   class FakeService(data: Beneficiaries) extends TrustService {
