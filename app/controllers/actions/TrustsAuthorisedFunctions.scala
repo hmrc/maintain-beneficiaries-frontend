@@ -21,14 +21,14 @@ import config.FrontendAppConfig
 import play.api.Logger
 import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, NoActiveSession}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedFunctions, NoActiveSession}
 
 class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnector,
                                           val config: FrontendAppConfig) extends AuthorisedFunctions {
 
   def recoverFromAuthorisation: PartialFunction[Throwable, Result] = {
     case _: NoActiveSession => redirectToLogin
-    case e =>
+    case e: AuthorisationException =>
       Logger.error(s"Recovered error: $e")
       Redirect(controllers.routes.UnauthorisedController.onPageLoad())
   }
