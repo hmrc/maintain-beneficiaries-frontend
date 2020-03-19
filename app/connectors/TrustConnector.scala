@@ -20,7 +20,8 @@ import config.FrontendAppConfig
 import javax.inject.Inject
 import models.TrustStartDate
 import models.beneficiaries.Beneficiaries
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.libs.json.{JsString, Writes}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,6 +40,10 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
     http.GET[Beneficiaries](getBeneficiariesUrl(utr))
   }
 
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"${config.trustsUrl}/trusts/amend-unidentified-beneficiary/$utr/$index"
+
+  def amendClassOfBeneficiary(utr: String, index: Int, description: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    http.POST[JsString, HttpResponse](amendClassOfBeneficiaryUrl(utr, index), JsString(description))(implicitly[Writes[JsString]], HttpReads.readRaw, hc, ec)
+  }
+
 }
-
-

@@ -23,7 +23,7 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
 class OtherBeneficiarySpec extends WordSpec with MustMatchers {
-  
+
   "OtherBeneficiary" must {
     "deserialise from backend JSON" when {
       "with UK address" in {

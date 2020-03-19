@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries._
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -84,6 +84,11 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2012-03-14")
   )
 
+  private val unidentifiedBeneficiary = ClassOfBeneficiary(
+    description = "Description",
+    entityStart = LocalDate.parse("2019-02-28")
+  )
+
   val beneficiaries = Beneficiaries(
     List(beneficiary),
     List(classOfBeneficiary),
@@ -94,7 +99,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None),
+    AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None)
@@ -103,6 +108,10 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   class FakeService(data: Beneficiaries) extends TrustService {
 
     override def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
+
+    override def getUnidentifiedBeneficiary(utr: String, index: Int)
+                                           (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
+      Future.successful(unidentifiedBeneficiary)
 
   }
 
