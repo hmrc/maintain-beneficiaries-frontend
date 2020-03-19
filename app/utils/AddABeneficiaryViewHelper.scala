@@ -16,16 +16,16 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
+  private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
         AddRow(
           name = beneficiary.name.displayName,
-          typeLabel = messages(s"entities.beneficiaries.individual"),
+          typeLabel = messages("entities.beneficiaries.individual"),
           changeLabel = messages("site.change.details"),
           changeUrl = None,
           removeLabel =  messages("site.delete"),
@@ -33,8 +33,21 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
         )
   }
 
+  private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
+    AddRow(
+      name = beneficiary.description,
+      typeLabel = messages("entities.beneficiaries.unidentified"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(index).url),
+      removeLabel =  messages("site.delete"),
+      removeUrl = None
+    )
+  }
+
   def rows : AddToRows = {
-    val complete = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
+    val complete =
+      beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
+      beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2))
 
     AddToRows(Nil, complete)
   }

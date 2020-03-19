@@ -13,6 +13,10 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980
+site.complete = Completed
+
+error.browser.title.prefix = Error:
+error.summary.title = There is a problem
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -45,3 +49,12 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
+entities.beneficiaries.unidentified = Class of beneficiaries
+
+classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
+classOfBeneficiary.description.error.required = Enter the description for the class of beneficiaries
+classOfBeneficiary.description.error.invalidFormat = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+classOfBeneficiary.description.error.length = The description of the class in the trust deed must be 56 characters or less
+classOfBeneficiary.description.return.link = Return to add a beneficiary
