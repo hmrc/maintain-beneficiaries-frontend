@@ -68,6 +68,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   private val charityBeneficiary = CharityBeneficiary(
     name = "Humanitarian Endeavours Ltd",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,

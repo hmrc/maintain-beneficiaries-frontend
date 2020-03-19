@@ -45,6 +45,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[CharityBeneficiary]
         beneficiary mustBe CharityBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
@@ -69,6 +70,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[CharityBeneficiary]
         beneficiary mustBe CharityBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
@@ -92,12 +94,39 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[CharityBeneficiary]
         beneficiary mustBe CharityBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
+
+      "there is a UTR" in {
+        val json = Json.parse(
+          """
+            |{
+            |                "lineNo": "236",
+            |                "bpMatchStatus": "01",
+            |                "organisationName": "Beneficiary Charity 25",
+            |                "identification": {
+            |                  "utr": "2570719166"
+            |                },
+            |                "entityStart": "2019-09-23"
+            |              }
+            |""".stripMargin)
+
+        val beneficiary = json.as[CharityBeneficiary]
+        beneficiary mustBe CharityBeneficiary(
+          name = "Beneficiary Charity 25",
+          utr = Some("2570719166"),
+          address = None,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.of(2019, 9, 23)
+        )
+      }
+
       "there is a UK address" in {
         val json = Json.parse(
           """
@@ -125,6 +154,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[CharityBeneficiary]
         beneficiary mustBe CharityBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",

@@ -238,6 +238,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               charity = List(
                 CharityBeneficiary(
                   name = "Humanitarian Endeavours Ltd",
+                  utr = None,
                   address = None,
                   income = None,
                   incomeDiscretionYesNo = true,

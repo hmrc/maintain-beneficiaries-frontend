@@ -23,22 +23,24 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, JsSuccess, Reads, __}
 
 final case class CharityBeneficiary(name: String,
-                                  address : Option[Address],
-                                  income: Option[String],
-                                  incomeDiscretionYesNo: Boolean,
-                                  entityStart: LocalDate) extends Beneficiary
+                                    utr: Option[String],
+                                    address : Option[Address],
+                                    income: Option[String],
+                                    incomeDiscretionYesNo: Boolean,
+                                    entityStart: LocalDate) extends Beneficiary
 
 object CharityBeneficiary {
   implicit val reads: Reads[CharityBeneficiary] =
     ((__ \ 'organisationName).read[String] and
+      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate]).tupled.map {
 
-      case (name, address, None, _, entityStart) => CharityBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, _, Some(true), entityStart) => CharityBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, income, _, entityStart) => CharityBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart)
+      case (name, utr, address, None, _, entityStart) => CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, utr, address, _, Some(true), entityStart) => CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, utr, address, income, _, entityStart) => CharityBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart)
     }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
