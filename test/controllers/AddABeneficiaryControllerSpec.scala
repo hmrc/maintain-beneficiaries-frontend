@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -74,16 +74,27 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2012-03-14")
   )
 
+  private val companyBeneficiary = CompanyBeneficiary(
+    name = "Humanitarian Company Ltd",
+    utr = Some("0987654321"),
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14")
+  )
+
   val beneficiaries = Beneficiaries(
     List(beneficiary),
     List(classOfBeneficiary),
-    List.empty,
+    List(companyBeneficiary),
     List(trustBeneficiary),
-    List(charityBeneficiary))
+    List(charityBeneficiary)
+  )
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
     AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None)
   )
@@ -224,7 +235,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -295,7 +306,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }

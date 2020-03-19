@@ -16,7 +16,7 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
@@ -61,14 +61,25 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = None
     )
 
+  private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.company"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
 
   def rows : AddToRows = {
     val completeIndividuals = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
     val completeClassOf = beneficiaries.classOf.zipWithIndex.map(x => renderClassOf(x._1, x._2))
     val completeTrust = beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2))
     val completeCharity = beneficiaries.charity.zipWithIndex.map(x => renderCharityBeneficiary(x._1, x._2))
+    val completeCompany = beneficiaries.company.zipWithIndex.map(x => renderCompanyBeneficiary(x._1, x._2))
 
-    val complete = completeIndividuals ++ completeClassOf ++ completeTrust ++ completeCharity
+    val complete = completeIndividuals ++ completeClassOf ++ completeCompany ++ completeTrust ++ completeCharity
 
     AddToRows(Nil, complete)
   }

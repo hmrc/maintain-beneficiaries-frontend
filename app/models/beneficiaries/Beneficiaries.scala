@@ -28,11 +28,12 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          trust: List[TrustBeneficiary],
                          charity: List[CharityBeneficiary]) {
 
-  def addToHeading()(implicit mp: MessagesProvider): String = (individualDetails ++ classOf ++ company ++ trust ++ charity).size match {
-    case 0 => Messages("addABeneficiary.heading")
-    case 1 => Messages("addABeneficiary.singular.heading")
-    case l => Messages("addABeneficiary.count.heading", l)
-  }
+  def addToHeading()(implicit mp: MessagesProvider): String =
+    (individualDetails ++ classOf ++ company ++ trust ++ charity ++ company).size match {
+      case 0 => Messages("addABeneficiary.heading")
+      case 1 => Messages("addABeneficiary.singular.heading")
+      case l => Messages("addABeneficiary.count.heading", l)
+    }
 }
 
 object Beneficiaries {
