@@ -37,8 +37,15 @@ object CompanyBeneficiary {
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).readWithDefault[Boolean](true) and
-      (__ \ "entityStart").read[LocalDate])(CompanyBeneficiary.apply _)
+      (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
+      (__ \ "entityStart").read[LocalDate]).tupled.map {
+      case (name, utr, address, None, _, entityStart) =>
+        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, utr, address, _, Some(true), entityStart) =>
+        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, utr, address, income, _, entityStart) =>
+        CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart)
+    }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)

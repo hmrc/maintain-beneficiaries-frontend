@@ -156,29 +156,79 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
         )
       }
 
-      "implying incomeDiscretionYesNo" in {
+      "there is conflicting income info" in {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "185",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Org 24",
-            |                "identification": {
-            |                  "utr": "2570719121"
-            |                },
-            |                "entityStart": "2019-09-23"
-            |              }
+            |  "lineNo": "1",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Nelson Ltd ",
+            |  "beneficiaryDiscretion": true,
+            |  "beneficiaryShareOfIncome": "0",
+            |  "identification": {
+            |    "safeId": "2222200000000"
+            |  },
+            |  "entityStart": "2017-02-28"
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[CompanyBeneficiary]
-
         beneficiary mustBe CompanyBeneficiary(
-          name = "Beneficiary Org 24",
-          utr = Some("2570719121"),
+          name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2017, 2, 28)
+        )
+      }
+      "there is no discretion for income info" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "lineNo": "1",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Nelson Ltd ",
+            |  "beneficiaryShareOfIncome": "10000",
+            |  "identification": {
+            |    "safeId": "2222200000000"
+            |  },
+            |  "entityStart": "2017-02-28"
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[CompanyBeneficiary]
+        beneficiary mustBe CompanyBeneficiary(
+          name = "Nelson Ltd ",
+          utr = None,
+          address = None,
+          income = Some("10000"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.of(2017, 2, 28)
+        )
+      }
+      "there is no income at all" in {
+        val json = Json.parse(
+          """
+            |{
+            |  "lineNo": "1",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Nelson Ltd ",
+            |  "identification": {
+            |    "safeId": "2222200000000"
+            |  },
+            |  "entityStart": "2017-02-28"
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[CompanyBeneficiary]
+        beneficiary mustBe CompanyBeneficiary(
+          name = "Nelson Ltd ",
+          utr = None,
+          address = None,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.of(2017, 2, 28)
         )
       }
     }

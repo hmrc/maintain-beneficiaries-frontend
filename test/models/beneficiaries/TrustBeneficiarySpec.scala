@@ -24,7 +24,7 @@ import play.api.libs.json.Json
 
 class TrustBeneficiarySpec extends WordSpec with MustMatchers {
 
-  "IndividualBeneficiary" must {
+  "TrustBeneficiary" must {
     "deserialise from backend JSON" when {
       "there is conflicting income info" in {
         val json = Json.parse(

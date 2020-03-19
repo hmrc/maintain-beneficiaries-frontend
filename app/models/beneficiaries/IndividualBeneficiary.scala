@@ -40,8 +40,17 @@ object IndividualBeneficiary {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).readWithDefault[Boolean](true) and
-      (__ \ "entityStart").read[LocalDate]).apply(IndividualBeneficiary.apply _)
+      (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
+      (__ \ "entityStart").read[LocalDate]).tupled.map{
+
+      case (name, dob, nino, address, vulnerable, None, _, entityStart) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, dob, nino, address, vulnerable, _, Some(true), entityStart) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart)
+      case (name, dob, nino, address, vulnerable,  income, _, entityStart) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, income, incomeDiscretionYesNo = false, entityStart)
+
+    }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
