@@ -22,7 +22,7 @@ import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
+  private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
         AddRow(
           name = beneficiary.name.displayName,
           typeLabel = messages("entities.beneficiaries.individual"),
@@ -33,7 +33,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
         )
   }
 
-  private def render(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
+  private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
     AddRow(
       name = beneficiary.description,
       typeLabel = messages("entities.beneficiaries.unidentified"),
@@ -46,8 +46,8 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
 
   def rows : AddToRows = {
     val complete =
-      beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2)) ++
-      beneficiaries.unidentified.zipWithIndex.map(x => render(x._1, x._2))
+      beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
+      beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2))
 
     AddToRows(Nil, complete)
   }

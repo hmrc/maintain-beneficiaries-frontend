@@ -16,7 +16,7 @@
 
 package views.classofbeneficiary
 
-import forms.StandardSingleFieldFormProvider
+import forms.StringFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -26,7 +26,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "classOfBeneficiary.description"
 
-  val form: Form[String] = new StandardSingleFieldFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix)
   val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
   val index = 0
 

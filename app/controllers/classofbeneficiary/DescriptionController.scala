@@ -18,7 +18,7 @@ package controllers.classofbeneficiary
 
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import forms.StandardSingleFieldFormProvider
+import forms.StringFormProvider
 import javax.inject.Inject
 import models.beneficiaries.ClassOfBeneficiary
 import play.api.data.Form
@@ -31,12 +31,12 @@ import views.html.classofbeneficiary.DescriptionView
 import scala.concurrent.{ExecutionContext, Future}
 
 class DescriptionController @Inject()(
-                                     val controllerComponents: MessagesControllerComponents,
-                                     standardActionSets: StandardActionSets,
-                                     formProvider: StandardSingleFieldFormProvider,
-                                     connector: TrustConnector,
-                                     view: DescriptionView,
-                                     trustService: TrustService
+                                       val controllerComponents: MessagesControllerComponents,
+                                       standardActionSets: StandardActionSets,
+                                       formProvider: StringFormProvider,
+                                       connector: TrustConnector,
+                                       view: DescriptionView,
+                                       trustService: TrustService
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description")
@@ -44,9 +44,9 @@ class DescriptionController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
-        case ClassOfBeneficiary(description, _) => Future.successful(Ok(view(form.fill(description), index)))
-        case _ => Future.successful(Ok(view(form, index)))
+      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+        case ClassOfBeneficiary(description, _) => Ok(view(form.fill(description), index))
+        case _ => Ok(view(form, index))
       }
   }
 

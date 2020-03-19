@@ -20,7 +20,7 @@ import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class StandardSingleFieldFormProviderSpec extends StringFieldBehaviours {
+class StringFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "classOfBeneficiary.description"
 
@@ -29,7 +29,7 @@ class StandardSingleFieldFormProviderSpec extends StringFieldBehaviours {
   val invalidFormatKey = s"$prefix.error.invalidFormat"
   val maxLength = 56
 
-  val form = new StandardSingleFieldFormProvider().withPrefix(prefix)
+  val form = new StringFormProvider().withPrefix(prefix)
 
   ".value" must {
 

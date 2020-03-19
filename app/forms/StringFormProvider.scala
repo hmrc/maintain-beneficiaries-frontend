@@ -20,7 +20,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class StandardSingleFieldFormProvider @Inject() extends Mappings {
+class StringFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[String] =
     Form(
