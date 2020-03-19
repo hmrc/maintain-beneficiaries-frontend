@@ -49,8 +49,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
-    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(1).url), "Remove", None)
+    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
+    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(1).url), "Remove", None)
   )
 
   private val individualBeneficiary = IndividualBeneficiary(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary
+package controllers.classofbeneficiary.amend
 
 import java.time.LocalDate
 
@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.http.HttpResponse
-import views.html.classofbeneficiary.DescriptionView
+import views.html.classofbeneficiary.amend.DescriptionView
 
 import scala.concurrent.Future
 

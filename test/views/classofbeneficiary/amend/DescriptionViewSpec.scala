@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package views.classofbeneficiary
+package views.classofbeneficiary.amend
 
+import controllers.classofbeneficiary.amend.routes
 import forms.StringFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import views.html.classofbeneficiary.DescriptionView
+import views.html.classofbeneficiary.amend.DescriptionView
 
 class DescriptionViewSpec extends StringViewBehaviours {
 
@@ -46,7 +47,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
       applyView,
       messageKeyPrefix,
       None,
-      controllers.classofbeneficiary.routes.DescriptionController.onSubmit(index).url,
+      routes.DescriptionController.onSubmit(index).url,
       "value"
     )
 
