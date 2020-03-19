@@ -58,9 +58,9 @@ class DescriptionController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, index))),
 
         value =>
-          for {
-            _ <- connector.amendClassOfBeneficiary(request.userAnswers.utr, index, value)
-          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          connector.amendClassOfBeneficiary(request.userAnswers.utr, index, value).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
       )
   }
 }
