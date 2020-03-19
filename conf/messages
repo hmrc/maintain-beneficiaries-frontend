@@ -49,3 +49,4 @@ entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
 entities.beneficiaries.classOf = Class of beneficiaries
 entities.beneficiaries.trust = Named trust
+entities.beneficiaries.charity = Named charity

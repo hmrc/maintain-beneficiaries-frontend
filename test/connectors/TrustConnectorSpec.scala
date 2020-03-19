@@ -24,7 +24,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.Name
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -64,7 +64,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           """
             |{
             | "beneficiary": {
-            |   "charity":[{"lineNo":"1","bpMatchStatus":"01","entityStart":"2019-02-28","organisationName":"1234567890 QwErTyUiOp ,.(/)&'- name","beneficiaryDiscretion":false,"beneficiaryShareOfIncome":"100","identification":{"address":{"line1":"1234567890 QwErTyUiOp ,.(/)&'- name","line2":"1234567890 QwErTyUiOp ,.(/)&'- name","line3":"1234567890 QwErTyUiOp ,.(/)&'- name","country":"DE"}}}]
             | }
             |}
             |""".stripMargin)
@@ -92,7 +91,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               individualDetails = Nil,
               classOf = Nil,
               company = Nil,
-              trust = Nil)
+              trust = Nil,
+              charity = Nil)
         }
 
         application.stop()
@@ -165,6 +165,19 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       },
             |       "entityStart": "2017-02-28"
             |    }
+            |  ],
+            |  "charity": [
+            |    {
+            |       "lineNo": "1",
+            |       "bpMatchStatus": "01",
+            |       "organisationName": "Humanitarian Endeavours Ltd",
+            |       "beneficiaryDiscretion": true,
+            |       "beneficiaryShareOfIncome": "0",
+            |       "identification": {
+            |         "safeId": "2222200000000"
+            |       },
+            |       "entityStart": "2012-03-14"
+            |    }
             |  ]
             | }
             |}
@@ -220,6 +233,15 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   income = None,
                   incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2017-02-28")
+                )
+              ),
+              charity = List(
+                CharityBeneficiary(
+                  name = "Humanitarian Endeavours Ltd",
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2012-03-14")
                 )
               )
             )

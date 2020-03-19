@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -66,12 +66,26 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     incomeDiscretionYesNo = true,
     entityStart = LocalDate.of(2017, 2, 28))
 
-  val beneficiaries = Beneficiaries(List(beneficiary), List(classOfBeneficiary), List.empty, List(trustBeneficiary))
+  private val charityBeneficiary = CharityBeneficiary(
+    name = "Humanitarian Endeavours Ltd",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14")
+  )
+
+  val beneficiaries = Beneficiaries(
+    List(beneficiary),
+    List(classOfBeneficiary),
+    List.empty,
+    List(trustBeneficiary),
+    List(charityBeneficiary))
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
     AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", None, "Remove", None),
-    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None)
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None)
   )
 
   class FakeService(data: Beneficiaries) extends TrustService {
@@ -86,7 +100,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -124,7 +138,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -146,7 +160,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -210,7 +224,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 3 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -281,7 +295,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 3 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }

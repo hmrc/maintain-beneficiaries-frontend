@@ -28,7 +28,6 @@ final case class CharityBeneficiary(name: String,
                                   incomeDiscretionYesNo: Boolean,
                                   entityStart: LocalDate) extends Beneficiary
 
-
 object CharityBeneficiary {
   implicit val reads: Reads[CharityBeneficiary] =
     ((__ \ 'organisationName).read[String] and
