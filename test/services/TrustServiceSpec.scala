@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.TrustConnector
 import models.Name
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -68,6 +68,14 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
         entityStart = LocalDate.parse("2012-03-14")
       )
 
+      val otherBeneficiary = OtherBeneficiary(
+        description = "Other Endeavours Ltd",
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.parse("2012-03-14")
+      )
+
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(
           Beneficiaries(
@@ -75,7 +83,8 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
             List(classOf),
             List.empty,
             List(trustBeneficiary),
-            List(charityBeneficiary)
+            List(charityBeneficiary),
+            List(otherBeneficiary)
           )
         ))
 
@@ -91,7 +100,8 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
           List(classOf),
           List.empty,
           List(trustBeneficiary),
-          List(charityBeneficiary))
+          List(charityBeneficiary),
+          List(otherBeneficiary))
       }
     }
 
@@ -116,7 +126,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       )
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified), Nil, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified), Nil, Nil, Nil, Nil)))
 
       val service = new TrustServiceImpl(mockConnector)
 

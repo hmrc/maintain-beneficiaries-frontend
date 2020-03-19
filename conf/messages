@@ -54,6 +54,7 @@ entities.beneficiaries.unidentified = Class of beneficiaries
 entities.beneficiaries.trust = Named trust
 entities.beneficiaries.charity = Named charity
 entities.beneficiaries.company = Named company
+entities.beneficiaries.other = Other beneficiary
 
 classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?

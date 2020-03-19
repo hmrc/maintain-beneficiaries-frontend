@@ -19,7 +19,7 @@ package connectors
 import java.time.LocalDate
 
 import models.Name
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
 import play.api.libs.json.Json
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
@@ -99,7 +99,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               unidentified = Nil,
               company = Nil,
               trust = Nil,
-              charity = Nil)
+              charity = Nil,
+              other = Nil)
         }
 
         application.stop()
@@ -185,7 +186,14 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       },
             |       "entityStart": "2012-03-14"
             |    }
-            |  ]
+            |  ],
+            |  "other": [
+            |              {
+            |                "lineNo": "286",
+            |                "description": "Other Endeavours Ltd",
+            |                "entityStart": "2019-09-23"
+            |              }
+            |              ]
             | }
             |}
             |""".stripMargin)
@@ -250,6 +258,15 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   income = None,
                   incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2012-03-14")
+                )
+              ),
+              other = List(
+                OtherBeneficiary(
+                  description = "Other Endeavours Ltd",
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2019-09-23")
                 )
               )
             )

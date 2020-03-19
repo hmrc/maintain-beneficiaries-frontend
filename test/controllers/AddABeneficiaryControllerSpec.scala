@@ -57,8 +57,6 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     incomeDiscretionYesNo = false
   )
 
-  private val classOfBeneficiary = ClassOfBeneficiary("Beneficiaries description", entityStart = LocalDate.of(2019,9,23))
-
   private val trustBeneficiary = TrustBeneficiary(
     name = "Trust Beneficiary Name",
     address = None,
@@ -85,24 +83,34 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   )
 
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
-    description = "Description",
+    description = "Unidentified Beneficiary",
+    entityStart = LocalDate.parse("2019-02-28")
+  )
+
+  private val otherBeneficiary = OtherBeneficiary(
+    description = "Other Endeavours Ltd",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
     entityStart = LocalDate.parse("2019-02-28")
   )
 
   val beneficiaries = Beneficiaries(
     List(beneficiary),
-    List(classOfBeneficiary),
+    List(unidentifiedBeneficiary),
     List(companyBeneficiary),
     List(trustBeneficiary),
-    List(charityBeneficiary)
+    List(charityBeneficiary),
+    List(otherBeneficiary)
   )
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Beneficiaries description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
+    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
-    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None)
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),
+    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", None, "Remove", None)
   )
 
   class FakeService(data: Beneficiaries) extends TrustService {
@@ -121,7 +129,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -159,7 +167,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -181,7 +189,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
