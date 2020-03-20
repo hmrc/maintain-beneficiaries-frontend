@@ -19,14 +19,15 @@ package services
 import java.time.LocalDate
 
 import connectors.TrustConnector
-import models.Name
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.{Name, RemoveBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.http.Status.OK
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Future
@@ -100,6 +101,28 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
         _ mustBe unidentified
       }
 
+    }
+
+  }
+
+  "remove a ClassOfBeneficiary" in {
+
+    when(mockConnector.removeClassOfBeneficiary(any(),any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, None)))
+
+    val service = new TrustServiceImpl(mockConnector)
+
+    val trustee : RemoveBeneficiary =  RemoveBeneficiary(
+      index = 0,
+      endDate = LocalDate.now()
+    )
+
+    implicit val hc : HeaderCarrier = HeaderCarrier()
+
+    val result = service.removeClassOfBeneficiary("1234567890", trustee)
+
+    whenReady(result) { r =>
+      r.status mustBe 200
     }
 
   }

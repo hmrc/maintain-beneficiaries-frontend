@@ -22,7 +22,7 @@ import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
-import models.{AddABeneficiary, Name}
+import models.{AddABeneficiary, Name, RemoveBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.inject.bind
@@ -79,6 +79,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
                                            (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
       Future.successful(unidentifiedBeneficiary)
 
+    override def removeClassOfBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+      Future.successful(HttpResponse(OK))
   }
 
   " AddABeneficiary Controller" when {
