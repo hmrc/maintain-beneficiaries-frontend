@@ -57,8 +57,10 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val utr = "1000000008"
   val index = 0
   val description = "description"
+  val date: LocalDate = LocalDate.parse("2019-02-03")
 
   private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
+  private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
 
   "trust connector" when {
 
@@ -360,6 +362,60 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )
 
         val result = connector.amendClassOfBeneficiary(utr, index, description)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "addClassOfBeneficiary" must {
+
+      val classOfBeneficiary = ClassOfBeneficiary(description, date)
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
+
+        result.futureValue.status mustBe (OK)
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
