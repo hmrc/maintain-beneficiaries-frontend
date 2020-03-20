@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries._
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -46,14 +46,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
   val addTrusteeForm = new AddABeneficiaryFormProvider()()
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
-  val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
-    AddRow("Description", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(1).url), "Remove", None)
-  )
-
-  private val individualBeneficiary = IndividualBeneficiary(
+  private val beneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
     nationalInsuranceNumber = Some("JS123456A"),
@@ -61,15 +54,64 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,
     income = None,
-    incomeYesNo = false
+    incomeDiscretionYesNo = false
+  )
+
+  private val trustBeneficiary = TrustBeneficiary(
+    name = "Trust Beneficiary Name",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.of(2017, 2, 28))
+
+  private val charityBeneficiary = CharityBeneficiary(
+    name = "Humanitarian Endeavours Ltd",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14")
+  )
+
+  private val companyBeneficiary = CompanyBeneficiary(
+    name = "Humanitarian Company Ltd",
+    utr = Some("0987654321"),
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14")
   )
 
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
-    description = "Description",
+    description = "Unidentified Beneficiary",
     entityStart = LocalDate.parse("2019-02-28")
   )
 
-  val beneficiaries = Beneficiaries(List(individualBeneficiary, individualBeneficiary), List(unidentifiedBeneficiary, unidentifiedBeneficiary))
+  private val otherBeneficiary = OtherBeneficiary(
+    description = "Other Endeavours Ltd",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2019-02-28")
+  )
+
+  val beneficiaries = Beneficiaries(
+    List(beneficiary),
+    List(unidentifiedBeneficiary),
+    List(companyBeneficiary),
+    List(trustBeneficiary),
+    List(charityBeneficiary),
+    List(otherBeneficiary)
+  )
+
+  val beneficiaryRows = List(
+    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
+    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),
+    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", None, "Remove", None)
+  )
 
   class FakeService(data: Beneficiaries) extends TrustService {
 
@@ -87,7 +129,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -125,7 +167,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -147,7 +189,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -211,7 +253,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -282,7 +324,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 4 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
