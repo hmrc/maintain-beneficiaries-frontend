@@ -106,7 +106,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
+    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),

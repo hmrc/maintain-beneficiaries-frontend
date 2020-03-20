@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary
+package controllers.classofbeneficiary.amend
 
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
@@ -26,7 +26,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.classofbeneficiary.DescriptionView
+import views.html.classofbeneficiary.amend.DescriptionView
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-package navigation
+package pages
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import play.api.libs.json.JsPath
 
-@Singleton
-class Navigator @Inject()() {
-
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+package object classofbeneficiary {
+  val basePath = JsPath \ 'classOfBeneficiary
 }

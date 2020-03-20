@@ -14,55 +14,28 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary
-
-import java.time.LocalDate
+package controllers.classofbeneficiary.add
 
 import base.SpecBase
-import connectors.TrustConnector
 import forms.StringFormProvider
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.classofbeneficiary.DescriptionPage
 import play.api.data.Form
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.TrustService
-import uk.gov.hmrc.http.HttpResponse
-import views.html.classofbeneficiary.DescriptionView
-
-import scala.concurrent.Future
+import views.html.classofbeneficiary.add.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
   val form: Form[String] = new StringFormProvider().withPrefix("classOfBeneficiary.description")
-  val index = 0
-  lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad(index).url
+  lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad().url
   val description: String = "Description"
-  val date: LocalDate = LocalDate.parse("2019-02-28")
-
-  val mockTrustConnector: TrustConnector = mock[TrustConnector]
-
-  when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
-    .thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date)), Nil, Nil, Nil, Nil)))
-  when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any()))
-    .thenReturn(Future.successful(HttpResponse(OK)))
-
-  val mockTrustService: TrustService = mock[TrustService]
-
-  when(mockTrustService.getUnidentifiedBeneficiary(any(), any())(any(), any()))
-    .thenReturn(Future.successful(ClassOfBeneficiary(description, date)))
 
   "Description Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, descriptionRoute)
 
@@ -73,7 +46,27 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(description), index)(request, messages).toString
+        view(form)(request, messages).toString
+
+      application.stop()
+    }
+
+    "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val answers = emptyUserAnswers.set(DescriptionPage, description).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+      val request = FakeRequest(GET, descriptionRoute)
+
+      val view = application.injector.instanceOf[DescriptionView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form.fill(description))(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -81,12 +74,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[TrustService].toInstance(mockTrustService),
-            bind[TrustConnector].toInstance(mockTrustConnector)
-          )
-          .build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, descriptionRoute)
@@ -96,7 +84,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.EntityStartController.onPageLoad().url
 
       application.stop()
     }
@@ -116,7 +104,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index)(fakeRequest, messages).toString
+        view(boundForm)(fakeRequest, messages).toString
 
        application.stop()
     }
