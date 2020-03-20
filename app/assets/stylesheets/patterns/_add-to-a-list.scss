@@ -56,6 +56,8 @@
   margin: 0;
   text-align: left;
   font-weight: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 
   @include media(tablet) {
     display: table-cell;
