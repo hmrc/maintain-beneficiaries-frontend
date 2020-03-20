@@ -56,6 +56,12 @@ entities.beneficiaries.charity = Named charity
 entities.beneficiaries.company = Named company
 entities.beneficiaries.other = Other beneficiary
 
+beneficiary.employmentRelated.howManyBeneficiaries.over1 = 1 to 100
+beneficiary.employmentRelated.howManyBeneficiaries.over101 = 101 to 200
+beneficiary.employmentRelated.howManyBeneficiaries.over201 = 201 to 500
+beneficiary.employmentRelated.howManyBeneficiaries.over501 = 501 to 1000
+beneficiary.employmentRelated.howManyBeneficiaries.over1001 = Over 1,001
+
 classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
