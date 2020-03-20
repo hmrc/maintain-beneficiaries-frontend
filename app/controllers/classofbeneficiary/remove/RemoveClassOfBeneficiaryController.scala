@@ -76,7 +76,7 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
             trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
-                if (false) {  //TODO: This needs changed to - if (beneficiary.isNewlyAdded) {
+                if (beneficiary.provisional) {
                   for {
                     _ <- trust.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary(index))
                   } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

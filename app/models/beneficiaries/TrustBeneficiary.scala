@@ -26,7 +26,8 @@ final case class TrustBeneficiary(name: String,
                                   address : Option[Address],
                                   income: Option[String],
                                   incomeDiscretionYesNo: Boolean,
-                                  entityStart: LocalDate) extends Beneficiary
+                                  entityStart: LocalDate,
+                                  provisional : Boolean) extends Beneficiary
 
 object TrustBeneficiary {
   implicit val reads: Reads[TrustBeneficiary] =
@@ -34,11 +35,15 @@ object TrustBeneficiary {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ "entityStart").read[LocalDate]).tupled.map {
+      (__ \ "entityStart").read[LocalDate] and
+      (__ \ "provisional").readWithDefault(false)).tupled.map {
 
-      case (name, address, None, _, entityStart) => TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, _, Some(true), entityStart) => TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, income, _, entityStart) => TrustBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart)
+      case (name, address, None, _, entityStart, provisional) =>
+        TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, address, _, Some(true), entityStart, provisional) =>
+        TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, address, income, _, entityStart, provisional) =>
+        TrustBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (

@@ -45,7 +45,7 @@ class DescriptionController @Inject()(
     implicit request =>
 
       trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
-        case ClassOfBeneficiary(description, _) => Ok(view(form.fill(description), index))
+        case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
         case _ => Ok(view(form, index))
       }
   }

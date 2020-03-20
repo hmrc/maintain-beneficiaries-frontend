@@ -38,7 +38,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -48,7 +49,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no discretion for income info" in {
@@ -62,7 +64,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -72,7 +75,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no income at all" in {
@@ -85,7 +89,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -95,7 +100,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is a UK address" in {
@@ -118,7 +124,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
             |          "country": "GB"
             |       }
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -134,7 +141,8 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
     }

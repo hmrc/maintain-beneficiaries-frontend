@@ -55,7 +55,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,
     income = None,
-    incomeDiscretionYesNo = false
+    incomeDiscretionYesNo = false,
+    provisional = false
   )
 
   private val trustBeneficiary = TrustBeneficiary(
@@ -63,7 +64,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.of(2017, 2, 28))
+    entityStart = LocalDate.of(2017, 2, 28),
+    provisional = false
+  )
 
   private val charityBeneficiary = CharityBeneficiary(
     name = "Humanitarian Endeavours Ltd",
@@ -71,7 +74,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val companyBeneficiary = CompanyBeneficiary(
@@ -80,7 +84,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
@@ -89,12 +94,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     description = Seq("Description"),
     howManyBeneficiaries = Over201,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
     description = "Unidentified Beneficiary",
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = false
   )
 
   private val otherBeneficiary = OtherBeneficiary(
@@ -102,7 +109,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = false
   )
 
   val beneficiaries = Beneficiaries(

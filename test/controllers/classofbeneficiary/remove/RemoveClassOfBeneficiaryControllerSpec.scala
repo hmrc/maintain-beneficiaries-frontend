@@ -49,7 +49,8 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
 
   def classOfBeneficiary(id: Int, provisional : Boolean) = ClassOfBeneficiary(
     description = s"Some Description $id",
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = provisional
   )
 
   val expectedResult = classOfBeneficiary(2, provisional = true)

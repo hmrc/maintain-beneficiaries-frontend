@@ -20,7 +20,11 @@ import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.json.{Reads, __}
 import play.api.libs.functional.syntax._
 
-trait Beneficiary
+trait Beneficiary {
+
+  val provisional : Boolean
+
+}
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          unidentified: List[ClassOfBeneficiary],

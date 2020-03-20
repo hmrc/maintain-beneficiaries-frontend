@@ -66,7 +66,8 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   def classOfBeneficiary(id: Int) = ClassOfBeneficiary(
     description = s"Some Description $id",
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = false
   )
 
   val beneficiaries = List(classOfBeneficiary(1), classOfBeneficiary(2), classOfBeneficiary(3))
