@@ -44,11 +44,16 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
   val date: LocalDate = LocalDate.parse("2019-02-28")
 
   val mockTrustConnector: TrustConnector = mock[TrustConnector]
-  when(mockTrustConnector.getBeneficiaries(any())(any(), any())).thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date)))))
-  when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+
+  when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
+    .thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date)), Nil, Nil, Nil, Nil, Nil)))
+  when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any()))
+    .thenReturn(Future.successful(HttpResponse(OK)))
 
   val mockTrustService: TrustService = mock[TrustService]
-  when(mockTrustService.getUnidentifiedBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(ClassOfBeneficiary(description, date)))
+
+  when(mockTrustService.getUnidentifiedBeneficiary(any(), any())(any(), any()))
+    .thenReturn(Future.successful(ClassOfBeneficiary(description, date)))
 
   "Description Controller" must {
 

@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json}
 
-final case class ClassOfBeneficiary(description: String, entityStart: LocalDate)
+final case class ClassOfBeneficiary(description: String, entityStart: LocalDate) extends Beneficiary
 
 object ClassOfBeneficiary {
   implicit val formats : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]

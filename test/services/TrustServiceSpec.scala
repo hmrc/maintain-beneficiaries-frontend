@@ -19,8 +19,9 @@ package services
 import java.time.LocalDate
 
 import connectors.TrustConnector
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.HowManyBeneficiaries.Over101
 import models.{Name, RemoveBeneficiary}
+import models.beneficiaries._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -47,14 +48,66 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
         address = None,
         vulnerableYesNo = false,
         income = None,
-        incomeYesNo = false,
+        incomeDiscretionYesNo = false,
         entityStart = LocalDate.of(2012, 4, 15)
       )
 
       val classOf = ClassOfBeneficiary("Test Beneficiary", LocalDate.of(2019, 9, 23))
 
+      val companyBeneficiary = CompanyBeneficiary(
+        name = "Company Beneficiary Name",
+        utr = None,
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28))
+
+
+      val trustBeneficiary = TrustBeneficiary(
+        name = "Trust Beneficiary Name",
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28))
+
+      val charityBeneficiary = CharityBeneficiary(
+        name = "Humanitarian Endeavours Ltd",
+        utr = None,
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.parse("2012-03-14")
+      )
+
+      val otherBeneficiary = OtherBeneficiary(
+        description = "Other Endeavours Ltd",
+        address = None,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.parse("2012-03-14")
+      )
+
+      val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
+        name = "Employment Related Endeavors Ltd",
+        utr = None,
+        address = None,
+        description = Seq("Other Endeavours Ltd"),
+        howManyBeneficiaries = Over101,
+        entityStart = LocalDate.parse("2012-03-14")
+      )
+
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf))))
+        .thenReturn(Future.successful(
+          Beneficiaries(
+            List(individual),
+            List(classOf),
+            List(companyBeneficiary),
+            List(employmentRelatedBeneficiary),
+            List(trustBeneficiary),
+            List(charityBeneficiary),
+            List(otherBeneficiary)
+          )
+        ))
 
       val service = new TrustServiceImpl(mockConnector)
 
@@ -63,9 +116,16 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val result = service.getBeneficiaries("1234567890")
 
       whenReady(result) {
-        _ mustBe Beneficiaries(List(individual), List(classOf))
+        _ mustBe Beneficiaries(
+          List(individual),
+          List(classOf),
+          List(companyBeneficiary),
+          List(employmentRelatedBeneficiary),
+          List(trustBeneficiary),
+          List(charityBeneficiary),
+          List(otherBeneficiary)
+        )
       }
-
     }
 
     "get beneficiary" in {
@@ -79,7 +139,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
         address = None,
         vulnerableYesNo = false,
         income = None,
-        incomeYesNo = false,
+        incomeDiscretionYesNo = false,
         entityStart = LocalDate.parse("2019-02-28")
       )
 
@@ -89,7 +149,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       )
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified))))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified), Nil, Nil, Nil, Nil, Nil)))
 
       val service = new TrustServiceImpl(mockConnector)
 

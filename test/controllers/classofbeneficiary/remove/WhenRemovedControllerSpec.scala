@@ -76,7 +76,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List.empty, beneficiaries)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 
@@ -98,7 +98,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         .set(WhenRemovedPage, validAnswer).success.value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List.empty, beneficiaries)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 

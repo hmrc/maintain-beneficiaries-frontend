@@ -13,10 +13,27 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980
+site.inprogress = In Progress
 site.complete = Completed
 
 error.browser.title.prefix = Error:
+
+error.boolean = Please give an answer
+error.invalid_date = Give a correct date
+error.date.day_blank = Enter a day
+error.date.day_invalid = Give a correct day using numbers 1 to 31
+error.date.month_blank = Enter a month
+error.date.month_invalid = Give a correct month using numbers 1 to 12
+error.date.year_blank = Enter a year
+error.date.year_invalid = Give a correct year
+error.integer = Give an answer in whole numbers
+error.non_numeric = Give a value using only numbers
+error.number = Please enter a valid number
+error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
+error.summary.title = There is a problem
+
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -50,6 +67,17 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
 entities.beneficiaries.unidentified = Class of beneficiaries
+entities.beneficiaries.trust = Named trust
+entities.beneficiaries.charity = Named charity
+entities.beneficiaries.company = Named company
+entities.beneficiaries.employmentRelated = Employment related
+entities.beneficiaries.other = Other beneficiary
+
+beneficiary.employmentRelated.howManyBeneficiaries.over1 = 1 to 100
+beneficiary.employmentRelated.howManyBeneficiaries.over101 = 101 to 200
+beneficiary.employmentRelated.howManyBeneficiaries.over201 = 201 to 500
+beneficiary.employmentRelated.howManyBeneficiaries.over501 = 501 to 1000
+beneficiary.employmentRelated.howManyBeneficiaries.over1001 = Over 1,001
 
 classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?

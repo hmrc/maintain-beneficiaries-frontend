@@ -16,21 +16,21 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries._
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
   private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
-        AddRow(
-          name = beneficiary.name.displayName,
-          typeLabel = messages("entities.beneficiaries.individual"),
-          changeLabel = messages("site.change.details"),
-          changeUrl = None,
-          removeLabel =  messages("site.delete"),
-          removeUrl = None
-        )
+    AddRow(
+      name = beneficiary.name.displayName,
+      typeLabel = messages("entities.beneficiaries.individual"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel =  messages("site.delete"),
+      removeUrl = None
+    )
   }
 
   private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
@@ -44,10 +44,66 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
     )
   }
 
+  private def renderTrustBeneficiary(beneficiary: TrustBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.trust"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
+  private def renderCharityBeneficiary(beneficiary: CharityBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.charity"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
+  private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.company"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
+  private def renderEmploymentRelatedBeneficiary(beneficiary: EmploymentRelatedBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.employmentRelated"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
+  private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.description,
+      typeLabel = messages("entities.beneficiaries.other"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
+
   def rows : AddToRows = {
     val complete =
       beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
-      beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2))
+        beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2)) ++
+        beneficiaries.company.zipWithIndex.map(x => renderCompanyBeneficiary(x._1, x._2)) ++
+        beneficiaries.employmentRelated.zipWithIndex.map(x => renderEmploymentRelatedBeneficiary(x._1, x._2)) ++
+        beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2)) ++
+        beneficiaries.charity.zipWithIndex.map(x => renderCharityBeneficiary(x._1, x._2)) ++
+        beneficiaries.other.zipWithIndex.map(x => renderOtherBeneficiary(x._1, x._2))
 
     AddToRows(Nil, complete)
   }

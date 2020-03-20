@@ -69,7 +69,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List.empty, beneficiaries)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[TrustConnector].toInstance(mockConnector))
@@ -119,7 +119,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
         val index = 0
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(List.empty, beneficiaries)))
+          .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[TrustConnector].toInstance(mockConnector))
@@ -150,7 +150,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
           .build()
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(List.empty, beneficiaries)))
+          .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
         when(mockConnector.removeClassOfBeneficiary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
