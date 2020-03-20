@@ -74,6 +74,16 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = None
     )
 
+  private def renderEmploymentRelatedBeneficiary(beneficiary: EmploymentRelatedBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.name,
+      typeLabel = messages("entities.beneficiaries.employmentRelated"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
   private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int) : AddRow =
     AddRow(
       name = beneficiary.description,
@@ -90,6 +100,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
         beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2)) ++
         beneficiaries.company.zipWithIndex.map(x => renderCompanyBeneficiary(x._1, x._2)) ++
+        beneficiaries.employmentRelated.zipWithIndex.map(x => renderEmploymentRelatedBeneficiary(x._1, x._2)) ++
         beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2)) ++
         beneficiaries.charity.zipWithIndex.map(x => renderCharityBeneficiary(x._1, x._2)) ++
         beneficiaries.other.zipWithIndex.map(x => renderOtherBeneficiary(x._1, x._2))
