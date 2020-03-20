@@ -16,30 +16,33 @@
 
 package utils
 
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, IndividualBeneficiary, TrustBeneficiary}
+import models.beneficiaries._
 import play.api.i18n.Messages
 import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def render(beneficiary: IndividualBeneficiary, index: Int) : AddRow =
+  private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
     AddRow(
       name = beneficiary.name.displayName,
       typeLabel = messages("entities.beneficiaries.individual"),
       changeLabel = messages("site.change.details"),
       changeUrl = None,
-      removeLabel = messages("site.delete"),
+      removeLabel =  messages("site.delete"),
       removeUrl = None
     )
-  private def renderClassOf(beneficiary: ClassOfBeneficiary, index: Int) : AddRow =
+  }
+
+  private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
     AddRow(
       name = beneficiary.description,
-      typeLabel = messages("entities.beneficiaries.classOf"),
+      typeLabel = messages("entities.beneficiaries.unidentified"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
-      removeLabel = messages("site.delete"),
+      changeUrl = Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(index).url),
+      removeLabel =  messages("site.delete"),
       removeUrl = None
     )
+  }
 
   private def renderTrustBeneficiary(beneficiary: TrustBeneficiary, index: Int) : AddRow =
     AddRow(
@@ -71,15 +74,25 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = None
     )
 
+  private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int) : AddRow =
+    AddRow(
+      name = beneficiary.description,
+      typeLabel = messages("entities.beneficiaries.other"),
+      changeLabel = messages("site.change.details"),
+      changeUrl = None,
+      removeLabel = messages("site.delete"),
+      removeUrl = None
+    )
+
 
   def rows : AddToRows = {
-    val completeIndividuals = beneficiaries.individualDetails.zipWithIndex.map(x => render(x._1, x._2))
-    val completeClassOf = beneficiaries.classOf.zipWithIndex.map(x => renderClassOf(x._1, x._2))
-    val completeTrust = beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2))
-    val completeCharity = beneficiaries.charity.zipWithIndex.map(x => renderCharityBeneficiary(x._1, x._2))
-    val completeCompany = beneficiaries.company.zipWithIndex.map(x => renderCompanyBeneficiary(x._1, x._2))
-
-    val complete = completeIndividuals ++ completeClassOf ++ completeCompany ++ completeTrust ++ completeCharity
+    val complete =
+      beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
+        beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2)) ++
+        beneficiaries.company.zipWithIndex.map(x => renderCompanyBeneficiary(x._1, x._2)) ++
+        beneficiaries.trust.zipWithIndex.map(x => renderTrustBeneficiary(x._1, x._2)) ++
+        beneficiaries.charity.zipWithIndex.map(x => renderCharityBeneficiary(x._1, x._2)) ++
+        beneficiaries.other.zipWithIndex.map(x => renderOtherBeneficiary(x._1, x._2))
 
     AddToRows(Nil, complete)
   }

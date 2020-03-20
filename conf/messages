@@ -17,6 +17,7 @@ site.inprogress = In Progress
 site.complete = Completed
 
 error.browser.title.prefix = Error:
+
 error.boolean = Please give an answer
 error.invalid_date = Give a correct date
 error.date.day_blank = Enter a day
@@ -31,6 +32,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
+error.summary.title = There is a problem
+
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -63,7 +66,16 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
-entities.beneficiaries.classOf = Class of beneficiaries
+entities.beneficiaries.unidentified = Class of beneficiaries
 entities.beneficiaries.trust = Named trust
 entities.beneficiaries.charity = Named charity
 entities.beneficiaries.company = Named company
+entities.beneficiaries.other = Other beneficiary
+
+classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
+classOfBeneficiary.description.error.required = Enter the description for the class of beneficiaries
+classOfBeneficiary.description.error.invalidFormat = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+classOfBeneficiary.description.error.length = The description of the class in the trust deed must be 56 characters or less
+classOfBeneficiary.description.return.link = Return to add a beneficiary

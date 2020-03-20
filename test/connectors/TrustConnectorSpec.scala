@@ -18,16 +18,18 @@ package connectors
 
 import java.time.LocalDate
 
+import models.Name
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
+import play.api.libs.json.Json
 import base.SpecBase
-import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
-import models.Name
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, TrustBeneficiary}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
-import play.api.libs.json.Json
+import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
 class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
@@ -51,6 +53,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     server.stop()
   }
 
+  val utr = "1000000008"
+  val index = 0
+  val description = "description"
+
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
 
   "trust connector" when {
 
@@ -89,10 +96,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           result =>
             result mustBe Beneficiaries(
               individualDetails = Nil,
-              classOf = Nil,
+              unidentified = Nil,
               company = Nil,
               trust = Nil,
-              charity = Nil)
+              charity = Nil,
+              other = Nil)
         }
 
         application.stop()
@@ -178,7 +186,14 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       },
             |       "entityStart": "2012-03-14"
             |    }
-            |  ]
+            |  ],
+            |  "other": [
+            |              {
+            |                "lineNo": "286",
+            |                "description": "Other Endeavours Ltd",
+            |                "entityStart": "2019-09-23"
+            |              }
+            |              ]
             | }
             |}
             |""".stripMargin)
@@ -215,7 +230,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   entityStart = LocalDate.parse("2000-01-01")
                 )
               ),
-              classOf = List(
+              unidentified = List(
                 ClassOfBeneficiary(
                   description = "Beneficiary Unidentified 25",
                   entityStart = LocalDate.parse("2019-09-23")
@@ -244,9 +259,70 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2012-03-14")
                 )
+              ),
+              other = List(
+                OtherBeneficiary(
+                  description = "Other Endeavours Ltd",
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2019-09-23")
+                )
               )
             )
         }
+
+        application.stop()
+      }
+
+    }
+
+    "amendClassOfBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendClassOfBeneficiary(utr, index, description)
+
+        result.futureValue.status mustBe (OK)
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendClassOfBeneficiary(utr, index, description)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
 
         application.stop()
       }

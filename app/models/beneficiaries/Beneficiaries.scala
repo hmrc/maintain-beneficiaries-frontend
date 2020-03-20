@@ -23,13 +23,14 @@ import play.api.libs.functional.syntax._
 trait Beneficiary
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
-                         classOf: List[ClassOfBeneficiary],
+                         unidentified: List[ClassOfBeneficiary],
                          company: List[CompanyBeneficiary],
                          trust: List[TrustBeneficiary],
-                         charity: List[CharityBeneficiary]) {
+                         charity: List[CharityBeneficiary],
+                         other: List[OtherBeneficiary]) {
 
   def addToHeading()(implicit mp: MessagesProvider): String =
-    (individualDetails ++ classOf ++ company ++ trust ++ charity ++ company).size match {
+    (individualDetails ++ unidentified ++ company ++ trust ++ charity ++ other).size match {
       case 0 => Messages("addABeneficiary.heading")
       case 1 => Messages("addABeneficiary.singular.heading")
       case l => Messages("addABeneficiary.count.heading", l)
@@ -43,5 +44,6 @@ object Beneficiaries {
       and (__ \ "beneficiary" \ "company").readWithDefault[List[CompanyBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "trust").readWithDefault[List[TrustBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "charity").readWithDefault[List[CharityBeneficiary]](Nil)
+      and (__ \ "beneficiary" \ "other").readWithDefault[List[OtherBeneficiary]](Nil)
       ).apply(Beneficiaries.apply _)
 }
