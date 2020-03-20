@@ -70,7 +70,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -116,7 +116,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -152,7 +152,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           vulnerableYesNo = true,
           income = Some("10"),
-          incomeYesNo = false,
+          incomeDiscretionYesNo = false,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
@@ -183,13 +183,113 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           nationalInsuranceNumber = None,
           address = None,
           vulnerableYesNo = true,
-          income = Some("0"),
-          incomeYesNo = true,
+          income = None,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }
 
-      "implying incomeYesNo" in {
+      "there is conflicting income info" in {
+
+        val json = Json.parse(
+          """
+            |{
+            |    "lineNo": "1",
+            |    "bpMatchStatus": "01",
+            |    "name": {
+            |    "firstName": "Nicola",
+            |    "middleName": "Andrey",
+            |    "lastName": "Jackson"
+            |    },
+            |    "dateOfBirth": "1970-02-28",
+            |    "vulnerableBeneficiary": true,
+            |    "beneficiaryType": "Director",
+            |    "beneficiaryDiscretion": true,
+            |    "beneficiaryShareOfIncome": "0",
+            |    "identification": {
+            |       "safeId": "2222200000000",
+            |       "address": {
+            |          "line1": "Suite 10",
+            |          "line2": "Wealthy Arena",
+            |          "line3": "Trafagar Square",
+            |          "line4": "London",
+            |          "postCode": "SE2 2HB",
+            |          "country": "GB"
+            |       }
+            |    },
+            |    "entityStart": "2017-02-28"
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[IndividualBeneficiary]
+        beneficiary mustBe IndividualBeneficiary(
+          name = Name("Nicola", Some("Andrey"), "Jackson"),
+          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
+          nationalInsuranceNumber = None,
+          address = Some(UkAddress(
+            "Suite 10",
+            "Wealthy Arena",
+            Some("Trafagar Square"),
+            Some("London"),
+            "SE2 2HB"
+          )),
+          vulnerableYesNo = true,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.of(2017, 2, 28)
+        )
+      }
+      "there is no discretion for income info" in {
+
+        val json = Json.parse(
+          """
+            |{
+            |    "lineNo": "1",
+            |    "bpMatchStatus": "01",
+            |    "name": {
+            |    "firstName": "Nicola",
+            |    "middleName": "Andrey",
+            |    "lastName": "Jackson"
+            |    },
+            |    "dateOfBirth": "1970-02-28",
+            |    "vulnerableBeneficiary": true,
+            |    "beneficiaryType": "Director",
+            |    "beneficiaryShareOfIncome": "10000",
+            |    "identification": {
+            |       "safeId": "2222200000000",
+            |       "address": {
+            |          "line1": "Suite 10",
+            |          "line2": "Wealthy Arena",
+            |          "line3": "Trafagar Square",
+            |          "line4": "London",
+            |          "postCode": "SE2 2HB",
+            |          "country": "GB"
+            |       }
+            |    },
+            |    "entityStart": "2017-02-28"
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[IndividualBeneficiary]
+        beneficiary mustBe IndividualBeneficiary(
+          name = Name("Nicola", Some("Andrey"), "Jackson"),
+          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
+          nationalInsuranceNumber = None,
+          address = Some(UkAddress(
+            "Suite 10",
+            "Wealthy Arena",
+            Some("Trafagar Square"),
+            Some("London"),
+            "SE2 2HB"
+          )),
+          vulnerableYesNo = true,
+          income = Some("10000"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.of(2017, 2, 28)
+        )
+      }
+      "there is no income at all" in {
+
         val json = Json.parse(
           """
             |{
@@ -232,7 +332,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           vulnerableYesNo = true,
           income = None,
-          incomeYesNo = true,
+          incomeDiscretionYesNo = true,
           entityStart = LocalDate.of(2017, 2, 28)
         )
       }

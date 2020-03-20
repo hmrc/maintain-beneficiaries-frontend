@@ -18,12 +18,15 @@ package connectors
 
 import java.time.LocalDate
 
+import models.Name
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
+import play.api.libs.json.Json
 import base.SpecBase
+import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
-import models.beneficiaries.ClassOfBeneficiary
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.test.Helpers._
@@ -32,9 +35,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   with Inside with BeforeAndAfterAll with BeforeAndAfterEach with IntegrationPatience {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
-
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
-  private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
 
   protected val server: WireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
 
@@ -56,110 +56,277 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val utr = "1000000008"
   val index = 0
   val description = "description"
-  val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  "TrustConnector amendClassOfBeneficiary" must {
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
 
-    "Return OK when the request is successful" in {
+  "trust connector" when {
 
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
+    "get beneficiaries returns a trust with empty lists" must {
 
-      val connector = application.injector.instanceOf[TrustConnector]
+      "return a default empty list beneficiaries" in {
 
-      server.stubFor(
-        post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
-          .willReturn(ok)
-      )
+        val utr = "1000000008"
 
-      val result = connector.amendClassOfBeneficiary(utr, index, description)
+        val json = Json.parse(
+          """
+            |{
+            | "beneficiary": {
+            | }
+            |}
+            |""".stripMargin)
 
-      result.futureValue.status mustBe (OK)
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
 
-      application.stop()
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          get(urlEqualTo(s"/trusts/$utr/transformed/beneficiaries"))
+            .willReturn(okJson(json.toString))
+        )
+
+        val processed = connector.getBeneficiaries(utr)
+
+        whenReady(processed) {
+          result =>
+            result mustBe Beneficiaries(
+              individualDetails = Nil,
+              unidentified = Nil,
+              company = Nil,
+              trust = Nil,
+              charity = Nil,
+              other = Nil)
+        }
+
+        application.stop()
+      }
+
     }
 
-    "return Bad Request when the request is unsuccessful" in {
+    "get beneficiaries" must {
 
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
+      "parse the response and return the beneficiaries" in {
+        val utr = "1000000008"
 
-      val connector = application.injector.instanceOf[TrustConnector]
+        val json = Json.parse(
+          """
+            |{
+            | "beneficiary": {
+            |   "charity": [
+            |				{
+            |					"lineNo": "1",
+            |					"bpMatchStatus": "01",
+            |					"entityStart": "2019-02-28",
+            |					"organisationName": "1234567890 QwErTyUiOp ,.(/)&'- name",
+            |					"beneficiaryDiscretion": false,
+            |					"beneficiaryShareOfIncome": "100",
+            |					"identification": {
+            |						"address": {
+            |							"line1": "1234567890 QwErTyUiOp ,.(/)&'- name",
+            |							"line2": "1234567890 QwErTyUiOp ,.(/)&'- name",
+            |							"line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
+            |							"country": "DE"
+            |						}
+            |					}
+            |				}
+            |			],
+            |   "individualDetails": [
+            |     {
+            |         "lineNo": "7",
+            |         "bpMatchStatus": "01",
+            |         "entityStart": "2000-01-01",
+            |         "name": {
+            |           "firstName": "first",
+            |           "lastName": "last"
+            |         },
+            |         "vulnerableBeneficiary": false
+            |      }
+            |    ],
+            |    "unidentified": [
+            |      {
+            |        "lineNo": "311",
+            |        "description": "Beneficiary Unidentified 25",
+            |        "beneficiaryDiscretion": false,
+            |        "beneficiaryShareOfIncome": "25",
+            |        "entityStart": "2019-09-23"
+            |      },
+            |      {
+            |         "lineNo": "309",
+            |         "description": "Beneficiary Unidentified 23",
+            |         "entityStart": "2019-09-23"
+            |       }
+            |  ],
+            |  "trust": [
+            |    {
+            |       "lineNo": "1",
+            |       "bpMatchStatus": "01",
+            |       "organisationName": "Nelson Ltd ",
+            |       "beneficiaryDiscretion": true,
+            |       "beneficiaryShareOfIncome": "0",
+            |       "identification": {
+            |         "safeId": "2222200000000"
+            |       },
+            |       "entityStart": "2017-02-28"
+            |    }
+            |  ],
+            |  "charity": [
+            |    {
+            |       "lineNo": "1",
+            |       "bpMatchStatus": "01",
+            |       "organisationName": "Humanitarian Endeavours Ltd",
+            |       "beneficiaryDiscretion": true,
+            |       "beneficiaryShareOfIncome": "0",
+            |       "identification": {
+            |         "safeId": "2222200000000"
+            |       },
+            |       "entityStart": "2012-03-14"
+            |    }
+            |  ],
+            |  "other": [
+            |              {
+            |                "lineNo": "286",
+            |                "description": "Other Endeavours Ltd",
+            |                "entityStart": "2019-09-23"
+            |              }
+            |              ]
+            | }
+            |}
+            |""".stripMargin)
 
-      server.stubFor(
-        post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
-          .willReturn(badRequest)
-      )
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
 
-      val result = connector.amendClassOfBeneficiary(utr, index, description)
+        val connector = application.injector.instanceOf[TrustConnector]
 
-      result.map(response => response.status mustBe BAD_REQUEST)
+        server.stubFor(
+          get(urlEqualTo(s"/trusts/$utr/transformed/beneficiaries"))
+            .willReturn(okJson(json.toString))
+        )
 
-      application.stop()
+        val processed = connector.getBeneficiaries(utr)
+
+        whenReady(processed) {
+          result =>
+            result mustBe Beneficiaries(
+              individualDetails = List(
+                IndividualBeneficiary(
+                  name = Name("first", None, "last"),
+                  dateOfBirth = None,
+                  nationalInsuranceNumber = None,
+                  address = None,
+                  vulnerableYesNo = false,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2000-01-01")
+                )
+              ),
+              unidentified = List(
+                ClassOfBeneficiary(
+                  description = "Beneficiary Unidentified 25",
+                  entityStart = LocalDate.parse("2019-09-23")
+                ),
+                ClassOfBeneficiary(
+                  description = "Beneficiary Unidentified 23",
+                  entityStart = LocalDate.parse("2019-09-23")
+                )
+              ),
+              company = Nil,
+              trust = List(
+                TrustBeneficiary(
+                  name = "Nelson Ltd ",
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2017-02-28")
+                )
+              ),
+              charity = List(
+                CharityBeneficiary(
+                  name = "Humanitarian Endeavours Ltd",
+                  utr = None,
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2012-03-14")
+                )
+              ),
+              other = List(
+                OtherBeneficiary(
+                  description = "Other Endeavours Ltd",
+                  address = None,
+                  income = None,
+                  incomeDiscretionYesNo = true,
+                  entityStart = LocalDate.parse("2019-09-23")
+                )
+              )
+            )
+        }
+
+        application.stop()
+      }
+
     }
 
-  }
+    "amendClassOfBeneficiary" must {
 
-  "TrustConnector addClassOfBeneficiary" must {
+      "Return OK when the request is successful" in {
 
-    val classOfBeneficiary = ClassOfBeneficiary(description, date)
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
 
-    "Return OK when the request is successful" in {
+        val connector = application.injector.instanceOf[TrustConnector]
 
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
+        server.stubFor(
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
 
-      val connector = application.injector.instanceOf[TrustConnector]
+        val result = connector.amendClassOfBeneficiary(utr, index, description)
 
-      server.stubFor(
-        post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
-          .willReturn(ok)
-      )
+        result.futureValue.status mustBe (OK)
 
-      val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
+        application.stop()
+      }
 
-      result.futureValue.status mustBe (OK)
+      "return Bad Request when the request is unsuccessful" in {
 
-      application.stop()
-    }
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
 
-    "return Bad Request when the request is unsuccessful" in {
+        val connector = application.injector.instanceOf[TrustConnector]
 
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
+        server.stubFor(
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
 
-      val connector = application.injector.instanceOf[TrustConnector]
+        val result = connector.amendClassOfBeneficiary(utr, index, description)
 
-      server.stubFor(
-        post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
-          .willReturn(badRequest)
-      )
+        result.map(response => response.status mustBe BAD_REQUEST)
 
-      val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
+        application.stop()
+      }
 
-      result.map(response => response.status mustBe BAD_REQUEST)
-
-      application.stop()
     }
 
   }

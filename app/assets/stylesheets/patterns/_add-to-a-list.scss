@@ -43,7 +43,7 @@
 .hmrc-add-to-a-list__contents:first-child dt {
   @include media(tablet) {
     padding-top: 0;
-    padding-right: 5px;
+    padding-right: 20px;
   }
 }
 
@@ -56,6 +56,8 @@
   margin: 0;
   text-align: left;
   font-weight: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 
   @include media(tablet) {
     display: table-cell;
@@ -69,11 +71,11 @@
 
   @include media(tablet) {
     margin: 0;
-    padding-right: 5px;
+    padding-right: 20px;
   }
 }
 
 .hmrc-add-to-a-list__identifier--light {
   font-weight: normal;
-  padding: 0;
+  padding-right: 20px;
 }
