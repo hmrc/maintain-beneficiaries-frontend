@@ -19,7 +19,7 @@ package connectors
 import java.time.LocalDate
 
 import models.Name
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, EmploymentRelatedBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
 import play.api.libs.json.Json
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
@@ -27,6 +27,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
+import models.HowManyBeneficiaries.Over501
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.test.Helpers._
@@ -100,6 +101,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               individualDetails = Nil,
               unidentified = Nil,
               company = Nil,
+              employmentRelated = Nil,
               trust = Nil,
               charity = Nil,
               other = Nil)
@@ -176,6 +178,24 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       "entityStart": "2017-02-28"
             |    }
             |  ],
+            |  "company": [
+            |   {
+            |                "lineNo": "184",
+            |                "bpMatchStatus": "01",
+            |                "organisationName": "Company Ltd",
+            |                "entityStart": "2019-09-23"
+            |              }
+            |  ],
+            |  "large": [
+            |  {
+            |                "lineNo": "254",
+            |                "bpMatchStatus": "01",
+            |                "organisationName": "Employment Related Endeavours",
+            |                "description": "Description 1",
+            |                "numberOfBeneficiary": "501",
+            |                "entityStart": "2019-09-23"
+            |              }
+            |  ],
             |  "charity": [
             |    {
             |       "lineNo": "1",
@@ -242,7 +262,26 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   entityStart = LocalDate.parse("2019-09-23")
                 )
               ),
-              company = Nil,
+              company = List(
+                CompanyBeneficiary(
+                  name = "Company Ltd",
+                  utr = None,
+                  address = None,
+                  None,
+                  true,
+                  entityStart = LocalDate.parse("2019-09-23")
+                )
+              ),
+              employmentRelated = List(
+                EmploymentRelatedBeneficiary(
+                  name = "Employment Related Endeavours",
+                  utr = None,
+                  address = None,
+                  description = Seq("Description 1"),
+                  howManyBeneficiaries = Over501,
+                  entityStart = LocalDate.parse("2019-09-23")
+                )
+              ),
               trust = List(
                 TrustBeneficiary(
                   name = "Nelson Ltd ",

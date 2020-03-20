@@ -25,12 +25,13 @@ trait Beneficiary
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          unidentified: List[ClassOfBeneficiary],
                          company: List[CompanyBeneficiary],
+                         employmentRelated: List[EmploymentRelatedBeneficiary],
                          trust: List[TrustBeneficiary],
                          charity: List[CharityBeneficiary],
                          other: List[OtherBeneficiary]) {
 
   def addToHeading()(implicit mp: MessagesProvider): String =
-    (individualDetails ++ unidentified ++ company ++ trust ++ charity ++ other).size match {
+    (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
       case 0 => Messages("addABeneficiary.heading")
       case 1 => Messages("addABeneficiary.singular.heading")
       case l => Messages("addABeneficiary.count.heading", l)
@@ -42,6 +43,7 @@ object Beneficiaries {
     ((__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "company").readWithDefault[List[CompanyBeneficiary]](Nil)
+      and (__ \ "beneficiary" \ "large").readWithDefault[List[EmploymentRelatedBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "trust").readWithDefault[List[TrustBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "charity").readWithDefault[List[CharityBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "other").readWithDefault[List[OtherBeneficiary]](Nil)

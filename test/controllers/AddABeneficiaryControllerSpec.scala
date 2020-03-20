@@ -21,6 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustStoreConnector
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
+import models.HowManyBeneficiaries.Over201
 import models.beneficiaries._
 import models.{AddABeneficiary, Name}
 import org.mockito.Matchers.any
@@ -82,6 +83,15 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2012-03-14")
   )
 
+  private val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
+    name = "Employment Related Endeavours",
+    utr = Some("0987654321"),
+    address = None,
+    description = Seq("Description"),
+    howManyBeneficiaries = Over201,
+    entityStart = LocalDate.parse("2012-03-14")
+  )
+
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
     description = "Unidentified Beneficiary",
     entityStart = LocalDate.parse("2019-02-28")
@@ -99,6 +109,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     List(beneficiary),
     List(unidentifiedBeneficiary),
     List(companyBeneficiary),
+    List(employmentRelatedBeneficiary),
     List(trustBeneficiary),
     List(charityBeneficiary),
     List(otherBeneficiary)
@@ -108,6 +119,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
     AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
+    AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", None, "Remove", None),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),
     AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", None, "Remove", None)
@@ -129,7 +141,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to Session Expired for a GET if no existing data is found" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = None).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -167,7 +179,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -189,7 +201,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil))
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService)
@@ -253,7 +265,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -324,7 +336,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 6 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
       }

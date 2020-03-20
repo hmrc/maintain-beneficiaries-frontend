@@ -70,6 +70,7 @@ entities.beneficiaries.unidentified = Class of beneficiaries
 entities.beneficiaries.trust = Named trust
 entities.beneficiaries.charity = Named charity
 entities.beneficiaries.company = Named company
+entities.beneficiaries.employmentRelated = Employment related
 entities.beneficiaries.other = Other beneficiary
 
 beneficiary.employmentRelated.howManyBeneficiaries.over1 = 1 to 100
