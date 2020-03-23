@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.mappings.Mappings
-import javax.inject.Inject
 import models.beneficiaries.Beneficiary
-import play.api.data.Form
+import play.api.libs.json.JsPath
 
-class AddBeneficiaryTypeFormProvider @Inject() extends Mappings {
+case object AddNowPage extends QuestionPage[Beneficiary] {
 
-  def apply(): Form[Beneficiary] =
-    Form(
-      "value" -> enumerable[Beneficiary]("addNow.error.required")
-    )
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "addNow"
 }

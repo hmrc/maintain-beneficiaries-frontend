@@ -16,52 +16,60 @@
 
 package controllers
 
-import config.FrontendAppConfig
-import connectors.TrustConnector
 import controllers.actions._
+import forms.AddBeneficiaryTypeFormProvider
 import javax.inject.Inject
+import models.beneficiaries.Beneficiary
+import models.beneficiaries.Beneficiary._
+import pages.AddNowPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.ClassOfBeneficiaryMapper
-import utils.print.ClassOfBeneficiaryPrintHelper
-import viewmodels.AnswerSection
-import views.html.classofbeneficiary.add.CheckDetailsView
+import views.html.AddNowView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddNowController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        connector: TrustConnector,
-                                        val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: ClassOfBeneficiaryPrintHelper,
-                                        mapper: ClassOfBeneficiaryMapper
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                  override val messagesApi: MessagesApi,
+                                  standardActionSets: StandardActionSets,
+                                  val controllerComponents: MessagesControllerComponents,
+                                  view: AddNowView,
+                                  formProvider: AddBeneficiaryTypeFormProvider,
+                                  repository: PlaybackRepository
+                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  val form: Form[Beneficiary] = formProvider.apply()
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers)
-      Ok(view(section))
+      val preparedForm = request.userAnswers.get(AddNowPage) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers) match {
-        case None =>
-          Future.successful(InternalServerError)
-        case Some(beneficiary) =>
+      form.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors))),
+
+        value =>
           for {
-            _ <- connector.addClassOfBeneficiary(request.userAnswers.utr, beneficiary)
-            updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath))
-            _ <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-      }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddNowPage, value))
+            _ <- repository.set(updatedAnswers)
+          } yield {
+            value match {
+              case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
+              case _ => Redirect(controllers.routes.AddNowController.onPageLoad())
+            }
+          }
+      )
   }
 }

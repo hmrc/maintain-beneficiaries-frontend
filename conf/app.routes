@@ -20,6 +20,9 @@ GET        /add                                                             cont
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
 
+GET        /add-now                                                         controllers.AddNowController.onPageLoad()
+POST       /add-now                                                         controllers.AddNowController.onSubmit()
+
 GET        /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onPageLoad(index: Int)
 POST       /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onSubmit(index: Int)
 

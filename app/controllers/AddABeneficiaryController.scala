@@ -109,7 +109,7 @@ class AddABeneficiaryController @Inject()(
           },
           {
             case AddABeneficiary.YesNow =>
-              Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+              Future.successful(Redirect(controllers.routes.AddNowController.onPageLoad()))
             case AddABeneficiary.YesLater =>
               Future.successful(Redirect(appConfig.maintainATrustOverview))
             case AddABeneficiary.NoComplete =>
