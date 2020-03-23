@@ -20,13 +20,32 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json, Reads}
 
-case class RemoveBeneficiary(`type`: String, index : Int, endDate: LocalDate)
+case class RemoveBeneficiary(`type`: BeneficiaryType, index : Int, endDate: LocalDate)
 
 object RemoveBeneficiary {
 
   implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
 
-  def apply(`type`: String, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
+  def apply(`type`: BeneficiaryType, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
 
 }
 
+sealed trait BeneficiaryType
+
+object BeneficiaryType extends Enumerable.Implicits {
+
+  case object Unidentified extends WithName("unidentified") with BeneficiaryType
+  case object Individual extends WithName("individual") with BeneficiaryType
+  case object Company extends WithName("company") with BeneficiaryType
+  case object Trust extends WithName("trust") with BeneficiaryType
+  case object Charity extends WithName("charity") with BeneficiaryType
+  case object Large extends WithName("large") with BeneficiaryType
+  case object Other extends WithName("other") with BeneficiaryType
+
+  val values: Set[BeneficiaryType] = Set(
+    Unidentified, Individual, Company, Trust, Charity, Large, Other
+  )
+
+  implicit val enumerable: Enumerable[BeneficiaryType] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+}

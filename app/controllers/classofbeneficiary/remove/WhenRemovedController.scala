@@ -19,6 +19,7 @@ package controllers.classofbeneficiary.remove
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
+import models.BeneficiaryType.Unidentified
 import models.RemoveBeneficiary
 import navigation.Navigator
 import pages.classofbeneficiary.WhenRemovedPage
@@ -75,7 +76,7 @@ class WhenRemovedController @Inject()(
         },
         value =>
           for {
-            _ <- trustService.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary("unidentified", index, value))
+            _ <- trustService.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary(Unidentified, index, value))
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       )
   }
