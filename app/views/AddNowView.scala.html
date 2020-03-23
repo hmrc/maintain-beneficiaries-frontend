@@ -38,7 +38,7 @@
             field = form("value"),
             legend = messages("addNow.heading"),
             legendClass = Some("heading-large"),
-            inputs = Beneficiary.options,
+            inputs = Beneficiary.options.toSeq,
             headingIsLegend = true,
             hint = Some(messages("addNow.hint"))
         )

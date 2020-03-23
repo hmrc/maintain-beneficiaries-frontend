@@ -40,7 +40,7 @@ class AddNowController @Inject()(
                                   repository: PlaybackRepository
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Beneficiary] = formProvider.apply()
+  val form: Form[Beneficiary] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
