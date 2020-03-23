@@ -34,7 +34,6 @@ error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 error.summary.title = There is a problem
 
-
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 
@@ -48,6 +47,12 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the trust you can
+featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
 
 addABeneficiaryYesNo.title = Do you want to add a beneficiary?
 addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
@@ -63,6 +68,17 @@ addABeneficiary.add-them-later = No, not now
 addABeneficiary.no-complete = No, all the beneficiaries are up to date
 addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
 addABeneficiary.error.required = Select yes if you want to add a new beneficiary
+
+addNow.heading = What kind of beneficiary do you need to add next?
+addNow.title = What kind of beneficiary do you need to add next?
+addNow.hint = You can enter a maximum of 25 entries for each beneficiary type
+addNow.individual = Individual
+addNow.unidentified = Class of beneficiaries
+addNow.charity-or-trust = Charity or trust
+addNow.company-or-employment-related = Company or employment related
+addNow.other = Other beneficiary
+addNow.error.required = Select the type of beneficiary you need to add
+addNow.return.link = Return to add a beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual

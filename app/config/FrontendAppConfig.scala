@@ -24,9 +24,7 @@ import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
-
-  private val contactBaseUrl: String = servicesConfig.baseUrl("contact-frontend")
+class FrontendAppConfig @Inject()(config: Configuration) {
 
   private val contactHost: String = config.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier: String = "maintain-beneficiaries-frontend"
@@ -39,8 +37,8 @@ class FrontendAppConfig @Inject()(config: Configuration, servicesConfig: Service
   val analyticsToken: String = config.get[String](s"google-analytics.token")
   val analyticsHost: String  = config.get[String](s"google-analytics.host")
 
-  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   val betaFeedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
