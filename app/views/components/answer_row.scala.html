@@ -21,12 +21,10 @@
 <li>
     <div class="cya-question">@row.label</div>
     <div class="cya-answer">@row.answer</div>
-    @row.changeUrl.map{ changeUrl =>
     <div class="cya-change">
-        <a href='@changeUrl'>
+        <a href='@row.changeUrl'>
             <span aria-hidden="true">@messages("site.edit")</span>
             <span class="visually-hidden">@messages("site.hidden-edit", row.label)</span>
         </a>
     </div>
-    }
 </li>
