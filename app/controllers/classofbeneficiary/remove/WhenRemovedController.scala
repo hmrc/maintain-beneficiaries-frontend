@@ -75,7 +75,7 @@ class WhenRemovedController @Inject()(
         },
         value =>
           for {
-            _ <- trustService.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary(index, value))
+            _ <- trustService.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary("unidentified", index, value))
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       )
   }

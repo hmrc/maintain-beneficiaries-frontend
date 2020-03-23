@@ -78,7 +78,7 @@ class RemoveClassOfBeneficiaryController @Inject()(
               beneficiary =>
                 if (beneficiary.provisional) {
                   for {
-                    _ <- trust.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary(index))
+                    _ <- trust.removeClassOfBeneficiary(request.userAnswers.utr, RemoveBeneficiary("unidentified", index))
                   } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                 } else {
                   Future.successful(Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url))

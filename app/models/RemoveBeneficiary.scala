@@ -20,13 +20,13 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json, Reads}
 
-case class RemoveBeneficiary(index : Int, endDate: LocalDate)
+case class RemoveBeneficiary(`type`: String, index : Int, endDate: LocalDate)
 
 object RemoveBeneficiary {
 
   implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
 
-  def apply(index: Int): RemoveBeneficiary =  RemoveBeneficiary(index, LocalDate.now)
+  def apply(`type`: String, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
 
 }
 

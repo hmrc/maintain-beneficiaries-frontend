@@ -55,6 +55,6 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
   private def removeBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/beneficiaries/remove"
 
   def removeClassOfBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    http.POST[JsValue, HttpResponse](removeBeneficiaryUrl(utr), Json.obj("unidentified" -> Json.toJson(beneficiary)))
+    http.PUT[JsValue, HttpResponse](removeBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 }
