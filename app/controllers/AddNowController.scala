@@ -67,7 +67,7 @@ class AddNowController @Inject()(
           } yield {
             value match {
               case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
-              case _ => Redirect(controllers.routes.AddNowController.onPageLoad())
+              case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             }
           }
       )

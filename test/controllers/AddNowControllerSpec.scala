@@ -90,7 +90,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to same page if anything else selected" in {
+    "redirect to feature not available page if anything else selected" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -102,7 +102,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.AddNowController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.FeatureNotAvailableController.onPageLoad().url
 
       application.stop()
     }
