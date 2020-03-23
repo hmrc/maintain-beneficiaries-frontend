@@ -60,15 +60,15 @@ object Beneficiary extends Enumerable.Implicits {
   case object CompanyOrEmploymentRelated extends WithName("company-or-employment-related") with Beneficiary
   case object Other extends WithName("other") with Beneficiary
 
-  val values: Set[Beneficiary] = Set(
+  val values: List[Beneficiary] = List(
     Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
   )
 
-  val options: Set[RadioOption] = values.map {
+  val options: List[RadioOption] = values.map {
     value =>
       RadioOption("addNow", value.toString)
   }
 
   implicit val enumerable: Enumerable[Beneficiary] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v): _*)
 }
