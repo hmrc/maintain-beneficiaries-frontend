@@ -20,7 +20,6 @@ import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
 import javax.inject.Inject
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -48,8 +47,6 @@ class CheckDetailsController @Inject()(
     implicit request =>
 
       val section: AnswerSection = printHelper(request.userAnswers)
-      Logger.debug("*****************************************")
-      Logger.debug(s"$section")
       Ok(view(section))
   }
 
