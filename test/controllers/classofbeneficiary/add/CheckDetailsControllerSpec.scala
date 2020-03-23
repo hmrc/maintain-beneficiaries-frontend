@@ -60,7 +60,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK and the correct view for a GET" in {
 
-      val bound = new AnswerRowConverter().bind(userAnswers, "", mock[CountryOptions])
+      val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
 
       val answerSection = AnswerSection(None, Seq(
         bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),

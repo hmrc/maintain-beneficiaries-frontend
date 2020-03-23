@@ -100,20 +100,22 @@ classOfBeneficiary.description.heading = What is the description for the class o
 classOfBeneficiary.description.checkYourAnswersLabel = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
 classOfBeneficiary.description.error.required = Enter the description for the class of beneficiaries
-classOfBeneficiary.description.error.invalidFormat = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-classOfBeneficiary.description.error.length = The description of the class in the trust deed must be 56 characters or less
+classOfBeneficiary.description.error.invalidFormat = The description for the class of beneficiaries must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+classOfBeneficiary.description.error.length = The description for the class of beneficiaries must be 56 characters or less
 classOfBeneficiary.description.return.link = Return to add a beneficiary
 
-classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.heading = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
-classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiary was added to the trust
-classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiary was added to the trust must include a {0} and {1}
-classOfBeneficiary.entityStart.error.required = The date the class of beneficiary was added to the trust must include {0}
-classOfBeneficiary.entityStart.error.invalid = Enter a real date when the class of beneficiary was added to the trust
-classOfBeneficiary.entityStart.error.future = The date the class of beneficiary was added to the trust must be today or in the past
-classOfBeneficiary.entityStart.error.past = The date the class of beneficiary was added to the trust cannot be before the start date of the trust
+classOfBeneficiary.description.default = class of beneficiaries
 
-classOfBeneficiary.checkDetails.title = Check class of beneficiary details
-classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
+classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
+classOfBeneficiary.entityStart.heading = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
+classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiaries was added to the trust
+classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiaries was added to the trust must include a {0} and {1}
+classOfBeneficiary.entityStart.error.required = The date the class of beneficiaries was added to the trust must include {0}
+classOfBeneficiary.entityStart.error.invalid = Enter a real date when the class of beneficiaries was added to the trust
+classOfBeneficiary.entityStart.error.future = The date the class of beneficiaries was added to the trust must be today or in the past
+classOfBeneficiary.entityStart.error.past = The date the class of beneficiaries was added to the trust cannot be before the start date of the trust
+
+classOfBeneficiary.checkDetails.title = Check class of beneficiaries details
+classOfBeneficiary.checkDetails.heading = Check class of beneficiaries details

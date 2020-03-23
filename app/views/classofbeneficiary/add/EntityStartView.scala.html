@@ -21,7 +21,7 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("classOfBeneficiary.entityStart.title")}"
@@ -35,7 +35,7 @@
 
         @components.input_date(
             field = form("value"),
-            legend = messages("classOfBeneficiary.entityStart.heading"),
+            legend = messages("classOfBeneficiary.entityStart.heading", description),
             legendClass = "heading-large",
             headingIsLegend = true,
             hint = Some(messages("classOfBeneficiary.entityStart.hint"))
