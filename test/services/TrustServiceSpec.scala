@@ -181,7 +181,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
   "remove a ClassOfBeneficiary" in {
 
-    when(mockConnector.removeClassOfBeneficiary(any(),any())(any(), any()))
+    when(mockConnector.removeBeneficiary(any(),any())(any(), any()))
       .thenReturn(Future.successful(HttpResponse(OK, None)))
 
     val service = new TrustServiceImpl(mockConnector)
@@ -193,7 +193,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
     implicit val hc : HeaderCarrier = HeaderCarrier()
 
-    val result = service.removeClassOfBeneficiary("1234567890", trustee)
+    val result = service.removeBeneficiary("1234567890", trustee)
 
     whenReady(result) { r =>
       r.status mustBe 200

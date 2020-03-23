@@ -153,7 +153,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
         when(mockConnector.getBeneficiaries(any())(any(), any()))
           .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
-        when(mockConnector.removeClassOfBeneficiary(any(), any())(any(), any()))
+        when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
         val request =

@@ -141,7 +141,7 @@ class AddABeneficiaryControllerSpec extends SpecBase {
                                            (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
       Future.successful(unidentifiedBeneficiary)
 
-    override def removeClassOfBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
       Future.successful(HttpResponse(OK))
   }
 
