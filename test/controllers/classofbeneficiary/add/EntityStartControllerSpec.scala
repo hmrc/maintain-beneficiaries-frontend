@@ -22,7 +22,7 @@ import base.SpecBase
 import forms.DateAddedToTrustFormProvider
 import models.UserAnswers
 import org.scalatestplus.mockito.MockitoSugar
-import pages.classofbeneficiary.EntityStartPage
+import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,12 +33,15 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
   val date: LocalDate = LocalDate.parse("2019-02-03")
   val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.entityStart", date)
   lazy val entityStartRoute: String = routes.EntityStartController.onPageLoad().url
+  val description: String = "Description"
+
+  val answersWithDescription: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
   "EntityStart Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(answersWithDescription)).build()
 
       val request = FakeRequest(GET, entityStartRoute)
 
@@ -49,14 +52,14 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, description)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(EntityStartPage, date).success.value
+      val answers = answersWithDescription.set(EntityStartPage, date).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -69,7 +72,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(date))(fakeRequest, messages).toString
+        view(form.fill(date), description)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -100,7 +103,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(answersWithDescription)).build()
 
       val request = FakeRequest(POST, entityStartRoute)
 
@@ -113,7 +116,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, description)(fakeRequest, messages).toString
 
        application.stop()
     }

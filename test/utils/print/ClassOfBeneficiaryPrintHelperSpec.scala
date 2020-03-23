@@ -38,12 +38,12 @@ class ClassOfBeneficiaryPrintHelperSpec extends SpecBase {
         .set(DescriptionPage, description).success.value
         .set(EntityStartPage, date).success.value
 
-      val result = helper(userAnswers)
+      val result = helper(userAnswers, description)
       result mustBe AnswerSection(
         headingKey = None,
         rows = Seq(
           AnswerRow(label = Html(messages("classOfBeneficiary.description.checkYourAnswersLabel")), answer = Html("Description"), changeUrl = controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
-          AnswerRow(label = Html(messages("classOfBeneficiary.entityStart.checkYourAnswersLabel")), answer = Html("3 February 2019"), changeUrl = controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
+          AnswerRow(label = Html(messages("classOfBeneficiary.entityStart.checkYourAnswersLabel", description)), answer = Html("3 February 2019"), changeUrl = controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
         )
       )
     }

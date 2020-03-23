@@ -30,13 +30,14 @@ class EntityStartViewSpec extends QuestionViewBehaviours[LocalDate] {
   val date: LocalDate = LocalDate.parse("2019-02-03")
   val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, date)
   val view: EntityStartView = viewFor[EntityStartView](Some(emptyUserAnswers))
+  val description: String = "Description"
 
   "EntityStart view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, description)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, description)
 
     behave like pageWithBackLink(applyView(form))
 

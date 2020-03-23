@@ -61,7 +61,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .set(DescriptionPage, description).success.value
         .set(EntityStartPage, date).success.value
 
-      val bound = new AnswerRowConverter().bind(userAnswers, "", mock[CountryOptions])
+      val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
 
       val answerSection = AnswerSection(None, Seq(
         bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),

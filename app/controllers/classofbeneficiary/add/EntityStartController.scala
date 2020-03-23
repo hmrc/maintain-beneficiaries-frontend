@@ -18,6 +18,7 @@ package controllers.classofbeneficiary.add
 
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
+import controllers.classofbeneficiary.actions.DescriptionRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -39,12 +40,13 @@ class EntityStartController @Inject()(
                                        view: EntityStartView,
                                        trustService: TrustService,
                                        repository: PlaybackRepository,
-                                       navigator: Navigator
+                                       navigator: Navigator,
+                                       descriptionAction: DescriptionRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val prefix: String = "classOfBeneficiary.entityStart"
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
@@ -54,17 +56,17 @@ class EntityStartController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm))
+      Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
 
       val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+          Future.successful(BadRequest(view(formWithErrors, request.description))),
 
         value =>
           for {
@@ -73,4 +75,5 @@ class EntityStartController @Inject()(
           } yield Redirect(navigator.nextPage(EntityStartPage, updatedAnswers))
       )
   }
+
 }
