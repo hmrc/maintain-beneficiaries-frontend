@@ -64,6 +64,12 @@ addABeneficiary.no-complete = No, all the beneficiaries are up to date
 addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
 addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 
+addNow.individual = Individual
+addNow.unidentified = Class of beneficiaries
+addNow.charity-or-trust = Charity or trust
+addNow.company-or-employment-related = Company or employment related
+addNow.other = Other beneficiary
+
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
 entities.beneficiaries.unidentified = Class of beneficiaries

@@ -32,15 +32,13 @@
     title = s"${errorPrefix(form)} $heading"
     ) {
 
-    @formHelper(action = AddABeneficiaryController.submitAnother(), 'autoComplete -> "off") {
+    @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
         @components.heading(heading)
-
-        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
 
         @components.data_list(completeBeneficiaries, "complete", "beneficiary")
 
