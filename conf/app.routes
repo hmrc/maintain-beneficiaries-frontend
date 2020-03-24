@@ -1,5 +1,8 @@
 # microservice specific routes
 
+->         /class-of-beneficiaries                                          classofbeneficiary.Routes
+->         /individual                                                      individual.Routes
+
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
@@ -19,8 +22,5 @@ GET        /agent-not-authorised                                            cont
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
-
-GET        /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.DescriptionController.onPageLoad(index: Int)
-POST       /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.DescriptionController.onSubmit(index: Int)
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

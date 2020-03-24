@@ -1,0 +1,3 @@
+
+GET        /:index/description                       controllers.classofbeneficiary.DescriptionController.onPageLoad(index: Int)
+POST       /:index/description                       controllers.classofbeneficiary.DescriptionController.onSubmit(index: Int)

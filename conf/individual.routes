@@ -1,0 +1,3 @@
+
+GET        /:index/name                       controllers.individual.IndividualBeneficiaryNameController.onPageLoad(index: Int)
+POST       /:index/name                       controllers.individual.IndividualBeneficiaryNameController.onSubmit(index: Int)
