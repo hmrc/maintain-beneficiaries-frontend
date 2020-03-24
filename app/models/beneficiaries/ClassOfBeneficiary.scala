@@ -26,12 +26,11 @@ final case class ClassOfBeneficiary(description: String, entityStart: LocalDate,
   extends Beneficiary
 
 object ClassOfBeneficiary {
-//  implicit val formats : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
 
   implicit val reads: Reads[ClassOfBeneficiary] =
     ((__ \ 'description).read[String] and
       (__ \ 'entityStart).read[LocalDate] and
-      (__ \ 'provisional).readWithDefault(false)).apply(ClassOfBeneficiary.apply _)
+      (__ \ 'lineNo).readNullable[String].map(_.isEmpty)).apply(ClassOfBeneficiary.apply _)
 
   implicit val writes: Writes[ClassOfBeneficiary] =
     ((__ \ 'description).write[String] and
