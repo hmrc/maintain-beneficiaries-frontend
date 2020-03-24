@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-import java.time.LocalDate
+import views.behaviours.ViewBehaviours
+import views.html.FeatureNotAvailableView
 
-import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
+class FeatureNotAvailableViewSpec extends ViewBehaviours {
 
-case class RemoveBeneficiary(`type`: Beneficiary, index : Int, endDate: LocalDate)
+  "FeatureNotAvailableView view" must {
 
-object RemoveBeneficiary {
+    val application = applicationBuilder().build()
 
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
+    val view = application.injector.instanceOf[FeatureNotAvailableView]
 
-  def apply(`type`: Beneficiary, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
+    val applyView = view.apply()(fakeRequest, messages)
 
+    behave like normalPage(applyView, "featureNotAvailable")
+  }
 }

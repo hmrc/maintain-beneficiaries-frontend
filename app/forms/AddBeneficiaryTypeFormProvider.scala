@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import java.time.LocalDate
-
+import forms.mappings.Mappings
+import javax.inject.Inject
 import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
+import play.api.data.Form
 
-case class RemoveBeneficiary(`type`: Beneficiary, index : Int, endDate: LocalDate)
+class AddBeneficiaryTypeFormProvider @Inject() extends Mappings {
 
-object RemoveBeneficiary {
-
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
-
-  def apply(`type`: Beneficiary, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
-
+  def apply(): Form[Beneficiary] =
+    Form(
+      "value" -> enumerable[Beneficiary]("addNow.error.required")
+    )
 }

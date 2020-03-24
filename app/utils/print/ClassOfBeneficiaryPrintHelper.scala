@@ -27,9 +27,9 @@ class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
                                               countryOptions: CountryOptions
                                  ) {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, description: String)(implicit messages: Messages) = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, "", countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description, countryOptions)
 
     AnswerSection(
       None,

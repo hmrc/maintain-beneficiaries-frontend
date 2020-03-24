@@ -21,11 +21,13 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustConnector
 import models.UserAnswers
+import models.beneficiaries.Beneficiary
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
+import pages.AddNowPage
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -50,6 +52,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
+    .set(AddNowPage, Beneficiary.ClassOfBeneficiaries).success.value
     .set(DescriptionPage, description).success.value
     .set(EntityStartPage, date).success.value
 
@@ -57,11 +60,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(DescriptionPage, description).success.value
-        .set(EntityStartPage, date).success.value
-
-      val bound = new AnswerRowConverter().bind(userAnswers, "", mock[CountryOptions])
+      val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
 
       val answerSection = AnswerSection(None, Seq(
         bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),

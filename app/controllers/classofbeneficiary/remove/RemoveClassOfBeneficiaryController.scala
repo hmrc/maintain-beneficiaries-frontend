@@ -19,8 +19,8 @@ package controllers.classofbeneficiary.remove
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
-import models.BeneficiaryType.Unidentified
 import models.RemoveBeneficiary
+import models.beneficiaries.Beneficiary.ClassOfBeneficiaries
 import navigation.Navigator
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -79,7 +79,7 @@ class RemoveClassOfBeneficiaryController @Inject()(
               beneficiary =>
                 if (beneficiary.provisional) {
                   for {
-                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(Unidentified, index))
+                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(ClassOfBeneficiaries, index))
                   } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                 } else {
                   Future.successful(Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url))

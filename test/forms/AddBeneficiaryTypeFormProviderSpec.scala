@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import java.time.LocalDate
-
+import forms.behaviours.OptionFieldBehaviours
 import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
+import play.api.data.FormError
 
-case class RemoveBeneficiary(`type`: Beneficiary, index : Int, endDate: LocalDate)
+class AddBeneficiaryTypeFormProviderSpec extends OptionFieldBehaviours {
 
-object RemoveBeneficiary {
+  val form = new AddBeneficiaryTypeFormProvider()()
 
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
+  ".value" must {
 
-  def apply(`type`: Beneficiary, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
+    val fieldName = "value"
+    val requiredKey = "addNow.error.required"
 
+    behave like optionsField[Beneficiary](
+      form,
+      fieldName,
+      validValues  = Beneficiary.values,
+      invalidError = FormError(fieldName, "error.invalid")
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

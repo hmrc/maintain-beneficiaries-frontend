@@ -14,41 +14,34 @@
  * limitations under the License.
  */
 
-package views.classofbeneficiary.add
+package views
 
-import java.time.LocalDate
-
-import forms.DateAddedToTrustFormProvider
+import forms.AddBeneficiaryTypeFormProvider
+import models.beneficiaries.Beneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
-import views.html.classofbeneficiary.add.EntityStartView
+import views.behaviours.OptionsViewBehaviours
+import views.html.AddNowView
 
-class EntityStartViewSpec extends QuestionViewBehaviours[LocalDate] {
+class AddNowViewSpec extends OptionsViewBehaviours {
 
-  val messageKeyPrefix = "classOfBeneficiary.entityStart"
-  val date: LocalDate = LocalDate.parse("2019-02-03")
-  val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, date)
-  val view: EntityStartView = viewFor[EntityStartView](Some(emptyUserAnswers))
-  val description: String = "Description"
+  val messageKeyPrefix = "addNow"
 
-  "EntityStart view" must {
+  val form: Form[Beneficiary] = new AddBeneficiaryTypeFormProvider()()
+  val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
+
+  "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, description)(fakeRequest, messages)
+      view.apply(form)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, description)
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like pageWithDateFields(
-      form,
-      applyView,
-      messageKeyPrefix,
-      "value"
-    )
+    behave like pageWithOptions(form, applyView, Beneficiary.options)
 
     behave like pageWithASubmitButton(applyView(form))
   }

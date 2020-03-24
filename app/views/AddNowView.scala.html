@@ -14,33 +14,37 @@
  * limitations under the License.
  *@
 
-@import controllers.classofbeneficiary.add.routes._
+@import controllers.routes._
+@import models.beneficiaries.Beneficiary
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], description: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("classOfBeneficiary.entityStart.title")}"
-) {
+    title = s"${errorPrefix(form)} ${messages("addNow.title")}"
+    ) {
 
-    @formHelper(action = EntityStartController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_date(
+        @components.input_radio(
             field = form("value"),
-            legend = messages("classOfBeneficiary.entityStart.heading", description),
-            legendClass = "heading-large",
+            legend = messages("addNow.heading"),
+            legendClass = Some("heading-large"),
+            inputs = Beneficiary.options.toSeq,
             headingIsLegend = true,
-            hint = Some(messages("classOfBeneficiary.entityStart.hint"))
+            hint = Some(messages("addNow.hint"))
         )
 
         @components.submit_button()
+
+        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("addNow.return.link")</a></p>
     }
 }

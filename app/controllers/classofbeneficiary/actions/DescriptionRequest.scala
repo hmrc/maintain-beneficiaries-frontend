@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package controllers.classofbeneficiary.actions
 
-import java.time.LocalDate
+import models.UserAnswers
+import models.requests.DataRequest
+import play.api.mvc.WrappedRequest
 
-import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
-
-case class RemoveBeneficiary(`type`: Beneficiary, index : Int, endDate: LocalDate)
-
-object RemoveBeneficiary {
-
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
-
-  def apply(`type`: Beneficiary, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
-
+case class DescriptionRequest[T](request: DataRequest[T], description: String) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }

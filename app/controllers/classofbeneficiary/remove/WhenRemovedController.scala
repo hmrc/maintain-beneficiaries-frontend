@@ -19,8 +19,8 @@ package controllers.classofbeneficiary.remove
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
-import models.BeneficiaryType.Unidentified
 import models.RemoveBeneficiary
+import models.beneficiaries.Beneficiary.ClassOfBeneficiaries
 import navigation.Navigator
 import pages.classofbeneficiary.WhenRemovedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -76,7 +76,7 @@ class WhenRemovedController @Inject()(
         },
         value =>
           for {
-            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(Unidentified, index, value))
+            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(ClassOfBeneficiaries, index, value))
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       )
   }

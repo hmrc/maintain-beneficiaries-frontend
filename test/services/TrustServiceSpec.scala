@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over101
+import models.beneficiaries.Beneficiary.ClassOfBeneficiaries
 import models.{Name, RemoveBeneficiary}
 import models.beneficiaries._
 import org.mockito.Matchers.any
@@ -186,7 +187,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
     val service = new TrustServiceImpl(mockConnector)
 
-    val trustee : RemoveBeneficiary =  RemoveBeneficiary(
+    val trustee : RemoveBeneficiary =  RemoveBeneficiary(ClassOfBeneficiaries,
       index = 0,
       endDate = LocalDate.now()
     )

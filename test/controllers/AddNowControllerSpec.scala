@@ -14,109 +14,115 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.add
-
-import java.time.LocalDate
+package controllers
 
 import base.SpecBase
-import forms.DateAddedToTrustFormProvider
-import models.UserAnswers
+import forms.AddBeneficiaryTypeFormProvider
+import models.beneficiaries.Beneficiary
 import org.scalatestplus.mockito.MockitoSugar
-import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
+import pages.AddNowPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.classofbeneficiary.add.EntityStartView
+import views.html.AddNowView
 
-class EntityStartControllerSpec extends SpecBase with MockitoSugar {
+class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
-  val date: LocalDate = LocalDate.parse("2019-02-03")
-  val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.entityStart", date)
-  lazy val entityStartRoute: String = routes.EntityStartController.onPageLoad().url
-  val description: String = "Description"
+  val form: Form[Beneficiary] = new AddBeneficiaryTypeFormProvider()()
+  lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
+  val validAnswer: Beneficiary.ClassOfBeneficiaries.type = Beneficiary.ClassOfBeneficiaries
 
-  val answersWithDescription: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
-
-  "EntityStart Controller" must {
+  "AddNow Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(answersWithDescription)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, entityStartRoute)
+      val request = FakeRequest(GET, addNowRoute)
 
-      val view = application.injector.instanceOf[EntityStartView]
+      val view = application.injector.instanceOf[AddNowView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, description)(request, messages).toString
+        view(form)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = answersWithDescription.set(EntityStartPage, date).success.value
+      val answers = emptyUserAnswers.set(AddNowPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, entityStartRoute)
+      val request = FakeRequest(GET, addNowRoute)
 
-      val view = application.injector.instanceOf[EntityStartView]
+      val view = application.injector.instanceOf[AddNowView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(date), description)(fakeRequest, messages).toString
+        view(form.fill(validAnswer))(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
-
-      val answers = UserAnswers("internalId", "UTRUTRUTR", date)
+    "redirect to the next page when Class of beneficiaries is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(answers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, entityStartRoute)
-          .withFormUrlEncodedBody(
-            "value.day" -> date.getDayOfMonth.toString,
-            "value.month" -> date.getMonthValue.toString,
-            "value.year"  -> date.getYear.toString
-          )
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.CheckDetailsController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to feature not available page if anything else selected" in {
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", Beneficiary.Individual.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.FeatureNotAvailableController.onPageLoad().url
 
       application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(answersWithDescription)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, entityStartRoute)
+      val request = FakeRequest(POST, addNowRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[EntityStartView]
+      val view = application.injector.instanceOf[AddNowView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, description)(fakeRequest, messages).toString
+        view(boundForm)(fakeRequest, messages).toString
 
        application.stop()
     }
@@ -125,7 +131,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, entityStartRoute)
+      val request = FakeRequest(GET, addNowRoute)
 
       val result = route(application, request).value
 
@@ -140,7 +146,8 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, entityStartRoute)
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 

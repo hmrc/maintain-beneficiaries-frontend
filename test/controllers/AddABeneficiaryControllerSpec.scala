@@ -123,14 +123,16 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     List(otherBeneficiary)
   )
 
+  lazy val featureNotAvailable : String = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+
   val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", None, "Remove", None),
-    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
-    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
-    AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", None, "Remove", None),
-    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
-    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),
-    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", None, "Remove", None)
+    AddRow("First Last", typeLabel = "Named individual", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable))
   )
 
   class FakeService(data: Beneficiaries) extends TrustService {

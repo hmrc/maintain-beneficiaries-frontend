@@ -19,7 +19,9 @@ package controllers.classofbeneficiary.add
 import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
+import controllers.classofbeneficiary.actions.DescriptionRequiredAction
 import javax.inject.Inject
+import pages.AddNowPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -40,13 +42,14 @@ class CheckDetailsController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
                                         printHelper: ClassOfBeneficiaryPrintHelper,
-                                        mapper: ClassOfBeneficiaryMapper
+                                        mapper: ClassOfBeneficiaryMapper,
+                                        descriptionAction: DescriptionRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers)
+      val section: AnswerSection = printHelper(request.userAnswers, request.description)
       Ok(view(section))
   }
 
@@ -59,7 +62,7 @@ class CheckDetailsController @Inject()(
         case Some(beneficiary) =>
           for {
             _ <- connector.addClassOfBeneficiary(request.userAnswers.utr, beneficiary)
-            updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath))
+            updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath).flatMap(_.deleteAtPath(AddNowPage.path)))
             _ <- playbackRepository.set(updatedAnswers)
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       }

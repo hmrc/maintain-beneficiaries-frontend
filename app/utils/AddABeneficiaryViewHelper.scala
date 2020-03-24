@@ -27,9 +27,9 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name.displayName,
       typeLabel = messages("entities.beneficiaries.individual"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel =  messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
   }
 
@@ -49,9 +49,9 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.trust"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel = messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
 
   private def renderCharityBeneficiary(beneficiary: CharityBeneficiary, index: Int) : AddRow =
@@ -59,9 +59,9 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.charity"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel = messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
 
   private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int) : AddRow =
@@ -69,9 +69,9 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.company"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel = messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
 
   private def renderEmploymentRelatedBeneficiary(beneficiary: EmploymentRelatedBeneficiary, index: Int) : AddRow =
@@ -79,9 +79,9 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.employmentRelated"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel = messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
 
   private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int) : AddRow =
@@ -89,11 +89,10 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.description,
       typeLabel = messages("entities.beneficiaries.other"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel = messages("site.delete"),
-      removeUrl = None
+      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
-
 
   def rows : AddToRows = {
     val complete =
