@@ -19,24 +19,30 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBase
-import connectors.TrustStoreConnector
+import connectors.{TrustConnector, TrustStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
 import models.beneficiaries._
-import models.{AddABeneficiary, Name}
+import models.{AddABeneficiary, Name, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.concurrent.ScalaFutures
+import pages.AddNowPage
+import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import viewmodels.addAnother.AddRow
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddABeneficiaryControllerSpec extends SpecBase {
+class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
   lazy val getRoute : String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute : String = controllers.routes.AddABeneficiaryController.submitAnother().url

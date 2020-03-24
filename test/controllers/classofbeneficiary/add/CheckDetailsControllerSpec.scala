@@ -92,46 +92,15 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       when(mockTrustConnector.addClassOfBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
-      val captor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass[UserAnswers](classOf[UserAnswers])
-
       val request = FakeRequest(POST, submitDetailsRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      verify(playbackRepository).set(captor.capture)
-
-      captor.getValue.data mustBe Json.obj()
-
       redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
-    }
-
-    "Clear out the user answers for the add class of beneficiary journey on submission" in {
-
-      val mockTrustConnector = mock[TrustConnector]
-
-      reset(playbackRepository)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers),
-          affinityGroup = Agent)
-          .overrides(
-            bind[TrustConnector].toInstance(mockTrustConnector)
-          ).build()
-
-      when(mockTrustConnector.addClassOfBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
-      when(playbackRepository.set(any())).thenReturn(Future.successful(true))
-
-      val request = FakeRequest(POST, submitDetailsRoute)
-
-      whenReady(route(application, request).value) { _ =>
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(playbackRepository).set(uaCaptor.capture())
-        uaCaptor.getValue.data mustBe Json.obj()
-      }
     }
 
   }
