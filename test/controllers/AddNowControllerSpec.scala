@@ -30,7 +30,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
   val form: Form[Beneficiary] = new AddBeneficiaryTypeFormProvider()()
   lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
-  val validAnswer: Beneficiary.ClassOfBeneficiaries.type = Beneficiary.ClassOfBeneficiaries
+  val classOfBeneficiariesAnswer: Beneficiary.ClassOfBeneficiaries.type = Beneficiary.ClassOfBeneficiaries
 
   "AddNow Controller" must {
 
@@ -54,7 +54,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(AddNowPage, validAnswer).success.value
+      val answers = emptyUserAnswers.set(AddNowPage, classOfBeneficiariesAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -67,7 +67,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer))(fakeRequest, messages).toString
+        view(form.fill(classOfBeneficiariesAnswer))(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -79,7 +79,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.toString))
+          .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
 
       val result = route(application, request).value
 
@@ -90,13 +90,31 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to feature not available page if anything else selected" in {
+    "redirect to the next page when Individual beneficary is submitted" in {
+
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, addNowRoute)
           .withFormUrlEncodedBody(("value", Beneficiary.Individual.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.individualbeneficiary.add.routes.NameController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to feature not available page if anything else selected" in {
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", Beneficiary.Other.toString))
 
       val result = route(application, request).value
 
@@ -147,7 +165,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.toString))
+          .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
 
       val result = route(application, request).value
 

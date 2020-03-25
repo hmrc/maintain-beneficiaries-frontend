@@ -37,4 +37,7 @@ POST       /class-of-beneficiaries/when-added                               cont
 GET        /class-of-beneficiaries/check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onPageLoad()
 POST       /class-of-beneficiaries/check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onSubmit()
 
+GET        /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onPageLoad()
+POST       /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onSubmit()
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)
