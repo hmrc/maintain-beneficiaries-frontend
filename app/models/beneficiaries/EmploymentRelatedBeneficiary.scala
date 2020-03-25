@@ -27,7 +27,8 @@ case class EmploymentRelatedBeneficiary(name: String,
                                         address: Option[Address],
                                         description: Seq[String],
                                         howManyBeneficiaries: HowManyBeneficiaries,
-                                        entityStart: LocalDate
+                                        entityStart: LocalDate,
+                                        provisional : Boolean
                                        ) extends Beneficiary
 
 object EmploymentRelatedBeneficiary {
@@ -38,7 +39,8 @@ object EmploymentRelatedBeneficiary {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       readDescription and
       (__ \ 'numberOfBeneficiary).read[HowManyBeneficiaries] and
-      (__ \ 'entityStart).read[LocalDate]
+      (__ \ 'entityStart).read[LocalDate] and
+      (__ \ "provisional").readWithDefault(false)
       ).apply(EmploymentRelatedBeneficiary.apply _)
 
   def readDescription =

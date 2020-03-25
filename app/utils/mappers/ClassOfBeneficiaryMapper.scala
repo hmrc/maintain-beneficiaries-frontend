@@ -34,7 +34,10 @@ class ClassOfBeneficiaryMapper {
       (
         DescriptionPage.path.read[String] and
         EntityStartPage.path.read[LocalDate]
-      ).apply(ClassOfBeneficiary.apply _)
+      )(
+        (desc, start) =>
+          ClassOfBeneficiary(desc, start, provisional = true)
+      )
 
     answers.data.validate[ClassOfBeneficiary](readFromUserAnswers) match {
       case JsSuccess(value, _) =>

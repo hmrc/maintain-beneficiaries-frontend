@@ -72,13 +72,14 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 addNow.heading = What kind of beneficiary do you need to add next?
 addNow.title = What kind of beneficiary do you need to add next?
 addNow.hint = You can enter a maximum of 25 entries for each beneficiary type
-addNow.individual = Individual
-addNow.unidentified = Class of beneficiaries
-addNow.charity-or-trust = Charity or trust
-addNow.company-or-employment-related = Company or employment related
-addNow.other = Other beneficiary
 addNow.error.required = Select the type of beneficiary you need to add
 addNow.return.link = Return to add a beneficiary
+
+whatTypeOfBeneficiary.individual = Individual
+whatTypeOfBeneficiary.classOfBeneficiaries = Class of beneficiaries
+whatTypeOfBeneficiary.charityOrTrust = Charity or trust
+whatTypeOfBeneficiary.companyOrEmploymentRelated = Company or employment related
+whatTypeOfBeneficiary.other = Other beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
@@ -117,5 +118,20 @@ classOfBeneficiary.entityStart.error.invalid = Enter a real date when the class 
 classOfBeneficiary.entityStart.error.future = The date the class of beneficiaries was added to the trust must be today or in the past
 classOfBeneficiary.entityStart.error.past = The date the class of beneficiaries was added to the trust cannot be before the start date of the trust
 
-classOfBeneficiary.checkDetails.title = Check class of beneficiaries details
-classOfBeneficiary.checkDetails.heading = Check class of beneficiaries details
+classOfBeneficiary.checkDetails.title = Check class of beneficiary details
+classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
+
+removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.default = the beneficiary
+removeClassOfBeneficiary.error.required = Select yes if you want to remove the beneficiary
+
+classOfBeneficiary.whenRemoved.title = When was the trustee removed as a beneficiary?
+classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+classOfBeneficiary.whenRemoved.hint = For example, 31 3 1980
+classOfBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+classOfBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+classOfBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
