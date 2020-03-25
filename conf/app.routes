@@ -43,7 +43,7 @@ POST       /individual-beneficiary/description                              cont
 GET        /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
 POST       /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
 
-GET        /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportOrIdCardController.onPageLoad()
-POST       /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportOrIdCardController.onSubmit()
+GET        /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
+POST       /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

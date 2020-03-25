@@ -22,23 +22,22 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String, countryOptions:Seq[InputOption])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportOrIdCardDetails.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportDetails.title")}"
 ) {
 
-    @formHelper(action = PassportOrIdCardController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = PassportDetailsController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("individualBeneficiary.passportOrIdCardDetails.heading", Some(name))
+        @components.heading("individualBeneficiary.passportDetails.heading", Some(name))
 
-        @components.select(
-            field = form("country"),
-            label = messages("individualBeneficiary.passportOrIdCardDetails.country"),
+        @components.select(field = form("country"),
+            label = messages("individualBeneficiary.passportDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some("address.country.select"),
@@ -48,15 +47,16 @@
 
         @components.input_text(
             field = form("number"),
-            label = messages("individualBeneficiary.passportOrIdCardDetails.number")
+            label = messages("individualBeneficiary.passportDetails.number"),
+            hint = Some(messages("individualBeneficiary.passportDetails.number.hint"))
         )
 
         @components.input_date(
             field = form("expiryDate"),
-            legend = messages("individualBeneficiary.passportOrIdCardDetails.expiryDate.title"),
+            legend = messages("individualBeneficiary.passportDetails.expiryDate"),
             legendClass = "bold",
-            headingIsLegend = false,
-            hint = Some(messages(s"individualBeneficiary.passportOrIdCardDetails.expiryDate.hint"))
+            hint = Some(messages("individualBeneficiary.passportDetails.expiryDate.hint")),
+            headingIsLegend = false
         )
 
         @components.submit_button()
