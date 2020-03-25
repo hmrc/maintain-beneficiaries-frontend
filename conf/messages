@@ -72,13 +72,14 @@ addABeneficiary.error.required = Select yes if you want to add a new beneficiary
 addNow.heading = What kind of beneficiary do you need to add next?
 addNow.title = What kind of beneficiary do you need to add next?
 addNow.hint = You can enter a maximum of 25 entries for each beneficiary type
-addNow.individual = Individual
-addNow.unidentified = Class of beneficiaries
-addNow.charity-or-trust = Charity or trust
-addNow.company-or-employment-related = Company or employment related
-addNow.other = Other beneficiary
 addNow.error.required = Select the type of beneficiary you need to add
 addNow.return.link = Return to add a beneficiary
+
+whatTypeOfBeneficiary.individual = Individual
+whatTypeOfBeneficiary.classOfBeneficiaries = Class of beneficiaries
+whatTypeOfBeneficiary.charityOrTrust = Charity or trust
+whatTypeOfBeneficiary.companyOrEmploymentRelated = Company or employment related
+whatTypeOfBeneficiary.other = Other beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
