@@ -1,3 +1,18 @@
 
-GET        /:index/description                       controllers.classofbeneficiary.DescriptionController.onPageLoad(index: Int)
-POST       /:index/description                       controllers.classofbeneficiary.DescriptionController.onSubmit(index: Int)
+GET        /:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onPageLoad(index: Int)
+POST       /:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onSubmit(index: Int)
+
+GET        /description                              controllers.classofbeneficiary.add.DescriptionController.onPageLoad()
+POST       /description                              controllers.classofbeneficiary.add.DescriptionController.onSubmit()
+
+GET        /when-added                               controllers.classofbeneficiary.add.EntityStartController.onPageLoad()
+POST       /when-added                               controllers.classofbeneficiary.add.EntityStartController.onSubmit()
+
+GET        /check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onPageLoad()
+POST       /check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onSubmit()
+
+GET        /:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onPageLoad(index : Int)
+POST       /:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onSubmit(index : Int)
+
+GET        /:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)

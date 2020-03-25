@@ -19,24 +19,30 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBase
-import connectors.TrustStoreConnector
+import connectors.{TrustConnector, TrustStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
-import models.beneficiaries._
-import models.{AddABeneficiary, Name}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
+import models.{AddABeneficiary, Name, RemoveBeneficiary, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.concurrent.ScalaFutures
+import pages.AddNowPage
+import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import viewmodels.addAnother.AddRow
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddABeneficiaryControllerSpec extends SpecBase {
+class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
   lazy val getRoute : String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute : String = controllers.routes.AddABeneficiaryController.submitAnother().url
@@ -55,7 +61,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,
     income = None,
-    incomeDiscretionYesNo = false
+    incomeDiscretionYesNo = false,
+    provisional = false
   )
 
   private val trustBeneficiary = TrustBeneficiary(
@@ -63,7 +70,9 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.of(2017, 2, 28))
+    entityStart = LocalDate.of(2017, 2, 28),
+    provisional = false
+  )
 
   private val charityBeneficiary = CharityBeneficiary(
     name = "Humanitarian Endeavours Ltd",
@@ -71,7 +80,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val companyBeneficiary = CompanyBeneficiary(
@@ -80,7 +90,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
@@ -89,12 +100,14 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     description = Seq("Description"),
     howManyBeneficiaries = Over201,
-    entityStart = LocalDate.parse("2012-03-14")
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
   )
 
   private val unidentifiedBeneficiary = ClassOfBeneficiary(
     description = "Unidentified Beneficiary",
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = false
   )
 
   private val otherBeneficiary = OtherBeneficiary(
@@ -102,7 +115,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
-    entityStart = LocalDate.parse("2019-02-28")
+    entityStart = LocalDate.parse("2019-02-28"),
+    provisional = false
   )
 
   val beneficiaries = Beneficiaries(
@@ -115,14 +129,16 @@ class AddABeneficiaryControllerSpec extends SpecBase {
     List(otherBeneficiary)
   )
 
+  lazy val featureNotAvailable : String = controllers.routes.FeatureNotAvailableController.onPageLoad().url
+
   val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", Some(controllers.individual.routes.NameController.onPageLoad(0).url), "Remove", None),
-    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.routes.DescriptionController.onPageLoad(0).url), "Remove", None),
-    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", None, "Remove", None),
-    AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", None, "Remove", None),
-    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", None, "Remove", None),
-    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", None, "Remove", None),
-    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", None, "Remove", None)
+    AddRow("First Last", typeLabel = "Named individual", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable))
   )
 
   class FakeService(data: Beneficiaries) extends TrustService {
@@ -133,6 +149,8 @@ class AddABeneficiaryControllerSpec extends SpecBase {
                                            (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
       Future.successful(unidentifiedBeneficiary)
 
+    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+      Future.successful(HttpResponse(OK))
   }
 
   " AddABeneficiary Controller" when {
@@ -339,6 +357,41 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
+      }
+
+      "Clear out the user answers when starting the add class of beneficiary journey and redirect to what type of beneficiary page" in {
+
+        val mockTrustConnector = mock[TrustConnector]
+
+        val userAnswers = emptyUserAnswers
+          .set(AddNowPage, Beneficiary.ClassOfBeneficiaries).success.value
+          .set(DescriptionPage, "Description").success.value
+          .set(EntityStartPage, LocalDate.parse("2019-02-03")).success.value
+
+        reset(playbackRepository)
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers),
+            affinityGroup = Agent
+          ).overrides(
+            bind[TrustConnector].toInstance(mockTrustConnector)
+          ).build()
+
+        when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
+          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
+        when(playbackRepository.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", AddABeneficiary.YesNow.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(playbackRepository).set(uaCaptor.capture)
+        uaCaptor.getValue.data mustBe Json.obj()
       }
 
     }

@@ -31,14 +31,16 @@ class ClassOfBeneficiarySpec extends WordSpec with MustMatchers {
         """{
           |                "lineNo": "286",
           |                "description": "Beneficiary Other 25",
-          |                "entityStart": "2019-09-23"
+          |                "entityStart": "2019-09-23",
+          |                "provisional": false
           |              }""".stripMargin
       )
 
       val beneficiary = json.as[ClassOfBeneficiary]
       beneficiary mustBe ClassOfBeneficiary(
         description = "Beneficiary Other 25",
-        entityStart = LocalDate.of(2019, 9, 23)
+        entityStart = LocalDate.of(2019, 9, 23),
+        provisional = false
       )
 
     }

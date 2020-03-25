@@ -24,8 +24,9 @@ import play.api.mvc.Call
 @Singleton
 class Navigator @Inject()() {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+  private val normalRoutes: Page => UserAnswers => Call =
+    ClassOfBeneficiaryNavigator.routes orElse {
+    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
   }
 
   def nextPage(page: Page, userAnswers: UserAnswers): Call =

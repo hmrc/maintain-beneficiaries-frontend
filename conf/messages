@@ -34,7 +34,6 @@ error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 error.summary.title = There is a problem
 
-
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 
@@ -48,6 +47,12 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+featureNotAvailable.title = This part of the online service is not available yet
+featureNotAvailable.heading = This part of the online service is not available yet
+featureNotAvailable.p1 = If you need to make any changes to the trust you can
+featureNotAvailable.link = contact our trusts helpline (opens in a new window or tab)
+featureNotAvailable.p2 = You will be able to update these details online in the future.
 
 addABeneficiaryYesNo.title = Do you want to add a beneficiary?
 addABeneficiaryYesNo.heading = Do you want to add a beneficiary?
@@ -63,6 +68,18 @@ addABeneficiary.add-them-later = No, not now
 addABeneficiary.no-complete = No, all the beneficiaries are up to date
 addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
 addABeneficiary.error.required = Select yes if you want to add a new beneficiary
+
+addNow.heading = What kind of beneficiary do you need to add next?
+addNow.title = What kind of beneficiary do you need to add next?
+addNow.hint = You can enter a maximum of 25 entries for each beneficiary type
+addNow.error.required = Select the type of beneficiary you need to add
+addNow.return.link = Return to add a beneficiary
+
+whatTypeOfBeneficiary.individual = Individual
+whatTypeOfBeneficiary.classOfBeneficiaries = Class of beneficiaries
+whatTypeOfBeneficiary.charityOrTrust = Charity or trust
+whatTypeOfBeneficiary.companyOrEmploymentRelated = Company or employment related
+whatTypeOfBeneficiary.other = Other beneficiary
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
@@ -81,11 +98,43 @@ beneficiary.employmentRelated.howManyBeneficiaries.over1001 = Over 1,001
 
 classOfBeneficiary.description.title = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.heading = What is the description for the class of beneficiaries?
+classOfBeneficiary.description.checkYourAnswersLabel = What is the description for the class of beneficiaries?
 classOfBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
 classOfBeneficiary.description.error.required = Enter the description for the class of beneficiaries
-classOfBeneficiary.description.error.invalidFormat = The description of the class in the trust deed must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-classOfBeneficiary.description.error.length = The description of the class in the trust deed must be 56 characters or less
+classOfBeneficiary.description.error.invalidFormat = The description for the class of beneficiaries must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+classOfBeneficiary.description.error.length = The description for the class of beneficiaries must be 56 characters or less
 classOfBeneficiary.description.return.link = Return to add a beneficiary
+
+classOfBeneficiary.description.default = class of beneficiaries
+
+classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
+classOfBeneficiary.entityStart.heading = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
+classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiaries was added to the trust
+classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiaries was added to the trust must include a {0} and {1}
+classOfBeneficiary.entityStart.error.required = The date the class of beneficiaries was added to the trust must include {0}
+classOfBeneficiary.entityStart.error.invalid = Enter a real date when the class of beneficiaries was added to the trust
+classOfBeneficiary.entityStart.error.future = The date the class of beneficiaries was added to the trust must be today or in the past
+classOfBeneficiary.entityStart.error.past = The date the class of beneficiaries was added to the trust cannot be before the start date of the trust
+
+classOfBeneficiary.checkDetails.title = Check class of beneficiary details
+classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
+
+removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.default = the beneficiary
+removeClassOfBeneficiary.error.required = Select yes if you want to remove the beneficiary
+
+classOfBeneficiary.whenRemoved.title = When was the trustee removed as a beneficiary?
+classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+classOfBeneficiary.whenRemoved.hint = For example, 31 3 1980
+classOfBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+classOfBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+classOfBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
 
 individualBeneficiary.name.title = What is the name of the individual?
 individualBeneficiary.name.heading = What is the name of the individual?

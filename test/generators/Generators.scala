@@ -94,7 +94,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     chars     <- listOfN(length, arbitrary[Char])
   } yield chars.mkString
 
-  def stringsExceptSpecificValues(excluded: Set[String]): Gen[String] =
+  def stringsExceptSpecificValues(excluded: List[String]): Gen[String] =
     nonEmptyString suchThat (!excluded.contains(_))
 
   def oneOf[T](xs: Seq[Gen[T]]): Gen[T] =

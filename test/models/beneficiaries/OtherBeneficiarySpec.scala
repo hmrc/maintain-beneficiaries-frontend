@@ -40,7 +40,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                  "postCode": "AB1 2BA",
             |                  "country": "GB"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }""".stripMargin)
 
         val beneficiary = json.as[OtherBeneficiary]
@@ -56,7 +57,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -72,7 +74,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                  "line3": "Ben Other Line 3",
             |                  "country": "RU"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }""".stripMargin)
 
         val beneficiary = json.as[OtherBeneficiary]
@@ -87,7 +90,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -98,7 +102,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                "description": "Beneficiary Other 13",
             |                "beneficiaryDiscretion": false,
             |                "beneficiaryShareOfIncome": "20",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }""".stripMargin)
 
         val beneficiary = json.as[OtherBeneficiary]
@@ -108,7 +113,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("20"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -120,7 +126,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                "description": "Beneficiary Other 15",
             |                "entityStart": "2019-09-23",
             |                "beneficiaryDiscretion": true,
-            |                "beneficiaryShareOfIncome": "0"
+            |                "beneficiaryShareOfIncome": "0",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -130,7 +137,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
       "there is no discretion for income info" in {
@@ -140,7 +148,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                "description": "Beneficiary Other 14",
             |                "entityStart": "2019-09-23",
             |                "beneficiaryDiscretion": false,
-            |                "beneficiaryShareOfIncome": "20"
+            |                "beneficiaryShareOfIncome": "20",
+            |                "provisional": false
             |              }""".stripMargin)
 
         val beneficiary = json.as[OtherBeneficiary]
@@ -149,7 +158,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("20"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
       "there is no income at all" in {
@@ -165,7 +175,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
             |                  "postCode": "AB1 2BA",
             |                  "country": "GB"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }""".stripMargin)
 
         val beneficiary = json.as[OtherBeneficiary]
@@ -180,7 +191,8 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
     }

@@ -19,8 +19,13 @@ GET        /trust-not-claimed                                               cont
 
 GET        /agent-not-authorised                                            controllers.AgentNotAuthorisedController.onPageLoad()
 
+GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
+
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
+
+GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
+POST       /what-kind                                                       controllers.AddNowController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

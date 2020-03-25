@@ -14,35 +14,33 @@
  * limitations under the License.
  *@
 
-@import controllers.classofbeneficiary.routes._
+@import controllers.classofbeneficiary.add.routes._
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
-@(form: Form[_], index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("classOfBeneficiary.description.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("classOfBeneficiary.entityStart.title")}"
+) {
 
-    @formHelper(action = DescriptionController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = EntityStartController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_date(
             field = form("value"),
-            label = messages("classOfBeneficiary.description.heading"),
-            headingIsLabel = true,
-            hint = Some(messages("classOfBeneficiary.description.hint")),
-            labelClass=Some("heading-large")
+            legend = messages("classOfBeneficiary.entityStart.heading", description),
+            legendClass = "heading-large",
+            headingIsLegend = true,
+            hint = Some(messages("classOfBeneficiary.entityStart.hint"))
         )
 
         @components.submit_button()
-
-        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("classOfBeneficiary.description.return.link")</a></p>
     }
 }

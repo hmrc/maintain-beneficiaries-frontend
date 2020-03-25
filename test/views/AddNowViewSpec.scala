@@ -14,41 +14,34 @@
  * limitations under the License.
  */
 
-package views.classofbeneficiary
+package views
 
-import forms.StringFormProvider
+import forms.AddBeneficiaryTypeFormProvider
+import models.beneficiaries.Beneficiary
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.classofbeneficiary.DescriptionView
+import views.behaviours.OptionsViewBehaviours
+import views.html.AddNowView
 
-class DescriptionViewSpec extends StringViewBehaviours {
+class AddNowViewSpec extends OptionsViewBehaviours {
 
-  val messageKeyPrefix = "classOfBeneficiary.description"
+  val messageKeyPrefix = "addNow"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix)
-  val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
-  val index = 0
+  val form: Form[Beneficiary] = new AddBeneficiaryTypeFormProvider()()
+  val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
 
   "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, index)(fakeRequest, messages)
+      view.apply(form)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix, "return.link")
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like pageWithTextFields(
-      form,
-      applyView,
-      messageKeyPrefix,
-      None,
-      controllers.classofbeneficiary.routes.DescriptionController.onSubmit(index).url,
-      "value"
-    )
+    behave like pageWithOptions(form, applyView, Beneficiary.options)
 
     behave like pageWithASubmitButton(applyView(form))
   }
