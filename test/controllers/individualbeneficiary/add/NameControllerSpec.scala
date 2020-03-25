@@ -21,7 +21,7 @@ import forms.IndividualNameFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.NamePage
+import pages.individualbeneficiary.IndividualNamePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -56,7 +56,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(NamePage, name).success.value
+      val answers = emptyUserAnswers.set(IndividualNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 

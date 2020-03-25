@@ -18,7 +18,7 @@ package controllers.actions.individual
 
 import javax.inject.Inject
 import models.requests.DataRequest
-import pages.NamePage
+import pages.individualbeneficiary.IndividualNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
@@ -34,7 +34,7 @@ class NameRequiredAction @Inject()(val executionContext: ExecutionContext, val m
   }
 
   private def getName[A](request: DataRequest[A]): String = {
-    request.userAnswers.get(NamePage) match {
+    request.userAnswers.get(IndividualNamePage) match {
       case Some(name) => name.displayName
       case _ => request.messages(messagesApi)("individualBeneficiary.defaultText")
     }
