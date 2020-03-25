@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.individualbeneficiary
 
-import controllers.individualbeneficiary.add.{routes => rts}
-import models.UserAnswers
-import pages.Page
-import pages.individualbeneficiary.IndividualNamePage
-import play.api.mvc.Call
+import models.Name
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-object IndividualBeneficiaryNavigator {
-  private val simpleNavigation: PartialFunction[Page, Call] = {
-    case IndividualNamePage => rts.DateOfBirthYesNoController.onPageLoad()
-  }
+case object IndividualNamePage extends QuestionPage[Name] {
 
-  val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c)
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "name"
 }
