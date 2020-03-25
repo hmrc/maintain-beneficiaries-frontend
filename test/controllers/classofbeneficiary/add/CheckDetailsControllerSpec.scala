@@ -20,17 +20,14 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.UserAnswers
 import models.beneficiaries.Beneficiary
-import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
