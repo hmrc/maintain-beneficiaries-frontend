@@ -132,6 +132,16 @@ individualBeneficiary.name.lastName = Last name
 individualBeneficiary.dateOfBirthYesNo.title = Do you know {0}’s date of birth?
 individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 
+individualBeneficiary.dateOfBirth.title = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.heading = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.error.required.all = Enter a date of birth
+individualBeneficiary.dateOfBirth.error.required.two = Date of birth must include a {0} and a {1}
+individualBeneficiary.dateOfBirth.error.required = Date of birth must include a {0}
+individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
+individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
+individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
 individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
 individualBeneficiary.passportDetails.title = What are the individual beneficiary’s passport details?
 individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
