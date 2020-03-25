@@ -120,6 +120,7 @@ classOfBeneficiary.entityStart.error.past = The date the class of beneficiaries 
 classOfBeneficiary.checkDetails.title = Check class of beneficiaries details
 classOfBeneficiary.checkDetails.heading = Check class of beneficiaries details
 
+individualBeneficiary.defaultText = the beneficiary
 individualBeneficiary.return.link = Return to add a beneficiary
 
 individualBeneficiary.name.title = What is the name of the individual?
@@ -127,3 +128,6 @@ individualBeneficiary.name.heading = What is the name of the individual?
 individualBeneficiary.name.firstName = First name
 individualBeneficiary.name.middleName = Middle names (optional)
 individualBeneficiary.name.lastName = Last name
+
+individualBeneficiary.dateOfBirthYesNo.title = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?

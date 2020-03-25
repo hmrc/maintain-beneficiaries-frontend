@@ -40,4 +40,7 @@ POST       /class-of-beneficiaries/check-details                            cont
 GET        /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onPageLoad()
 POST       /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onSubmit()
 
+GET        /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
+POST       /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)
