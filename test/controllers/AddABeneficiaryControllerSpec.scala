@@ -378,12 +378,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
-
-        whenReady(route(application, request).value) { _ =>
-          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(playbackRepository).set(uaCaptor.capture())
-          uaCaptor.getValue.data mustBe Json.obj()
-        }
+        
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(playbackRepository).set(uaCaptor.capture)
+        uaCaptor.getValue.data mustBe Json.obj()
       }
 
     }
