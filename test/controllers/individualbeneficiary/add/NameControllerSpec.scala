@@ -19,9 +19,11 @@ package controllers.individualbeneficiary.add
 import base.SpecBase
 import forms.IndividualNameFormProvider
 import models.Name
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.NamePage
-import pages.classofbeneficiary.DescriptionPage
+import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.individualbeneficiary.add.NameView
@@ -72,23 +74,29 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-//    "redirect to the next page when valid data is submitted" in {
-//
-//      val application =
-//        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-//
-//      val request =
-//        FakeRequest(POST, nameRoute)
-//          .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
-//
-//      val result = route(application, request).value
-//
-//      status(result) mustEqual SEE_OTHER
-//
-//      redirectLocation(result).value mustEqual routes.EntityStartController.onPageLoad().url
-//
-//      application.stop()
-//    }
+    "redirect to the next page when valid data is submitted" in {
+
+      def onwardRoute = Call("GET", "/foo")
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
+
+      val request =
+        FakeRequest(POST, nameRoute)
+          .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
