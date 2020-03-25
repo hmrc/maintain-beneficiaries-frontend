@@ -76,9 +76,9 @@ addNow.error.required = Select the type of beneficiary you need to add
 addNow.return.link = Return to add a beneficiary
 
 whatTypeOfBeneficiary.individual = Individual
-whatTypeOfBeneficiary.class-of-beneficiaries = Class of beneficiaries
-whatTypeOfBeneficiary.charity-or-trust = Charity or trust
-whatTypeOfBeneficiary.company-or-employment-related = Company or employment related
+whatTypeOfBeneficiary.classOfBeneficiaries = Class of beneficiaries
+whatTypeOfBeneficiary.charityOrTrust = Charity or trust
+whatTypeOfBeneficiary.companyOrEmploymentRelated = Company or employment related
 whatTypeOfBeneficiary.other = Other beneficiary
 
 entities.beneficiary = Beneficiaries

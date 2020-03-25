@@ -55,9 +55,9 @@ object Beneficiaries {
 object Beneficiary extends Enumerable.Implicits {
 
   case object Individual extends WithName("individual") with Beneficiary
-  case object ClassOfBeneficiaries extends WithName("class-of-beneficiaries") with Beneficiary
-  case object CharityOrTrust extends WithName("charity-or-trust") with Beneficiary
-  case object CompanyOrEmploymentRelated extends WithName("company-or-employment-related") with Beneficiary
+  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with Beneficiary
+  case object CharityOrTrust extends WithName("charityOrTrust") with Beneficiary
+  case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with Beneficiary
   case object Other extends WithName("other") with Beneficiary
 
   val values: List[Beneficiary] = List(
