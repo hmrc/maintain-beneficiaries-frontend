@@ -55,7 +55,7 @@ object Beneficiaries {
 object Beneficiary extends Enumerable.Implicits {
 
   case object Individual extends WithName("individual") with Beneficiary
-  case object ClassOfBeneficiaries extends WithName("unidentified") with Beneficiary
+  case object ClassOfBeneficiaries extends WithName("class-of-beneficiaries") with Beneficiary
   case object CharityOrTrust extends WithName("charity-or-trust") with Beneficiary
   case object CompanyOrEmploymentRelated extends WithName("company-or-employment-related") with Beneficiary
   case object Other extends WithName("other") with Beneficiary
@@ -66,7 +66,7 @@ object Beneficiary extends Enumerable.Implicits {
 
   val options: List[RadioOption] = values.map {
     value =>
-      RadioOption("addNow", value.toString)
+      RadioOption("whatTypeOfBeneficiary", value.toString)
   }
 
   implicit val enumerable: Enumerable[Beneficiary] =
