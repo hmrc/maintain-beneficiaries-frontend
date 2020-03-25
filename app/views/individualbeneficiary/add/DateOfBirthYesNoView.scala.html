@@ -24,7 +24,7 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualbeneficiary.dateOfBirthYesNo.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirthYesNo.title", name)}"
     ) {
 
     @formHelper(action = DateOfBirthYesNoController.onSubmit(), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages("individualbeneficiary.dateOfBirthYesNo.heading", name),
+            legend = messages("individualBeneficiary.dateOfBirthYesNo.heading", name),
             headingIsLegend = true
         )
 

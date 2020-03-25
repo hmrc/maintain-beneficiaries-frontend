@@ -16,21 +16,16 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
+import controllers.individualbeneficiary.add.{routes => rts}
 import models.UserAnswers
-import pages.Page
+import pages.{NamePage, Page}
 import play.api.mvc.Call
 
-@Singleton
-class Navigator @Inject()() {
-
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+object IndividualBeneficiaryNavigator {
+  private val simpleNavigation: PartialFunction[Page, Call] = {
+    case NamePage => rts.DateOfBirthYesNoController.onPageLoad()
   }
 
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+  val routes: PartialFunction[Page, UserAnswers => Call] =
+    simpleNavigation andThen (c => (_:UserAnswers) => c)
 }
