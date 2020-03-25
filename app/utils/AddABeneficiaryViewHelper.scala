@@ -27,7 +27,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name.displayName,
       typeLabel = messages("entities.beneficiaries.individual"),
       changeLabel = messages("site.change.details"),
-      changeUrl = None,
+      changeUrl = Some(controllers.individual.routes.NameController.onPageLoad(index).url),
       removeLabel =  messages("site.delete"),
       removeUrl = None
     )

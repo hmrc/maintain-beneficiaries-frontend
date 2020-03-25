@@ -26,26 +26,28 @@ import pages.individual.IndividualBeneficiaryNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.classofbeneficiary.DescriptionView
+import views.html.individual.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndividualBeneficiaryNameController @Inject()(
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     standardActionSets: StandardActionSets,
-                                                     formProvider: NameFormProvider,
-                                                     connector: TrustConnector,
-                                                     view: DescriptionView,
-                                                     trustService: TrustService
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class NameController @Inject()(
+                                val controllerComponents: MessagesControllerComponents,
+                                standardActionSets: StandardActionSets,
+                                formProvider: NameFormProvider,
+                                playbackRepository: PlaybackRepository,
+                                view: NameView,
+                                trustService: TrustService,
+                                navigator: Navigator
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Name] = formProvider.withPrefix("individualBeneficiary")
+  val form: Form[Name] = formProvider.withPrefix("individualBeneficiary.name")
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
-      
+
       val preparedForm = request.userAnswers.get(IndividualBeneficiaryNamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
@@ -60,8 +62,11 @@ class IndividualBeneficiaryNameController @Inject()(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, index))),
         value => {
-            Future.successful(Ok)
-          }
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IndividualBeneficiaryNamePage(index), value))
+            _ <- playbackRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(IndividualBeneficiaryNamePage(index), updatedAnswers))
+        }
       )
   }
 }
