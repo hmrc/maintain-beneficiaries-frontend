@@ -26,27 +26,27 @@ class NameFormProvider @Inject() extends Mappings {
 
    def withPrefix(prefix: String): Form[Name] =   Form(
     mapping(
-      "firstName" -> text(s"$prefix.error.firstname.required")
+      "firstName" -> text(s"$prefix.error.firstName.required")
         .verifying(
           firstError(
-            maxLength(35, s"$prefix.error.firstname.length"),
-            nonEmptyString("firstName", s"$prefix.error.firstname.required"),
-            regexp(Validation.nameRegex, s"$prefix.error.firstname.invalid")
+            maxLength(35, s"$prefix.error.firstName.length"),
+            nonEmptyString("firstName", s"$prefix.error.firstName.required"),
+            regexp(Validation.nameRegex, s"$prefix.error.firstName.invalid")
           )
         ),
       "middleName" -> optional(text()
         .verifying(
           firstError(
-            maxLength(35, s"$prefix.error.middlename.length"),
-            regexp(Validation.nameRegex, s"$prefix.error.middlename.invalid"))
+            maxLength(35, s"$prefix.error.middleName.length"),
+            regexp(Validation.nameRegex, s"$prefix.error.middleName.invalid"))
         )
       ),
-      "lastName" -> text(s"$prefix.error.lastname.required")
+      "lastName" -> text(s"$prefix.error.lastName.required")
         .verifying(
           firstError(
-            maxLength(35, s"$prefix.error.lastname.length"),
-            nonEmptyString("lastName", s"$prefix.error.lastname.required"),
-            regexp(Validation.nameRegex, s"$prefix.error.lastname.invalid")
+            maxLength(35, s"$prefix.error.lastName.length"),
+            nonEmptyString("lastName", s"$prefix.error.lastName.required"),
+            regexp(Validation.nameRegex, s"$prefix.error.lastName.invalid")
           )
         )
     )(Name.apply)(Name.unapply)
