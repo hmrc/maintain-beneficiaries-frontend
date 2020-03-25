@@ -18,10 +18,23 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.unlift
+import play.api.libs.json.{Format, Json, Reads, Writes, __}
 
-final case class ClassOfBeneficiary(description: String, entityStart: LocalDate) extends Beneficiary
+final case class ClassOfBeneficiary(description: String, entityStart: LocalDate, provisional : Boolean)
+  extends Beneficiary
 
 object ClassOfBeneficiary {
-  implicit val formats : Format[ClassOfBeneficiary] = Json.format[ClassOfBeneficiary]
+
+  implicit val reads: Reads[ClassOfBeneficiary] =
+    ((__ \ 'description).read[String] and
+      (__ \ 'entityStart).read[LocalDate] and
+      (__ \ 'lineNo).readNullable[String].map(_.isEmpty)).apply(ClassOfBeneficiary.apply _)
+
+  implicit val writes: Writes[ClassOfBeneficiary] =
+    ((__ \ 'description).write[String] and
+      (__ \ 'entityStart).write[LocalDate] and
+      (__ \ "provisional").write[Boolean]).apply(unlift(ClassOfBeneficiary.unapply))
+
 }

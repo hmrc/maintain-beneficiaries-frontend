@@ -45,7 +45,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "beneficiaryDiscretion": false,
             |    "beneficiaryShareOfIncome": "98",
-            |    "entityStart": "2019-09-23"
+            |    "entityStart": "2019-09-23",
+            |    "provisional": false
             |    }""".stripMargin)
 
         val beneficiary = json.as[CompanyBeneficiary]
@@ -62,7 +63,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = Some("98"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -84,7 +86,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "beneficiaryDiscretion": false,
             |    "beneficiaryShareOfIncome": "98",
-            |    "entityStart": "2019-09-23"
+            |    "entityStart": "2019-09-23",
+            |    "provisional": false
             |    }""".stripMargin)
 
         val beneficiary = json.as[CompanyBeneficiary]
@@ -100,7 +103,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = Some("98"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -116,7 +120,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |                },
             |                "beneficiaryDiscretion": false,
             |                "beneficiaryShareOfIncome": "98",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -128,7 +133,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("98"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
       "with no identification" in {
@@ -140,7 +146,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |                "organisationName": "Beneficiary Org 24",
             |                "beneficiaryDiscretion": false,
             |                "beneficiaryShareOfIncome": "98",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -152,7 +159,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("98"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -168,7 +176,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -179,7 +188,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no discretion for income info" in {
@@ -193,7 +203,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -204,7 +215,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no income at all" in {
@@ -217,7 +229,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -228,7 +241,8 @@ class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
     }

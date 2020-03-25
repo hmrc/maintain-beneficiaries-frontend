@@ -52,6 +52,7 @@ object Beneficiaries {
       ).apply(Beneficiaries.apply _)
 }
 
+
 object Beneficiary extends Enumerable.Implicits {
 
   case object Individual extends WithName("individual") with Beneficiary
