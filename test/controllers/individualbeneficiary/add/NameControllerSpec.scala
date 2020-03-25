@@ -30,7 +30,7 @@ import views.html.individualbeneficiary.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form = new IndividualNameFormProvider().withPrefix("individualBeneficiary.description")
+  private val form = new IndividualNameFormProvider().withPrefix("individualBeneficiary.name")
   private lazy val nameRoute = routes.NameController.onPageLoad().url
   private val name = Name("First", Some("Middle"), "Last")
 

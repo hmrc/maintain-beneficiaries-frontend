@@ -42,9 +42,9 @@ class NameController @Inject()(
                                 trustService: TrustService,
                                 repository: PlaybackRepository,
                                 navigator: Navigator
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Name] = formProvider.withPrefix("individualBeneficiary.description")
+  val form: Form[Name] = formProvider.withPrefix("individualBeneficiary.name")
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
