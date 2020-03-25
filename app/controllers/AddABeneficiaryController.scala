@@ -24,6 +24,7 @@ import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
 import models.{AddABeneficiary, Enumerable}
 import navigation.Navigator
+import pages.AddNowPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,18 +37,18 @@ import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddABeneficiaryController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       registrationsRepository: PlaybackRepository,
-                                       navigator: Navigator,
-                                       trust: TrustService,
-                                       standardActionSets: StandardActionSets,
-                                       addAnotherFormProvider: AddABeneficiaryFormProvider,
-                                       yesNoFormProvider: YesNoFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       addAnotherView: AddABeneficiaryView,
-                                       yesNoView: AddABeneficiaryYesNoView,
-                                       val appConfig: FrontendAppConfig,
-                                       trustStoreConnector: TrustStoreConnector
+                                           override val messagesApi: MessagesApi,
+                                           repository: PlaybackRepository,
+                                           navigator: Navigator,
+                                           trust: TrustService,
+                                           standardActionSets: StandardActionSets,
+                                           addAnotherFormProvider: AddABeneficiaryFormProvider,
+                                           yesNoFormProvider: YesNoFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           addAnotherView: AddABeneficiaryView,
+                                           yesNoView: AddABeneficiaryYesNoView,
+                                           val appConfig: FrontendAppConfig,
+                                           trustStoreConnector: TrustStoreConnector
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
@@ -109,7 +110,10 @@ class AddABeneficiaryController @Inject()(
           },
           {
             case AddABeneficiary.YesNow =>
-              Future.successful(Redirect(controllers.routes.AddNowController.onPageLoad()))
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath).flatMap(_.remove(AddNowPage)))
+                _ <- repository.set(updatedAnswers)
+              } yield Redirect(controllers.routes.AddNowController.onPageLoad())
             case AddABeneficiary.YesLater =>
               Future.successful(Redirect(appConfig.maintainATrustOverview))
             case AddABeneficiary.NoComplete =>

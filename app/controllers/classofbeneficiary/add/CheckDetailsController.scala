@@ -21,7 +21,6 @@ import connectors.TrustConnector
 import controllers.actions._
 import controllers.classofbeneficiary.actions.DescriptionRequiredAction
 import javax.inject.Inject
-import pages.AddNowPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -60,11 +59,9 @@ class CheckDetailsController @Inject()(
         case None =>
           Future.successful(InternalServerError)
         case Some(beneficiary) =>
-          for {
-            _ <- connector.addClassOfBeneficiary(request.userAnswers.utr, beneficiary)
-            updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath).flatMap(_.deleteAtPath(AddNowPage.path)))
-            _ <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          connector.addClassOfBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
       }
   }
 }

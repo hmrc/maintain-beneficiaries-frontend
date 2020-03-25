@@ -19,24 +19,30 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBase
-import connectors.TrustStoreConnector
+import connectors.{TrustConnector, TrustStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
-import models.{AddABeneficiary, Name, RemoveBeneficiary}
+import models.{AddABeneficiary, Name, RemoveBeneficiary, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.concurrent.ScalaFutures
+import pages.AddNowPage
+import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import viewmodels.addAnother.AddRow
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddABeneficiaryControllerSpec extends SpecBase {
+class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
   lazy val getRoute : String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute : String = controllers.routes.AddABeneficiaryController.submitAnother().url
@@ -351,6 +357,41 @@ class AddABeneficiaryControllerSpec extends SpecBase {
         contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
 
         application.stop()
+      }
+
+      "Clear out the user answers when starting the add class of beneficiary journey and redirect to what type of beneficiary page" in {
+
+        val mockTrustConnector = mock[TrustConnector]
+
+        val userAnswers = emptyUserAnswers
+          .set(AddNowPage, Beneficiary.ClassOfBeneficiaries).success.value
+          .set(DescriptionPage, "Description").success.value
+          .set(EntityStartPage, LocalDate.parse("2019-02-03")).success.value
+
+        reset(playbackRepository)
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers),
+            affinityGroup = Agent
+          ).overrides(
+            bind[TrustConnector].toInstance(mockTrustConnector)
+          ).build()
+
+        when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
+          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
+        when(playbackRepository.set(any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", AddABeneficiary.YesNow.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(playbackRepository).set(uaCaptor.capture)
+        uaCaptor.getValue.data mustBe Json.obj()
       }
 
     }
