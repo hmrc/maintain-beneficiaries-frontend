@@ -19,52 +19,48 @@ package controllers.individualbeneficiary.add
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import forms.DateOfBirthFormProvider
+import forms.IncomePercentageFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{DateOfBirthPage, IndividualNamePage}
+import pages.individualbeneficiary.{DateOfBirthPage, IncomePercentagePage, IndividualNamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.add.DateOfBirthView
+import views.html.individualbeneficiary.add.IncomePercentageView
 
 import scala.concurrent.Future
 
-class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
+class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new DateOfBirthFormProvider()
-  private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
+  private val formProvider = new IncomePercentageFormProvider()
+  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
 
-  def onwardRoute = Call("GET", "/foo")
+  private def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  private val validAnswer = 42
 
-  lazy val dateOfBirthRoute = routes.DateOfBirthController.onPageLoad().url
+  private lazy val incomePercentageRoute = routes.IncomePercentageController.onPageLoad().url
 
-  val name = Name("New", None, "Beneficiary")
+  private val name = Name("New", None, "Beneficiary")
 
   override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
     .set(IndividualNamePage, name)
     .success.value
 
-  def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, dateOfBirthRoute)
+  private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest(GET, incomePercentageRoute)
 
-  def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
-    FakeRequest(POST, dateOfBirthRoute)
-      .withFormUrlEncodedBody(
-        "value.day"   -> validAnswer.getDayOfMonth.toString,
-        "value.month" -> validAnswer.getMonthValue.toString,
-        "value.year"  -> validAnswer.getYear.toString
-      )
+  private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
+    FakeRequest(POST, incomePercentageRoute)
+      .withFormUrlEncodedBody("percentage" -> validAnswer.toString)
 
-  "DateOfBirth Controller" must {
+  "Individual Beneficiary Income Percentage Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -72,7 +68,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
       val result = route(application, getRequest()).value
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[IncomePercentageView]
 
       status(result) mustEqual OK
 
@@ -85,12 +81,12 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(DateOfBirthPage, validAnswer).success.value
+        .set(IncomePercentagePage, validAnswer).success.value
         .set(IndividualNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[IncomePercentageView]
 
       val result = route(application, getRequest()).value
 
@@ -129,12 +125,12 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, dateOfBirthRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, incomePercentageRoute)
+          .withFormUrlEncodedBody(("percentage", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("percentage" -> "invalid value"))
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[IncomePercentageView]
 
       val result = route(application, request).value
 
