@@ -85,6 +85,7 @@ class AddABeneficiaryController @Inject()(
   private def cleanRemoveYesNoPages(implicit request: DataRequest[AnyContent]): Try[UserAnswers] = {
     request.userAnswers
       .remove(pages.individual.RemoveYesNoPage)
+      .flatMap(_.remove(pages.classofbeneficiary.RemoveYesNoPage))
   }
 
   def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData {

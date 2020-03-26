@@ -25,7 +25,7 @@ import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.classofbeneficiary.WhenRemovedPage
+import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -89,28 +89,6 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
       contentAsString(result) mustEqual
         view(form, index, description)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(WhenRemovedPage, validAnswer).success.value
-
-      when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
-
-      val view = application.injector.instanceOf[WhenRemovedView]
-
-      val result = route(application, getRequest()).value
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(validAnswer), index, description)(getRequest(), messages).toString
 
       application.stop()
     }

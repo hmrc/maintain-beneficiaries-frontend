@@ -21,6 +21,7 @@ import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import navigation.Navigator
+import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -33,10 +34,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveClassOfBeneficiaryController @Inject()(
                                                     override val messagesApi: MessagesApi,
-                                                    sessionRepository: PlaybackRepository,
+                                                    repository: PlaybackRepository,
                                                     navigator: Navigator,
                                                     standardActionSets: StandardActionSets,
-                                                    trust: TrustService,
+                                                    trustService: TrustService,
                                                     formProvider: RemoveIndexFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
                                                     view: RemoveIndexView
@@ -52,9 +53,14 @@ class RemoveClassOfBeneficiaryController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
+
+      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(messagesPrefix, form, index, beneficiary.description, formRoute(index)))
+          Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
       }
 
   }
@@ -66,22 +72,28 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+          trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
             beneficiary =>
               BadRequest(view(messagesPrefix, formWithErrors, index, beneficiary.description, formRoute(index)))
           }
         },
         value => {
+
           if (value) {
 
-            trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
+            trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  for {
-                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index))
-                  } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)).map(_ =>
+                    Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                  )
                 } else {
-                  Future.successful(Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url))
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
+                    _ <- repository.set(updatedAnswers)
+                  } yield {
+                    Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url)
+                  }
                 }
             }
           } else {

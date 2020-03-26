@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package pages.classofbeneficiary
+package pages.classOfBeneficiary
 
 import java.time.LocalDate
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import org.scalacheck.Arbitrary
+import pages.behaviours.PageBehaviours
+import pages.classofbeneficiary.RemoveYesNoPage
 
-case object WhenRemovedPage extends QuestionPage[LocalDate] {
+class RemoveYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = basePath \ toString
+  "RemoveYesNoPage" must {
 
-  override def toString: String = "dateRemovedFromTrust"
+    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
+      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now())
+    }
+
+    beRetrievable[Boolean](RemoveYesNoPage)
+
+    beSettable[Boolean](RemoveYesNoPage)
+
+    beRemovable[Boolean](RemoveYesNoPage)
+  }
 }

@@ -26,6 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.PropertyChecks
+import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -85,6 +86,30 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(RemoveYesNoPage, true).success.value
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+
+      val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[RemoveIndexView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(messagesPrefix, form.fill(true), 0, description, formRoute)(fakeRequest, messages).toString
 
       application.stop()
     }
