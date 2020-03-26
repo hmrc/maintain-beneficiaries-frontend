@@ -25,7 +25,8 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{DateOfBirthPage, IncomePercentagePage, IndividualNamePage}
+import pages.NamePage
+import pages.individualbeneficiary.{DateOfBirthPage, IncomePercentagePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -50,7 +51,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
   private val name = Name("New", None, "Beneficiary")
 
   override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
-    .set(IndividualNamePage, name)
+    .set(NamePage, name)
     .success.value
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
@@ -82,7 +83,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = emptyUserAnswers
         .set(IncomePercentagePage, validAnswer).success.value
-        .set(IndividualNamePage, name).success.value
+        .set(NamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

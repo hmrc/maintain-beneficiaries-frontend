@@ -33,12 +33,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("individualBeneficiary.incomePercentage.heading")
-
         @components.input_text(
             field = form("percentage"),
-            label = messages("individualBeneficiary.incomePercentage.label"),
-            hint = Some(messages("individualBeneficiary.incomePercentage.hint"))
+            label = messages("individualBeneficiary.incomePercentage.heading", name),
+            headingIsLabel = true,
+            hint = Some(messages("individualBeneficiary.incomePercentage.hint")),
+            labelClass=Some("heading-large")
         )
 
         @components.submit_button()
