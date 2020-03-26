@@ -19,17 +19,18 @@ package navigation
 import controllers.individualbeneficiary.add.{routes => rts}
 import models.UserAnswers
 import pages.{Page, QuestionPage}
-import pages.individualbeneficiary.{DateOfBirthPage, DateOfBirthYesNoPage, IncomeDiscretionYesNoPage, IndividualNamePage}
+import pages.individualbeneficiary.{DateOfBirthPage, DateOfBirthYesNoPage, IncomeDiscretionYesNoPage, IncomePercentagePage, IndividualNamePage}
 import play.api.mvc.Call
 
 object IndividualBeneficiaryNavigator {
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case IndividualNamePage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
+    case IncomePercentagePage => rts.NationalInsuranceNumberController.onPageLoad()
   }
   private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] =
     yesNoNav(DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad()) orElse
-    yesNoNav(IncomeDiscretionYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
+    yesNoNav(IncomeDiscretionYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
