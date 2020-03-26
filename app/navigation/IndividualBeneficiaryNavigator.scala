@@ -18,15 +18,25 @@ package navigation
 
 import controllers.individualbeneficiary.add.{routes => rts}
 import models.UserAnswers
-import pages.Page
-import pages.individualbeneficiary.IndividualNamePage
+import pages.{Page, QuestionPage}
+import pages.individualbeneficiary.{DateOfBirthYesNoPage, IndividualNamePage}
 import play.api.mvc.Call
 
 object IndividualBeneficiaryNavigator {
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case IndividualNamePage => rts.DateOfBirthYesNoController.onPageLoad()
   }
+  private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] =
+    yesNoNav(DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.NameController.onPageLoad())
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c)
+    simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
+    yesNoNavigations
+
+  def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call) : PartialFunction[Page, UserAnswers => Call] = {
+    case `fromPage` =>
+      ua => ua.get(fromPage)
+        .map(if (_) yesCall else noCall)
+        .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  }
 }
