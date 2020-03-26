@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-package forms
+package pages.classOfBeneficiary
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import models.beneficiaries.TypeOfBeneficiaryToAdd
-import play.api.data.Form
+import java.time.LocalDate
 
-class AddBeneficiaryTypeFormProvider @Inject() extends Mappings {
+import org.scalacheck.Arbitrary
+import pages.behaviours.PageBehaviours
+import pages.classofbeneficiary.RemoveYesNoPage
 
-  def apply(): Form[TypeOfBeneficiaryToAdd] =
-    Form(
-      "value" -> enumerable[TypeOfBeneficiaryToAdd]("addNow.error.required")
-    )
+class RemoveYesNoPageSpec extends PageBehaviours {
+
+  "RemoveYesNoPage" must {
+
+    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
+      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now())
+    }
+
+    beRetrievable[Boolean](RemoveYesNoPage)
+
+    beSettable[Boolean](RemoveYesNoPage)
+
+    beRemovable[Boolean](RemoveYesNoPage)
+  }
 }

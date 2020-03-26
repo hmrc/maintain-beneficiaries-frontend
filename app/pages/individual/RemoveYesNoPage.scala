@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package pages.classofbeneficiary
-
-import java.time.LocalDate
+package pages.individual
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object WhenRemovedPage extends QuestionPage[LocalDate] {
+case object RemoveYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "dateRemovedFromTrust"
+  override def toString: String = "removeYesNo"
 }

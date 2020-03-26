@@ -16,10 +16,10 @@
 
 package pages
 
-import models.beneficiaries.Beneficiary
+import models.beneficiaries.TypeOfBeneficiaryToAdd
 import play.api.libs.json.JsPath
 
-case object AddNowPage extends QuestionPage[Beneficiary] {
+case object AddNowPage extends QuestionPage[TypeOfBeneficiaryToAdd] {
 
   override def path: JsPath = JsPath \ toString
 

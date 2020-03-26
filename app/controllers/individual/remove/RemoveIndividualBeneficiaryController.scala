@@ -14,39 +14,34 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.remove
+package controllers.individual.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import navigation.Navigator
-import pages.classofbeneficiary.RemoveYesNoPage
+import pages.individual.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.classofbeneficiary.remove.RemoveIndexView
+import views.html.individual.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveClassOfBeneficiaryController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    repository: PlaybackRepository,
-                                                    navigator: Navigator,
-                                                    standardActionSets: StandardActionSets,
-                                                    trustService: TrustService,
-                                                    formProvider: RemoveIndexFormProvider,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: RemoveIndexView
+class RemoveIndividualBeneficiaryController @Inject()(
+                                                       override val messagesApi: MessagesApi,
+                                                       repository: PlaybackRepository,
+                                                       standardActionSets: StandardActionSets,
+                                                       trustService: TrustService,
+                                                       formProvider: RemoveIndexFormProvider,
+                                                       val controllerComponents: MessagesControllerComponents,
+                                                       view: RemoveIndexView
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def formRoute(index: Int): Call =
-    controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
-
-  private val messagesPrefix: String = "removeClassOfBeneficiary"
+  private val messagesPrefix: String = "removeIndividualBeneficiary"
 
   private val form = formProvider.apply(messagesPrefix)
 
@@ -58,9 +53,9 @@ class RemoveClassOfBeneficiaryController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+      trustService.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+          Ok(view(preparedForm, index, beneficiary.name.displayName))
       }
 
   }
@@ -72,19 +67,19 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+          trustService.getIndividualBeneficiary(request.userAnswers.utr, index).map {
             beneficiary =>
-              BadRequest(view(messagesPrefix, formWithErrors, index, beneficiary.description, formRoute(index)))
+              BadRequest(view(formWithErrors, index, beneficiary.name.displayName))
           }
         },
         value => {
 
           if (value) {
 
-            trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
+            trustService.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)).map(_ =>
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index)).map(_ =>
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   )
                 } else {
@@ -92,12 +87,12 @@ class RemoveClassOfBeneficiaryController @Inject()(
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
                     _ <- repository.set(updatedAnswers)
                   } yield {
-                    Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url)
+                    Redirect(controllers.individual.remove.routes.WhenRemovedController.onPageLoad(index))
                   }
                 }
             }
           } else {
-            Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))
+            Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
           }
         }
       )

@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.Beneficiary
+import models.beneficiaries.TypeOfBeneficiaryToAdd
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage
 import play.api.data.Form
@@ -28,9 +28,9 @@ import views.html.AddNowView
 
 class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[Beneficiary] = new AddBeneficiaryTypeFormProvider()()
+  val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
   lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
-  val validAnswer: Beneficiary.ClassOfBeneficiaries.type = Beneficiary.ClassOfBeneficiaries
+  val validAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
 
   "AddNow Controller" must {
 
@@ -96,7 +96,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", Beneficiary.Individual.toString))
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Individual.toString))
 
       val result = route(application, request).value
 

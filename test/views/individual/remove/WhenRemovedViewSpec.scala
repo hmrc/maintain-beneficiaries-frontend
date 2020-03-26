@@ -14,36 +14,48 @@
  * limitations under the License.
  */
 
-package views
+package views.individual.remove
 
-import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.TypeOfBeneficiaryToAdd
+import java.time.LocalDate
+
+import forms.DateRemovedFromTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
-import views.html.AddNowView
+import views.behaviours.QuestionViewBehaviours
+import views.html.individual.remove.WhenRemovedView
 
-class AddNowViewSpec extends OptionsViewBehaviours {
+class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "addNow"
+  val messageKeyPrefix = "individualBeneficiary.whenRemoved"
+  val index = 0
+  val name = "Name"
 
-  val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
-  val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
+  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, LocalDate.now())
 
-  "Description view" must {
+  "whenRemoved view" must {
+
+    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, index, name)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like pageWithOptions(form, applyView, TypeOfBeneficiaryToAdd.options)
+    "fields" must {
+
+      behave like pageWithDateFields(
+        form,
+        applyView,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+    }
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }
