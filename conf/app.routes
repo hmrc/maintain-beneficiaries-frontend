@@ -49,6 +49,9 @@ POST       /individual-beneficiary/date-of-birth                            cont
 GET        /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
 POST       /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
 
+GET        /individual-beneficiary/has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onPageLoad()
+POST       /individual-beneficiary/has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onSubmit()
+
 GET        /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onPageLoad()
 POST       /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onSubmit()
 

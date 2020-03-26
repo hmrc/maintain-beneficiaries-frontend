@@ -145,6 +145,11 @@ individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discret
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
 
+individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+individualBeneficiary.addressYesNo.title = Do you know the individual beneficiary’s address?
+individualBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual beneficiary’s address
+
 individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 individualBeneficiary.liveInTheUkYesNo.title = Does the individual beneficiary live in the UK?
 individualBeneficiary.liveInTheUkYesNo.heading = Does {0} live in the UK?
