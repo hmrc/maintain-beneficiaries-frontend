@@ -16,24 +16,12 @@
 
 package pages.individualbeneficiary
 
-import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object IncomeDiscretionYesNoPage extends QuestionPage[Boolean] {
+case object VPE1FormYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "incomeDiscretionYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(true) =>
-        userAnswers.remove(IncomePercentagePage)
-      case _ =>
-        super.cleanup(value, userAnswers)
-    }
-  }
+  override def toString: String = "vpe1FormYesNo"
 }
