@@ -153,7 +153,6 @@ individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for detail
 individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is {0} entitled to?
 individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
 individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
-individualBeneficiary.incomePercentage.label = Percentage of income
 
 individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 individualBeneficiary.addressYesNo.title = Do you know the individual beneficiary’s address?
