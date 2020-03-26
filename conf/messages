@@ -33,6 +33,11 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
+error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+error.income_percentage.required = Enter what percentage of the trust’s assets the individual beneficiary is entitled to
+error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 
