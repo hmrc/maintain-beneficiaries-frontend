@@ -30,7 +30,7 @@ class RemoveIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
   val name = "Trustee Name"
   val index = 0
 
-  "AddressInTheUkYesNoPage view" must {
+  "RemoveIndividualBeneficiary view" must {
 
     val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
 
