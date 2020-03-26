@@ -169,10 +169,12 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
-      val result = service.getUnidentifiedBeneficiary("1234567890", index)
-
-      whenReady(result) {
+      whenReady(service.getUnidentifiedBeneficiary("1234567890", index)) {
         _ mustBe unidentified
+      }
+
+      whenReady(service.getIndividualBeneficiary("1234567890", index)) {
+        _ mustBe individual
       }
 
     }
