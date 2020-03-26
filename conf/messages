@@ -155,18 +155,30 @@ individualBeneficiary.incomePercentage.heading = What percentage of the trust’
 individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
 individualBeneficiary.incomePercentage.label = Percentage of income
 
+individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.heading = Do you know {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.error.required = Select yes if you know the individual’s National Insurance number
+
+individualBeneficiary.nationalInsuranceNumber.checkYourAnswersLabel = What is {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.title = What is the individual’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.heading = What is {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual’s National Insurance number
+individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual’s National Insurance number in the correct format
+
 individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-individualBeneficiary.addressYesNo.title = Do you know the individual beneficiary’s address?
+individualBeneficiary.addressYesNo.title = Do you know the individual’s address?
 individualBeneficiary.addressYesNo.heading = Do you know {0}’s address?
-individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual beneficiary’s address
+individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual’s address
 
 individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
-individualBeneficiary.liveInTheUkYesNo.title = Does the individual beneficiary live in the UK?
+individualBeneficiary.liveInTheUkYesNo.title = Does the individual live in the UK?
 individualBeneficiary.liveInTheUkYesNo.heading = Does {0} live in the UK?
-individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual beneficiary lives in the UK
+individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual lives in the UK
 
 individualBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-individualBeneficiary.ukAddress.title = What is the individual beneficiary’s address?
+individualBeneficiary.ukAddress.title = What is the individual’s address?
 individualBeneficiary.ukAddress.heading = What is {0}’s address?
 individualBeneficiary.ukAddress.line1 = Address line 1
 individualBeneficiary.ukAddress.line2 = Address line 2
@@ -176,54 +188,54 @@ individualBeneficiary.ukAddress.postcode = Postcode
 individualBeneficiary.ukAddress.postcode.hint = For example AB1 1AB
 
 individualBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
-individualBeneficiary.nonUkAddress.title = What is the individual beneficiary’s address?
+individualBeneficiary.nonUkAddress.title = What is the individual’s address?
 individualBeneficiary.nonUkAddress.heading = What is {0}’s address?
 
 individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
-individualBeneficiary.passportDetailsYesNo.title = Do you know the individual beneficiary’s passport details?
+individualBeneficiary.passportDetailsYesNo.title = Do you know the individual’s passport details?
 individualBeneficiary.passportDetailsYesNo.heading = Do you know {0}’s passport details?
-individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport details
+individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual’s passport details
 
 individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
-individualBeneficiary.passportDetails.title = What are the individual beneficiary’s passport details?
+individualBeneficiary.passportDetails.title = What are the individual’s passport details?
 individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
 individualBeneficiary.passportDetails.country = Passport country of issue
-individualBeneficiary.passportDetails.country.error.required = Enter the individual beneficiary’s passport country of issue
-individualBeneficiary.passportDetails.country.error.length = The individual beneficiary’s passport country must be 100 characters or less
+individualBeneficiary.passportDetails.country.error.required = Enter the individual’s passport country of issue
+individualBeneficiary.passportDetails.country.error.length = The individual’s passport country must be 100 characters or less
 individualBeneficiary.passportDetails.number = Passport number
 individualBeneficiary.passportDetails.number.hint = For example, 502135326
-individualBeneficiary.passportDetails.number.error.required = Enter the individual beneficiary’s passport number
-individualBeneficiary.passportDetails.number.error.length = The individual beneficiary’s passport number must be 30 characters or less
+individualBeneficiary.passportDetails.number.error.required = Enter the individual’s passport number
+individualBeneficiary.passportDetails.number.error.length = The individual’s passport number must be 30 characters or less
 individualBeneficiary.passportDetails.number.error.invalid = Passport number can only include letters and numbers
 individualBeneficiary.passportDetails.expiryDate = Expiry date
 individualBeneficiary.passportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
 individualBeneficiary.passportDetails.expiryDate.error.required.all = Enter the passport expiry date
 individualBeneficiary.passportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
 individualBeneficiary.passportDetails.expiryDate.error.required = Passport expiry date must include {0}
-individualBeneficiary.passportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
+individualBeneficiary.passportDetails.expiryDate.error.invalid = Enter a real date when the individual’s passport expires
 individualBeneficiary.passportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
 individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
-individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual beneficiary’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual’s ID card details?
 individualBeneficiary.idCardDetailsYesNo.heading = Do you know {0}’s ID card details?
-individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s ID card details
+individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual’s ID card details
 
 individualBeneficiary.idCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
-individualBeneficiary.idCardDetails.title = What are the individual beneficiary’s ID card details?
+individualBeneficiary.idCardDetails.title = What are the individual’s ID card details?
 individualBeneficiary.idCardDetails.heading = What are {0}’s ID card details?
 individualBeneficiary.idCardDetails.country = ID card country of issue
-individualBeneficiary.idCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
-individualBeneficiary.idCardDetails.country.error.length = The individual beneficiary’s ID card country must be 100 characters or less
+individualBeneficiary.idCardDetails.country.error.required = Enter the individual’s ID card country of issue
+individualBeneficiary.idCardDetails.country.error.length = The individual’s ID card country must be 100 characters or less
 individualBeneficiary.idCardDetails.number = ID card number
-individualBeneficiary.idCardDetails.number.error.required = Enter the individual beneficiary’s ID card number
-individualBeneficiary.idCardDetails.number.error.length = The individual beneficiary’s ID card number must be 30 characters or less
+individualBeneficiary.idCardDetails.number.error.required = Enter the individual’s ID card number
+individualBeneficiary.idCardDetails.number.error.length = The individual’s ID card number must be 30 characters or less
 individualBeneficiary.idCardDetails.number.error.invalid = ID card number can only include letters and numbers
 individualBeneficiary.idCardDetails.expiryDate = Expiry date
 individualBeneficiary.idCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
 individualBeneficiary.idCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
 individualBeneficiary.idCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
 individualBeneficiary.idCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
-individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s ID card expires
+individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date when the individual’s ID card expires
 individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100

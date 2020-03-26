@@ -19,17 +19,25 @@ package navigation
 import controllers.individualbeneficiary.add.{routes => rts}
 import models.UserAnswers
 import pages.{Page, QuestionPage}
-import pages.individualbeneficiary.{DateOfBirthPage, DateOfBirthYesNoPage, IncomeDiscretionYesNoPage, IndividualNamePage}
+import pages.individualbeneficiary._
 import play.api.mvc.Call
 
 object IndividualBeneficiaryNavigator {
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case IndividualNamePage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
+    case NationalInsuranceNumberPage => ???
+    case UkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
+    case NonUkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
+    case IdCardDetailsPage => ???
   }
   private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] =
     yesNoNav(DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad()) orElse
-    yesNoNav(IncomeDiscretionYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
+    yesNoNav(IncomeDiscretionYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomePercentageController.onPageLoad()) orElse
+    yesNoNav(NationalInsuranceNumberYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), ???) orElse
+    yesNoNav(LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad()) orElse
+    yesNoNav(PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(), rts.IdCardDetailsYesNoController.onPageLoad()) orElse
+    yesNoNav(IdCardDetailsYesNoPage, rts.IdCardDetailsController.onPageLoad(), ???)
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
