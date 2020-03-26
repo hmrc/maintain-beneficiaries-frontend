@@ -16,24 +16,26 @@
 
 package pages.individual
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import java.time.LocalDate
 
-import scala.util.Try
+import pages.behaviours.PageBehaviours
 
-case class DateOfBirthYesNoPage(index: Int) extends QuestionPage[Boolean] {
+class DateOfBirthYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = basePath \ index \ toString
+  "DateOfBirthYesNo page" must {
 
-  override def toString: String = "dateOfBirthYesNo"
+    beRetrievable[Boolean](DateOfBirthYesNoPage(0))
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(false) =>
-        userAnswers.remove(DateOfBirthPage(index))
-      case _ =>
-        super.cleanup(value, userAnswers)
+    beSettable[Boolean](DateOfBirthYesNoPage(0))
+
+    beRemovable[Boolean](DateOfBirthYesNoPage(0))
+
+    "implement cleanup logic when NO selected" in {
+      val userAnswers = emptyUserAnswers
+        .set(DateOfBirthPage(0), LocalDate.now())
+        .flatMap(_.set(DateOfBirthYesNoPage(0), false))
+
+      userAnswers.get.get(DateOfBirthPage(0)) mustNot be(defined)
     }
   }
 }
