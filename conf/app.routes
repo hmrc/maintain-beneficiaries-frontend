@@ -82,4 +82,7 @@ POST       /individual-beneficiary/has-id-card                              cont
 GET        /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad()
 POST       /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit()
 
+GET        /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
+POST       /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)
