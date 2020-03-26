@@ -24,19 +24,21 @@
 @(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirthYesNo.title")}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirth.title")}"
 ) {
 
-    @formHelper(action = DateOfBirthYesNoController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = DateOfBirthController.onSubmit(index), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
+        @components.input_date(
             field = form("value"),
-            legend = messages("individualBeneficiary.dateOfBirthYesNo.heading", name),
-            headingIsLegend = true
+            legend = messages("individualBeneficiary.dateOfBirth.heading", name),
+            legendClass = "heading-large",
+            headingIsLegend = true,
+            hint = Some(messages("individualBeneficiary.dateOfBirth.hint"))
         )
 
         @components.submit_button()
