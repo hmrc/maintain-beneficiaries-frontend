@@ -16,37 +16,37 @@
 
 package controllers.individualbeneficiary.add
 
-import controllers.actions.StandardActionSets
+import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
-import forms.DateOfBirthFormProvider
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.individualbeneficiary.DateOfBirthPage
+import pages.individualbeneficiary.IncomeDiscretionYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individualbeneficiary.add.DateOfBirthView
+import views.html.individualbeneficiary.add.IncomeDiscretionYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateOfBirthController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        playbackRepository: PlaybackRepository,
-                                        navigator: Navigator,
-                                        standardActionSets: StandardActionSets,
-                                        nameAction: NameRequiredAction,
-                                        formProvider: DateOfBirthFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: DateOfBirthView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IncomeDiscretionYesNoController @Inject()(
+                                         override val messagesApi: MessagesApi,
+                                         playbackRepository: PlaybackRepository,
+                                         navigator: Navigator,
+                                         standardActionSets: StandardActionSets,
+                                         nameAction: NameRequiredAction,
+                                         formProvider: YesNoFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: IncomeDiscretionYesNoView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
+  private val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DateOfBirthPage) match {
+      val preparedForm = request.userAnswers.get(IncomeDiscretionYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,9 +63,9 @@ class DateOfBirthController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeDiscretionYesNoPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DateOfBirthPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage, updatedAnswers))
       )
   }
 }

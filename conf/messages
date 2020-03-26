@@ -142,6 +142,9 @@ individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
 individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
 individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
+individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+
 individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
 individualBeneficiary.passportDetails.title = What are the individual beneficiary’s passport details?
 individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
