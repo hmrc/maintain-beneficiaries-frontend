@@ -18,7 +18,6 @@ package pages.individualbeneficiary
 
 import java.time.LocalDate
 
-import models.Passport
 import pages.behaviours.PageBehaviours
 
 class DateOfBirthYesNoPageSpec extends PageBehaviours {

@@ -16,24 +16,24 @@
 
 package pages.individualbeneficiary
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-import scala.util.Try
+class IncomeDiscretionYesNoPageSpec extends PageBehaviours {
 
-case object IncomeDiscretionYesNoPage extends QuestionPage[Boolean] {
+  "IncomeDiscretionYesNo page" must {
 
-  override def path: JsPath = basePath \ toString
+    beRetrievable[Boolean](IncomeDiscretionYesNoPage)
 
-  override def toString: String = "incomeDiscretionYesNo"
+    beSettable[Boolean](IncomeDiscretionYesNoPage)
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(true) =>
-        userAnswers.remove(IncomePercentagePage)
-      case _ =>
-        super.cleanup(value, userAnswers)
+    beRemovable[Boolean](IncomeDiscretionYesNoPage)
+
+    "implement cleanup logic when YES selected" in {
+      val userAnswers = emptyUserAnswers
+        .set(IncomePercentagePage, 65)
+        .flatMap(_.set(IncomeDiscretionYesNoPage, true))
+
+      userAnswers.get.get(IncomePercentagePage) mustNot be(defined)
     }
   }
 }
