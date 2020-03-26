@@ -18,9 +18,8 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import play.api.libs.functional.syntax._
-import play.api.libs.functional.syntax.unlift
-import play.api.libs.json.{Format, Json, Reads, Writes, __}
+import play.api.libs.functional.syntax.{unlift, _}
+import play.api.libs.json.{Reads, Writes, __}
 
 final case class ClassOfBeneficiary(description: String, entityStart: LocalDate, provisional : Boolean)
   extends Beneficiary

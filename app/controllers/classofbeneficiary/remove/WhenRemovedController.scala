@@ -19,8 +19,7 @@ package controllers.classofbeneficiary.remove
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
-import models.RemoveBeneficiary
-import models.beneficiaries.Beneficiary.ClassOfBeneficiaries
+import models.{BeneficiaryType, RemoveBeneficiary}
 import navigation.Navigator
 import pages.classofbeneficiary.WhenRemovedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,7 +29,7 @@ import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.classofbeneficiary.remove.WhenRemovedView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -76,7 +75,8 @@ class WhenRemovedController @Inject()(
         },
         value =>
           for {
-            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(ClassOfBeneficiaries, index, value))
+            _ <- Future.fromTry(request.userAnswers.set(WhenRemovedPage, value))
+            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value))
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       )
   }
