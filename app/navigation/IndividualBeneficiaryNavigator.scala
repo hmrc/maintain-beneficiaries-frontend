@@ -26,29 +26,37 @@ object IndividualBeneficiaryNavigator {
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
-    case IncomePercentagePage => rts.NationalInsuranceNumberController.onPageLoad()
-    case NationalInsuranceNumberPage => ???
+    case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad()
+    case NationalInsuranceNumberPage => rts.VPE1FormYesNoController.onPageLoad()
     case UkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
     case NonUkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
-    case IdCardDetailsPage => ???
+    case PassportDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
+    case IdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
   }
-  private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] =
-    yesNoNav(DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad()) orElse
-    yesNoNav(IncomeDiscretionYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
-    yesNoNav(IncomeDiscretionYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomePercentageController.onPageLoad()) orElse
-    yesNoNav(NationalInsuranceNumberYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), ???) orElse
-    yesNoNav(LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad()) orElse
-    yesNoNav(PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(), rts.IdCardDetailsYesNoController.onPageLoad()) orElse
-    yesNoNav(IdCardDetailsYesNoPage, rts.IdCardDetailsController.onPageLoad(), ???)
+  private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] = {
+    case DateOfBirthYesNoPage => ua =>
+      yesNoNav(ua, DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad())
+    case IncomeDiscretionYesNoPage => ua =>
+        yesNoNav(ua, IncomeDiscretionYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
+    case NationalInsuranceNumberYesNoPage => ua =>
+        yesNoNav(ua, NationalInsuranceNumberYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.AddressYesNoController.onPageLoad())
+    case AddressYesNoPage => ua =>
+      yesNoNav(ua, AddressYesNoPage, rts.LiveInTheUkYesNoController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
+    case LiveInTheUkYesNoPage => ua =>
+        yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
+    case PassportDetailsYesNoPage => ua =>
+        yesNoNav(ua, PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(), rts.IdCardDetailsYesNoController.onPageLoad())
+    case IdCardDetailsYesNoPage => ua =>
+        yesNoNav(ua, IdCardDetailsYesNoPage, rts.IdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
+  }
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
     yesNoNavigations
 
-  def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call) : PartialFunction[Page, UserAnswers => Call] = {
-    case `fromPage` =>
-      ua => ua.get(fromPage)
-        .map(if (_) yesCall else noCall)
-        .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
+    ua.get(fromPage)
+      .map(if (_) yesCall else noCall)
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 }
