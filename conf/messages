@@ -34,7 +34,7 @@ error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
 error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.required = Enter what percentage of the trust’s assets the individual beneficiary is entitled to
+error.income_percentage.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
 error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
 error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
 
@@ -132,11 +132,16 @@ individualBeneficiary.name.heading = What is the name of the individual?
 individualBeneficiary.name.firstName = First name
 individualBeneficiary.name.middleName = Middle names (optional)
 individualBeneficiary.name.lastName = Last name
+individualBeneficiary.name.error.firstName.required = Enter the individual beneficiary’s first name
+individualBeneficiary.name.error.lastName.required = Enter the individual beneficiary’s last name
 
-individualBeneficiary.dateOfBirthYesNo.title = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
 individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth
 
-individualBeneficiary.dateOfBirth.title = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.title = What is the individual beneficiary’s date of birth?
 individualBeneficiary.dateOfBirth.heading = What is {0}’s date of birth?
 individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
 individualBeneficiary.dateOfBirth.error.required.all = Enter a date of birth
@@ -146,11 +151,14 @@ individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
 individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
 individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
-individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income the individual beneficiary may get?
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
+individualBeneficiary.incomeDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
 
-individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.incomePercentage.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
 individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
 individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
 
@@ -240,6 +248,6 @@ individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry dat
 individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
 individualBeneficiary.vpe1FormUkYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
-individualBeneficiary.vpe1FormUkYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormUkYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
 individualBeneficiary.vpe1FormUkYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
 individualBeneficiary.vpe1FormUkYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
