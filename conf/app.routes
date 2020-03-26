@@ -85,4 +85,7 @@ POST       /individual-beneficiary/id-card                                  cont
 GET        /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
 POST       /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
 
+GET        /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
+POST       /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

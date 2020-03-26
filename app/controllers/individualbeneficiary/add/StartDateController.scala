@@ -21,32 +21,32 @@ import controllers.actions.individual.NameRequiredAction
 import forms.DateFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.individualbeneficiary.DateOfBirthPage
+import pages.individualbeneficiary.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individualbeneficiary.add.DateOfBirthView
+import views.html.individualbeneficiary.add.StartDateView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateOfBirthController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       playbackRepository: PlaybackRepository,
-                                       navigator: Navigator,
-                                       standardActionSets: StandardActionSets,
-                                       nameAction: NameRequiredAction,
-                                       formProvider: DateFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: DateOfBirthView
+class StartDateController @Inject()(
+                                     override val messagesApi: MessagesApi,
+                                     playbackRepository: PlaybackRepository,
+                                     navigator: Navigator,
+                                     standardActionSets: StandardActionSets,
+                                     nameAction: NameRequiredAction,
+                                     formProvider: DateFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: StartDateView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
+  private val form = formProvider.withPrefix("individualBeneficiary.startDate")
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DateOfBirthPage) match {
+      val preparedForm = request.userAnswers.get(StartDatePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,9 +63,9 @@ class DateOfBirthController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DateOfBirthPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
       )
   }
 }

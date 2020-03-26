@@ -22,7 +22,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class DateOfBirthFormProvider @Inject() extends Mappings {
+class DateFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[LocalDate] =
     Form(

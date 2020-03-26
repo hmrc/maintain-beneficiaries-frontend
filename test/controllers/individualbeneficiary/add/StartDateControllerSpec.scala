@@ -26,27 +26,27 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.NamePage
-import pages.individualbeneficiary.DateOfBirthPage
+import pages.individualbeneficiary.StartDatePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.add.DateOfBirthView
+import views.html.individualbeneficiary.add.StartDateView
 
 import scala.concurrent.Future
 
-class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
+class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new DateFormProvider()
-  private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
+  private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.startDate")
 
   def onwardRoute = Call("GET", "/foo")
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val dateOfBirthRoute = routes.DateOfBirthController.onPageLoad().url
+  lazy val startDateRoute = routes.StartDateController.onPageLoad().url
 
   val name = Name("New", None, "Beneficiary")
 
@@ -55,17 +55,17 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     .success.value
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, dateOfBirthRoute)
+    FakeRequest(GET, startDateRoute)
 
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
-    FakeRequest(POST, dateOfBirthRoute)
+    FakeRequest(POST, startDateRoute)
       .withFormUrlEncodedBody(
         "value.day"   -> validAnswer.getDayOfMonth.toString,
         "value.month" -> validAnswer.getMonthValue.toString,
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  "DateOfBirth Controller" must {
+  "Individual Beneficiary Start Date Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -73,7 +73,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
       val result = route(application, getRequest()).value
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[StartDateView]
 
       status(result) mustEqual OK
 
@@ -86,12 +86,12 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(DateOfBirthPage, validAnswer).success.value
+        .set(StartDatePage, validAnswer).success.value
         .set(NamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[StartDateView]
 
       val result = route(application, getRequest()).value
 
@@ -130,12 +130,12 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, dateOfBirthRoute)
+        FakeRequest(POST, startDateRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[DateOfBirthView]
+      val view = application.injector.instanceOf[StartDateView]
 
       val result = route(application, request).value
 
