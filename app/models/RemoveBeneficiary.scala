@@ -18,15 +18,14 @@ package models
 
 import java.time.LocalDate
 
-import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, Writes}
 
-case class RemoveBeneficiary(`type`: Beneficiary, index : Int, endDate: LocalDate)
+case class RemoveBeneficiary(`type`: BeneficiaryType, index : Int, endDate: LocalDate)
 
 object RemoveBeneficiary {
 
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
+  implicit val writes : Writes[RemoveBeneficiary] = Json.writes[RemoveBeneficiary]
 
-  def apply(`type`: Beneficiary, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
+  def apply(`type`: BeneficiaryType, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
 
 }
