@@ -19,7 +19,7 @@ package controllers.individual.remove
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
-import models.RemoveBeneficiary
+import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.individual.WhenRemovedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -72,7 +72,7 @@ class WhenRemovedController @Inject()(
         },
         value =>
           for {
-            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary("individualDetails", index, value))
+            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value))
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhenRemovedPage, value))
             _ <- repository.set(updatedAnswers)
           } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

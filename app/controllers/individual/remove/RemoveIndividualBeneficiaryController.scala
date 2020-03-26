@@ -19,7 +19,8 @@ package controllers.individual.remove
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
-import models.RemoveBeneficiary
+import models.{BeneficiaryType, RemoveBeneficiary}
+import pages.individual.{RemoveYesNoPage, WhenRemovedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,9 +46,14 @@ class RemoveIndividualBeneficiaryController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
+      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
+        case None => form
+        case Some(value) => form.fill(value)
+      }
+
       trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(form, index, beneficiary.name.displayName))
+          Ok(view(preparedForm, index, beneficiary.name.displayName))
       }
 
   }
@@ -65,14 +71,15 @@ class RemoveIndividualBeneficiaryController @Inject()(
           }
         },
         value => {
+          
           if (value) {
 
             trust.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  for {
-                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary("individualDetails", index))
-                  } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                  trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index)).map(_ =>
+                    Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                  )
                 } else {
                   Future.successful(Redirect(controllers.individual.remove.routes.WhenRemovedController.onPageLoad(index).url))
                 }
