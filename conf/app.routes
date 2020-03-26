@@ -49,7 +49,16 @@ POST       /individual-beneficiary/date-of-birth                            cont
 GET        /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
 POST       /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
 
-GET        /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
-POST       /individual-beneficiary/passport-or-id-card                      controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
+GET        /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad()
+POST       /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit()
+
+GET        /individual-beneficiary/passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
+POST       /individual-beneficiary/passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
+
+GET        /individual-beneficiary/has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad()
+POST       /individual-beneficiary/has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit()
+
+GET        /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad()
+POST       /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

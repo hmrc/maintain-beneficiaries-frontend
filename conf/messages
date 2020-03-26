@@ -32,7 +32,6 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
-error.summary.title = There is a problem
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -145,6 +144,11 @@ individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 De
 individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 
+individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
+individualBeneficiary.passportDetailsYesNo.title = Do you know the individual beneficiary’s passport details?
+individualBeneficiary.passportDetailsYesNo.heading = Do you know {0}’s passport details?
+individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport details
+
 individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
 individualBeneficiary.passportDetails.title = What are the individual beneficiary’s passport details?
 individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
@@ -164,3 +168,27 @@ individualBeneficiary.passportDetails.expiryDate.error.required = Passport expir
 individualBeneficiary.passportDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s passport expires
 individualBeneficiary.passportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual beneficiary’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.heading = Do you know {0}’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s ID card details
+
+individualBeneficiary.idCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
+individualBeneficiary.idCardDetails.title = What are the individual beneficiary’s ID card details?
+individualBeneficiary.idCardDetails.heading = What are {0}’s ID card details?
+individualBeneficiary.idCardDetails.country = ID card country of issue
+individualBeneficiary.idCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
+individualBeneficiary.idCardDetails.country.error.length = The individual beneficiary’s ID card country must be 100 characters or less
+individualBeneficiary.idCardDetails.number = ID card number
+individualBeneficiary.idCardDetails.number.error.required = Enter the individual beneficiary’s ID card number
+individualBeneficiary.idCardDetails.number.error.length = The individual beneficiary’s ID card number must be 30 characters or less
+individualBeneficiary.idCardDetails.number.error.invalid = ID card number can only include letters and numbers
+individualBeneficiary.idCardDetails.expiryDate = Expiry date
+individualBeneficiary.idCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+individualBeneficiary.idCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
+individualBeneficiary.idCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+individualBeneficiary.idCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
+individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s ID card expires
+individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
