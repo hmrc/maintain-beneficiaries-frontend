@@ -17,10 +17,10 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.NamePage
+import pages.individual.NamePage
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryNamePage: Arbitrary[NamePage.type] =
-    Arbitrary(NamePage)
+  implicit lazy val arbitraryNamePage: Arbitrary[NamePage] =
+    Arbitrary(NamePage(0))
 }

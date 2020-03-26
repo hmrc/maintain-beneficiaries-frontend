@@ -1,3 +1,6 @@
 
 GET        /:index/name                       controllers.individual.NameController.onPageLoad(index: Int)
 POST       /:index/name                       controllers.individual.NameController.onSubmit(index: Int)
+
+GET        /know-date-of-birth                controllers.individual.DateOfBirthYesNoController.onPageLoad(index: Int)
+POST       /know-date-of-birth                controllers.individual.DateOfBirthYesNoController.onSubmit(index: Int)

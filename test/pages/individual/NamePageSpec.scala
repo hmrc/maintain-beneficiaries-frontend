@@ -17,12 +17,16 @@
 package pages.individual
 
 import models.Name
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case class IndividualBeneficiaryNamePage(index: Int) extends QuestionPage[Name] {
+class NamePageSpec extends PageBehaviours {
 
-  override def path: JsPath = basePath \ index \ toString
+  "NamePage" must {
 
-  override def toString: String = "name"
+    beRetrievable[Name](NamePage(0))
+
+    beSettable[Name](NamePage(0))
+
+    beRemovable[Name](NamePage(0))
+  }
 }

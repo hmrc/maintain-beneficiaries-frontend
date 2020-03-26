@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package pages.individual
 
-import models.Name
-import pages.behaviours.PageBehaviours
+import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class NamePageSpec extends PageBehaviours {
+import scala.util.Try
 
-  "NamePage" must {
+case class DateOfBirthYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-    beRetrievable[Name](NamePage)
+  override def path: JsPath = basePath \ index \ toString
 
-    beSettable[Name](NamePage)
+  override def toString: String = "dateOfBirthYesNo"
 
-    beRemovable[Name](NamePage)
-  }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    super.cleanup(value, userAnswers)
+
 }

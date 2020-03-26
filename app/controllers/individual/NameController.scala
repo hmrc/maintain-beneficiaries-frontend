@@ -22,7 +22,7 @@ import forms.{NameFormProvider, StringFormProvider}
 import javax.inject.Inject
 import models.Name
 import navigation.Navigator
-import pages.individual.IndividualBeneficiaryNamePage
+import pages.individual.NamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +48,7 @@ class NameController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(IndividualBeneficiaryNamePage(index)) match {
+      val preparedForm = request.userAnswers.get(NamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -63,9 +63,9 @@ class NameController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, index))),
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IndividualBeneficiaryNamePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage(index), value))
             _ <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IndividualBeneficiaryNamePage(index), updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage(index), updatedAnswers))
         }
       )
   }
