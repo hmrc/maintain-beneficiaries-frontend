@@ -14,29 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.remove
+package controllers.individual.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.RemoveBeneficiary
-import navigation.Navigator
-import pages.classofbeneficiary.WhenRemovedPage
-import pages.individual.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
-import repositories.PlaybackRepository
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.classofbeneficiary.remove.RemoveIndexView
+import views.html.individual.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveClassOfBeneficiaryController @Inject()(
+class RemoveIndividualBeneficiaryController @Inject()(
                                                     override val messagesApi: MessagesApi,
-                                                    sessionRepository: PlaybackRepository,
-                                                    navigator: Navigator,
                                                     standardActionSets: StandardActionSets,
                                                     trust: TrustService,
                                                     formProvider: RemoveIndexFormProvider,
@@ -44,24 +38,16 @@ class RemoveClassOfBeneficiaryController @Inject()(
                                                     view: RemoveIndexView
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def formRoute(index: Int): Call =
-    controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
-
-  private val messagesPrefix: String = "removeClassOfBeneficiary"
+  private val messagesPrefix: String = "removeIndividualBeneficiary"
 
   private val form = formProvider.apply(messagesPrefix)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+      trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+          Ok(view(form, index, beneficiary.name.displayName))
       }
 
   }
@@ -73,22 +59,22 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+          trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
             beneficiary =>
-              BadRequest(view(messagesPrefix, formWithErrors, index, beneficiary.description, formRoute(index)))
+              BadRequest(view(formWithErrors, index, beneficiary.name.displayName))
           }
         },
         value => {
           if (value) {
 
-            trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
+            trust.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
                   for {
-                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary("unidentified", index))
+                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary("individualDetails", index))
                   } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                 } else {
-                  Future.successful(Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url))
+                  Future.successful(Redirect(controllers.individual.remove.routes.WhenRemovedController.onPageLoad(index).url))
                 }
             }
           } else {

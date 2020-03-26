@@ -43,4 +43,10 @@ POST       /class-of-beneficiaries/:index/remove                            cont
 GET        /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
 POST       /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)
 
+GET        /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onPageLoad(index: Int)
+POST       /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onSubmit(index: Int)
+
+GET        /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onSubmit(index: Int)
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

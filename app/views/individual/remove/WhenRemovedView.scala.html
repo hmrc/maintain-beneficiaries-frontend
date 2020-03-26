@@ -14,37 +14,33 @@
  * limitations under the License.
  *@
 
-@import controllers.routes._
-@import models.beneficiaries.TypeOfBeneficiary
+@import controllers.individual.remove.routes._
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("addNow.title")}"
-    ) {
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.whenRemoved.title", name)}"
+) {
 
-    @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_radio(
+        @components.input_date(
             field = form("value"),
-            legend = messages("addNow.heading"),
-            legendClass = Some("heading-large"),
-            inputs = TypeOfBeneficiary.options.toSeq,
+            legend = messages("individualBeneficiary.whenRemoved.heading", name),
+            legendClass = "heading-large",
             headingIsLegend = true,
-            hint = Some(messages("addNow.hint"))
+            hint = Some(messages("individualBeneficiary.whenRemoved.hint"))
         )
 
         @components.submit_button()
-
-        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("addNow.return.link")</a></p>
     }
 }

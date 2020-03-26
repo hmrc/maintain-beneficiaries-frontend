@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages.individual
 
-import java.time.LocalDate
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
+case object RemoveYesNoPage extends QuestionPage[Boolean] {
 
-case class RemoveBeneficiary(`type`: String, index : Int, endDate: LocalDate)
+  override def path: JsPath = basePath \ toString
 
-object RemoveBeneficiary {
-
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
-
-  def apply(`type`: String, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
-
+  override def toString: String = "removeYesNo"
 }

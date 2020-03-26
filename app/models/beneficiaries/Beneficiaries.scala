@@ -52,16 +52,17 @@ object Beneficiaries {
       ).apply(Beneficiaries.apply _)
 }
 
+trait TypeOfBeneficiary
 
-object Beneficiary extends Enumerable.Implicits {
+object TypeOfBeneficiary extends Enumerable.Implicits {
 
-  case object Individual extends WithName("individual") with Beneficiary
-  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with Beneficiary
-  case object CharityOrTrust extends WithName("charityOrTrust") with Beneficiary
-  case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with Beneficiary
-  case object Other extends WithName("other") with Beneficiary
+  case object Individual extends WithName("individual") with TypeOfBeneficiary
+  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiary
+  case object CharityOrTrust extends WithName("charityOrTrust") with TypeOfBeneficiary
+  case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiary
+  case object Other extends WithName("other") with TypeOfBeneficiary
 
-  val values: List[Beneficiary] = List(
+  val values: List[TypeOfBeneficiary] = List(
     Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
   )
 
@@ -70,6 +71,6 @@ object Beneficiary extends Enumerable.Implicits {
       RadioOption("whatTypeOfBeneficiary", value.toString)
   }
 
-  implicit val enumerable: Enumerable[Beneficiary] =
+  implicit val enumerable: Enumerable[TypeOfBeneficiary] =
     Enumerable(values.map(v => v.toString -> v): _*)
 }

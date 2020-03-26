@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import java.time.LocalDate
+import play.api.libs.json.JsPath
 
-import models.beneficiaries.Beneficiary
-import play.api.libs.json.{Format, Json}
-
-case class RemoveBeneficiary(`type`: String, index : Int, endDate: LocalDate)
-
-object RemoveBeneficiary {
-
-  implicit val formats : Format[RemoveBeneficiary] = Json.format[RemoveBeneficiary]
-
-  def apply(`type`: String, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
-
+package object individual {
+  val basePath = JsPath \ 'individual
 }

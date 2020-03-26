@@ -18,13 +18,13 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.beneficiaries.Beneficiary
+import models.beneficiaries.TypeOfBeneficiary
 import play.api.data.Form
 
 class AddBeneficiaryTypeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Beneficiary] =
+  def apply(): Form[TypeOfBeneficiary] =
     Form(
-      "value" -> enumerable[Beneficiary]("addNow.error.required")
+      "value" -> enumerable[TypeOfBeneficiary]("addNow.error.required")
     )
 }
