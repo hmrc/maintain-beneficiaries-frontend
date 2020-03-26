@@ -49,7 +49,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
-    .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries$ToAdd).success.value
+    .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries).success.value
     .set(DescriptionPage, description).success.value
     .set(EntityStartPage, date).success.value
 

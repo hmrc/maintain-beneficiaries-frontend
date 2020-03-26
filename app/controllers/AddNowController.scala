@@ -66,7 +66,7 @@ class AddNowController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-              case ClassOfBeneficiaries$ToAdd => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
+              case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
               case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             }
           }

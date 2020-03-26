@@ -30,7 +30,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
   val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
   lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
-  val validAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries$ToAdd.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries$ToAdd
+  val validAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
 
   "AddNow Controller" must {
 

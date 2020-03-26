@@ -57,13 +57,13 @@ sealed trait TypeOfBeneficiaryToAdd
 object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
 
   case object Individual extends WithName("individual") with TypeOfBeneficiaryToAdd
-  case object ClassOfBeneficiaries$ToAdd extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
+  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
   case object CharityOrTrust extends WithName("charityOrTrust") with TypeOfBeneficiaryToAdd
   case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiaryToAdd
   case object Other extends WithName("other") with TypeOfBeneficiaryToAdd
 
   val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries$ToAdd, CharityOrTrust, CompanyOrEmploymentRelated, Other
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
   )
 
   val options: List[RadioOption] = values.map {

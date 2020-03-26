@@ -368,7 +368,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         val mockTrustConnector = mock[TrustConnector]
 
         val userAnswers = emptyUserAnswers
-          .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries$ToAdd).success.value
+          .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries).success.value
           .set(DescriptionPage, "Description").success.value
           .set(EntityStartPage, LocalDate.parse("2019-02-03")).success.value
 
