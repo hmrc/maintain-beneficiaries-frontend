@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.remove
+package controllers.individual.remove
 
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import navigation.Navigator
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.classofbeneficiary.remove.WhenRemovedView
+import views.html.individual.remove.WhenRemovedView
 
 import scala.concurrent.ExecutionContext
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       sessionRepository: PlaybackRepository,
-                                       navigator: Navigator,
+                                       repository: PlaybackRepository,
                                        standardActionSets: StandardActionSets,
                                        formProvider: DateRemovedFromTrustFormProvider,
                                        trust: TrustService,
@@ -45,30 +43,29 @@ class WhenRemovedController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("classOfBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
+      val form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
 
-      trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+      trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(form, index, beneficiary.description))
+          Ok(view(form, index, beneficiary.name.displayName))
       }
-
 
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("classOfBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
+      val form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
-        formWithErrors =>{
-          trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+        formWithErrors => {
+          trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
             beneficiary =>
-              BadRequest(view(formWithErrors, index, beneficiary.description))
+              BadRequest(view(formWithErrors, index, beneficiary.name.displayName))
           }
         },
         value =>
-          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value)).map(_ =>
+          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
       )

@@ -14,55 +14,60 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.remove
+package controllers.individual.remove
 
 import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
+import models.Name
+import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.PropertyChecks
-import pages.classofbeneficiary.RemoveYesNoPage
+import pages.individual.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.classofbeneficiary.remove.RemoveIndexView
+import views.html.individual.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
+class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
 
-  val messagesPrefix = "removeClassOfBeneficiary"
+  val messagesPrefix = "removeIndividualBeneficiary"
 
   lazy val formProvider = new RemoveIndexFormProvider()
   lazy val form = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveClassOfBeneficiaryController.onSubmit(0)
+  lazy val formRoute = routes.RemoveIndividualBeneficiaryController.onSubmit(0)
 
-  lazy val description : String = "Some Description 1"
+  lazy val name : Name = Name("First", None, "Last")
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def classOfBeneficiary(id: Int, provisional : Boolean) = ClassOfBeneficiary(
-    description = s"Some Description $id",
+  def individualBeneficiary(id: Int, provisional : Boolean) = IndividualBeneficiary(
+    name = name,
+    dateOfBirth = None,
+    nationalInsuranceNumber = None,
+    address = None,
+    vulnerableYesNo = false,
+    income = None,
+    incomeDiscretionYesNo = false,
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
   )
 
-  val expectedResult = classOfBeneficiary(2, provisional = true)
-
   val beneficiaries = List(
-    classOfBeneficiary(1, provisional = false),
-    expectedResult,
-    classOfBeneficiary(3, provisional = true)
+    individualBeneficiary(1, provisional = false),
+    individualBeneficiary(2, provisional = true),
+    individualBeneficiary(3, provisional = true)
   )
 
-  "RemoveClassOfBeneficiary Controller" when {
+  "RemoveIndividualBeneficiary Controller" when {
 
     "return OK and the correct view for a GET" in {
 
@@ -71,13 +76,13 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(beneficiaries, Nil, Nil, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[TrustConnector].toInstance(mockConnector))
         .build()
 
-      val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(index).url)
+      val request = FakeRequest(GET, routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
@@ -85,7 +90,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(form, index, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -96,11 +101,13 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
         .set(RemoveYesNoPage, true).success.value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(beneficiaries, Nil, Nil, Nil, Nil, Nil, Nil)))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
-      val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)
+      val request = FakeRequest(GET, routes.RemoveIndividualBeneficiaryController.onPageLoad(0).url)
 
       val result = route(application, request).value
 
@@ -109,7 +116,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, form.fill(true), 0, description, formRoute)(fakeRequest, messages).toString
+        view(form.fill(true), 0, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -125,7 +132,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
           .build()
 
         val request =
-          FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "false"))
 
         val result = route(application, request).value
@@ -145,21 +152,21 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
         val index = 0
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
+          .thenReturn(Future.successful(Beneficiaries(beneficiaries, Nil, Nil, Nil, Nil, Nil, Nil)))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[TrustConnector].toInstance(mockConnector))
           .build()
 
         val request =
-          FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.individual.remove.routes.WhenRemovedController.onPageLoad(0).url
 
         application.stop()
       }
@@ -176,13 +183,13 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
           .build()
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
+          .thenReturn(Future.successful(Beneficiaries(beneficiaries, Nil, Nil, Nil, Nil, Nil, Nil)))
 
         when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
         val request =
-          FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -202,7 +209,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
+        FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -214,7 +221,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, description, formRoute)(fakeRequest, messages).toString
+        view(boundForm, index, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -225,7 +232,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(index).url)
+      val request = FakeRequest(GET, routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
@@ -243,7 +250,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
+        FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

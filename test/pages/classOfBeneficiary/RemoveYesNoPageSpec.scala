@@ -20,20 +20,20 @@ import java.time.LocalDate
 
 import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
-import pages.classofbeneficiary.WhenRemovedPage
+import pages.classofbeneficiary.RemoveYesNoPage
 
-class WhenRemovedPageSpec extends PageBehaviours {
+class RemoveYesNoPageSpec extends PageBehaviours {
 
-  "WhenRemovedPage" must {
+  "RemoveYesNoPage" must {
 
     implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
       datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now())
     }
 
-    beRetrievable[LocalDate](WhenRemovedPage)
+    beRetrievable[Boolean](RemoveYesNoPage)
 
-    beSettable[LocalDate](WhenRemovedPage)
+    beSettable[Boolean](RemoveYesNoPage)
 
-    beRemovable[LocalDate](WhenRemovedPage)
+    beRemovable[Boolean](RemoveYesNoPage)
   }
 }
