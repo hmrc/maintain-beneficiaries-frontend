@@ -136,6 +136,8 @@ classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the benefi
 classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
 
+individualBeneficiary.name.default = the individual beneficiary
+
 individualBeneficiary.name.title = What is the name of the individual?
 individualBeneficiary.name.heading = What is the name of the individual?
 individualBeneficiary.name.checkYourAnswersLabel = What is the name of the individual?
@@ -150,3 +152,8 @@ individualBeneficiary.name.error.lastname.length = The individual beneficiary’
 individualBeneficiary.name.error.firstname.invalid = The individual beneficiary’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 individualBeneficiary.name.error.middlename.invalid = The individual beneficiary’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 individualBeneficiary.name.error.lastname.invalid = The individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth

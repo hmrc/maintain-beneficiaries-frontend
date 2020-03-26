@@ -44,28 +44,33 @@ class DateOfBirthYesNoController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
-      request.userAnswers.get(NamePage(index)) map { name =>
+      val name = request.userAnswers.get(NamePage(index))
+        .map { _.displayName }
+        .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
 
         val preparedForm = request.userAnswers.get(DateOfBirthYesNoPage(index)) match {
           case None => form
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, index, name.displayName))
+        Ok(view(preparedForm, index, name))
 
-      } getOrElse Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+
 
   }
 
   def onSubmit(index: Int): Action[AnyContent] = (standardActionSets.verifiedForUtr).async {
     implicit request =>
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            request.userAnswers.get(NamePage(index)).map{ name =>
-              BadRequest(view(formWithErrors, index, name.displayName))
-            } getOrElse Redirect(controllers.routes.SessionExpiredController.onPageLoad())
-          ),
+        formWithErrors => {
+
+          val name = request.userAnswers.get(NamePage(index))
+            .map { _.displayName }
+            .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
+
+          Future.successful(BadRequest(view(formWithErrors, index, name)))
+
+        },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthYesNoPage(index), value))
