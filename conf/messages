@@ -143,6 +143,7 @@ individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 De
 
 individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
 
 individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 individualBeneficiary.liveInTheUkYesNo.title = Does the individual beneficiary live in the UK?
