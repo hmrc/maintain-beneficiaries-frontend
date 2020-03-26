@@ -7,3 +7,6 @@ POST       /:index/know-date-of-birth         controllers.individual.DateOfBirth
 
 GET        /:index/date-of-birth              controllers.individual.DateOfBirthController.onPageLoad(index: Int)
 POST       /:index/date-of-birth              controllers.individual.DateOfBirthController.onSubmit(index: Int)
+
+GET        /:index/decide-income              controllers.individual.DiscretionaryIncomeYesNoController.onPageLoad(index: Int)
+POST       /:index/decide-income              controllers.individual.DiscretionaryIncomeYesNoController.onSubmit(index: Int)

@@ -169,3 +169,9 @@ individualBeneficiary.dateOfBirth.error.required = Date of birth must include a 
 individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
 individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
 individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+individualBeneficiary.discretionaryIncomeYesNo.title = Can the trustees decide how much {0} may get?
+individualBeneficiary.discretionaryIncomeYesNo.heading = Can the trustees decide how much {0} may get?
+individualBeneficiary.discretionaryIncomeYesNo.checkYourAnswersLabel = Can the trustees decide how much {0} may get?
+individualBeneficiary.discretionaryIncomeYesNo.hint = See the trust deed for details
+individualBeneficiary.discretionaryIncomeYesNo.error.required = Select yes if the trustees can the trustees decide how much the individual beneficiary may get
