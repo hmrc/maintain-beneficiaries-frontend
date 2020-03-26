@@ -19,10 +19,8 @@ package controllers.classofbeneficiary.remove
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
-import models.RemoveBeneficiary
+import models.{BeneficiaryType, RemoveBeneficiary}
 import navigation.Navigator
-import pages.classofbeneficiary.WhenRemovedPage
-import pages.individual.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -54,14 +52,9 @@ class RemoveClassOfBeneficiaryController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
       trust.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+          Ok(view(messagesPrefix, form, index, beneficiary.description, formRoute(index)))
       }
 
   }
@@ -85,7 +78,7 @@ class RemoveClassOfBeneficiaryController @Inject()(
               beneficiary =>
                 if (beneficiary.provisional) {
                   for {
-                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary("unidentified", index))
+                    _ <- trust.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index))
                   } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                 } else {
                   Future.successful(Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url))
