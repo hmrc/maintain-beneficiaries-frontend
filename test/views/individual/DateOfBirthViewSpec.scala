@@ -27,7 +27,7 @@ import views.html.individual.DateOfBirthView
 
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "trustee.individual.dateOfBirth"
+  val messageKeyPrefix = "individualBeneficiary.dateOfBirth"
   val name: Name = Name("First", Some("Middle"), "Last")
   val index: Int = 0
 

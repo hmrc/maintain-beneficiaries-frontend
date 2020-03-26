@@ -23,7 +23,7 @@ import play.api.libs.json.JsPath
 
 case class DateOfBirthPage(index: Int) extends QuestionPage[LocalDate] {
 
-  override def path: JsPath = basePath \ toString
+  override def path: JsPath = basePath \ index \ toString
 
   override def toString: String = "dateOfBirth"
 }

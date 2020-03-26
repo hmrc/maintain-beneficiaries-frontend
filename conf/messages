@@ -157,3 +157,15 @@ individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual benefi
 individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
 individualBeneficiary.dateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth
+
+individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.title = What is the trustee’s date of birth?
+individualBeneficiary.dateOfBirth.heading = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.hint = For example, 31 3 1980
+individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.error.required.all = Enter a date of birth
+individualBeneficiary.dateOfBirth.error.required.two = Date of birth must include a {0} and a {1}
+individualBeneficiary.dateOfBirth.error.required = Date of birth must include a {0}
+individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
+individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
+individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
