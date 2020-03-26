@@ -16,24 +16,27 @@
 
 package pages.individualbeneficiary
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import java.time.LocalDate
 
-import scala.util.Try
+import models.Passport
+import pages.behaviours.PageBehaviours
 
-case object DateOfBirthYesNoPage extends QuestionPage[Boolean] {
+class DateOfBirthYesNoPageSpec extends PageBehaviours {
 
-  override def path: JsPath = basePath \ toString
+  "DateOfBirthYesNo page" must {
 
-  override def toString: String = "dateOfBirthYesNo"
+    beRetrievable[Boolean](DateOfBirthYesNoPage)
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(false) =>
-        userAnswers.remove(DateOfBirthPage)
-      case _ =>
-        super.cleanup(value, userAnswers)
+    beSettable[Boolean](DateOfBirthYesNoPage)
+
+    beRemovable[Boolean](DateOfBirthYesNoPage)
+
+    "implement cleanup logic when NO selected" in {
+      val userAnswers = emptyUserAnswers
+        .set(DateOfBirthPage, LocalDate.of(2012, 12, 20))
+        .flatMap(_.set(DateOfBirthYesNoPage, false))
+
+      userAnswers.get.get(DateOfBirthPage) mustNot be(defined)
     }
   }
 }
