@@ -53,7 +53,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   val addTrusteeForm = new AddABeneficiaryFormProvider()()
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
-  private val beneficiary = IndividualBeneficiary(
+  private val individualBeneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
     nationalInsuranceNumber = Some("JS123456A"),
@@ -120,7 +120,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   )
 
   val beneficiaries = Beneficiaries(
-    List(beneficiary),
+    List(individualBeneficiary),
     List(unidentifiedBeneficiary),
     List(companyBeneficiary),
     List(employmentRelatedBeneficiary),
@@ -132,7 +132,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   lazy val featureNotAvailable : String = controllers.routes.FeatureNotAvailableController.onPageLoad().url
 
   val beneficiaryRows = List(
-    AddRow("First Last", typeLabel = "Named individual", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("First Last", typeLabel = "Named individual", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.individual.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(0).url)),
     AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)),
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
     AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
@@ -148,6 +148,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     override def getUnidentifiedBeneficiary(utr: String, index: Int)
                                            (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
       Future.successful(unidentifiedBeneficiary)
+
+    override def getIndividualBeneficiary(utr: String, index: Int)
+                                         (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary] =
+      Future.successful(individualBeneficiary)
 
     override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
       Future.successful(HttpResponse(OK))
@@ -364,7 +368,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         val mockTrustConnector = mock[TrustConnector]
 
         val userAnswers = emptyUserAnswers
-          .set(AddNowPage, Beneficiary.ClassOfBeneficiaries).success.value
+          .set(AddNowPage, TypeOfBeneficiary.ClassOfBeneficiaries).success.value
           .set(DescriptionPage, "Description").success.value
           .set(EntityStartPage, LocalDate.parse("2019-02-03")).success.value
 

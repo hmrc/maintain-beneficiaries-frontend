@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.beneficiaries.Beneficiary
+import models.beneficiaries.TypeOfBeneficiary
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -49,7 +49,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
-    .set(AddNowPage, Beneficiary.ClassOfBeneficiaries).success.value
+    .set(AddNowPage, TypeOfBeneficiary.ClassOfBeneficiaries).success.value
     .set(DescriptionPage, description).success.value
     .set(EntityStartPage, date).success.value
 

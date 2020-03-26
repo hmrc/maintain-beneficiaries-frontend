@@ -20,7 +20,6 @@ import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import pages.individual.WhenRemovedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -28,7 +27,7 @@ import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individual.remove.WhenRemovedView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -46,14 +45,9 @@ class WhenRemovedController @Inject()(
 
       val form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
 
-      val preparedForm = request.userAnswers.get(WhenRemovedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
       trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          Ok(view(preparedForm, index, beneficiary.name.displayName))
+          Ok(view(form, index, beneficiary.name.displayName))
       }
 
   }
@@ -71,11 +65,9 @@ class WhenRemovedController @Inject()(
           }
         },
         value =>
-          for {
-            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhenRemovedPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
       )
   }
 }
