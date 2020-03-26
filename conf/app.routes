@@ -49,6 +49,15 @@ POST       /individual-beneficiary/date-of-birth                            cont
 GET        /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
 POST       /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
 
+GET        /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onPageLoad()
+POST       /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onSubmit()
+
+GET        /individual-beneficiary/uk-address                               controllers.individualbeneficiary.add.UkAddressController.onPageLoad()
+POST       /individual-beneficiary/uk-address                               controllers.individualbeneficiary.add.UkAddressController.onSubmit()
+
+GET        /individual-beneficiary/non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onPageLoad()
+POST       /individual-beneficiary/non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onSubmit()
+
 GET        /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad()
 POST       /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit()
 

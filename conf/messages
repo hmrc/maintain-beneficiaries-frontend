@@ -144,6 +144,25 @@ individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 De
 individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 
+individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+individualBeneficiary.liveInTheUkYesNo.title = Does the individual beneficiary live in the UK?
+individualBeneficiary.liveInTheUkYesNo.heading = Does {0} live in the UK?
+individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual beneficiary lives in the UK
+
+individualBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+individualBeneficiary.ukAddress.title = What is the individual beneficiary’s address?
+individualBeneficiary.ukAddress.heading = What is {0}’s address?
+individualBeneficiary.ukAddress.line1 = Address line 1
+individualBeneficiary.ukAddress.line2 = Address line 2
+individualBeneficiary.ukAddress.line3 = Address line 3 (optional)
+individualBeneficiary.ukAddress.line4 = Address line 4 (optional)
+individualBeneficiary.ukAddress.postcode = Postcode
+individualBeneficiary.ukAddress.postcode.hint = For example AB1 1AB
+
+individualBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+individualBeneficiary.nonUkAddress.title = What is the individual beneficiary’s address?
+individualBeneficiary.nonUkAddress.heading = What is {0}’s address?
+
 individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
 individualBeneficiary.passportDetailsYesNo.title = Do you know the individual beneficiary’s passport details?
 individualBeneficiary.passportDetailsYesNo.heading = Do you know {0}’s passport details?
