@@ -27,7 +27,7 @@ import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individual.remove.WhenRemovedView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -65,11 +65,9 @@ class WhenRemovedController @Inject()(
           }
         },
         value =>
-          for {
-            _ <- trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.individual.basePath))
-            _ <- repository.set(updatedAnswers)
-          } yield Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
       )
   }
 }
