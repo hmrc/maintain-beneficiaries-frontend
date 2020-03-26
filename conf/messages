@@ -143,6 +143,7 @@ individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 De
 
 individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
 individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
 
 individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
 individualBeneficiary.passportDetailsYesNo.title = Do you know the individual beneficiary’s passport details?

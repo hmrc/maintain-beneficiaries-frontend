@@ -36,7 +36,8 @@
         @components.input_yes_no(
             field = form("value"),
             legend = messages("individualBeneficiary.incomeDiscretionYesNo.heading", name),
-            headingIsLegend = true
+            headingIsLegend = true,
+            hint = Some(messages("individualBeneficiary.incomeDiscretionYesNo.hint"))
         )
 
         @components.submit_button()
