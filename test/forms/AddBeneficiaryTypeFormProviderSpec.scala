@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.OptionFieldBehaviours
-import models.beneficiaries.TypeOfBeneficiary
+import models.beneficiaries.TypeOfBeneficiaryToAdd
 import play.api.data.FormError
 
 class AddBeneficiaryTypeFormProviderSpec extends OptionFieldBehaviours {
@@ -29,10 +29,10 @@ class AddBeneficiaryTypeFormProviderSpec extends OptionFieldBehaviours {
     val fieldName = "value"
     val requiredKey = "addNow.error.required"
 
-    behave like optionsField[TypeOfBeneficiary](
+    behave like optionsField[TypeOfBeneficiaryToAdd](
       form,
       fieldName,
-      validValues  = TypeOfBeneficiary.values,
+      validValues  = TypeOfBeneficiaryToAdd.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

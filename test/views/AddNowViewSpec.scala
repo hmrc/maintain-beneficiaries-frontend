@@ -17,7 +17,7 @@
 package views
 
 import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.TypeOfBeneficiary
+import models.beneficiaries.TypeOfBeneficiaryToAdd
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.OptionsViewBehaviours
@@ -27,7 +27,7 @@ class AddNowViewSpec extends OptionsViewBehaviours {
 
   val messageKeyPrefix = "addNow"
 
-  val form: Form[TypeOfBeneficiary] = new AddBeneficiaryTypeFormProvider()()
+  val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
   val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
 
   "Description view" must {
@@ -41,7 +41,7 @@ class AddNowViewSpec extends OptionsViewBehaviours {
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like pageWithOptions(form, applyView, TypeOfBeneficiary.options)
+    behave like pageWithOptions(form, applyView, TypeOfBeneficiaryToAdd.options)
 
     behave like pageWithASubmitButton(applyView(form))
   }
