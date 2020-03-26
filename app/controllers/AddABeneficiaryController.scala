@@ -58,25 +58,19 @@ class AddABeneficiaryController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      for {
-        beneficiaries <- trust.getBeneficiaries(request.userAnswers.utr)
-        updatedAnswers <- Future.fromTry(request.userAnswers.remove(pages.individual.RemoveYesNoPage))
-        _ <- repository.set(updatedAnswers)
-      } yield {
-        beneficiaries match {
-          case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
-            Ok(yesNoView(yesNoForm))
-          case all: Beneficiaries =>
+      trust.getBeneficiaries(request.userAnswers.utr) map {
+        case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
+          Ok(yesNoView(yesNoForm))
+        case all: Beneficiaries =>
 
-            val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
+          val beneficiaries = new AddABeneficiaryViewHelper(all).rows
 
-            Ok(addAnotherView(
-              form = addAnotherForm,
-              inProgressBeneficiaries = beneficiaryRows.inProgress,
-              completeBeneficiaries = beneficiaryRows.complete,
-              heading = all.addToHeading
-            ))
-        }
+          Ok(addAnotherView(
+            form = addAnotherForm,
+            inProgressBeneficiaries = beneficiaries.inProgress,
+            completeBeneficiaries = beneficiaries.complete,
+            heading = all.addToHeading
+          ))
       }
   }
 
