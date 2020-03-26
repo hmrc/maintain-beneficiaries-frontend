@@ -123,8 +123,7 @@ classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
 
 removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
-removeClassOfBeneficiary.default = the beneficiary
-removeClassOfBeneficiary.error.required = Select yes if you want to remove the beneficiary
+removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
 
 classOfBeneficiary.whenRemoved.title = When was the class of beneficiary removed as a beneficiary?
 classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -138,7 +137,6 @@ classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed
 
 removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
-removeIndividualBeneficiary.default = the individual beneficiary
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
 
 individualBeneficiary.whenRemoved.title = When was {0} removed as a beneficiary?
