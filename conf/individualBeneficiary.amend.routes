@@ -37,3 +37,6 @@ POST       /has-passport-or-id-card               controllers.individualbenefici
 
 GET        /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onPageLoad()
 POST       /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onSubmit()
+
+GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onPageLoad()
+POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onSubmit()

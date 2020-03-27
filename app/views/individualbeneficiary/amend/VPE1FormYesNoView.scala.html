@@ -24,10 +24,10 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportOrIdCardDetailsYesNo.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.vpe1FormYesNo.title", name)}"
 ) {
 
-    @formHelper(action = PassportOrIdCardDetailsYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = VPE1FormYesNoController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.heading", name),
+            legend = messages("individualBeneficiary.vpe1FormYesNo.heading", name),
             headingIsLegend = true
         )
 
