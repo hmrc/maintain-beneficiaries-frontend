@@ -26,7 +26,8 @@ final case class OtherBeneficiary(description: String,
                                   address : Option[Address],
                                   income: Option[String],
                                   incomeDiscretionYesNo: Boolean,
-                                  entityStart: LocalDate) extends Beneficiary
+                                  entityStart: LocalDate,
+                                  provisional : Boolean) extends Beneficiary
 
 object OtherBeneficiary {
 
@@ -35,13 +36,14 @@ object OtherBeneficiary {
       (__ \ 'address).readNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ "entityStart").read[LocalDate]).tupled.map {
-      case (name, address, None, _, entityStart) =>
-        OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, _, Some(true), entityStart) =>
-        OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, address, income, _, entityStart) =>
-        OtherBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart)
+      (__ \ "entityStart").read[LocalDate] and
+      (__ \ "provisional").readWithDefault(false)).tupled.map {
+      case (name, address, None, _, entityStart, provisional) =>
+        OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, address, _, Some(true), entityStart, provisional) =>
+        OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, address, income, _, entityStart, provisional) =>
+        OtherBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
 }

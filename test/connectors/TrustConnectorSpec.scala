@@ -136,7 +136,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |							"line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
             |							"country": "DE"
             |						}
-            |					}
+            |					},
+            |         "provisional": false
             |				}
             |			],
             |   "individualDetails": [
@@ -148,7 +149,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |           "firstName": "first",
             |           "lastName": "last"
             |         },
-            |         "vulnerableBeneficiary": false
+            |         "vulnerableBeneficiary": false,
+            |         "provisional": false
             |      }
             |    ],
             |    "unidentified": [
@@ -157,12 +159,14 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |        "description": "Beneficiary Unidentified 25",
             |        "beneficiaryDiscretion": false,
             |        "beneficiaryShareOfIncome": "25",
-            |        "entityStart": "2019-09-23"
+            |        "entityStart": "2019-09-23",
+            |        "provisional": false
             |      },
             |      {
             |         "lineNo": "309",
             |         "description": "Beneficiary Unidentified 23",
-            |         "entityStart": "2019-09-23"
+            |         "entityStart": "2019-09-23",
+            |         "provisional": false
             |       }
             |  ],
             |  "trust": [
@@ -175,7 +179,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       "identification": {
             |         "safeId": "2222200000000"
             |       },
-            |       "entityStart": "2017-02-28"
+            |       "entityStart": "2017-02-28",
+            |       "provisional": false
             |    }
             |  ],
             |  "company": [
@@ -183,7 +188,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |                "lineNo": "184",
             |                "bpMatchStatus": "01",
             |                "organisationName": "Company Ltd",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |  ],
             |  "large": [
@@ -193,7 +199,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |                "organisationName": "Employment Related Endeavours",
             |                "description": "Description 1",
             |                "numberOfBeneficiary": "501",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |  ],
             |  "charity": [
@@ -206,14 +213,16 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             |       "identification": {
             |         "safeId": "2222200000000"
             |       },
-            |       "entityStart": "2012-03-14"
+            |       "entityStart": "2012-03-14",
+            |       "provisional": false
             |    }
             |  ],
             |  "other": [
             |              {
             |                "lineNo": "286",
             |                "description": "Other Endeavours Ltd",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |              ]
             | }
@@ -249,17 +258,20 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   vulnerableYesNo = false,
                   income = None,
                   incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2000-01-01")
+                  entityStart = LocalDate.parse("2000-01-01"),
+                  provisional = false
                 )
               ),
               unidentified = List(
                 ClassOfBeneficiary(
                   description = "Beneficiary Unidentified 25",
-                  entityStart = LocalDate.parse("2019-09-23")
+                  entityStart = LocalDate.parse("2019-09-23"),
+                  provisional = false
                 ),
                 ClassOfBeneficiary(
                   description = "Beneficiary Unidentified 23",
-                  entityStart = LocalDate.parse("2019-09-23")
+                  entityStart = LocalDate.parse("2019-09-23"),
+                  provisional = false
                 )
               ),
               company = List(
@@ -269,7 +281,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   None,
                   true,
-                  entityStart = LocalDate.parse("2019-09-23")
+                  entityStart = LocalDate.parse("2019-09-23"),
+                  provisional = false
                 )
               ),
               employmentRelated = List(
@@ -279,7 +292,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   description = Seq("Description 1"),
                   howManyBeneficiaries = Over501,
-                  entityStart = LocalDate.parse("2019-09-23")
+                  entityStart = LocalDate.parse("2019-09-23"),
+                  provisional = false
                 )
               ),
               trust = List(
@@ -288,7 +302,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   income = None,
                   incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2017-02-28")
+                  entityStart = LocalDate.parse("2017-02-28"),
+                  provisional = false
                 )
               ),
               charity = List(
@@ -298,7 +313,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   income = None,
                   incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2012-03-14")
+                  entityStart = LocalDate.parse("2012-03-14"),
+                  provisional = false
                 )
               ),
               other = List(
@@ -307,7 +323,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   address = None,
                   income = None,
                   incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2019-09-23")
+                  entityStart = LocalDate.parse("2019-09-23"),
+                  provisional = false
                 )
               )
             )
@@ -372,7 +389,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     "addClassOfBeneficiary" must {
 
-      val classOfBeneficiary = ClassOfBeneficiary(description, date)
+      val classOfBeneficiary = ClassOfBeneficiary(description, date, provisional = true)
 
       "Return OK when the request is successful" in {
 

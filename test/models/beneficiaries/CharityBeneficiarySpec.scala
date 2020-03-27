@@ -38,7 +38,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -49,7 +50,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no discretion for income info" in {
@@ -63,7 +65,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -74,7 +77,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
       "there is no income at all" in {
@@ -87,7 +91,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             |  "identification": {
             |    "safeId": "2222200000000"
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -98,7 +103,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
 
@@ -112,7 +118,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             |                "identification": {
             |                  "utr": "2570719166"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -123,7 +130,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -147,7 +155,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             |          "country": "GB"
             |       }
             |  },
-            |  "entityStart": "2017-02-28"
+            |  "entityStart": "2017-02-28",
+            |  "provisional": false
             |}
             |""".stripMargin)
 
@@ -164,7 +173,8 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28)
+          entityStart = LocalDate.of(2017, 2, 28),
+          provisional = false
         )
       }
     }

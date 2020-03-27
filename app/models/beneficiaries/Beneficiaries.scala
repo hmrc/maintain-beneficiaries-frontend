@@ -52,23 +52,25 @@ object Beneficiaries {
       ).apply(Beneficiaries.apply _)
 }
 
-object Beneficiary extends Enumerable.Implicits {
+sealed trait TypeOfBeneficiaryToAdd
 
-  case object Individual extends WithName("individual") with Beneficiary
-  case object ClassOfBeneficiaries extends WithName("unidentified") with Beneficiary
-  case object CharityOrTrust extends WithName("charity-or-trust") with Beneficiary
-  case object CompanyOrEmploymentRelated extends WithName("company-or-employment-related") with Beneficiary
-  case object Other extends WithName("other") with Beneficiary
+object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
 
-  val values: List[Beneficiary] = List(
+  case object Individual extends WithName("individual") with TypeOfBeneficiaryToAdd
+  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
+  case object CharityOrTrust extends WithName("charityOrTrust") with TypeOfBeneficiaryToAdd
+  case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiaryToAdd
+  case object Other extends WithName("other") with TypeOfBeneficiaryToAdd
+
+  val values: List[TypeOfBeneficiaryToAdd] = List(
     Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
   )
 
   val options: List[RadioOption] = values.map {
     value =>
-      RadioOption("addNow", value.toString)
+      RadioOption("whatTypeOfBeneficiary", value.toString)
   }
 
-  implicit val enumerable: Enumerable[Beneficiary] =
+  implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =
     Enumerable(values.map(v => v.toString -> v): _*)
 }
