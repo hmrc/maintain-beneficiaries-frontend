@@ -85,7 +85,7 @@ final case class UserAnswers(
 
   def deleteAtPath(path: JsPath): Try[UserAnswers] = {
     data.removeObject(path).map(obj => copy(data = obj)).fold(
-      errors => Failure(JsResultException(errors)),
+      _ => Success(this),
       result => Success(result)
     )
   }

@@ -29,7 +29,8 @@ final case class IndividualBeneficiary(name: Name,
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
                                        incomeDiscretionYesNo: Boolean,
-                                       entityStart: LocalDate) extends Beneficiary
+                                       entityStart: LocalDate,
+                                       provisional : Boolean) extends Beneficiary
 
 object IndividualBeneficiary {
 
@@ -41,14 +42,15 @@ object IndividualBeneficiary {
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ "entityStart").read[LocalDate]).tupled.map{
+      (__ \ "entityStart").read[LocalDate] and
+      (__ \ "provisional").readWithDefault(false)).tupled.map{
 
-      case (name, dob, nino, address, vulnerable, None, _, entityStart) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, dob, nino, address, vulnerable, _, Some(true), entityStart) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, dob, nino, address, vulnerable,  income, _, entityStart) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, income, incomeDiscretionYesNo = false, entityStart)
+      case (name, dob, nino, address, vulnerable, None, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, address, vulnerable, _, Some(true), entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, address, vulnerable,  income, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, address, vulnerable, income, incomeDiscretionYesNo = false, entityStart, provisional)
 
     }
 

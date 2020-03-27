@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.TrustStartDate
+import models.{RemoveBeneficiary, TrustStartDate}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
 import play.api.libs.json.{JsString, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
@@ -52,4 +52,9 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
     http.POST[JsValue, HttpResponse](addClassOfBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
+  private def removeBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/beneficiaries/remove"
+
+  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    http.PUT[JsValue, HttpResponse](removeBeneficiaryUrl(utr), Json.toJson(beneficiary))
+  }
 }

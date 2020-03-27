@@ -88,4 +88,16 @@ POST       /individual-beneficiary/vpe1-form-yes-no                         cont
 GET        /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
 POST       /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
 
+GET        /class-of-beneficiaries/:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onPageLoad(index : Int)
+POST       /class-of-beneficiaries/:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onSubmit(index : Int)
+
+GET        /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)
+
+GET        /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onPageLoad(index: Int)
+POST       /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onSubmit(index: Int)
+
+GET        /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onSubmit(index: Int)
+
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

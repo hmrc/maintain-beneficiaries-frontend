@@ -27,7 +27,8 @@ case class CompanyBeneficiary(name: String,
                               address: Option[Address],
                               income: Option[String],
                               incomeDiscretionYesNo: Boolean,
-                              entityStart: LocalDate
+                              entityStart: LocalDate,
+                              provisional : Boolean
                              ) extends Beneficiary
 
 object CompanyBeneficiary {
@@ -38,13 +39,14 @@ object CompanyBeneficiary {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ "entityStart").read[LocalDate]).tupled.map {
-      case (name, utr, address, None, _, entityStart) =>
-        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, utr, address, _, Some(true), entityStart) =>
-        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart)
-      case (name, utr, address, income, _, entityStart) =>
-        CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart)
+      (__ \ "entityStart").read[LocalDate] and
+      (__ \ "provisional").readWithDefault(false)).tupled.map {
+      case (name, utr, address, None, _, entityStart, provisional) =>
+        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, utr, address, _, Some(true), entityStart, provisional) =>
+        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, utr, address, income, _, entityStart, provisional) =>
+        CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (

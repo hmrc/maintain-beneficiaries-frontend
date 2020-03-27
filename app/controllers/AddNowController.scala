@@ -19,8 +19,8 @@ package controllers
 import controllers.actions._
 import forms.AddBeneficiaryTypeFormProvider
 import javax.inject.Inject
-import models.beneficiaries.Beneficiary
-import models.beneficiaries.Beneficiary._
+import models.beneficiaries.TypeOfBeneficiaryToAdd
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import pages.AddNowPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +40,7 @@ class AddNowController @Inject()(
                                   repository: PlaybackRepository
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Beneficiary] = formProvider()
+  val form: Form[TypeOfBeneficiaryToAdd] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>

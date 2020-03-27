@@ -22,8 +22,10 @@ import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
-import models.{AddABeneficiary, Enumerable}
+import models.requests.DataRequest
+import models.{AddABeneficiary, Enumerable, UserAnswers}
 import navigation.Navigator
+import pages.AddNowPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,20 +36,21 @@ import utils.AddABeneficiaryViewHelper
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class AddABeneficiaryController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       registrationsRepository: PlaybackRepository,
-                                       navigator: Navigator,
-                                       trust: TrustService,
-                                       standardActionSets: StandardActionSets,
-                                       addAnotherFormProvider: AddABeneficiaryFormProvider,
-                                       yesNoFormProvider: YesNoFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       addAnotherView: AddABeneficiaryView,
-                                       yesNoView: AddABeneficiaryYesNoView,
-                                       val appConfig: FrontendAppConfig,
-                                       trustStoreConnector: TrustStoreConnector
+                                           override val messagesApi: MessagesApi,
+                                           repository: PlaybackRepository,
+                                           navigator: Navigator,
+                                           trust: TrustService,
+                                           standardActionSets: StandardActionSets,
+                                           addAnotherFormProvider: AddABeneficiaryFormProvider,
+                                           yesNoFormProvider: YesNoFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           addAnotherView: AddABeneficiaryView,
+                                           yesNoView: AddABeneficiaryYesNoView,
+                                           val appConfig: FrontendAppConfig,
+                                           trustStoreConnector: TrustStoreConnector
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
@@ -57,20 +60,32 @@ class AddABeneficiaryController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getBeneficiaries(request.userAnswers.utr) map {
-        case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
-          Ok(yesNoView(yesNoForm))
-        case all: Beneficiaries =>
+      for {
+        beneficiaries <- trust.getBeneficiaries(request.userAnswers.utr)
+        updatedAnswers <- Future.fromTry(cleanRemoveYesNoPages)
+        _ <- repository.set(updatedAnswers)
+      } yield {
+        beneficiaries match {
+          case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
+            Ok(yesNoView(yesNoForm))
+          case all: Beneficiaries =>
 
-          val beneficiaries = new AddABeneficiaryViewHelper(all).rows
+            val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
-          Ok(addAnotherView(
-            form = addAnotherForm,
-            inProgressBeneficiaries = beneficiaries.inProgress,
-            completeBeneficiaries = beneficiaries.complete,
-            heading = all.addToHeading
-          ))
+            Ok(addAnotherView(
+              form = addAnotherForm,
+              inProgressBeneficiaries = beneficiaryRows.inProgress,
+              completeBeneficiaries = beneficiaryRows.complete,
+              heading = all.addToHeading
+            ))
+        }
       }
+  }
+
+  private def cleanRemoveYesNoPages(implicit request: DataRequest[AnyContent]): Try[UserAnswers] = {
+    request.userAnswers
+      .remove(pages.individual.RemoveYesNoPage)
+      .flatMap(_.remove(pages.classofbeneficiary.RemoveYesNoPage))
   }
 
   def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData {
@@ -109,7 +124,10 @@ class AddABeneficiaryController @Inject()(
           },
           {
             case AddABeneficiary.YesNow =>
-              Future.successful(Redirect(controllers.routes.AddNowController.onPageLoad()))
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath).flatMap(_.remove(AddNowPage)))
+                _ <- repository.set(updatedAnswers)
+              } yield Redirect(controllers.routes.AddNowController.onPageLoad())
             case AddABeneficiary.YesLater =>
               Future.successful(Redirect(appConfig.maintainATrustOverview))
             case AddABeneficiary.NoComplete =>

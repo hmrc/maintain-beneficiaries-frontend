@@ -15,7 +15,7 @@
  *@
 
 @import controllers.routes._
-@import models.beneficiaries.Beneficiary
+@import models.beneficiaries.TypeOfBeneficiaryToAdd
 
 @this(
     main_template: MainTemplate,
@@ -38,7 +38,7 @@
             field = form("value"),
             legend = messages("addNow.heading"),
             legendClass = Some("heading-large"),
-            inputs = Beneficiary.options.toSeq,
+            inputs = TypeOfBeneficiaryToAdd.options.toSeq,
             headingIsLegend = true,
             hint = Some(messages("addNow.hint"))
         )

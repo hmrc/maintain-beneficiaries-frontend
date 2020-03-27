@@ -29,7 +29,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       changeLabel = messages("site.change.details"),
       changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
       removeLabel =  messages("site.delete"),
-      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
+      removeUrl = Some(controllers.individual.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
     )
   }
 
@@ -40,7 +40,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       changeLabel = messages("site.change.details"),
       changeUrl = Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(index).url),
       removeLabel =  messages("site.delete"),
-      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
+      removeUrl = Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(index).url)
     )
   }
 

@@ -49,7 +49,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |                   "country": "GB"
             |                  }
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -67,7 +68,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           description = Seq("Description 1"),
           howManyBeneficiaries = Over1001,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
       "with foreign address" in {
@@ -88,7 +90,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |                   "country": "US"
             |                   }
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -105,7 +108,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           )),
           description = Seq("Description 1"),
           howManyBeneficiaries = Over201,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -125,7 +129,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |                "identification": {
             |                  "utr": "3570719187"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -137,7 +142,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           description = Seq("Description 1", "Description 2", "Description 3", "Description 4", "Description 5"),
           howManyBeneficiaries = Over101,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
@@ -153,7 +159,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |                "identification": {
             |                  "utr": "3570719187"
             |                },
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -165,7 +172,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           description = Seq("Description 1"),
           howManyBeneficiaries = Over501,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
       "with no identification" in {
@@ -177,7 +185,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |                "organisationName": "Beneficiary Large 25",
             |                "description": "Description 1",
             |                "numberOfBeneficiary": "1",
-            |                "entityStart": "2019-09-23"
+            |                "entityStart": "2019-09-23",
+            |                "provisional": false
             |              }
             |""".stripMargin)
 
@@ -189,7 +198,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           address = None,
           description = Seq("Description 1"),
           howManyBeneficiaries = Over1,
-          entityStart = LocalDate.of(2019, 9, 23)
+          entityStart = LocalDate.of(2019, 9, 23),
+          provisional = false
         )
       }
 
