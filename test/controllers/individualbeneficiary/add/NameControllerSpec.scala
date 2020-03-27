@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.individualbeneficiary.add
 
 import base.SpecBase
-import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.TypeOfBeneficiaryToAdd
+import forms.IndividualNameFormProvider
+import models.Name
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddNowPage
-import play.api.data.Form
+import pages.individualbeneficiary.NamePage
+import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.AddNowView
+import views.html.individualbeneficiary.add.NameView
 
-class AddNowControllerSpec extends SpecBase with MockitoSugar {
+class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
-  lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
-  val classOfBeneficiariesAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
+  private val form = new IndividualNameFormProvider().withPrefix("individualBeneficiary.name")
+  private lazy val nameRoute = routes.NameController.onPageLoad().url
+  private val name = Name("First", Some("Middle"), "Last")
 
-  "AddNow Controller" must {
+  "Individual Beneficiary Name Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, addNowRoute)
+      val request = FakeRequest(GET, nameRoute)
 
-      val view = application.injector.instanceOf[AddNowView]
+      val view = application.injector.instanceOf[NameView]
 
       val result = route(application, request).value
 
@@ -54,73 +56,44 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(AddNowPage, classOfBeneficiariesAnswer).success.value
+      val answers = emptyUserAnswers.set(NamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, addNowRoute)
+      val request = FakeRequest(GET, nameRoute)
 
-      val view = application.injector.instanceOf[AddNowView]
+      val view = application.injector.instanceOf[NameView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(classOfBeneficiariesAnswer))(fakeRequest, messages).toString
+        view(form.fill(name))(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when Class of beneficiaries is submitted" in {
+    "redirect to the next page when valid data is submitted" in {
+
+      def onwardRoute = Call("GET", "/foo")
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
+        FakeRequest(POST, nameRoute)
+          .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Individual beneficary is submitted" ignore {
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Individual.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.individualbeneficiary.add.routes.NameController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to feature not available page if anything else selected" in {
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Other.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -129,11 +102,11 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, addNowRoute)
+      val request = FakeRequest(POST, nameRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AddNowView]
+      val view = application.injector.instanceOf[NameView]
 
       val result = route(application, request).value
 
@@ -149,7 +122,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, addNowRoute)
+      val request = FakeRequest(GET, nameRoute)
 
       val result = route(application, request).value
 
@@ -164,8 +137,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
+        FakeRequest(POST, nameRoute)
+          .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
       val result = route(application, request).value
 

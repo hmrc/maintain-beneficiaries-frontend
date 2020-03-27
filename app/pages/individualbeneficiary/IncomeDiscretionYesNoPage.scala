@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.individualbeneficiary
 
-import javax.inject.{Inject, Singleton}
 import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-@Singleton
-class Navigator @Inject()() {
+import scala.util.Try
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+case object IncomeDiscretionYesNoPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "incomeDiscretionYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(IncomePercentagePage)
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
   }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
 }

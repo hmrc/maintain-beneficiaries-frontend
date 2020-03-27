@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import javax.inject.Inject
 
-@Singleton
-class Navigator @Inject()() {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
+class NationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+  def withPrefix(messagePrefix: String): Form[String] =
+    Form(
+      "value" -> nino(s"$messagePrefix.error.required")
+        .verifying(
+          firstError(
+            nonEmptyString("value", s"$messagePrefix.error.required"),
+            isNinoValid("value", s"$messagePrefix.error.invalidFormat")
+          ))
+    )
 }
+

@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-@Singleton
-class Navigator @Inject()() {
+class IncomePercentageFormProvider @Inject() extends Mappings {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+  def withPrefix(prefix: String): Form[Int] =
+    Form(
+      "percentage" -> incomePercentage()
+    )
 }

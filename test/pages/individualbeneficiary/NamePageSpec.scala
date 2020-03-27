@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.individualbeneficiary
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import models.Name
+import pages.behaviours.PageBehaviours
 
-@Singleton
-class Navigator @Inject()() {
+class NamePageSpec extends PageBehaviours {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+  "NamePage" must {
+
+    beRetrievable[Name](NamePage)
+
+    beSettable[Name](NamePage)
+
+    beRemovable[Name](NamePage)
   }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
 }
