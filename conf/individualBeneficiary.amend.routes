@@ -25,3 +25,9 @@ POST       /has-address                              controllers.individualbenef
 
 GET        /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onPageLoad()
 POST       /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onSubmit()
+
+GET        /uk-address                               controllers.individualbeneficiary.amend.UkAddressController.onPageLoad()
+POST       /uk-address                               controllers.individualbeneficiary.amend.UkAddressController.onSubmit()
+
+GET        /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onSubmit()
