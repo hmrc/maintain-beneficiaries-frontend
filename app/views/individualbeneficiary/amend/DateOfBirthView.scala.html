@@ -14,28 +14,31 @@
  * limitations under the License.
  *@
 
-@import play.api.mvc.Call
+@import controllers.individualbeneficiary.amend.routes._
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
 )
 
-@(prefix : String, form: Form[_], index: Int, nameOrDescription : String, route : Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(s"$prefix.title", nameOrDescription)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirth.title")}"
 ) {
 
-    @formHelper(action = route, 'autoComplete -> "off") {
+    @formHelper(action = DateOfBirthController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
+        @components.input_date(
             field = form("value"),
-            legend = messages(s"$prefix.heading", nameOrDescription)
+            legend = messages("individualBeneficiary.dateOfBirth.heading", name),
+            legendClass = "heading-large",
+            headingIsLegend = true,
+            hint = Some(messages("individualBeneficiary.dateOfBirth.hint"))
         )
 
         @components.submit_button()

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.individual.remove
+package controllers.individualbeneficiary.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import pages.individual.RemoveYesNoPage
+import pages.individualbeneficiary.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individual.remove.RemoveIndexView
+import views.html.individualbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -87,7 +87,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
                     _ <- repository.set(updatedAnswers)
                   } yield {
-                    Redirect(controllers.individual.remove.routes.WhenRemovedController.onPageLoad(index))
+                    Redirect(controllers.individualbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index))
                   }
                 }
             }

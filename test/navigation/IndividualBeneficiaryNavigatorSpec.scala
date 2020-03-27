@@ -17,7 +17,6 @@
 package navigation
 
 import base.SpecBase
-import navigation.Navigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.{NamePage, _}
 

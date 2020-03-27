@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.individual.remove
+package controllers.individualbeneficiary.remove
 
 import java.time.{LocalDate, ZoneOffset}
 
@@ -32,7 +32,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
-import views.html.individual.remove.WhenRemovedView
+import views.html.individualbeneficiary.remove.WhenRemovedView
 
 import scala.concurrent.Future
 
