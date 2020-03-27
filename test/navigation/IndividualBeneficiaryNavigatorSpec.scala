@@ -53,6 +53,22 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .mustBe(controllers.individualbeneficiary.add.routes.IncomeDiscretionYesNoController.onPageLoad())
     }
 
+    "Do you know IncomeDiscretion page -> No -> IncomeDiscretion page" in {
+      val answers = emptyUserAnswers
+        .set(IncomeDiscretionYesNoPage, false).success.value
+
+      navigator.nextPage(IncomeDiscretionYesNoPage, answers)
+        .mustBe(controllers.individualbeneficiary.add.routes.IncomePercentageController.onPageLoad())
+    }
+
+    "Do you know IncomeDiscretion page -> Yes -> Do you know NINO page" in {
+      val answers = emptyUserAnswers
+        .set(IncomeDiscretionYesNoPage, true).success.value
+
+      navigator.nextPage(IncomeDiscretionYesNoPage, answers)
+        .mustBe(controllers.individualbeneficiary.add.routes.NationalInsuranceNumberYesNoController.onPageLoad())
+    }
+
     "IncomeDiscretion page -> Do you know NINO page" in {
       navigator.nextPage(IncomePercentagePage, emptyUserAnswers)
         .mustBe(controllers.individualbeneficiary.add.routes.NationalInsuranceNumberYesNoController.onPageLoad())

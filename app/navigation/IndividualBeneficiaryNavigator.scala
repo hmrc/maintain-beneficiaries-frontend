@@ -38,7 +38,7 @@ object IndividualBeneficiaryNavigator {
     case DateOfBirthYesNoPage => ua =>
       yesNoNav(ua, DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad())
     case IncomeDiscretionYesNoPage => ua =>
-        yesNoNav(ua, IncomeDiscretionYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
+        yesNoNav(ua, IncomeDiscretionYesNoPage, rts.NationalInsuranceNumberYesNoController.onPageLoad(), rts.IncomePercentageController.onPageLoad())
     case NationalInsuranceNumberYesNoPage => ua =>
         yesNoNav(ua, NationalInsuranceNumberYesNoPage, rts.NationalInsuranceNumberController.onPageLoad(), rts.AddressYesNoController.onPageLoad())
     case AddressYesNoPage => ua =>
