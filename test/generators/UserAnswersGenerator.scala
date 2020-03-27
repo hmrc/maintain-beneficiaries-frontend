@@ -23,14 +23,15 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages.QuestionPage
-import pages.individual.NamePage
+import pages.individualbeneficiary.NamePage
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    arbitrary[(NamePage, JsValue)] :: Nil
+    arbitrary[(NamePage.type, JsValue)] ::
+    Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 

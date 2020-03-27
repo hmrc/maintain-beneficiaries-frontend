@@ -25,7 +25,8 @@ import play.api.mvc.Call
 class Navigator @Inject()() {
 
   private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse {
+    ClassOfBeneficiaryNavigator.routes orElse
+    IndividualBeneficiaryNavigator.routes orElse {
     case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
   }
 

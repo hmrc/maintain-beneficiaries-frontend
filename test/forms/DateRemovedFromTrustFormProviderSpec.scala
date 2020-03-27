@@ -18,7 +18,6 @@ package forms
 
 import java.time.{LocalDate, ZoneOffset}
 
-import forms.DateRemovedFromTrustFormProvider
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 

@@ -94,6 +94,7 @@ trait Formatters {
         baseFormatter
           .bind(key, data)
           .right.map(_.replace(",", ""))
+          .right.map(_.trim())
           .right.flatMap {
           case s if s.matches(decimalRegexp) =>
             Left(Seq(FormError(key, wholeNumberKey, args)))
@@ -107,6 +108,21 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
+  private[mappings] def percentageFormatter(requiredKey: String, wholeNumberKey: String, nonNumericKey: String, validPercentageKey: String): Formatter[Int] =
+    new Formatter[Int] {
+
+      private val baseFormatter = intFormatter(requiredKey, wholeNumberKey, nonNumericKey)
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
+        val baseValue = baseFormatter.bind(key, data)
+        baseValue match {
+          case Right(value) if value < 0 => Left(Seq(FormError(key, wholeNumberKey)))
+          case Right(value) if value > 100 => Left(Seq(FormError(key, validPercentageKey)))
+          case _ => baseValue
+        }
+      }
+      override def unbind(key: String, value: Int): Map[String, String] = baseFormatter.unbind(key, value)
+    }
 
   private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String)(implicit ev: Enumerable[A]): Formatter[A] =
     new Formatter[A] {
