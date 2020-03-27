@@ -54,6 +54,8 @@ object IndividualBeneficiary {
 
     }
 
+  implicit val writes: Writes[IndividualBeneficiary] = Json.writes[IndividualBeneficiary]
+
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])

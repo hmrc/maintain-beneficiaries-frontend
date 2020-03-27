@@ -24,7 +24,7 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.vpe1FormUkYesNo.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.vpe1FormYesNo.title", name)}"
 ) {
 
     @formHelper(action = VPE1FormYesNoController.onSubmit(), 'autoComplete -> "off") {
@@ -35,7 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages("individualBeneficiary.vpe1FormUkYesNo.heading", name),
+            legend = messages("individualBeneficiary.vpe1FormYesNo.heading", name),
             headingIsLegend = true
         )
 
