@@ -22,3 +22,6 @@ POST       /national-insurance-number                controllers.individualbenef
 
 GET        /has-address                              controllers.individualbeneficiary.amend.AddressYesNoController.onPageLoad()
 POST       /has-address                              controllers.individualbeneficiary.amend.AddressYesNoController.onSubmit()
+
+GET        /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onPageLoad()
+POST       /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onSubmit()

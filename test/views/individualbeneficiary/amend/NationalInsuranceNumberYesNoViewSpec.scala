@@ -16,7 +16,7 @@
 
 package views.individualbeneficiary.amend
 
-import controllers.individualbeneficiary.add.routes
+import controllers.individualbeneficiary.amend.routes
 import forms.YesNoFormProvider
 import models.Name
 import play.api.data.Form
