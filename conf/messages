@@ -185,6 +185,12 @@ individualBeneficiary.name.middleName = Middle names (optional)
 individualBeneficiary.name.lastName = Last name
 individualBeneficiary.name.error.firstName.required = Enter the individual beneficiary’s first name
 individualBeneficiary.name.error.lastName.required = Enter the individual beneficiary’s last name
+individualBeneficiary.name.error.firstName.length = Individual beneficiary’s first name must be 35 characters or less
+individualBeneficiary.name.error.middleName.length = Individual beneficiary’s middle names must be 35 characters or less
+individualBeneficiary.name.error.lastName.length = Individual beneficiary’s last name must be 35 characters or less
+individualBeneficiary.name.error.firstName.invalid = Individual beneficiary’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiary.name.error.middleName.invalid = Individual beneficiary’s middle name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiary.name.error.lastName.invalid = Individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
 individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
 individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
@@ -297,10 +303,10 @@ individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date
 individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
-individualBeneficiary.vpe1FormUkYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
-individualBeneficiary.vpe1FormUkYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
-individualBeneficiary.vpe1FormUkYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
-individualBeneficiary.vpe1FormUkYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
+individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
+individualBeneficiary.vpe1FormYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
 
 individualBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
 individualBeneficiary.startDate.title = When was the individual beneficiary added as a beneficiary?
