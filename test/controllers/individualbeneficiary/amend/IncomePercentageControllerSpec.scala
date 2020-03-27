@@ -19,73 +19,81 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
-import forms.YesNoFormProvider
+import forms.IncomePercentageFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{IncomeDiscretionYesNoPage, NamePage}
+import pages.individualbeneficiary.{IncomePercentagePage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.amend.IncomeDiscretionYesNoView
+import views.html.individualbeneficiary.amend.IncomePercentageView
 
 import scala.concurrent.Future
 
-class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
+class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val formProvider = new IncomePercentageFormProvider()
+  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
 
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
-  val trusteeName = "FirstName LastName"
-  val name = Name("FirstName", None, "LastName")
-  val index = 0
+  private def onwardRoute = Call("GET", "/foo")
+
+  private val validAnswer = 42
+
+  private lazy val incomePercentageRoute = routes.IncomePercentageController.onPageLoad().url
+
+  private val name = Name("New", None, "Beneficiary")
 
   override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success.value
 
-  lazy val discretionaryIncomeYesNoRoute = routes.IncomeDiscretionYesNoController.onPageLoad().url
+  private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest(GET, incomePercentageRoute)
 
-  "DiscretionaryIncomeYesNo Controller" must {
+  private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
+    FakeRequest(POST, incomePercentageRoute)
+      .withFormUrlEncodedBody("percentage" -> validAnswer.toString)
+
+  "Individual Beneficiary Income Percentage Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, discretionaryIncomeYesNoRoute)
+      val result = route(application, getRequest()).value
 
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[IncomeDiscretionYesNoView]
+      val view = application.injector.instanceOf[IncomePercentageView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, trusteeName)(fakeRequest, messages).toString
+        view(form, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(IncomeDiscretionYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(IncomePercentagePage, validAnswer).success.value
+        .set(NamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, discretionaryIncomeYesNoRoute)
+      val view = application.injector.instanceOf[IncomePercentageView]
 
-      val view = application.injector.instanceOf[IncomeDiscretionYesNoView]
-
-      val result = route(application, request).value
+      val result = route(application, getRequest()).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), trusteeName)(fakeRequest, messages).toString
+        view(form.fill(validAnswer), name.displayName)(getRequest(), messages).toString
 
       application.stop()
     }
@@ -103,11 +111,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
           )
           .build()
 
-      val request =
-        FakeRequest(POST, discretionaryIncomeYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(application, request).value
+      val result = route(application, postRequest()).value
 
       status(result) mustEqual SEE_OTHER
 
@@ -121,19 +125,19 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, discretionaryIncomeYesNoRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, incomePercentageRoute)
+          .withFormUrlEncodedBody(("percentage", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("percentage" -> "invalid value"))
 
-      val view = application.injector.instanceOf[IncomeDiscretionYesNoView]
+      val view = application.injector.instanceOf[IncomePercentageView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, trusteeName)(fakeRequest, messages).toString
+        view(boundForm, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -142,12 +146,9 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, discretionaryIncomeYesNoRoute)
-
-      val result = route(application, request).value
+      val result = route(application, getRequest()).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -157,11 +158,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request =
-        FakeRequest(POST, discretionaryIncomeYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(application, request).value
+      val result = route(application, postRequest()).value
 
       status(result) mustEqual SEE_OTHER
 

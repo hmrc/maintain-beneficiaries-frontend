@@ -17,6 +17,7 @@
 package controllers.individualbeneficiary.amend
 
 import controllers.actions.StandardActionSets
+import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -34,14 +35,15 @@ class IncomeDiscretionYesNoController @Inject()(
                                             sessionRepository: PlaybackRepository,
                                             navigator: Navigator,
                                             standardActionSets: StandardActionSets,
+                                            nameAction: NameRequiredAction,
                                             formProvider: YesNoFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
                                             view: IncomeDiscretionYesNoView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("individualBeneficiary.discretionaryIncomeYesNo")
+  val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage)
@@ -59,18 +61,11 @@ class IncomeDiscretionYesNoController @Inject()(
 
   }
 
-  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr).async {
+  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
       form.bindFromRequest().fold(
-        formWithErrors => {
-
-          val name = request.userAnswers.get(NamePage)
-            .map { _.displayName }
-            .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
-
-          Future.successful(BadRequest(view(formWithErrors, name)))
-
-        },
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeDiscretionYesNoPage, value))
