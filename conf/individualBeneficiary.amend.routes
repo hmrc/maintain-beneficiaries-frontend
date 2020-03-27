@@ -13,3 +13,6 @@ POST       /decide-income                    controllers.individualbeneficiary.a
 
 GET        /income-percentage                controllers.individualbeneficiary.amend.IncomePercentageController.onPageLoad()
 POST       /income-percentage                controllers.individualbeneficiary.amend.IncomePercentageController.onSubmit()
+
+GET        /has-national-insurance-number            controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onPageLoad()
+POST       /has-national-insurance-number            controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onSubmit()
