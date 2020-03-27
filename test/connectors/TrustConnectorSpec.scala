@@ -18,18 +18,17 @@ package connectors
 
 import java.time.LocalDate
 
-import models.{Name, UkAddress}
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, EmploymentRelatedBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
-import play.api.libs.json.Json
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo}
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo, _}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.HowManyBeneficiaries.Over501
+import models.beneficiaries._
+import models.{Name, UkAddress}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -60,6 +59,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val date: LocalDate = LocalDate.parse("2019-02-03")
 
   private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
+  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-individual-beneficiary/$utr/$index"
   private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
   private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/add-individual-beneficiary/$utr"
 
@@ -511,6 +511,92 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       }
 
     }
+
+
+    "amending an individual beneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendIndividualBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = None,
+            lastName = "Last"
+          ),
+          dateOfBirth = None,
+          nationalInsuranceNumber = None,
+          address = None,
+          vulnerableYesNo = false,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val result = connector.amendIndividualBeneficiary(utr, index, individual)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendIndividualBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = None,
+            lastName = "Last"
+          ),
+          dateOfBirth = None,
+          nationalInsuranceNumber = None,
+          address = None,
+          vulnerableYesNo = false,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val result = connector.amendIndividualBeneficiary(utr, index, individual)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
   }
 
 }

@@ -19,8 +19,8 @@ package models.beneficiaries
 import java.time.LocalDate
 
 import models.{Address, Name}
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -54,7 +54,17 @@ object IndividualBeneficiary {
 
     }
 
-  implicit val writes: Writes[IndividualBeneficiary] = Json.writes[IndividualBeneficiary]
+  implicit val writes: Writes[IndividualBeneficiary] =
+    ((__ \ 'name).write[Name] and
+      (__ \ 'dateOfBirth).writeNullable[LocalDate] and
+      (__ \ 'identification \ 'nino).writeNullable[String] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      (__ \ 'vulnerableBeneficiary).write[Boolean] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+    ).apply(unlift(IndividualBeneficiary.unapply))
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
