@@ -35,8 +35,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages(s"$prefix.heading", nameOrDescription),
-            headingIsLegend = true
+            label = messages(s"$prefix.heading", nameOrDescription)
         )
 
         @components.submit_button()

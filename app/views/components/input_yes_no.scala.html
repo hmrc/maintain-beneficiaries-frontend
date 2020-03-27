@@ -16,25 +16,21 @@
 
 @(
         field: Field,
-        legend: String,
+        label: String,
         hint: Option[String] = None,
         legendClass: Option[String] = None,
-        headingIsLegend: Boolean = false
+        legendAsHeading: Boolean = true
 )(implicit messages: Messages)
 
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <fieldset class="inline" id="@{field.id}" @if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input} @if(hint.nonEmpty){hint-@{field.id}}"}>
 
-        @if(headingIsLegend){
-            <legend>
-                <h1 @if(legendClass.nonEmpty){class="@legendClass" }else{class="heading-large"}>@legend</h1>
-            </legend>
-        } else {
-            <legend @if(legendClass.nonEmpty){class="@legendClass" }>
-                @legend
-            </legend>
-        }
+        <legend id="@{field.id}-legend">
+            @if(legendAsHeading){<h1 id="@{field.id}-id" class="legend-as-heading heading-large">}
+            @label
+            @if(legendAsHeading){</h1>}
+        </legend>
 
         @if(hint.nonEmpty){
             <div class="form-hint" id="hint-@{field.id}">@hint</div>
