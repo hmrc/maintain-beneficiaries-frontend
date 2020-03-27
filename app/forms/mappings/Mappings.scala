@@ -54,4 +54,10 @@ trait Mappings extends Formatters with Constraints {
                            twoRequiredKey: String,
                            requiredKey: String): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey))
+
+  protected def incomePercentage(requiredKey: String = "error.income_percentage.required",
+                           wholeNumberKey: String = "error.income_percentage.integer",
+                           nonNumericKey: String = "error.income_percentage.non_numeric",
+                           validPercentageKey: String = "error.income_percentage.less_than_100"): FieldMapping[Int] =
+    of(percentageFormatter(requiredKey, wholeNumberKey, nonNumericKey, validPercentageKey))
 }

@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package controllers.actions.individual
 
-import javax.inject.{Inject, Singleton}
 import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import models.requests.DataRequest
+import play.api.mvc.WrappedRequest
 
-@Singleton
-class Navigator @Inject()() {
-
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+case class BeneficiaryNameRequest[T](request: DataRequest[T], beneficiaryName: String) extends WrappedRequest[T](request){
+  val userAnswers:UserAnswers = request.userAnswers
 }

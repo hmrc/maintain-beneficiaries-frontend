@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.individualbeneficiary
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import pages.behaviours.PageBehaviours
 
-@Singleton
-class Navigator @Inject()() {
+class IncomeDiscretionYesNoPageSpec extends PageBehaviours {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
+  "IncomeDiscretionYesNo page" must {
+
+    beRetrievable[Boolean](IncomeDiscretionYesNoPage)
+
+    beSettable[Boolean](IncomeDiscretionYesNoPage)
+
+    beRemovable[Boolean](IncomeDiscretionYesNoPage)
+
+    "implement cleanup logic when YES selected" in {
+      val userAnswers = emptyUserAnswers
+        .set(IncomePercentagePage, 65)
+        .flatMap(_.set(IncomeDiscretionYesNoPage, true))
+
+      userAnswers.get.get(IncomePercentagePage) mustNot be(defined)
+    }
   }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
 }

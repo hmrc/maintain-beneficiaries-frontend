@@ -16,6 +16,46 @@ site.date.hint = For example, 31 3 1980
 site.inprogress = In Progress
 site.complete = Completed
 
+site.address.uk.title = What is the address?
+site.address.uk.heading = What is {0}’s address?
+site.address.uk.line1 = Address line 1
+site.address.uk.line2 = Address line 2
+site.address.uk.line3 = Address line 3 (optional)
+site.address.uk.line4 = Address line 4 (optional)
+site.address.uk.postcode = Postcode
+site.address.uk.postcode.hint = For example AB1 1AB
+
+address.country.select = Select a country
+site.address.nonUk.title = What is {0}’s address?
+site.address.nonUk.heading = What is {0}’s address?
+site.address.nonUk.line1 = Address line 1
+site.address.nonUk.line2 = Address line 2
+site.address.nonUk.line3 = Address line 3 (optional)
+site.address.nonUk.country = Country
+
+ukAddress.error.line1.required = Enter address line 1
+ukAddress.error.line2.required = Enter address line 2
+ukAddress.error.postcode.required = Enter a postcode
+ukAddress.error.line1.length = Address line 1 must be 35 characters or less
+ukAddress.error.line2.length = Address line 2 must be 35 characters or less
+ukAddress.error.line3.length = Address line 3 must be 35 characters or less
+ukAddress.error.line4.length = Address line 4 must be 35 characters or less
+ukAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.line4.invalidCharacters = Address line 4 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+ukAddress.error.postcode.invalidCharacters = Enter a real postcode
+
+nonUkAddress.error.line1.required = Enter address line 1
+nonUkAddress.error.line2.required = Enter address line 2
+nonUkAddress.error.country.required = Select a country
+nonUkAddress.error.line1.length = Address line 1 must be 35 characters or less
+nonUkAddress.error.line2.length = Address line 2 must be 35 characters or less
+nonUkAddress.error.line3.length = Address line 3 must be 35 characters or less
+nonUkAddress.error.line1.invalidCharacters = Address line 1 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+nonUkAddress.error.line2.invalidCharacters = Address line 2 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+nonUkAddress.error.line3.invalidCharacters = Address line 3 must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
 error.browser.title.prefix = Error:
 
 error.boolean = Please give an answer
@@ -32,7 +72,11 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
-error.summary.title = There is a problem
+
+error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+error.income_percentage.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
+error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -121,10 +165,6 @@ classOfBeneficiary.entityStart.error.past = The date the class of beneficiaries 
 classOfBeneficiary.checkDetails.title = Check class of beneficiary details
 classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
 
-removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
-removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
-removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
-
 classOfBeneficiary.whenRemoved.title = When was the class of beneficiary removed as a beneficiary?
 classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
 classOfBeneficiary.whenRemoved.hint = For example, 31 3 1980
@@ -135,9 +175,149 @@ classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the benefi
 classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
 
-removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
-removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
-removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+individualBeneficiary.defaultText = the beneficiary
+individualBeneficiary.return.link = Return to add a beneficiary
+
+individualBeneficiary.name.title = What is the name of the individual?
+individualBeneficiary.name.heading = What is the name of the individual?
+individualBeneficiary.name.firstName = First name
+individualBeneficiary.name.middleName = Middle names (optional)
+individualBeneficiary.name.lastName = Last name
+individualBeneficiary.name.error.firstName.required = Enter the individual beneficiary’s first name
+individualBeneficiary.name.error.lastName.required = Enter the individual beneficiary’s last name
+individualBeneficiary.name.error.firstName.length = Individual beneficiary’s first name must be 35 characters or less
+individualBeneficiary.name.error.middleName.length = Individual beneficiary’s middle names must be 35 characters or less
+individualBeneficiary.name.error.lastName.length = Individual beneficiary’s last name must be 35 characters or less
+individualBeneficiary.name.error.firstName.invalid = Individual beneficiary’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiary.name.error.middleName.invalid = Individual beneficiary’s middle name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+individualBeneficiary.name.error.lastName.invalid = Individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
+individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
+individualBeneficiary.dateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth
+
+individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.title = What is the individual beneficiary’s date of birth?
+individualBeneficiary.dateOfBirth.heading = What is {0}’s date of birth?
+individualBeneficiary.dateOfBirth.error.required.all = Enter a date of birth
+individualBeneficiary.dateOfBirth.error.required.two = Date of birth must include a {0} and a {1}
+individualBeneficiary.dateOfBirth.error.required = Date of birth must include a {0}
+individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
+individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
+individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
+
+individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income the individual beneficiary may get?
+individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
+individualBeneficiary.incomeDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
+
+individualBeneficiary.incomePercentage.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
+individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
+
+individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.heading = Do you know {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumberYesNo.error.required = Select yes if you know the individual’s National Insurance number
+
+individualBeneficiary.nationalInsuranceNumber.checkYourAnswersLabel = What is {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.title = What is the individual’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.heading = What is {0}’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual’s National Insurance number
+individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual’s National Insurance number in the correct format
+
+individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+individualBeneficiary.addressYesNo.title = Do you know the individual’s address?
+individualBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual’s address
+
+individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
+individualBeneficiary.liveInTheUkYesNo.title = Does the individual live in the UK?
+individualBeneficiary.liveInTheUkYesNo.heading = Does {0} live in the UK?
+individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual lives in the UK
+
+individualBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+individualBeneficiary.ukAddress.title = What is the individual’s address?
+individualBeneficiary.ukAddress.heading = What is {0}’s address?
+individualBeneficiary.ukAddress.line1 = Address line 1
+individualBeneficiary.ukAddress.line2 = Address line 2
+individualBeneficiary.ukAddress.line3 = Address line 3 (optional)
+individualBeneficiary.ukAddress.line4 = Address line 4 (optional)
+individualBeneficiary.ukAddress.postcode = Postcode
+individualBeneficiary.ukAddress.postcode.hint = For example AB1 1AB
+
+individualBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+individualBeneficiary.nonUkAddress.title = What is the individual’s address?
+individualBeneficiary.nonUkAddress.heading = What is {0}’s address?
+
+individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
+individualBeneficiary.passportDetailsYesNo.title = Do you know the individual’s passport details?
+individualBeneficiary.passportDetailsYesNo.heading = Do you know {0}’s passport details?
+individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual’s passport details
+
+individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
+individualBeneficiary.passportDetails.title = What are the individual’s passport details?
+individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
+individualBeneficiary.passportDetails.country = Passport country of issue
+individualBeneficiary.passportDetails.country.error.required = Enter the individual’s passport country of issue
+individualBeneficiary.passportDetails.country.error.length = The individual’s passport country must be 100 characters or less
+individualBeneficiary.passportDetails.number = Passport number
+individualBeneficiary.passportDetails.number.hint = For example, 502135326
+individualBeneficiary.passportDetails.number.error.required = Enter the individual’s passport number
+individualBeneficiary.passportDetails.number.error.length = The individual’s passport number must be 30 characters or less
+individualBeneficiary.passportDetails.number.error.invalid = Passport number can only include letters and numbers
+individualBeneficiary.passportDetails.expiryDate = Expiry date
+individualBeneficiary.passportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+individualBeneficiary.passportDetails.expiryDate.error.required.all = Enter the passport expiry date
+individualBeneficiary.passportDetails.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+individualBeneficiary.passportDetails.expiryDate.error.required = Passport expiry date must include {0}
+individualBeneficiary.passportDetails.expiryDate.error.invalid = Enter a real date when the individual’s passport expires
+individualBeneficiary.passportDetails.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+individualBeneficiary.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.heading = Do you know {0}’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual’s ID card details
+
+individualBeneficiary.idCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
+individualBeneficiary.idCardDetails.title = What are the individual’s ID card details?
+individualBeneficiary.idCardDetails.heading = What are {0}’s ID card details?
+individualBeneficiary.idCardDetails.country = ID card country of issue
+individualBeneficiary.idCardDetails.country.error.required = Enter the individual’s ID card country of issue
+individualBeneficiary.idCardDetails.country.error.length = The individual’s ID card country must be 100 characters or less
+individualBeneficiary.idCardDetails.number = ID card number
+individualBeneficiary.idCardDetails.number.error.required = Enter the individual’s ID card number
+individualBeneficiary.idCardDetails.number.error.length = The individual’s ID card number must be 30 characters or less
+individualBeneficiary.idCardDetails.number.error.invalid = ID card number can only include letters and numbers
+individualBeneficiary.idCardDetails.expiryDate = Expiry date
+individualBeneficiary.idCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+individualBeneficiary.idCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
+individualBeneficiary.idCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+individualBeneficiary.idCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
+individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date when the individual’s ID card expires
+individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+
+individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
+individualBeneficiary.vpe1FormYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
+
+individualBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+individualBeneficiary.startDate.title = When was the individual beneficiary added as a beneficiary?
+individualBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+individualBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
+individualBeneficiary.startDate.error.required.all = Enter the date the individual beneficiary was added to the trust
+individualBeneficiary.startDate.error.required.two = The date the individual beneficiary was added to the trust must include a {0} and a {1}
+individualBeneficiary.startDate.error.required = The date the individual beneficiary was added to the trust must include a {0}
+individualBeneficiary.startDate.error.invalid = Enter a real date
+individualBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
+individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
 
 individualBeneficiary.whenRemoved.title = When was {0} removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -148,3 +328,11 @@ individualBeneficiary.whenRemoved.error.required = The date the beneficiary was 
 individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
+
+removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
+
+removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
+removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
+removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
