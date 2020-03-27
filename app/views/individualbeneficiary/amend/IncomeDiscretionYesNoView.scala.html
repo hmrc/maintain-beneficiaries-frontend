@@ -14,31 +14,29 @@
  * limitations under the License.
  *@
 
-@import controllers.individual.remove.routes._
+@import controllers.individualbeneficiary.amend.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.whenRemoved.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.discretionaryIncomeYesNo.title", name)}"
 ) {
 
-    @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = IncomeDiscretionYesNoController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_date(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("individualBeneficiary.whenRemoved.heading", name),
-            legendClass = "heading-large",
-            headingIsLegend = true,
-            hint = Some(messages("individualBeneficiary.whenRemoved.hint"))
+            legend = messages("individualBeneficiary.discretionaryIncomeYesNo.heading", name),
+            headingIsLegend = true
         )
 
         @components.submit_button()

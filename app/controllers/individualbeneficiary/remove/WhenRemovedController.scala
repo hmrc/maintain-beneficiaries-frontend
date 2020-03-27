@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.individual.remove
+package controllers.individualbeneficiary.remove
 
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individual.remove.WhenRemovedView
+import views.html.individualbeneficiary.remove.WhenRemovedView
 
 import scala.concurrent.ExecutionContext
 

@@ -1,0 +1,50 @@
+GET        /description                              controllers.individualbeneficiary.add.NameController.onPageLoad()
+POST       /description                              controllers.individualbeneficiary.add.NameController.onSubmit()
+
+GET        /date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
+POST       /date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
+
+GET        /date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onPageLoad()
+POST       /date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onSubmit()
+
+GET        /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
+POST       /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
+
+GET        /income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
+POST       /income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
+
+GET        /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onPageLoad()
+POST       /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onSubmit()
+
+GET        /national-insurance-number                controllers.individualbeneficiary.add.NationalInsuranceNumberController.onPageLoad()
+POST       /national-insurance-number                controllers.individualbeneficiary.add.NationalInsuranceNumberController.onSubmit()
+
+GET        /has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onPageLoad()
+POST       /has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onSubmit()
+
+GET        /has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onPageLoad()
+POST       /has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onSubmit()
+
+GET        /uk-address                               controllers.individualbeneficiary.add.UkAddressController.onPageLoad()
+POST       /uk-address                               controllers.individualbeneficiary.add.UkAddressController.onSubmit()
+
+GET        /non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onSubmit()
+
+GET        /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad()
+POST       /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit()
+
+GET        /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
+POST       /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
+
+GET        /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad()
+POST       /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit()
+
+GET        /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad()
+POST       /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit()
+
+GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
+POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
+
+GET        /start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
+POST       /start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()

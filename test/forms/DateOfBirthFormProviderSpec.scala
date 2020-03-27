@@ -21,32 +21,32 @@ import java.time.{LocalDate, ZoneOffset}
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 
-class DateRemovedFromTrustFormProviderSpec extends DateBehaviours {
+class DateOfBirthFormProviderSpec extends DateBehaviours {
 
+  val form = new DateOfBirthFormProvider().withPrefix("individualBeneficiary.dateOfBirth")
+
+  private val min = LocalDate.of(1500, 1, 1)
   private val max = LocalDate.now(ZoneOffset.UTC)
-  private val trustStartDate = LocalDate.of(2020, 1, 1)
-
-  val form = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.whenRemoved", trustStartDate)
 
   ".value" should {
 
     val validData = datesBetween(
-      min = trustStartDate,
+      min = min,
       max = max
     )
 
     behave like dateField(form, "value", validData)
 
-    behave like mandatoryDateField(form, "value", "classOfBeneficiary.whenRemoved.error.required.all")
+    behave like mandatoryDateField(form, "value", "individualBeneficiary.dateOfBirth.error.required.all")
 
     behave like dateFieldWithMax(form, "value",
       max = max,
-      FormError("value", "classOfBeneficiary.whenRemoved.error.future", List("day", "month", "year"))
+      FormError("value", "individualBeneficiary.dateOfBirth.error.future", List("day", "month", "year"))
     )
 
     behave like dateFieldWithMin(form, "value",
-      min = trustStartDate,
-      FormError("value", "classOfBeneficiary.whenRemoved.error.past", List("day", "month", "year"))
+      min = min,
+      FormError("value", "individualBeneficiary.dateOfBirth.error.past", List("day", "month", "year"))
     )
 
   }

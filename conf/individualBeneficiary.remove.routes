@@ -1,0 +1,6 @@
+
+GET        /:index/remove                            controllers.individualbeneficiary.remove.RemoveIndividualBeneficiaryController.onPageLoad(index: Int)
+POST       /:index/remove                            controllers.individualbeneficiary.remove.RemoveIndividualBeneficiaryController.onSubmit(index: Int)
+
+GET        /:index/when-was-beneficiary-removed      controllers.individualbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-was-beneficiary-removed      controllers.individualbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)

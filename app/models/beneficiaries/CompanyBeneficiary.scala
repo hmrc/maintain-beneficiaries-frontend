@@ -18,7 +18,7 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, Name}
+import models.Address
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
