@@ -24,7 +24,9 @@ import play.api.libs.json.Json
 
 class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
   "IndividualBeneficiary" must {
+
     "deserialise from backend JSON" when {
+
       "with UK address" in {
         val json = Json.parse(
           """
@@ -76,6 +78,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+
       "with foreign address" in {
         val json = Json.parse(
           """
@@ -162,6 +165,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+
       "with no identification" in {
         val json = Json.parse(
           """
@@ -249,6 +253,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+
       "there is no discretion for income info" in {
 
         val json = Json.parse(
@@ -300,6 +305,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+
       "there is no income at all" in {
 
         val json = Json.parse(
@@ -350,6 +356,188 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+    }
+
+    "serialise to backend JSON" when {
+
+      "with UK address in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = None,
+            lastName = "Last"
+          ),
+          dateOfBirth = None,
+          nationalInsuranceNumber = None,
+          address = Some(UkAddress(
+            line1 = "Line 1",
+            line2 = "Line 2",
+            line3 = None,
+            line4 = None,
+            postcode = "NE11ZZ"
+          )),
+          vulnerableYesNo = false,
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustEqual Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "lastName": "Last"
+            |    },
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryDiscretion": true,
+            |    "identification": {
+            |       "address": {
+            |          "line1": "Line 1",
+            |          "line2": "Line 2",
+            |          "postCode": "NE11ZZ",
+            |          "country": "GB"
+            |       }
+            |    },
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+
+      "with non-UK address in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          nationalInsuranceNumber = None,
+          address = Some(NonUkAddress(
+            line1 = "Line 1",
+            line2 = "Line 2",
+            line3 = None,
+            country = "DE"
+          )),
+          vulnerableYesNo = false,
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "identification": {
+            |       "address": {
+            |          "line1": "Line 1",
+            |          "line2": "Line 2",
+            |          "country": "DE"
+            |       }
+            |    },
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+
+      "with nino in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          nationalInsuranceNumber = Some("JP121212A"),
+          address = None,
+          vulnerableYesNo = false,
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "identification": {
+            |       "nino": "JP121212A"
+            |    },
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+
+      "with no identification in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          nationalInsuranceNumber = None,
+          address = None,
+          vulnerableYesNo = false,
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+
     }
   }
 }

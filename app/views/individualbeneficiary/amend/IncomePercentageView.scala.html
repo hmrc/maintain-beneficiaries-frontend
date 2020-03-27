@@ -24,19 +24,21 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.incomeDiscretionYesNo.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.incomePercentage.title", name)}"
 ) {
 
-    @formHelper(action = IncomeDiscretionYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = IncomePercentageController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
-            field = form("value"),
-            legend = messages("individualBeneficiary.incomeDiscretionYesNo.heading", name),
-            headingIsLegend = true
+        @components.input_text(
+            field = form("percentage"),
+            label = messages("individualBeneficiary.incomePercentage.heading", name),
+            headingIsLabel = true,
+            hint = Some(messages("individualBeneficiary.incomePercentage.hint")),
+            labelClass=Some("heading-large")
         )
 
         @components.submit_button()
