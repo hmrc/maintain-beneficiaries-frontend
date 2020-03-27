@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
-import controllers.classofbeneficiary.actions.DescriptionRequiredAction
+import controllers.actions.individual.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,13 +42,13 @@ class CheckDetailsController @Inject()(
                                         playbackRepository: PlaybackRepository,
                                         printHelper: IndividualBeneficiaryPrintHelper,
                                         mapper: IndividualBeneficiaryMapper,
-                                        descriptionAction: DescriptionRequiredAction
+                                        nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.description)
+      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
       Ok(view(section))
   }
 
