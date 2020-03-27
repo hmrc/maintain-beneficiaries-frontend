@@ -21,7 +21,7 @@ import forms.IndividualNameFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.NamePage
+import pages.individualbeneficiary.NamePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

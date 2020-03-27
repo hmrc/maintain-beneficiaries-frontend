@@ -19,8 +19,7 @@ package navigation
 import base.SpecBase
 import navigation.Navigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.NamePage
-import pages.individualbeneficiary._
+import pages.individualbeneficiary.{NamePage, _}
 
 class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 

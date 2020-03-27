@@ -22,7 +22,7 @@ import forms.IndividualNameFormProvider
 import javax.inject.Inject
 import models.Name
 import navigation.Navigator
-import pages.NamePage
+import pages.individualbeneficiary.NamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

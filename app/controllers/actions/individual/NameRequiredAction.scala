@@ -18,7 +18,7 @@ package controllers.actions.individual
 
 import javax.inject.Inject
 import models.requests.DataRequest
-import pages.NamePage
+import pages.individualbeneficiary.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 

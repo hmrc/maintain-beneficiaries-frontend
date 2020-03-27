@@ -23,8 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.NamePage
-import pages.individualbeneficiary.NationalInsuranceNumberPage
+import pages.individualbeneficiary.{NamePage, NationalInsuranceNumberPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

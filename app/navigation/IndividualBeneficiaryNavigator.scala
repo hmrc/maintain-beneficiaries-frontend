@@ -18,7 +18,7 @@ package navigation
 
 import controllers.individualbeneficiary.add.{routes => rts}
 import models.UserAnswers
-import pages.{NamePage, Page, QuestionPage}
+import pages.{Page, QuestionPage}
 import pages.individualbeneficiary._
 import play.api.mvc.Call
 

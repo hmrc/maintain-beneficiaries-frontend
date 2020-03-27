@@ -25,8 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.NamePage
-import pages.individualbeneficiary.{DateOfBirthPage, IncomePercentagePage}
+import pages.individualbeneficiary.{DateOfBirthPage, IncomePercentagePage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
