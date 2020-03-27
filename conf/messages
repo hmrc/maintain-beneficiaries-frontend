@@ -303,10 +303,10 @@ individualBeneficiary.idCardDetails.expiryDate.error.invalid = Enter a real date
 individualBeneficiary.idCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.idCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
-individualBeneficiary.vpe1FormUkYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
-individualBeneficiary.vpe1FormUkYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
-individualBeneficiary.vpe1FormUkYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
-individualBeneficiary.vpe1FormUkYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
+individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.title = Has a vulnerable person election form (VPE1) been submitted to HMRC for the individual beneficiary?
+individualBeneficiary.vpe1FormYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
+individualBeneficiary.vpe1FormYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
 
 individualBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
 individualBeneficiary.startDate.title = When was the individual beneficiary added as a beneficiary?
