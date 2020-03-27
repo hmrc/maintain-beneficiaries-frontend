@@ -26,7 +26,7 @@ import views.html.individualbeneficiary.amend.IncomeDiscretionYesNoView
 
 class IncomeDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.discretionaryIncomeYesNo"
+  val messageKeyPrefix = "individualBeneficiary.incomeDiscretionYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
