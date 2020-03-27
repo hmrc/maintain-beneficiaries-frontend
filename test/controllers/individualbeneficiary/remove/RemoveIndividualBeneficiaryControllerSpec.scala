@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.individual.remove
+package controllers.individualbeneficiary.remove
 
 import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
+import controllers.individualbeneficiary.remove.routes
 import forms.RemoveIndexFormProvider
 import models.Name
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
@@ -27,12 +28,12 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.PropertyChecks
-import pages.individual.RemoveYesNoPage
+import pages.individualbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.individual.remove.RemoveIndexView
+import views.html.individualbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
@@ -166,7 +167,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with PropertyCh
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.individual.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.individualbeneficiary.remove.routes.WhenRemovedController.onPageLoad(0).url
 
         application.stop()
       }

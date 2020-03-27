@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package views.individual.remove
+package views.individualbeneficiary.remove
 
-import controllers.individual.remove.routes
-import forms.YesNoFormProvider
+import java.time.LocalDate
+
+import forms.DateRemovedFromTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.individual.remove.RemoveIndexView
+import views.behaviours.QuestionViewBehaviours
+import views.html.individualbeneficiary.remove.WhenRemovedView
 
-class RemoveIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
+class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "removeIndividualBeneficiary"
-  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
-  val name = "Trustee Name"
+  val messageKeyPrefix = "individualBeneficiary.whenRemoved"
   val index = 0
+  val name = "Name"
 
-  "RemoveIndividualBeneficiary view" must {
+  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, LocalDate.now())
 
-    val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
+  "whenRemoved view" must {
+
+    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index, name)(fakeRequest, messages)
@@ -41,6 +43,19 @@ class RemoveIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
+    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
+
+    "fields" must {
+
+      behave like pageWithDateFields(
+        form,
+        applyView,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+    }
+
+    behave like pageWithASubmitButton(applyView(form))
   }
 }

@@ -14,36 +14,35 @@
  * limitations under the License.
  */
 
-package views.individual.remove
+package views.individualbeneficiary.amend
 
 import java.time.LocalDate
 
-import forms.DateRemovedFromTrustFormProvider
+import forms.DateOfBirthFormProvider
+import models.Name
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import views.html.individual.remove.WhenRemovedView
+import views.html.individualbeneficiary.amend.DateOfBirthView
 
-class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
+class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "individualBeneficiary.whenRemoved"
-  val index = 0
-  val name = "Name"
+  val messageKeyPrefix = "individualBeneficiary.dateOfBirth"
+  val name: Name = Name("First", Some("Middle"), "Last")
 
-  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, LocalDate.now())
+  override val form: Form[LocalDate] = new DateOfBirthFormProvider().withPrefix(messageKeyPrefix)
 
-  "whenRemoved view" must {
+  "DateOfBirth view" must {
 
-    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
+    val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
+
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, index, name)(fakeRequest, messages)
-
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
+      view.apply(form, name.displayName)(fakeRequest, messages)
+    
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
     behave like pageWithBackLink(applyView(form))
-
-    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
     "fields" must {
 
@@ -52,7 +51,7 @@ class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
         applyView,
         messageKeyPrefix,
         "value",
-        name
+        name.displayName
       )
     }
 

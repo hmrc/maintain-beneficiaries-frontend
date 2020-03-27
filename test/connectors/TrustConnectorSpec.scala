@@ -18,7 +18,7 @@ package connectors
 
 import java.time.LocalDate
 
-import models.Name
+import models.{Name, UkAddress}
 import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, CompanyBeneficiary, EmploymentRelatedBeneficiary, IndividualBeneficiary, OtherBeneficiary, TrustBeneficiary}
 import play.api.libs.json.Json
 import base.SpecBase
@@ -61,6 +61,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
   private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
   private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
+  private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/add-individual-beneficiary/$utr"
 
   "trust connector" when {
 
@@ -441,6 +442,75 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
+    "addIndividualBeneficiary" must {
+
+      val individualBeneficiary = IndividualBeneficiary(
+        name = Name("Nicola", Some("Andrey"), "Jackson"),
+        dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
+        nationalInsuranceNumber = None,
+        address = Some(UkAddress(
+          "Suite 10",
+          "Wealthy Arena",
+          Some("Trafagar Square"),
+          Some("London"),
+          "SE2 2HB"
+        )),
+        vulnerableYesNo = true,
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28),
+        provisional = true
+      )
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addIndividualBeneficiaryUrl(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.addIndividualBeneficiary(utr, individualBeneficiary)
+
+        result.futureValue.status mustBe (OK)
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addIndividualBeneficiaryUrl(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.addIndividualBeneficiary(utr, individualBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
   }
 
 }

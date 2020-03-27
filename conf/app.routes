@@ -1,5 +1,11 @@
 # microservice specific routes
 
+->         /class-of-beneficiaries                                          classofbeneficiary.Routes
+
+->         /individual/add                                                  individualBeneficiary.add.Routes
+->         /individual/amend                                                individualBeneficiary.amend.Routes
+->         /individual/remove                                               individualBeneficiary.remove.Routes
+
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
@@ -24,80 +30,5 @@ POST       /add-another                                                     cont
 
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
 POST       /what-kind                                                       controllers.AddNowController.onSubmit()
-
-GET        /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onPageLoad(index: Int)
-POST       /class-of-beneficiaries/:index/description                       controllers.classofbeneficiary.amend.DescriptionController.onSubmit(index: Int)
-
-GET        /class-of-beneficiaries/description                              controllers.classofbeneficiary.add.DescriptionController.onPageLoad()
-POST       /class-of-beneficiaries/description                              controllers.classofbeneficiary.add.DescriptionController.onSubmit()
-
-GET        /class-of-beneficiaries/when-added                               controllers.classofbeneficiary.add.EntityStartController.onPageLoad()
-POST       /class-of-beneficiaries/when-added                               controllers.classofbeneficiary.add.EntityStartController.onSubmit()
-
-GET        /class-of-beneficiaries/check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onPageLoad()
-POST       /class-of-beneficiaries/check-details                            controllers.classofbeneficiary.add.CheckDetailsController.onSubmit()
-
-GET        /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onPageLoad()
-POST       /individual-beneficiary/description                              controllers.individualbeneficiary.add.NameController.onSubmit()
-
-GET        /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
-POST       /individual-beneficiary/date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
-
-GET        /individual-beneficiary/date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onPageLoad()
-POST       /individual-beneficiary/date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onSubmit()
-
-GET        /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
-POST       /individual-beneficiary/income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
-
-GET        /individual-beneficiary/income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
-POST       /individual-beneficiary/income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
-
-GET        /individual-beneficiary/has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onPageLoad()
-POST       /individual-beneficiary/has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onSubmit()
-
-GET        /individual-beneficiary/national-insurance-number                controllers.individualbeneficiary.add.NationalInsuranceNumberController.onPageLoad()
-POST       /individual-beneficiary/national-insurance-number                controllers.individualbeneficiary.add.NationalInsuranceNumberController.onSubmit()
-
-GET        /individual-beneficiary/has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onPageLoad()
-POST       /individual-beneficiary/has-address                              controllers.individualbeneficiary.add.AddressYesNoController.onSubmit()
-
-GET        /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onPageLoad()
-POST       /individual-beneficiary/has-uk-address                           controllers.individualbeneficiary.add.LiveInTheUkYesNoController.onSubmit()
-
-GET        /individual-beneficiary/uk-address                               controllers.individualbeneficiary.add.UkAddressController.onPageLoad()
-POST       /individual-beneficiary/uk-address                               controllers.individualbeneficiary.add.UkAddressController.onSubmit()
-
-GET        /individual-beneficiary/non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onPageLoad()
-POST       /individual-beneficiary/non-uk-address                           controllers.individualbeneficiary.add.NonUkAddressController.onSubmit()
-
-GET        /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad()
-POST       /individual-beneficiary/has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit()
-
-GET        /individual-beneficiary/passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
-POST       /individual-beneficiary/passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
-
-GET        /individual-beneficiary/has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad()
-POST       /individual-beneficiary/has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit()
-
-GET        /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad()
-POST       /individual-beneficiary/id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit()
-
-GET        /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
-POST       /individual-beneficiary/vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
-
-GET        /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
-POST       /individual-beneficiary/start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
-
-GET        /class-of-beneficiaries/:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onPageLoad(index : Int)
-POST       /class-of-beneficiaries/:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onSubmit(index : Int)
-
-GET        /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
-POST       /class-of-beneficiaries/:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)
-
-GET        /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onPageLoad(index: Int)
-POST       /individual-beneficiary/:index/remove                            controllers.individual.remove.RemoveIndividualBeneficiaryController.onSubmit(index: Int)
-
-GET        /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onPageLoad(index: Int)
-POST       /individual-beneficiary/:index/when-was-beneficiary-removed      controllers.individual.remove.WhenRemovedController.onSubmit(index: Int)
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

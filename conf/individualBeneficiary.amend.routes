@@ -1,0 +1,12 @@
+
+GET        /name                             controllers.individualbeneficiary.amend.NameController.onPageLoad()
+POST       /name                             controllers.individualbeneficiary.amend.NameController.onSubmit()
+
+GET        /know-date-of-birth               controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onPageLoad()
+POST       /know-date-of-birth               controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onSubmit()
+
+GET        /date-of-birth                    controllers.individualbeneficiary.amend.DateOfBirthController.onPageLoad()
+POST       /date-of-birth                    controllers.individualbeneficiary.amend.DateOfBirthController.onSubmit()
+
+GET        /decide-income                    controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onPageLoad()
+POST       /decide-income                    controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onSubmit()

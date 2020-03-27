@@ -14,29 +14,40 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.add.routes._
+@import controllers.individualbeneficiary.amend.routes._
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.vpe1FormYesNo.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.name.title")}"
 ) {
 
-    @formHelper(action = VPE1FormYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = NameController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
-            field = form("value"),
-            legend = messages("individualBeneficiary.vpe1FormYesNo.heading", name),
-            headingIsLegend = true
+        @components.heading("individualBeneficiary.name.heading")
+
+        @components.input_text(
+            field = form("firstName"),
+            label = messages("individualBeneficiary.name.firstName")
+        )
+
+        @components.input_text(
+            field = form("middleName"),
+            label = messages("individualBeneficiary.name.middleName")
+        )
+
+        @components.input_text(
+            field = form("lastName"),
+            label = messages("individualBeneficiary.name.lastName")
         )
 
         @components.submit_button()
