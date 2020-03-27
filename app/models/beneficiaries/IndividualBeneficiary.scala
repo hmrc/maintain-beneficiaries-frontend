@@ -18,9 +18,9 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, IndividualIdentification, Name, NationalInsuranceNumber}
-import play.api.libs.json._
+import models.{Address, IndividualIdentification, Name}
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -37,7 +37,7 @@ object IndividualBeneficiary {
   implicit val reads: Reads[IndividualBeneficiary] =
     ((__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
-      __.lazyRead(readNullableAtSubPath[NationalInsuranceNumber](__ \ 'identification)) and
+      __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
