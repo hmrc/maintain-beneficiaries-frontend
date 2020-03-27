@@ -27,7 +27,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
   private val name = Name("First", None, "Last")
   private val dateOfBirth = LocalDate.parse("2010-02-03")
-  private val nino = "AA123456A"
   private val startDate = LocalDate.parse("2019-03-09")
 
   "IndividualBeneficiaryMapper" must {
@@ -35,6 +34,8 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
     "generate class of individual model with nino and income discretion" in {
 
       val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+
+      val nino = "AA123456A"
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
@@ -50,7 +51,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
       result.name mustBe name
       result.dateOfBirth mustBe Some(dateOfBirth)
-      result.nationalInsuranceNumber mustBe Some(nino)
+      result.identification mustBe Some(NationalInsuranceNumber(nino))
       result.address mustBe None
       result.vulnerableYesNo mustBe false
       result.income mustBe None
@@ -78,7 +79,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
       result.name mustBe name
       result.dateOfBirth mustBe Some(dateOfBirth)
-      result.nationalInsuranceNumber mustBe None
+      result.identification mustBe None
       result.address mustBe Some(ukAddress)
       result.vulnerableYesNo mustBe false
       result.incomeDiscretionYesNo mustBe false
@@ -106,7 +107,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
       result.name mustBe name
       result.dateOfBirth mustBe Some(dateOfBirth)
-      result.nationalInsuranceNumber mustBe None
+      result.identification mustBe None
       result.address mustBe Some(nonUkAddress)
       result.vulnerableYesNo mustBe false
       result.income mustBe None

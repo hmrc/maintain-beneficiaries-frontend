@@ -254,7 +254,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                 IndividualBeneficiary(
                   name = Name("first", None, "last"),
                   dateOfBirth = None,
-                  nationalInsuranceNumber = None,
+                  identification = None,
                   address = None,
                   vulnerableYesNo = false,
                   income = None,
@@ -447,7 +447,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       val individualBeneficiary = IndividualBeneficiary(
         name = Name("Nicola", Some("Andrey"), "Jackson"),
         dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-        nationalInsuranceNumber = None,
+        identification = None,
         address = Some(UkAddress(
           "Suite 10",
           "Wealthy Arena",

@@ -18,13 +18,13 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, Name}
+import models.{Address, IndividualIdentification, Name, NationalInsuranceNumber}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
-                                       nationalInsuranceNumber: Option[String],
+                                       identification: Option[IndividualIdentification],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
                                        income: Option[String],
@@ -37,7 +37,7 @@ object IndividualBeneficiary {
   implicit val reads: Reads[IndividualBeneficiary] =
     ((__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
-      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'nino)) and
+      __.lazyRead(readNullableAtSubPath[NationalInsuranceNumber](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
@@ -45,12 +45,12 @@ object IndividualBeneficiary {
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)).tupled.map{
 
-      case (name, dob, nino, address, vulnerable, None, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, address, vulnerable, _, Some(true), entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, address, vulnerable,  income, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, address, vulnerable, income, incomeDiscretionYesNo = false, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, None, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, _, Some(true), entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable,  income, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, income, incomeDiscretionYesNo = false, entityStart, provisional)
 
     }
 

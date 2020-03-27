@@ -18,7 +18,7 @@ package utils.mappers
 
 import java.time.LocalDate
 
-import models.{Address, Name, NonUkAddress, UkAddress, UserAnswers}
+import models.{Address, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, UkAddress, UserAnswers}
 import models.beneficiaries.IndividualBeneficiary
 import org.slf4j.LoggerFactory
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
@@ -35,7 +35,7 @@ class IndividualBeneficiaryMapper {
       (
         NamePage.path.read[Name] and
         DateOfBirthPage.path.readNullable[LocalDate] and
-        readNino and
+        readIdentification and
         readAddress and
         VPE1FormYesNoPage.path.read[Boolean] and
         readIncome and
@@ -65,9 +65,9 @@ class IndividualBeneficiaryMapper {
     }
   }
 
-  private def readNino: Reads[Option[String]] = {
-    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap[Option[String]] {
-      case true => NationalInsuranceNumberPage.path.read[String].map(Some(_))
+  private def readIdentification: Reads[Option[IndividualIdentification]] = {
+    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
+      case true => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
       case false => Reads(_ => JsSuccess(None))
     }
   }
