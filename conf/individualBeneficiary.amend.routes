@@ -31,3 +31,9 @@ POST       /uk-address                               controllers.individualbenef
 
 GET        /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onPageLoad()
 POST       /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onSubmit()
+
+GET        /has-passport-or-id-card               controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onPageLoad()
+POST       /has-passport-or-id-card               controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onSubmit()
+
+GET        /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onPageLoad()
+POST       /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onSubmit()
