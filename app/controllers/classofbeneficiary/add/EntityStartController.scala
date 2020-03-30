@@ -16,6 +16,7 @@
 
 package controllers.classofbeneficiary.add
 
+import config.annotations.ClassOfBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.classofbeneficiary.actions.DescriptionRequiredAction
@@ -40,7 +41,7 @@ class EntityStartController @Inject()(
                                        view: EntityStartView,
                                        trustService: TrustService,
                                        repository: PlaybackRepository,
-                                       navigator: Navigator,
+                                       @ClassOfBeneficiary navigator: Navigator,
                                        descriptionAction: DescriptionRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

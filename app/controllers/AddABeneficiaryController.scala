@@ -41,7 +41,6 @@ import scala.util.Try
 class AddABeneficiaryController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            repository: PlaybackRepository,
-                                           navigator: Navigator,
                                            trust: TrustService,
                                            standardActionSets: StandardActionSets,
                                            addAnotherFormProvider: AddABeneficiaryFormProvider,

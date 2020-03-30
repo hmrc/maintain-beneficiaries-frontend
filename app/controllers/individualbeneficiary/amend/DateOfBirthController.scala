@@ -16,12 +16,13 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
 import forms.DateOfBirthFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.individualbeneficiary.{DateOfBirthPage, NamePage}
+import pages.individualbeneficiary.DateOfBirthPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -33,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfBirthController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: PlaybackRepository,
-                                       navigator: Navigator,
+                                       @IndividualBeneficiary navigator: Navigator,
                                        standardActionSets: StandardActionSets,
                                        nameAction: NameRequiredAction,
                                        formProvider: DateOfBirthFormProvider,

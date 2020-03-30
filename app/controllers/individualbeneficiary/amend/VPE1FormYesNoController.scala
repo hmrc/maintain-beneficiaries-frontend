@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -33,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class VPE1FormYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             playbackRepository: PlaybackRepository,
-                                            navigator: Navigator,
+                                            @IndividualBeneficiary navigator: Navigator,
                                             standardActionSets: StandardActionSets,
                                             nameAction: NameRequiredAction,
                                             formProvider: YesNoFormProvider,

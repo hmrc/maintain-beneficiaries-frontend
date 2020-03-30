@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -27,12 +28,13 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individualbeneficiary.add.LiveInTheUkYesNoView
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiveInTheUkYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             playbackRepository: PlaybackRepository,
-                                            navigator: Navigator,
+                                            @IndividualBeneficiary navigator: Navigator,
                                             standardActionSets: StandardActionSets,
                                             nameAction: NameRequiredAction,
                                             formProvider: YesNoFormProvider,

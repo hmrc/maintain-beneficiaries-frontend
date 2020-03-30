@@ -35,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveClassOfBeneficiaryController @Inject()(
                                                     override val messagesApi: MessagesApi,
                                                     repository: PlaybackRepository,
-                                                    navigator: Navigator,
                                                     standardActionSets: StandardActionSets,
                                                     trustService: TrustService,
                                                     formProvider: RemoveIndexFormProvider,

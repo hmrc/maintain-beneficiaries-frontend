@@ -19,7 +19,6 @@ package controllers.individualbeneficiary.amend
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import controllers.individualbeneficiary.amend.routes
 import forms.DateOfBirthFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}

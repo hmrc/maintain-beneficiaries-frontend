@@ -33,7 +33,6 @@ import scala.concurrent.ExecutionContext
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: PlaybackRepository,
-                                       navigator: Navigator,
                                        standardActionSets: StandardActionSets,
                                        formProvider: DateRemovedFromTrustFormProvider,
                                        trust: TrustService,

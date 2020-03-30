@@ -17,12 +17,17 @@
 package navigation
 
 import controllers.individualbeneficiary.add.{routes => rts}
+import javax.inject.Inject
 import models.UserAnswers
 import pages.{Page, QuestionPage}
 import pages.individualbeneficiary._
 import play.api.mvc.Call
 
-object IndividualBeneficiaryNavigator {
+class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
+
+  override def nextPage(page: Page, userAnswers: UserAnswers): Call =
+    routes(page)(userAnswers)
+
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
@@ -34,7 +39,7 @@ object IndividualBeneficiaryNavigator {
     case IdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
     case VPE1FormYesNoPage => rts.StartDateController.onPageLoad()
   }
-  private val yesNoNavigations : PartialFunction[Page, UserAnswers => Call] = {
+  private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DateOfBirthYesNoPage => ua =>
       yesNoNav(ua, DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad())
     case IncomeDiscretionYesNoPage => ua =>
@@ -53,7 +58,7 @@ object IndividualBeneficiaryNavigator {
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
-    yesNoNavigations
+    yesNoNavigation
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)

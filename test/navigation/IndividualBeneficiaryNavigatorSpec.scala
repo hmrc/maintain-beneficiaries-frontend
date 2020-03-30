@@ -22,7 +22,7 @@ import pages.individualbeneficiary.{NamePage, _}
 
 class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new Navigator
+  val navigator = new IndividualBeneficiaryNavigator
 
   "Individual beneficiary navigator" when {
 
