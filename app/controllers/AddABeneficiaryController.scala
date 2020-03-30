@@ -125,7 +125,12 @@ class AddABeneficiaryController @Inject()(
           {
             case AddABeneficiary.YesNow =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.deleteAtPath(pages.classofbeneficiary.basePath).flatMap(_.remove(AddNowPage)))
+                updatedAnswers <- Future.fromTry(
+                  request.userAnswers
+                    .deleteAtPath(pages.classofbeneficiary.basePath)
+                    .flatMap(_.deleteAtPath(pages.charityortrust.basePath))
+                    .flatMap(_.remove(AddNowPage))
+                )
                 _ <- repository.set(updatedAnswers)
               } yield Redirect(controllers.routes.AddNowController.onPageLoad())
             case AddABeneficiary.YesLater =>

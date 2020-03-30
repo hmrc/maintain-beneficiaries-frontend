@@ -21,3 +21,6 @@ POST        /non-uk-address             controllers.charityortrust.add.charity.N
 
 GET         /start-date                 controllers.charityortrust.add.charity.StartDateController.onPageLoad()
 POST        /start-date                 controllers.charityortrust.add.charity.StartDateController.onSubmit()
+
+GET         /check-details              controllers.charityortrust.add.charity.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.charityortrust.add.charity.CheckDetailsController.onSubmit()

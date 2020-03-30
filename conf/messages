@@ -399,3 +399,6 @@ charityBeneficiary.startDate.error.required = The date the individual beneficiar
 charityBeneficiary.startDate.error.invalid = Enter a real date
 charityBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
 charityBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
+
+charityBeneficiary.checkDetails.title = Check charity beneficiary details
+charityBeneficiary.checkDetails.heading = Check charity beneficiary details

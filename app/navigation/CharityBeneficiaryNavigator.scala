@@ -29,6 +29,7 @@ object CharityBeneficiaryNavigator {
     case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
     case UkAddressPage => rts.StartDateController.onPageLoad()
     case NonUkAddressPage => rts.StartDateController.onPageLoad()
+    case StartDatePage => rts.CheckDetailsController.onPageLoad()
   }
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {

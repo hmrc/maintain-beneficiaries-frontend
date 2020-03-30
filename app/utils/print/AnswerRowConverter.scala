@@ -71,6 +71,19 @@ class AnswerRowConverter @Inject()() {
       }
     }
 
+    def percentageQuestion(query: Gettable[String],
+                           labelKey: String,
+                           changeUrl: String)
+                          (implicit messages:Messages): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          HtmlFormat.escape(messages(s"${labelKey}.checkYourAnswersLabel", name)),
+          percentage(x),
+          changeUrl
+        )
+      }
+    }
+
     def dateQuestion(query: Gettable[LocalDate],
                      labelKey: String,
                      changeUrl: String): Option[AnswerRow] = {
