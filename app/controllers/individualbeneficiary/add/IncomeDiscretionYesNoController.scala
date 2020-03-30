@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -32,14 +32,14 @@ import views.html.individualbeneficiary.add.IncomeDiscretionYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class IncomeDiscretionYesNoController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         playbackRepository: PlaybackRepository,
-                                         @IndividualBeneficiary navigator: Navigator,
-                                         standardActionSets: StandardActionSets,
-                                         nameAction: NameRequiredAction,
-                                         formProvider: YesNoFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: IncomeDiscretionYesNoView
+                                                 override val messagesApi: MessagesApi,
+                                                 playbackRepository: PlaybackRepository,
+                                                 @AddIndividualBeneficiary navigator: Navigator,
+                                                 standardActionSets: StandardActionSets,
+                                                 nameAction: NameRequiredAction,
+                                                 formProvider: YesNoFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: IncomeDiscretionYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")

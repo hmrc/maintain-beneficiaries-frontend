@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.NationalInsuranceNumberFormProvider
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NationalInsuranceNumberController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    sessionRepository: PlaybackRepository,
-                                                   @IndividualBeneficiary navigator: Navigator,
+                                                   @AmendIndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: NationalInsuranceNumberFormProvider,

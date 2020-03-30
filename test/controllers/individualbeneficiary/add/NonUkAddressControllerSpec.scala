@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import forms.NonUkAddressFormProvider
 import models.{Name, NonUkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -103,7 +103,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

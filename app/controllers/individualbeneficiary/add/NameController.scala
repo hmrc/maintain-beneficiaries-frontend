@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.IndividualNameFormProvider
@@ -42,7 +42,7 @@ class NameController @Inject()(
                                 view: NameView,
                                 trustService: TrustService,
                                 repository: PlaybackRepository,
-                                @IndividualBeneficiary navigator: Navigator
+                                @AddIndividualBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Name] = formProvider.withPrefix("individualBeneficiary.name")

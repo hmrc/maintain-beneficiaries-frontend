@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.individualBeneficiary
 
-import controllers.individualbeneficiary.add.{routes => rts}
+import controllers.individualbeneficiary.amend.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
-import pages.{Page, QuestionPage}
+import navigation.Navigator
 import pages.individualbeneficiary._
+import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
+class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
@@ -33,13 +34,11 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
     case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad()
     case NationalInsuranceNumberPage => rts.VPE1FormYesNoController.onPageLoad()
-    case UkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
-    case NonUkAddressPage => rts.PassportDetailsYesNoController.onPageLoad()
-    case PassportDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
-    case IdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
+    case UkAddressPage => rts.PassportOrIdCardDetailsYesNoController.onPageLoad()
+    case NonUkAddressPage => rts.PassportOrIdCardDetailsYesNoController.onPageLoad()
     case PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
     case VPE1FormYesNoPage => rts.StartDateController.onPageLoad()
-    case StartDatePage => rts.CheckDetailsController.onPageLoad()
+    case StartDatePage => ???
   }
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DateOfBirthYesNoPage => ua =>
@@ -52,10 +51,8 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(ua, AddressYesNoPage, rts.LiveInTheUkYesNoController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
     case LiveInTheUkYesNoPage => ua =>
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
-    case PassportDetailsYesNoPage => ua =>
-        yesNoNav(ua, PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(), rts.IdCardDetailsYesNoController.onPageLoad())
-    case IdCardDetailsYesNoPage => ua =>
-        yesNoNav(ua, IdCardDetailsYesNoPage, rts.IdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
+    case PassportOrIdCardDetailsYesNoPage => ua =>
+        yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, rts.PassportOrIdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
   }
 
   val routes: PartialFunction[Page, UserAnswers => Call] =

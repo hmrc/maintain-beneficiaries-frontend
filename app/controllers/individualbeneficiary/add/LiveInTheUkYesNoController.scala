@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LiveInTheUkYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             playbackRepository: PlaybackRepository,
-                                            @IndividualBeneficiary navigator: Navigator,
+                                            @AddIndividualBeneficiary navigator: Navigator,
                                             standardActionSets: StandardActionSets,
                                             nameAction: NameRequiredAction,
                                             formProvider: YesNoFormProvider,

@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
@@ -43,7 +43,7 @@ class IncomePercentageController @Inject()(
                                 view: IncomePercentageView,
                                 trustService: TrustService,
                                 repository: PlaybackRepository,
-                                @IndividualBeneficiary navigator: Navigator
+                                @AmendIndividualBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")

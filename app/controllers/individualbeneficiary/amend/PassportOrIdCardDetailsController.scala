@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.CombinedPassportOrIdCardDetailsFormProvider
@@ -33,15 +33,15 @@ import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class PassportOrIdCardDetailsController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            playbackRepository: PlaybackRepository,
-                                            @IndividualBeneficiary navigator: Navigator,
-                                            standardActionSets: StandardActionSets,
-                                            nameAction: NameRequiredAction,
-                                            formProvider: CombinedPassportOrIdCardDetailsFormProvider,
-                                            countryOptions: CountryOptions,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: PassportOrIdCardDetailsView
+                                                   override val messagesApi: MessagesApi,
+                                                   playbackRepository: PlaybackRepository,
+                                                   @AmendIndividualBeneficiary navigator: Navigator,
+                                                   standardActionSets: StandardActionSets,
+                                                   nameAction: NameRequiredAction,
+                                                   formProvider: CombinedPassportOrIdCardDetailsFormProvider,
+                                                   countryOptions: CountryOptions,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: PassportOrIdCardDetailsView
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetails")

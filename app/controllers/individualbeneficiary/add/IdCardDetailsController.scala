@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.IdCardDetailsFormProvider
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdCardDetailsController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: PlaybackRepository,
-                                         @IndividualBeneficiary navigator: Navigator,
+                                         @AddIndividualBeneficiary navigator: Navigator,
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
                                          formProvider: IdCardDetailsFormProvider,

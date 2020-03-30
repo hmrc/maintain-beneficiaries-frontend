@@ -40,3 +40,6 @@ POST       /passport-or-id-card                   controllers.individualbenefici
 
 GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onPageLoad()
 POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onSubmit()
+
+GET        /start-date                               controllers.individualbeneficiary.amend.StartDateController.onPageLoad()
+POST       /start-date                               controllers.individualbeneficiary.amend.StartDateController.onSubmit()

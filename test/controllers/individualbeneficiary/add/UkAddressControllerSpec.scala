@@ -17,7 +17,7 @@
 package controllers.individualbeneficiary.add
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import forms.UkAddressFormProvider
 import models.{Name, UkAddress}
 import navigation.{FakeNavigator, Navigator}
@@ -97,7 +97,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(fakeNavigator))
           .build()
 
 

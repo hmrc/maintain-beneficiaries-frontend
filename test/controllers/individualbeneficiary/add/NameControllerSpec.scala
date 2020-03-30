@@ -17,7 +17,7 @@
 package controllers.individualbeneficiary.add
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import forms.IndividualNameFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
@@ -82,7 +82,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

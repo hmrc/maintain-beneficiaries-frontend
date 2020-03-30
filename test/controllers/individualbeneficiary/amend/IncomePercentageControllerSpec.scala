@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import forms.IncomePercentageFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -108,7 +108,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

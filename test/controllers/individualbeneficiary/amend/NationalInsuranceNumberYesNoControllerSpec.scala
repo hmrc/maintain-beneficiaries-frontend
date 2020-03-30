@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import forms.YesNoFormProvider
 import models.{Name, UserAnswers}
 import navigation.Navigator
@@ -94,7 +94,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+        .overrides(bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
       val request =

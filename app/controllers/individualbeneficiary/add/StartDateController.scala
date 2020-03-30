@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AddIndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
 import forms.DateFormProvider
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @IndividualBeneficiary navigator: Navigator,
+                                     @AddIndividualBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: DateFormProvider,

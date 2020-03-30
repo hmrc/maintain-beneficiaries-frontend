@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.annotations.IndividualBeneficiary
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -32,14 +32,14 @@ import views.html.individualbeneficiary.amend.IncomeDiscretionYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class IncomeDiscretionYesNoController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            sessionRepository: PlaybackRepository,
-                                            @IndividualBeneficiary navigator: Navigator,
-                                            standardActionSets: StandardActionSets,
-                                            nameAction: NameRequiredAction,
-                                            formProvider: YesNoFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: IncomeDiscretionYesNoView
+                                                 override val messagesApi: MessagesApi,
+                                                 sessionRepository: PlaybackRepository,
+                                                 @AmendIndividualBeneficiary navigator: Navigator,
+                                                 standardActionSets: StandardActionSets,
+                                                 nameAction: NameRequiredAction,
+                                                 formProvider: YesNoFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: IncomeDiscretionYesNoView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
