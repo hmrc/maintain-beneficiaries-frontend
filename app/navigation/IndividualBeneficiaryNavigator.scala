@@ -39,7 +39,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case IdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
     case PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
     case VPE1FormYesNoPage => rts.StartDateController.onPageLoad()
-    case StartDatePage => ???
+    case StartDatePage => rts.CheckDetailsController.onPageLoad()
   }
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DateOfBirthYesNoPage => ua =>

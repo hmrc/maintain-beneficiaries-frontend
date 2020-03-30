@@ -178,6 +178,7 @@ classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed
 individualBeneficiary.defaultText = the beneficiary
 individualBeneficiary.return.link = Return to add a beneficiary
 
+individualBeneficiary.name.checkYourAnswersLabel = What is the name of the individual?
 individualBeneficiary.name.title = What is the name of the individual?
 individualBeneficiary.name.heading = What is the name of the individual?
 individualBeneficiary.name.firstName = First name
@@ -320,6 +321,9 @@ individualBeneficiary.startDate.error.invalid = Enter a real date
 individualBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
 individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
 
+individualBeneficiary.checkDetails.title = Check individual beneficiary details
+individualBeneficiary.checkDetails.heading = Check individual beneficiary details
+
 individualBeneficiary.whenRemoved.title = When was {0} removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
 individualBeneficiary.whenRemoved.hint = For example, 31 3 1980
@@ -329,6 +333,7 @@ individualBeneficiary.whenRemoved.error.required = The date the beneficiary was 
 individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
+
 classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
 
 individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?

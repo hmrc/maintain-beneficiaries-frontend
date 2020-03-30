@@ -18,11 +18,14 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Name, NonUkAddress, UkAddress}
+import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
 class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
+  private val testDateOfBirth = Some(LocalDate.of(1970, 2, 28))
+  private val testEntityStart = LocalDate.of(2017, 2, 28)
+
   "IndividualBeneficiary" must {
 
     "deserialise from backend JSON" when {
@@ -62,8 +65,8 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",
@@ -74,7 +77,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           vulnerableYesNo = true,
           income = Some("10"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -112,8 +115,8 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = Some(NonUkAddress(
             "123 Sesame Street",
             "Hollywood, CA",
@@ -123,7 +126,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           vulnerableYesNo = true,
           income = Some("10"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -155,13 +158,13 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = Some("NH111111A"),
+          dateOfBirth = testDateOfBirth,
+          identification = Some(NationalInsuranceNumber("NH111111A")),
           address = None,
           vulnerableYesNo = true,
           income = Some("10"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -190,13 +193,13 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = None,
           vulnerableYesNo = true,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -237,8 +240,8 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",
@@ -249,7 +252,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           vulnerableYesNo = true,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -289,8 +292,8 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",
@@ -301,7 +304,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           vulnerableYesNo = true,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -340,8 +343,8 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[IndividualBeneficiary]
         beneficiary mustBe IndividualBeneficiary(
           name = Name("Nicola", Some("Andrey"), "Jackson"),
-          dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-          nationalInsuranceNumber = None,
+          dateOfBirth = testDateOfBirth,
+          identification = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",
@@ -352,7 +355,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           vulnerableYesNo = true,
           income = None,
           incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28),
+          entityStart = testEntityStart,
           provisional = false
         )
       }
@@ -368,7 +371,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             lastName = "Last"
           ),
           dateOfBirth = None,
-          nationalInsuranceNumber = None,
+          identification = None,
           address = Some(UkAddress(
             line1 = "Line 1",
             line2 = "Line 2",
@@ -417,7 +420,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             lastName = "Last"
           ),
           dateOfBirth = Some(LocalDate.parse("2020-10-05")),
-          nationalInsuranceNumber = None,
+          identification = None,
           address = Some(NonUkAddress(
             line1 = "Line 1",
             line2 = "Line 2",
@@ -467,7 +470,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             lastName = "Last"
           ),
           dateOfBirth = Some(LocalDate.parse("2020-10-05")),
-          nationalInsuranceNumber = Some("JP121212A"),
+          identification = Some(NationalInsuranceNumber("JP121212A")),
           address = None,
           vulnerableYesNo = false,
           income = Some("25"),
@@ -508,7 +511,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             lastName = "Last"
           ),
           dateOfBirth = Some(LocalDate.parse("2020-10-05")),
-          nationalInsuranceNumber = None,
+          identification = None,
           address = None,
           vulnerableYesNo = false,
           income = Some("25"),
