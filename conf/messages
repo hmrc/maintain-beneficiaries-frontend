@@ -334,6 +334,32 @@ individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the ben
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
 
+classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
+
+individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetailsYesNo.heading = Do you know {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport or ID card details
+
+individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel = What are {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetails.title = What are the {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetails.heading = What are {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetails.country = ID card country of issue
+individualBeneficiary.passportOrIdCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
+individualBeneficiary.passportOrIdCardDetails.country.error.length = The individual beneficiary’s ID card country must be 100 characters or less
+individualBeneficiary.passportOrIdCardDetails.number = ID card number
+individualBeneficiary.passportOrIdCardDetails.number.error.required = Enter the individual beneficiary’s ID card number
+individualBeneficiary.passportOrIdCardDetails.number.error.length = The individual beneficiary’s ID card number must be 30 characters or less
+individualBeneficiary.passportOrIdCardDetails.number.error.invalid = ID card number can only include letters and numbers
+individualBeneficiary.passportOrIdCardDetails.expiryDate.title = Expiry date
+individualBeneficiary.passportOrIdCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.required.all = Enter the ID card expiry date
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.required = ID card expiry date must include a {0}
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.invalid = Enter a real date when the individual beneficiary’s ID card expires
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+individualBeneficiary.passportOrIdCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+
 removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
