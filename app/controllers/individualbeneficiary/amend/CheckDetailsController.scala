@@ -75,10 +75,9 @@ class CheckDetailsController @Inject()(
         case None =>
           Future.successful(InternalServerError)
         case Some(beneficiary) =>
-//          connector.amendIndividualBeneficiary(request.userAnswers.utr, 0,beneficiary).map(_ =>
-//            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-//          )
-          Future.successful(Ok)
+          connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
       }
   }
 }
