@@ -334,46 +334,11 @@ individualBeneficiary.whenRemoved.error.future = The date the beneficiary was re
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
 classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
 
-individualBeneficiary.name.default = the individual beneficiary
-
-individualBeneficiary.name.title = What is the name of the individual?
-individualBeneficiary.name.heading = What is the name of the individual?
-individualBeneficiary.name.checkYourAnswersLabel = What is the name of the individual?
-individualBeneficiary.name.firstName = First name
-individualBeneficiary.name.middleName = Middle names (optional)
-individualBeneficiary.name.lastName = Last name
-individualBeneficiary.name.error.firstname.required = Enter the individual beneficiary’s first name
-individualBeneficiary.name.error.lastname.required = Enter the individual beneficiary’s last name
-individualBeneficiary.name.error.firstname.length = The individual beneficiary’s first name must be 35 characters or less
-individualBeneficiary.name.error.middlename.length = The individual beneficiary’s middle names must be 35 characters or less
-individualBeneficiary.name.error.lastname.length = The individual beneficiary’s last name must be 35 characters or less
-individualBeneficiary.name.error.firstname.invalid = The individual beneficiary’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-individualBeneficiary.name.error.middlename.invalid = The individual beneficiary’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-individualBeneficiary.name.error.lastname.invalid = The individual beneficiary’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-
-individualBeneficiary.dateOfBirthYesNo.title = Do you know the individual beneficiary’s date of birth?
-individualBeneficiary.dateOfBirthYesNo.heading = Do you know {0}’s date of birth?
-individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
-individualBeneficiary.dateOfBirthYesNo.error.required = Select yes if you know the individual beneficiary’s date of birth
-
-individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
-individualBeneficiary.dateOfBirth.title = What is the trustee’s date of birth?
-individualBeneficiary.dateOfBirth.heading = What is {0}’s date of birth?
-individualBeneficiary.dateOfBirth.hint = For example, 31 3 1980
-individualBeneficiary.dateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
-individualBeneficiary.dateOfBirth.error.required.all = Enter a date of birth
-individualBeneficiary.dateOfBirth.error.required.two = Date of birth must include a {0} and a {1}
-individualBeneficiary.dateOfBirth.error.required = Date of birth must include a {0}
-individualBeneficiary.dateOfBirth.error.invalid = Enter a real date of birth
-individualBeneficiary.dateOfBirth.error.future = Date of birth must be today or in the past
-individualBeneficiary.dateOfBirth.error.past = Date of birth must be after 31 December 1499
-
-individualBeneficiary.discretionaryIncomeYesNo.title = Can the trustees decide how much {0} may get?
-individualBeneficiary.discretionaryIncomeYesNo.heading = Can the trustees decide how much {0} may get?
-individualBeneficiary.discretionaryIncomeYesNo.checkYourAnswersLabel = Can the trustees decide how much {0} may get?
-individualBeneficiary.discretionaryIncomeYesNo.hint = See the trust deed for details
-individualBeneficiary.discretionaryIncomeYesNo.error.required = Select yes if the trustees can the trustees decide how much the individual beneficiary may get
-
+individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
+individualBeneficiary.incomeDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
 
 removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?

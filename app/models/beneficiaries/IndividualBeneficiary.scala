@@ -54,7 +54,17 @@ object IndividualBeneficiary {
 
     }
 
-  implicit val writes: Writes[IndividualBeneficiary] = Json.writes[IndividualBeneficiary]
+  implicit val writes: Writes[IndividualBeneficiary] =
+    ((__ \ 'name).write[Name] and
+      (__ \ 'dateOfBirth).writeNullable[LocalDate] and
+      (__ \ 'identification).writeNullable[IndividualIdentification] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      (__ \ 'vulnerableBeneficiary).write[Boolean] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+    ).apply(unlift(IndividualBeneficiary.unapply))
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)

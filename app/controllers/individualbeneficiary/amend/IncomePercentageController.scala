@@ -16,38 +16,41 @@
 
 package controllers.individualbeneficiary.amend
 
+import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
-import forms.DateOfBirthFormProvider
+import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.individualbeneficiary.{DateOfBirthPage, NamePage}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import pages.individualbeneficiary.IncomePercentagePage
+import play.api.data.Form
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individualbeneficiary.amend.DateOfBirthView
+import views.html.individualbeneficiary.amend.IncomePercentageView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateOfBirthController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: PlaybackRepository,
-                                       navigator: Navigator,
-                                       standardActionSets: StandardActionSets,
-                                       nameAction: NameRequiredAction,
-                                       formProvider: DateOfBirthFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: DateOfBirthView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IncomePercentageController @Inject()(
+                                val controllerComponents: MessagesControllerComponents,
+                                standardActionSets: StandardActionSets,
+                                nameAction: NameRequiredAction,
+                                formProvider: IncomePercentageFormProvider,
+                                connector: TrustConnector,
+                                view: IncomePercentageView,
+                                trustService: TrustService,
+                                repository: PlaybackRepository,
+                                navigator: Navigator
+                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
-
+  private val form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DateOfBirthPage) match {
+      val preparedForm = request.userAnswers.get(IncomePercentagePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -61,11 +64,12 @@ class DateOfBirthController @Inject()(
       form.bindFromRequest().fold(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
+
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DateOfBirthPage, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePercentagePage, value))
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(IncomePercentagePage, updatedAnswers))
       )
   }
 }
