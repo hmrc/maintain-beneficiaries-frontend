@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
+import extractors.IndividualBeneficiaryExtractor
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,16 +44,25 @@ class CheckDetailsController @Inject()(
                                         playbackRepository: PlaybackRepository,
                                         printHelper: IndividualBeneficiaryPrintHelper,
                                         mapper: IndividualBeneficiaryMapper,
-                                        nameAction: NameRequiredAction
+                                        nameAction: NameRequiredAction,
+                                        extractor: IndividualBeneficiaryExtractor
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      service.getIndividualBeneficiary(request.userAnswers.utr, index) map {
+      service.getIndividualBeneficiary(request.userAnswers.utr, index) flatMap {
         individual =>
-          val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
-          Ok(view(section))
+
+          val extractedAnswers = extractor(request.userAnswers, individual, index)
+
+          for {
+            extractedF <- Future.fromTry(extractedAnswers)
+            _ <- playbackRepository.set(extractedF)
+          } yield {
+            val section: AnswerSection = printHelper(extractedF, individual.name.displayName)
+            Ok(view(section))
+          }
       }
 
   }

@@ -69,10 +69,10 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   private val userAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
+    .set(DateOfBirthYesNoPage, true).success.value
     .set(DateOfBirthPage, dateOfBirth).success.value
     .set(NationalInsuranceNumberYesNoPage, true).success.value
     .set(NationalInsuranceNumberPage, nino).success.value
-    .set(AddressYesNoPage, false).success.value
     .set(VPE1FormYesNoPage, false).success.value
     .set(IncomeDiscretionYesNoPage, true).success.value
     .set(StartDatePage, startDate).success.value
