@@ -40,3 +40,6 @@ POST       /passport-or-id-card                   controllers.individualbenefici
 
 GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onPageLoad()
 POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onSubmit()
+
+GET        /:index/check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.onPageLoad(index: Int)
+POST       /:index/check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.onSubmit(index: Int)

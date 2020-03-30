@@ -58,7 +58,6 @@ class IndividualBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        println(s"Failed: $errors")
         logger.error("Failed to rehydrate IndividualBeneficiary from UserAnswers", errors)
         None
     }
