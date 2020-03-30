@@ -27,6 +27,8 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
   private val name = Name("First", None, "Last")
   private val dateOfBirth = LocalDate.parse("2010-02-03")
   private val startDate = LocalDate.parse("2019-03-09")
+  private val ukAddress = UkAddress("line1", "line2", Some("line3"), Some("line4"), "POSTCODE")
+  private val nonUkAddress = NonUkAddress("line1", "line2", Some("line3"), "country")
 
   "IndividualBeneficiaryMapper" must {
 
@@ -57,7 +59,6 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.entityStart mustBe startDate
     }
     "generate class of individual model with UK address and no income discretion" in {
-      val ukAddress = UkAddress("line1", "line2", Some("line3"), Some("line4"), "POSTCODE")
 
       val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
 
@@ -87,8 +88,6 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.entityStart mustBe startDate
     }
     "generate class of individual model with non-UK address" in {
-
-      val nonUkAddress = NonUkAddress("line1", "line2", Some("line3"), "country")
 
       val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
 
@@ -127,7 +126,9 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
         .set(NamePage, name).success.value
         .set(DateOfBirthPage, dateOfBirth).success.value
         .set(NationalInsuranceNumberYesNoPage, false).success.value
-        .set(AddressYesNoPage, false).success.value
+        .set(AddressYesNoPage, true).success.value
+        .set(LiveInTheUkYesNoPage, false).success.value
+        .set(NonUkAddressPage, nonUkAddress).success.value
         .set(PassportDetailsYesNoPage, true).success.value
         .set(PassportDetailsPage, passport).success.value
         .set(VPE1FormYesNoPage, false).success.value
@@ -139,7 +140,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.name mustBe name
       result.dateOfBirth mustBe Some(dateOfBirth)
       result.identification mustBe Some(passport)
-      result.address mustBe None
+      result.address mustBe Some(nonUkAddress)
       result.vulnerableYesNo mustBe false
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
@@ -156,7 +157,9 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
         .set(NamePage, name).success.value
         .set(DateOfBirthPage, dateOfBirth).success.value
         .set(NationalInsuranceNumberYesNoPage, false).success.value
-        .set(AddressYesNoPage, false).success.value
+        .set(AddressYesNoPage, true).success.value
+        .set(LiveInTheUkYesNoPage, true).success.value
+        .set(UkAddressPage, ukAddress).success.value
         .set(PassportDetailsYesNoPage, false).success.value
         .set(IdCardDetailsYesNoPage, true).success.value
         .set(IdCardDetailsPage, idcard).success.value
@@ -169,11 +172,36 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.name mustBe name
       result.dateOfBirth mustBe Some(dateOfBirth)
       result.identification mustBe Some(idcard)
-      result.address mustBe None
+      result.address mustBe Some(ukAddress)
       result.vulnerableYesNo mustBe false
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
     }
   }
+  "generate class of individual model with neither nino nor address" in {
+
+    val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+
+    val userAnswers = emptyUserAnswers
+      .set(NamePage, name).success.value
+      .set(DateOfBirthPage, dateOfBirth).success.value
+      .set(NationalInsuranceNumberYesNoPage, false).success.value
+      .set(AddressYesNoPage, false).success.value
+      .set(VPE1FormYesNoPage, false).success.value
+      .set(IncomeDiscretionYesNoPage, true).success.value
+      .set(StartDatePage, startDate).success.value
+
+    val result = mapper(userAnswers).get
+
+    result.name mustBe name
+    result.dateOfBirth mustBe Some(dateOfBirth)
+    result.identification mustBe None
+    result.address mustBe None
+    result.vulnerableYesNo mustBe false
+    result.income mustBe None
+    result.incomeDiscretionYesNo mustBe true
+    result.entityStart mustBe startDate
+  }
+
 }

@@ -71,9 +71,19 @@ class IndividualBeneficiaryMapper {
   }
 
   private def readPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
-    PassportDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-      case true => PassportDetailsPage.path.read[Passport].map(Some(_))
-      case false => readIdCard
+    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap {
+      case true => Reads(_ => JsSuccess(None))
+      case false => readPassportOrIdIfAddressExists
+    }
+  }
+
+  private def readPassportOrIdIfAddressExists: Reads[Option[IndividualIdentification]] = {
+    AddressYesNoPage.path.read[Boolean].flatMap {
+      case true => PassportDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
+        case true => PassportDetailsPage.path.read[Passport].map(Some(_))
+        case false => readIdCard
+      }
+       case _ => Reads(_ => JsSuccess(None))
     }
   }
 
