@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.add
+package controllers.individualbeneficiary.add
 
 import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
+import models.Name
 import models.beneficiaries.TypeOfBeneficiaryToAdd
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -27,36 +28,45 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
+import pages.individualbeneficiary.{AddressYesNoPage, DateOfBirthPage, IncomeDiscretionYesNoPage, NamePage, NationalInsuranceNumberPage, NationalInsuranceNumberYesNoPage, StartDatePage, VPE1FormYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.countryOptions.CountryOptions
-import utils.print.{AnswerRowConverter, ClassOfBeneficiaryPrintHelper}
-import views.html.classofbeneficiary.add.CheckDetailsView
+import utils.print.{AnswerRowConverter, IndividualBeneficiaryPrintHelper}
+import viewmodels.AnswerSection
+import views.html.individualbeneficiary.add.CheckDetailsView
 
 import scala.concurrent.Future
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  private val description: String = "Description"
-  private val date: LocalDate = LocalDate.parse("2019-02-03")
-
   private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad().url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit().url
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
+  private val name = Name("First", None, "Last")
+  private val dateOfBirth = LocalDate.parse("2010-02-03")
+  private val nino = "AA123456A"
+  private val startDate = LocalDate.parse("2019-03-09")
+
   private val userAnswers = emptyUserAnswers
-    .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries).success.value
-    .set(DescriptionPage, description).success.value
-    .set(EntityStartPage, date).success.value
+    .set(NamePage, name).success.value
+    .set(DateOfBirthPage, dateOfBirth).success.value
+    .set(NationalInsuranceNumberYesNoPage, true).success.value
+    .set(NationalInsuranceNumberPage, nino).success.value
+    .set(AddressYesNoPage, false).success.value
+    .set(VPE1FormYesNoPage, false).success.value
+    .set(IncomeDiscretionYesNoPage, true).success.value
+    .set(StartDatePage, startDate).success.value
 
   "CheckDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
+      val bound = new AnswerRowConverter().bind(userAnswers, name.displayName, mock[CountryOptions])
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,8 +75,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[ClassOfBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, description)
+      val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
+      val answerSection = printHelper(userAnswers, name.displayName)
 
       status(result) mustEqual OK
 
@@ -83,7 +93,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.addClassOfBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(mockTrustConnector.addIndividualBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
       val request = FakeRequest(POST, submitDetailsRoute)
 

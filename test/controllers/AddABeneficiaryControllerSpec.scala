@@ -23,7 +23,7 @@ import connectors.{TrustConnector, TrustStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
-import models.{AddABeneficiary, Name, RemoveBeneficiary, UserAnswers}
+import models.{AddABeneficiary, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
@@ -56,7 +56,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-    nationalInsuranceNumber = Some("JS123456A"),
+    identification = Some(NationalInsuranceNumber("JS123456A")),
     address = None,
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,

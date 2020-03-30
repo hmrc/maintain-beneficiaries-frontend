@@ -53,7 +53,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with PropertyCh
   def individualBeneficiary(id: Int, provisional : Boolean) = IndividualBeneficiary(
     name = name,
     dateOfBirth = None,
-    nationalInsuranceNumber = None,
+    identification = None,
     address = None,
     vulnerableYesNo = false,
     income = None,

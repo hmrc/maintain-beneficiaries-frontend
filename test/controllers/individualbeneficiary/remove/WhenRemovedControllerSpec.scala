@@ -67,7 +67,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
   def individualBeneficiary(id: Int) = IndividualBeneficiary(
     name = name,
     dateOfBirth = None,
-    nationalInsuranceNumber = None,
+    identification = None,
     address = None,
     vulnerableYesNo = false,
     income = None,

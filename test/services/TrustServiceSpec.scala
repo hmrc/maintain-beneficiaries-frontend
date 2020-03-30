@@ -44,7 +44,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val individual = IndividualBeneficiary(
         name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
         dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        nationalInsuranceNumber = None,
+        identification = None,
         address = None,
         vulnerableYesNo = false,
         income = None,
@@ -147,7 +147,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       val individual = IndividualBeneficiary(
         name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
         dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        nationalInsuranceNumber = None,
+        identification = None,
         address = None,
         vulnerableYesNo = false,
         income = None,
