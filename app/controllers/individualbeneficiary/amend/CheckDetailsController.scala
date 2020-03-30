@@ -16,7 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.FrontendAppConfig
+import config.{ErrorHandler, FrontendAppConfig}
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
@@ -28,7 +28,7 @@ import play.api.mvc._
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.IndividualBeneficiaryMapper
+import utils.mappers.AmendIndividualBeneficiaryMapper
 import utils.print.AmendIndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.individualbeneficiary.amend.CheckDetailsView
@@ -45,9 +45,10 @@ class CheckDetailsController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
                                         printHelper: AmendIndividualBeneficiaryPrintHelper,
-                                        mapper: IndividualBeneficiaryMapper,
+                                        mapper: AmendIndividualBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
-                                        extractor: IndividualBeneficiaryExtractor
+                                        extractor: IndividualBeneficiaryExtractor,
+                                        errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def render(userAnswers: UserAnswers,
@@ -80,13 +81,11 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers) match {
-        case None =>
-          Future.successful(InternalServerError)
-        case Some(beneficiary) =>
+      mapper(request.userAnswers).map {
+        beneficiary =>
           connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
-      }
+      }.getOrElse(Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate)))
   }
 }

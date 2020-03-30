@@ -19,10 +19,10 @@ package utils.mappers
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress}
+import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import pages.individualbeneficiary._
 
-class AddIndividualBeneficiaryMapperSpec extends SpecBase {
+class AmendIndividualBeneficiaryMapperSpec extends SpecBase {
 
   private val name = Name("First", None, "Last")
   private val dateOfBirth = LocalDate.parse("2010-02-03")
@@ -30,11 +30,11 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
   private val ukAddress = UkAddress("line1", "line2", Some("line3"), Some("line4"), "POSTCODE")
   private val nonUkAddress = NonUkAddress("line1", "line2", Some("line3"), "country")
 
-  "IndividualBeneficiaryMapper" must {
+  "AmendAmendIndividualBeneficiaryMapper" must {
 
     "generate class of individual model with nino and income discretion" in {
 
-      val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+      val mapper = injector.instanceOf[AmendIndividualBeneficiaryMapper]
 
       val nino = "AA123456A"
 
@@ -60,14 +60,13 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
     }
     "generate class of individual model with UK address and no income discretion" in {
 
-      val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+      val mapper = injector.instanceOf[AmendIndividualBeneficiaryMapper]
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
         .set(DateOfBirthPage, dateOfBirth).success.value
         .set(NationalInsuranceNumberYesNoPage, false).success.value
-        .set(PassportDetailsYesNoPage, false).success.value
-        .set(IdCardDetailsYesNoPage, false).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, false).success.value
         .set(AddressYesNoPage, true).success.value
         .set(LiveInTheUkYesNoPage, true).success.value
         .set(UkAddressPage, ukAddress).success.value
@@ -89,14 +88,13 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
     }
     "generate class of individual model with non-UK address" in {
 
-      val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+      val mapper = injector.instanceOf[AmendIndividualBeneficiaryMapper]
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
         .set(DateOfBirthPage, dateOfBirth).success.value
         .set(NationalInsuranceNumberYesNoPage, false).success.value
-        .set(PassportDetailsYesNoPage, false).success.value
-        .set(IdCardDetailsYesNoPage, false).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, false).success.value
         .set(AddressYesNoPage, true).success.value
         .set(LiveInTheUkYesNoPage, false).success.value
         .set(NonUkAddressPage, nonUkAddress).success.value
@@ -118,9 +116,9 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
 
     "generate class of individual model with passport" in {
 
-      val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+      val mapper = injector.instanceOf[AmendIndividualBeneficiaryMapper]
 
-      val passport = Passport("SP", "123456789", LocalDate.of(2024, 8, 16))
+      val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
@@ -129,8 +127,8 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
         .set(AddressYesNoPage, true).success.value
         .set(LiveInTheUkYesNoPage, false).success.value
         .set(NonUkAddressPage, nonUkAddress).success.value
-        .set(PassportDetailsYesNoPage, true).success.value
-        .set(PassportDetailsPage, passport).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, true).success.value
+        .set(PassportOrIdCardDetailsPage, passport).success.value
         .set(VPE1FormYesNoPage, false).success.value
         .set(IncomeDiscretionYesNoPage, true).success.value
         .set(StartDatePage, startDate).success.value
@@ -146,43 +144,12 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
     }
-
-    "generate class of individual model with id card" in {
-
-      val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
-
-      val idcard = IdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
-
-      val userAnswers = emptyUserAnswers
-        .set(NamePage, name).success.value
-        .set(DateOfBirthPage, dateOfBirth).success.value
-        .set(NationalInsuranceNumberYesNoPage, false).success.value
-        .set(AddressYesNoPage, true).success.value
-        .set(LiveInTheUkYesNoPage, true).success.value
-        .set(UkAddressPage, ukAddress).success.value
-        .set(PassportDetailsYesNoPage, false).success.value
-        .set(IdCardDetailsYesNoPage, true).success.value
-        .set(IdCardDetailsPage, idcard).success.value
-        .set(VPE1FormYesNoPage, false).success.value
-        .set(IncomeDiscretionYesNoPage, true).success.value
-        .set(StartDatePage, startDate).success.value
-
-      val result = mapper(userAnswers).get
-
-      result.name mustBe name
-      result.dateOfBirth mustBe Some(dateOfBirth)
-      result.identification mustBe Some(idcard)
-      result.address mustBe Some(ukAddress)
-      result.vulnerableYesNo mustBe false
-      result.income mustBe None
-      result.incomeDiscretionYesNo mustBe true
-      result.entityStart mustBe startDate
-    }
+    
   }
-
+  
   "generate class of individual model with neither nino nor address" in {
 
-    val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+    val mapper = injector.instanceOf[AmendIndividualBeneficiaryMapper]
 
     val userAnswers = emptyUserAnswers
       .set(NamePage, name).success.value

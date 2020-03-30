@@ -19,7 +19,7 @@ package utils.print
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{IdCard, Name, NonUkAddress, Passport, UkAddress}
+import models.{CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, Passport, UkAddress}
 import pages.individualbeneficiary._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
@@ -48,10 +48,8 @@ class AmendIndividualBeneficiaryPrintHelperSpec extends SpecBase {
         .set(LiveInTheUkYesNoPage, true).success.value
         .set(UkAddressPage, ukAddress).success.value
         .set(NonUkAddressPage, nonUkAddress).success.value
-        .set(PassportDetailsYesNoPage, true).success.value
-        .set(PassportDetailsPage, Passport("GB", "1", LocalDate.of(2030, 10, 10))).success.value
-        .set(IdCardDetailsYesNoPage, true).success.value
-        .set(IdCardDetailsPage, IdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, true).success.value
+        .set(PassportOrIdCardDetailsPage, CombinedPassportOrIdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
         .set(VPE1FormYesNoPage, true).success.value
         .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 

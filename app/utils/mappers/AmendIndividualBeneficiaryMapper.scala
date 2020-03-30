@@ -19,13 +19,13 @@ package utils.mappers
 import java.time.LocalDate
 
 import models.beneficiaries.IndividualBeneficiary
-import models.{Address, IdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
+import models.{Address, CombinedPassportOrIdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
 import pages.individualbeneficiary._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class IndividualBeneficiaryMapper {
+class AmendIndividualBeneficiaryMapper {
 
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
@@ -41,11 +41,11 @@ class IndividualBeneficiaryMapper {
           IncomeDiscretionYesNoPage.path.read[Boolean] and
           StartDatePage.path.read[LocalDate]
         ) (
-        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, income, incomeDiscretion, entityStart) =>
+        (name, dateOfBirth, identification, address, vulnerableYesNo, income, incomeDiscretion, entityStart) =>
           IndividualBeneficiary(
             name,
             dateOfBirth,
-            nationalInsuranceNumber,
+            identification,
             address,
             vulnerableYesNo,
             income,
@@ -79,18 +79,11 @@ class IndividualBeneficiaryMapper {
 
   private def readPassportOrIdIfAddressExists: Reads[Option[IndividualIdentification]] = {
     AddressYesNoPage.path.read[Boolean].flatMap {
-      case true => PassportDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-        case true => PassportDetailsPage.path.read[Passport].map(Some(_))
-        case false => readIdCard
+      case true => PassportOrIdCardDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
+        case true => PassportOrIdCardDetailsPage.path.read[CombinedPassportOrIdCard].map(Some(_))
+        case false => Reads(_ => JsSuccess(None))
       }
        case _ => Reads(_ => JsSuccess(None))
-    }
-  }
-
-  private def readIdCard: Reads[Option[IndividualIdentification]] = {
-    IdCardDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-      case true => IdCardDetailsPage.path.read[IdCard].map(Some(_))
-      case false => Reads(_ => JsSuccess(None))
     }
   }
 

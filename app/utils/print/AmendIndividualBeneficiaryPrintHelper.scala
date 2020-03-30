@@ -44,8 +44,8 @@ class AmendIndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: Answer
         bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", controllers.individualbeneficiary.amend.routes.LiveInTheUkYesNoController.onPageLoad().url),
         bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", controllers.individualbeneficiary.amend.routes.UkAddressController.onPageLoad().url),
         bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", controllers.individualbeneficiary.amend.routes.NonUkAddressController.onPageLoad().url),
-        bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url),
-        bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportOrIdCardDetails", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad().url),
+        bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url),
+        bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad().url),
         bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad().url)
       ).flatten
     )
