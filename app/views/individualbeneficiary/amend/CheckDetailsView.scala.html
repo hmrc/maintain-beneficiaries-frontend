@@ -14,32 +14,27 @@
  * limitations under the License.
  *@
 
+@import viewmodels.AnswerSection
 @import controllers.individualbeneficiary.amend.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirth.title")}"
-) {
+    title = messages("individualBeneficiary.checkDetails.title")
+    ) {
 
-    @formHelper(action = DateOfBirthController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading("individualBeneficiary.checkDetails.heading")
 
-        @components.input_date(
-            field = form("value"),
-            legend = messages("individualBeneficiary.dateOfBirth.heading", name),
-            legendClass = "heading-large",
-            headingIsLegend = true,
-            hint = Some(messages(s"site.date.hint"))
-        )
+        @components.answer_section(answerSection)
 
         @components.submit_button()
     }

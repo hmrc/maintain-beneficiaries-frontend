@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package config.annotations;
 
-import controllers.classofbeneficiary.add.{routes => rts}
-import javax.inject.Inject
-import models.UserAnswers
-import pages.Page
-import pages.classofbeneficiary._
-import play.api.mvc.Call
+import com.google.inject.BindingAnnotation;
 
-class ClassOfBeneficiaryNavigator @Inject()() extends Navigator {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  override def nextPage(page: Page, userAnswers: UserAnswers): Call = page match {
-    case DescriptionPage => rts.EntityStartController.onPageLoad()
-    case EntityStartPage => rts.CheckDetailsController.onPageLoad()
-    case _ => controllers.routes.IndexController.onPageLoad(userAnswers.utr)
-  }
-
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface AmendIndividualBeneficiary {}

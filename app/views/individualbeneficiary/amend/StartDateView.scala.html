@@ -17,17 +17,17 @@
 @import controllers.individualbeneficiary.amend.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.dateOfBirth.title")}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.startDate.title", name)}"
 ) {
 
-    @formHelper(action = DateOfBirthController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = StartDateController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -35,10 +35,9 @@
 
         @components.input_date(
             field = form("value"),
-            legend = messages("individualBeneficiary.dateOfBirth.heading", name),
-            legendClass = "heading-large",
+            legend = messages("individualBeneficiary.startDate.heading", name),
             headingIsLegend = true,
-            hint = Some(messages(s"site.date.hint"))
+            hint = Some(messages("individualBeneficiary.startDate.hint"))
         )
 
         @components.submit_button()

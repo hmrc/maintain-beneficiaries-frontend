@@ -22,7 +22,7 @@ import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
-class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
+class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
   private val testDateOfBirth = Some(LocalDate.of(1970, 2, 28))
   private val testEntityStart = LocalDate.of(2017, 2, 28)
 

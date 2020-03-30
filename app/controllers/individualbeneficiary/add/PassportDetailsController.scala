@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.add
 
+import config.annotations.AddIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.PassportDetailsFormProvider
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PassportDetailsController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            sessionRepository: PlaybackRepository,
-                                           navigator: Navigator,
+                                           @AddIndividualBeneficiary navigator: Navigator,
                                            standardActionSets: StandardActionSets,
                                            nameAction: NameRequiredAction,
                                            formProvider: PassportDetailsFormProvider,

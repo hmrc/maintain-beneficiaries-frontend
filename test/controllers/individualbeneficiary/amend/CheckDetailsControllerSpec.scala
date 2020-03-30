@@ -20,8 +20,8 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.beneficiaries.IndividualBeneficiary
 import models.{Name, NationalInsuranceNumber}
+import models.beneficiaries.IndividualBeneficiary
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -34,7 +34,7 @@ import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.IndividualBeneficiaryPrintHelper
-import views.html.individualbeneficiary.add.CheckDetailsView
+import views.html.individualbeneficiary.amend.CheckDetailsView
 
 import scala.concurrent.Future
 
@@ -44,6 +44,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad(index).url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit(index).url
+
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val name = Name("First", None, "Last")
@@ -103,7 +104,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection)(fakeRequest, messages).toString
+        view(answerSection, index)(fakeRequest, messages).toString
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {

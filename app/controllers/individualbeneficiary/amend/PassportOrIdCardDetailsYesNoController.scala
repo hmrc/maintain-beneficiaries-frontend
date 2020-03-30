@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -31,14 +32,14 @@ import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class PassportOrIdCardDetailsYesNoController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            sessionRepository: PlaybackRepository,
-                                            navigator: Navigator,
-                                            standardActionSets: StandardActionSets,
-                                            nameAction: NameRequiredAction,
-                                            formProvider: YesNoFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: PassportOrIdCardDetailsYesNoView
+                                                        override val messagesApi: MessagesApi,
+                                                        sessionRepository: PlaybackRepository,
+                                                        @AmendIndividualBeneficiary navigator: Navigator,
+                                                        standardActionSets: StandardActionSets,
+                                                        nameAction: NameRequiredAction,
+                                                        formProvider: YesNoFormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: PassportOrIdCardDetailsYesNoView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetailsYesNo")

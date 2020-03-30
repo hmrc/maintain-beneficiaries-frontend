@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.IndividualBeneficiaryMapper
 import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.individualbeneficiary.add.CheckDetailsView
+import views.html.individualbeneficiary.amend.CheckDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,6 +40,7 @@ class CheckDetailsController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsView,
                                         service: TrustService,
+                                        connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
                                         printHelper: IndividualBeneficiaryPrintHelper,
@@ -61,7 +62,7 @@ class CheckDetailsController @Inject()(
             _ <- playbackRepository.set(extractedF)
           } yield {
             val section: AnswerSection = printHelper(extractedF, individual.name.displayName)
-            Ok(view(section))
+            Ok(view(section, index))
           }
       }
 

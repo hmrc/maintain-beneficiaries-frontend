@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
@@ -31,14 +32,14 @@ import views.html.individualbeneficiary.amend.VPE1FormYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class VPE1FormYesNoController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            playbackRepository: PlaybackRepository,
-                                            navigator: Navigator,
-                                            standardActionSets: StandardActionSets,
-                                            nameAction: NameRequiredAction,
-                                            formProvider: YesNoFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: VPE1FormYesNoView
+                                         override val messagesApi: MessagesApi,
+                                         playbackRepository: PlaybackRepository,
+                                         @AmendIndividualBeneficiary navigator: Navigator,
+                                         standardActionSets: StandardActionSets,
+                                         nameAction: NameRequiredAction,
+                                         formProvider: YesNoFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: VPE1FormYesNoView
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider.withPrefix("individualBeneficiary.vpe1FormYesNo")

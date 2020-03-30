@@ -17,18 +17,19 @@
 package navigation
 
 import base.SpecBase
+import navigation.individualBeneficiary.AmendIndividualBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.{NamePage, _}
 
-class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class AmendIndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new Navigator
+  val navigator = new AmendIndividualBeneficiaryNavigator
 
   "Individual beneficiary navigator" when {
 
     "Name page -> Do you know date of birth page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.DateOfBirthYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.DateOfBirthYesNoController.onPageLoad())
     }
 
     "Do you know date of birth page -> Yes -> Date of birth page" in {
@@ -36,12 +37,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(DateOfBirthYesNoPage, true).success.value
 
       navigator.nextPage(DateOfBirthYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.DateOfBirthController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.DateOfBirthController.onPageLoad())
     }
 
     "Date of birth page -> Do you know IncomeDiscretion page" in {
       navigator.nextPage(DateOfBirthPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.IncomeDiscretionYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.IncomeDiscretionYesNoController.onPageLoad())
     }
 
     "Do you know date of birth page -> No -> IncomeDiscretion page" in {
@@ -49,7 +50,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(DateOfBirthYesNoPage, false).success.value
 
       navigator.nextPage(DateOfBirthYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.IncomeDiscretionYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.IncomeDiscretionYesNoController.onPageLoad())
     }
 
     "Do you know IncomeDiscretion page -> No -> IncomeDiscretion page" in {
@@ -57,7 +58,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(IncomeDiscretionYesNoPage, false).success.value
 
       navigator.nextPage(IncomeDiscretionYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.IncomePercentageController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.IncomePercentageController.onPageLoad())
     }
 
     "Do you know IncomeDiscretion page -> Yes -> Do you know NINO page" in {
@@ -65,12 +66,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(IncomeDiscretionYesNoPage, true).success.value
 
       navigator.nextPage(IncomeDiscretionYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.NationalInsuranceNumberYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.NationalInsuranceNumberYesNoController.onPageLoad())
     }
 
     "IncomeDiscretion page -> Do you know NINO page" in {
       navigator.nextPage(IncomePercentagePage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.NationalInsuranceNumberYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.NationalInsuranceNumberYesNoController.onPageLoad())
     }
 
     "Do you know NINO page -> Yes -> NINO page" in {
@@ -78,12 +79,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(NationalInsuranceNumberYesNoPage, true).success.value
 
       navigator.nextPage(NationalInsuranceNumberYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.NationalInsuranceNumberController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.NationalInsuranceNumberController.onPageLoad())
     }
 
     "NINO page -> VPE1 Yes No page" in {
       navigator.nextPage(NationalInsuranceNumberPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.VPE1FormYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad())
     }
 
     "Do you know NINO page -> No -> Do you know address page" in {
@@ -91,7 +92,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(NationalInsuranceNumberYesNoPage, false).success.value
 
       navigator.nextPage(NationalInsuranceNumberYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.AddressYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.AddressYesNoController.onPageLoad())
     }
 
     "Do you know address page -> Yes -> Is address in UK page" in {
@@ -99,7 +100,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressYesNoPage, true).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.LiveInTheUkYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.LiveInTheUkYesNoController.onPageLoad())
     }
 
     "Do you know address page -> No -> VPE1 Yes No page" in {
@@ -107,7 +108,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressYesNoPage, false).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.VPE1FormYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad())
     }
 
     "Is address in UK page -> Yes -> UK address page" in {
@@ -115,12 +116,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(LiveInTheUkYesNoPage, true).success.value
 
       navigator.nextPage(LiveInTheUkYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.UkAddressController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.UkAddressController.onPageLoad())
     }
 
     "UK address page -> Do you know passport details page" in {
       navigator.nextPage(UkAddressPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
     }
 
     "Is address in UK page -> No -> Non-UK address page" in {
@@ -128,54 +129,33 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(LiveInTheUkYesNoPage, false).success.value
 
       navigator.nextPage(LiveInTheUkYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.NonUkAddressController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.NonUkAddressController.onPageLoad())
     }
 
     "Non-UK address page -> Do you know passport details page" in {
       navigator.nextPage(NonUkAddressPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad())
+        .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
     }
 
     "Do you know passport details page -> Yes -> Passport details page" in {
       val answers = emptyUserAnswers
-        .set(PassportDetailsYesNoPage, true).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, true).success.value
 
-      navigator.nextPage(PassportDetailsYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsController.onPageLoad())
+      navigator.nextPage(PassportOrIdCardDetailsYesNoPage, answers)
+        .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad())
     }
 
     "Passport details page -> VPE1 Yes No page" in {
-      navigator.nextPage(PassportDetailsPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.VPE1FormYesNoController.onPageLoad())
-    }
-
-    "Do you know passport details page -> No -> Do you know ID card details page" in {
-      val answers = emptyUserAnswers
-        .set(PassportDetailsYesNoPage, false).success.value
-
-      navigator.nextPage(PassportDetailsYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.IdCardDetailsYesNoController.onPageLoad())
-    }
-
-    "Do you know ID card details page -> Yes -> ID card details page" in {
-      val answers = emptyUserAnswers
-        .set(IdCardDetailsYesNoPage, true).success.value
-
-      navigator.nextPage(IdCardDetailsYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.IdCardDetailsController.onPageLoad())
-    }
-
-    "ID card details page -> VPE1 Yes No page" in {
-      navigator.nextPage(IdCardDetailsPage, emptyUserAnswers)
-        .mustBe(controllers.individualbeneficiary.add.routes.VPE1FormYesNoController.onPageLoad())
+      navigator.nextPage(PassportOrIdCardDetailsPage, emptyUserAnswers)
+        .mustBe(controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad())
     }
 
     "Do you know ID card details page -> No -> VPE1 Yes No page" in {
       val answers = emptyUserAnswers
-        .set(IdCardDetailsYesNoPage, false).success.value
+        .set(PassportOrIdCardDetailsYesNoPage, false).success.value
 
-      navigator.nextPage(IdCardDetailsYesNoPage, answers)
-        .mustBe(controllers.individualbeneficiary.add.routes.VPE1FormYesNoController.onPageLoad())
+      navigator.nextPage(PassportOrIdCardDetailsYesNoPage, answers)
+        .mustBe(controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad())
     }
   }
 }
