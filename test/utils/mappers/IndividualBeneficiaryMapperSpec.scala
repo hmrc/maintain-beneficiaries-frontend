@@ -41,9 +41,6 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(DateOfBirthPage, dateOfBirth).success.value
         .set(NationalInsuranceNumberYesNoPage, true).success.value
         .set(NationalInsuranceNumberPage, nino).success.value
-        .set(PassportDetailsYesNoPage, false).success.value
-        .set(IdCardDetailsYesNoPage, false).success.value
-        .set(AddressYesNoPage, false).success.value
         .set(VPE1FormYesNoPage, false).success.value
         .set(IncomeDiscretionYesNoPage, true).success.value
         .set(StartDatePage, startDate).success.value
