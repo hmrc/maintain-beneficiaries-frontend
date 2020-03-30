@@ -37,8 +37,6 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case UkAddressPage => rts.PassportOrIdCardDetailsYesNoController.onPageLoad()
     case NonUkAddressPage => rts.PassportOrIdCardDetailsYesNoController.onPageLoad()
     case PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
-    case VPE1FormYesNoPage => rts.StartDateController.onPageLoad()
-    case StartDatePage => ???
   }
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DateOfBirthYesNoPage => ua =>
@@ -53,15 +51,24 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
     case PassportOrIdCardDetailsYesNoPage => ua =>
         yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, rts.PassportOrIdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad())
+    case VPE1FormYesNoPage => ua => checkDetailsRoute(ua)
   }
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
+    simpleNavigation andThen (c => (_ : UserAnswers) => c) orElse
     yesNoNavigation
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  }
+
+  def checkDetailsRoute(answers: UserAnswers) : Call = {
+    answers.get(IndexPage) match {
+      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case Some(x) =>
+        rts.CheckDetailsController.renderFromUserAnswers(x)
+    }
   }
 }

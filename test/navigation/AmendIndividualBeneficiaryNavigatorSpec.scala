@@ -157,5 +157,14 @@ class AmendIndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPr
       navigator.nextPage(PassportOrIdCardDetailsYesNoPage, answers)
         .mustBe(controllers.individualbeneficiary.amend.routes.VPE1FormYesNoController.onPageLoad())
     }
+
+    "VPE1 Yes No page -> Check Details page" in {
+      val answers = emptyUserAnswers
+        .set(VPE1FormYesNoPage, false).success.value
+        .set(IndexPage, 0).success.value
+
+      navigator.nextPage(VPE1FormYesNoPage, answers)
+        .mustBe(controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
+    }
   }
 }

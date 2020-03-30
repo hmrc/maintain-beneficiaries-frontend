@@ -22,8 +22,9 @@ import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import extractors.IndividualBeneficiaryExtractor
 import javax.inject.Inject
+import models.UserAnswers
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -49,23 +50,31 @@ class CheckDetailsController @Inject()(
                                         extractor: IndividualBeneficiaryExtractor
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  private def render(userAnswers: UserAnswers,
+                     index: Int,
+                     name: String)
+                    (implicit request: Request[AnyContent]): Result=
+  {
+    val section: AnswerSection = printHelper(userAnswers, name)
+    Ok(view(section, index))
+  }
+
+  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       service.getIndividualBeneficiary(request.userAnswers.utr, index) flatMap {
         individual =>
-
           val extractedAnswers = extractor(request.userAnswers, individual, index)
-
           for {
             extractedF <- Future.fromTry(extractedAnswers)
             _ <- playbackRepository.set(extractedF)
-          } yield {
-            val section: AnswerSection = printHelper(extractedF, individual.name.displayName)
-            Ok(view(section, index))
-          }
+          } yield render(extractedF, index, individual.name.displayName)
       }
+  }
 
+  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+    implicit request =>
+      render(request.userAnswers, index, request.beneficiaryName)
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
