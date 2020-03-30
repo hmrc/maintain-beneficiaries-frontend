@@ -178,6 +178,7 @@ classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed
 individualBeneficiary.defaultText = the beneficiary
 individualBeneficiary.return.link = Return to add a beneficiary
 
+individualBeneficiary.name.checkYourAnswersLabel = What is the name of the individual?
 individualBeneficiary.name.title = What is the name of the individual?
 individualBeneficiary.name.heading = What is the name of the individual?
 individualBeneficiary.name.firstName = First name
@@ -332,13 +333,6 @@ individualBeneficiary.whenRemoved.error.required = The date the beneficiary was 
 individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
-classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
-
-individualBeneficiary.incomeDiscretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
-individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
-individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
-individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
-individualBeneficiary.incomeDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
 
 removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
