@@ -43,3 +43,6 @@ POST       /vpe1-form-yes-no                         controllers.individualbenef
 
 GET        /start-date                               controllers.individualbeneficiary.amend.StartDateController.onPageLoad()
 POST       /start-date                               controllers.individualbeneficiary.amend.StartDateController.onSubmit()
+
+GET        /check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.onPageLoad()
+POST       /check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.onSubmit()
