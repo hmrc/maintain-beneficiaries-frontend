@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.charityortrust.charity
 
-import javax.inject.{Inject, Singleton}
-import models.UserAnswers
-import pages.Page
-import play.api.mvc.Call
+import models.UkAddress
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-@Singleton
-class Navigator @Inject()() {
+case object UkAddressPage extends QuestionPage[UkAddress] {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse
-    CharityBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
+  override def path: JsPath = basePath \ toString
 
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
-
+  override def toString: String = "ukAddress"
 }

@@ -16,7 +16,10 @@ site.date.hint = For example, 31 3 1980
 site.inprogress = In Progress
 site.complete = Completed
 
-site.address.uk.title = What is the address?
+site.return.link = Return to add a beneficiary
+site.beneficiary.defaultText = the beneficiary
+
+site.address.uk.title = What is {0}’s address?
 site.address.uk.heading = What is {0}’s address?
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2
@@ -344,3 +347,55 @@ removeClassOfBeneficiary.error.required = Select yes if you want to remove the c
 removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+
+charityOrTrust.title = Is the beneficiary a charity or trust?
+charityOrTrust.heading = Is the beneficiary a charity or trust?
+charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
+charityOrTrust.hint = As named in the trust deed
+charityOrTrust.error.required = Select the type of beneficiary you need to add
+
+charityOrTrustTypeOfBeneficiary.charity = Charity
+charityOrTrustTypeOfBeneficiary.trust = Trust
+
+charityBeneficiary.name.title = What is the charity’s name?
+charityBeneficiary.name.heading = What is the charity’s name?
+charityBeneficiary.name.checkYourAnswersLabel = What is the charity’s name?
+charityBeneficiary.name.error.required = Enter the charity’s name
+charityBeneficiary.name.error.invalidFormat = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+charityBeneficiary.name.error.length = Charity’s name must be 56 characters or less
+
+charityBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.hint = See the trust deed for details
+charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity may get
+
+charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
+charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
+charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+
+charityBeneficiary.addressYesNo.title = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.error.required = Select yes if you know the charity beneficiary’s address
+
+charityBeneficiary.addressUkYesNo.title = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.error.required = Select yes if the charity beneficiary’s address is in the UK
+
+charityBeneficiary.startDate.title = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
+charityBeneficiary.startDate.hint = For example, 31 3 1980
+charityBeneficiary.startDate.error.required.all = Enter the date the individual beneficiary was added to the trust
+charityBeneficiary.startDate.error.required.two = The date the individual beneficiary was added to the trust must include a {0} and a {1}
+charityBeneficiary.startDate.error.required = The date the individual beneficiary was added to the trust must include a {0}
+charityBeneficiary.startDate.error.invalid = Enter a real date
+charityBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
+charityBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499

@@ -14,38 +14,39 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.charityortrust.add
 
 import controllers.actions._
-import forms.AddBeneficiaryTypeFormProvider
+import forms.CharityOrTrustBeneficiaryTypeFormProvider
 import javax.inject.Inject
-import models.beneficiaries.TypeOfBeneficiaryToAdd
+import models.beneficiaries.CharityOrTrustToAdd
+import models.beneficiaries.CharityOrTrustToAdd._
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
-import pages.AddNowPage
+import pages.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AddNowView
+import views.html.charityortrust.add.CharityOrTrustView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddNowController @Inject()(
-                                  override val messagesApi: MessagesApi,
-                                  standardActionSets: StandardActionSets,
-                                  val controllerComponents: MessagesControllerComponents,
-                                  view: AddNowView,
-                                  formProvider: AddBeneficiaryTypeFormProvider,
-                                  repository: PlaybackRepository
+class CharityOrTrustController @Inject()(
+                                          override val messagesApi: MessagesApi,
+                                          standardActionSets: StandardActionSets,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: CharityOrTrustView,
+                                          formProvider: CharityOrTrustBeneficiaryTypeFormProvider,
+                                          repository: PlaybackRepository
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[TypeOfBeneficiaryToAdd] = formProvider()
+  val form: Form[CharityOrTrustToAdd] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AddNowPage) match {
+      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -62,14 +63,12 @@ class AddNowController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddNowPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-              case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
-//              case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
-              case CharityOrTrust => Redirect(controllers.charityortrust.add.routes.CharityOrTrustController.onPageLoad())
-              case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+              case Charity => Redirect(controllers.charityortrust.add.charity.routes.NameController.onPageLoad())
+              case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             }
           }
       )
