@@ -21,6 +21,7 @@ import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import forms.DateOfBirthFormProvider
 import models.Name
+import config.annotations.IndividualBeneficiary
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -110,7 +111,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

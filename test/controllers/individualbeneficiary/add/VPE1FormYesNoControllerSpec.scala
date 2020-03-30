@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -98,9 +99,8 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
-          )
+          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+
           .build()
 
       val request =

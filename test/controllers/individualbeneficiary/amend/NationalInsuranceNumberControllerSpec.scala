@@ -17,6 +17,7 @@
 package controllers.individualbeneficiary.amend
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.NationalInsuranceNumberFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
@@ -97,7 +98,7 @@ class NationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

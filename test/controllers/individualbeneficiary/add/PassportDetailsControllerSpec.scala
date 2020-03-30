@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.PassportDetailsFormProvider
 import models.{Name, Passport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -102,9 +103,7 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
-          )
+          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
           .build()
 
       val request =

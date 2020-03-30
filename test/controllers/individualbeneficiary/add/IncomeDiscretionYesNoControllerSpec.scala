@@ -17,6 +17,7 @@
 package controllers.individualbeneficiary.add
 
 import base.SpecBase
+import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.Name
 import navigation.Navigator
@@ -92,7 +93,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].toInstance(fakeNavigator))
+          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
           .build()
 
       val request =
