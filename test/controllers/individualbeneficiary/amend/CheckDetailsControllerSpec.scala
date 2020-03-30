@@ -20,8 +20,8 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.{Name, NationalInsuranceNumber}
 import models.beneficiaries.IndividualBeneficiary
+import models.{Name, NationalInsuranceNumber}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
-import utils.print.IndividualBeneficiaryPrintHelper
+import utils.print.AmendIndividualBeneficiaryPrintHelper
 import views.html.individualbeneficiary.amend.CheckDetailsView
 
 import scala.concurrent.Future
@@ -98,7 +98,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
+      val printHelper = application.injector.instanceOf[AmendIndividualBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, name.displayName)
 
       status(result) mustEqual OK
