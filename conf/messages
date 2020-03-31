@@ -388,6 +388,10 @@ charityBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
 charityBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 charityBeneficiary.addressUkYesNo.error.required = Select yes if the charity beneficiary’s address is in the UK
 
+charityBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+charityBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
 charityBeneficiary.startDate.title = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
