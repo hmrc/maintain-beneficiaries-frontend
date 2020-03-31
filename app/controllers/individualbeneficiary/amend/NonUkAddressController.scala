@@ -16,6 +16,7 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.NonUkAddressFormProvider
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NonUkAddressController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: PlaybackRepository,
-                                        navigator: Navigator,
+                                        @AmendIndividualBeneficiary navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredAction,
                                         formProvider: NonUkAddressFormProvider,

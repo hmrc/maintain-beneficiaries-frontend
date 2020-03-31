@@ -18,6 +18,7 @@ package models
 
 import java.time.{LocalDate, LocalDateTime}
 
+import pages.AddNowPage
 import play.api.Logger
 import play.api.libs.json._
 import queries.{Gettable, Settable}
@@ -31,13 +32,20 @@ final case class UserAnswers(
                               data: JsObject = Json.obj(),
                               updatedAt: LocalDateTime = LocalDateTime.now
                             ) {
+
+  def cleanup : Try[UserAnswers] = {
+    this
+      .deleteAtPath(pages.classofbeneficiary.basePath)
+      .flatMap(_.deleteAtPath(pages.individualbeneficiary.basePath))
+      .flatMap(_.remove(AddNowPage))
+  }
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
       case JsError(errors) => None
     }
   }
-
 
   def set[A](page: Settable[A], value: Option[A])(implicit writes: Writes[A]): Try[UserAnswers] = {
     value match {

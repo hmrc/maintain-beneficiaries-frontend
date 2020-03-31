@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.AmendIndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
 import models.{CombinedPassportOrIdCard, Name, UserAnswers}
 import navigation.Navigator
@@ -98,7 +99,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].toInstance(fakeNavigator))
+        .overrides(bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
       val request =

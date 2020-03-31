@@ -24,7 +24,7 @@ import pages.individualbeneficiary._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 
-class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
+class AddIndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
   val name: Name = Name("First", Some("Middle"), "Last")
   val trusteeUkAddress = UkAddress("value 1", "value 2", None, None, "AB1 1AB")

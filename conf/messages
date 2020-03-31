@@ -33,6 +33,24 @@ site.address.nonUk.line2 = Address line 2
 site.address.nonUk.line3 = Address line 3 (optional)
 site.address.nonUk.country = Country
 
+trustNotClaimed.title = Sorry, you cannot access this trust
+trustNotClaimed.heading = Sorry, you cannot access this trust
+trustNotClaimed.subheading = This trust’s UTR: {0}
+trustNotClaimed.p1 = One of the trustees will need to complete the next two steps so you can maintain the trust online on their behalf.
+trustNotClaimed.bullet.1.title = Trustee needs to claim the trust
+trustNotClaimed.bullet.1.p1 = A trustee needs to log onto the Trust Registration Service using their Government Gateway account. The account they use must be an organisation account, not an individual account.
+trustNotClaimed.bullet.1.p2 = If they do not have an account, they can
+trustNotClaimed.bullet.1.p2.a = register for one here (opens in a new tab).
+trustNotClaimed.bullet.1.p3 = The trustee needs to correctly answer questions about the trust so HMRC can prove the connection between the trustee and the trust.
+trustNotClaimed.bullet.1.p4 = The trustee must complete this step before you can request authorisation from them to maintain the trust.
+trustNotClaimed.bullet.2.title = Trustee needs to authorise your online access the trust
+trustNotClaimed.bullet.2.p1 = Through Agent Services you can create an authorisation link to send to the trustee.
+trustNotClaimed.bullet.2.p2 = The trustee needs to use the same Government Gateway organisation account used to claim the trust to approve your request.
+trustNotClaimed.bullet.2.p3 = If you need help with the service
+trustNotClaimed.bullet.2.p3.a = contact the trusts helpline (opens in a new window or tab).
+trustNotClaimed.bullet.2.p4 = You can
+trustNotClaimed.bullet.2.p4.a = return to register and maintain a trust for a client.
+
 ukAddress.error.line1.required = Enter address line 1
 ukAddress.error.line2.required = Enter address line 2
 ukAddress.error.postcode.required = Enter a postcode
