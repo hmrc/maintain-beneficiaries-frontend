@@ -85,7 +85,6 @@ class IndividualBeneficiaryExtractor @Inject()() {
     individualBeneficiary.income match {
       case Some(income) =>
         answers.set(IncomeDiscretionYesNoPage, false)
-          // TODO come back and fix this toInt to handle at API reads
           .flatMap(_.set(IncomePercentagePage, income.toInt))
       case None =>
         // Assumption that user answered yes as the share of income is not provided
