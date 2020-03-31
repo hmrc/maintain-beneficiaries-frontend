@@ -30,6 +30,7 @@ class AmendIndividualBeneficiaryMapper {
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
   def apply(answers: UserAnswers): Option[IndividualBeneficiary] = {
+
     val readFromUserAnswers: Reads[IndividualBeneficiary] =
       (
         NamePage.path.read[Name] and
