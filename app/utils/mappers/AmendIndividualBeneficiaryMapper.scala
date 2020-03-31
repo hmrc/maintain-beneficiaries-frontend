@@ -23,7 +23,7 @@ import models.{Address, CombinedPassportOrIdCard, IndividualIdentification, Name
 import org.slf4j.LoggerFactory
 import pages.individualbeneficiary._
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.{JsError, JsPath, JsSuccess, Reads}
 
 class AmendIndividualBeneficiaryMapper {
 
@@ -40,20 +40,9 @@ class AmendIndividualBeneficiaryMapper {
           VPE1FormYesNoPage.path.read[Boolean] and
           readIncome and
           IncomeDiscretionYesNoPage.path.read[Boolean] and
-          StartDatePage.path.read[LocalDate]
-        ) (
-        (name, dateOfBirth, identification, address, vulnerableYesNo, income, incomeDiscretion, entityStart) =>
-          IndividualBeneficiary(
-            name,
-            dateOfBirth,
-            identification,
-            address,
-            vulnerableYesNo,
-            income,
-            incomeDiscretion,
-            entityStart,
-            provisional = true)
-      )
+          StartDatePage.path.read[LocalDate] and
+          Reads(_ => JsSuccess(true))
+        ) (IndividualBeneficiary.apply _)
 
     answers.data.validate[IndividualBeneficiary](readFromUserAnswers) match {
       case JsSuccess(value, _) =>
