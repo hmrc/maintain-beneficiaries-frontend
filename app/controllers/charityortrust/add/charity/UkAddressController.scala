@@ -16,6 +16,7 @@
 
 package controllers.charityortrust.add.charity
 
+import config.annotations.AddCharityBeneficiary
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import forms.UkAddressFormProvider
@@ -33,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UkAddressController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      sessionRepository: PlaybackRepository,
-                                     navigator: Navigator,
+                                     @AddCharityBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: UkAddressFormProvider,

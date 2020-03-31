@@ -16,6 +16,7 @@
 
 package controllers.charityortrust.add.charity
 
+import config.annotations.AddCharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
@@ -34,15 +35,15 @@ import views.html.charityortrust.add.charity.AddressUkYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressUkYesNoController @Inject()(
-                                        val controllerComponents: MessagesControllerComponents,
-                                        standardActionSets: StandardActionSets,
-                                        formProvider: YesNoFormProvider,
-                                        connector: TrustConnector,
-                                        view: AddressUkYesNoView,
-                                        trustService: TrustService,
-                                        repository: PlaybackRepository,
-                                        navigator: Navigator,
-                                        nameAction: NameRequiredAction
+                                          val controllerComponents: MessagesControllerComponents,
+                                          standardActionSets: StandardActionSets,
+                                          formProvider: YesNoFormProvider,
+                                          connector: TrustConnector,
+                                          view: AddressUkYesNoView,
+                                          trustService: TrustService,
+                                          repository: PlaybackRepository,
+                                          @AddCharityBeneficiary navigator: Navigator,
+                                          nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.addressUkYesNo")

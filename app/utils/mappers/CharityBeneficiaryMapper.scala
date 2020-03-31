@@ -22,6 +22,7 @@ import models.beneficiaries.CharityBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
 import pages.charityortrust.charity._
+import pages.individualbeneficiary.IncomePercentagePage
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
@@ -39,11 +40,14 @@ class CharityBeneficiaryMapper {
           case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
           case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
         } and
-        ShareOfIncomePage.path.readNullable[String] and
+        ShareOfIncomePage.path.readNullable[Int].flatMap[Option[String]] {
+          case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
+          case None => Reads(_ => JsSuccess(None))
+        } and
         DiscretionYesNoPage.path.read[Boolean] and
         StartDatePage.path.read[LocalDate] and
         Reads(_ => JsSuccess(true))
-      ).apply(CharityBeneficiary.apply _ )
+      ) (CharityBeneficiary.apply _ )
 
     answers.data.validate[CharityBeneficiary](readFromUserAnswers) match {
       case JsSuccess(value, _) =>

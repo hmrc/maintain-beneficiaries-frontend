@@ -17,6 +17,7 @@
 package controllers.charityortrust.add.charity
 
 import base.SpecBase
+import config.annotations.AddCharityBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -82,7 +83,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

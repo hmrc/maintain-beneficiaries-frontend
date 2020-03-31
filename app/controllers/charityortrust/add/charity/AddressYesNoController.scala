@@ -16,6 +16,7 @@
 
 package controllers.charityortrust.add.charity
 
+import config.annotations.AddCharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
@@ -41,7 +42,7 @@ class AddressYesNoController @Inject()(
                                         view: AddressYesNoView,
                                         trustService: TrustService,
                                         repository: PlaybackRepository,
-                                        navigator: Navigator,
+                                        @AddCharityBeneficiary navigator: Navigator,
                                         nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

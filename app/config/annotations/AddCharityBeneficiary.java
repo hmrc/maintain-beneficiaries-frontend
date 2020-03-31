@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package config.annotations;
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import com.google.inject.BindingAnnotation;
 
-class ShareOfIncomeFormProvider @Inject() extends Mappings {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  def withPrefix(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            nonEmptyString("value", s"$prefix.error.required"),
-            regexp(Validation.percentageRegex, s"$prefix.error.invalid"),
-            maximumValue("100", s"$prefix.error.maximumValueExceeded")
-          )
-        )
-    )
- }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface AddCharityBeneficiary {}

@@ -21,9 +21,9 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._
 import controllers.charityortrust.add.charity.routes._
 
-class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class AddCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new Navigator
+  val navigator = new AddCharityBeneficiaryNavigator
 
   "Charity beneficiary navigator" when {
 

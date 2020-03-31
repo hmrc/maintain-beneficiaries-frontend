@@ -83,7 +83,7 @@ class AnswerRowConverter @Inject()() {
       }
     }
 
-    def percentageQuestion(query: Gettable[String],
+    def percentageQuestion(query: Gettable[Int],
                            labelKey: String,
                            changeUrl: String)
                           (implicit messages:Messages): Option[AnswerRow] = {

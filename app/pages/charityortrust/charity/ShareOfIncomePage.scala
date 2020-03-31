@@ -19,7 +19,7 @@ package pages.charityortrust.charity
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ShareOfIncomePage extends QuestionPage[String] {
+case object ShareOfIncomePage extends QuestionPage[Int] {
 
   override def path: JsPath = basePath \ toString
 

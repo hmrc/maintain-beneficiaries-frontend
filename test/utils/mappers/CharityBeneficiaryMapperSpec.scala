@@ -25,7 +25,7 @@ import pages.charityortrust.charity._
 class CharityBeneficiaryMapperSpec extends SpecBase {
 
   val name: String = "Charity"
-  val share: String = "50"
+  val share: Int = 50
   val date: LocalDate = LocalDate.parse("2019-02-03")
   val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
 

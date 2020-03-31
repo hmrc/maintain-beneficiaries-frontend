@@ -17,7 +17,8 @@
 package controllers.charityortrust.add.charity
 
 import base.SpecBase
-import forms.ShareOfIncomeFormProvider
+import config.annotations.AddCharityBeneficiary
+import forms.IncomePercentageFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{NamePage, ShareOfIncomePage}
@@ -30,11 +31,11 @@ import views.html.charityortrust.add.charity.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new ShareOfIncomeFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
+  private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
   private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
-  private val answer = "50"
+  private val answer = 50
 
   val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
@@ -83,12 +84,12 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody(("value", answer))
+          .withFormUrlEncodedBody(("percentage", answer.toString))
 
       val result = route(application, request).value
 
@@ -105,7 +106,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val request = FakeRequest(POST, shareOfIncomeRoute)
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("percentage" -> ""))
 
       val view = application.injector.instanceOf[ShareOfIncomeView]
 
@@ -139,7 +140,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody(("value", answer))
+          .withFormUrlEncodedBody(("percentage", answer.toString))
 
       val result = route(application, request).value
 

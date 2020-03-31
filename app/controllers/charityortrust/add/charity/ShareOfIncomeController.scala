@@ -16,10 +16,11 @@
 
 package controllers.charityortrust.add.charity
 
+import config.annotations.AddCharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
-import forms.ShareOfIncomeFormProvider
+import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.charityortrust.charity.ShareOfIncomePage
@@ -36,16 +37,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class ShareOfIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          standardActionSets: StandardActionSets,
-                                         formProvider: ShareOfIncomeFormProvider,
+                                         formProvider: IncomePercentageFormProvider,
                                          connector: TrustConnector,
                                          view: ShareOfIncomeView,
                                          trustService: TrustService,
                                          repository: PlaybackRepository,
-                                         navigator: Navigator,
+                                         @AddCharityBeneficiary navigator: Navigator,
                                          nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("charityBeneficiary.shareOfIncome")
+  val form: Form[Int] = formProvider.withPrefix("charityBeneficiary.shareOfIncome")
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
