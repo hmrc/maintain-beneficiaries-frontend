@@ -78,7 +78,7 @@ class IndividualBeneficiaryMapper {
       hasPassport <- PassportDetailsYesNoPage.path.readWithDefault(false)
       hasIdCard <- IdCardDetailsYesNoPage.path.readWithDefault(false)
     } yield (hasNino, hasAddress, hasPassport, hasIdCard)).flatMap[Option[IndividualIdentification]] {
-        case (false, true, true, false) => PassportDetailsPage.path.readNullable[Passport].map(Some(_))
+        case (false, true, true, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
         case (false, true, false, true) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
         case _ => Reads(_ => JsSuccess(None))
       }
