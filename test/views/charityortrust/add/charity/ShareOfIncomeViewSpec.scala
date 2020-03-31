@@ -20,10 +20,10 @@ import controllers.charityortrust.add.charity.routes
 import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.IntViewBehaviours
+import views.behaviours.QuestionViewBehaviours
 import views.html.charityortrust.add.charity.ShareOfIncomeView
 
-class ShareOfIncomeViewSpec extends IntViewBehaviours {
+class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
 
   val messageKeyPrefix = "charityBeneficiary.shareOfIncome"
   val name: String = "Charity"
@@ -46,7 +46,7 @@ class ShareOfIncomeViewSpec extends IntViewBehaviours {
       messageKeyPrefix,
       None,
       routes.NameController.onSubmit().url,
-      "value"
+      "percentage"
     )
 
     behave like pageWithASubmitButton(applyView(form))

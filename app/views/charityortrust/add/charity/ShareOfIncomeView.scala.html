@@ -34,8 +34,8 @@
         @components.error_summary(form.errors)
 
         @components.input_text(
-            field = form("value"),
-            label = messages("charityBeneficiary.shareOfIncome.heading"),
+            field = form("percentage"),
+            label = messages("charityBeneficiary.shareOfIncome.heading", name),
             headingIsLabel = true,
             hint = Some(messages("charityBeneficiary.shareOfIncome.hint")),
             labelClass=Some("heading-large")

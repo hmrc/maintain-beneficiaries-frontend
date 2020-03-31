@@ -38,6 +38,7 @@ final case class UserAnswers(
       .deleteAtPath(pages.classofbeneficiary.basePath)
       .flatMap(_.deleteAtPath(pages.individualbeneficiary.basePath))
       .flatMap(_.deleteAtPath(pages.charityortrust.basePath))
+      .flatMap(_.deleteAtPath(pages.charityortrust.charity.basePath))
       .flatMap(_.remove(AddNowPage))
   }
 
