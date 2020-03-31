@@ -155,6 +155,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
     override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
       Future.successful(HttpResponse(OK))
+
+    override def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] =
+      Future.successful(charityBeneficiary)
   }
 
   " AddABeneficiary Controller" when {
