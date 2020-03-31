@@ -255,7 +255,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                 IndividualBeneficiary(
                   name = Name("first", None, "last"),
                   dateOfBirth = None,
-                  nationalInsuranceNumber = None,
+                  identification = None,
                   address = None,
                   vulnerableYesNo = false,
                   income = None,
@@ -282,7 +282,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   utr = None,
                   address = None,
                   None,
-                  true,
+                  incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2019-09-23"),
                   provisional = false
                 )
@@ -448,7 +448,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       val individualBeneficiary = IndividualBeneficiary(
         name = Name("Nicola", Some("Andrey"), "Jackson"),
         dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
-        nationalInsuranceNumber = None,
+        identification = None,
         address = Some(UkAddress(
           "Suite 10",
           "Wealthy Arena",
@@ -482,7 +482,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.addIndividualBeneficiary(utr, individualBeneficiary)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -540,7 +540,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             lastName = "Last"
           ),
           dateOfBirth = None,
-          nationalInsuranceNumber = None,
+          identification = None,
           address = None,
           vulnerableYesNo = false,
           income = None,
@@ -580,7 +580,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             lastName = "Last"
           ),
           dateOfBirth = None,
-          nationalInsuranceNumber = None,
+          identification = None,
           address = None,
           vulnerableYesNo = false,
           income = None,

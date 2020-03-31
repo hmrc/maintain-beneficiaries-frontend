@@ -41,7 +41,6 @@ import scala.util.Try
 class AddABeneficiaryController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            repository: PlaybackRepository,
-                                           navigator: Navigator,
                                            trust: TrustService,
                                            standardActionSets: StandardActionSets,
                                            addAnotherFormProvider: AddABeneficiaryFormProvider,
@@ -62,7 +61,7 @@ class AddABeneficiaryController @Inject()(
 
       for {
         beneficiaries <- trust.getBeneficiaries(request.userAnswers.utr)
-        updatedAnswers <- Future.fromTry(cleanRemoveYesNoPages)
+        updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
         _ <- repository.set(updatedAnswers)
       } yield {
         beneficiaries match {
@@ -80,12 +79,6 @@ class AddABeneficiaryController @Inject()(
             ))
         }
       }
-  }
-
-  private def cleanRemoveYesNoPages(implicit request: DataRequest[AnyContent]): Try[UserAnswers] = {
-    request.userAnswers
-      .remove(pages.individualbeneficiary.RemoveYesNoPage)
-      .flatMap(_.remove(pages.classofbeneficiary.RemoveYesNoPage))
   }
 
   def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData {
@@ -125,11 +118,13 @@ class AddABeneficiaryController @Inject()(
           {
             case AddABeneficiary.YesNow =>
               for {
-                updatedAnswers <- Future.fromTry(cleanup)
+                updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
                 _ <- repository.set(updatedAnswers)
               } yield Redirect(controllers.routes.AddNowController.onPageLoad())
+
             case AddABeneficiary.YesLater =>
               Future.successful(Redirect(appConfig.maintainATrustOverview))
+
             case AddABeneficiary.NoComplete =>
               for {
                 _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
@@ -139,13 +134,5 @@ class AddABeneficiaryController @Inject()(
           }
         )
       }
-  }
-
-  private def cleanup(implicit request: DataRequest[AnyContent]): Try[UserAnswers] = {
-    request.userAnswers
-      .deleteAtPath(pages.classofbeneficiary.basePath)
-      .flatMap(_.deleteAtPath(pages.individualbeneficiary.basePath))
-      .flatMap(_.deleteAtPath(pages.charityortrust.basePath))
-      .flatMap(_.remove(AddNowPage))
   }
 }

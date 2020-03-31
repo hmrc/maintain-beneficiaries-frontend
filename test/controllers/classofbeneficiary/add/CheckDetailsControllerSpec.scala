@@ -33,8 +33,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.countryOptions.CountryOptions
-import utils.print.AnswerRowConverter
-import viewmodels.AnswerSection
+import utils.print.{AnswerRowConverter, ClassOfBeneficiaryPrintHelper}
 import views.html.classofbeneficiary.add.CheckDetailsView
 
 import scala.concurrent.Future
@@ -59,11 +58,6 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
 
-      val answerSection = AnswerSection(None, Seq(
-        bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
-        bound.dateQuestion(EntityStartPage, "classOfBeneficiary.entityStart", controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
-      ).flatten)
-
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, checkDetailsRoute)
@@ -71,6 +65,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
+      val printHelper = application.injector.instanceOf[ClassOfBeneficiaryPrintHelper]
+      val answerSection = printHelper(userAnswers, description)
 
       status(result) mustEqual OK
 

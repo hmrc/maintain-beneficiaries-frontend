@@ -59,6 +59,18 @@ class AnswerRowConverter @Inject()() {
       }
     }
 
+    def intQuestion(query: Gettable[Int],
+                       labelKey: String,
+                       changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
+          HtmlFormat.escape(x.toString),
+          changeUrl
+        )
+      }
+    }
+
     def yesNoQuestion(query: Gettable[Boolean],
                      labelKey: String,
                      changeUrl: String): Option[AnswerRow] = {

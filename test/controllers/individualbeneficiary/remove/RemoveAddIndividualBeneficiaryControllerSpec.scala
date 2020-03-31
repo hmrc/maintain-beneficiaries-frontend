@@ -37,7 +37,7 @@ import views.html.individualbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
+class RemoveAddIndividualBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
 
   val messagesPrefix = "removeIndividualBeneficiary"
 
@@ -53,7 +53,7 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with PropertyCh
   def individualBeneficiary(id: Int, provisional : Boolean) = IndividualBeneficiary(
     name = name,
     dateOfBirth = None,
-    nationalInsuranceNumber = None,
+    identification = None,
     address = None,
     vulnerableYesNo = false,
     income = None,

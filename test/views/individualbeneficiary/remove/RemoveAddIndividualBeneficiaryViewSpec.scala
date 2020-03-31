@@ -23,7 +23,7 @@ import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.individualbeneficiary.remove.RemoveIndexView
 
-class RemoveIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
+class RemoveAddIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "removeIndividualBeneficiary"
   val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)

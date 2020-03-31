@@ -16,22 +16,12 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
 import models.UserAnswers
 import pages.Page
 import play.api.mvc.Call
 
-@Singleton
-class Navigator @Inject()() {
+trait Navigator {
 
-  private val normalRoutes: Page => UserAnswers => Call =
-    ClassOfBeneficiaryNavigator.routes orElse
-    IndividualBeneficiaryNavigator.routes orElse
-    CharityBeneficiaryNavigator.routes orElse {
-    case _ => ua => controllers.routes.IndexController.onPageLoad(ua.utr)
-  }
-
-  def nextPage(page: Page, userAnswers: UserAnswers): Call =
-      normalRoutes(page)(userAnswers)
+  def nextPage(page: Page, userAnswers: UserAnswers): Call
 
 }

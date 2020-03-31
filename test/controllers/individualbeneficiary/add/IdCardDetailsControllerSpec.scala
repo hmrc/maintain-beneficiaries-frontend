@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.AddIndividualBeneficiary
 import forms.IdCardDetailsFormProvider
 import models.{IdCard, Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -102,9 +103,8 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
-          )
+          .overrides(bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(fakeNavigator))
+
           .build()
 
       val request =

@@ -2,7 +2,7 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/maintain-beneficiaries-frontend.log</file>
+        <file>logs/new_service.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%date{ISO8601} level=[%level] logger=[%logger] thread=[%thread] message=[%message] %replace(exception=[%xException]){'^exception=\[\]$',''}%n</pattern>
         </encoder>
@@ -43,17 +43,19 @@
         <appender-ref ref="STDOUT_IGNORE_NETTY" />
     </logger>
 
-    <logger name="com.google.inject" level="INFO"/>
+    <logger name="uk.gov" level="WARN"/>
 
-    <logger name="uk.gov" level="INFO"/>
+    <logger name="play.api.mvc.LegacySessionCookieBaker" level="OFF"/>
 
-    <logger name="application" level="DEBUG"/>
+    <loggern name="uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector" level="OFF"/>
 
-    <logger name="connector" level="TRACE">
+    <logger name="application" level="WARN"/>
+
+    <logger name="connector" level="INFO">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

@@ -16,6 +16,7 @@
 
 package controllers.classofbeneficiary.add
 
+import config.annotations.ClassOfBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
@@ -40,7 +41,7 @@ class DescriptionController @Inject()(
                                        view: DescriptionView,
                                        trustService: TrustService,
                                        repository: PlaybackRepository,
-                                       navigator: Navigator
+                                       @ClassOfBeneficiary navigator: Navigator
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description")
