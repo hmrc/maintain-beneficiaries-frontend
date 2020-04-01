@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
-import forms.DateFormProvider
+import forms.DateAddedToTrustFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{NamePage, StartDatePage}
@@ -33,13 +33,15 @@ import views.html.charityortrust.add.charity.StartDateView
 
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[LocalDate] = new DateFormProvider().withPrefix("charityBeneficiary.startDate")
+  private val date: LocalDate = LocalDate.parse("2019-02-01")
+  private val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("charityBeneficiary.startDate", date)
   private val startDateRoute: String = routes.StartDateController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
+  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date)
+    .set(NamePage, name).success.value
 
   "NonUkAddress Controller" must {
 
@@ -84,7 +86,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[AddCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
