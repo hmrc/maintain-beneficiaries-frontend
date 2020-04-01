@@ -35,7 +35,9 @@ class AmendCharityBeneficiaryNavigator @Inject()() extends Navigator {
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
-      yesNoNav(ua, DiscretionYesNoPage, rts.AddressUkYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
+      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
+    case AddressYesNoPage => ua =>
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), checkDetailsRoute(ua))
     case AddressUkYesNoPage => ua =>
       yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
   }

@@ -59,7 +59,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.charity"),
       changeLabel = messages("site.change.details"),
-      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
+      changeUrl = Some(controllers.charityortrust.amend.charity.routes.CheckDetailsController.extractAndRender(index).url),
       removeLabel = messages("site.delete"),
       removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
     )
