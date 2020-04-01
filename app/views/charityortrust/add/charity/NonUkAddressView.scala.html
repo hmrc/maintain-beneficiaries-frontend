@@ -39,5 +39,7 @@
         @components.non_uk_address(form, countryOptions)
 
         @components.submit_button()
+
+        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("site.return.link")</a></p>
     }
 }

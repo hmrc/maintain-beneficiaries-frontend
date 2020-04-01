@@ -40,7 +40,8 @@
             legendClass = Some("heading-large"),
             inputs = CharityOrTrustToAdd.options.toSeq,
             headingIsLegend = true,
-            hint = Some(messages("charityOrTrust.hint"))
+            hint = Some(messages("charityOrTrust.hint")),
+            fieldSetClass = Some("inline")
         )
 
         @components.submit_button()
