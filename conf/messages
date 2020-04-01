@@ -395,8 +395,8 @@ charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
 charityOrTrust.hint = As named in the trust deed
 charityOrTrust.error.required = Select the type of beneficiary you need to add
 
-charityOrTrustTypeOfBeneficiary.charity = Charity
-charityOrTrustTypeOfBeneficiary.trust = Trust
+isTheBeneficiaryACharityOrTrust.charity = Charity
+isTheBeneficiaryACharityOrTrust.trust = Trust
 
 charityBeneficiary.name.title = What is the charity’s name?
 charityBeneficiary.name.heading = What is the charity’s name?
