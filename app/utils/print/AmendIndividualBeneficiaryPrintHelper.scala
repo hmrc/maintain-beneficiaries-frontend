@@ -37,7 +37,7 @@ class AmendIndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: Answer
         bound.yesNoQuestion(DateOfBirthYesNoPage, "individualBeneficiary.dateOfBirthYesNo", controllers.individualbeneficiary.amend.routes.DateOfBirthYesNoController.onPageLoad().url),
         bound.dateQuestion(DateOfBirthPage, "individualBeneficiary.dateOfBirth", controllers.individualbeneficiary.amend.routes.DateOfBirthController.onPageLoad().url),
         bound.yesNoQuestion(IncomeDiscretionYesNoPage, "individualBeneficiary.incomeDiscretionYesNo", controllers.individualbeneficiary.amend.routes.IncomeDiscretionYesNoController.onPageLoad().url),
-        bound.intQuestion(IncomePercentagePage, "individualBeneficiary.incomePercentage", controllers.individualbeneficiary.amend.routes.IncomePercentageController.onPageLoad().url),
+        bound.percentageQuestion(IncomePercentagePage, "individualBeneficiary.incomePercentage", controllers.individualbeneficiary.amend.routes.IncomePercentageController.onPageLoad().url),
         bound.yesNoQuestion(NationalInsuranceNumberYesNoPage, "individualBeneficiary.nationalInsuranceNumberYesNo", controllers.individualbeneficiary.amend.routes.NationalInsuranceNumberYesNoController.onPageLoad().url),
         bound.ninoQuestion(NationalInsuranceNumberPage, "individualBeneficiary.nationalInsuranceNumber", controllers.individualbeneficiary.amend.routes.NationalInsuranceNumberController.onPageLoad().url),
         bound.yesNoQuestion(AddressYesNoPage, "individualBeneficiary.addressYesNo", controllers.individualbeneficiary.amend.routes.AddressYesNoController.onPageLoad().url),
