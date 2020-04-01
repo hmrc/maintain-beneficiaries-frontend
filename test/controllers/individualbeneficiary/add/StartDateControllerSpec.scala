@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import forms.DateFormProvider
+import forms.{DateAddedToTrustFormProvider, DateFormProvider}
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -38,8 +38,9 @@ import scala.concurrent.Future
 
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new DateFormProvider()
-  private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.startDate")
+  val formProvider = new DateAddedToTrustFormProvider()
+  private val date: LocalDate = LocalDate.parse("2019-02-03")
+  private def form: Form[LocalDate] = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.startDate", date)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -49,7 +50,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   val name = Name("New", None, "Beneficiary")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
+  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", date)
     .set(NamePage, name)
     .success.value
 
