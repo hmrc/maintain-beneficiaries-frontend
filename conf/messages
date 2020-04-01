@@ -19,7 +19,7 @@ site.complete = Completed
 site.return.link = Return to add a beneficiary
 site.beneficiary.defaultText = the beneficiary
 
-site.address.uk.title = What is {0}’s address?
+site.address.uk.title = What is the address?
 site.address.uk.heading = What is {0}’s address?
 site.address.uk.line1 = Address line 1
 site.address.uk.line2 = Address line 2
@@ -29,7 +29,7 @@ site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB
 
 address.country.select = Select a country
-site.address.nonUk.title = What is {0}’s address?
+site.address.nonUk.title = What is the address?
 site.address.nonUk.heading = What is {0}’s address?
 site.address.nonUk.line1 = Address line 1
 site.address.nonUk.line2 = Address line 2
@@ -405,26 +405,26 @@ charityBeneficiary.name.error.required = Enter the charity’s name
 charityBeneficiary.name.error.invalidFormat = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 charityBeneficiary.name.error.length = Charity’s name must be 56 characters or less
 
-charityBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the charity beneficiary may get?
 charityBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 charityBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 charityBeneficiary.discretionYesNo.hint = See the trust deed for details
 charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity may get
 
-charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is Test entitled to?
-charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
+charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
 charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is Test entitled to?
 charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
 charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
 charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
 charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
 
-charityBeneficiary.addressYesNo.title = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.title = Do you know the charity beneficiary’s address?
 charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
 charityBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 charityBeneficiary.addressYesNo.error.required = Select yes if you know the charity beneficiary’s address
 
-charityBeneficiary.addressUkYesNo.title = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.title = Is the charity beneficiary’s address in the UK?
 charityBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
 charityBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
 charityBeneficiary.addressUkYesNo.error.required = Select yes if the charity beneficiary’s address is in the UK
@@ -433,7 +433,7 @@ charityBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 
 charityBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
-charityBeneficiary.startDate.title = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.title = When was the charity beneficiary added as a beneficiary?
 charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.

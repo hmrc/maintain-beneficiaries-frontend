@@ -40,24 +40,5 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =
     Enumerable(values.map(v => v.toString -> v): _*)
-}
-
-sealed trait CharityOrTrustToAdd
-
-object CharityOrTrustToAdd extends Enumerable.Implicits {
-  case object Charity extends WithName("charity") with CharityOrTrustToAdd
-  case object Trust extends WithName("trust") with CharityOrTrustToAdd
-
-  val values: List[CharityOrTrustToAdd] = List(
-    Charity, Trust
-  )
-
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("charityOrTrustTypeOfBeneficiary", value.toString)
-  }
-
-  implicit val enumerable: Enumerable[CharityOrTrustToAdd] =
-    Enumerable(values.map(v => v.toString -> v): _*)
 
 }
