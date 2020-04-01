@@ -385,7 +385,7 @@ removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
 
-removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
+removeIndividualBeneficiary.title = Are you sure you want to remove the individual beneficiary?
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
 
