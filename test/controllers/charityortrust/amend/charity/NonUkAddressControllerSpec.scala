@@ -18,88 +18,82 @@ package controllers.charityortrust.amend.charity
 
 import base.SpecBase
 import config.annotations.AmendCharityBeneficiary
-import forms.IncomePercentageFormProvider
+import forms.NonUkAddressFormProvider
+import models.NonUkAddress
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{NamePage, ShareOfIncomePage}
+import pages.charityortrust.charity.{NamePage, NonUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.PlaybackRepository
-import views.html.charityortrust.amend.charity.ShareOfIncomeView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.charityortrust.amend.charity.NonUkAddressView
 
-import scala.concurrent.Future
+class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
-
-  private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
-  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad().url
+  private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
+  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
-  private val answer = 50
+  private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
   val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
-  "ShareOfIncome Controller" must {
+  "NonUkAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, name)(request, messages).toString
+        view(form, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(ShareOfIncomePage, answer).success.value
+      val answers = baseAnswers.set(NonUkAddressPage, answer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), name)(fakeRequest, messages).toString
+        view(form.fill(answer), countryOptions, name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockPlaybackRepository = mock[PlaybackRepository]
-
-      when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
-
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[AmendCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          )
-          .build()
+          ).build()
 
       val request =
-        FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody("value" -> answer.toString)
+        FakeRequest(POST, nonUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "DE"))
 
       val result = route(application, request).value
 
@@ -114,18 +108,18 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, shareOfIncomeRoute)
+      val request = FakeRequest(POST, nonUkAddressRoute)
 
-      val boundForm = form.bind(Map("percentage" -> ""))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, name)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, name)(fakeRequest, messages).toString
 
        application.stop()
     }
@@ -134,7 +128,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
       val result = route(application, request).value
 
@@ -149,8 +143,8 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody(("percentage", answer.toString))
+        FakeRequest(POST, nonUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "DE"))
 
       val result = route(application, request).value
 
