@@ -38,6 +38,8 @@ object CheckAnswersFormatters {
 
   def formatNino(nino: String): Html = HtmlFormat.escape(Nino(nino).formatted)
 
+  def percentage(value: Int): Html = HtmlFormat.escape(s"$value%")
+
   def formatAddress(address: Address, countryOptions: CountryOptions): Html = {
     address match {
       case a: UkAddress => formatUkAddress(a)
