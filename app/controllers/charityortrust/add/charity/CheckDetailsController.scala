@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.add.charity
 
-import config.FrontendAppConfig
+import config.{ErrorHandler, FrontendAppConfig}
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
@@ -42,7 +42,8 @@ class CheckDetailsController @Inject()(
                                         playbackRepository: PlaybackRepository,
                                         printHelper: CharityBeneficiaryPrintHelper,
                                         mapper: CharityBeneficiaryMapper,
-                                        nameAction: NameRequiredAction
+                                        nameAction: NameRequiredAction,
+                                        errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
@@ -57,7 +58,7 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers) match {
         case None =>
-          Future.successful(InternalServerError)
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>
           connector.addCharityBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

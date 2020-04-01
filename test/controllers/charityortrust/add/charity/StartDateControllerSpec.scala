@@ -16,38 +16,40 @@
 
 package controllers.charityortrust.add.charity
 
+import java.time.LocalDate
+
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
-import forms.IncomePercentageFormProvider
+import forms.DateFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{NamePage, ShareOfIncomePage}
+import pages.charityortrust.charity.{NamePage, StartDatePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.add.charity.ShareOfIncomeView
+import views.html.charityortrust.add.charity.StartDateView
 
-class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
+class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
-  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad().url
+  private val form: Form[LocalDate] = new DateFormProvider().withPrefix("charityBeneficiary.startDate")
+  private val startDateRoute: String = routes.StartDateController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
-  private val answer = 50
+  private val answer = LocalDate.parse("2019-02-03")
 
   val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
-  "ShareOfIncome Controller" must {
+  "NonUkAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, startDateRoute)
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[StartDateView]
 
       val result = route(application, request).value
 
@@ -61,13 +63,13 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(ShareOfIncomePage, answer).success.value
+      val answers = baseAnswers.set(StartDatePage, answer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, startDateRoute)
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[StartDateView]
 
       val result = route(application, request).value
 
@@ -88,8 +90,12 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
           ).build()
 
       val request =
-        FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody(("value", answer.toString))
+        FakeRequest(POST, startDateRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> answer.getDayOfMonth.toString,
+            "value.month" -> answer.getMonthValue.toString,
+            "value.year"  -> answer.getYear.toString
+          )
 
       val result = route(application, request).value
 
@@ -104,11 +110,11 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, shareOfIncomeRoute)
+      val request = FakeRequest(POST, startDateRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ShareOfIncomeView]
+      val view = application.injector.instanceOf[StartDateView]
 
       val result = route(application, request).value
 
@@ -124,7 +130,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, shareOfIncomeRoute)
+      val request = FakeRequest(GET, startDateRoute)
 
       val result = route(application, request).value
 
@@ -139,8 +145,12 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, shareOfIncomeRoute)
-          .withFormUrlEncodedBody(("value", answer.toString))
+        FakeRequest(POST, startDateRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> answer.getDayOfMonth.toString,
+            "value.month" -> answer.getMonthValue.toString,
+            "value.year"  -> answer.getYear.toString
+          )
 
       val result = route(application, request).value
 

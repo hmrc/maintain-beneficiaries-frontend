@@ -24,19 +24,21 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-  title = s"${errorPrefix(form)} ${messages("site.address.uk.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("site.address.uk.title")}"
 ) {
 
-  @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
 
-    @components.back_link()
+        @components.back_link()
 
-    @components.error_summary(form.errors)
+        @components.error_summary(form.errors)
 
-    @components.heading("site.address.uk.heading", Some(name))
+        @components.heading("site.address.uk.heading", Some(name))
 
-    @components.uk_address(form)
+        @components.uk_address(form)
 
-    @components.submit_button()
-  }
+        @components.submit_button()
+
+        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("site.return.link")</a></p>
+    }
 }
