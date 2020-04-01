@@ -342,7 +342,7 @@ individualBeneficiary.startDate.error.past = The date the individual beneficiary
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
 
-individualBeneficiary.whenRemoved.title = When was {0} removed as a beneficiary?
+individualBeneficiary.whenRemoved.title = When was the individual removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
 individualBeneficiary.whenRemoved.hint = For example, 31 3 1980
 individualBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
@@ -355,12 +355,12 @@ individualBeneficiary.whenRemoved.error.past = The date the beneficiary was remo
 classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
 
 individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
-individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know the individual’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.heading = Do you know {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport or ID card details
 
 individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel = What are {0}’s passport or ID card details?
-individualBeneficiary.passportOrIdCardDetails.title = What are the {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetails.title = What are the individual’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetails.heading = What are {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetails.country = ID card country of issue
 individualBeneficiary.passportOrIdCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
