@@ -16,6 +16,8 @@
 
 package controllers.actions.charity
 
+import controllers.actions
+import controllers.actions.BeneficiaryNameRequest
 import javax.inject.Inject
 import models.requests.DataRequest
 import pages.charityortrust.charity.NamePage
@@ -28,7 +30,7 @@ class NameRequiredAction @Inject()(val executionContext: ExecutionContext, val m
   extends ActionTransformer[DataRequest, BeneficiaryNameRequest] with I18nSupport {
 
   override protected def transform[A](request: DataRequest[A]): Future[BeneficiaryNameRequest[A]] = {
-    Future.successful(BeneficiaryNameRequest[A](request,
+    Future.successful(actions.BeneficiaryNameRequest[A](request,
       getName(request)
     ))
   }
