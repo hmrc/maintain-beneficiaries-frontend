@@ -16,12 +16,37 @@
 
 package pages
 
+import models.UserAnswers
 import models.beneficiaries.TypeOfBeneficiaryToAdd
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object AddNowPage extends QuestionPage[TypeOfBeneficiaryToAdd] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "addNow"
+
+  override def cleanup(value: Option[TypeOfBeneficiaryToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+
+      case Some(Individual) =>
+        userAnswers.deleteAtPath(classofbeneficiary.basePath)
+          .flatMap(_.deleteAtPath(charityortrust.basePath))
+
+      case Some(ClassOfBeneficiaries) =>
+        userAnswers.deleteAtPath(individualbeneficiary.basePath)
+          .flatMap(_.deleteAtPath(charityortrust.basePath))
+
+      case Some(CharityOrTrust) =>
+        userAnswers.deleteAtPath(individualbeneficiary.basePath)
+          .flatMap(_.deleteAtPath(classofbeneficiary.basePath))
+
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
+  }
+
 }

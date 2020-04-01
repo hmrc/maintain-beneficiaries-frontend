@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
+import config.annotations.AddIndividualBeneficiary
 import forms.IncomePercentageFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -58,7 +59,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, incomePercentageRoute)
-      .withFormUrlEncodedBody("percentage" -> validAnswer.toString)
+      .withFormUrlEncodedBody("value" -> validAnswer.toString)
 
   "Individual Beneficiary Income Percentage Controller" must {
 
@@ -107,7 +108,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 
@@ -126,9 +127,9 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, incomePercentageRoute)
-          .withFormUrlEncodedBody(("percentage", "invalid value"))
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("percentage" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val view = application.injector.instanceOf[IncomePercentageView]
 

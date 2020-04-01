@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.amend
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import controllers.individualbeneficiary.amend.routes
+import config.annotations.AmendIndividualBeneficiary
 import forms.DateOfBirthFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
@@ -68,7 +68,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithName)).build()
 
       val result = route(application, getRequest()).value
 
@@ -77,7 +77,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, messages("individualBeneficiary.name.default"))(fakeRequest, messages).toString
+        view(form, name.displayName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -111,7 +111,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

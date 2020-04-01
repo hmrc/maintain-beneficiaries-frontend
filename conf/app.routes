@@ -6,6 +6,8 @@
 ->         /individual/amend                                                individualBeneficiary.amend.Routes
 ->         /individual/remove                                               individualBeneficiary.remove.Routes
 
+->         /charity/add                                                     charityBeneficiary.add.Routes
+
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
@@ -30,5 +32,8 @@ POST       /add-another                                                     cont
 
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
 POST       /what-kind                                                       controllers.AddNowController.onSubmit()
+
+GET        /charity-or-trust                                                controllers.charityortrust.add.CharityOrTrustController.onPageLoad()
+POST       /charity-or-trust                                                controllers.charityortrust.add.CharityOrTrustController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

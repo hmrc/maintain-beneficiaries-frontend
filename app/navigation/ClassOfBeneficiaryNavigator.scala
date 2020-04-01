@@ -17,17 +17,18 @@
 package navigation
 
 import controllers.classofbeneficiary.add.{routes => rts}
+import javax.inject.Inject
 import models.UserAnswers
 import pages.Page
 import pages.classofbeneficiary._
 import play.api.mvc.Call
 
-object ClassOfBeneficiaryNavigator {
-  private val simpleNavigation: PartialFunction[Page, Call] = {
+class ClassOfBeneficiaryNavigator @Inject()() extends Navigator {
+
+  override def nextPage(page: Page, userAnswers: UserAnswers): Call = page match {
     case DescriptionPage => rts.EntityStartController.onPageLoad()
     case EntityStartPage => rts.CheckDetailsController.onPageLoad()
+    case _ => controllers.routes.IndexController.onPageLoad(userAnswers.utr)
   }
 
-  val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c)
 }

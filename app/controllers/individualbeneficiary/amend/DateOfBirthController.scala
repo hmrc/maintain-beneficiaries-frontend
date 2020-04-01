@@ -16,11 +16,13 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions.StandardActionSets
+import controllers.actions.individual.NameRequiredAction
 import forms.DateOfBirthFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.individualbeneficiary.{DateOfBirthPage, NamePage}
+import pages.individualbeneficiary.DateOfBirthPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -32,8 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfBirthController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: PlaybackRepository,
-                                       navigator: Navigator,
+                                       @AmendIndividualBeneficiary navigator: Navigator,
                                        standardActionSets: StandardActionSets,
+                                       nameAction: NameRequiredAction,
                                        formProvider: DateOfBirthFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: DateOfBirthView
@@ -42,33 +45,23 @@ class DateOfBirthController @Inject()(
   val form = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
 
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
-
-      val name = request.userAnswers.get(NamePage)
-        .map { _.displayName }
-        .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
 
       val preparedForm = request.userAnswers.get(DateOfBirthPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, name))
+      Ok(view(preparedForm, request.beneficiaryName))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
-        formWithErrors => {
-
-          val name = request.userAnswers.get(NamePage)
-            .map { _.displayName }
-            .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
-
-          Future.successful(BadRequest(view(formWithErrors, name)))
-        },
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthPage, value))

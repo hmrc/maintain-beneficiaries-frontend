@@ -19,6 +19,7 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
+import config.annotations.AmendIndividualBeneficiary
 import forms.YesNoFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -40,7 +41,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.discretionaryIncomeYesNo")
+  val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
   val trusteeName = "FirstName LastName"
   val name = Name("FirstName", None, "LastName")
   val index = 0
@@ -99,7 +100,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

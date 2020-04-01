@@ -58,8 +58,7 @@ class IndividualBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        println(s"Failed: $errors")
-        logger.error("Failed to rehydrate IndividualBeneficiary from UserAnswers", errors)
+        logger.error(s"Failed to rehydrate IndividualBeneficiary from UserAnswers due to $errors")
         None
     }
   }
@@ -72,23 +71,25 @@ class IndividualBeneficiaryMapper {
   }
 
   private def readPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
-    PassportDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-      case true => PassportDetailsPage.path.read[Passport].map(Some(_))
-      case false => readIdCard
-    }
-  }
-
-  private def readIdCard: Reads[Option[IndividualIdentification]] = {
-    IdCardDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-      case true => IdCardDetailsPage.path.read[IdCard].map(Some(_))
-      case false => Reads(_ => JsSuccess(None))
-    }
+    (for {
+      hasNino <- NationalInsuranceNumberYesNoPage.path.readWithDefault(false)
+      hasAddress <- AddressYesNoPage.path.readWithDefault(false)
+      hasPassport <- PassportDetailsYesNoPage.path.readWithDefault(false)
+      hasIdCard <- IdCardDetailsYesNoPage.path.readWithDefault(false)
+    } yield (hasNino, hasAddress, hasPassport, hasIdCard)).flatMap[Option[IndividualIdentification]] {
+        case (false, true, true, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
+        case (false, true, false, true) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
+        case _ => Reads(_ => JsSuccess(None))
+      }
   }
 
   private def readAddress: Reads[Option[Address]] = {
-    AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
-      case true => readUkOrNonUkAddress
-      case false => Reads(_ => JsSuccess(None))
+    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap {
+      case true => Reads(_ => JsSuccess(None))
+      case false => AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
+        case true => readUkOrNonUkAddress
+        case false => Reads(_ => JsSuccess(None))
+      }
     }
   }
 

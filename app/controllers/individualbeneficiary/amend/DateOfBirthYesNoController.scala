@@ -16,7 +16,9 @@
 
 package controllers.individualbeneficiary.amend
 
+import config.annotations.AmendIndividualBeneficiary
 import controllers.actions.StandardActionSets
+import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import navigation.Navigator
@@ -32,8 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateOfBirthYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             sessionRepository: PlaybackRepository,
-                                            navigator: Navigator,
+                                            @AmendIndividualBeneficiary navigator: Navigator,
                                             standardActionSets: StandardActionSets,
+                                            nameAction: NameRequiredAction,
                                             formProvider: YesNoFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
                                             view: DateOfBirthYesNoView
@@ -41,7 +44,7 @@ class DateOfBirthYesNoController @Inject()(
 
   val form = formProvider.withPrefix("individualBeneficiary.dateOfBirthYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
       val name = request.userAnswers.get(NamePage)
@@ -59,18 +62,11 @@ class DateOfBirthYesNoController @Inject()(
 
   }
 
-  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr).async {
+  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
       form.bindFromRequest().fold(
-        formWithErrors => {
-
-          val name = request.userAnswers.get(NamePage)
-            .map { _.displayName }
-            .getOrElse { request.messages(messagesApi)("individualBeneficiary.name.default") }
-
-          Future.successful(BadRequest(view(formWithErrors, name)))
-
-        },
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthYesNoPage, value))

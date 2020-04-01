@@ -24,6 +24,6 @@ class IncomePercentageFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[Int] =
     Form(
-      "percentage" -> incomePercentage()
+      "value" -> incomePercentage()
     )
 }

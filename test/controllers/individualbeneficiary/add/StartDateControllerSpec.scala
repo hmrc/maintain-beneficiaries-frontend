@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import forms.{DateAddedToTrustFormProvider, DateFormProvider}
+import forms.DateAddedToTrustFormProvider
 import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
