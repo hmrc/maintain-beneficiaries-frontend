@@ -16,11 +16,9 @@
 
 package models.beneficiaries
 
-import models.{Enumerable, WithName}
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
-import viewmodels.RadioOption
 
 trait Beneficiary
 
@@ -50,27 +48,4 @@ object Beneficiaries {
       and (__ \ "beneficiary" \ "charity").readWithDefault[List[CharityBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "other").readWithDefault[List[OtherBeneficiary]](Nil)
       ).apply(Beneficiaries.apply _)
-}
-
-sealed trait TypeOfBeneficiaryToAdd
-
-object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
-
-  case object Individual extends WithName("individual") with TypeOfBeneficiaryToAdd
-  case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
-  case object CharityOrTrust extends WithName("charityOrTrust") with TypeOfBeneficiaryToAdd
-  case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiaryToAdd
-  case object Other extends WithName("other") with TypeOfBeneficiaryToAdd
-
-  val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
-  )
-
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("whatTypeOfBeneficiary", value.toString)
-  }
-
-  implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =
-    Enumerable(values.map(v => v.toString -> v): _*)
 }
