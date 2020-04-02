@@ -30,7 +30,7 @@ class AmendCharityBeneficiaryNavigator @Inject()() extends Navigator {
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.DiscretionYesNoController.onPageLoad()
-    case ShareOfIncomePage => rts.AddressUkYesNoController.onPageLoad()
+    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
   }
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
