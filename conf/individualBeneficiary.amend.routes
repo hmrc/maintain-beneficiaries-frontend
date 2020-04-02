@@ -11,8 +11,8 @@ POST       /date-of-birth                           controllers.individualbenefi
 GET        /decide-income                           controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onPageLoad()
 POST       /decide-income                           controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onSubmit()
 
-GET        /income-percentage                       controllers.individualbeneficiary.amend.IncomePercentageController.onPageLoad()
-POST       /income-percentage                       controllers.individualbeneficiary.amend.IncomePercentageController.onSubmit()
+GET        /share-of-income                       controllers.individualbeneficiary.amend.IncomePercentageController.onPageLoad()
+POST       /share-of-income                       controllers.individualbeneficiary.amend.IncomePercentageController.onSubmit()
 
 GET        /has-national-insurance-number           controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onPageLoad()
 POST       /has-national-insurance-number           controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onSubmit()

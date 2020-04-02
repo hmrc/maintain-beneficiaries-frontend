@@ -10,8 +10,8 @@ POST       /date-of-birth                            controllers.individualbenef
 GET        /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
 POST       /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
 
-GET        /income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
-POST       /income-percentage                        controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
+GET        /share-of-income                        controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
+POST       /share-of-income                        controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
 
 GET        /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onPageLoad()
 POST       /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onSubmit()
