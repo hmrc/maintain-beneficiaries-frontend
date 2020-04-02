@@ -33,7 +33,7 @@ class AddNowViewSpec extends OptionsViewBehaviours {
   "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, TypeOfBeneficiaryToAdd.options)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

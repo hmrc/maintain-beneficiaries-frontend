@@ -19,6 +19,8 @@ package models.beneficiaries
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
+import viewmodels.RadioOption
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 
 trait Beneficiary
 
@@ -36,6 +38,23 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
       case 1 => Messages("addABeneficiary.singular.heading")
       case l => Messages("addABeneficiary.count.heading", l)
     }
+
+  val availableOptions: List[RadioOption] = {
+
+    val options: List[TypeOfBeneficiaryToAdd] =
+      (if (individualDetails.size < 25) List(Individual) else Nil) ++
+        (if (unidentified.size < 25) List(ClassOfBeneficiaries) else Nil) ++
+        (if (trust.size + charity.size < 25) List(CharityOrTrust) else Nil) ++
+        (if (company.size + employmentRelated.size < 25) List(CompanyOrEmploymentRelated) else Nil) ++
+        (if (other.size < 25) List(Other) else Nil)
+
+    options.map {
+      value =>
+        RadioOption("whatTypeOfBeneficiary", value.toString)
+    }
+
+  }
+
 }
 
 object Beneficiaries {

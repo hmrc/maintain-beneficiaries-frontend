@@ -26,6 +26,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.AddNowView
 
@@ -37,41 +38,50 @@ class AddNowController @Inject()(
                                   val controllerComponents: MessagesControllerComponents,
                                   view: AddNowView,
                                   formProvider: AddBeneficiaryTypeFormProvider,
-                                  repository: PlaybackRepository
+                                  repository: PlaybackRepository,
+                                  trustService: TrustService
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[TypeOfBeneficiaryToAdd] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AddNowPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+      trustService.getBeneficiaries(request.userAnswers.utr).map {
+        beneficiaries =>
+          val preparedForm = request.userAnswers.get(AddNowPage) match {
+            case None => form
+            case Some(value) => form.fill(value)
+          }
 
-      Ok(view(preparedForm))
+          Ok(view(preparedForm, beneficiaries.availableOptions))
+
+      }
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+      trustService.getBeneficiaries(request.userAnswers.utr).flatMap {
+        beneficiaries =>
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddNowPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            value match {
-              case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
-              case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
-              case CharityOrTrust => Redirect(controllers.charityortrust.add.routes.CharityOrTrustController.onPageLoad())
-              case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
-            }
-          }
-      )
+          form.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, beneficiaries.availableOptions))),
+
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddNowPage, value))
+                _ <- repository.set(updatedAnswers)
+              } yield {
+                value match {
+                  case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
+                  case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
+                  case CharityOrTrust => Redirect(controllers.charityortrust.add.routes.CharityOrTrustController.onPageLoad())
+                  case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+                }
+              }
+          )
+      }
   }
 }

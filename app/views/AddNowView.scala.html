@@ -16,13 +16,14 @@
 
 @import controllers.routes._
 @import models.beneficiaries.TypeOfBeneficiaryToAdd
+@import viewmodels.RadioOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("addNow.title")}"
@@ -38,7 +39,7 @@
             field = form("value"),
             legend = messages("addNow.heading"),
             legendClass = Some("heading-large"),
-            inputs = TypeOfBeneficiaryToAdd.options.toSeq,
+            inputs = options.toSeq,
             headingIsLegend = true,
             hint = Some(messages("addNow.hint"))
         )
