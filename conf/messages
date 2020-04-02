@@ -447,3 +447,8 @@ charityBeneficiary.startDate.error.past = The date the individual beneficiary wa
 
 charityBeneficiary.checkDetails.title = Check charity beneficiary details
 charityBeneficiary.checkDetails.heading = Check charity beneficiary details
+
+charityBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+charityBeneficiary.checkDetails.utr.p1 = Some of the information we ask about charity beneficiaries has changed.
+charityBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
+charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.

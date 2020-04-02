@@ -22,6 +22,9 @@ POST       /non-uk-address                          controllers.charityortrust.a
 
 GET        /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.extractAndRender(index: Int)
 
+GET        /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onPageLoad()
+POST       /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onSubmit()
+
 GET        /:index/updated-details                  controllers.charityortrust.amend.charity.CheckDetailsController.renderFromUserAnswers(index: Int)
 
 POST       /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.onSubmit(index: Int)

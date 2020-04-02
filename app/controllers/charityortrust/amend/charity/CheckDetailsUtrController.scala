@@ -20,78 +20,41 @@ import config.{ErrorHandler, FrontendAppConfig}
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
-import extractors.CharityBeneficiaryExtractor
 import javax.inject.Inject
-import models.UserAnswers
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
 import utils.print.AmendCharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.charityortrust.amend.charity.CheckDetailsView
+import views.html.charityortrust.amend.charity.CheckDetailsUtrView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class CheckDetailsController @Inject()(
+class CheckDetailsUtrController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        service: TrustService,
+                                        view: CheckDetailsUtrView,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
                                         printHelper: AmendCharityBeneficiaryPrintHelper,
                                         mapper: CharityBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
-                                        extractor: CharityBeneficiaryExtractor,
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
-    val section: AnswerSection = printHelper(userAnswers, name)
-    Ok(view(section, index))
-  }
-
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      service.getCharityBeneficiary(request.userAnswers.utr, index) flatMap {
-        charity =>
-          val extractedAnswers = extractor(request.userAnswers, charity, index)
-          for {
-            extractedF <- Future.fromTry(extractedAnswers)
-            _ <- playbackRepository.set(extractedF)
-          } yield {
-            if (charity.utr.isDefined) {
-              Redirect(controllers.charityortrust.amend.charity.routes.CheckDetailsUtrController.onPageLoad())
-            } else {
-              render(extractedF, index, charity.name)
-            }
-          }
-      }
+      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      Ok(view(section, request.beneficiaryName))
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
-      render(request.userAnswers, index, request.beneficiaryName)
-  }
-
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      mapper(request.userAnswers).map {
-        beneficiary =>
-          connector.amendCharityBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
-      }.getOrElse(Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate)))
   }
 }

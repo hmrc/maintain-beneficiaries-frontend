@@ -37,6 +37,7 @@ class AmendCharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRow
         bound.stringQuestion(NamePage, "charityBeneficiary.name", controllers.charityortrust.amend.charity.routes.NameController.onPageLoad().url),
         bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", controllers.charityortrust.amend.charity.routes.DiscretionYesNoController.onPageLoad().url),
         bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", controllers.charityortrust.amend.charity.routes.ShareOfIncomeController.onPageLoad().url),
+        bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr",""),
         bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", controllers.charityortrust.amend.charity.routes.AddressYesNoController.onPageLoad().url),
         bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", controllers.charityortrust.amend.charity.routes.AddressUkYesNoController.onPageLoad().url),
         bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", controllers.charityortrust.amend.charity.routes.UkAddressController.onPageLoad().url),
