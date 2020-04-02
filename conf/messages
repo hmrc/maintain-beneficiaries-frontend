@@ -381,7 +381,7 @@ individualBeneficiary.passportOrIdCardDetails.expiryDate.error.invalid = Enter a
 individualBeneficiary.passportOrIdCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.passportOrIdCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
-removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
 
