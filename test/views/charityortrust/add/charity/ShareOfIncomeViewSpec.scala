@@ -46,7 +46,7 @@ class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
       messageKeyPrefix,
       None,
       routes.NameController.onSubmit().url,
-      "percentage"
+      "value"
     )
 
     behave like pageWithASubmitButton(applyView(form))
