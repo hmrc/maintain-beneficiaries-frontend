@@ -27,6 +27,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.charityortrust.add.CharityOrTrustView
 
@@ -38,39 +39,48 @@ class CharityOrTrustController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           view: CharityOrTrustView,
                                           formProvider: CharityOrTrustBeneficiaryTypeFormProvider,
-                                          repository: PlaybackRepository
+                                          repository: PlaybackRepository,
+                                          trustService: TrustService
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[CharityOrTrustToAdd] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+      trustService.getBeneficiaries(request.userAnswers.utr).map {
+        beneficiaries =>
+          val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
+            case None => form
+            case Some(value) => form.fill(value)
+          }
 
-      Ok(view(preparedForm))
+          Ok(view(preparedForm, beneficiaries.availableCharityOrTrustOptions))
+
+      }
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+      trustService.getBeneficiaries(request.userAnswers.utr).flatMap {
+        beneficiaries =>
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            value match {
-              case Charity => Redirect(controllers.charityortrust.add.charity.routes.NameController.onPageLoad())
-              case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
-            }
-          }
-      )
+          form.bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, beneficiaries.availableCharityOrTrustOptions))),
+
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
+                _ <- repository.set(updatedAnswers)
+              } yield {
+                value match {
+                  case Charity => Redirect(controllers.charityortrust.add.charity.routes.NameController.onPageLoad())
+                  case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+                }
+              }
+          )
+      }
   }
 }

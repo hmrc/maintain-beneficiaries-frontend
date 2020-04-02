@@ -21,6 +21,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 import viewmodels.RadioOption
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
+import models.beneficiaries.CharityOrTrustToAdd._
 
 trait Beneficiary
 
@@ -39,20 +40,40 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
       case l => Messages("addABeneficiary.count.heading", l)
     }
 
-  val availableOptions: List[RadioOption] = {
+  private def addToList[A](size: Int, option: A): List[A] = {
+    if (size < 25) List(option) else Nil
+  }
 
-    val options: List[TypeOfBeneficiaryToAdd] =
-      (if (individualDetails.size < 25) List(Individual) else Nil) ++
-        (if (unidentified.size < 25) List(ClassOfBeneficiaries) else Nil) ++
-        (if (trust.size + charity.size < 25) List(CharityOrTrust) else Nil) ++
-        (if (company.size + employmentRelated.size < 25) List(CompanyOrEmploymentRelated) else Nil) ++
-        (if (other.size < 25) List(Other) else Nil)
+  val allAvailableOptions: List[RadioOption] = {
+
+    val options: List[TypeOfBeneficiaryToAdd] = {
+      addToList(individualDetails.size, Individual) ++
+      addToList(unidentified.size, ClassOfBeneficiaries) ++
+      addToList(trust.size, CharityOrTrust) ++
+      addToList(charity.size, CharityOrTrust) ++
+      addToList(company.size, CompanyOrEmploymentRelated) ++
+      addToList(employmentRelated.size, CompanyOrEmploymentRelated) ++
+      addToList(other.size, Other)
+    }.distinct
 
     options.map {
       value =>
-        RadioOption("whatTypeOfBeneficiary", value.toString)
+        RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
     }
 
+  }
+
+  val availableCharityOrTrustOptions: List[RadioOption] = {
+
+    val options: List[CharityOrTrustToAdd] = {
+      addToList(charity.size, Charity) ++
+      addToList(trust.size, Trust)
+    }
+
+    options.map {
+      value =>
+        RadioOption(CharityOrTrustToAdd.prefix, value.toString)
+    }
   }
 
 }

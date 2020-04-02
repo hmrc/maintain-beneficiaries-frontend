@@ -23,6 +23,8 @@ sealed trait CharityOrTrustToAdd
 
 object CharityOrTrustToAdd extends Enumerable.Implicits {
 
+  val prefix = "isTheBeneficiaryACharityOrTrust"
+
   case object Charity extends WithName("charity") with CharityOrTrustToAdd
   case object Trust extends WithName("trust") with CharityOrTrustToAdd
 
@@ -32,7 +34,7 @@ object CharityOrTrustToAdd extends Enumerable.Implicits {
 
   val options: List[RadioOption] = values.map {
     value =>
-      RadioOption("isTheBeneficiaryACharityOrTrust", value.toString)
+      RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[CharityOrTrustToAdd] =

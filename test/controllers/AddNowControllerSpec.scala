@@ -235,7 +235,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, beneficiaries.availableOptions)(fakeRequest, messages).toString
+        view(form, beneficiaries.allAvailableOptions)(fakeRequest, messages).toString
 
       application.stop()
 

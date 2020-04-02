@@ -23,6 +23,8 @@ sealed trait TypeOfBeneficiaryToAdd
 
 object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
 
+  val prefix = "whatTypeOfBeneficiary"
+
   case object Individual extends WithName("individual") with TypeOfBeneficiaryToAdd
   case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
   case object CharityOrTrust extends WithName("charityOrTrust") with TypeOfBeneficiaryToAdd
@@ -35,7 +37,7 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
 
   val options: List[RadioOption] = values.map {
     value =>
-      RadioOption("whatTypeOfBeneficiary", value.toString)
+      RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =

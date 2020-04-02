@@ -16,15 +16,23 @@
 
 package controllers.charityortrust.add
 
+import java.time.LocalDate
+
 import base.SpecBase
 import forms.CharityOrTrustBeneficiaryTypeFormProvider
-import models.beneficiaries.CharityOrTrustToAdd
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, CharityOrTrustToAdd}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust._
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.TrustService
 import views.html.charityortrust.add.CharityOrTrustView
+
+import scala.concurrent.Future
 
 class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
@@ -32,11 +40,19 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
   lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad().url
   val charityOrTrustBeneficiaryAnswer: CharityOrTrustToAdd.Charity.type = CharityOrTrustToAdd.Charity
 
+  val mockTrustService: TrustService = mock[TrustService]
+
+  when(mockTrustService.getBeneficiaries(any())(any(), any()))
+    .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
+
   "AddNow Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, charityOrTrustRoute)
 
@@ -47,7 +63,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, CharityOrTrustToAdd.options)(request, messages).toString
 
       application.stop()
     }
@@ -56,7 +72,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       val answers = emptyUserAnswers.set(CharityOrTrustPage, charityOrTrustBeneficiaryAnswer).success.value
 
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+      val application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, charityOrTrustRoute)
 
@@ -67,7 +86,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(charityOrTrustBeneficiaryAnswer))(fakeRequest, messages).toString
+        view(form.fill(charityOrTrustBeneficiaryAnswer), CharityOrTrustToAdd.options)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -75,7 +94,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the Name page when Charity is selected" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[TrustService].toInstance(mockTrustService)
+          ).build()
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
@@ -92,7 +114,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to feature not available page when Trust is selected" in {
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[TrustService].toInstance(mockTrustService)
+          ).build()
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
@@ -109,7 +134,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(POST, charityOrTrustRoute)
 
@@ -122,14 +150,17 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, CharityOrTrustToAdd.options)(fakeRequest, messages).toString
 
        application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, charityOrTrustRoute)
 
@@ -143,7 +174,10 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request =
         FakeRequest(POST, charityOrTrustRoute)
@@ -156,6 +190,45 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "not show a certain radio option if there are 25 or more of that type of beneficiary" in {
+
+      val charityBeneficiary = CharityBeneficiary(
+        "name",
+        None,
+        None,
+        None,
+        incomeDiscretionYesNo = true,
+        LocalDate.parse("2019-02-03"),
+        provisional = false
+      )
+
+      val charityBeneficiaires: List[CharityBeneficiary] = List.fill(25)(charityBeneficiary)
+
+      val beneficiaries = Beneficiaries(Nil, Nil, Nil, Nil, Nil, charityBeneficiaires, Nil)
+
+      when(mockTrustService.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.successful(beneficiaries))
+
+      val application = applicationBuilder(Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request = FakeRequest(GET, charityOrTrustRoute)
+
+      val view = application.injector.instanceOf[CharityOrTrustView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, beneficiaries.availableCharityOrTrustOptions)(fakeRequest, messages).toString
+
+      application.stop()
+
     }
   }
 }

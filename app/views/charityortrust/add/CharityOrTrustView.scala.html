@@ -15,14 +15,14 @@
  *@
 
 @import controllers.charityortrust.add.routes._
-@import models.beneficiaries.CharityOrTrustToAdd
+@import viewmodels.RadioOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("charityOrTrust.title")}"
@@ -38,7 +38,7 @@
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
             legendClass = Some("heading-large"),
-            inputs = CharityOrTrustToAdd.options.toSeq,
+            inputs = options.toSeq,
             headingIsLegend = true,
             hint = Some(messages("charityOrTrust.hint")),
             fieldSetClass = Some("inline")
