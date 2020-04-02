@@ -38,7 +38,6 @@ class NameController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 standardActionSets: StandardActionSets,
                                 formProvider: IndividualNameFormProvider,
-                                connector: TrustConnector,
                                 view: NameView,
                                 trustService: TrustService,
                                 repository: PlaybackRepository,

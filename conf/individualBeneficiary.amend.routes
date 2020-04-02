@@ -1,48 +1,48 @@
 
-GET        /name                             controllers.individualbeneficiary.amend.NameController.onPageLoad()
-POST       /name                             controllers.individualbeneficiary.amend.NameController.onSubmit()
+GET        /name                                    controllers.individualbeneficiary.amend.NameController.onPageLoad()
+POST       /name                                    controllers.individualbeneficiary.amend.NameController.onSubmit()
 
-GET        /know-date-of-birth               controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onPageLoad()
-POST       /know-date-of-birth               controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onSubmit()
+GET        /know-date-of-birth                      controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onPageLoad()
+POST       /know-date-of-birth                      controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onSubmit()
 
-GET        /date-of-birth                    controllers.individualbeneficiary.amend.DateOfBirthController.onPageLoad()
-POST       /date-of-birth                    controllers.individualbeneficiary.amend.DateOfBirthController.onSubmit()
+GET        /date-of-birth                           controllers.individualbeneficiary.amend.DateOfBirthController.onPageLoad()
+POST       /date-of-birth                           controllers.individualbeneficiary.amend.DateOfBirthController.onSubmit()
 
-GET        /decide-income                    controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onPageLoad()
-POST       /decide-income                    controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onSubmit()
+GET        /decide-income                           controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onPageLoad()
+POST       /decide-income                           controllers.individualbeneficiary.amend.IncomeDiscretionYesNoController.onSubmit()
 
-GET        /income-percentage                controllers.individualbeneficiary.amend.IncomePercentageController.onPageLoad()
-POST       /income-percentage                controllers.individualbeneficiary.amend.IncomePercentageController.onSubmit()
+GET        /share-of-income                       controllers.individualbeneficiary.amend.IncomePercentageController.onPageLoad()
+POST       /share-of-income                       controllers.individualbeneficiary.amend.IncomePercentageController.onSubmit()
 
-GET        /has-national-insurance-number            controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onPageLoad()
-POST       /has-national-insurance-number            controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onSubmit()
+GET        /has-national-insurance-number           controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onPageLoad()
+POST       /has-national-insurance-number           controllers.individualbeneficiary.amend.NationalInsuranceNumberYesNoController.onSubmit()
 
-GET        /national-insurance-number                controllers.individualbeneficiary.amend.NationalInsuranceNumberController.onPageLoad()
-POST       /national-insurance-number                controllers.individualbeneficiary.amend.NationalInsuranceNumberController.onSubmit()
+GET        /national-insurance-number               controllers.individualbeneficiary.amend.NationalInsuranceNumberController.onPageLoad()
+POST       /national-insurance-number               controllers.individualbeneficiary.amend.NationalInsuranceNumberController.onSubmit()
 
-GET        /has-address                              controllers.individualbeneficiary.amend.AddressYesNoController.onPageLoad()
-POST       /has-address                              controllers.individualbeneficiary.amend.AddressYesNoController.onSubmit()
+GET        /has-address                             controllers.individualbeneficiary.amend.AddressYesNoController.onPageLoad()
+POST       /has-address                             controllers.individualbeneficiary.amend.AddressYesNoController.onSubmit()
 
-GET        /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onPageLoad()
-POST       /has-uk-address                           controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onSubmit()
+GET        /has-uk-address                          controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onPageLoad()
+POST       /has-uk-address                          controllers.individualbeneficiary.amend.LiveInTheUkYesNoController.onSubmit()
 
-GET        /uk-address                               controllers.individualbeneficiary.amend.UkAddressController.onPageLoad()
-POST       /uk-address                               controllers.individualbeneficiary.amend.UkAddressController.onSubmit()
+GET        /uk-address                              controllers.individualbeneficiary.amend.UkAddressController.onPageLoad()
+POST       /uk-address                              controllers.individualbeneficiary.amend.UkAddressController.onSubmit()
 
-GET        /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onPageLoad()
-POST       /non-uk-address                           controllers.individualbeneficiary.amend.NonUkAddressController.onSubmit()
+GET        /non-uk-address                          controllers.individualbeneficiary.amend.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                          controllers.individualbeneficiary.amend.NonUkAddressController.onSubmit()
 
-GET        /has-passport-or-id-card               controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onPageLoad()
-POST       /has-passport-or-id-card               controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onSubmit()
+GET        /has-passport-or-id-card                 controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onPageLoad()
+POST       /has-passport-or-id-card                 controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onSubmit()
 
-GET        /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onPageLoad()
-POST       /passport-or-id-card                   controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onSubmit()
+GET        /passport-or-id-card                     controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onPageLoad()
+POST       /passport-or-id-card                     controllers.individualbeneficiary.amend.PassportOrIdCardDetailsController.onSubmit()
 
-GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onPageLoad()
-POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.amend.VPE1FormYesNoController.onSubmit()
+GET        /vpe1-form-yes-no                        controllers.individualbeneficiary.amend.VPE1FormYesNoController.onPageLoad()
+POST       /vpe1-form-yes-no                        controllers.individualbeneficiary.amend.VPE1FormYesNoController.onSubmit()
 
-GET        /:index/check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.extractAndRender(index: Int)
+GET        /:index/check-details                    controllers.individualbeneficiary.amend.CheckDetailsController.extractAndRender(index: Int)
 
 GET        /:index/updated-details                  controllers.individualbeneficiary.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
 
-POST       /:index/check-details                            controllers.individualbeneficiary.amend.CheckDetailsController.onSubmit(index: Int)
+POST       /:index/check-details                    controllers.individualbeneficiary.amend.CheckDetailsController.onSubmit(index: Int)

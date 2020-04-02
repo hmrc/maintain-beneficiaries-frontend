@@ -22,7 +22,6 @@ import models.beneficiaries.CharityBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
 import pages.charityortrust.charity._
-import pages.individualbeneficiary.IncomePercentagePage
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 

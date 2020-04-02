@@ -24,11 +24,6 @@ class IncomePercentageFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[Int] =
     Form(
-      "value" -> incomePercentage(
-        requiredKey = s"$prefix.error.income_percentage.required",
-        wholeNumberKey = s"$prefix.error.income_percentage.integer",
-        nonNumericKey = s"$prefix.error.income_percentage.non_numeric",
-        validPercentageKey = s"$prefix.error.income_percentage.less_than_100"
-      )
+      "value" -> incomePercentage(prefix)
     )
 }

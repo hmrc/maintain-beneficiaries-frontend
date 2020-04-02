@@ -46,7 +46,7 @@ class IncomePercentageController @Inject()(
                                 @AmendIndividualBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
+  private val form: Form[Int] = formProvider.withPrefix("individualBeneficiary.shareOfIncome")
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>

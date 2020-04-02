@@ -132,6 +132,17 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithDynamicText(view: HtmlFormat.Appendable,
+                          expectedTextKey: String,
+                          expectedTextParam: String): Unit = {
+
+    "behave like a page with dynamic text" in {
+
+      val doc = asDocument(view)
+      assertContainsText(doc, messages(expectedTextKey, expectedTextParam))
+    }
+  }
+
   def pageWithBackLink(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a back link" must {

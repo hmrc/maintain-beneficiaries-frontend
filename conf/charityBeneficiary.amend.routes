@@ -1,0 +1,30 @@
+
+GET        /name                                    controllers.charityortrust.amend.charity.NameController.onPageLoad()
+POST       /name                                    controllers.charityortrust.amend.charity.NameController.onSubmit()
+
+GET        /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onPageLoad()
+POST       /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onSubmit()
+
+GET        /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onPageLoad()
+POST       /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onSubmit()
+
+GET         /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onPageLoad()
+POST        /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onSubmit()
+
+GET        /has-uk-address                          controllers.charityortrust.amend.charity.AddressUkYesNoController.onPageLoad()
+POST       /has-uk-address                          controllers.charityortrust.amend.charity.AddressUkYesNoController.onSubmit()
+
+GET        /uk-address                              controllers.charityortrust.amend.charity.UkAddressController.onPageLoad()
+POST       /uk-address                              controllers.charityortrust.amend.charity.UkAddressController.onSubmit()
+
+GET        /non-uk-address                          controllers.charityortrust.amend.charity.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                          controllers.charityortrust.amend.charity.NonUkAddressController.onSubmit()
+
+GET        /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.extractAndRender(index: Int)
+
+GET        /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onPageLoad()
+POST       /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onSubmit()
+
+GET        /:index/updated-details                  controllers.charityortrust.amend.charity.CheckDetailsController.renderFromUserAnswers(index: Int)
+
+POST       /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.onSubmit(index: Int)
