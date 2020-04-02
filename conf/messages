@@ -94,11 +94,6 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
-error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
-
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 
@@ -239,6 +234,10 @@ individualBeneficiary.incomePercentage.checkYourAnswersLabel = What percentage o
 individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
 individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
 individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
+individualBeneficiary.incomePercentage.error.required = Enter what percentage of the trust’s assets the individual beneficiary is entitled to
+individualBeneficiary.incomePercentage.error.integer = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.incomePercentage.error.non_numeric = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.incomePercentage.error.less_than_100 = The percentage of the trust’s assets the individual beneficiary is entitled to must be 100 or less
 
 individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
@@ -416,8 +415,9 @@ charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s asse
 charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
 charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
 charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
-charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
-charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the charity beneficiary is entitled to must be 100 or less
+charityBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the charity beneficiary is entitled to must be 100 or less
 
 charityBeneficiary.addressYesNo.title = Do you know the charity beneficiary’s address?
 charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
