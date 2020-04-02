@@ -413,11 +413,11 @@ charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees h
 
 charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
 charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
 charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
-charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
+charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the charity beneficiary is entitled to must be 100 or less
 
 charityBeneficiary.addressYesNo.title = Do you know the charity beneficiary’s address?
 charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
@@ -443,7 +443,7 @@ charityBeneficiary.startDate.error.required.two = The date the charity beneficia
 charityBeneficiary.startDate.error.required = The date the charity beneficiary was added to the trust must include a {0}
 charityBeneficiary.startDate.error.invalid = Enter a real date
 charityBeneficiary.startDate.error.future = The date the charity beneficiary was added to the trust must be today or in the past
-charityBeneficiary.startDate.error.past = The date the charity beneficiary was added to the trust must be after 31 December 1499
+charityBeneficiary.startDate.error.past = The date the charity beneficiary was added to the trust cannot be before the start date of the trust
 
 charityBeneficiary.checkDetails.title = Check charity beneficiary details
 charityBeneficiary.checkDetails.heading = Check charity beneficiary details
