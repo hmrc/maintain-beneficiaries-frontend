@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package controllers.individualbeneficiary.add
+package controllers.charityortrust.amend.charity
 
-import config.annotations.AddIndividualBeneficiary
-import connectors.TrustConnector
+import config.annotations.AmendCharityBeneficiary
 import controllers.actions.StandardActionSets
-import forms.IndividualNameFormProvider
+import forms.StringFormProvider
 import javax.inject.Inject
-import models.Name
 import navigation.Navigator
-import pages.individualbeneficiary.NamePage
+import pages.charityortrust.charity.NamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.individualbeneficiary.add.NameView
+import views.html.charityortrust.amend.charity.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 standardActionSets: StandardActionSets,
-                                formProvider: IndividualNameFormProvider,
+                                formProvider: StringFormProvider,
                                 view: NameView,
-                                trustService: TrustService,
                                 repository: PlaybackRepository,
-                                @AddIndividualBeneficiary navigator: Navigator
+                                @AmendCharityBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Name] = formProvider.withPrefix("individualBeneficiary.name")
+  val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name")
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
@@ -55,6 +51,7 @@ class NameController @Inject()(
       }
 
       Ok(view(preparedForm))
+
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
@@ -67,7 +64,7 @@ class NameController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
-            _              <- repository.set(updatedAnswers)
+            _ <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(NamePage, updatedAnswers))
       )
   }

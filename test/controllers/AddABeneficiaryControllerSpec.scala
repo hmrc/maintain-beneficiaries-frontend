@@ -137,7 +137,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
     AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
-    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(controllers.charityortrust.amend.charity.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(featureNotAvailable)),
     AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable))
   )
 
@@ -155,6 +155,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
     override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
       Future.successful(HttpResponse(OK))
+
+    override def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] =
+      Future.successful(charityBeneficiary)
   }
 
   " AddABeneficiary Controller" when {
