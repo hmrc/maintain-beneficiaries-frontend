@@ -386,6 +386,10 @@ removeIndividualBeneficiary.title = Are you sure you want to remove the individu
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
 
+removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+
 charityOrTrust.title = Is the beneficiary a charity or trust?
 charityOrTrust.heading = Is the beneficiary a charity or trust?
 charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
@@ -442,6 +446,16 @@ charityBeneficiary.startDate.error.required = The date the charity beneficiary w
 charityBeneficiary.startDate.error.invalid = Enter a real date
 charityBeneficiary.startDate.error.future = The date the charity beneficiary was added to the trust must be today or in the past
 charityBeneficiary.startDate.error.past = The date the charity beneficiary was added to the trust cannot be before the start date of the trust
+
+charityBeneficiary.whenRemoved.title = When was the charity removed as a beneficiary?
+charityBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+charityBeneficiary.whenRemoved.hint = For example, 31 3 1980
+charityBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+charityBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+charityBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+charityBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+charityBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+charityBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
 
 charityBeneficiary.checkDetails.title = Check charity beneficiary details
 charityBeneficiary.checkDetails.heading = Check charity beneficiary details
