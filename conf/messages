@@ -172,9 +172,9 @@ classOfBeneficiary.description.return.link = Return to add a beneficiary
 
 classOfBeneficiary.description.default = class of beneficiaries
 
-classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.heading = When was the {0} added to the trust?
-classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.title = When was the class of beneficiaries added to the trust?
+classOfBeneficiary.entityStart.heading = When was {0} added to the trust?
+classOfBeneficiary.entityStart.checkYourAnswersLabel = When was {0} added to the trust?
 classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
 classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiaries was added to the trust
 classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiaries was added to the trust must include a {0} and {1}
