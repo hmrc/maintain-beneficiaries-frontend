@@ -52,8 +52,8 @@ object CharityBeneficiary {
     ((__ \ 'organisationName).write[String] and
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
-      (__ \ 'income).writeNullable[String] and
-      (__ \ 'incomeDiscretionYesNo).write[Boolean] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
       ).apply(unlift(CharityBeneficiary.unapply))

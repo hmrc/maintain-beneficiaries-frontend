@@ -94,11 +94,6 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
-error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
-
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 
@@ -172,9 +167,9 @@ classOfBeneficiary.description.return.link = Return to add a beneficiary
 
 classOfBeneficiary.description.default = class of beneficiaries
 
-classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.heading = When was the {0} added to the trust?
-classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.title = When was the class of beneficiaries added to the trust?
+classOfBeneficiary.entityStart.heading = When was {0} added to the trust?
+classOfBeneficiary.entityStart.checkYourAnswersLabel = When was {0} added to the trust?
 classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
 classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiaries was added to the trust
 classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiaries was added to the trust must include a {0} and {1}
@@ -239,6 +234,10 @@ individualBeneficiary.incomePercentage.checkYourAnswersLabel = What percentage o
 individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
 individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
 individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
+individualBeneficiary.incomePercentage.error.required = Enter what percentage of the trust’s assets the individual beneficiary is entitled to
+individualBeneficiary.incomePercentage.error.integer = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.incomePercentage.error.non_numeric = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.incomePercentage.error.less_than_100 = The percentage of the trust’s assets the individual beneficiary is entitled to must be 100 or less
 
 individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
@@ -355,8 +354,6 @@ individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the ben
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
 
-classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
-
 individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know the individual’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.heading = Do you know {0}’s passport or ID card details?
@@ -395,8 +392,8 @@ charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
 charityOrTrust.hint = As named in the trust deed
 charityOrTrust.error.required = Select the type of beneficiary you need to add
 
-charityOrTrustTypeOfBeneficiary.charity = Charity
-charityOrTrustTypeOfBeneficiary.trust = Trust
+isTheBeneficiaryACharityOrTrust.charity = Charity
+isTheBeneficiaryACharityOrTrust.trust = Trust
 
 charityBeneficiary.name.title = What is the charity’s name?
 charityBeneficiary.name.heading = What is the charity’s name?
@@ -409,15 +406,16 @@ charityBeneficiary.discretionYesNo.title = Do the trustees have discretion over 
 charityBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
 charityBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
 charityBeneficiary.discretionYesNo.hint = See the trust deed for details
-charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity may get
+charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity beneficiary may get
 
 charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
 charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
-charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is Test entitled to?
+charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
 charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
-charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-charityBeneficiary.shareOfIncome.error.invalid = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-charityBeneficiary.shareOfIncome.error.maximumValueExceeded = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
+charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
+charityBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the charity beneficiary is entitled to must be 100 or less
 
 charityBeneficiary.addressYesNo.title = Do you know the charity beneficiary’s address?
 charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
@@ -438,12 +436,12 @@ charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
 charityBeneficiary.startDate.hint = For example, 31 3 1980
-charityBeneficiary.startDate.error.required.all = Enter the date the individual beneficiary was added to the trust
-charityBeneficiary.startDate.error.required.two = The date the individual beneficiary was added to the trust must include a {0} and a {1}
-charityBeneficiary.startDate.error.required = The date the individual beneficiary was added to the trust must include a {0}
+charityBeneficiary.startDate.error.required.all = Enter the date the charity beneficiary was added to the trust
+charityBeneficiary.startDate.error.required.two = The date the charity beneficiary was added to the trust must include a {0} and a {1}
+charityBeneficiary.startDate.error.required = The date the charity beneficiary was added to the trust must include a {0}
 charityBeneficiary.startDate.error.invalid = Enter a real date
-charityBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
-charityBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
+charityBeneficiary.startDate.error.future = The date the charity beneficiary was added to the trust must be today or in the past
+charityBeneficiary.startDate.error.past = The date the charity beneficiary was added to the trust cannot be before the start date of the trust
 
 charityBeneficiary.checkDetails.title = Check charity beneficiary details
 charityBeneficiary.checkDetails.heading = Check charity beneficiary details

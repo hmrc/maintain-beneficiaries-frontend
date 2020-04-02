@@ -19,7 +19,7 @@ package controllers.charityortrust.add.charity
 import config.annotations.AddCharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
-import forms.DateFormProvider
+import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.charityortrust.charity.StartDatePage
@@ -37,15 +37,15 @@ class StartDateController @Inject()(
                                      @AddCharityBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
-                                     formProvider: DateFormProvider,
+                                     formProvider: DateAddedToTrustFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: StartDateView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("charityBeneficiary.startDate")
-
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
+
+      val form = formProvider.withPrefixAndTrustStartDate("charityBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
       val preparedForm = request.userAnswers.get(StartDatePage) match {
         case None => form
@@ -57,6 +57,8 @@ class StartDateController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
+
+      val form = formProvider.withPrefixAndTrustStartDate("charityBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
         formWithErrors =>
