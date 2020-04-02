@@ -23,9 +23,11 @@ import play.api.data.{Form, FormError}
 
 class IncomePercentageMappingsSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues
   with Mappings {
+  
+  val prefix = "prefix"
 
   val form = Form(
-    "value" -> incomePercentage("")
+    "value" -> incomePercentage(prefix)
   )
 
   "bind valid data" in {
@@ -46,34 +48,34 @@ class IncomePercentageMappingsSpec extends FreeSpec with MustMatchers with Scala
 
     val result = form.bind(Map.empty[String, String])
 
-    result.errors must contain only FormError("value", ".error.required")
+    result.errors must contain only FormError("value", s"$prefix.error.required")
   }
 
   "fail to bind a non-integer" in {
 
     val result = form.bind(Map("value" -> "42.7"))
 
-    result.errors must contain only FormError("value", ".error.integer")
+    result.errors must contain only FormError("value", s"$prefix.error.integer")
   }
 
   "fail to bind a non-numeric" in {
 
     val result = form.bind(Map("value" -> "forty two"))
 
-    result.errors must contain only FormError("value", ".error.non_numeric")
+    result.errors must contain only FormError("value", s"$prefix.error.non_numeric")
   }
 
   "fail to bind a negative number" in {
 
     val result = form.bind(Map("value" -> "-5"))
 
-    result.errors must contain only FormError("value", ".error.integer")
+    result.errors must contain only FormError("value", s"$prefix.error.integer")
   }
 
   "fail to bind a percentage greater than 100" in {
 
     val result = form.bind(Map("value" -> "314"))
 
-    result.errors must contain only FormError("value", ".error.less_than_100")
+    result.errors must contain only FormError("value", s"$prefix.error.less_than_100")
   }
 }
