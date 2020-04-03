@@ -33,7 +33,7 @@ class CharityOrTrustViewSpec extends OptionsViewBehaviours {
   "CharityOrTrust view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, CharityOrTrustToAdd.options)(fakeRequest, messages)
+      view.apply(form)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

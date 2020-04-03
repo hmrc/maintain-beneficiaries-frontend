@@ -51,11 +51,6 @@
                 <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
                 <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
             </ul>
-        } else if(maxedOut.size == 7) {
-            <ul>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
-            </ul>
         } else if(maxedOut.size > 1) {
             <ul>
                 <li class="panel-indent">
@@ -74,7 +69,7 @@
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
             legendClass = Some("heading-medium"),
-            inputs = if(maxedOut.size < 7) AddABeneficiary.options else List(AddABeneficiary.NoComplete).map(x => RadioOption("addABeneficiary", x.toString))
+            inputs = AddABeneficiary.options
         )
 
         @components.submit_button()

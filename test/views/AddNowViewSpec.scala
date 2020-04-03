@@ -18,8 +18,10 @@ package views
 
 import forms.AddBeneficiaryTypeFormProvider
 import models.beneficiaries.TypeOfBeneficiaryToAdd
+import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewmodels.RadioOption
 import views.behaviours.OptionsViewBehaviours
 import views.html.AddNowView
 
@@ -30,10 +32,19 @@ class AddNowViewSpec extends OptionsViewBehaviours {
   val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
   val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
 
+  val values: List[TypeOfBeneficiaryToAdd] = List(
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+  )
+
+  val options: List[RadioOption] = values.map {
+    value =>
+      RadioOption(prefix, value.toString)
+  }
+
   "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, TypeOfBeneficiaryToAdd.options)(fakeRequest, messages)
+      view.apply(form, options)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -41,7 +52,7 @@ class AddNowViewSpec extends OptionsViewBehaviours {
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like pageWithOptions(form, applyView, TypeOfBeneficiaryToAdd.options)
+    behave like pageWithOptions(form, applyView, options)
 
     behave like pageWithASubmitButton(applyView(form))
   }

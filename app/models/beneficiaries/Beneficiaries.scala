@@ -39,11 +39,11 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
       case l => Messages("addABeneficiary.count.heading", l)
     }
 
-  private def addToList[A](size: Int, option: A): List[A] = {
-    if (size < 25) List(option) else Nil
-  }
-
   val allAvailableOptions: List[RadioOption] = {
+
+    def addToList(size: Int, option: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
+      if (size < 25) List(option) else Nil
+    }
 
     def addEitherOrBothToList(size1: Int,
                               option1: TypeOfBeneficiaryToAdd,
@@ -95,19 +95,6 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     options.map {
       value =>
         RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
-    }
-  }
-
-  val availableCharityOrTrustOptions: List[RadioOption] = {
-
-    val options: List[CharityOrTrustToAdd] = {
-      addToList(charity.size, CharityOrTrustToAdd.Charity) ++
-      addToList(trust.size, CharityOrTrustToAdd.Trust)
-    }
-
-    options.map {
-      value =>
-        RadioOption(CharityOrTrustToAdd.prefix, value.toString)
     }
   }
 

@@ -37,8 +37,9 @@ import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import utils.AddABeneficiaryViewHelper
 import viewmodels.addAnother.AddRow
-import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,6 +48,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   lazy val getRoute : String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute : String = controllers.routes.AddABeneficiaryController.submitAnother().url
   lazy val submitYesNoRoute : String = controllers.routes.AddABeneficiaryController.submitOne().url
+  lazy val submitCompleteRoute : String = controllers.routes.AddABeneficiaryController.submitComplete().url
 
   val mockStoreConnector : TrustStoreConnector = mock[TrustStoreConnector]
 
@@ -399,6 +401,67 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(playbackRepository).set(uaCaptor.capture)
         uaCaptor.getValue.data mustBe Json.obj()
+      }
+
+    }
+
+    "maxed out beneficiaries" must {
+
+      val beneficiaries = Beneficiaries(
+        List.fill(25)(individualBeneficiary),
+        List.fill(25)(unidentifiedBeneficiary),
+        List.fill(25)(companyBeneficiary),
+        List.fill(25)(employmentRelatedBeneficiary),
+        List.fill(25)(trustBeneficiary),
+        List.fill(25)(charityBeneficiary),
+        List.fill(25)(otherBeneficiary)
+      )
+
+      val fakeService = new FakeService(beneficiaries)
+
+      val beneficiaryRows = new AddABeneficiaryViewHelper(beneficiaries).rows
+
+      "return OK and the correct view for a GET" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[MaxedOutBeneficiariesView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+
+        application.stop()
+
+      }
+
+      "redirect to add to page and set beneficiaries to complete when user clicks continue" in {
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService),
+          bind(classOf[TrustStoreConnector]).toInstance(mockStoreConnector)
+        )).build()
+
+        val request = FakeRequest(POST, submitCompleteRoute)
+
+        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse.apply(200)))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
+
+        application.stop()
+
       }
 
     }

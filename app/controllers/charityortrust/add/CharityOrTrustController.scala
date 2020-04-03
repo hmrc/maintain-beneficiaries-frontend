@@ -44,42 +44,34 @@ class CharityOrTrustController @Inject()(
 
   val form: Form[CharityOrTrustToAdd] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
-      trustService.getBeneficiaries(request.userAnswers.utr).map {
-        beneficiaries =>
-          val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
-            case None => form
-            case Some(value) => form.fill(value)
-          }
-
-          Ok(view(preparedForm, beneficiaries.availableCharityOrTrustOptions))
-
+      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
+        case None => form
+        case Some(value) => form.fill(value)
       }
+
+      Ok(view(preparedForm))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getBeneficiaries(request.userAnswers.utr).flatMap {
-        beneficiaries =>
+      form.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors))),
 
-          form.bindFromRequest().fold(
-            formWithErrors =>
-              Future.successful(BadRequest(view(formWithErrors, beneficiaries.availableCharityOrTrustOptions))),
-
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
-                _ <- repository.set(updatedAnswers)
-              } yield {
-                value match {
-                  case Charity => Redirect(controllers.charityortrust.add.charity.routes.NameController.onPageLoad())
-                  case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
-                }
-              }
-          )
-      }
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
+            _ <- repository.set(updatedAnswers)
+          } yield {
+            value match {
+              case Charity => Redirect(controllers.charityortrust.add.charity.routes.NameController.onPageLoad())
+              case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+            }
+          }
+      )
   }
 }

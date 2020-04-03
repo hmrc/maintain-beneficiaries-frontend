@@ -17,7 +17,6 @@
 package models.beneficiaries
 
 import models.{Enumerable, WithName}
-import viewmodels.RadioOption
 
 sealed trait TypeOfBeneficiaryToAdd
 
@@ -40,11 +39,6 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
     Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other,
     Charity, Trust, Company, EmploymentRelated
   )
-
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
-  }
 
   implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =
     Enumerable(values.map(v => v.toString -> v): _*)

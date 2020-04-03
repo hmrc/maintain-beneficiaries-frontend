@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
+import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -30,6 +31,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
+import viewmodels.RadioOption
 import views.html.AddNowView
 
 import scala.concurrent.Future
@@ -44,6 +46,15 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
   when(mockTrustService.getBeneficiaries(any())(any(), any()))
     .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
+
+  val values: List[TypeOfBeneficiaryToAdd] = List(
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+  )
+
+  val options: List[RadioOption] = values.map {
+    value =>
+      RadioOption(prefix, value.toString)
+  }
 
   "AddNow Controller" must {
 
@@ -63,7 +74,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, TypeOfBeneficiaryToAdd.options)(request, messages).toString
+        view(form, options)(request, messages).toString
 
       application.stop()
     }
@@ -86,7 +97,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(classOfBeneficiariesAnswer), TypeOfBeneficiaryToAdd.options)(fakeRequest, messages).toString
+        view(form.fill(classOfBeneficiariesAnswer), options)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -168,7 +179,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, TypeOfBeneficiaryToAdd.options)(fakeRequest, messages).toString
+        view(boundForm, options)(fakeRequest, messages).toString
 
        application.stop()
     }

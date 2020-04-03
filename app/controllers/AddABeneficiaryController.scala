@@ -22,10 +22,7 @@ import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
-import models.requests.DataRequest
-import models.{AddABeneficiary, Enumerable, UserAnswers}
-import navigation.Navigator
-import pages.AddNowPage
+import models.{AddABeneficiary, Enumerable}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,10 +30,9 @@ import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
-import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class AddABeneficiaryController @Inject()(
                                            override val messagesApi: MessagesApi,
@@ -48,6 +44,7 @@ class AddABeneficiaryController @Inject()(
                                            val controllerComponents: MessagesControllerComponents,
                                            addAnotherView: AddABeneficiaryView,
                                            yesNoView: AddABeneficiaryYesNoView,
+                                           completeView: MaxedOutBeneficiariesView,
                                            val appConfig: FrontendAppConfig,
                                            trustStoreConnector: TrustStoreConnector
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -71,13 +68,21 @@ class AddABeneficiaryController @Inject()(
 
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
-            Ok(addAnotherView(
-              form = addAnotherForm,
-              inProgressBeneficiaries = beneficiaryRows.inProgress,
-              completeBeneficiaries = beneficiaryRows.complete,
-              heading = all.addToHeading,
-              maxedOut = beneficiaries.allUnavailableOptions.map(x => x.messageKey)
-            ))
+            if (beneficiaries.allUnavailableOptions.size == 7) {
+              Ok(completeView(
+                inProgressBeneficiaries = beneficiaryRows.inProgress,
+                completeBeneficiaries = beneficiaryRows.complete,
+                heading = all.addToHeading
+              ))
+            } else {
+              Ok(addAnotherView(
+                form = addAnotherForm,
+                inProgressBeneficiaries = beneficiaryRows.inProgress,
+                completeBeneficiaries = beneficiaryRows.complete,
+                heading = all.addToHeading,
+                maxedOut = beneficiaries.allUnavailableOptions.map(x => x.messageKey)
+              ))
+            }
         }
       }
   }
@@ -135,6 +140,16 @@ class AddABeneficiaryController @Inject()(
               }
           }
         )
+      }
+  }
+
+  def submitComplete(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
+    implicit request =>
+
+      for {
+        _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+      } yield {
+        Redirect(appConfig.maintainATrustOverview)
       }
   }
 }
