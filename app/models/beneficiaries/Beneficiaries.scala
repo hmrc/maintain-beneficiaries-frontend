@@ -49,18 +49,15 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     val options: List[TypeOfBeneficiaryToAdd] = {
       addToList(individualDetails.size, Individual) ++
       addToList(unidentified.size, ClassOfBeneficiaries) ++
-      addToList(trust.size, CharityOrTrust) ++
-      addToList(charity.size, CharityOrTrust) ++
-      addToList(company.size, CompanyOrEmploymentRelated) ++
-      addToList(employmentRelated.size, CompanyOrEmploymentRelated) ++
+      addToList(charity.size, CharityOrTrust) ++ addToList(trust.size, CharityOrTrust) ++
+      addToList(company.size, CompanyOrEmploymentRelated) ++ addToList(employmentRelated.size, CompanyOrEmploymentRelated) ++
       addToList(other.size, Other)
-    }.distinct
+    }
 
-    options.map {
+    options.distinct.map {
       value =>
         RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
     }
-
   }
 
   val availableCharityOrTrustOptions: List[RadioOption] = {
