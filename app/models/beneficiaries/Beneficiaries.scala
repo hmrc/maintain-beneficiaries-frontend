@@ -52,7 +52,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     List((other.size, Other))
   }
 
-  val allAvailableOptions: List[RadioOption] = {
+  val availableOptions: List[RadioOption] = {
 
     def combineOptions(list: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
@@ -77,7 +77,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     }
   }
 
-  val allUnavailableOptions: List[RadioOption] = {
+  val unavailableOptions: List[RadioOption] = {
 
     options.filter(x => x._1 >= 25).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)

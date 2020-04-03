@@ -104,14 +104,14 @@ class BeneficiariesSpec extends SpecBase {
 
       val beneficiaries = Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)
 
-      beneficiaries.allAvailableOptions mustBe List(
+      beneficiaries.availableOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
         RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
         RadioOption("whatTypeOfBeneficiary.charityOrTrust", "charityOrTrust", "whatTypeOfBeneficiary.charityOrTrust"),
         RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
         RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other"))
 
-      beneficiaries.allUnavailableOptions mustBe Nil
+      beneficiaries.unavailableOptions mustBe Nil
 
     }
 
@@ -119,14 +119,14 @@ class BeneficiariesSpec extends SpecBase {
 
       val beneficiaries = Beneficiaries(Nil, Nil, Nil, Nil, Nil, charityBeneficiaires, Nil)
 
-      beneficiaries.allAvailableOptions mustBe List(
+      beneficiaries.availableOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
         RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
         RadioOption("whatTypeOfBeneficiary.trust", "trust", "whatTypeOfBeneficiary.trust"),
         RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
         RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other"))
 
-      beneficiaries.allUnavailableOptions mustBe List(
+      beneficiaries.unavailableOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.charity", "charity", "whatTypeOfBeneficiary.charity")
       )
 
@@ -144,9 +144,9 @@ class BeneficiariesSpec extends SpecBase {
         otherBeneficiaires
       )
 
-      beneficiaries.allAvailableOptions mustBe Nil
+      beneficiaries.availableOptions mustBe Nil
 
-      beneficiaries.allUnavailableOptions mustBe List(
+      beneficiaries.unavailableOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
         RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
         RadioOption("whatTypeOfBeneficiary.charity", "charity", "whatTypeOfBeneficiary.charity"),

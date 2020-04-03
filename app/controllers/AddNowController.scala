@@ -54,7 +54,7 @@ class AddNowController @Inject()(
             case Some(value) => form.fill(value)
           }
 
-          Ok(view(preparedForm, beneficiaries.allAvailableOptions))
+          Ok(view(preparedForm, beneficiaries.availableOptions))
 
       }
   }
@@ -67,7 +67,7 @@ class AddNowController @Inject()(
 
           form.bindFromRequest().fold(
             formWithErrors =>
-              Future.successful(BadRequest(view(formWithErrors, beneficiaries.allAvailableOptions))),
+              Future.successful(BadRequest(view(formWithErrors, beneficiaries.availableOptions))),
 
             value =>
               for {
