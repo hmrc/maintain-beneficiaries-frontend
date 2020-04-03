@@ -435,7 +435,69 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+        val content = contentAsString(result)
+
+        content mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+        content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
+        content must include("If you have further beneficiaries to add, write to HMRC with their details.")
+
+        application.stop()
+
+      }
+
+      "return correct view when one type of beneficiary is maxed out" in {
+
+        val beneficiaries = Beneficiaries(
+          Nil,
+          Nil,
+          Nil,
+          Nil,
+          Nil,
+          List.fill(25)(charityBeneficiary),
+          Nil
+        )
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        contentAsString(result) must include("You cannot add another charity as you have entered a maximum of 25.")
+        contentAsString(result) must include("If you have further beneficiaries to add within this type, write to HMRC with their details.")
+
+        application.stop()
+
+      }
+
+      "return correct view when more than one type of beneficiary is maxed out" in {
+
+        val beneficiaries = Beneficiaries(
+          Nil,
+          List.fill(25)(unidentifiedBeneficiary),
+          Nil,
+          Nil,
+          Nil,
+          List.fill(25)(charityBeneficiary),
+          Nil
+        )
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        contentAsString(result) must include("You have entered the maximum number of beneficiaries for:")
+        contentAsString(result) must include("If you have further beneficiaries to add within these types, write to HMRC with their details.")
 
         application.stop()
 
