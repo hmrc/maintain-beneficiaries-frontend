@@ -26,7 +26,6 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.charityortrust.add.CharityOrTrustView
 
@@ -38,8 +37,7 @@ class CharityOrTrustController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           view: CharityOrTrustView,
                                           formProvider: CharityOrTrustBeneficiaryTypeFormProvider,
-                                          repository: PlaybackRepository,
-                                          trustService: TrustService
+                                          repository: PlaybackRepository
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[CharityOrTrustToAdd] = formProvider()
