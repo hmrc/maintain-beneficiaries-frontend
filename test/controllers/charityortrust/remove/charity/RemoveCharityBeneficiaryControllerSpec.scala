@@ -20,14 +20,12 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import controllers.charityortrust.remove.charity.routes
 import forms.RemoveIndexFormProvider
-import models.Name
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -37,7 +35,7 @@ import views.html.charityortrust.remove.charity.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveCharityBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
+class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
 
   val messagesPrefix = "removeCharityBeneficiary"
 
@@ -89,12 +87,14 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with PropertyCheck
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(form, index, name)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(form, index, beneficiaries(index).name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val index = 0
 
       val userAnswers = emptyUserAnswers
         .set(RemoveYesNoPage, true).success.value
@@ -115,7 +115,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), 0, name)(fakeRequest, messages).toString
+        view(form.fill(true), index, beneficiaries(index).name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -220,7 +220,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with PropertyCheck
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, name)(fakeRequest, messages).toString
+        view(boundForm, index, beneficiaries(index).name)(fakeRequest, messages).toString
 
       application.stop()
     }

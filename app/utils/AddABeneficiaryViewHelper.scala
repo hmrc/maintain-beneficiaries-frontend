@@ -61,7 +61,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       changeLabel = messages("site.change.details"),
       changeUrl = Some(controllers.charityortrust.amend.charity.routes.CheckDetailsController.extractAndRender(index).url),
       removeLabel = messages("site.delete"),
-      removeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url)
+      removeUrl = Some(controllers.charityortrust.remove.charity.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
     )
 
   private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int) : AddRow =
