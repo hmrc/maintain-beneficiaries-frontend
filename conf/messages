@@ -341,7 +341,7 @@ individualBeneficiary.startDate.error.required.two = The date the individual ben
 individualBeneficiary.startDate.error.required = The date the individual beneficiary was added to the trust must include a {0}
 individualBeneficiary.startDate.error.invalid = Enter a real date
 individualBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
-individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
+individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust cannot be before the start date of the trust
 
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
