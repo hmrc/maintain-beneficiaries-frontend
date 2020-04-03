@@ -32,6 +32,9 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          charity: List[CharityBeneficiary],
                          other: List[OtherBeneficiary]) {
 
+  type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
+  type BeneficiaryOptions = List[BeneficiaryOption]
+
   def addToHeading()(implicit mp: MessagesProvider): String =
     (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
       case 0 => Messages("addABeneficiary.heading")
@@ -39,62 +42,45 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
       case l => Messages("addABeneficiary.count.heading", l)
     }
 
+  private val options: BeneficiaryOptions = {
+    List((individualDetails.size, Individual)) ++
+    List((unidentified.size, ClassOfBeneficiaries)) ++
+    List((charity.size, Charity)) ++
+    List((trust.size, Trust)) ++
+    List((company.size, Company)) ++
+    List((employmentRelated.size, EmploymentRelated)) ++
+    List((other.size, Other))
+  }
+
   val allAvailableOptions: List[RadioOption] = {
 
-    def addToList(size: Int, option: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
-      if (size < 25) List(option) else Nil
-    }
-
-    def addEitherOrBothToList(size1: Int,
-                              option1: TypeOfBeneficiaryToAdd,
-                              size2: Int,
-                              option2: TypeOfBeneficiaryToAdd,
-                              combinedOption: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
-
-      if (size1 < 25 && size2 < 25) {
-        List(combinedOption)
-      } else if (size1 < 25) {
-        List(option1)
-      } else if (size2 < 25) {
-        List(option2)
-      } else {
-        Nil
+    def combineOptions(list: BeneficiaryOptions): BeneficiaryOptions = {
+      @scala.annotation.tailrec
+      def recurse(list: BeneficiaryOptions, acc: BeneficiaryOptions): BeneficiaryOptions = {
+        list match {
+          case Nil => acc
+          case List(head, next, _*) if head._2 == Charity && next._2 == Trust =>
+            val option: BeneficiaryOption = (head._1 + next._1, CharityOrTrust)
+            recurse(list.tail.tail, acc ++ List(option))
+          case List(head, next, _*) if head._2 == Company && next._2 == EmploymentRelated =>
+            val option: BeneficiaryOption = (head._1 + next._1, CompanyOrEmploymentRelated)
+            recurse(list.tail.tail, acc ++ List(option))
+          case _ =>
+            recurse(list.tail, acc ++ List(list.head))
+        }
       }
+      recurse(list, Nil)
     }
 
-    val options: List[TypeOfBeneficiaryToAdd] = {
-      addToList(individualDetails.size, Individual) ++
-      addToList(unidentified.size, ClassOfBeneficiaries) ++
-      addEitherOrBothToList(charity.size, Charity, trust.size, Trust, CharityOrTrust) ++
-      addEitherOrBothToList(company.size, Company, employmentRelated.size, EmploymentRelated, CompanyOrEmploymentRelated) ++
-      addToList(other.size, Other)
-    }
-
-    options.map {
-      value =>
-        RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
+    combineOptions(options.filter(x => x._1 < 25)).map {
+      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
 
   val allUnavailableOptions: List[RadioOption] = {
 
-    def addToList(size: Int, option: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
-      if (size >= 25) List(option) else Nil
-    }
-
-    val options: List[TypeOfBeneficiaryToAdd] = {
-      addToList(individualDetails.size, Individual) ++
-      addToList(unidentified.size, ClassOfBeneficiaries) ++
-      addToList(charity.size, Charity) ++
-      addToList(trust.size, Trust) ++
-      addToList(company.size, Company) ++
-      addToList(employmentRelated.size, EmploymentRelated) ++
-      addToList(other.size, Other)
-    }
-
-    options.map {
-      value =>
-        RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
+    options.filter(x => x._1 >= 25).map {
+      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
 
