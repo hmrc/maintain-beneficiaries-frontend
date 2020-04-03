@@ -5,8 +5,8 @@ POST       /name                                    controllers.charityortrust.a
 GET        /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onPageLoad()
 POST       /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onSubmit()
 
-GET        /income-percentage                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onPageLoad()
-POST       /income-percentage                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onSubmit()
+GET        /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onPageLoad()
+POST       /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onSubmit()
 
 GET         /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onPageLoad()
 POST        /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onSubmit()

@@ -24,7 +24,7 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.incomePercentage.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.shareOfIncome.title", name)}"
 ) {
 
     @formHelper(action = IncomePercentageController.onSubmit(), 'autoComplete -> "off") {
@@ -35,9 +35,9 @@
 
         @components.input_text(
             field = form("value"),
-            label = messages("individualBeneficiary.incomePercentage.heading", name),
+            label = messages("individualBeneficiary.shareOfIncome.heading", name),
             headingIsLabel = true,
-            hint = Some(messages("individualBeneficiary.incomePercentage.hint")),
+            hint = Some(messages("individualBeneficiary.shareOfIncome.hint")),
             labelClass=Some("heading-large")
         )
 

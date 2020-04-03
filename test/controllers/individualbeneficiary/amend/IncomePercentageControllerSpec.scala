@@ -40,7 +40,7 @@ import scala.concurrent.Future
 class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private val formProvider = new IncomePercentageFormProvider()
-  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
+  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.shareOfIncome")
 
   private def onwardRoute = Call("GET", "/foo")
 
