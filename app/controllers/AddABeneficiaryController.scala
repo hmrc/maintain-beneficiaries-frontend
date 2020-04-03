@@ -68,7 +68,7 @@ class AddABeneficiaryController @Inject()(
 
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
-            if (beneficiaries.allUnavailableOptions.size == 7) {
+            if (beneficiaries.allAvailableOptions.isEmpty) {
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
