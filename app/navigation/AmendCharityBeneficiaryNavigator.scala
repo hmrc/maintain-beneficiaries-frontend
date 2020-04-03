@@ -16,7 +16,7 @@
 
 package navigation
 
-import controllers.charityortrust.amend.charity.{routes => rts}
+import controllers.charityortrust.charity.amend.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
 import pages.charityortrust.charity._

@@ -35,7 +35,7 @@ POST       /add-another                                                     cont
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
 POST       /what-kind                                                       controllers.AddNowController.onSubmit()
 
-GET        /charity-or-trust                                                controllers.charityortrust.add.CharityOrTrustController.onPageLoad()
-POST       /charity-or-trust                                                controllers.charityortrust.add.CharityOrTrustController.onSubmit()
+GET        /charity-or-trust                                                controllers.charityortrust.CharityOrTrustController.onPageLoad()
+POST       /charity-or-trust                                                controllers.charityortrust.CharityOrTrustController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)
