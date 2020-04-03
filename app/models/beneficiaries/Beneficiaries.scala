@@ -16,12 +16,11 @@
 
 package models.beneficiaries
 
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 import viewmodels.RadioOption
-import models.beneficiaries.TypeOfBeneficiaryToAdd._
-import models.beneficiaries.CharityOrTrustToAdd._
 
 trait Beneficiary
 
@@ -46,15 +45,54 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
 
   val allAvailableOptions: List[RadioOption] = {
 
+    def addEitherOrBothToList(size1: Int,
+                              option1: TypeOfBeneficiaryToAdd,
+                              size2: Int,
+                              option2: TypeOfBeneficiaryToAdd,
+                              combinedOption: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
+
+      if (size1 < 25 && size2 < 25) {
+        List(combinedOption)
+      } else if (size1 < 25) {
+        List(option1)
+      } else if (size2 < 25) {
+        List(option2)
+      } else {
+        Nil
+      }
+    }
+
     val options: List[TypeOfBeneficiaryToAdd] = {
       addToList(individualDetails.size, Individual) ++
       addToList(unidentified.size, ClassOfBeneficiaries) ++
-      addToList(charity.size, CharityOrTrust) ++ addToList(trust.size, CharityOrTrust) ++
-      addToList(company.size, CompanyOrEmploymentRelated) ++ addToList(employmentRelated.size, CompanyOrEmploymentRelated) ++
+      addEitherOrBothToList(charity.size, Charity, trust.size, Trust, CharityOrTrust) ++
+      addEitherOrBothToList(company.size, Company, employmentRelated.size, EmploymentRelated, CompanyOrEmploymentRelated) ++
       addToList(other.size, Other)
     }
 
-    options.distinct.map {
+    options.map {
+      value =>
+        RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
+    }
+  }
+
+  val allUnavailableOptions: List[RadioOption] = {
+
+    def addToList(size: Int, option: TypeOfBeneficiaryToAdd): List[TypeOfBeneficiaryToAdd] = {
+      if (size >= 25) List(option) else Nil
+    }
+
+    val options: List[TypeOfBeneficiaryToAdd] = {
+      addToList(individualDetails.size, Individual) ++
+      addToList(unidentified.size, ClassOfBeneficiaries) ++
+      addToList(charity.size, Charity) ++
+      addToList(trust.size, Trust) ++
+      addToList(company.size, Company) ++
+      addToList(employmentRelated.size, EmploymentRelated) ++
+      addToList(other.size, Other)
+    }
+
+    options.map {
       value =>
         RadioOption(TypeOfBeneficiaryToAdd.prefix, value.toString)
     }
@@ -63,8 +101,8 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
   val availableCharityOrTrustOptions: List[RadioOption] = {
 
     val options: List[CharityOrTrustToAdd] = {
-      addToList(charity.size, Charity) ++
-      addToList(trust.size, Trust)
+      addToList(charity.size, CharityOrTrustToAdd.Charity) ++
+      addToList(trust.size, CharityOrTrustToAdd.Trust)
     }
 
     options.map {

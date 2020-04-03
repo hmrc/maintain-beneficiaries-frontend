@@ -36,6 +36,11 @@ p.font-xsmall{
   display: block;
 }
 
+.govuk-list, .app-prose-scope ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
 .govuk-list--number, .app-prose-scope ol {
     padding-left: 20px;
     list-style-type: decimal;

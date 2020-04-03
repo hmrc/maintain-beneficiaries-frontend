@@ -31,8 +31,14 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
   case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiaryToAdd
   case object Other extends WithName("other") with TypeOfBeneficiaryToAdd
 
+  case object Charity extends WithName("charity") with TypeOfBeneficiaryToAdd
+  case object Trust extends WithName("trust") with TypeOfBeneficiaryToAdd
+  case object Company extends WithName("company") with TypeOfBeneficiaryToAdd
+  case object EmploymentRelated extends WithName("employmentRelated") with TypeOfBeneficiaryToAdd
+
   val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other,
+    Charity, Trust, Company, EmploymentRelated
   )
 
   val options: List[RadioOption] = values.map {

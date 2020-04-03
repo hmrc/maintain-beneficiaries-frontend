@@ -290,7 +290,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -361,7 +361,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }

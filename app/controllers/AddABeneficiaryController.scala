@@ -41,7 +41,7 @@ import scala.util.Try
 class AddABeneficiaryController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            repository: PlaybackRepository,
-                                           trust: TrustService,
+                                           trustService: TrustService,
                                            standardActionSets: StandardActionSets,
                                            addAnotherFormProvider: AddABeneficiaryFormProvider,
                                            yesNoFormProvider: YesNoFormProvider,
@@ -60,7 +60,7 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       for {
-        beneficiaries <- trust.getBeneficiaries(request.userAnswers.utr)
+        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.utr)
         updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
         _ <- repository.set(updatedAnswers)
       } yield {
@@ -75,7 +75,8 @@ class AddABeneficiaryController @Inject()(
               form = addAnotherForm,
               inProgressBeneficiaries = beneficiaryRows.inProgress,
               completeBeneficiaries = beneficiaryRows.complete,
-              heading = all.addToHeading
+              heading = all.addToHeading,
+              maxedOut = beneficiaries.allUnavailableOptions.map(x => x.messageKey)
             ))
         }
       }
@@ -100,7 +101,7 @@ class AddABeneficiaryController @Inject()(
   def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trust.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
+      trustService.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
@@ -111,7 +112,8 @@ class AddABeneficiaryController @Inject()(
                 formWithErrors,
                 rows.inProgress,
                 rows.complete,
-                beneficiaries.addToHeading
+                beneficiaries.addToHeading,
+                maxedOut = beneficiaries.allUnavailableOptions.map(x => x.messageKey)
               )
             ))
           },

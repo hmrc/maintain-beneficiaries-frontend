@@ -21,7 +21,6 @@ import forms.CharityOrTrustBeneficiaryTypeFormProvider
 import javax.inject.Inject
 import models.beneficiaries.CharityOrTrustToAdd
 import models.beneficiaries.CharityOrTrustToAdd._
-import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import pages.charityortrust.CharityOrTrustPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
