@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._
-import controllers.charityortrust.add.charity.routes._
+import controllers.charityortrust.charity.add.routes._
 
 class AddCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 

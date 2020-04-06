@@ -20,14 +20,13 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import controllers.individualbeneficiary.remove.routes
 import forms.RemoveIndexFormProvider
 import models.Name
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -37,7 +36,7 @@ import views.html.individualbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveAddIndividualBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
+class RemoveAddIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
 
   val messagesPrefix = "removeIndividualBeneficiary"
 
