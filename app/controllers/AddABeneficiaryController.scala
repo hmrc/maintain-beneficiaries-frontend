@@ -81,17 +81,22 @@ class AddABeneficiaryController @Inject()(
       }
   }
 
-  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData {
+  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
+
       yesNoForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          BadRequest(yesNoView(formWithErrors))
+          Future.successful(BadRequest(yesNoView(formWithErrors)))
         },
         addNow => {
           if (addNow) {
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+
+            for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
+                _ <- repository.set(updatedAnswers)
+              } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
-            Redirect(appConfig.maintainATrustOverview)
+            Future.successful(Redirect(appConfig.maintainATrustOverview))
           }
         }
       )
