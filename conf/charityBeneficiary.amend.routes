@@ -1,30 +1,30 @@
 
-GET        /name                                    controllers.charityortrust.amend.charity.NameController.onPageLoad()
-POST       /name                                    controllers.charityortrust.amend.charity.NameController.onSubmit()
+GET        /name                                    controllers.charityortrust.charity.amend.NameController.onPageLoad()
+POST       /name                                    controllers.charityortrust.charity.amend.NameController.onSubmit()
 
-GET        /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onPageLoad()
-POST       /decide-income                           controllers.charityortrust.amend.charity.DiscretionYesNoController.onSubmit()
+GET        /decide-income                           controllers.charityortrust.charity.amend.DiscretionYesNoController.onPageLoad()
+POST       /decide-income                           controllers.charityortrust.charity.amend.DiscretionYesNoController.onSubmit()
 
-GET        /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onPageLoad()
-POST       /share-of-income                       controllers.charityortrust.amend.charity.ShareOfIncomeController.onSubmit()
+GET        /share-of-income                       controllers.charityortrust.charity.amend.ShareOfIncomeController.onPageLoad()
+POST       /share-of-income                       controllers.charityortrust.charity.amend.ShareOfIncomeController.onSubmit()
 
-GET         /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onPageLoad()
-POST        /has-address                            controllers.charityortrust.amend.charity.AddressYesNoController.onSubmit()
+GET         /has-address                            controllers.charityortrust.charity.amend.AddressYesNoController.onPageLoad()
+POST        /has-address                            controllers.charityortrust.charity.amend.AddressYesNoController.onSubmit()
 
-GET        /has-uk-address                          controllers.charityortrust.amend.charity.AddressUkYesNoController.onPageLoad()
-POST       /has-uk-address                          controllers.charityortrust.amend.charity.AddressUkYesNoController.onSubmit()
+GET        /has-uk-address                          controllers.charityortrust.charity.amend.AddressUkYesNoController.onPageLoad()
+POST       /has-uk-address                          controllers.charityortrust.charity.amend.AddressUkYesNoController.onSubmit()
 
-GET        /uk-address                              controllers.charityortrust.amend.charity.UkAddressController.onPageLoad()
-POST       /uk-address                              controllers.charityortrust.amend.charity.UkAddressController.onSubmit()
+GET        /uk-address                              controllers.charityortrust.charity.amend.UkAddressController.onPageLoad()
+POST       /uk-address                              controllers.charityortrust.charity.amend.UkAddressController.onSubmit()
 
-GET        /non-uk-address                          controllers.charityortrust.amend.charity.NonUkAddressController.onPageLoad()
-POST       /non-uk-address                          controllers.charityortrust.amend.charity.NonUkAddressController.onSubmit()
+GET        /non-uk-address                          controllers.charityortrust.charity.amend.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                          controllers.charityortrust.charity.amend.NonUkAddressController.onSubmit()
 
-GET        /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.extractAndRender(index: Int)
+GET        /:index/check-details                    controllers.charityortrust.charity.amend.CheckDetailsController.extractAndRender(index: Int)
 
-GET        /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onPageLoad()
-POST       /check-details-without-amend             controllers.charityortrust.amend.charity.CheckDetailsUtrController.onSubmit()
+GET        /check-details-without-amend             controllers.charityortrust.charity.amend.CheckDetailsUtrController.onPageLoad()
+POST       /check-details-without-amend             controllers.charityortrust.charity.amend.CheckDetailsUtrController.onSubmit()
 
-GET        /:index/updated-details                  controllers.charityortrust.amend.charity.CheckDetailsController.renderFromUserAnswers(index: Int)
+GET        /:index/updated-details                  controllers.charityortrust.charity.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
 
-POST       /:index/check-details                    controllers.charityortrust.amend.charity.CheckDetailsController.onSubmit(index: Int)
+POST       /:index/check-details                    controllers.charityortrust.charity.amend.CheckDetailsController.onSubmit(index: Int)

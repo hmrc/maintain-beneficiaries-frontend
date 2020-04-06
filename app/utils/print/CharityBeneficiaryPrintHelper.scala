@@ -22,6 +22,7 @@ import pages.charityortrust.charity._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
+import controllers.charityortrust.charity.add.routes._
 
 class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
                                               countryOptions: CountryOptions
@@ -34,14 +35,14 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
     AnswerSection(
       None,
       Seq(
-        bound.stringQuestion(NamePage, "charityBeneficiary.name", controllers.charityortrust.add.charity.routes.NameController.onPageLoad().url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", controllers.charityortrust.add.charity.routes.DiscretionYesNoController.onPageLoad().url),
-        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", controllers.charityortrust.add.charity.routes.ShareOfIncomeController.onPageLoad().url),
-        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", controllers.charityortrust.add.charity.routes.AddressYesNoController.onPageLoad().url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", controllers.charityortrust.add.charity.routes.AddressUkYesNoController.onPageLoad().url),
-        bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", controllers.charityortrust.add.charity.routes.UkAddressController.onPageLoad().url),
-        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", controllers.charityortrust.add.charity.routes.NonUkAddressController.onPageLoad().url),
-        bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", controllers.charityortrust.add.charity.routes.StartDateController.onPageLoad().url)
+        bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad().url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad().url),
+        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad().url),
+        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad().url),
+        bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad().url),
+        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad().url),
+        bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url)
       ).flatten
     )
   }

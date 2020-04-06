@@ -25,7 +25,7 @@ import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -35,7 +35,7 @@ import views.html.classofbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with PropertyChecks with ScalaFutures {
+class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
 
   val messagesPrefix = "removeClassOfBeneficiary"
 
