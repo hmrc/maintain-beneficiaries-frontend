@@ -240,7 +240,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
 
         application.stop()
       }
