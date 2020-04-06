@@ -43,33 +43,34 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     }
 
   private val options: BeneficiaryOptions = {
-    List((individualDetails.size, Individual)) ++
-    List((unidentified.size, ClassOfBeneficiaries)) ++
-    List((charity.size, Charity)) ++
-    List((trust.size, Trust)) ++
-    List((company.size, Company)) ++
-    List((employmentRelated.size, EmploymentRelated)) ++
-    List((other.size, Other))
+    (individualDetails.size, Individual) ::
+    (unidentified.size, ClassOfBeneficiaries) ::
+    (charity.size, Charity) ::
+    (trust.size, Trust) ::
+    (company.size, Company) ::
+    (employmentRelated.size, EmploymentRelated) ::
+    (other.size, Other) ::
+    Nil
   }
 
   val availableOptions: List[RadioOption] = {
 
-    def combineOptions(list: BeneficiaryOptions): BeneficiaryOptions = {
+    def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
-      def recurse(list: BeneficiaryOptions, acc: BeneficiaryOptions): BeneficiaryOptions = {
-        list match {
-          case Nil => acc
+      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
+        uncombinedOptions match {
+          case Nil => combinedOptions
           case List(head, next, _*) if head._2 == Charity && next._2 == Trust =>
-            val option: BeneficiaryOption = (head._1 + next._1, CharityOrTrust)
-            recurse(list.tail.tail, acc ++ List(option))
+            val combinedOption: BeneficiaryOption = (head._1 + next._1, CharityOrTrust)
+            recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
           case List(head, next, _*) if head._2 == Company && next._2 == EmploymentRelated =>
-            val option: BeneficiaryOption = (head._1 + next._1, CompanyOrEmploymentRelated)
-            recurse(list.tail.tail, acc ++ List(option))
+            val combinedOption: BeneficiaryOption = (head._1 + next._1, CompanyOrEmploymentRelated)
+            recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
           case _ =>
-            recurse(list.tail, acc ++ List(list.head))
+            recurse(uncombinedOptions.tail, combinedOptions :+ uncombinedOptions.head)
         }
       }
-      recurse(list, Nil)
+      recurse(uncombinedOptions, Nil)
     }
 
     combineOptions(options.filter(x => x._1 < 25)).map {
