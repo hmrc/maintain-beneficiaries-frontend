@@ -34,7 +34,7 @@ import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.AmendCharityBeneficiaryPrintHelper
-import views.html.charityortrust.amend.charity.CheckDetailsView
+import views.html.charityortrust.charity.amend.CheckDetailsView
 
 import scala.concurrent.Future
 

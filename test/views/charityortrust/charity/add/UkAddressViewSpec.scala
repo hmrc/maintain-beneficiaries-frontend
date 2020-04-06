@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
-import java.time.LocalDate
-
-import forms.DateFormProvider
+import controllers.charityortrust.charity.add.routes
+import forms.UkAddressFormProvider
+import models.UkAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
-import views.html.charityortrust.add.charity.StartDateView
+import views.behaviours.UkAddressViewBehaviours
+import views.html.charityortrust.charity.add.UkAddressView
 
-class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
+class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.startDate"
+  val messageKeyPrefix = "site.address.uk"
   val name: String = "Charity"
 
-  val form: Form[LocalDate] = new DateFormProvider().withPrefix(messageKeyPrefix)
-  val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
+  override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
 
-  "StartDate view" must {
+  "UkAddressView" must {
+
+    val view = viewFor[UkAddressView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, name)(fakeRequest, messages)
@@ -41,15 +42,13 @@ class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithDateFields(
-      form,
+    behave like ukAddressPage(
       applyView,
-      messageKeyPrefix,
-      "value",
+      Some(messageKeyPrefix),
+      routes.UkAddressController.onSubmit().url,
       name
     )
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }

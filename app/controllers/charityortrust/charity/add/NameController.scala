@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.add.charity.NameView
+import views.html.charityortrust.charity.add.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 

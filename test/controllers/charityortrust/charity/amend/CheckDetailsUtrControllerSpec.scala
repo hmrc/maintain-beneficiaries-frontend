@@ -34,7 +34,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.AmendCharityBeneficiaryPrintHelper
-import views.html.charityortrust.amend.charity.CheckDetailsUtrView
+import views.html.charityortrust.charity.amend.CheckDetailsUtrView
 
 import scala.concurrent.Future
 

@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.charityortrust.remove.charity.RemoveIndexView
+import views.html.charityortrust.charity.remove.RemoveIndexView
 
 import scala.concurrent.Future
 

@@ -27,7 +27,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.amend.charity.NameView
+import views.html.charityortrust.charity.amend.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 

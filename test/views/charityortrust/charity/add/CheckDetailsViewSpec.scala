@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
 /*
  * Copyright 2020 HM Revenue & Customs
@@ -35,7 +35,7 @@ package views.charityortrust.charity.add.charity
 import play.twirl.api.HtmlFormat
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
-import views.html.charityortrust.add.charity.CheckDetailsView
+import views.html.charityortrust.charity.add.CheckDetailsView
 
 class CheckDetailsViewSpec extends ViewBehaviours {
 

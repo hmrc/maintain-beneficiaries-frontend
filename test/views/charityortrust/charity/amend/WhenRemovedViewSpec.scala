@@ -22,7 +22,7 @@ import forms.DateRemovedFromTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import views.html.charityortrust.remove.charity.WhenRemovedView
+import views.html.charityortrust.charity.remove.WhenRemovedView
 
 class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 

@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.remove.charity.WhenRemovedView
+import views.html.charityortrust.charity.remove.WhenRemovedView
 
 import scala.concurrent.ExecutionContext
 

@@ -24,7 +24,7 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.NonUkAddressViewBehaviours
-import views.html.charityortrust.amend.charity.NonUkAddressView
+import views.html.charityortrust.charity.amend.NonUkAddressView
 
 class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 

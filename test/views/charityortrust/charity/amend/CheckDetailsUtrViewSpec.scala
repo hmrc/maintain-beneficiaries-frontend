@@ -35,7 +35,7 @@ package views.charityortrust.charity.amend
 import play.twirl.api.HtmlFormat
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
-import views.html.charityortrust.amend.charity.CheckDetailsUtrView
+import views.html.charityortrust.charity.amend.CheckDetailsUtrView
 
 class CheckDetailsUtrViewSpec extends ViewBehaviours {
 

@@ -21,7 +21,7 @@ import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import views.html.charityortrust.amend.charity.ShareOfIncomeView
+import views.html.charityortrust.charity.amend.ShareOfIncomeView
 
 class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
 

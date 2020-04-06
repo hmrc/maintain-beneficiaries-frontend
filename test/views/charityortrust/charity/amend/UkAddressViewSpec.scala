@@ -22,7 +22,7 @@ import models.UkAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
-import views.html.charityortrust.amend.charity.UkAddressView
+import views.html.charityortrust.charity.amend.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 

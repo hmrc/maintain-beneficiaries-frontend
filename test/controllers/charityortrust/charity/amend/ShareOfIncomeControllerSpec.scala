@@ -30,7 +30,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.charityortrust.amend.charity.ShareOfIncomeView
+import views.html.charityortrust.charity.amend.ShareOfIncomeView
 
 import scala.concurrent.Future
 

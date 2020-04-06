@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
-import controllers.charityortrust.charity.add.routes
-import forms.YesNoFormProvider
+import java.time.LocalDate
+
+import forms.DateFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.charityortrust.add.charity.DiscretionYesNoView
+import views.behaviours.QuestionViewBehaviours
+import views.html.charityortrust.charity.add.StartDateView
 
-class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
+class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "charityBeneficiary.discretionYesNo"
+  val messageKeyPrefix = "charityBeneficiary.startDate"
   val name: String = "Charity"
 
-  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[LocalDate] = new DateFormProvider().withPrefix(messageKeyPrefix)
+  val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
 
-  "DiscretionYesNo view" must {
-
-    val view = viewFor[DiscretionYesNoView](Some(emptyUserAnswers))
+  "StartDate view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, name)(fakeRequest, messages)
@@ -41,8 +41,15 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.DiscretionYesNoController.onSubmit().url)
+    behave like pageWithDateFields(
+      form,
+      applyView,
+      messageKeyPrefix,
+      "value",
+      name
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

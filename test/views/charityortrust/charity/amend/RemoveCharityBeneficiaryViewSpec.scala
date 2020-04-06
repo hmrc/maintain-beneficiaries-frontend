@@ -21,7 +21,7 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.charityortrust.remove.charity.RemoveIndexView
+import views.html.charityortrust.charity.remove.RemoveIndexView
 
 class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 

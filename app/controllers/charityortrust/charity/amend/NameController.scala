@@ -27,7 +27,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.amend.charity.NameView
+import views.html.charityortrust.charity.amend.NameView
 
 import scala.concurrent.{ExecutionContext, Future}
 

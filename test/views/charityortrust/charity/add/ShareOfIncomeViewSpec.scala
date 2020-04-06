@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
-import forms.UkAddressFormProvider
-import models.UkAddress
+import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.UkAddressViewBehaviours
-import views.html.charityortrust.add.charity.UkAddressView
+import views.behaviours.QuestionViewBehaviours
+import views.html.charityortrust.charity.add.ShareOfIncomeView
 
-class UkAddressViewSpec extends UkAddressViewBehaviours {
+class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
 
-  val messageKeyPrefix = "site.address.uk"
+  val messageKeyPrefix = "charityBeneficiary.shareOfIncome"
   val name: String = "Charity"
 
-  override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
+  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
+  val view: ShareOfIncomeView = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
 
-  "UkAddressView" must {
-
-    val view = viewFor[UkAddressView](Some(emptyUserAnswers))
+  "ShareOfIncome view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, name)(fakeRequest, messages)
@@ -42,13 +40,16 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like ukAddressPage(
+    behave like pageWithTextFields(
+      form,
       applyView,
-      Some(messageKeyPrefix),
-      routes.UkAddressController.onSubmit().url,
-      name
+      messageKeyPrefix,
+      None,
+      routes.NameController.onSubmit().url,
+      "value"
     )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.add.charity.UkAddressView
+import views.html.charityortrust.charity.add.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 

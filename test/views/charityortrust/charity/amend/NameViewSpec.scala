@@ -21,7 +21,7 @@ import forms.StringFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.amend.charity.NameView
+import views.html.charityortrust.charity.amend.NameView
 
 class NameViewSpec extends StringViewBehaviours {
 

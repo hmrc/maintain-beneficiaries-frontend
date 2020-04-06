@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
 import utils.print.AmendCharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.charityortrust.amend.charity.CheckDetailsView
+import views.html.charityortrust.charity.amend.CheckDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 

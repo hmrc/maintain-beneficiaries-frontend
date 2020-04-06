@@ -30,7 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.charityortrust.amend.charity.NonUkAddressView
+import views.html.charityortrust.charity.amend.NonUkAddressView
 
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 

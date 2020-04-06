@@ -14,42 +14,45 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
-import forms.IncomePercentageFormProvider
+import forms.NonUkAddressFormProvider
+import models.NonUkAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
-import views.html.charityortrust.add.charity.ShareOfIncomeView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.behaviours.NonUkAddressViewBehaviours
+import views.html.charityortrust.charity.add.NonUkAddressView
 
-class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
+class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.shareOfIncome"
+  val messageKeyPrefix = "site.address.nonUk"
   val name: String = "Charity"
 
-  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
-  val view: ShareOfIncomeView = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
+  override val form: Form[NonUkAddress] = new NonUkAddressFormProvider().apply()
 
-  "ShareOfIncome view" must {
+  "NonUkAddressView" must {
+
+    val view = viewFor[NonUkAddressView](Some(emptyUserAnswers))
+
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, name)(fakeRequest, messages)
+      view.apply(form, countryOptions, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(
-      form,
+    behave like nonUkAddressPage(
       applyView,
-      messageKeyPrefix,
-      None,
-      routes.NameController.onSubmit().url,
-      "value"
+      Some(messageKeyPrefix),
+      routes.NonUkAddressController.onSubmit().url,
+      name
     )
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }

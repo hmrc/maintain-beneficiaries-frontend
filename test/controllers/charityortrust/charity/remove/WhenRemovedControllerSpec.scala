@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
-import views.html.charityortrust.remove.charity.WhenRemovedView
+import views.html.charityortrust.charity.remove.WhenRemovedView
 
 import scala.concurrent.Future
 

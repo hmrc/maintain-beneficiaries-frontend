@@ -14,44 +14,34 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
-import forms.NonUkAddressFormProvider
-import models.NonUkAddress
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import utils.InputOption
-import utils.countryOptions.CountryOptionsNonUK
-import views.behaviours.NonUkAddressViewBehaviours
-import views.html.charityortrust.add.charity.NonUkAddressView
+import views.behaviours.YesNoViewBehaviours
+import views.html.charityortrust.charity.add.DiscretionYesNoView
 
-class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
+class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "site.address.nonUk"
+  val messageKeyPrefix = "charityBeneficiary.discretionYesNo"
   val name: String = "Charity"
 
-  override val form: Form[NonUkAddress] = new NonUkAddressFormProvider().apply()
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "NonUkAddressView" must {
+  "DiscretionYesNo view" must {
 
-    val view = viewFor[NonUkAddressView](Some(emptyUserAnswers))
-
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val view = viewFor[DiscretionYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, name)(fakeRequest, messages)
+      view.apply(form, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like nonUkAddressPage(
-      applyView,
-      Some(messageKeyPrefix),
-      routes.NonUkAddressController.onSubmit().url,
-      name
-    )
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.DiscretionYesNoController.onSubmit().url)
 
     behave like pageWithASubmitButton(applyView(form))
   }

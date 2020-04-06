@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add.charity
+package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.charityortrust.add.charity.AddressUkYesNoView
+import views.html.charityortrust.charity.add.AddressYesNoView
 
-class AddressUkYesNoViewSpec extends YesNoViewBehaviours {
+class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.addressUkYesNo"
+  val messageKeyPrefix = "charityBeneficiary.addressYesNo"
   val name: String = "Charity"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "AddressYesNo view" must {
 
-    val view = viewFor[AddressUkYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[AddressYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, name)(fakeRequest, messages)
@@ -41,7 +41,7 @@ class AddressUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.AddressUkYesNoController.onSubmit().url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.AddressYesNoController.onSubmit().url)
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -21,7 +21,7 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.charityortrust.amend.charity.DiscretionYesNoView
+import views.html.charityortrust.charity.amend.DiscretionYesNoView
 
 class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 

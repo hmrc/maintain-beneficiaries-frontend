@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.charityortrust.add.charity.NonUkAddressView
+import views.html.charityortrust.charity.add.NonUkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
