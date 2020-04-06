@@ -53,7 +53,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     Nil
   }
 
-  val availableOptions: List[RadioOption] = {
+  val nonMaxedOutOptions: List[RadioOption] = {
 
     def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
@@ -78,7 +78,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
     }
   }
 
-  val unavailableOptions: List[RadioOption] = {
+  val maxedOutOptions: List[RadioOption] = {
 
     options.filter(x => x._1 >= 25).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)

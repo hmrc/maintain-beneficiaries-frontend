@@ -68,7 +68,7 @@ class AddABeneficiaryController @Inject()(
 
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
-            if (beneficiaries.availableOptions.isEmpty) {
+            if (beneficiaries.nonMaxedOutOptions.isEmpty) {
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
@@ -80,7 +80,7 @@ class AddABeneficiaryController @Inject()(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
                 heading = all.addToHeading,
-                maxedOut = beneficiaries.unavailableOptions.map(x => x.messageKey)
+                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
               ))
             }
         }
@@ -118,7 +118,7 @@ class AddABeneficiaryController @Inject()(
                 rows.inProgress,
                 rows.complete,
                 beneficiaries.addToHeading,
-                maxedOut = beneficiaries.unavailableOptions.map(x => x.messageKey)
+                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
               )
             ))
           },
