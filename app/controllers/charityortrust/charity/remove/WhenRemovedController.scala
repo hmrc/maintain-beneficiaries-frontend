@@ -25,9 +25,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.DateUtils
 import views.html.charityortrust.charity.remove.WhenRemovedView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -37,37 +38,42 @@ class WhenRemovedController @Inject()(
                                        trust: TrustService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: WhenRemovedView,
-                                       trustService: TrustService
+                                       trustService: TrustService,
+                                       dateUtils: DateUtils
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("charityBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
-
       trust.getCharityBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
+          val form = formProvider.withPrefixAndTrustStartDate(
+            "charityBeneficiary.whenRemoved",
+            dateUtils.maxDate(List(request.userAnswers.whenTrustSetup, beneficiary.entityStart))
+          )
           Ok(view(form, index, beneficiary.name))
       }
-
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("charityBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
-
-      form.bindFromRequest().fold(
-        formWithErrors => {
-          trust.getCharityBeneficiary(request.userAnswers.utr, index).map {
-            beneficiary =>
-              BadRequest(view(formWithErrors, index, beneficiary.name))
-          }
-        },
-        value =>
-          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CharityBeneficiary, index, value)).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+      trust.getCharityBeneficiary(request.userAnswers.utr, index).flatMap {
+        beneficiary =>
+          val form = formProvider.withPrefixAndTrustStartDate(
+            "charityBeneficiary.whenRemoved",
+            dateUtils.maxDate(List(request.userAnswers.whenTrustSetup, beneficiary.entityStart))
           )
-      )
+
+          form.bindFromRequest().fold(
+            formWithErrors => {
+              Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name)))
+            },
+            value =>
+              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CharityBeneficiary, index, value)).map(_ =>
+                Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+              )
+          )
+      }
   }
 }

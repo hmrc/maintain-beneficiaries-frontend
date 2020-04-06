@@ -29,14 +29,14 @@ import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import reactivemongo.play.json.collection.JSONCollection
-import utils.DateFormatter
+import utils.DateUtils
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PlaybackRepository @Inject()(
                                     mongo: ReactiveMongoApi,
                                     config: Configuration,
-                                    dateFormatter: DateFormatter
+                                    dateFormatter: DateUtils
                                   )(implicit ec: ExecutionContext, m: Materializer) extends MongoRepository {
 
   private val collectionName: String = "user-answers"

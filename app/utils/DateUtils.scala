@@ -16,19 +16,21 @@
 
 package utils
 
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, LocalDateTime}
 
-import com.google.inject.Inject
-import config.FrontendAppConfig
-
-class DateFormatter @Inject()(config: FrontendAppConfig) {
+class DateUtils {
 
   private val format = "d MMMM yyyy"
 
   def formatDate(dateTime: LocalDateTime): String = {
     val dateFormatter = DateTimeFormatter.ofPattern(format)
     dateTime.format(dateFormatter)
+  }
+
+  def maxDate(dates: List[LocalDate]): LocalDate = {
+    def max(d1: LocalDate, d2: LocalDate): LocalDate = if (d1.compareTo(d2) > 0) d1 else d2
+    dates.reduceLeft(max)
   }
 
 }
