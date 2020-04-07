@@ -189,7 +189,7 @@ classOfBeneficiary.whenRemoved.error.required.two = The date the beneficiary was
 classOfBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
 classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
-classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the date it was added
+classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
 individualBeneficiary.defaultText = the beneficiary
 individualBeneficiary.return.link = Return to add a beneficiary
@@ -354,7 +354,7 @@ individualBeneficiary.whenRemoved.error.required.two = The date the beneficiary 
 individualBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
 individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
-individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the date it was added
+individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
 individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know the individual beneficiary’s passport or ID card details?
@@ -458,7 +458,7 @@ charityBeneficiary.whenRemoved.error.required.two = The date the beneficiary was
 charityBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
 charityBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 charityBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
-charityBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the date it was added
+charityBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
 charityBeneficiary.checkDetails.title = Check charity beneficiary details
 charityBeneficiary.checkDetails.heading = Check charity beneficiary details
