@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.amend
+package views.charityortrust.charity.remove
 
-import java.time.LocalDate
-
-import forms.DateRemovedFromTrustFormProvider
+import controllers.charityortrust.charity.remove.routes
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
-import views.html.charityortrust.charity.remove.WhenRemovedView
+import views.behaviours.YesNoViewBehaviours
+import views.html.charityortrust.charity.remove.RemoveIndexView
 
-class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
+class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.whenRemoved"
+  val messageKeyPrefix = "removeCharityBeneficiary"
+  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
+  val name = "Trustee Name"
   val index = 0
-  val name = "Name"
 
-  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, LocalDate.now())
+  "removeCharityBeneficiary view" must {
 
-  "whenRemoved view" must {
-
-    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
+    val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index, name)(fakeRequest, messages)
@@ -43,19 +41,6 @@ class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
-
-    "fields" must {
-
-      behave like pageWithDateFields(
-        form,
-        applyView,
-        messageKeyPrefix,
-        "value",
-        name
-      )
-    }
-
-    behave like pageWithASubmitButton(applyView(form))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveCharityBeneficiaryController.onSubmit(index).url)
   }
 }

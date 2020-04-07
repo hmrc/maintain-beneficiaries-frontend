@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.amend
+package views.charityortrust.charity.remove
 
-import controllers.charityortrust.charity.remove.routes
-import forms.YesNoFormProvider
+import java.time.LocalDate
+
+import forms.DateRemovedFromTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.charityortrust.charity.remove.RemoveIndexView
+import views.behaviours.QuestionViewBehaviours
+import views.html.charityortrust.charity.remove.WhenRemovedView
 
-class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
+class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "removeCharityBeneficiary"
-  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
-  val name = "Trustee Name"
+  val messageKeyPrefix = "charityBeneficiary.whenRemoved"
   val index = 0
+  val name = "Name"
 
-  "removeCharityBeneficiary view" must {
+  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndEntityStartDate(messageKeyPrefix, LocalDate.now())
 
-    val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
+  "whenRemoved view" must {
+
+    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index, name)(fakeRequest, messages)
@@ -41,6 +43,19 @@ class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveCharityBeneficiaryController.onSubmit(index).url)
+    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
+
+    "fields" must {
+
+      behave like pageWithDateFields(
+        form,
+        applyView,
+        messageKeyPrefix,
+        "value",
+        name
+      )
+    }
+
+    behave like pageWithASubmitButton(applyView(form))
   }
 }

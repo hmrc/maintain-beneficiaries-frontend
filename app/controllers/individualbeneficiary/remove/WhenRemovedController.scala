@@ -27,7 +27,7 @@ import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individualbeneficiary.remove.WhenRemovedView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -43,31 +43,28 @@ class WhenRemovedController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
-
       trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
+          val form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", beneficiary.entityStart)
           Ok(view(form, index, beneficiary.name.displayName))
       }
-
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", request.userAnswers.whenTrustSetup)
-
-      form.bindFromRequest().fold(
-        formWithErrors => {
-          trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
-            beneficiary =>
-              BadRequest(view(formWithErrors, index, beneficiary.name.displayName))
-          }
-        },
-        value =>
-          trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+      trust.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
+        beneficiary =>
+          val form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", beneficiary.entityStart)
+          form.bindFromRequest().fold(
+            formWithErrors => {
+              Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name.displayName)))
+            },
+            value =>
+              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
+                Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+              )
           )
-      )
+      }
   }
 }

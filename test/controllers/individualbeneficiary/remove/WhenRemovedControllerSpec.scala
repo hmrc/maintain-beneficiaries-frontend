@@ -40,7 +40,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new DateRemovedFromTrustFormProvider()
 
-  private def form = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.whenRemoved", LocalDate.now())
+  private def form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", LocalDate.now())
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
