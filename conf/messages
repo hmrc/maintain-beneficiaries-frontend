@@ -16,6 +16,9 @@ site.date.hint = For example, 31 3 1980
 site.inprogress = In Progress
 site.complete = Completed
 
+site.return.link = Return to add a beneficiary
+site.beneficiary.defaultText = the beneficiary
+
 site.address.uk.title = What is the address?
 site.address.uk.heading = What is {0}’s address?
 site.address.uk.line1 = Address line 1
@@ -26,7 +29,7 @@ site.address.uk.postcode = Postcode
 site.address.uk.postcode.hint = For example AB1 1AB
 
 address.country.select = Select a country
-site.address.nonUk.title = What is {0}’s address?
+site.address.nonUk.title = What is the address?
 site.address.nonUk.heading = What is {0}’s address?
 site.address.nonUk.line1 = Address line 1
 site.address.nonUk.line2 = Address line 2
@@ -90,11 +93,6 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
-
-error.income_percentage.non_numeric = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.required = Enter what percentage of the trust’s assets the beneficiary is entitled to
-error.income_percentage.integer = The percentage of the trust’s assets the beneficiary is entitled to must be a whole number
-error.income_percentage.less_than_100 = The percentage of the trust’s assets the beneficiary is entitled to must be 100 or less
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
@@ -169,9 +167,9 @@ classOfBeneficiary.description.return.link = Return to add a beneficiary
 
 classOfBeneficiary.description.default = class of beneficiaries
 
-classOfBeneficiary.entityStart.title = When was the class of beneficiary added to the trust?
-classOfBeneficiary.entityStart.heading = When was the {0} added to the trust?
-classOfBeneficiary.entityStart.checkYourAnswersLabel = When was the {0} added to the trust?
+classOfBeneficiary.entityStart.title = When was the class of beneficiaries added as a beneficiary?
+classOfBeneficiary.entityStart.heading = When was {0} added as a beneficiary?
+classOfBeneficiary.entityStart.checkYourAnswersLabel = When was {0} added as a beneficiary?
 classOfBeneficiary.entityStart.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980
 classOfBeneficiary.entityStart.error.required.all = Enter the date the class of beneficiaries was added to the trust
 classOfBeneficiary.entityStart.error.required.two = The date the class of beneficiaries was added to the trust must include a {0} and {1}
@@ -191,7 +189,7 @@ classOfBeneficiary.whenRemoved.error.required.two = The date the beneficiary was
 classOfBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
 classOfBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 classOfBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
-classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
+classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
 individualBeneficiary.defaultText = the beneficiary
 individualBeneficiary.return.link = Return to add a beneficiary
@@ -232,35 +230,41 @@ individualBeneficiary.incomeDiscretionYesNo.heading = Do the trustees have discr
 individualBeneficiary.incomeDiscretionYesNo.hint = See the trust deed for details
 individualBeneficiary.incomeDiscretionYesNo.error.required = Select yes if the trustees have discretion over how much income the individual beneficiary may get
 
-individualBeneficiary.incomePercentage.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
-individualBeneficiary.incomePercentage.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
-individualBeneficiary.incomePercentage.heading = What percentage of the trust’s assets is {0} entitled to?
-individualBeneficiary.incomePercentage.hint = Round this down to a whole number.
+individualBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the individual beneficiary entitled to?
+individualBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+individualBeneficiary.shareOfIncome.hint = Round this down to a whole number.
+
+
+individualBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the individual beneficiary is entitled to
+individualBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
+individualBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the individual beneficiary is entitled to must be 100 or less
 
 individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.heading = Do you know {0}’s National Insurance number?
-individualBeneficiary.nationalInsuranceNumberYesNo.error.required = Select yes if you know the individual’s National Insurance number
+individualBeneficiary.nationalInsuranceNumberYesNo.error.required = Select yes if you know the individual beneficiary’s National Insurance number
 
 individualBeneficiary.nationalInsuranceNumber.checkYourAnswersLabel = What is {0}’s National Insurance number?
-individualBeneficiary.nationalInsuranceNumber.title = What is the individual’s National Insurance number?
+individualBeneficiary.nationalInsuranceNumber.title = What is the individual beneficiary’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumber.heading = What is {0}’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
-individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual’s National Insurance number
-individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual’s National Insurance number in the correct format
+individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
+individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual beneficiary’s National Insurance number in the correct format
 
 individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
-individualBeneficiary.addressYesNo.title = Do you know the individual’s address?
+individualBeneficiary.addressYesNo.title = Do you know the individual beneficiary’s address?
 individualBeneficiary.addressYesNo.heading = Do you know {0}’s address?
-individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual’s address
+individualBeneficiary.addressYesNo.error.required = Select yes if you know the individual beneficiary’s address
 
 individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel = Does {0} live in the UK?
-individualBeneficiary.liveInTheUkYesNo.title = Does the individual live in the UK?
+individualBeneficiary.liveInTheUkYesNo.title = Does the individual beneficiary live in the UK?
 individualBeneficiary.liveInTheUkYesNo.heading = Does {0} live in the UK?
-individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual lives in the UK
+individualBeneficiary.liveInTheUkYesNo.error.required = Select yes if the individual beneficiary lives in the UK
 
 individualBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
-individualBeneficiary.ukAddress.title = What is the individual’s address?
+individualBeneficiary.ukAddress.title = What is the individual beneficiary’s address?
 individualBeneficiary.ukAddress.heading = What is {0}’s address?
 individualBeneficiary.ukAddress.line1 = Address line 1
 individualBeneficiary.ukAddress.line2 = Address line 2
@@ -270,24 +274,24 @@ individualBeneficiary.ukAddress.postcode = Postcode
 individualBeneficiary.ukAddress.postcode.hint = For example AB1 1AB
 
 individualBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
-individualBeneficiary.nonUkAddress.title = What is the individual’s address?
+individualBeneficiary.nonUkAddress.title = What is the individual beneficiary’s address?
 individualBeneficiary.nonUkAddress.heading = What is {0}’s address?
 
 individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
-individualBeneficiary.passportDetailsYesNo.title = Do you know the individual’s passport details?
+individualBeneficiary.passportDetailsYesNo.title = Do you know the individual beneficiary’s passport details?
 individualBeneficiary.passportDetailsYesNo.heading = Do you know {0}’s passport details?
-individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual’s passport details
+individualBeneficiary.passportDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport details
 
 individualBeneficiary.passportDetails.checkYourAnswersLabel = What are {0}’s passport details?
-individualBeneficiary.passportDetails.title = What are the individual’s passport details?
+individualBeneficiary.passportDetails.title = What are the individual beneficiary’s passport details?
 individualBeneficiary.passportDetails.heading = What are {0}’s passport details?
 individualBeneficiary.passportDetails.country = Passport country of issue
-individualBeneficiary.passportDetails.country.error.required = Enter the individual’s passport country of issue
-individualBeneficiary.passportDetails.country.error.length = The individual’s passport country must be 100 characters or less
+individualBeneficiary.passportDetails.country.error.required = Enter the individual beneficiary’s passport country of issue
+individualBeneficiary.passportDetails.country.error.length = The individual beneficiary’s passport country must be 100 characters or less
 individualBeneficiary.passportDetails.number = Passport number
 individualBeneficiary.passportDetails.number.hint = For example, 502135326
-individualBeneficiary.passportDetails.number.error.required = Enter the individual’s passport number
-individualBeneficiary.passportDetails.number.error.length = The individual’s passport number must be 30 characters or less
+individualBeneficiary.passportDetails.number.error.required = Enter the individual beneficiary’s passport number
+individualBeneficiary.passportDetails.number.error.length = The individual beneficiary’s passport number must be 30 characters or less
 individualBeneficiary.passportDetails.number.error.invalid = Passport number can only include letters and numbers
 individualBeneficiary.passportDetails.expiryDate = Expiry date
 individualBeneficiary.passportDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
@@ -299,20 +303,20 @@ individualBeneficiary.passportDetails.expiryDate.error.future = Passport expiry 
 individualBeneficiary.passportDetails.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
 individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s ID card details?
-individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual’s ID card details?
+individualBeneficiary.idCardDetailsYesNo.title = Do you know the individual beneficiary’s ID card details?
 individualBeneficiary.idCardDetailsYesNo.heading = Do you know {0}’s ID card details?
-individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual’s ID card details
+individualBeneficiary.idCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s ID card details
 
 individualBeneficiary.idCardDetails.checkYourAnswersLabel = What are {0}’s ID card details?
-individualBeneficiary.idCardDetails.title = What are the individual’s ID card details?
+individualBeneficiary.idCardDetails.title = What are the individual beneficiary’s ID card details?
 individualBeneficiary.idCardDetails.heading = What are {0}’s ID card details?
 individualBeneficiary.idCardDetails.country = ID card country of issue
-individualBeneficiary.idCardDetails.country.error.required = Enter the individual’s ID card country of issue
-individualBeneficiary.idCardDetails.country.error.length = The individual’s ID card country must be 100 characters or less
+individualBeneficiary.idCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
+individualBeneficiary.idCardDetails.country.error.length = The individual beneficiary’s ID card country must be 100 characters or less
 individualBeneficiary.idCardDetails.number = ID card number
 individualBeneficiary.idCardDetails.number.hint = For example, 502135326
-individualBeneficiary.idCardDetails.number.error.required = Enter the individual’s ID card number
-individualBeneficiary.idCardDetails.number.error.length = The individual’s ID card number must be 30 characters or less
+individualBeneficiary.idCardDetails.number.error.required = Enter the individual beneficiary’s ID card number
+individualBeneficiary.idCardDetails.number.error.length = The individual beneficiary’s ID card number must be 30 characters or less
 individualBeneficiary.idCardDetails.number.error.invalid = ID card number can only include letters and numbers
 individualBeneficiary.idCardDetails.expiryDate = Expiry date
 individualBeneficiary.idCardDetails.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980
@@ -337,12 +341,12 @@ individualBeneficiary.startDate.error.required.two = The date the individual ben
 individualBeneficiary.startDate.error.required = The date the individual beneficiary was added to the trust must include a {0}
 individualBeneficiary.startDate.error.invalid = Enter a real date
 individualBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
-individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust must be after 31 December 1499
+individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust cannot be before the start date of the trust
 
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
 
-individualBeneficiary.whenRemoved.title = When was {0} removed as a beneficiary?
+individualBeneficiary.whenRemoved.title = When was the individual removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
 individualBeneficiary.whenRemoved.hint = For example, 31 3 1980
 individualBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
@@ -350,17 +354,15 @@ individualBeneficiary.whenRemoved.error.required.two = The date the beneficiary 
 individualBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
 individualBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 individualBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
-individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed from the trust cannot be before the start date of the trust
-
-classOfBeneficiary.whenRemoved.error.past = The date the beneficiary was was removed from trust cannot be before the start date of the trust
+individualBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
 individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel = Do you know {0}’s passport or ID card details?
-individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetailsYesNo.title = Do you know the individual beneficiary’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.heading = Do you know {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetailsYesNo.error.required = Select yes if you know the individual beneficiary’s passport or ID card details
 
 individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel = What are {0}’s passport or ID card details?
-individualBeneficiary.passportOrIdCardDetails.title = What are the {0}’s passport or ID card details?
+individualBeneficiary.passportOrIdCardDetails.title = What are the individual beneficiary’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetails.heading = What are {0}’s passport or ID card details?
 individualBeneficiary.passportOrIdCardDetails.country = ID card country of issue
 individualBeneficiary.passportOrIdCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
@@ -378,10 +380,90 @@ individualBeneficiary.passportOrIdCardDetails.expiryDate.error.invalid = Enter a
 individualBeneficiary.passportOrIdCardDetails.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 individualBeneficiary.passportOrIdCardDetails.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
-removeClassOfBeneficiary.title = Are you sure you want to remove {0}?
+removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
 removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
 removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
 
-removeIndividualBeneficiary.title = Are you sure you want to remove {0}?
+removeIndividualBeneficiary.title = Are you sure you want to remove the individual beneficiary?
 removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
 removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+
+removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+
+charityOrTrust.title = Is the beneficiary a charity or trust?
+charityOrTrust.heading = Is the beneficiary a charity or trust?
+charityOrTrust.checkYourAnswersLabel = Is the beneficiary a charity or trust?
+charityOrTrust.hint = As named in the trust deed
+charityOrTrust.error.required = Select the type of beneficiary you need to add
+
+isTheBeneficiaryACharityOrTrust.charity = Charity
+isTheBeneficiaryACharityOrTrust.trust = Trust
+
+charityBeneficiary.name.title = What is the charity’s name?
+charityBeneficiary.name.heading = What is the charity’s name?
+charityBeneficiary.name.checkYourAnswersLabel = What is the charity’s name?
+charityBeneficiary.name.error.required = Enter the charity’s name
+charityBeneficiary.name.error.invalidFormat = Charity’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+charityBeneficiary.name.error.length = Charity’s name must be 56 characters or less
+
+charityBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the charity beneficiary may get?
+charityBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+charityBeneficiary.discretionYesNo.hint = See the trust deed for details
+charityBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the charity beneficiary may get
+
+charityBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the charity beneficiary entitled to?
+charityBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+charityBeneficiary.shareOfIncome.hint = Round this down to a whole number
+
+charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the charity beneficiary is entitled to
+charityBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the charity beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the charity beneficiary is entitled to must be 100 or less
+
+charityBeneficiary.addressYesNo.title = Do you know the charity beneficiary’s address?
+charityBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+charityBeneficiary.addressYesNo.error.required = Select yes if you know the charity beneficiary’s address
+
+charityBeneficiary.addressUkYesNo.title = Is the charity beneficiary’s address in the UK?
+charityBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+charityBeneficiary.addressUkYesNo.error.required = Select yes if the charity beneficiary’s address is in the UK
+
+charityBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+charityBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+charityBeneficiary.startDate.title = When was the charity beneficiary added as a beneficiary?
+charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+charityBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
+charityBeneficiary.startDate.hint = For example, 31 3 1980
+charityBeneficiary.startDate.error.required.all = Enter the date the charity beneficiary was added to the trust
+charityBeneficiary.startDate.error.required.two = The date the charity beneficiary was added to the trust must include a {0} and a {1}
+charityBeneficiary.startDate.error.required = The date the charity beneficiary was added to the trust must include a {0}
+charityBeneficiary.startDate.error.invalid = Enter a real date
+charityBeneficiary.startDate.error.future = The date the charity beneficiary was added to the trust must be today or in the past
+charityBeneficiary.startDate.error.past = The date the charity beneficiary was added to the trust cannot be before the start date of the trust
+
+charityBeneficiary.whenRemoved.title = When was the charity removed as a beneficiary?
+charityBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+charityBeneficiary.whenRemoved.hint = For example, 31 3 1980
+charityBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+charityBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+charityBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+charityBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+charityBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+charityBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
+
+charityBeneficiary.checkDetails.title = Check charity beneficiary details
+charityBeneficiary.checkDetails.heading = Check charity beneficiary details
+
+charityBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+charityBeneficiary.checkDetails.utr.p1 = Some of the information we ask about charity beneficiaries has changed.
+charityBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
+charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.

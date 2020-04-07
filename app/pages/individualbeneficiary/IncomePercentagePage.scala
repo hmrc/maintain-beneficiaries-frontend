@@ -23,5 +23,5 @@ case object IncomePercentagePage extends QuestionPage[Int] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "incomePercentage"
+  override def toString: String = "shareOfIncome"
 }

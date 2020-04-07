@@ -68,6 +68,7 @@ class AddNowController @Inject()(
             value match {
               case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
               case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
+              case CharityOrTrust => Redirect(controllers.charityortrust.routes.CharityOrTrustController.onPageLoad())
               case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             }
           }

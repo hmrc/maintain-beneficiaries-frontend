@@ -1,5 +1,7 @@
 .*
-
+project/metals.sbt
+.bloop
+.metals
 !.gitignore
 !.scalafmt.conf
 .cache

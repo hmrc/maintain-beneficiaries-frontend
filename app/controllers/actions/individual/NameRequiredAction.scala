@@ -16,6 +16,7 @@
 
 package controllers.actions.individual
 
+import controllers.actions.BeneficiaryNameRequest
 import javax.inject.Inject
 import models.requests.DataRequest
 import pages.individualbeneficiary.NamePage

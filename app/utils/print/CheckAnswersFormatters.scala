@@ -114,4 +114,6 @@ object CheckAnswersFormatters {
     Html(lines.mkString("<br />"))
   }
 
+  def percentage(value: Int): Html = HtmlFormat.escape(s"$value%")
+
 }

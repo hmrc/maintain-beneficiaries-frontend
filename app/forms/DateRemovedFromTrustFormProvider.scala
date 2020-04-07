@@ -24,7 +24,7 @@ import play.api.data.Form
 
 class DateRemovedFromTrustFormProvider @Inject() extends Mappings {
 
-  def withPrefixAndTrustStartDate(prefix: String, trustStartDate: LocalDate): Form[LocalDate] =
+  def withPrefixAndEntityStartDate(prefix: String, entityStartDate: LocalDate): Form[LocalDate] =
     Form(
       "value" -> localDate(
         invalidKey     = s"$prefix.error.invalid",
@@ -33,7 +33,7 @@ class DateRemovedFromTrustFormProvider @Inject() extends Mappings {
         requiredKey    = s"$prefix.error.required"
       ).verifying(firstError(
         maxDate(LocalDate.now, s"$prefix.error.future", "day", "month", "year"),
-        minDate(trustStartDate, s"$prefix.error.past", "day", "month", "year")
+        minDate(entityStartDate, s"$prefix.error.past", "day", "month", "year")
       ))
     )
 }

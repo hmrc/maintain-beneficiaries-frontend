@@ -1,0 +1,6 @@
+
+GET        /:index/remove                            controllers.charityortrust.charity.remove.RemoveCharityBeneficiaryController.onPageLoad(index: Int)
+POST       /:index/remove                            controllers.charityortrust.charity.remove.RemoveCharityBeneficiaryController.onSubmit(index: Int)
+
+GET        /:index/when-was-beneficiary-removed      controllers.charityortrust.charity.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-was-beneficiary-removed      controllers.charityortrust.charity.remove.WhenRemovedController.onSubmit(index: Int)

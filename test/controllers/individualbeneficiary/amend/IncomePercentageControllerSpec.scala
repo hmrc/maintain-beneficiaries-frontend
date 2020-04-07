@@ -40,7 +40,7 @@ import scala.concurrent.Future
 class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private val formProvider = new IncomePercentageFormProvider()
-  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.incomePercentage")
+  private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.shareOfIncome")
 
   private def onwardRoute = Call("GET", "/foo")
 
@@ -59,7 +59,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, incomePercentageRoute)
-      .withFormUrlEncodedBody("percentage" -> validAnswer.toString)
+      .withFormUrlEncodedBody("value" -> validAnswer.toString)
 
   "Individual Beneficiary Income Percentage Controller" must {
 
@@ -127,9 +127,9 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, incomePercentageRoute)
-          .withFormUrlEncodedBody(("percentage", "invalid value"))
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("percentage" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val view = application.injector.instanceOf[IncomePercentageView]
 

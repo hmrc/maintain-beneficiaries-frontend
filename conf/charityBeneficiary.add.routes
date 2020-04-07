@@ -1,0 +1,26 @@
+GET         /name                       controllers.charityortrust.charity.add.NameController.onPageLoad()
+POST        /name                       controllers.charityortrust.charity.add.NameController.onSubmit()
+
+GET         /discretion-yes-no          controllers.charityortrust.charity.add.DiscretionYesNoController.onPageLoad()
+POST        /discretion-yes-no          controllers.charityortrust.charity.add.DiscretionYesNoController.onSubmit()
+
+GET         /share-of-income            controllers.charityortrust.charity.add.ShareOfIncomeController.onPageLoad()
+POST        /share-of-income            controllers.charityortrust.charity.add.ShareOfIncomeController.onSubmit()
+
+GET         /has-address                controllers.charityortrust.charity.add.AddressYesNoController.onPageLoad()
+POST        /has-address                controllers.charityortrust.charity.add.AddressYesNoController.onSubmit()
+
+GET         /has-uk-address             controllers.charityortrust.charity.add.AddressUkYesNoController.onPageLoad()
+POST        /has-uk-address             controllers.charityortrust.charity.add.AddressUkYesNoController.onSubmit()
+
+GET         /uk-address                 controllers.charityortrust.charity.add.UkAddressController.onPageLoad()
+POST        /uk-address                 controllers.charityortrust.charity.add.UkAddressController.onSubmit()
+
+GET         /non-uk-address             controllers.charityortrust.charity.add.NonUkAddressController.onPageLoad()
+POST        /non-uk-address             controllers.charityortrust.charity.add.NonUkAddressController.onSubmit()
+
+GET         /start-date                 controllers.charityortrust.charity.add.StartDateController.onPageLoad()
+POST        /start-date                 controllers.charityortrust.charity.add.StartDateController.onSubmit()
+
+GET         /check-details              controllers.charityortrust.charity.add.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.charityortrust.charity.add.CheckDetailsController.onSubmit()

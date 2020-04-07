@@ -18,9 +18,9 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.Address
+import models.{Address, Name}
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsSuccess, Reads, __}
+import play.api.libs.json.{JsPath, JsSuccess, Reads, Writes, __}
 
 final case class CharityBeneficiary(name: String,
                                     utr: Option[String],
@@ -48,7 +48,17 @@ object CharityBeneficiary {
         CharityBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
-  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
+  implicit val writes: Writes[CharityBeneficiary] =
+    ((__ \ 'organisationName).write[String] and
+      (__ \ 'identification \ 'utr).writeNullable[String] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+      ).apply(unlift(CharityBeneficiary.unapply))
+
+  private def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
       .map(Some(_))

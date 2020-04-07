@@ -24,14 +24,14 @@ import play.api.data.FormError
 class DateRemovedFromTrustFormProviderSpec extends DateBehaviours {
 
   private val max = LocalDate.now(ZoneOffset.UTC)
-  private val trustStartDate = LocalDate.of(2020, 1, 1)
+  private val entityStartDate = LocalDate.of(2020, 1, 1)
 
-  val form = new DateRemovedFromTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.whenRemoved", trustStartDate)
+  val form = new DateRemovedFromTrustFormProvider().withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", entityStartDate)
 
   ".value" should {
 
     val validData = datesBetween(
-      min = trustStartDate,
+      min = entityStartDate,
       max = max
     )
 
@@ -45,7 +45,7 @@ class DateRemovedFromTrustFormProviderSpec extends DateBehaviours {
     )
 
     behave like dateFieldWithMin(form, "value",
-      min = trustStartDate,
+      min = entityStartDate,
       FormError("value", "classOfBeneficiary.whenRemoved.error.past", List("day", "month", "year"))
     )
 

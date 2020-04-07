@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import config.annotations.AddIndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
-import forms.DateFormProvider
+import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.individualbeneficiary.StartDatePage
@@ -37,15 +37,17 @@ class StartDateController @Inject()(
                                      @AddIndividualBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
-                                     formProvider: DateFormProvider,
+                                     formProvider: DateAddedToTrustFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: StartDateView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form = formProvider.withPrefix("individualBeneficiary.startDate")
+  private val prefix: String = "individualBeneficiary.startDate"
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
+
+      val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
 
       val preparedForm = request.userAnswers.get(StartDatePage) match {
         case None => form
@@ -57,6 +59,8 @@ class StartDateController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
+
+      val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
         formWithErrors =>
