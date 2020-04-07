@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 class FrontendAppConfig @Inject()(config: Configuration) {
 
   private val contactHost: String = config.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier: String = "maintain-beneficiaries-frontend"
+  private val contactFormServiceIdentifier: String = "trusts"
 
   private val assetsUrl: String = config.get[String]("assets.url")
 
