@@ -18,24 +18,24 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, IndividualIdentification, Name}
+import models.{Address, Enumerable, IndividualIdentification, Name, WithName}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 sealed trait BeneficiaryEmploymentType
 
-object BeneficiaryEmploymentType {
-//  implicit val reads: Reads[IndividualIdentification] =
-  implicit val writes: Writes[BeneficiaryEmploymentType] = Writes {
-    case DirectorEmploymentType => JsString("Director")
-    case EmployeeEmploymentType => JsString("Employee")
-    case NAEmploymentType => JsString("NA")
-  }
+object BeneficiaryEmploymentType extends Enumerable.Implicits {
+  val values: Seq[BeneficiaryEmploymentType] = Seq(
+    DirectorEmploymentType, EmployeeEmploymentType, NAEmploymentType
+  )
+
+  implicit val enumerable: Enumerable[BeneficiaryEmploymentType] =
+    Enumerable(values.map(v => v.toString -> v): _*)
 }
 
-case object DirectorEmploymentType extends BeneficiaryEmploymentType
-case object EmployeeEmploymentType extends BeneficiaryEmploymentType
-case object NAEmploymentType extends BeneficiaryEmploymentType
+case object DirectorEmploymentType extends WithName("Director") with BeneficiaryEmploymentType
+case object EmployeeEmploymentType extends WithName("Employee") with BeneficiaryEmploymentType
+case object NAEmploymentType extends WithName("NA") with BeneficiaryEmploymentType
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
@@ -56,17 +56,18 @@ object IndividualBeneficiary {
       __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
+      (__ \ 'beneficiaryType).readNullable[BeneficiaryEmploymentType] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)).tupled.map{
 
-      case (name, dob, nino, identification, vulnerable, None, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable, _, Some(true), entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable,  income, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, income, incomeDiscretionYesNo = false, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, employment, None, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, employment, _, Some(true), entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable,  employment, income, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = false, entityStart, provisional)
 
     }
 

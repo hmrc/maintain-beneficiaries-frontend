@@ -43,7 +43,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryDiscretion": false,
             |    "beneficiaryShareOfIncome": "10",
             |    "identification": {
@@ -96,7 +95,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryDiscretion": false,
             |    "beneficiaryShareOfIncome": "10",
             |    "identification": {
@@ -146,7 +144,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryDiscretion": false,
             |    "beneficiaryShareOfIncome": "10",
             |    "identification": {
@@ -185,7 +182,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryDiscretion": true,
             |    "beneficiaryShareOfIncome": "0",
             |    "entityStart": "2017-02-28",
@@ -222,7 +218,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryDiscretion": true,
             |    "beneficiaryShareOfIncome": "0",
             |    "identification": {
@@ -276,7 +271,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "beneficiaryShareOfIncome": "10000",
             |    "identification": {
             |       "safeId": "2222200000000",
@@ -329,7 +323,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "1970-02-28",
             |    "vulnerableBeneficiary": true,
-            |    "beneficiaryType": "Director",
             |    "identification": {
             |       "safeId": "2222200000000",
             |       "address": {
@@ -366,6 +359,112 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
           provisional = false
         )
       }
+      "with director employment type" in {
+        val json = Json.parse(
+          """
+            |{
+            |    "lineNo": "1",
+            |    "bpMatchStatus": "01",
+            |    "name": {
+            |      "firstName": "Nicola",
+            |      "middleName": "Andrey",
+            |      "lastName": "Jackson"
+            |    },
+            |    "dateOfBirth": "1970-02-28",
+            |    "vulnerableBeneficiary": true,
+            |    "beneficiaryType": "Director",
+            |    "beneficiaryDiscretion": true,
+            |    "beneficiaryShareOfIncome": "0",
+            |    "entityStart": "2017-02-28",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[IndividualBeneficiary]
+        beneficiary mustBe IndividualBeneficiary(
+          name = Name("Nicola", Some("Andrey"), "Jackson"),
+          dateOfBirth = testDateOfBirth,
+          identification = None,
+          address = None,
+          vulnerableYesNo = true,
+          employmentType = Some(DirectorEmploymentType),
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = testEntityStart,
+          provisional = false
+        )
+      }
+      "with employee employment type" in {
+        val json = Json.parse(
+          """
+            |{
+            |    "lineNo": "1",
+            |    "bpMatchStatus": "01",
+            |    "name": {
+            |      "firstName": "Nicola",
+            |      "middleName": "Andrey",
+            |      "lastName": "Jackson"
+            |    },
+            |    "dateOfBirth": "1970-02-28",
+            |    "vulnerableBeneficiary": true,
+            |    "beneficiaryType": "Employee",
+            |    "beneficiaryDiscretion": true,
+            |    "beneficiaryShareOfIncome": "0",
+            |    "entityStart": "2017-02-28",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[IndividualBeneficiary]
+        beneficiary mustBe IndividualBeneficiary(
+          name = Name("Nicola", Some("Andrey"), "Jackson"),
+          dateOfBirth = testDateOfBirth,
+          identification = None,
+          address = None,
+          vulnerableYesNo = true,
+          employmentType = Some(EmployeeEmploymentType),
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = testEntityStart,
+          provisional = false
+        )
+      }
+      "with NA employment type" in {
+        val json = Json.parse(
+          """
+            |{
+            |    "lineNo": "1",
+            |    "bpMatchStatus": "01",
+            |    "name": {
+            |      "firstName": "Nicola",
+            |      "middleName": "Andrey",
+            |      "lastName": "Jackson"
+            |    },
+            |    "dateOfBirth": "1970-02-28",
+            |    "vulnerableBeneficiary": true,
+            |    "beneficiaryType": "NA",
+            |    "beneficiaryDiscretion": true,
+            |    "beneficiaryShareOfIncome": "0",
+            |    "entityStart": "2017-02-28",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+        val beneficiary = json.as[IndividualBeneficiary]
+        beneficiary mustBe IndividualBeneficiary(
+          name = Name("Nicola", Some("Andrey"), "Jackson"),
+          dateOfBirth = testDateOfBirth,
+          identification = None,
+          address = None,
+          vulnerableYesNo = true,
+          employmentType = Some(NAEmploymentType),
+          income = None,
+          incomeDiscretionYesNo = true,
+          entityStart = testEntityStart,
+          provisional = false
+        )
+      }
+
     }
 
     "serialise to backend JSON" when {
