@@ -37,17 +37,19 @@ class IndividualBeneficiaryMapper {
           readIdentification and
           readAddress and
           VPE1FormYesNoPage.path.read[Boolean] and
+          Reads(_ => JsSuccess(None)) and   // TODO: employment type
           readIncome and
           IncomeDiscretionYesNoPage.path.read[Boolean] and
           StartDatePage.path.read[LocalDate]
         ) (
-        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, income, incomeDiscretion, entityStart) =>
+        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, employmentType, income, incomeDiscretion, entityStart) =>
           IndividualBeneficiary(
             name,
             dateOfBirth,
             nationalInsuranceNumber,
             address,
             vulnerableYesNo,
+            employmentType,
             income,
             incomeDiscretion,
             entityStart,

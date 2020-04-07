@@ -22,11 +22,27 @@ import models.{Address, IndividualIdentification, Name}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
+sealed trait BeneficiaryEmploymentType
+
+object BeneficiaryEmploymentType {
+//  implicit val reads: Reads[IndividualIdentification] =
+  implicit val writes: Writes[BeneficiaryEmploymentType] = Writes {
+    case DirectorEmploymentType => JsString("Director")
+    case EmployeeEmploymentType => JsString("Employee")
+    case NAEmploymentType => JsString("NA")
+  }
+}
+
+case object DirectorEmploymentType extends BeneficiaryEmploymentType
+case object EmployeeEmploymentType extends BeneficiaryEmploymentType
+case object NAEmploymentType extends BeneficiaryEmploymentType
+
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
                                        identification: Option[IndividualIdentification],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
+                                       employmentType: Option[BeneficiaryEmploymentType],
                                        income: Option[String],
                                        incomeDiscretionYesNo: Boolean,
                                        entityStart: LocalDate,
@@ -46,11 +62,11 @@ object IndividualBeneficiary {
       (__ \ "provisional").readWithDefault(false)).tupled.map{
 
       case (name, dob, nino, identification, vulnerable, None, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, None, incomeDiscretionYesNo = true, entityStart, provisional)
       case (name, dob, nino, identification, vulnerable, _, Some(true), entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, None, incomeDiscretionYesNo = true, entityStart, provisional)
       case (name, dob, nino, identification, vulnerable,  income, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, income, incomeDiscretionYesNo = false, entityStart, provisional)
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, income, incomeDiscretionYesNo = false, entityStart, provisional)
 
     }
 
@@ -60,6 +76,7 @@ object IndividualBeneficiary {
       (__ \ 'identification).writeNullable[IndividualIdentification] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'vulnerableBeneficiary).write[Boolean] and
+      (__ \ 'beneficiaryType).writeNullable[BeneficiaryEmploymentType] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
       (__ \ 'beneficiaryDiscretion).write[Boolean] and
       (__ \ "entityStart").write[LocalDate] and

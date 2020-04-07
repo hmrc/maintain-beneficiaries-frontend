@@ -38,6 +38,7 @@ class AmendIndividualBeneficiaryMapper {
           readIdentification and
           readAddress and
           VPE1FormYesNoPage.path.read[Boolean] and
+          Reads(_ => JsSuccess(None)) and   // TODO: employment type
           readIncome and
           IncomeDiscretionYesNoPage.path.read[Boolean] and
           StartDatePage.path.read[LocalDate] and

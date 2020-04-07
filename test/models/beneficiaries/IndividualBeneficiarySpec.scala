@@ -22,7 +22,7 @@ import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
-class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
+class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
   private val testDateOfBirth = Some(LocalDate.of(1970, 2, 28))
   private val testEntityStart = LocalDate.of(2017, 2, 28)
 
@@ -75,6 +75,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           vulnerableYesNo = true,
+          employmentType = None,
           income = Some("10"),
           incomeDiscretionYesNo = false,
           entityStart = testEntityStart,
@@ -123,6 +124,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             Some("314159"),
             "US"
           )),
+          employmentType = None,
           vulnerableYesNo = true,
           income = Some("10"),
           incomeDiscretionYesNo = false,
@@ -162,6 +164,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
           identification = Some(NationalInsuranceNumber("NH111111A")),
           address = None,
           vulnerableYesNo = true,
+          employmentType = None,
           income = Some("10"),
           incomeDiscretionYesNo = false,
           entityStart = testEntityStart,
@@ -197,6 +200,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
           identification = None,
           address = None,
           vulnerableYesNo = true,
+          employmentType = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = testEntityStart,
@@ -250,6 +254,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           vulnerableYesNo = true,
+          employmentType = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = testEntityStart,
@@ -302,6 +307,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           vulnerableYesNo = true,
+          employmentType = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
           entityStart = testEntityStart,
@@ -353,6 +359,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           vulnerableYesNo = true,
+          employmentType = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = testEntityStart,
@@ -380,6 +387,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             postcode = "NE11ZZ"
           )),
           vulnerableYesNo = false,
+          employmentType = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = LocalDate.parse("2020-03-27"),
@@ -428,6 +436,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             country = "DE"
           )),
           vulnerableYesNo = false,
+          employmentType = None,
           income = Some("25"),
           incomeDiscretionYesNo = false,
           entityStart = LocalDate.parse("2020-03-27"),
@@ -473,6 +482,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
           identification = Some(NationalInsuranceNumber("JP121212A")),
           address = None,
           vulnerableYesNo = false,
+          employmentType = None,
           income = Some("25"),
           incomeDiscretionYesNo = false,
           entityStart = LocalDate.parse("2020-03-27"),
@@ -514,6 +524,7 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
           identification = None,
           address = None,
           vulnerableYesNo = false,
+          employmentType = None,
           income = Some("25"),
           incomeDiscretionYesNo = false,
           entityStart = LocalDate.parse("2020-03-27"),
@@ -532,6 +543,123 @@ class AddIndividualBeneficiarySpec extends WordSpec with MustMatchers {
             |    },
             |    "dateOfBirth": "2020-10-05",
             |    "vulnerableBeneficiary": false,
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+      "with director employment type in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          identification = None,
+          address = None,
+          vulnerableYesNo = false,
+          employmentType = Some(DirectorEmploymentType),
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryType": "Director",
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+      "with employee employment type in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          identification = None,
+          address = None,
+          vulnerableYesNo = false,
+          employmentType = Some(EmployeeEmploymentType),
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryType": "Employee",
+            |    "beneficiaryShareOfIncome": "25",
+            |    "beneficiaryDiscretion": false,
+            |    "entityStart": "2020-03-27",
+            |    "provisional": false
+            |}
+            |""".stripMargin)
+
+      }
+      "with NA employment type in" in {
+        val individual = IndividualBeneficiary(
+          name = Name(
+            firstName = "First",
+            middleName = Some("Middle"),
+            lastName = "Last"
+          ),
+          dateOfBirth = Some(LocalDate.parse("2020-10-05")),
+          identification = None,
+          address = None,
+          vulnerableYesNo = false,
+          employmentType = Some(NAEmploymentType),
+          income = Some("25"),
+          incomeDiscretionYesNo = false,
+          entityStart = LocalDate.parse("2020-03-27"),
+          provisional = false
+        )
+
+        val asJson = Json.toJson(individual)
+
+        asJson mustBe Json.parse(
+          """
+            |{
+            |    "name": {
+            |    "firstName": "First",
+            |    "middleName": "Middle",
+            |    "lastName": "Last"
+            |    },
+            |    "dateOfBirth": "2020-10-05",
+            |    "vulnerableBeneficiary": false,
+            |    "beneficiaryType": "NA",
             |    "beneficiaryShareOfIncome": "25",
             |    "beneficiaryDiscretion": false,
             |    "entityStart": "2020-03-27",
