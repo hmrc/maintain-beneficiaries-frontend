@@ -25,6 +25,6 @@ class RoleInCompanyFormProvider @Inject() extends Mappings {
 
   def apply(): Form[RoleInCompany] =
     Form(
-      "value" -> enumerable[RoleInCompany]("roleInCompany.error.required")
+      "value" -> enumerable[RoleInCompany]("individualBeneficiary.roleInCompany.error.required")
     )
 }
