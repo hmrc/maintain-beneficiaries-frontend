@@ -467,3 +467,17 @@ charityBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Uniq
 charityBeneficiary.checkDetails.utr.p1 = Some of the information we ask about charity beneficiaries has changed.
 charityBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
 charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
+
+removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
+removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
+removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
+
+otherBeneficiary.whenRemoved.title = When was the other beneficiary removed as a beneficiary?
+otherBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+otherBeneficiary.whenRemoved.hint = For example, 31 3 1980
+otherBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+otherBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+otherBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+otherBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+otherBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+otherBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
