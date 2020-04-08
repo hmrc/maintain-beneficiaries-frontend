@@ -24,6 +24,8 @@ import pages.charityortrust.charity._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 import controllers.charityortrust.charity.amend.routes._
+import models.beneficiaries.RoleInCompany.NA
+import pages.individualbeneficiary.RoleInCompanyPage
 
 class AmendCharityBeneficiaryPrintHelperSpec extends SpecBase {
 
@@ -41,6 +43,7 @@ class AmendCharityBeneficiaryPrintHelperSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
+        .set(RoleInCompanyPage, NA).success.value
         .set(DiscretionYesNoPage, false).success.value
         .set(ShareOfIncomePage, share).success.value
         .set(AddressYesNoPage, true).success.value
@@ -53,6 +56,7 @@ class AmendCharityBeneficiaryPrintHelperSpec extends SpecBase {
         headingKey = None,
         rows = Seq(
           AnswerRow(label = Html(messages("charityBeneficiary.name.checkYourAnswersLabel")), answer = Html("Charity"), changeUrl = NameController.onPageLoad().url),
+          //AnswerRow(label = Html(messages("charityBeneficiary.roleInCompany.checkYourAnswersLabel", name)), answer = Html("NA"), changeUrl = controllers.individualbeneficiary.add.routes.RoleInCompanyController.onPageLoad().url),
           AnswerRow(label = Html(messages("charityBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad().url),
           AnswerRow(label = Html(messages("charityBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad().url),
           AnswerRow(label = Html(messages("charityBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad().url),
