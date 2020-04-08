@@ -10,6 +10,7 @@
 ->         /charity/amend                                                   charityBeneficiary.amend.Routes
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 
+->         /other/add                                                       otherBeneficiary.add.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)

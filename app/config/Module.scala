@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import config.annotations._
 import controllers.actions._
 import navigation.individualBeneficiary._
-import navigation.{AddCharityBeneficiaryNavigator, AmendCharityBeneficiaryNavigator, ClassOfBeneficiaryNavigator, Navigator}
+import navigation.{AddCharityBeneficiaryNavigator, AddOtherBeneficiaryNavigator, AmendCharityBeneficiaryNavigator, ClassOfBeneficiaryNavigator, Navigator}
 import repositories.{MongoRepository, PlaybackRepository}
 import services.{AuthenticationService, AuthenticationServiceImpl}
 
@@ -42,6 +42,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[AmendIndividualBeneficiary]).to(classOf[AmendIndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddCharityBeneficiary]).to(classOf[AddCharityBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendCharityBeneficiary]).to(classOf[AmendCharityBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[AddOtherBeneficiary]).to(classOf[AddOtherBeneficiaryNavigator]).asEagerSingleton()
 
   }
 }
