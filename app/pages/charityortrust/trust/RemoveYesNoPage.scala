@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.charityortrust.trust
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-package object trust {
-  val basePath = JsPath \ 'trust
+case object RemoveYesNoPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "removeYesNo"
 }

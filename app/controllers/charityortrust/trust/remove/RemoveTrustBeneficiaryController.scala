@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.charityortrust.trust.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import pages.trust.RemoveYesNoPage
+import pages.charityortrust.trust.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.trust.remove.RemoveIndexView
+import views.html.charityortrust.trust.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -87,7 +87,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
                     _ <- repository.set(updatedAnswers)
                   } yield {
-                    Redirect(controllers.trust.remove.routes.WhenRemovedController.onPageLoad(index).url)
+                    Redirect(controllers.charityortrust.trust.remove.routes.WhenRemovedController.onPageLoad(index).url)
                   }
                 }
             }

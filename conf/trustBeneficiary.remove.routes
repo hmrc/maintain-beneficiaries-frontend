@@ -1,6 +1,6 @@
 
-GET        /:index/remove                            controllers.trust.remove.RemoveTrustBeneficiaryController.onPageLoad(index: Int)
-POST       /:index/remove                            controllers.trust.remove.RemoveTrustBeneficiaryController.onSubmit(index: Int)
+GET        /:index/remove                            controllers.charityortrust.trust.remove.RemoveTrustBeneficiaryController.onPageLoad(index: Int)
+POST       /:index/remove                            controllers.charityortrust.trust.remove.RemoveTrustBeneficiaryController.onSubmit(index: Int)
 
-GET        /:index/when-was-beneficiary-removed      controllers.trust.remove.WhenRemovedController.onPageLoad(index: Int)
-POST       /:index/when-was-beneficiary-removed      controllers.trust.remove.WhenRemovedController.onSubmit(index: Int)
+GET        /:index/when-was-beneficiary-removed      controllers.charityortrust.trust.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-was-beneficiary-removed      controllers.charityortrust.trust.remove.WhenRemovedController.onSubmit(index: Int)
