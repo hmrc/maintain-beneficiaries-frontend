@@ -33,6 +33,7 @@ GET        /feature-not-available                                           cont
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
+POST       /complete                                                        controllers.AddABeneficiaryController.submitComplete()
 
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
 POST       /what-kind                                                       controllers.AddNowController.onSubmit()
