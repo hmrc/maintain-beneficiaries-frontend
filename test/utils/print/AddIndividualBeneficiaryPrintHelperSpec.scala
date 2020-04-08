@@ -62,7 +62,7 @@ class AddIndividualBeneficiaryPrintHelperSpec extends SpecBase {
         headingKey = None,
         rows = Seq(
           AnswerRow(label = Html(messages("individualBeneficiary.name.checkYourAnswersLabel")), answer = Html("First Middle Last"), changeUrl = controllers.individualbeneficiary.add.routes.NameController.onPageLoad().url),
-          AnswerRow(label = Html(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel")), answer = Html("NA"), changeUrl = controllers.individualbeneficiary.add.routes.RoleInCompanyController.onPageLoad().url),
+          AnswerRow(label = Html(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel", name.displayName)), answer = Html("NA"), changeUrl = controllers.individualbeneficiary.add.routes.RoleInCompanyController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.add.routes.DateOfBirthYesNoController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.dateOfBirth.checkYourAnswersLabel", name.displayName)), answer = Html("10 October 2010"), changeUrl = controllers.individualbeneficiary.add.routes.DateOfBirthController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("No"), changeUrl = controllers.individualbeneficiary.add.routes.IncomeDiscretionYesNoController.onPageLoad().url),

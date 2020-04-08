@@ -19,6 +19,7 @@ package utils.print
 import java.time.LocalDate
 
 import base.SpecBase
+import models.beneficiaries.RoleInCompany.NA
 import models.{CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, Passport, UkAddress}
 import pages.individualbeneficiary._
 import play.twirl.api.Html
@@ -38,6 +39,7 @@ class AmendIndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value
+        .set(RoleInCompanyPage, NA).success.value
         .set(DateOfBirthYesNoPage, true).success.value
         .set(DateOfBirthPage, LocalDate.of(2010, 10, 10)).success.value
         .set(IncomeDiscretionYesNoPage, false).success.value
@@ -58,6 +60,7 @@ class AmendIndividualBeneficiaryPrintHelperSpec extends SpecBase {
         headingKey = None,
         rows = Seq(
           AnswerRow(label = Html(messages("individualBeneficiary.name.checkYourAnswersLabel")), answer = Html("First Middle Last"), changeUrl = controllers.individualbeneficiary.amend.routes.NameController.onPageLoad().url),
+          AnswerRow(label = Html(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel", name.displayName)), answer = Html("NA"), changeUrl = controllers.individualbeneficiary.amend.routes.RoleInCompanyController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.dateOfBirthYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.amend.routes.DateOfBirthYesNoController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.dateOfBirth.checkYourAnswersLabel", name.displayName)), answer = Html("10 October 2010"), changeUrl = controllers.individualbeneficiary.amend.routes.DateOfBirthController.onPageLoad().url),
           AnswerRow(label = Html(messages("individualBeneficiary.incomeDiscretionYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("No"), changeUrl = controllers.individualbeneficiary.amend.routes.IncomeDiscretionYesNoController.onPageLoad().url),

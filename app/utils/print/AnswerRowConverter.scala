@@ -54,7 +54,7 @@ class AnswerRowConverter @Inject()() {
                               changeUrl: String): Option[AnswerRow] = {
       userAnswers.get(query) map {x =>
         AnswerRow(
-          HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel")),
+          HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
           {
             x match {
               case NA => HtmlFormat.escape("individualBeneficiary.roleInCompany.checkYourAnswersLabel.NA")
