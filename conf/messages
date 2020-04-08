@@ -128,6 +128,12 @@ addABeneficiary.add-them-later = No, not now
 addABeneficiary.no-complete = No, all the beneficiaries are up to date
 addABeneficiary.checkYourAnswersLabel = Add A Beneficiary
 addABeneficiary.error.required = Select yes if you want to add a new beneficiary
+addABeneficiary.maxedOut.just1 = You cannot add another {0} as you have entered a maximum of 25.
+addABeneficiary.maxedOut.just1.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.
+addABeneficiary.maxedOut.moreThan1 = You have entered the maximum number of beneficiaries for:
+addABeneficiary.maxedOut.moreThan1.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.
+addABeneficiary.maxedOut.all = You cannot enter another beneficiary as you have entered a maximum of 175.
+addABeneficiary.maxedOut.all.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.
 
 addNow.heading = What kind of beneficiary do you need to add next?
 addNow.title = What kind of beneficiary do you need to add next?
@@ -140,6 +146,11 @@ whatTypeOfBeneficiary.classOfBeneficiaries = Class of beneficiaries
 whatTypeOfBeneficiary.charityOrTrust = Charity or trust
 whatTypeOfBeneficiary.companyOrEmploymentRelated = Company or employment related
 whatTypeOfBeneficiary.other = Other beneficiary
+
+whatTypeOfBeneficiary.charity = Charity
+whatTypeOfBeneficiary.trust = Trust
+whatTypeOfBeneficiary.company = Company
+whatTypeOfBeneficiary.employmentRelated = Employment related
 
 entities.beneficiary = Beneficiaries
 entities.beneficiaries.individual = Named individual
