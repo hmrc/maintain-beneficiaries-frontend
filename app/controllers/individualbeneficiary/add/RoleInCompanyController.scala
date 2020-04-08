@@ -29,7 +29,7 @@ import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individualbeneficiary.add.RoleInCompanyView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class RoleInCompanyController @Inject()(
                                          override val messagesApi: MessagesApi,
@@ -58,7 +58,17 @@ class RoleInCompanyController @Inject()(
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
-      ???
+
+      form.bindFromRequest().fold(
+        formWithErrors =>
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
+
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(RoleInCompanyPage, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(RoleInCompanyPage, updatedAnswers))
+      )
   }
 
 }

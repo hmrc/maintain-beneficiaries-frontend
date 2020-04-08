@@ -37,77 +37,76 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
+  val individual = IndividualBeneficiary(
+    name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
+    dateOfBirth = Some(LocalDate.parse("1983-09-24")),
+    identification = None,
+    address = None,
+    vulnerableYesNo = false,
+    roleInCompany = None,
+    income = None,
+    incomeDiscretionYesNo = false,
+    entityStart = LocalDate.of(2012, 4, 15),
+    provisional = false
+  )
+
+  val classOf = ClassOfBeneficiary(
+    "Test Beneficiary",
+    LocalDate.of(2019, 9, 23),
+    provisional = false
+  )
+
+  val companyBeneficiary = CompanyBeneficiary(
+    name = "Company Beneficiary Name",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.of(2017, 2, 28),
+    provisional = false
+  )
+
+  val trustBeneficiary = TrustBeneficiary(
+    name = "Trust Beneficiary Name",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.of(2017, 2, 28),
+    provisional = false
+  )
+
+  val charityBeneficiary = CharityBeneficiary(
+    name = "Humanitarian Endeavours Ltd",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
+  )
+
+  val otherBeneficiary = OtherBeneficiary(
+    description = "Other Endeavours Ltd",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
+  )
+
+  val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
+    name = "Employment Related Endeavors Ltd",
+    utr = None,
+    address = None,
+    description = Seq("Other Endeavours Ltd"),
+    howManyBeneficiaries = Over101,
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
+  )
+
   "Trust service" - {
 
     "get beneficiaries" in {
-
-      val individual = IndividualBeneficiary(
-        name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
-        dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        identification = None,
-        address = None,
-        vulnerableYesNo = false,
-        roleInCompany = None,
-        income = None,
-        incomeDiscretionYesNo = false,
-        entityStart = LocalDate.of(2012, 4, 15),
-        provisional = false
-      )
-
-      val classOf = ClassOfBeneficiary(
-        "Test Beneficiary",
-        LocalDate.of(2019, 9, 23),
-        provisional = false
-      )
-
-      val companyBeneficiary = CompanyBeneficiary(
-        name = "Company Beneficiary Name",
-        utr = None,
-        address = None,
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
-        provisional = false
-      )
-
-
-      val trustBeneficiary = TrustBeneficiary(
-        name = "Trust Beneficiary Name",
-        address = None,
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
-        provisional = false
-      )
-
-      val charityBeneficiary = CharityBeneficiary(
-        name = "Humanitarian Endeavours Ltd",
-        utr = None,
-        address = None,
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = LocalDate.parse("2012-03-14"),
-        provisional = false
-      )
-
-      val otherBeneficiary = OtherBeneficiary(
-        description = "Other Endeavours Ltd",
-        address = None,
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = LocalDate.parse("2012-03-14"),
-        provisional = false
-      )
-
-      val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
-        name = "Employment Related Endeavors Ltd",
-        utr = None,
-        address = None,
-        description = Seq("Other Endeavours Ltd"),
-        howManyBeneficiaries = Over101,
-        entityStart = LocalDate.parse("2012-03-14"),
-        provisional = false
-      )
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(
@@ -145,38 +144,23 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
       val index = 0
 
-      val individual = IndividualBeneficiary(
-        name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
-        dateOfBirth = Some(LocalDate.parse("1983-09-24")),
-        identification = None,
-        address = None,
-        vulnerableYesNo = false,
-        roleInCompany = None,
-        income = None,
-        incomeDiscretionYesNo = false,
-        entityStart = LocalDate.parse("2019-02-28"),
-        provisional = false
-      )
-
-      val unidentified = ClassOfBeneficiary(
-        description = "description",
-        entityStart = LocalDate.parse("2019-02-28"),
-        provisional = false
-      )
-
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(unidentified), Nil, Nil, Nil, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), Nil, Nil, Nil, Nil, List(otherBeneficiary))))
 
       val service = new TrustServiceImpl(mockConnector)
 
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
       whenReady(service.getUnidentifiedBeneficiary("1234567890", index)) {
-        _ mustBe unidentified
+        _ mustBe classOf
       }
 
       whenReady(service.getIndividualBeneficiary("1234567890", index)) {
         _ mustBe individual
+      }
+
+      whenReady(service.getOtherBeneficiary("1234567890", index)) {
+        _ mustBe otherBeneficiary
       }
 
     }
