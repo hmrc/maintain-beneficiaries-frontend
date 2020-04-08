@@ -33,7 +33,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.add.RoleInCompanyView
+import views.html.individualbeneficiary.amend.RoleInCompanyView
 
 import scala.concurrent.Future
 
