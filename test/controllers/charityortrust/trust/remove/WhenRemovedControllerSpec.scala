@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.charityortrust.trust.remove
 
 import java.time.{LocalDate, ZoneOffset}
 
@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
-import views.html.trust.remove.WhenRemovedView
+import views.html.charityortrust.trust.remove.WhenRemovedView
 
 import scala.concurrent.Future
 

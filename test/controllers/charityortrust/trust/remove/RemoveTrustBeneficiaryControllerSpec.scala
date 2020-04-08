@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.charityortrust.trust.remove
 
 import java.time.LocalDate
 
@@ -26,12 +26,12 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.trust.RemoveYesNoPage
+import pages.charityortrust.trust.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.trust.remove.RemoveIndexView
+import views.html.charityortrust.trust.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
@@ -160,7 +160,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.trust.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.charityortrust.trust.remove.routes.WhenRemovedController.onPageLoad(0).url
 
         application.stop()
       }

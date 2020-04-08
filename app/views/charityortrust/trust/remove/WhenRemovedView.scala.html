@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.trust.remove.routes._
+@import controllers.charityortrust.trust.remove.routes._
 
 @this(
         main_template: MainTemplate,
@@ -24,19 +24,21 @@
 @(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("removeTrustBeneficiary.title")}"
+    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.whenRemoved.title", name)}"
 ) {
 
-    @formHelper(action = RemoveTrustBeneficiaryController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
+        @components.input_date(
             field = form("value"),
-            legend = messages("removeTrustBeneficiary.heading", name),
-            headingIsLegend = true
+            legend = messages("trustBeneficiary.whenRemoved.heading", name),
+            legendClass = "heading-large",
+            headingIsLegend = true,
+            hint = Some(messages("trustBeneficiary.whenRemoved.hint"))
         )
 
         @components.submit_button()

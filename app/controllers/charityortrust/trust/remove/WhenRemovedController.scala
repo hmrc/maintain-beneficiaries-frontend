@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.charityortrust.trust.remove
 
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.trust.remove.WhenRemovedView
+import views.html.charityortrust.trust.remove.WhenRemovedView
 
 import scala.concurrent.{ExecutionContext, Future}
 
