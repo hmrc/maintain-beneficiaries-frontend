@@ -16,9 +16,11 @@
 
 package models.beneficiaries
 
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
+import viewmodels.RadioOption
 
 trait Beneficiary
 
@@ -30,12 +32,59 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          charity: List[CharityBeneficiary],
                          other: List[OtherBeneficiary]) {
 
+  type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
+  type BeneficiaryOptions = List[BeneficiaryOption]
+
   def addToHeading()(implicit mp: MessagesProvider): String =
     (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
       case 0 => Messages("addABeneficiary.heading")
       case 1 => Messages("addABeneficiary.singular.heading")
       case l => Messages("addABeneficiary.count.heading", l)
     }
+
+  private val options: BeneficiaryOptions = {
+    (individualDetails.size, Individual) ::
+    (unidentified.size, ClassOfBeneficiaries) ::
+    (charity.size, Charity) ::
+    (trust.size, Trust) ::
+    (company.size, Company) ::
+    (employmentRelated.size, EmploymentRelated) ::
+    (other.size, Other) ::
+    Nil
+  }
+
+  val nonMaxedOutOptions: List[RadioOption] = {
+
+    def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
+      @scala.annotation.tailrec
+      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
+        uncombinedOptions match {
+          case Nil => combinedOptions
+          case List(head, next, _*) if head._2 == Charity && next._2 == Trust =>
+            val combinedOption: BeneficiaryOption = (head._1 + next._1, CharityOrTrust)
+            recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
+          case List(head, next, _*) if head._2 == Company && next._2 == EmploymentRelated =>
+            val combinedOption: BeneficiaryOption = (head._1 + next._1, CompanyOrEmploymentRelated)
+            recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
+          case _ =>
+            recurse(uncombinedOptions.tail, combinedOptions :+ uncombinedOptions.head)
+        }
+      }
+      recurse(uncombinedOptions, Nil)
+    }
+
+    combineOptions(options.filter(x => x._1 < 25)).map {
+      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
+    }
+  }
+
+  val maxedOutOptions: List[RadioOption] = {
+
+    options.filter(x => x._1 >= 25).map {
+      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
+    }
+  }
+
 }
 
 object Beneficiaries {

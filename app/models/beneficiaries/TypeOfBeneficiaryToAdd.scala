@@ -17,11 +17,12 @@
 package models.beneficiaries
 
 import models.{Enumerable, WithName}
-import viewmodels.RadioOption
 
 sealed trait TypeOfBeneficiaryToAdd
 
 object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
+
+  val prefix = "whatTypeOfBeneficiary"
 
   case object Individual extends WithName("individual") with TypeOfBeneficiaryToAdd
   case object ClassOfBeneficiaries extends WithName("classOfBeneficiaries") with TypeOfBeneficiaryToAdd
@@ -29,14 +30,15 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
   case object CompanyOrEmploymentRelated extends WithName("companyOrEmploymentRelated") with TypeOfBeneficiaryToAdd
   case object Other extends WithName("other") with TypeOfBeneficiaryToAdd
 
-  val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
-  )
+  case object Charity extends WithName("charity") with TypeOfBeneficiaryToAdd
+  case object Trust extends WithName("trust") with TypeOfBeneficiaryToAdd
+  case object Company extends WithName("company") with TypeOfBeneficiaryToAdd
+  case object EmploymentRelated extends WithName("employmentRelated") with TypeOfBeneficiaryToAdd
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("whatTypeOfBeneficiary", value.toString)
-  }
+  val values: List[TypeOfBeneficiaryToAdd] = List(
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other,
+    Charity, Trust, Company, EmploymentRelated
+  )
 
   implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =
     Enumerable(values.map(v => v.toString -> v): _*)

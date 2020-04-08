@@ -16,15 +16,25 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.TypeOfBeneficiaryToAdd
+import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
+import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.TrustService
+import viewmodels.RadioOption
 import views.html.AddNowView
+
+import scala.concurrent.Future
 
 class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
@@ -32,11 +42,28 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
   lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
   val classOfBeneficiariesAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
 
+  val mockTrustService: TrustService = mock[TrustService]
+
+  when(mockTrustService.getBeneficiaries(any())(any(), any()))
+    .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
+
+  val values: List[TypeOfBeneficiaryToAdd] = List(
+    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+  )
+
+  val options: List[RadioOption] = values.map {
+    value =>
+      RadioOption(prefix, value.toString)
+  }
+
   "AddNow Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -47,7 +74,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, options)(request, messages).toString
 
       application.stop()
     }
@@ -56,7 +83,10 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       val answers = emptyUserAnswers.set(AddNowPage, classOfBeneficiariesAnswer).success.value
 
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+      val application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -67,15 +97,17 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(classOfBeneficiariesAnswer))(fakeRequest, messages).toString
+        view(form.fill(classOfBeneficiariesAnswer), options)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when Class of beneficiaries is submitted" in {
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request =
         FakeRequest(POST, addNowRoute)
@@ -92,8 +124,10 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when Individual beneficary is submitted" in {
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request =
         FakeRequest(POST, addNowRoute)
@@ -109,8 +143,10 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "redirect to feature not available page if anything else selected" in {
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request =
         FakeRequest(POST, addNowRoute)
@@ -127,7 +163,10 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(POST, addNowRoute)
 
@@ -140,14 +179,17 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, options)(fakeRequest, messages).toString
 
        application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -161,7 +203,10 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
 
       val request =
         FakeRequest(POST, addNowRoute)
@@ -174,6 +219,37 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "not show a certain radio option if there are 25 or more of that type of beneficiary" in {
+
+      val classOfBeneficiaries = ClassOfBeneficiary("description", LocalDate.parse("2019-02-03"), provisional = false)
+
+      val classesOfBeneficiaries: List[ClassOfBeneficiary] = List.fill(25)(classOfBeneficiaries)
+
+      val beneficiaries = Beneficiaries(Nil, classesOfBeneficiaries, Nil, Nil, Nil, Nil, Nil)
+
+      when(mockTrustService.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.successful(beneficiaries))
+
+      val application = applicationBuilder(Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request = FakeRequest(GET, addNowRoute)
+
+      val view = application.injector.instanceOf[AddNowView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, beneficiaries.nonMaxedOutOptions)(fakeRequest, messages).toString
+
+      application.stop()
+
     }
   }
 }

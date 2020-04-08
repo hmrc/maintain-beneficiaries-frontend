@@ -22,10 +22,7 @@ import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
-import models.requests.DataRequest
-import models.{AddABeneficiary, Enumerable, UserAnswers}
-import navigation.Navigator
-import pages.AddNowPage
+import models.{AddABeneficiary, Enumerable}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,21 +30,21 @@ import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
-import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class AddABeneficiaryController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            repository: PlaybackRepository,
-                                           trust: TrustService,
+                                           trustService: TrustService,
                                            standardActionSets: StandardActionSets,
                                            addAnotherFormProvider: AddABeneficiaryFormProvider,
                                            yesNoFormProvider: YesNoFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
                                            addAnotherView: AddABeneficiaryView,
                                            yesNoView: AddABeneficiaryYesNoView,
+                                           completeView: MaxedOutBeneficiariesView,
                                            val appConfig: FrontendAppConfig,
                                            trustStoreConnector: TrustStoreConnector
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -60,7 +57,7 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       for {
-        beneficiaries <- trust.getBeneficiaries(request.userAnswers.utr)
+        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.utr)
         updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
         _ <- repository.set(updatedAnswers)
       } yield {
@@ -71,12 +68,21 @@ class AddABeneficiaryController @Inject()(
 
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
-            Ok(addAnotherView(
-              form = addAnotherForm,
-              inProgressBeneficiaries = beneficiaryRows.inProgress,
-              completeBeneficiaries = beneficiaryRows.complete,
-              heading = all.addToHeading
-            ))
+            if (beneficiaries.nonMaxedOutOptions.isEmpty) {
+              Ok(completeView(
+                inProgressBeneficiaries = beneficiaryRows.inProgress,
+                completeBeneficiaries = beneficiaryRows.complete,
+                heading = all.addToHeading
+              ))
+            } else {
+              Ok(addAnotherView(
+                form = addAnotherForm,
+                inProgressBeneficiaries = beneficiaryRows.inProgress,
+                completeBeneficiaries = beneficiaryRows.complete,
+                heading = all.addToHeading,
+                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
+              ))
+            }
         }
       }
   }
@@ -105,7 +111,7 @@ class AddABeneficiaryController @Inject()(
   def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trust.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
+      trustService.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
@@ -116,7 +122,8 @@ class AddABeneficiaryController @Inject()(
                 formWithErrors,
                 rows.inProgress,
                 rows.complete,
-                beneficiaries.addToHeading
+                beneficiaries.addToHeading,
+                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
               )
             ))
           },
@@ -138,6 +145,16 @@ class AddABeneficiaryController @Inject()(
               }
           }
         )
+      }
+  }
+
+  def submitComplete(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
+    implicit request =>
+
+      for {
+        _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+      } yield {
+        Redirect(appConfig.maintainATrustOverview)
       }
   }
 }

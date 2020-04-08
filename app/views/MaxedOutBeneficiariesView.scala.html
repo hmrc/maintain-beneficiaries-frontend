@@ -15,6 +15,8 @@
  *@
 
 @import controllers.routes._
+@import models.AddABeneficiary
+@import viewmodels.addAnother.AddRow
 @import viewmodels.RadioOption
 
 @this(
@@ -22,29 +24,29 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
+@(inProgressBeneficiaries: Seq[AddRow],
+    completeBeneficiaries: Seq[AddRow],
+    heading: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("addNow.title")}"
+    title = heading
     ) {
 
-    @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = AddABeneficiaryController.submitComplete(), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading(heading)
 
-        @components.input_radio(
-            field = form("value"),
-            legend = messages("addNow.heading"),
-            legendClass = Some("heading-large"),
-            inputs = options.toSeq,
-            headingIsLegend = true,
-            hint = Some(messages("addNow.hint"))
-        )
+        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
+
+        @components.data_list(completeBeneficiaries, "complete", "beneficiary")
+
+        <ul>
+            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
+            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
+        </ul>
 
         @components.submit_button()
-
-        <p><a href="@controllers.routes.AddABeneficiaryController.onPageLoad().url">@messages("addNow.return.link")</a></p>
     }
 }
