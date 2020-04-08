@@ -136,7 +136,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(0).url)),
     AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)),
-    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(0).url)),
     AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
     AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)),
@@ -166,6 +166,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
     override def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] =
       Future.successful(trustBeneficiary)
+
+    override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
+      Future.successful(companyBeneficiary)
   }
 
   " AddABeneficiary Controller" when {
