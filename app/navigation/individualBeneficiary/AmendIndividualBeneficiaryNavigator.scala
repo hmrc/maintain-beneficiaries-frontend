@@ -30,7 +30,8 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DateOfBirthYesNoController.onPageLoad()
+    case NamePage => rts.RoleInCompanyController.onPageLoad()
+    case RoleInCompanyPage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
     case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad()
     case NationalInsuranceNumberPage => rts.VPE1FormYesNoController.onPageLoad()
