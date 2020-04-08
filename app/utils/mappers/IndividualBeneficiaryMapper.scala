@@ -18,7 +18,7 @@ package utils.mappers
 
 import java.time.LocalDate
 
-import models.beneficiaries.IndividualBeneficiary
+import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import models.{Address, IdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
 import pages.individualbeneficiary._
@@ -37,19 +37,19 @@ class IndividualBeneficiaryMapper {
           readIdentification and
           readAddress and
           VPE1FormYesNoPage.path.read[Boolean] and
-          Reads(_ => JsSuccess(None)) and   // TODO: employment type
+          RoleInCompanyPage.path.readNullable[RoleInCompany] and
           readIncome and
           IncomeDiscretionYesNoPage.path.read[Boolean] and
           StartDatePage.path.read[LocalDate]
         ) (
-        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, employmentType, income, incomeDiscretion, entityStart) =>
+        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, roleInCompany, income, incomeDiscretion, entityStart) =>
           IndividualBeneficiary(
             name,
             dateOfBirth,
             nationalInsuranceNumber,
             address,
             vulnerableYesNo,
-            employmentType,
+            roleInCompany,
             income,
             incomeDiscretion,
             entityStart,

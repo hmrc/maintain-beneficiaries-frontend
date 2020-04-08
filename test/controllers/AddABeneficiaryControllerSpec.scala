@@ -60,7 +60,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     address = None,
     entityStart = LocalDate.parse("2019-02-28"),
     vulnerableYesNo = false,
-    employmentType = None,
+    roleInCompany = None,
     income = None,
     incomeDiscretionYesNo = false,
     provisional = false

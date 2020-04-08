@@ -18,31 +18,16 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, Enumerable, IndividualIdentification, Name, WithName}
+import models.{Address, IndividualIdentification, Name}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-
-sealed trait BeneficiaryEmploymentType
-
-object BeneficiaryEmploymentType extends Enumerable.Implicits {
-  val values: Seq[BeneficiaryEmploymentType] = Seq(
-    DirectorEmploymentType, EmployeeEmploymentType, NAEmploymentType
-  )
-
-  implicit val enumerable: Enumerable[BeneficiaryEmploymentType] =
-    Enumerable(values.map(v => v.toString -> v): _*)
-}
-
-case object DirectorEmploymentType extends WithName("Director") with BeneficiaryEmploymentType
-case object EmployeeEmploymentType extends WithName("Employee") with BeneficiaryEmploymentType
-case object NAEmploymentType extends WithName("NA") with BeneficiaryEmploymentType
 
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
                                        identification: Option[IndividualIdentification],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
-                                       employmentType: Option[BeneficiaryEmploymentType],
+                                       roleInCompany: Option[RoleInCompany],
                                        income: Option[String],
                                        incomeDiscretionYesNo: Boolean,
                                        entityStart: LocalDate,
@@ -56,7 +41,7 @@ object IndividualBeneficiary {
       __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
-      (__ \ 'beneficiaryType).readNullable[BeneficiaryEmploymentType] and
+      (__ \ 'beneficiaryType).readNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
@@ -77,7 +62,7 @@ object IndividualBeneficiary {
       (__ \ 'identification).writeNullable[IndividualIdentification] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'vulnerableBeneficiary).write[Boolean] and
-      (__ \ 'beneficiaryType).writeNullable[BeneficiaryEmploymentType] and
+      (__ \ 'beneficiaryType).writeNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
       (__ \ 'beneficiaryDiscretion).write[Boolean] and
       (__ \ "entityStart").write[LocalDate] and

@@ -55,7 +55,7 @@ class RemoveAddIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCh
     identification = None,
     address = None,
     vulnerableYesNo = false,
-    employmentType = None,
+    roleInCompany = None,
     income = None,
     incomeDiscretionYesNo = false,
     entityStart = LocalDate.parse("2019-02-28"),
