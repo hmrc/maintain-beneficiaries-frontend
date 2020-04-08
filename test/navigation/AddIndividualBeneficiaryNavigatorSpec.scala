@@ -27,8 +27,13 @@ class AddIndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckProp
 
   "Individual beneficiary navigator" when {
 
-    "Name page -> Do you know date of birth page" in {
+    "Name page -> Role in company page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
+        .mustBe(controllers.individualbeneficiary.add.routes.RoleInCompanyController.onPageLoad())
+    }
+
+    "Role in company page -> Do you know date of birth page" in {
+      navigator.nextPage(RoleInCompanyPage, emptyUserAnswers)
         .mustBe(controllers.individualbeneficiary.add.routes.DateOfBirthYesNoController.onPageLoad())
     }
 
