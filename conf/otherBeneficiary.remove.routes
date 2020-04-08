@@ -1,0 +1,6 @@
+
+GET        /:index/remove                            controllers.other.remove.RemoveOtherBeneficiaryController.onPageLoad(index: Int)
+POST       /:index/remove                            controllers.other.remove.RemoveOtherBeneficiaryController.onSubmit(index: Int)
+
+GET        /:index/when-was-beneficiary-removed      controllers.other.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-was-beneficiary-removed      controllers.other.remove.WhenRemovedController.onSubmit(index: Int)
