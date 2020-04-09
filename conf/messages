@@ -349,7 +349,7 @@ individualBeneficiary.roleInCompany.checkYourAnswersLabel = What is {0}’s role
 individualBeneficiary.roleInCompany.Director = Director
 individualBeneficiary.roleInCompany.Employee = Employee
 individualBeneficiary.roleInCompany.NA = None of these
-individualBeneficiary.roleInCompany.checkYourAnswersLabel.NA = NA
+individualBeneficiary.roleInCompany.checkYourAnswersLabel.NA = Not a director or employee
 individualBeneficiary.roleInCompany.error.required = Select the individual beneficiary’s role in the company the trust was created for
 
 individualBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
