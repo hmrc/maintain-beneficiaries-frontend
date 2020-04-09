@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.actions
+package controllers.actions.other
 
 import controllers.actions
 import controllers.actions.DescriptionRequest
 import javax.inject.Inject
 import models.requests.DataRequest
-import pages.classofbeneficiary.DescriptionPage
+import pages.other.DescriptionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
