@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import forms.StringFormProvider
+import forms.DescriptionFormProvider
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -37,7 +37,7 @@ import scala.concurrent.Future
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[String] = new StringFormProvider().withPrefix("classOfBeneficiary.description")
+  val form: Form[String] = new DescriptionFormProvider().withPrefix("classOfBeneficiary.description", 56)
   val index = 0
   lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad(index).url
   val description: String = "Description"

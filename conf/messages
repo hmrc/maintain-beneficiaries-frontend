@@ -493,6 +493,59 @@ otherBeneficiary.whenRemoved.error.invalid = Enter a real date when the other be
 otherBeneficiary.whenRemoved.error.future = The date the other beneficiary was removed from the trust must be today or in the past
 otherBeneficiary.whenRemoved.error.past = The date the other beneficiary was removed must be on or after the date they were added
 
+otherBeneficiary.description.title = What is the description of the other beneficiary?
+otherBeneficiary.description.heading = What is the description of the other beneficiary?
+otherBeneficiary.description.checkYourAnswersLabel = What is the description of the other beneficiary?
+otherBeneficiary.description.hint = Do not include named or specific individuals, they must be listed as individual beneficiaries. This must be 70 characters or less.
+otherBeneficiary.description.error.required = Enter the description of the other beneficiary
+otherBeneficiary.description.error.invalidFormat = The description of the other beneficiary must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+otherBeneficiary.description.error.length = The description of the other beneficiary must be 70 characters or less
+
+otherBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the other beneficiary may get?
+otherBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+otherBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+otherBeneficiary.discretionYesNo.hint = See the trust deed for details
+otherBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the other beneficiary may get
+
+otherBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the other beneficiary entitled to?
+otherBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+otherBeneficiary.shareOfIncome.hint = Round this down to a whole number.
+
+otherBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the other beneficiary is entitled to
+otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the other beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the other beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the other beneficiary is entitled to must be 100 or less
+
+otherBeneficiary.addressYesNo.title = Do you know the other beneficiary’s address?
+otherBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+otherBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+otherBeneficiary.addressYesNo.error.required = Select yes if you know the other beneficiary’s address
+
+otherBeneficiary.addressUkYesNo.title = Is the other beneficiary’s address in the UK?
+otherBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+otherBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+otherBeneficiary.addressUkYesNo.error.required = Select yes if the other beneficiary’s address is in the UK
+
+otherBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+otherBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+otherBeneficiary.startDate.title = When was the other beneficiary added as a beneficiary?
+otherBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+otherBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+otherBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
+otherBeneficiary.startDate.hint = For example, 31 3 1980
+otherBeneficiary.startDate.error.required.all = Enter the date the other beneficiary was added to the trust
+otherBeneficiary.startDate.error.required.two = The date the other beneficiary was added to the trust must include a {0} and a {1}
+otherBeneficiary.startDate.error.required = The date the other beneficiary was added to the trust must include a {0}
+otherBeneficiary.startDate.error.invalid = Enter a real date
+otherBeneficiary.startDate.error.future = The date the other beneficiary was added to the trust must be today or in the past
+otherBeneficiary.startDate.error.past = The date the other beneficiary was added to the trust cannot be before the start date of the trust
+
+otherBeneficiary.checkDetails.title = Check other beneficiary details
+otherBeneficiary.checkDetails.heading = Check other beneficiary details
+
 removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
 removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
 removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
@@ -520,3 +573,19 @@ companyBeneficiary.whenRemoved.error.required = The date the company beneficiary
 companyBeneficiary.whenRemoved.error.invalid = Enter a real date when the company beneficiary was removed from the trust
 companyBeneficiary.whenRemoved.error.future = The date the company beneficiary was removed from the trust must be today or in the past
 companyBeneficiary.whenRemoved.error.past = The date the company beneficiary was removed must be on or after the date they were added
+
+companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.heading = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.checkYourAnswersLabel = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.hint = For example, employees and their children, spouses or widows would be employment related.
+companyOrEmploymentRelated.error.required = Select the type of beneficiary you need to add
+
+isTheBeneficiaryACompanyOrEmploymentRelated.company = Company
+isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or their families
+
+companyBeneficiary.name.title = What is the company’s name?
+companyBeneficiary.name.heading = What is the company’s name?
+companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?
+companyBeneficiary.name.error.required = Enter the company’s name
+companyBeneficiary.name.error.invalidFormat = Company’s name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
+companyBeneficiary.name.error.length = Company’s name cannot be more than 105 characters

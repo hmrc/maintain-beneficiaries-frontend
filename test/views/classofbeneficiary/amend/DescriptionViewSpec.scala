@@ -17,7 +17,7 @@
 package views.classofbeneficiary.amend
 
 import controllers.classofbeneficiary.amend.routes
-import forms.StringFormProvider
+import forms.DescriptionFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -27,7 +27,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "classOfBeneficiary.description"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[String] = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 56)
   val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
   val index = 0
 

@@ -142,7 +142,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to feature not available page if anything else selected" in {
+    "redirect to the next page when Other beneficary is submitted" in {
+
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
@@ -156,7 +157,26 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.other.add.routes.DescriptionController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Company or employment related is submitted" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.CompanyOrEmploymentRelated.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad().url
 
       application.stop()
     }
