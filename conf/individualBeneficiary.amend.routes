@@ -2,6 +2,9 @@
 GET        /name                                    controllers.individualbeneficiary.amend.NameController.onPageLoad()
 POST       /name                                    controllers.individualbeneficiary.amend.NameController.onSubmit()
 
+GET        /role-in-company                         controllers.individualbeneficiary.amend.RoleInCompanyController.onPageLoad()
+POST       /role-in-company                         controllers.individualbeneficiary.amend.RoleInCompanyController.onSubmit()
+
 GET        /know-date-of-birth                      controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onPageLoad()
 POST       /know-date-of-birth                      controllers.individualbeneficiary.amend.DateOfBirthYesNoController.onSubmit()
 

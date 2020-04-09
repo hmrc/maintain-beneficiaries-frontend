@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import config.annotations.AmendIndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
-import models.{CombinedPassportOrIdCard, Name, UserAnswers}
+import models.{CombinedPassportOrIdCard, Name, TypeOfTrust, UserAnswers}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -45,7 +45,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
+  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(),TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
   lazy val passportOrIdCardDetailsRoute = routes.PassportOrIdCardDetailsController.onPageLoad().url

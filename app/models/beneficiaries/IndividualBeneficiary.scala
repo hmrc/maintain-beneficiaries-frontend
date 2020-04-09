@@ -27,6 +27,7 @@ final case class IndividualBeneficiary(name: Name,
                                        identification: Option[IndividualIdentification],
                                        address : Option[Address],
                                        vulnerableYesNo: Boolean,
+                                       roleInCompany: Option[RoleInCompany],
                                        income: Option[String],
                                        incomeDiscretionYesNo: Boolean,
                                        entityStart: LocalDate,
@@ -40,17 +41,18 @@ object IndividualBeneficiary {
       __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'vulnerableBeneficiary).read[Boolean] and
+      (__ \ 'beneficiaryType).readNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)).tupled.map{
 
-      case (name, dob, nino, identification, vulnerable, None, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable, _, Some(true), entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable,  income, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, income, incomeDiscretionYesNo = false, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, employment, None, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable, employment, _, Some(true), entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, dob, nino, identification, vulnerable,  employment, income, _, entityStart, provisional) =>
+        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = false, entityStart, provisional)
 
     }
 
@@ -60,6 +62,7 @@ object IndividualBeneficiary {
       (__ \ 'identification).writeNullable[IndividualIdentification] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'vulnerableBeneficiary).write[Boolean] and
+      (__ \ 'beneficiaryType).writeNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
       (__ \ 'beneficiaryDiscretion).write[Boolean] and
       (__ \ "entityStart").write[LocalDate] and

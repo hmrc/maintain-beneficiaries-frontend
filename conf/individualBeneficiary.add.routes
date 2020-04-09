@@ -46,6 +46,9 @@ POST       /id-card                                  controllers.individualbenef
 GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
 POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
 
+GET        /role-in-company                         controllers.individualbeneficiary.add.RoleInCompanyController.onPageLoad()
+POST       /role-in-company                         controllers.individualbeneficiary.add.RoleInCompanyController.onSubmit()
+
 GET        /start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
 POST       /start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
 

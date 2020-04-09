@@ -19,6 +19,7 @@ package utils.mappers
 import java.time.LocalDate
 
 import base.SpecBase
+import models.beneficiaries.RoleInCompany
 import models.{IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress}
 import pages.individualbeneficiary._
 
@@ -54,6 +55,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.identification mustBe Some(NationalInsuranceNumber(nino))
       result.address mustBe None
       result.vulnerableYesNo mustBe false
+      result.roleInCompany mustBe None
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
@@ -83,6 +85,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.identification mustBe None
       result.address mustBe Some(ukAddress)
       result.vulnerableYesNo mustBe false
+      result.roleInCompany mustBe None
       result.incomeDiscretionYesNo mustBe false
       result.income mustBe Some("45")
       result.entityStart mustBe startDate
@@ -111,6 +114,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.identification mustBe None
       result.address mustBe Some(nonUkAddress)
       result.vulnerableYesNo mustBe false
+      result.roleInCompany mustBe None
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
@@ -142,6 +146,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.identification mustBe Some(passport)
       result.address mustBe Some(nonUkAddress)
       result.vulnerableYesNo mustBe false
+      result.roleInCompany mustBe None
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
@@ -174,6 +179,7 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
       result.identification mustBe Some(idcard)
       result.address mustBe Some(ukAddress)
       result.vulnerableYesNo mustBe false
+      result.roleInCompany mustBe None
       result.income mustBe None
       result.incomeDiscretionYesNo mustBe true
       result.entityStart mustBe startDate
@@ -200,9 +206,36 @@ class AddIndividualBeneficiaryMapperSpec extends SpecBase {
     result.identification mustBe None
     result.address mustBe None
     result.vulnerableYesNo mustBe false
+    result.roleInCompany mustBe None
     result.income mustBe None
     result.incomeDiscretionYesNo mustBe true
     result.entityStart mustBe startDate
   }
 
+  "generate class of individual model with role in company" in {
+
+    val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+
+    val userAnswers = emptyUserAnswers
+      .set(NamePage, name).success.value
+      .set(DateOfBirthPage, dateOfBirth).success.value
+      .set(NationalInsuranceNumberYesNoPage, false).success.value
+      .set(AddressYesNoPage, false).success.value
+      .set(VPE1FormYesNoPage, false).success.value
+      .set(RoleInCompanyPage, RoleInCompany.Employee).success.value
+      .set(IncomeDiscretionYesNoPage, true).success.value
+      .set(StartDatePage, startDate).success.value
+
+    val result = mapper(userAnswers).get
+
+    result.name mustBe name
+    result.dateOfBirth mustBe Some(dateOfBirth)
+    result.identification mustBe None
+    result.address mustBe None
+    result.vulnerableYesNo mustBe false
+    result.roleInCompany mustBe Some(RoleInCompany.Employee)
+    result.income mustBe None
+    result.incomeDiscretionYesNo mustBe true
+    result.entityStart mustBe startDate
+  }
 }

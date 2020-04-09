@@ -25,7 +25,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.HowManyBeneficiaries.Over501
 import models.beneficiaries._
-import models.{Name, UkAddress}
+import models.{Name, TrustDetails, TypeOfTrust, UkAddress}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -65,6 +65,52 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private def addCharityBeneficiaryUrl(utr: String) = s"/trusts/add-charity-beneficiary/$utr"
 
   "trust connector" when {
+
+    "get trusts details" in {
+
+      val utr = "1000000008"
+
+      val json = Json.parse(
+        """
+          |{
+          | "startDate": "1920-03-28",
+          | "lawCountry": "AD",
+          | "administrationCountry": "GB",
+          | "residentialStatus": {
+          |   "uk": {
+          |     "scottishLaw": false,
+          |     "preOffShore": "AD"
+          |   }
+          | },
+          | "typeOfTrust": "Will Trust or Intestacy Trust",
+          | "deedOfVariation": "Previously there was only an absolute interest under the will",
+          | "interVivos": false
+          |}
+          |""".stripMargin)
+
+      val application = applicationBuilder()
+        .configure(
+          Seq(
+            "microservice.services.trusts.port" -> server.port(),
+            "auditing.enabled" -> false
+          ): _*
+        ).build()
+
+      val connector = application.injector.instanceOf[TrustConnector]
+
+      server.stubFor(
+        get(urlEqualTo(s"/trusts/$utr/trust-details"))
+          .willReturn(okJson(json.toString))
+      )
+
+      val processed = connector.getTrustDetails(utr)
+
+      whenReady(processed) {
+        r =>
+          r mustBe TrustDetails(startDate = "1920-03-28", typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust)
+      }
+
+    }
 
     "get beneficiaries returns a trust with empty lists" must {
 
@@ -258,6 +304,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   identification = None,
                   address = None,
                   vulnerableYesNo = false,
+                  roleInCompany = None,
                   income = None,
                   incomeDiscretionYesNo = true,
                   entityStart = LocalDate.parse("2000-01-01"),
@@ -457,6 +504,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           "SE2 2HB"
         )),
         vulnerableYesNo = true,
+        roleInCompany = None,
         income = None,
         incomeDiscretionYesNo = true,
         entityStart = LocalDate.of(2017, 2, 28),
@@ -513,7 +561,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-
     "amending an individual beneficiary" must {
 
       "Return OK when the request is successful" in {
@@ -543,6 +590,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           identification = None,
           address = None,
           vulnerableYesNo = false,
+          roleInCompany = None,
           income = None,
           incomeDiscretionYesNo = true,
           entityStart = LocalDate.parse("2020-03-27"),
@@ -582,6 +630,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           dateOfBirth = None,
           identification = None,
           address = None,
+          roleInCompany = None,
           vulnerableYesNo = false,
           income = None,
           incomeDiscretionYesNo = true,

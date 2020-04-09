@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package config.annotations;
 
-import play.api.libs.json.{Json, OFormat}
+import com.google.inject.BindingAnnotation;
 
-object TrustStartDate {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  implicit val formats: OFormat[TrustStartDate] = Json.format[TrustStartDate]
-}
-
-case class TrustStartDate(startDate: String)
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface AddTrustBeneficiary {}

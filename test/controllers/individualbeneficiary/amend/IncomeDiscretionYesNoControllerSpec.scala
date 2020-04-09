@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import config.annotations.AmendIndividualBeneficiary
 import forms.YesNoFormProvider
-import models.{Name, UserAnswers}
+import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -46,7 +46,7 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   val name = Name("FirstName", None, "LastName")
   val index = 0
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
+  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
   lazy val discretionaryIncomeYesNoRoute = routes.IncomeDiscretionYesNoController.onPageLoad().url
