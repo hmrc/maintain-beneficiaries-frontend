@@ -18,18 +18,13 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
 import play.api.data.Form
 
-class DescriptionFormProvider @Inject() extends Mappings {
-  def withPrefix(prefix: String, length: Int): Form[String] =
+class CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[CompanyOrEmploymentRelatedToAdd] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            nonEmptyString("value", s"$prefix.error.required"),
-            maxLength(length, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalidFormat")
-          )
-        )
+      "value" -> enumerable[CompanyOrEmploymentRelatedToAdd]("companyOrEmploymentRelated.error.required")
     )
 }

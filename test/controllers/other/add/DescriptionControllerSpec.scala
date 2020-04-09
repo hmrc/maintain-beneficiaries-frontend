@@ -17,7 +17,7 @@
 package controllers.other.add
 
 import base.SpecBase
-import forms.StringFormProvider
+import forms.{DescriptionFormProvider, StringFormProvider}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.DescriptionPage
 import play.api.data.Form
@@ -27,7 +27,7 @@ import views.html.other.add.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[String] = new StringFormProvider().withPrefix("otherBeneficiary.description")
+  val form: Form[String] = new DescriptionFormProvider().withPrefix("otherBeneficiary.description", 70)
   lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad().url
   val description: String = "Description"
 

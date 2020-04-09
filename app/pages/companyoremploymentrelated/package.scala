@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import play.api.libs.json.JsPath
 
-class DescriptionFormProvider @Inject() extends Mappings {
-  def withPrefix(prefix: String, length: Int): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            nonEmptyString("value", s"$prefix.error.required"),
-            maxLength(length, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalidFormat")
-          )
-        )
-    )
+package object companyoremploymentrelated {
+  val basePath = JsPath \ 'companyOrEmploymentRelated
 }
