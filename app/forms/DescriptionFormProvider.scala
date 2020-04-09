@@ -21,13 +21,13 @@ import javax.inject.Inject
 import play.api.data.Form
 
 class DescriptionFormProvider @Inject() extends Mappings {
-  def withPrefix(prefix: String): Form[String] =
+  def withPrefix(prefix: String, length: Int): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
           firstError(
             nonEmptyString("value", s"$prefix.error.required"),
-            maxLength(70, s"$prefix.error.length"),
+            maxLength(length, s"$prefix.error.length"),
             regexp(Validation.descriptionRegex, s"$prefix.error.invalidFormat")
           )
         )
