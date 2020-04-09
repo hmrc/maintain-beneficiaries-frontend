@@ -17,7 +17,7 @@
 package controllers.charityortrust.trust.add
 
 import base.SpecBase
-import config.annotations.{AddCharityBeneficiary, AddTrustBeneficiary}
+import config.annotations.AddTrustBeneficiary
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,7 +31,7 @@ import views.html.charityortrust.trust.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new StringFormProvider().withPrefix("trustBeneficiary.name")
+  private val form: Form[String] = new StringFormProvider().withPrefix("trustBeneficiary.name", 105)
   private val nameRoute: String = routes.NameController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
