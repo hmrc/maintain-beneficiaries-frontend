@@ -479,6 +479,13 @@ charityBeneficiary.checkDetails.utr.p1 = Some of the information we ask about ch
 charityBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
 charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 
+trustBeneficiary.name.title = What is the trust’s name?
+trustBeneficiary.name.heading = What is the trust’s name?
+trustBeneficiary.name.checkYourAnswersLabel = What is the trust’s name?
+trustBeneficiary.name.error.required = Enter the trust’s name
+trustBeneficiary.name.error.invalidFormat = Trust’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+trustBeneficiary.name.error.length = Trust’s name must be 56 characters or less
+
 removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
 removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
 removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
