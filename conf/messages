@@ -492,6 +492,15 @@ trustBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have di
 trustBeneficiary.discretionYesNo.hint = See the trust deed for details
 trustBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
 
+trustBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the trust beneficiary entitled to?
+trustBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiary.shareOfIncome.hint = Round this down to a whole number
+trustBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
+trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
+
 removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
 removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
 removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
