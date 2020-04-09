@@ -17,7 +17,7 @@
 package controllers.charityortrust.trust.add
 
 import base.SpecBase
-import config.annotations.AddCharityBeneficiary
+import config.annotations.{AddCharityBeneficiary, AddTrustBeneficiary}
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -27,7 +27,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.charity.add.NameView
+import views.html.charityortrust.trust.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
@@ -81,7 +81,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddTrustBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
