@@ -37,7 +37,7 @@ class NonUkAddressController @Inject()(
                                         sessionRepository: PlaybackRepository,
                                         @AddOtherBeneficiary navigator: Navigator,
                                         standardActionSets: StandardActionSets,
-                                        nameAction: DescriptionRequiredAction,
+                                        descriptionAction: DescriptionRequiredAction,
                                         formProvider: NonUkAddressFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: NonUkAddressView,
@@ -46,7 +46,7 @@ class NonUkAddressController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NonUkAddressPage) match {
@@ -57,7 +57,7 @@ class NonUkAddressController @Inject()(
       Ok(view(preparedForm, countryOptions.options, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(

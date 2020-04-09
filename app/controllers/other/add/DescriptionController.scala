@@ -37,9 +37,7 @@ class DescriptionController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        standardActionSets: StandardActionSets,
                                        formProvider: StringFormProvider,
-                                       connector: TrustConnector,
                                        view: DescriptionView,
-                                       trustService: TrustService,
                                        repository: PlaybackRepository,
                                        @AddOtherBeneficiary navigator: Navigator
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {

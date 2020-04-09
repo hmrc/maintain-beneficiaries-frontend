@@ -38,17 +38,15 @@ class AddressUkYesNoController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
                                           formProvider: YesNoFormProvider,
-                                          connector: TrustConnector,
                                           view: AddressUkYesNoView,
-                                          trustService: TrustService,
                                           repository: PlaybackRepository,
                                           @AddOtherBeneficiary navigator: Navigator,
-                                          nameAction: DescriptionRequiredAction
+                                          descriptionAction: DescriptionRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.addressUkYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(AddressUkYesNoPage) match {
@@ -59,7 +57,7 @@ class AddressUkYesNoController @Inject()(
       Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(

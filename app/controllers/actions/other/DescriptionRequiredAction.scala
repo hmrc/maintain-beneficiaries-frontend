@@ -16,6 +16,8 @@
 
 package controllers.actions.other
 
+import controllers.actions
+import controllers.actions.DescriptionRequest
 import javax.inject.Inject
 import models.requests.DataRequest
 import pages.other.DescriptionPage
@@ -28,7 +30,7 @@ class DescriptionRequiredAction @Inject()(val executionContext: ExecutionContext
   extends ActionTransformer[DataRequest, DescriptionRequest] with I18nSupport {
 
   override protected def transform[A](request: DataRequest[A]): Future[DescriptionRequest[A]] = {
-    Future.successful(DescriptionRequest[A](request,
+    Future.successful(actions.DescriptionRequest[A](request,
       getDescription(request)
     ))
   }

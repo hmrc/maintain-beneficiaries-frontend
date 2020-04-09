@@ -39,14 +39,13 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
                                         printHelper: OtherBeneficiaryPrintHelper,
                                         mapper: OtherBeneficiaryMapper,
-                                        nameAction: DescriptionRequiredAction,
+                                        descriptionAction: DescriptionRequiredAction,
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val section: AnswerSection = printHelper(request.userAnswers, request.description)

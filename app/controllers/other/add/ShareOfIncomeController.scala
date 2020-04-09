@@ -38,17 +38,15 @@ class ShareOfIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          standardActionSets: StandardActionSets,
                                          formProvider: IncomePercentageFormProvider,
-                                         connector: TrustConnector,
                                          view: ShareOfIncomeView,
-                                         trustService: TrustService,
                                          repository: PlaybackRepository,
                                          @AddOtherBeneficiary navigator: Navigator,
-                                         nameAction: DescriptionRequiredAction
+                                         descriptionAction: DescriptionRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Int] = formProvider.withPrefix("otherBeneficiary.shareOfIncome")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(ShareOfIncomePage) match {
@@ -59,7 +57,7 @@ class ShareOfIncomeController @Inject()(
       Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(

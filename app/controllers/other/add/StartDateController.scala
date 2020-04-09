@@ -36,13 +36,13 @@ class StartDateController @Inject()(
                                      playbackRepository: PlaybackRepository,
                                      @AddOtherBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
-                                     nameAction: DescriptionRequiredAction,
+                                     descriptionAction: DescriptionRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: StartDateView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
+  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction) {
     implicit request =>
 
       val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
@@ -55,7 +55,7 @@ class StartDateController @Inject()(
       Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
+  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction).async {
     implicit request =>
 
       val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)

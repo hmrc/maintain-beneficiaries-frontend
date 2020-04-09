@@ -36,7 +36,7 @@ class UkAddressController @Inject()(
                                      sessionRepository: PlaybackRepository,
                                      @AddOtherBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
-                                     nameAction: DescriptionRequiredAction,
+                                     descriptionAction: DescriptionRequiredAction,
                                      formProvider: UkAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
                                      view: UkAddressView
@@ -44,7 +44,7 @@ class UkAddressController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(UkAddressPage) match {
@@ -55,7 +55,7 @@ class UkAddressController @Inject()(
       Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
