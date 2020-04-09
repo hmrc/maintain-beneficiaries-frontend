@@ -1,0 +1,3 @@
+
+GET         /name                       controllers.charityortrust.trust.add.NameController.onPageLoad()
+POST        /name                       controllers.charityortrust.trust.add.NameController.onSubmit()
