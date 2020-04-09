@@ -23,9 +23,9 @@ sealed trait RoleInCompany
 
 object RoleInCompany extends Enumerable.Implicits {
 
-  case object Director extends WithName("Director") with RoleInCompany
-  case object Employee extends WithName("Employee") with RoleInCompany
-  case object NA extends WithName("NA") with RoleInCompany
+  case object Director extends WithName("director") with RoleInCompany
+  case object Employee extends WithName("employee") with RoleInCompany
+  case object NA extends WithName("na") with RoleInCompany
 
   val values: List[RoleInCompany] = List(
     Director, Employee, NA
