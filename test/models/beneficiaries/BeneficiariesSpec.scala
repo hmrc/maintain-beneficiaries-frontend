@@ -31,7 +31,7 @@ class BeneficiariesSpec extends SpecBase {
     None,
     vulnerableYesNo = false,
     None,
-    None,
+    None  ,
     incomeDiscretionYesNo = true,
     LocalDate.parse("2019-02-03"),
     provisional = false
