@@ -20,44 +20,48 @@ import java.time.LocalDate
 
 import base.SpecBase
 import config.annotations.AddIndividualBeneficiary
-import forms.YesNoFormProvider
+import forms.RoleInCompanyFormProvider
+import models.beneficiaries.RoleInCompany.Director
 import models.{Name, TypeOfTrust, UserAnswers}
-import navigation.Navigator
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{NamePage, NationalInsuranceNumberYesNoPage}
+import pages.individualbeneficiary.{NamePage, RoleInCompanyPage}
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.add.NationalInsuranceNumberYesNoView
+import views.html.individualbeneficiary.add.RoleInCompanyView
 
 import scala.concurrent.Future
 
-class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
+class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.nationalInsuranceNumberYesNo")
+  def onwardRoute = Call("GET", "/foo")
+
+  val formProvider = new RoleInCompanyFormProvider()
+  val form = formProvider()
   val trusteeName = "FirstName LastName"
   val name = Name("FirstName", None, "LastName")
 
   override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
-  lazy val nationalInsuranceNumberYesNoRoute = routes.NationalInsuranceNumberYesNoController.onPageLoad().url
+  lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad().url
 
-  "NationalInsuranceNumberYesNo Controller" must {
+  "AddressYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, nationalInsuranceNumberYesNoRoute)
+      val request = FakeRequest(GET, roleInCompanyControllerRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[NationalInsuranceNumberYesNoView]
+      val view = application.injector.instanceOf[RoleInCompanyView]
 
       status(result) mustEqual OK
 
@@ -69,20 +73,20 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NationalInsuranceNumberYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(RoleInCompanyPage, Director).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, nationalInsuranceNumberYesNoRoute)
+      val request = FakeRequest(GET, roleInCompanyControllerRoute)
 
-      val view = application.injector.instanceOf[NationalInsuranceNumberYesNoView]
+      val view = application.injector.instanceOf[RoleInCompanyView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), trusteeName)(fakeRequest, messages).toString
+        view(form.fill(Director), trusteeName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -93,19 +97,22 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(fakeNavigator))
-        .build()
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
-        FakeRequest(POST, nationalInsuranceNumberYesNoRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, roleInCompanyControllerRoute)
+          .withFormUrlEncodedBody(("value", Director.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -115,12 +122,12 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, nationalInsuranceNumberYesNoRoute)
+        FakeRequest(POST, roleInCompanyControllerRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[NationalInsuranceNumberYesNoView]
+      val view = application.injector.instanceOf[RoleInCompanyView]
 
       val result = route(application, request).value
 
@@ -136,7 +143,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, nationalInsuranceNumberYesNoRoute)
+      val request = FakeRequest(GET, roleInCompanyControllerRoute)
 
       val result = route(application, request).value
 
@@ -152,7 +159,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, nationalInsuranceNumberYesNoRoute)
+        FakeRequest(POST, roleInCompanyControllerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

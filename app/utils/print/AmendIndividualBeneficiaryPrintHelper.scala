@@ -34,6 +34,7 @@ class AmendIndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: Answer
       None,
       Seq(
         bound.nameQuestion(NamePage, "individualBeneficiary.name", controllers.individualbeneficiary.amend.routes.NameController.onPageLoad().url),
+        bound.roleInCompanyQuestion(RoleInCompanyPage, "individualBeneficiary.roleInCompany", controllers.individualbeneficiary.amend.routes.RoleInCompanyController.onPageLoad().url),
         bound.yesNoQuestion(DateOfBirthYesNoPage, "individualBeneficiary.dateOfBirthYesNo", controllers.individualbeneficiary.amend.routes.DateOfBirthYesNoController.onPageLoad().url),
         bound.dateQuestion(DateOfBirthPage, "individualBeneficiary.dateOfBirth", controllers.individualbeneficiary.amend.routes.DateOfBirthController.onPageLoad().url),
         bound.yesNoQuestion(IncomeDiscretionYesNoPage, "individualBeneficiary.incomeDiscretionYesNo", controllers.individualbeneficiary.amend.routes.IncomeDiscretionYesNoController.onPageLoad().url),

@@ -24,6 +24,7 @@ import play.api.libs.json.{JsPath, Json}
 import scala.util.Success
 
 class UserAnswersSpec extends FreeSpec with MustMatchers {
+
   "delete data removes data from the Json Object" in {
     val json = Json.obj(
       "field" -> Json.obj(
@@ -35,6 +36,7 @@ class UserAnswersSpec extends FreeSpec with MustMatchers {
       "ID",
       "UTRUTRUTR",
       LocalDate.of(1999, 10, 20),
+      TypeOfTrust.WillTrustOrIntestacyTrust,
       json
     )
 

@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import generators.ModelGenerators
 import models.beneficiaries.IndividualBeneficiary
-import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, TypeOfTrust, UkAddress, UserAnswers}
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.Json
@@ -32,7 +32,9 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
   val answers: UserAnswers = UserAnswers(
     "Id",
     "UTRUTRUTR",
-    LocalDate.of(1987, 12, 31), Json.obj()
+    LocalDate.of(1987, 12, 31),
+    TypeOfTrust.WillTrustOrIntestacyTrust,
+    Json.obj()
   )
   val index = 0
 
@@ -52,6 +54,7 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
       identification = Some(nino),
       address = None,
       vulnerableYesNo = false,
+      roleInCompany = None,
       income = None,
       incomeDiscretionYesNo = true,
       entityStart = date,
@@ -84,6 +87,7 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
       identification = Some(combined),
       address = Some(address),
       vulnerableYesNo = false,
+      roleInCompany = None,
       income = None,
       incomeDiscretionYesNo = true,
       entityStart = date,
@@ -115,6 +119,7 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
       identification = None,
       address = Some(address),
       vulnerableYesNo = false,
+      roleInCompany = None,
       income = None,
       incomeDiscretionYesNo = true,
       entityStart = date,
@@ -145,6 +150,7 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
       identification = None,
       address = None,
       vulnerableYesNo = false,
+      roleInCompany = None,
       income = None,
       incomeDiscretionYesNo = true,
       entityStart = date,

@@ -343,6 +343,15 @@ individualBeneficiary.vpe1FormYesNo.title = Has a vulnerable person election for
 individualBeneficiary.vpe1FormYesNo.heading = Has a vulnerable person election form (VPE1) been submitted to HMRC for {0}?
 individualBeneficiary.vpe1FormYesNo.error.required = Select yes if a vulnerable person election form (VPE1) has been submitted to HMRC
 
+individualBeneficiary.roleInCompany.title = What is the individual beneficiary’s role in the company that the trust was created for?
+individualBeneficiary.roleInCompany.heading = What is {0}’s role in the company that the trust was created for?
+individualBeneficiary.roleInCompany.checkYourAnswersLabel = What is {0}’s role in the company that the trust was created for?
+individualBeneficiary.roleInCompany.director = Director
+individualBeneficiary.roleInCompany.employee = Employee
+individualBeneficiary.roleInCompany.na = None of these
+individualBeneficiary.roleInCompany.checkYourAnswersLabel.na = Not a director or employee
+individualBeneficiary.roleInCompany.error.required = Select the individual beneficiary’s role in the company the trust was created for
+
 individualBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
 individualBeneficiary.startDate.title = When was the individual beneficiary added as a beneficiary?
 individualBeneficiary.startDate.heading = When was {0} added as a beneficiary?

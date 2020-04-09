@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import config.annotations.AddIndividualBeneficiary
 import forms.YesNoFormProvider
-import models.{Name, UserAnswers}
+import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -44,7 +44,7 @@ class PassportDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute: Call = Call("GET", "/foo")
   val name: Name = Name("FirstName", None, "LastName")
 
-  override val emptyUserAnswers: UserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
+  override val emptyUserAnswers: UserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
   val passportDetailsYesNoRoute: String = routes.PassportDetailsYesNoController.onPageLoad().url

@@ -18,7 +18,7 @@ package navigation.individualBeneficiary
 
 import controllers.individualbeneficiary.amend.{routes => rts}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{TypeOfTrust, UserAnswers}
 import navigation.Navigator
 import pages.individualbeneficiary._
 import pages.{Page, QuestionPage}
@@ -30,7 +30,7 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DateOfBirthYesNoController.onPageLoad()
+    case RoleInCompanyPage => rts.DateOfBirthYesNoController.onPageLoad()
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad()
     case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad()
     case NationalInsuranceNumberPage => rts.VPE1FormYesNoController.onPageLoad()
@@ -39,6 +39,7 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad()
   }
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
+    case NamePage => ua => namePageNav(ua)
     case DateOfBirthYesNoPage => ua =>
       yesNoNav(ua, DateOfBirthYesNoPage, rts.DateOfBirthController.onPageLoad(), rts.IncomeDiscretionYesNoController.onPageLoad())
     case IncomeDiscretionYesNoPage => ua =>
@@ -57,6 +58,11 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_ : UserAnswers) => c) orElse
     yesNoNavigation
+
+  def namePageNav(ua: UserAnswers): Call = ua.trustType match {
+    case TypeOfTrust.EmployeeRelated => rts.RoleInCompanyController.onPageLoad()
+    case _ => rts.DateOfBirthYesNoController.onPageLoad()
+  }
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)

@@ -16,7 +16,10 @@
 
 package navigation
 
+import java.time.LocalDate
+
 import base.SpecBase
+import models.{TypeOfTrust, UserAnswers}
 import navigation.individualBeneficiary.AddIndividualBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.{NamePage, _}
@@ -27,8 +30,26 @@ class AddIndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckProp
 
   "Individual beneficiary navigator" when {
 
-    "Name page -> Do you know date of birth page" in {
-      navigator.nextPage(NamePage, emptyUserAnswers)
+    "employment related trust" must {
+
+      "Name page -> Role in company page" in {
+        navigator.nextPage(NamePage, UserAnswers("id", "utr", LocalDate.parse("2019-02-10"), TypeOfTrust.EmployeeRelated))
+          .mustBe(controllers.individualbeneficiary.add.routes.RoleInCompanyController.onPageLoad())
+      }
+
+    }
+
+    "not an employment related trust" must {
+
+      "Name page -> Do you know date of birth page" in {
+        navigator.nextPage(NamePage, emptyUserAnswers)
+          .mustBe(controllers.individualbeneficiary.add.routes.DateOfBirthYesNoController.onPageLoad())
+      }
+
+    }
+
+    "Role in company page -> Do you know date of birth page" in {
+      navigator.nextPage(RoleInCompanyPage, emptyUserAnswers)
         .mustBe(controllers.individualbeneficiary.add.routes.DateOfBirthYesNoController.onPageLoad())
     }
 

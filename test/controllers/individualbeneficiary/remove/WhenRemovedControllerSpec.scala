@@ -70,6 +70,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     identification = None,
     address = None,
     vulnerableYesNo = false,
+    roleInCompany = None,
     income = None,
     incomeDiscretionYesNo = false,
     entityStart = LocalDate.parse("2019-02-28"),
