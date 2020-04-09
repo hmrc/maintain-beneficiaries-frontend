@@ -38,7 +38,7 @@ class DescriptionFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      RegexpGen.from(Validation.nameRegex)
+      RegexpGen.from(Validation.descriptionRegex)
     )
 
     behave like fieldWithMaxLength(
@@ -63,9 +63,9 @@ class DescriptionFormProviderSpec extends StringFieldBehaviours {
     behave like fieldWithRegexpWithGenerator(
       form,
       fieldName,
-      regexp = Validation.nameRegex,
+      regexp = Validation.descriptionRegex,
       generator = stringsWithMaxLength(maxLength),
-      error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
+      error = FormError(fieldName, invalidFormatKey, Seq(Validation.descriptionRegex))
     )
   }
 }

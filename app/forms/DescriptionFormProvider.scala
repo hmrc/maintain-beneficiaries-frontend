@@ -28,7 +28,7 @@ class DescriptionFormProvider @Inject() extends Mappings {
           firstError(
             nonEmptyString("value", s"$prefix.error.required"),
             maxLength(70, s"$prefix.error.length"),
-            regexp(Validation.nameRegex, s"$prefix.error.invalidFormat")
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalidFormat")
           )
         )
     )
