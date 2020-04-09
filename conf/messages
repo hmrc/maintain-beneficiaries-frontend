@@ -531,3 +531,6 @@ otherBeneficiary.startDate.error.required = The date the other beneficiary was a
 otherBeneficiary.startDate.error.invalid = Enter a real date
 otherBeneficiary.startDate.error.future = The date the other beneficiary was added to the trust must be today or in the past
 otherBeneficiary.startDate.error.past = The date the other beneficiary was added to the trust cannot be before the start date of the trust
+
+otherBeneficiary.checkDetails.title = Check other beneficiary details
+otherBeneficiary.checkDetails.heading = Check other beneficiary details

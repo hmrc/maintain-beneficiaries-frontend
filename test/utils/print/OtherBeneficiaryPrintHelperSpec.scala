@@ -53,7 +53,7 @@ class OtherBeneficiaryPrintHelperSpec extends SpecBase {
       result mustBe AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow(label = Html(messages("otherBeneficiary.name.checkYourAnswersLabel")), answer = Html("Other"), changeUrl = DescriptionController.onPageLoad().url),
+          AnswerRow(label = Html(messages("otherBeneficiary.description.checkYourAnswersLabel")), answer = Html("Other"), changeUrl = DescriptionController.onPageLoad().url),
           AnswerRow(label = Html(messages("otherBeneficiary.discretionYesNo.checkYourAnswersLabel", description)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad().url),
           AnswerRow(label = Html(messages("otherBeneficiary.shareOfIncome.checkYourAnswersLabel", description)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad().url),
           AnswerRow(label = Html(messages("otherBeneficiary.addressYesNo.checkYourAnswersLabel", description)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad().url),

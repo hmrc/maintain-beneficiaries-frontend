@@ -35,7 +35,7 @@ class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
     AnswerSection(
       None,
       Seq(
-        bound.stringQuestion(DescriptionPage, "otherBeneficiary.name", DescriptionController.onPageLoad().url),
+        bound.stringQuestion(DescriptionPage, "otherBeneficiary.description", DescriptionController.onPageLoad().url),
         bound.yesNoQuestion(DiscretionYesNoPage, "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad().url),
         bound.percentageQuestion(ShareOfIncomePage, "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad().url),
         bound.yesNoQuestion(AddressYesNoPage, "otherBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
