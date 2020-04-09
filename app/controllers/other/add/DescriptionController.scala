@@ -17,9 +17,8 @@
 package controllers.other.add
 
 import config.annotations.AddOtherBeneficiary
-import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import forms.StringFormProvider
+import forms.DescriptionFormProvider
 import javax.inject.Inject
 import navigation.Navigator
 import pages.other.DescriptionPage
@@ -27,7 +26,6 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.other.add.DescriptionView
 
@@ -36,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DescriptionController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        standardActionSets: StandardActionSets,
-                                       formProvider: StringFormProvider,
+                                       formProvider: DescriptionFormProvider,
                                        view: DescriptionView,
                                        repository: PlaybackRepository,
                                        @AddOtherBeneficiary navigator: Navigator

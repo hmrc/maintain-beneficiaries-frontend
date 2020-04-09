@@ -493,13 +493,13 @@ otherBeneficiary.whenRemoved.error.invalid = Enter a real date when the benefici
 otherBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 otherBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
 
-otherBeneficiary.description.title = What is the description of the other type of beneficiary?
-otherBeneficiary.description.heading = What is the description of the other type of beneficiary?
-otherBeneficiary.description.checkYourAnswersLabel = What is the description of the other type of beneficiary?
-otherBeneficiary.description.hint = This must be 56 characters or less. For example, future grandchildren and future great-grandchildren.
-otherBeneficiary.description.error.required = Enter the description the other type of beneficiary
-otherBeneficiary.description.error.invalidFormat = The description the other type of beneficiary must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-otherBeneficiary.description.error.length = The description the other type of beneficiary must be 56 characters or less
+otherBeneficiary.description.title = What is the description of the other beneficiary?
+otherBeneficiary.description.heading = What is the description of the other beneficiary?
+otherBeneficiary.description.checkYourAnswersLabel = What is the description of the other beneficiary?
+otherBeneficiary.description.hint = Do not include named or specific individuals, they must be listed as individual beneficiaries. This must be 70 characters or less.
+otherBeneficiary.description.error.required = Enter the description of the other beneficiary
+otherBeneficiary.description.error.invalidFormat = The description the other beneficiary must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+otherBeneficiary.description.error.length = The description of the other beneficiary must be 70 characters or less
 
 otherBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the other beneficiary may get?
 otherBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
@@ -510,7 +510,7 @@ otherBeneficiary.discretionYesNo.error.required = Select yes if the trustees hav
 otherBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the other beneficiary entitled to?
 otherBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
 otherBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
-otherBeneficiary.shareOfIncome.hint = Round this down to a whole number
+otherBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
 otherBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the other beneficiary is entitled to
 otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the other beneficiary is entitled to must be a whole number
@@ -545,7 +545,6 @@ otherBeneficiary.startDate.error.past = The date the other beneficiary was added
 
 otherBeneficiary.checkDetails.title = Check other beneficiary details
 otherBeneficiary.checkDetails.heading = Check other beneficiary details
-
 
 removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
 removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
