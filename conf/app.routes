@@ -15,6 +15,7 @@
 
 ->         /trust/remove                                                    trustBeneficiary.remove.Routes
 
+->         /company/add                                                     companyBeneficiary.add.Routes
 ->         /company/remove                                                  companyBeneficiary.remove.Routes
 
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)

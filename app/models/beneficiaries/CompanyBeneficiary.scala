@@ -49,6 +49,16 @@ object CompanyBeneficiary {
         CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
+  implicit val writes: Writes[CompanyBeneficiary] =
+    ((__ \ 'organisationName).write[String] and
+      (__ \ 'identification \ 'utr).writeNullable[String] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+      ).apply(unlift(CompanyBeneficiary.unapply))
+
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
