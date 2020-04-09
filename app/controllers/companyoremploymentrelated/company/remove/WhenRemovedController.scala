@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.companyoremploymentrelated.company.remove
 
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.trust.remove.WhenRemovedView
+import views.html.companyoremploymentrelated.company.remove.WhenRemovedView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,9 +43,9 @@ class WhenRemovedController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getTrustBeneficiary(request.userAnswers.utr, index).map {
+      trust.getCompanyBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
-          val form = formProvider.withPrefixAndEntityStartDate("trustBeneficiary.whenRemoved", beneficiary.entityStart)
+          val form = formProvider.withPrefixAndEntityStartDate("companyBeneficiary.whenRemoved", beneficiary.entityStart)
           Ok(view(form, index, beneficiary.name))
       }
   }
@@ -53,15 +53,15 @@ class WhenRemovedController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getTrustBeneficiary(request.userAnswers.utr, index).flatMap {
+      trust.getCompanyBeneficiary(request.userAnswers.utr, index).flatMap {
         beneficiary =>
-          val form = formProvider.withPrefixAndEntityStartDate("trustBeneficiary.whenRemoved", beneficiary.entityStart)
+          val form = formProvider.withPrefixAndEntityStartDate("companyBeneficiary.whenRemoved", beneficiary.entityStart)
           form.bindFromRequest().fold(
             formWithErrors => {
               Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name)))
             },
             value =>
-              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.TrustBeneficiary, index, value)).map(_ =>
+              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CompanyBeneficiary, index, value)).map(_ =>
                 Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
               )
           )

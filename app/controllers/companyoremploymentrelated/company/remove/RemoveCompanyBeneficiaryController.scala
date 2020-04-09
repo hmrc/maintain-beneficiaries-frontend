@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.companyoremploymentrelated.company.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import pages.trust.RemoveYesNoPage
+import pages.companyoremploymentrelated.company.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.trust.remove.RemoveIndexView
+import views.html.companyoremploymentrelated.company.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveTrustBeneficiaryController @Inject()(
+class RemoveCompanyBeneficiaryController @Inject()(
                                                     override val messagesApi: MessagesApi,
                                                     repository: PlaybackRepository,
                                                     standardActionSets: StandardActionSets,
@@ -41,7 +41,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                                                     view: RemoveIndexView
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val messagesPrefix: String = "removeTrustBeneficiary"
+  private val messagesPrefix: String = "removeCompanyBeneficiary"
 
   private val form = formProvider.apply(messagesPrefix)
 
@@ -53,7 +53,7 @@ class RemoveTrustBeneficiaryController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      trustService.getTrustBeneficiary(request.userAnswers.utr, index).map {
+      trustService.getCompanyBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.name))
       }
@@ -67,7 +67,7 @@ class RemoveTrustBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trustService.getTrustBeneficiary(request.userAnswers.utr, index).map {
+          trustService.getCompanyBeneficiary(request.userAnswers.utr, index).map {
             beneficiary =>
               BadRequest(view(formWithErrors, index, beneficiary.name))
           }
@@ -76,10 +76,10 @@ class RemoveTrustBeneficiaryController @Inject()(
 
           if (value) {
 
-            trustService.getTrustBeneficiary(request.userAnswers.utr, index).flatMap {
+            trustService.getCompanyBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.TrustBeneficiary, index)).map(_ =>
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CompanyBeneficiary, index)).map(_ =>
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   )
                 } else {
@@ -87,7 +87,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
                     _ <- repository.set(updatedAnswers)
                   } yield {
-                    Redirect(controllers.trust.remove.routes.WhenRemovedController.onPageLoad(index).url)
+                    Redirect(controllers.companyoremploymentrelated.company.remove.routes.WhenRemovedController.onPageLoad(index).url)
                   }
                 }
             }

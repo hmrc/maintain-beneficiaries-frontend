@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package views.trust.remove
+package views.companyoremploymentrelated.company.remove
 
-import controllers.trust.remove.routes
+import controllers.charityortrust.trust.remove.routes
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.trust.remove.RemoveIndexView
+import views.html.companyoremploymentrelated.company.remove.RemoveIndexView
 
-class RemoveTrustBeneficiaryViewSpec extends YesNoViewBehaviours {
+class RemoveCompanyBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeTrustBeneficiary"
+  val messageKeyPrefix = "removeCompanyBeneficiary"
   val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Name"
   val index = 0
 
-  "RemoveTrustBeneficiary view" must {
+  "RemoveCompanyBeneficiary view" must {
 
     val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
 

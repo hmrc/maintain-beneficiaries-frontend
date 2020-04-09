@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.companyoremploymentrelated.company.remove
 
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import connectors.TrustConnector
 import forms.DateRemovedFromTrustFormProvider
-import models.beneficiaries.{Beneficiaries, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CompanyBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,7 +31,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
-import views.html.trust.remove.WhenRemovedView
+import views.html.companyoremploymentrelated.company.remove.WhenRemovedView
 
 import scala.concurrent.Future
 
@@ -39,13 +39,13 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new DateRemovedFromTrustFormProvider()
 
-  private def form = formProvider.withPrefixAndEntityStartDate("trustBeneficiary.whenRemoved", LocalDate.now())
+  private def form = formProvider.withPrefixAndEntityStartDate("companyBeneficiary.whenRemoved", LocalDate.now())
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
   val index = 0
 
-  val description = "Some Name 1"
+  val name = "Some Name 1"
   val mockConnector = mock[TrustConnector]
 
   val fakeService = new TrustServiceImpl(mockConnector)
@@ -63,8 +63,9 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  def trustBeneficiary(id: Int) = TrustBeneficiary(
+  def companyBeneficiary(id: Int) = CompanyBeneficiary(
     name = s"Some Name $id",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
@@ -72,14 +73,14 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     provisional = false
   )
 
-  val beneficiaries = List(trustBeneficiary(1), trustBeneficiary(2), trustBeneficiary(3))
+  val beneficiaries = List(companyBeneficiary(1), companyBeneficiary(2), companyBeneficiary(3))
 
   "WhenRemoved Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, beneficiaries, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 
@@ -90,7 +91,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, description)(fakeRequest, messages).toString
+        view(form, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -132,7 +133,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, description)(fakeRequest, messages).toString
+        view(boundForm, index, name)(fakeRequest, messages).toString
 
       application.stop()
     }

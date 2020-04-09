@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package pages.trust
+package pages.companyoremploymentrelated
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RemoveYesNoPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = basePath \ toString
-
-  override def toString: String = "removeYesNo"
+package object company {
+  val basePath = JsPath \ 'company
 }

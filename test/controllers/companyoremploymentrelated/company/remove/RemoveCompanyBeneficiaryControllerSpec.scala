@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package controllers.trust.remove
+package controllers.companyoremploymentrelated.company.remove
 
 import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
-import models.beneficiaries.{Beneficiaries, TrustBeneficiary}
+import models.beneficiaries.{Beneficiaries, CompanyBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.trust.RemoveYesNoPage
+import pages.companyoremploymentrelated.company.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import views.html.trust.remove.RemoveIndexView
+import views.html.companyoremploymentrelated.company.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
-class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
+class RemoveCompanyBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
 
-  val messagesPrefix = "removeTrustBeneficiary"
+  val messagesPrefix = "removeCompanyBeneficiary"
 
   lazy val formProvider = new RemoveIndexFormProvider()
   lazy val form = formProvider(messagesPrefix)
@@ -46,8 +46,9 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def trustBeneficiary(id: Int, provisional : Boolean) = TrustBeneficiary(
+  def companyBeneficiary(id: Int, provisional : Boolean) = CompanyBeneficiary(
     name = s"Some Name $id",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
@@ -55,15 +56,15 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
     provisional = provisional
   )
 
-  val expectedResult = trustBeneficiary(2, provisional = true)
+  val expectedResult = companyBeneficiary(2, provisional = true)
 
   val beneficiaries = List(
-    trustBeneficiary(1, provisional = false),
+    companyBeneficiary(1, provisional = false),
     expectedResult,
-    trustBeneficiary(3, provisional = true)
+    companyBeneficiary(3, provisional = true)
   )
 
-  "RemoveTrustBeneficiary Controller" when {
+  "RemoveCompanyBeneficiary Controller" when {
 
     "return OK and the correct view for a GET" in {
 
@@ -72,13 +73,13 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       implicit val hc : HeaderCarrier = HeaderCarrier()
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, beneficiaries, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[TrustConnector].toInstance(mockConnector))
         .build()
 
-      val request = FakeRequest(GET, routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
+      val request = FakeRequest(GET, routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
@@ -97,11 +98,11 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         .set(RemoveYesNoPage, true).success.value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
+        .thenReturn(Future.successful(Beneficiaries(Nil, Nil, beneficiaries, Nil, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 
-      val request = FakeRequest(GET, routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)
+      val request = FakeRequest(GET, routes.RemoveCompanyBeneficiaryController.onPageLoad(0).url)
 
       val result = route(application, request).value
 
@@ -126,7 +127,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
           .build()
 
         val request =
-          FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveCompanyBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "false"))
 
         val result = route(application, request).value
@@ -146,21 +147,21 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
         val index = 0
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
+          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, beneficiaries, Nil, Nil, Nil, Nil)))
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[TrustConnector].toInstance(mockConnector))
           .build()
 
         val request =
-          FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveCompanyBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.trust.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.remove.routes.WhenRemovedController.onPageLoad(0).url
 
         application.stop()
       }
@@ -177,13 +178,13 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
           .build()
 
         when(mockConnector.getBeneficiaries(any())(any(), any()))
-          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
+          .thenReturn(Future.successful(Beneficiaries(Nil, Nil, beneficiaries, Nil, Nil, Nil, Nil)))
 
         when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
         val request =
-          FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
+          FakeRequest(POST, routes.RemoveCompanyBeneficiaryController.onSubmit(index).url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -203,7 +204,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
+        FakeRequest(POST, routes.RemoveCompanyBeneficiaryController.onSubmit(index).url)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -226,7 +227,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
+      val request = FakeRequest(GET, routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
@@ -244,7 +245,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
+        FakeRequest(POST, routes.RemoveCompanyBeneficiaryController.onSubmit(index).url)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

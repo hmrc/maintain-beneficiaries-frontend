@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package views.trust.remove
+package views.charityortrust.trust.remove
 
-import java.time.LocalDate
-
-import forms.DateRemovedFromTrustFormProvider
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.QuestionViewBehaviours
-import views.html.trust.remove.WhenRemovedView
+import views.behaviours.YesNoViewBehaviours
+import views.html.charityortrust.trust.remove.RemoveIndexView
+import controllers.charityortrust.trust.remove.routes
 
-class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
+class RemoveTrustBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "trustBeneficiary.whenRemoved"
-  val index = 0
+  val messageKeyPrefix = "removeTrustBeneficiary"
+  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Name"
+  val index = 0
 
-  override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndEntityStartDate(messageKeyPrefix, LocalDate.now())
+  "RemoveTrustBeneficiary view" must {
 
-  "whenRemoved view" must {
-
-    val view = viewFor[WhenRemovedView](Some(emptyUserAnswers))
+    val view = viewFor[RemoveIndexView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index, name)(fakeRequest, messages)
@@ -43,19 +41,6 @@ class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
-
-    "fields" must {
-
-      behave like pageWithDateFields(
-        form,
-        applyView,
-        messageKeyPrefix,
-        "value",
-        name
-      )
-    }
-
-    behave like pageWithASubmitButton(applyView(form))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveTrustBeneficiaryController.onSubmit(index).url)
   }
 }
