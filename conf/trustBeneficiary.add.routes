@@ -1,0 +1,21 @@
+
+GET         /name                       controllers.charityortrust.trust.add.NameController.onPageLoad()
+POST        /name                       controllers.charityortrust.trust.add.NameController.onSubmit()
+
+GET         /discretion-yes-no          controllers.charityortrust.trust.add.DiscretionYesNoController.onPageLoad()
+POST        /discretion-yes-no          controllers.charityortrust.trust.add.DiscretionYesNoController.onSubmit()
+
+GET         /share-of-income            controllers.charityortrust.trust.add.ShareOfIncomeController.onPageLoad()
+POST        /share-of-income            controllers.charityortrust.trust.add.ShareOfIncomeController.onSubmit()
+
+GET         /has-address                controllers.charityortrust.trust.add.AddressYesNoController.onPageLoad()
+POST        /has-address                controllers.charityortrust.trust.add.AddressYesNoController.onSubmit()
+
+GET         /has-uk-address             controllers.charityortrust.trust.add.AddressUkYesNoController.onPageLoad()
+POST        /has-uk-address             controllers.charityortrust.trust.add.AddressUkYesNoController.onSubmit()
+
+GET         /uk-address                 controllers.charityortrust.trust.add.UkAddressController.onPageLoad()
+POST        /uk-address                 controllers.charityortrust.trust.add.UkAddressController.onSubmit()
+
+GET         /non-uk-address             controllers.charityortrust.trust.add.NonUkAddressController.onPageLoad()
+POST        /non-uk-address             controllers.charityortrust.trust.add.NonUkAddressController.onSubmit()

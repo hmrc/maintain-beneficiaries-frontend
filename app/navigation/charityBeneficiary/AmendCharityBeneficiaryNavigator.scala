@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.charityBeneficiary
 
 import controllers.charityortrust.charity.amend.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
+import navigation.Navigator
 import pages.charityortrust.charity._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call

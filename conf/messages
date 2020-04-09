@@ -479,6 +479,28 @@ charityBeneficiary.checkDetails.utr.p1 = Some of the information we ask about ch
 charityBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
 charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 
+trustBeneficiary.name.title = What is the trust’s name?
+trustBeneficiary.name.heading = What is the trust’s name?
+trustBeneficiary.name.checkYourAnswersLabel = What is the trust’s name?
+trustBeneficiary.name.error.required = Enter the trust’s name
+trustBeneficiary.name.error.invalidFormat = Trust’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+trustBeneficiary.name.error.length = Trust’s name must be 56 characters or less
+
+trustBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the trust beneficiary may get?
+trustBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiary.discretionYesNo.hint = See the trust deed for details
+trustBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
+
+trustBeneficiary.shareOfIncome.title = What percentage of the trust’s assets is the trust beneficiary entitled to?
+trustBeneficiary.shareOfIncome.heading = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s assets is {0} entitled to?
+trustBeneficiary.shareOfIncome.hint = Round this down to a whole number
+trustBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
+trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
+
 removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
 removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
 removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
