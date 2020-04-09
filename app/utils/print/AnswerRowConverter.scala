@@ -55,12 +55,9 @@ class AnswerRowConverter @Inject()() {
       userAnswers.get(query) map {x =>
         AnswerRow(
           HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
-          {
-            x match {
-              case NA => HtmlFormat.escape("individualBeneficiary.roleInCompany.checkYourAnswersLabel.NA")
-              case _ => HtmlFormat.escape(x.toString)
-            }
-            HtmlFormat.escape(x.toString)
+          x match {
+            case NA => HtmlFormat.escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
+            case _ => HtmlFormat.escape(messages(x.toString))
           },
           changeUrl
         )

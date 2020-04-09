@@ -33,28 +33,16 @@ class IndividualBeneficiaryMapper {
     val readFromUserAnswers: Reads[IndividualBeneficiary] =
       (
         NamePage.path.read[Name] and
-          DateOfBirthPage.path.readNullable[LocalDate] and
-          readIdentification and
-          readAddress and
-          VPE1FormYesNoPage.path.read[Boolean] and
-          RoleInCompanyPage.path.readNullable[RoleInCompany] and
-          readIncome and
-          IncomeDiscretionYesNoPage.path.read[Boolean] and
-          StartDatePage.path.read[LocalDate]
-        ) (
-        (name, dateOfBirth, nationalInsuranceNumber, address, vulnerableYesNo, roleInCompany, income, incomeDiscretion, entityStart) =>
-          IndividualBeneficiary(
-            name,
-            dateOfBirth,
-            nationalInsuranceNumber,
-            address,
-            vulnerableYesNo,
-            roleInCompany,
-            income,
-            incomeDiscretion,
-            entityStart,
-            provisional = true)
-      )
+        DateOfBirthPage.path.readNullable[LocalDate] and
+        readIdentification and
+        readAddress and
+        VPE1FormYesNoPage.path.read[Boolean] and
+        RoleInCompanyPage.path.readNullable[RoleInCompany] and
+        readIncome and
+        IncomeDiscretionYesNoPage.path.read[Boolean] and
+        StartDatePage.path.read[LocalDate] and
+        Reads(_ => JsSuccess(true))
+      ) (IndividualBeneficiary.apply _)
 
     answers.data.validate[IndividualBeneficiary](readFromUserAnswers) match {
       case JsSuccess(value, _) =>
