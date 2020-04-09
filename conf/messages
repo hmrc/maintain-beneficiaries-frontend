@@ -520,3 +520,12 @@ companyBeneficiary.whenRemoved.error.required = The date the beneficiary was rem
 companyBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 companyBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 companyBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
+
+companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.heading = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.checkYourAnswersLabel = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.hint = For example, employees and their children, spouses or widows would be employment related.
+companyOrEmploymentRelated.error.required = Select the type of beneficiary you need to add
+
+isTheBeneficiaryACompanyOrEmploymentRelated.company = Company
+isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or their families
