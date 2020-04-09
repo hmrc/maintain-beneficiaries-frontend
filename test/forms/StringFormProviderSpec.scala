@@ -29,7 +29,7 @@ class StringFormProviderSpec extends StringFieldBehaviours {
   val invalidFormatKey = s"$prefix.error.invalidFormat"
   val maxLength = 56
 
-  val form = new StringFormProvider().withPrefix(prefix)
+  val form = new StringFormProvider().withPrefix(prefix, maxLength)
 
   ".value" must {
 

@@ -10,6 +10,7 @@
 ->         /charity/amend                                                   charityBeneficiary.amend.Routes
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 
+->         /other/add                                                       otherBeneficiary.add.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
 ->         /trust/remove                                                    trustBeneficiary.remove.Routes
@@ -44,5 +45,8 @@ POST       /what-kind                                                       cont
 
 GET        /charity-or-trust                                                controllers.charityortrust.CharityOrTrustController.onPageLoad()
 POST       /charity-or-trust                                                controllers.charityortrust.CharityOrTrustController.onSubmit()
+
+GET        /company-or-employment-related                                   controllers.companyoremploymentrelated.CompanyOrEmploymentRelatedController.onPageLoad()
+POST       /company-or-employment-related                                   controllers.companyoremploymentrelated.CompanyOrEmploymentRelatedController.onSubmit()
 
 GET        /:utr                                                            controllers.IndexController.onPageLoad(utr: String)

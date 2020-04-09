@@ -22,13 +22,13 @@ import play.api.data.Form
 
 class StringFormProvider @Inject() extends Mappings {
 
-  def withPrefix(prefix: String): Form[String] =
+  def withPrefix(prefix: String, length: Int): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
         .verifying(
           firstError(
             nonEmptyString("value", s"$prefix.error.required"),
-            maxLength(56, s"$prefix.error.length"),
+            maxLength(length, s"$prefix.error.length"),
             regexp(Validation.nameRegex, s"$prefix.error.invalidFormat")
           )
         )

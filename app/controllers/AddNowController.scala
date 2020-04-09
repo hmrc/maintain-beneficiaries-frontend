@@ -79,6 +79,9 @@ class AddNowController @Inject()(
                   case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
                   case CharityOrTrust => Redirect(controllers.charityortrust.routes.CharityOrTrustController.onPageLoad())
                   case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad())
+                  case CompanyOrEmploymentRelated => Redirect(controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad())
+                  case Company => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+                  case Other => Redirect(controllers.other.add.routes.DescriptionController.onPageLoad())
                   case _ => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
                 }
               }
