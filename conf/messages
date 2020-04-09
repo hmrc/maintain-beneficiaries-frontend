@@ -529,3 +529,10 @@ companyOrEmploymentRelated.error.required = Select the type of beneficiary you n
 
 isTheBeneficiaryACompanyOrEmploymentRelated.company = Company
 isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or their families
+
+companyBeneficiary.name.title = What is the company’s name?
+companyBeneficiary.name.heading = What is the company’s name?
+companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?
+companyBeneficiary.name.error.required = Enter the company’s name
+companyBeneficiary.name.error.invalidFormat = Company’s name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
+companyBeneficiary.name.error.length = Company’s name cannot be more than 105 characters
