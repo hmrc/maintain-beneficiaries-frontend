@@ -501,3 +501,17 @@ otherBeneficiary.whenRemoved.error.required = The date the beneficiary was remov
 otherBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 otherBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 otherBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
+
+removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
+removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
+removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
+
+trustBeneficiary.whenRemoved.title = When was the trust beneficiary removed as a beneficiary?
+trustBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+trustBeneficiary.whenRemoved.hint = For example, 31 3 1980
+trustBeneficiary.whenRemoved.error.required.all = Enter the date the beneficiary was removed from the trust
+trustBeneficiary.whenRemoved.error.required.two = The date the beneficiary was removed from the trust must include a {0} and {1}
+trustBeneficiary.whenRemoved.error.required = The date the beneficiary was removed from the trust must include {0}
+trustBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
+trustBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
+trustBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
