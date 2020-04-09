@@ -18,7 +18,7 @@ package controllers.classofbeneficiary.amend
 
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import forms.StringFormProvider
+import forms.DescriptionFormProvider
 import javax.inject.Inject
 import models.beneficiaries.ClassOfBeneficiary
 import play.api.data.Form
@@ -33,13 +33,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class DescriptionController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        standardActionSets: StandardActionSets,
-                                       formProvider: StringFormProvider,
+                                       formProvider: DescriptionFormProvider,
                                        connector: TrustConnector,
                                        view: DescriptionView,
                                        trustService: TrustService
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description")
+  val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description", 56)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>

@@ -29,7 +29,7 @@ class DescriptionFormProviderSpec extends StringFieldBehaviours {
   val invalidFormatKey = s"$prefix.error.invalidFormat"
   val maxLength = 70
 
-  val form = new DescriptionFormProvider().withPrefix(prefix)
+  val form = new DescriptionFormProvider().withPrefix(prefix, maxLength)
 
   ".value" must {
 

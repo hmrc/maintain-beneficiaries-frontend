@@ -595,3 +595,19 @@ companyBeneficiary.whenRemoved.error.required = The date the beneficiary was rem
 companyBeneficiary.whenRemoved.error.invalid = Enter a real date when the beneficiary was removed from the trust
 companyBeneficiary.whenRemoved.error.future = The date the beneficiary was removed from the trust must be today or in the past
 companyBeneficiary.whenRemoved.error.past = The date the beneficiary was removed must be on or after the date they were added
+
+companyOrEmploymentRelated.title = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.heading = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.checkYourAnswersLabel = Is the beneficiary a company or the employees and/or their families?
+companyOrEmploymentRelated.hint = For example, employees and their children, spouses or widows would be employment related.
+companyOrEmploymentRelated.error.required = Select the type of beneficiary you need to add
+
+isTheBeneficiaryACompanyOrEmploymentRelated.company = Company
+isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or their families
+
+companyBeneficiary.name.title = What is the company’s name?
+companyBeneficiary.name.heading = What is the company’s name?
+companyBeneficiary.name.checkYourAnswersLabel = What is the company’s name?
+companyBeneficiary.name.error.required = Enter the company’s name
+companyBeneficiary.name.error.invalidFormat = Company’s name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
+companyBeneficiary.name.error.length = Company’s name cannot be more than 105 characters

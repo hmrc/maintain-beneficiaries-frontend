@@ -40,7 +40,7 @@ class DescriptionController @Inject()(
                                        @AddOtherBeneficiary navigator: Navigator
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("otherBeneficiary.description")
+  val form: Form[String] = formProvider.withPrefix("otherBeneficiary.description", 70)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
