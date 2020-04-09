@@ -31,7 +31,7 @@ import views.html.charityortrust.charity.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new StringFormProvider().withPrefix("charityBeneficiary.name")
+  private val form: Form[String] = new StringFormProvider().withPrefix("trustBeneficiary.name")
   private val nameRoute: String = routes.NameController.onPageLoad().url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
