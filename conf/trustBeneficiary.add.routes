@@ -1,3 +1,6 @@
 
 GET         /name                       controllers.charityortrust.trust.add.NameController.onPageLoad()
 POST        /name                       controllers.charityortrust.trust.add.NameController.onSubmit()
+
+GET         /discretion-yes-no          controllers.charityortrust.trust.add.DiscretionYesNoController.onPageLoad()
+POST        /discretion-yes-no          controllers.charityortrust.trust.add.DiscretionYesNoController.onSubmit()

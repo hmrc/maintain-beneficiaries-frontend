@@ -486,6 +486,12 @@ trustBeneficiary.name.error.required = Enter the trust’s name
 trustBeneficiary.name.error.invalidFormat = Trust’s name must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 trustBeneficiary.name.error.length = Trust’s name must be 56 characters or less
 
+trustBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the trust beneficiary may get?
+trustBeneficiary.discretionYesNo.heading = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiary.discretionYesNo.checkYourAnswersLabel = Do the trustees have discretion over how much income {0} may get?
+trustBeneficiary.discretionYesNo.hint = See the trust deed for details
+trustBeneficiary.discretionYesNo.error.required = Select yes if the trustees have discretion over how much income the trust beneficiary may get
+
 removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
 removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
 removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
