@@ -22,7 +22,7 @@ import base.SpecBase
 import config.annotations.AmendIndividualBeneficiary
 import forms.RoleInCompanyFormProvider
 import models.beneficiaries.RoleInCompany.Director
-import models.{Name, UserAnswers}
+import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -46,7 +46,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
   val trusteeName = "FirstName LastName"
   val name = Name("FirstName", None, "LastName")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now())
+  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
   lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad().url

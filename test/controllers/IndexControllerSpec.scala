@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.TrustStartDate
+import models.{TrustDetails, TypeOfTrust}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.inject.bind
@@ -35,7 +35,8 @@ class IndexControllerSpec extends SpecBase {
 
       val mockTrustConnector = mock[TrustConnector]
 
-      when(mockTrustConnector.getTrustStartDate(any())(any(), any())).thenReturn(Future.successful(TrustStartDate("2019-06-01")))
+      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+        .thenReturn(Future.successful(TrustDetails(startDate = "2019-06-01", typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust)))
 
       val application = applicationBuilder(userAnswers = None).overrides(bind[TrustConnector].toInstance(mockTrustConnector)).build()
 

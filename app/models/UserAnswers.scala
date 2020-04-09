@@ -29,6 +29,7 @@ final case class UserAnswers(
                               internalAuthId: String,
                               utr: String,
                               whenTrustSetup: LocalDate,
+                              trustType: TypeOfTrust,
                               data: JsObject = Json.obj(),
                               updatedAt: LocalDateTime = LocalDateTime.now
                             ) {
@@ -111,6 +112,7 @@ object UserAnswers {
       (__ \ "internalId").read[String] and
         (__ \ "utr").read[String] and
         (__ \ "whenTrustSetup").read[LocalDate] and
+        (__ \ "trustType").read[TypeOfTrust] and
         (__ \ "data").read[JsObject] and
         (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead)
       ) (UserAnswers.apply _)
@@ -124,6 +126,7 @@ object UserAnswers {
       (__ \ "internalId").write[String] and
         (__ \ "utr").write[String] and
         (__ \ "whenTrustSetup").write[LocalDate] and
+        (__ \ "trustType").write[TypeOfTrust] and
         (__ \ "data").write[JsObject] and
         (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite)
       ) (unlift(UserAnswers.unapply))

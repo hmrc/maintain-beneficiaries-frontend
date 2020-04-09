@@ -40,12 +40,15 @@ class IndexController @Inject()(
 
     identifierAction.async {
       implicit request =>
-        (connector.getTrustStartDate(utr) flatMap { date =>
-          repo.set(UserAnswers(
-            request.user.internalId,
-            utr,
-            LocalDate.parse(date.startDate)
-          )).map(_ =>
+        (connector.getTrustDetails(utr) flatMap { details =>
+          repo.set(
+            UserAnswers(
+              internalAuthId = request.user.internalId,
+              utr = utr,
+              whenTrustSetup = LocalDate.parse(details.startDate),
+              trustType = details.typeOfTrust
+            )
+          ).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
         }).recover {case _ => InternalServerError}

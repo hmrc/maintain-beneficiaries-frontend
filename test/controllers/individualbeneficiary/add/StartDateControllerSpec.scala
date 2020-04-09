@@ -21,7 +21,7 @@ import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import config.annotations.AddIndividualBeneficiary
 import forms.DateAddedToTrustFormProvider
-import models.{Name, UserAnswers}
+import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -51,7 +51,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   val name = Name("New", None, "Beneficiary")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", date)
+  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", date, TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name)
     .success.value
 

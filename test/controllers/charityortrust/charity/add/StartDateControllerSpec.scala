@@ -21,6 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
 import forms.DateAddedToTrustFormProvider
+import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{NamePage, StartDatePage}
@@ -40,7 +41,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date)
+  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date,TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
 
   "NonUkAddress Controller" must {

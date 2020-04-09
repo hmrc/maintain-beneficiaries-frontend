@@ -25,7 +25,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.HowManyBeneficiaries.Over501
 import models.beneficiaries._
-import models.{Name, TrustDetails, TrustStartDate, TypeOfTrust, UkAddress}
+import models.{Name, TrustDetails, TypeOfTrust, UkAddress}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -108,52 +108,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       whenReady(processed) {
         r =>
           r mustBe TrustDetails(startDate = "1920-03-28", typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust)
-      }
-
-    }
-
-    "get trusts start date" in {
-
-      val utr = "1000000008"
-
-      val json = Json.parse(
-        """
-          |{
-          | "startDate": "1920-03-28",
-          | "lawCountry": "AD",
-          | "administrationCountry": "GB",
-          | "residentialStatus": {
-          |   "uk": {
-          |     "scottishLaw": false,
-          |     "preOffShore": "AD"
-          |   }
-          | },
-          | "typeOfTrust": "Will Trust or Intestacy Trust",
-          | "deedOfVariation": "Previously there was only an absolute interest under the will",
-          | "interVivos": false
-          |}
-          |""".stripMargin)
-
-      val application = applicationBuilder()
-        .configure(
-          Seq(
-            "microservice.services.trusts.port" -> server.port(),
-            "auditing.enabled" -> false
-          ): _*
-        ).build()
-
-      val connector = application.injector.instanceOf[TrustConnector]
-
-      server.stubFor(
-        get(urlEqualTo(s"/trusts/$utr/trust-details"))
-          .willReturn(okJson(json.toString))
-      )
-
-      val processed = connector.getTrustStartDate(utr)
-
-      whenReady(processed) {
-        r =>
-          r mustBe TrustStartDate(startDate = "1920-03-28")
       }
 
     }
