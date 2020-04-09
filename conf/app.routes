@@ -10,6 +10,7 @@
 ->         /charity/amend                                                   charityBeneficiary.amend.Routes
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 
+->         /other/add                                                       otherBeneficiary.add.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
 ->         /trust/add                                                       trustBeneficiary.add.Routes

@@ -19,7 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import javax.inject.Inject
 import models.{RemoveBeneficiary, TrustStartDate}
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary}
+import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary}
 import play.api.libs.json.{JsString, JsValue, Json, Writes}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -84,5 +84,11 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
   def amendCharityBeneficiary(utr: String, index: Int, beneficiary: CharityBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](amendCharityBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
+  }
+
+  private def addOtherBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-other-beneficiary/$utr"
+
+  def addOtherBeneficiary(utr: String, beneficiary: OtherBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    http.POST[JsValue, HttpResponse](addOtherBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 }

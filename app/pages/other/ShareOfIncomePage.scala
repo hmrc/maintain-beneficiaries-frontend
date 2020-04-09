@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.actions
+package pages.other
 
-import models.UserAnswers
-import models.requests.DataRequest
-import play.api.mvc.WrappedRequest
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class DescriptionRequest[T](request: DataRequest[T], description: String) extends WrappedRequest[T](request){
-  val userAnswers:UserAnswers = request.userAnswers
+case object ShareOfIncomePage extends QuestionPage[Int] {
+
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "shareOfIncome"
 }

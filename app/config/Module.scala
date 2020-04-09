@@ -22,7 +22,7 @@ import controllers.actions._
 import navigation.trustBeneficiary._
 import navigation.charityBeneficiary._
 import navigation.individualBeneficiary._
-import navigation.{ClassOfBeneficiaryNavigator, Navigator}
+import navigation._
 import repositories.{MongoRepository, PlaybackRepository}
 import services.{AuthenticationService, AuthenticationServiceImpl}
 
@@ -44,6 +44,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[AmendIndividualBeneficiary]).to(classOf[AmendIndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddCharityBeneficiary]).to(classOf[AddCharityBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendCharityBeneficiary]).to(classOf[AmendCharityBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[AddOtherBeneficiary]).to(classOf[AddOtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddTrustBeneficiary]).to(classOf[AddTrustBeneficiaryNavigator]).asEagerSingleton()
 
   }

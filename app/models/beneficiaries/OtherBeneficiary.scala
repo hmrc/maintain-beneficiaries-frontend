@@ -46,4 +46,12 @@ object OtherBeneficiary {
         OtherBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
 
+  implicit val writes: Writes[OtherBeneficiary] =
+    ((__ \ 'description).write[String] and
+      (__ \ 'address).writeNullable[Address] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+      ).apply(unlift(OtherBeneficiary.unapply))
 }
