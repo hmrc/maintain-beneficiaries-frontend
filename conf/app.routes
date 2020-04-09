@@ -13,6 +13,10 @@
 ->         /other/add                                                       otherBeneficiary.add.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
+->         /trust/remove                                                    trustBeneficiary.remove.Routes
+
+->         /company/remove                                                  companyBeneficiary.remove.Routes
+
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()
@@ -34,6 +38,7 @@ GET        /feature-not-available                                           cont
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
+POST       /complete                                                        controllers.AddABeneficiaryController.submitComplete()
 
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
 POST       /what-kind                                                       controllers.AddNowController.onSubmit()

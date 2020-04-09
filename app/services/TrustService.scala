@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy
 import connectors.TrustConnector
 import javax.inject.Inject
 import models.RemoveBeneficiary
-import models.beneficiaries.{Beneficiaries, CharityBeneficiary, ClassOfBeneficiary, IndividualBeneficiary, OtherBeneficiary}
+import models.beneficiaries._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,6 +42,12 @@ class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService
   override def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] =
     getBeneficiaries(utr).map(_.other(index))
 
+  override def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] =
+    getBeneficiaries(utr).map(_.trust(index))
+
+  override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
+    getBeneficiaries(utr).map(_.company(index))
+
   override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     connector.removeBeneficiary(utr, beneficiary)
 
@@ -59,6 +65,10 @@ trait TrustService {
   def getIndividualBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary]
 
   def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary]
+
+  def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary]
+
+  def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary]
 
   def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[HttpResponse]
 }

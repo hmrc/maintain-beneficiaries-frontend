@@ -17,6 +17,7 @@
 @import controllers.routes._
 @import models.AddABeneficiary
 @import viewmodels.addAnother.AddRow
+@import viewmodels.RadioOption
 
 @this(
     main_template: MainTemplate,
@@ -26,7 +27,8 @@
 @(form: Form[_],
     inProgressBeneficiaries: Seq[AddRow],
     completeBeneficiaries: Seq[AddRow],
-    heading: String)(implicit request: Request[_], messages: Messages)
+    heading: String,
+    maxedOut: List[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} $heading"
@@ -43,6 +45,25 @@
         @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
 
         @components.data_list(completeBeneficiaries, "complete", "beneficiary")
+
+        @if(maxedOut.size == 1) {
+            <ul>
+                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
+                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
+            </ul>
+        } else if(maxedOut.size > 1) {
+            <ul>
+                <li class="panel-indent">
+                    <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
+                    <ul class="govuk-list">
+                        @for(option <- maxedOut) {
+                            <li>@messages(option)</li>
+                        }
+                    </ul>
+                </li>
+                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
+            </ul>
+        }
 
         @components.input_radio(
             field = form("value"),

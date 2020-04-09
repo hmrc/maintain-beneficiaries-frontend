@@ -37,8 +37,9 @@ import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import utils.AddABeneficiaryViewHelper
 import viewmodels.addAnother.AddRow
-import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView}
+import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,6 +48,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   lazy val getRoute : String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute : String = controllers.routes.AddABeneficiaryController.submitAnother().url
   lazy val submitYesNoRoute : String = controllers.routes.AddABeneficiaryController.submitOne().url
+  lazy val submitCompleteRoute : String = controllers.routes.AddABeneficiaryController.submitComplete().url
 
   val mockStoreConnector : TrustStoreConnector = mock[TrustStoreConnector]
 
@@ -134,9 +136,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   val beneficiaryRows = List(
     AddRow("First Last", typeLabel = "Named individual", "Change details", Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(0).url)),
     AddRow("Unidentified Beneficiary", typeLabel = "Class of beneficiaries", "Change details", Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(0).url), "Remove", Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)),
-    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Humanitarian Company Ltd", typeLabel = "Named company", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(0).url)),
     AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
-    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(featureNotAvailable)),
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)),
     AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.other.remove.routes.RemoveOtherBeneficiaryController.onPageLoad(0).url))
   )
@@ -161,6 +163,12 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
     override def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] =
       Future.successful(otherBeneficiary)
+
+    override def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] =
+      Future.successful(trustBeneficiary)
+
+    override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
+      Future.successful(companyBeneficiary)
   }
 
   " AddABeneficiary Controller" when {
@@ -293,7 +301,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -364,7 +372,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries")(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
 
         application.stop()
       }
@@ -402,6 +410,129 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(playbackRepository).set(uaCaptor.capture)
         uaCaptor.getValue.data mustBe Json.obj()
+      }
+
+    }
+
+    "maxed out beneficiaries" must {
+
+      val beneficiaries = Beneficiaries(
+        List.fill(25)(individualBeneficiary),
+        List.fill(25)(unidentifiedBeneficiary),
+        List.fill(25)(companyBeneficiary),
+        List.fill(25)(employmentRelatedBeneficiary),
+        List.fill(25)(trustBeneficiary),
+        List.fill(25)(charityBeneficiary),
+        List.fill(25)(otherBeneficiary)
+      )
+
+      val fakeService = new FakeService(beneficiaries)
+
+      val beneficiaryRows = new AddABeneficiaryViewHelper(beneficiaries).rows
+
+      "return OK and the correct view for a GET" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[MaxedOutBeneficiariesView]
+
+        status(result) mustEqual OK
+
+        val content = contentAsString(result)
+
+        content mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+        content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
+        content must include("If you have further beneficiaries to add, write to HMRC with their details.")
+
+        application.stop()
+
+      }
+
+      "return correct view when one type of beneficiary is maxed out" in {
+
+        val beneficiaries = Beneficiaries(
+          Nil,
+          Nil,
+          Nil,
+          Nil,
+          Nil,
+          List.fill(25)(charityBeneficiary),
+          Nil
+        )
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        contentAsString(result) must include("You cannot add another charity as you have entered a maximum of 25.")
+        contentAsString(result) must include("If you have further beneficiaries to add within this type, write to HMRC with their details.")
+
+        application.stop()
+
+      }
+
+      "return correct view when more than one type of beneficiary is maxed out" in {
+
+        val beneficiaries = Beneficiaries(
+          Nil,
+          List.fill(25)(unidentifiedBeneficiary),
+          Nil,
+          Nil,
+          Nil,
+          List.fill(25)(charityBeneficiary),
+          Nil
+        )
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService)
+        )).build()
+
+        val request = FakeRequest(GET, getRoute)
+
+        val result = route(application, request).value
+
+        contentAsString(result) must include("You have entered the maximum number of beneficiaries for:")
+        contentAsString(result) must include("If you have further beneficiaries to add within these types, write to HMRC with their details.")
+
+        application.stop()
+
+      }
+
+      "redirect to add to page and set beneficiaries to complete when user clicks continue" in {
+
+        val fakeService = new FakeService(beneficiaries)
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
+          bind(classOf[TrustService]).toInstance(fakeService),
+          bind(classOf[TrustStoreConnector]).toInstance(mockStoreConnector)
+        )).build()
+
+        val request = FakeRequest(POST, submitCompleteRoute)
+
+        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse.apply(200)))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
+
+        application.stop()
+
       }
 
     }
