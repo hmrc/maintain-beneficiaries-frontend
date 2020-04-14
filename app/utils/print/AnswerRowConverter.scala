@@ -57,7 +57,7 @@ class AnswerRowConverter @Inject()() {
           HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
           x match {
             case NA => HtmlFormat.escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
-            case _ => HtmlFormat.escape(messages("individualBeneficiary.roleInCompany." + x.toString))
+            case _ => HtmlFormat.escape(messages(s"individualBeneficiary.roleInCompany.$x"))
           },
           changeUrl
         )
