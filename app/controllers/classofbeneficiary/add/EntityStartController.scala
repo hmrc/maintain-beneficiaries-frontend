@@ -19,7 +19,7 @@ package controllers.classofbeneficiary.add
 import config.annotations.ClassOfBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import controllers.classofbeneficiary.actions.DescriptionRequiredAction
+import controllers.actions.classofbeneficiary.DescriptionRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
