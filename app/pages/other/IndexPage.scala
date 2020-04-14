@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,32 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import controllers.other.add.routes._
+package pages.other
 
-@this(
-  main_template: MainTemplate,
-  formHelper: FormWithCSRF
-)
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+case object IndexPage extends QuestionPage[Int] {
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("site.address.uk.title")}"
-) {
+  override def path: JsPath = basePath \ toString
 
-    @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
-
-        @components.back_link()
-
-        @components.error_summary(form.errors)
-
-        @components.heading("site.address.uk.heading", Some(name))
-
-        @components.uk_address(form)
-
-        @components.submit_button()
-
-    }
+  override def toString: String = "index"
 }

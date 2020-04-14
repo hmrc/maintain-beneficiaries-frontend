@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.other.add.routes._
+@import controllers.other.amend.routes._
 
 @this(
         main_template: MainTemplate,
@@ -24,10 +24,10 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.addressUkYesNo.title")}"
+    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.discretionYesNo.title")}"
 ) {
 
-    @formHelper(action = AddressUkYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = DiscretionYesNoController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -35,8 +35,9 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages("otherBeneficiary.addressUkYesNo.heading", name),
-            headingIsLegend = true
+            legend = messages("otherBeneficiary.discretionYesNo.heading", name),
+            headingIsLegend = true,
+            hint = Some(messages("otherBeneficiary.discretionYesNo.hint"))
         )
 
         @components.submit_button()
