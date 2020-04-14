@@ -19,3 +19,6 @@ POST        /uk-address                 controllers.charityortrust.trust.add.UkA
 
 GET         /non-uk-address             controllers.charityortrust.trust.add.NonUkAddressController.onPageLoad()
 POST        /non-uk-address             controllers.charityortrust.trust.add.NonUkAddressController.onSubmit()
+
+GET         /start-date                 controllers.charityortrust.trust.add.StartDateController.onPageLoad()
+POST        /start-date                 controllers.charityortrust.trust.add.StartDateController.onSubmit()
