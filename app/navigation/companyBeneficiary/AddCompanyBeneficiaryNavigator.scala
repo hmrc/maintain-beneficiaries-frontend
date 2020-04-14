@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.companyBeneficiary
 
 import controllers.companyoremploymentrelated.company.add.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
+import navigation.Navigator
 import pages.companyoremploymentrelated.company._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call

@@ -1,0 +1,29 @@
+GET         /name                                   controllers.companyoremploymentrelated.company.amend.NameController.onPageLoad()
+POST        /name                                   controllers.companyoremploymentrelated.company.amend.NameController.onSubmit()
+
+GET         /has-discretion                         controllers.companyoremploymentrelated.company.amend.DiscretionYesNoController.onPageLoad()
+POST        /has-discretion                         controllers.companyoremploymentrelated.company.amend.DiscretionYesNoController.onSubmit()
+
+GET         /share-of-income                        controllers.companyoremploymentrelated.company.amend.ShareOfIncomeController.onPageLoad()
+POST        /share-of-income                        controllers.companyoremploymentrelated.company.amend.ShareOfIncomeController.onSubmit()
+
+GET         /has-address                            controllers.companyoremploymentrelated.company.amend.AddressYesNoController.onPageLoad()
+POST        /has-address                            controllers.companyoremploymentrelated.company.amend.AddressYesNoController.onSubmit()
+
+GET         /has-uk-address                         controllers.companyoremploymentrelated.company.amend.AddressUkYesNoController.onPageLoad()
+POST        /has-uk-address                         controllers.companyoremploymentrelated.company.amend.AddressUkYesNoController.onSubmit()
+
+GET         /uk-address                             controllers.companyoremploymentrelated.company.amend.UkAddressController.onPageLoad()
+POST        /uk-address                             controllers.companyoremploymentrelated.company.amend.UkAddressController.onSubmit()
+
+GET         /non-uk-address                         controllers.companyoremploymentrelated.company.amend.NonUkAddressController.onPageLoad()
+POST        /non-uk-address                         controllers.companyoremploymentrelated.company.amend.NonUkAddressController.onSubmit()
+
+GET        /:index/check-details                    controllers.companyoremploymentrelated.company.amend.CheckDetailsController.extractAndRender(index: Int)
+
+GET        /check-details-without-amend             controllers.companyoremploymentrelated.company.amend.CheckDetailsUtrController.onPageLoad()
+POST       /check-details-without-amend             controllers.companyoremploymentrelated.company.amend.CheckDetailsUtrController.onSubmit()
+
+GET        /:index/updated-details                  controllers.companyoremploymentrelated.company.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
+
+POST       /:index/check-details                    controllers.companyoremploymentrelated.company.amend.CheckDetailsController.onSubmit(index: Int)
