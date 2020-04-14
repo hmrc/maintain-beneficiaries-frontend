@@ -22,7 +22,7 @@ import forms.UkAddressFormProvider
 import models.UkAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{NamePage, UkAddressPage}
+import pages.charityortrust.trust.{NamePage, UkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

@@ -18,11 +18,11 @@ package controllers.charityortrust.trust.add
 
 import config.annotations.AddTrustBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.charity.NameRequiredAction
+import controllers.actions.trust.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.charityortrust.charity.StartDatePage
+import pages.charityortrust.trust.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository

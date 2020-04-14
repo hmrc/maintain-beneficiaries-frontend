@@ -24,7 +24,7 @@ import forms.DateAddedToTrustFormProvider
 import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{NamePage, StartDatePage}
+import pages.charityortrust.trust.{NamePage, StartDatePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
