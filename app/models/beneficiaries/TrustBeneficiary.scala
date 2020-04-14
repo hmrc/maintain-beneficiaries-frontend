@@ -20,9 +20,10 @@ import java.time.LocalDate
 
 import models.Address
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsResult, JsSuccess, JsValue, Reads, __}
+import play.api.libs.json.{JsPath, JsResult, JsSuccess, JsValue, Reads, Writes, __}
 
 final case class TrustBeneficiary(name: String,
+                                  utr: Option[String],
                                   address : Option[Address],
                                   income: Option[String],
                                   incomeDiscretionYesNo: Boolean,
@@ -32,19 +33,30 @@ final case class TrustBeneficiary(name: String,
 object TrustBeneficiary {
   implicit val reads: Reads[TrustBeneficiary] =
     ((__ \ 'organisationName).read[String] and
+      Reads(_ => JsSuccess(None)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)).tupled.map {
 
-      case (name, address, None, _, entityStart, provisional) =>
-        TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, address, _, Some(true), entityStart, provisional) =>
-        TrustBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, address, income, _, entityStart, provisional) =>
-        TrustBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
+      case (name, utr, address, None, _, entityStart, provisional) =>
+        TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, utr, address, _, Some(true), entityStart, provisional) =>
+        TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+      case (name, utr, address, income, _, entityStart, provisional) =>
+        TrustBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
     }
+
+  implicit val writes: Writes[TrustBeneficiary] =
+    ((__ \ 'organisationName).write[String] and
+      (__ \ 'identification \ 'utr).writeNullable[String] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
+      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+      ).apply(unlift(TrustBeneficiary.unapply))
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)

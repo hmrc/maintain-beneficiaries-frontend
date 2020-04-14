@@ -96,9 +96,9 @@ class AddTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyC
         .mustBe(StartDateController.onPageLoad())
     }
 
-    "Start date page -> Check your answers page" ignore {
+    "Start date page -> Check your answers page" in {
       navigator.nextPage(StartDatePage, emptyUserAnswers)
-        .mustBe(StartDateController.onPageLoad())
+        .mustBe(CheckDetailsController.onPageLoad())
     }
   }
 }
