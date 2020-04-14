@@ -44,7 +44,9 @@ class NameController @Inject()(
                                 @AddTrustBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("trustBeneficiary.name", 105)
+  private val length: Int = 105
+
+  val form: Form[String] = formProvider.withPrefix("trustBeneficiary.name", length)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>

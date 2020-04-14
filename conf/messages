@@ -100,6 +100,7 @@ checkYourAnswers.heading = Check Your Answers
 date.day = Day
 date.month = Month
 date.year = Year
+date.hidden =  in numbers
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
@@ -509,6 +510,31 @@ trustBeneficiary.shareOfIncome.error.required = Enter what percentage of the tru
 trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
+
+trustBeneficiary.addressYesNo.title = Do you know the trust beneficiary’s address?
+trustBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+trustBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+trustBeneficiary.addressYesNo.error.required = Select yes if you know the trust beneficiary’s address
+
+trustBeneficiary.addressUkYesNo.title = Is the trust beneficiary’s address in the UK?
+trustBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+trustBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+trustBeneficiary.addressUkYesNo.error.required = Select yes if the trust beneficiary’s address is in the UK
+
+trustBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+trustBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+trustBeneficiary.startDate.title = When was the trust beneficiary added as a beneficiary?
+trustBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+trustBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+trustBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
+trustBeneficiary.startDate.hint = For example, 31 3 1980
+trustBeneficiary.startDate.error.required.all = Enter the date the trust beneficiary was added to the trust
+trustBeneficiary.startDate.error.required.two = The date the trust beneficiary was added to the trust must include a {0} and a {1}
+trustBeneficiary.startDate.error.required = The date the trust beneficiary was added to the trust must include a {0}
+trustBeneficiary.startDate.error.invalid = Enter a real date
+trustBeneficiary.startDate.error.future = The date the trust beneficiary was added to the trust must be today or in the past
+trustBeneficiary.startDate.error.past = The date the trust beneficiary was added to the trust cannot be before the start date of the trust
 
 removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
 removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
