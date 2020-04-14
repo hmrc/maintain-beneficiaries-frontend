@@ -19,20 +19,19 @@ package extractors
 import com.google.inject.Inject
 import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
-import pages.other.DescriptionPage
 
 import scala.util.Try
 
 class OtherBeneficiaryExtractor @Inject()() {
 
-  import pages.charityortrust.charity._
+  import pages.other._
 
   def apply(answers: UserAnswers,
             otherBeneficiary : OtherBeneficiary,
             index: Int): Try[UserAnswers] =
   {
 
-    answers.deleteAtPath(pages.charityortrust.charity.basePath)
+    answers.deleteAtPath(pages.other.basePath)
               .flatMap(_.set(DescriptionPage, otherBeneficiary.description))
               .flatMap(answers => extractAddress(otherBeneficiary.address, answers))
               .flatMap(answers => extractShareOfIncome(otherBeneficiary, answers))

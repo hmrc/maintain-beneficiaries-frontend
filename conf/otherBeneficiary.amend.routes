@@ -19,8 +19,8 @@ POST        /uk-address                 controllers.other.amend.UkAddressControl
 GET         /non-uk-address             controllers.other.amend.NonUkAddressController.onPageLoad()
 POST        /non-uk-address             controllers.other.amend.NonUkAddressController.onSubmit()
 
-GET        /:index/check-details        controllers.other.amend.CheckDetailsController.extractAndRender(index: Int)
-POST       /:index/check-details        controllers.other.amend.CheckDetailsController.onSubmit(index: Int)
+GET         /:index/check-details       controllers.other.amend.CheckDetailsController.extractAndRender(index: Int)
+POST        /:index/check-details       controllers.other.amend.CheckDetailsController.onSubmit(index: Int)
 
-GET        /:index/updated-details      controllers.other.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
+GET         /:index/updated-details     controllers.other.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
 
