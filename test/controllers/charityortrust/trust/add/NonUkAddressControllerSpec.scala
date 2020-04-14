@@ -22,7 +22,7 @@ import forms.NonUkAddressFormProvider
 import models.NonUkAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{NamePage, NonUkAddressPage}
+import pages.charityortrust.trust.{NamePage, NonUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

@@ -1,17 +1,17 @@
 GET        /description                              controllers.individualbeneficiary.add.NameController.onPageLoad()
 POST       /description                              controllers.individualbeneficiary.add.NameController.onSubmit()
 
-GET        /date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
-POST       /date-of-birth-yes-no                     controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
+GET        /know-date-of-birth                       controllers.individualbeneficiary.add.DateOfBirthYesNoController.onPageLoad()
+POST       /know-date-of-birth                       controllers.individualbeneficiary.add.DateOfBirthYesNoController.onSubmit()
 
 GET        /date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onPageLoad()
 POST       /date-of-birth                            controllers.individualbeneficiary.add.DateOfBirthController.onSubmit()
 
-GET        /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
-POST       /income-discretion-yes-no                 controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
+GET        /has-discretion                           controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onPageLoad()
+POST       /has-discretion                           controllers.individualbeneficiary.add.IncomeDiscretionYesNoController.onSubmit()
 
-GET        /share-of-income                        controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
-POST       /share-of-income                        controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
+GET        /share-of-income                          controllers.individualbeneficiary.add.IncomePercentageController.onPageLoad()
+POST       /share-of-income                          controllers.individualbeneficiary.add.IncomePercentageController.onSubmit()
 
 GET        /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onPageLoad()
 POST       /has-national-insurance-number            controllers.individualbeneficiary.add.NationalInsuranceNumberYesNoController.onSubmit()
@@ -46,11 +46,11 @@ POST       /id-card                                  controllers.individualbenef
 GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onPageLoad()
 POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.add.VPE1FormYesNoController.onSubmit()
 
-GET        /role-in-company                         controllers.individualbeneficiary.add.RoleInCompanyController.onPageLoad()
-POST       /role-in-company                         controllers.individualbeneficiary.add.RoleInCompanyController.onSubmit()
+GET        /role-in-company                          controllers.individualbeneficiary.add.RoleInCompanyController.onPageLoad()
+POST       /role-in-company                          controllers.individualbeneficiary.add.RoleInCompanyController.onSubmit()
 
-GET        /start-date                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
-POST       /start-date                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
+GET        /when-added                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
+POST       /when-added                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
 
 GET        /check-details                            controllers.individualbeneficiary.add.CheckDetailsController.onPageLoad()
 POST       /check-details                            controllers.individualbeneficiary.add.CheckDetailsController.onSubmit()

@@ -66,7 +66,7 @@ class CompanyOrEmploymentRelatedController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-              case Company => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
+              case Company => Redirect(controllers.companyoremploymentrelated.company.add.routes.NameController.onPageLoad())
               case EmploymentRelated => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
             }
           }

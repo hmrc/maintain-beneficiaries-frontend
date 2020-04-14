@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.actions
+package controllers.actions.trust
 
 import controllers.actions
-import controllers.actions.DescriptionRequest
+import controllers.actions.BeneficiaryNameRequest
 import javax.inject.Inject
 import models.requests.DataRequest
-import pages.classofbeneficiary.DescriptionPage
+import pages.charityortrust.trust.NamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionRequiredAction @Inject()(val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionTransformer[DataRequest, DescriptionRequest] with I18nSupport {
+class NameRequiredAction @Inject()(val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+  extends ActionTransformer[DataRequest, BeneficiaryNameRequest] with I18nSupport {
 
-  override protected def transform[A](request: DataRequest[A]): Future[DescriptionRequest[A]] = {
-    Future.successful(actions.DescriptionRequest[A](request,
-      getDescription(request)
+  override protected def transform[A](request: DataRequest[A]): Future[BeneficiaryNameRequest[A]] = {
+    Future.successful(actions.BeneficiaryNameRequest[A](request,
+      getName(request)
     ))
   }
 
-  private def getDescription[A](request: DataRequest[A]): String = {
-    request.userAnswers.get(DescriptionPage) match {
-      case Some(description) => description
-      case None => request.messages(messagesApi)("classOfBeneficiary.description.default")
+  private def getName[A](request: DataRequest[A]): String = {
+    request.userAnswers.get(NamePage) match {
+      case Some(name) => name
+      case _ => request.messages(messagesApi)("site.beneficiary.defaultText")
     }
   }
 }

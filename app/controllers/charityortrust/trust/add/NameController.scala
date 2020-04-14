@@ -22,7 +22,7 @@ import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.charityortrust.charity.NamePage
+import pages.charityortrust.trust.NamePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -44,7 +44,9 @@ class NameController @Inject()(
                                 @AddTrustBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("trustBeneficiary.name", 105)
+  private val length: Int = 105
+
+  val form: Form[String] = formProvider.withPrefix("trustBeneficiary.name", length)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>

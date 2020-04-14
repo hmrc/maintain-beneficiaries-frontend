@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
-import utils.print.OtherBeneficiaryPrintHelper
+import utils.print.AmendOtherBeneficiaryPrintHelper
 import views.html.other.amend.CheckDetailsView
 
 import scala.concurrent.Future
@@ -88,7 +88,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[OtherBeneficiaryPrintHelper]
+      val printHelper = application.injector.instanceOf[AmendOtherBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, description)
 
       status(result) mustEqual OK

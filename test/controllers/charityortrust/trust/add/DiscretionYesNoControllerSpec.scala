@@ -21,7 +21,7 @@ import config.annotations.AddTrustBeneficiary
 import forms.YesNoFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.{DiscretionYesNoPage, NamePage}
+import pages.charityortrust.trust.{DiscretionYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

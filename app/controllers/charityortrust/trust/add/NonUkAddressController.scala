@@ -18,11 +18,11 @@ package controllers.charityortrust.trust.add
 
 import config.annotations.AddTrustBeneficiary
 import controllers.actions._
-import controllers.actions.charity.NameRequiredAction
+import controllers.actions.trust.NameRequiredAction
 import forms.NonUkAddressFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.charityortrust.charity.NonUkAddressPage
+import pages.charityortrust.trust.NonUkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository

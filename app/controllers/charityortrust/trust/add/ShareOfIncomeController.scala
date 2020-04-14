@@ -19,11 +19,11 @@ package controllers.charityortrust.trust.add
 import config.annotations.AddTrustBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import controllers.actions.charity.NameRequiredAction
+import controllers.actions.trust.NameRequiredAction
 import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.charityortrust.charity.ShareOfIncomePage
+import pages.charityortrust.trust.ShareOfIncomePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
