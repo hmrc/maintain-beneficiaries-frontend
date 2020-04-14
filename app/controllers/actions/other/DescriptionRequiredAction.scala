@@ -38,7 +38,7 @@ class DescriptionRequiredAction @Inject()(val executionContext: ExecutionContext
   private def getDescription[A](request: DataRequest[A]): String = {
     request.userAnswers.get(DescriptionPage) match {
       case Some(description) => description
-      case None => request.messages(messagesApi)("classOfBeneficiary.description.default")
+      case None => request.messages(messagesApi)("otherBeneficiary.description.default")
     }
   }
 }
