@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.charityBeneficiary
 
 import base.SpecBase
+import controllers.charityortrust.charity.add.routes._
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._
-import controllers.charityortrust.charity.amend.{routes => rts}
-import navigation.charityBeneficiary.AmendCharityBeneficiaryNavigator
 
-class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class AddCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new AmendCharityBeneficiaryNavigator
+  val navigator = new AddCharityBeneficiaryNavigator
 
   "Charity beneficiary navigator" when {
 
     "Name page -> Discretion yes no page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(rts.DiscretionYesNoController.onPageLoad())
+        .mustBe(DiscretionYesNoController.onPageLoad())
     }
 
     "Discretion yes no page -> Yes -> Address yes no page" in {
@@ -38,7 +37,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(DiscretionYesNoPage, true).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(AddressYesNoController.onPageLoad())
     }
 
     "Discretion yes no page -> No -> Share of income page" in {
@@ -46,21 +45,20 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(DiscretionYesNoPage, false).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.ShareOfIncomeController.onPageLoad())
+        .mustBe(ShareOfIncomeController.onPageLoad())
     }
 
     "Share of income page -> Address yes no page" in {
       navigator.nextPage(ShareOfIncomePage, emptyUserAnswers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(AddressYesNoController.onPageLoad())
     }
 
-    "Address yes no page -> No -> Check your answers page" in {
+    "Address yes no page -> No -> Start date page" in {
       val answers = emptyUserAnswers
         .set(AddressYesNoPage, false).success.value
-        .set(IndexPage, 0).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+        .mustBe(StartDateController.onPageLoad())
     }
 
     "Address yes no page -> Yes -> Address in the UK yes no page" in {
@@ -68,7 +66,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressYesNoPage, true).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.AddressUkYesNoController.onPageLoad())
+        .mustBe(AddressUkYesNoController.onPageLoad())
     }
 
     "Address in the UK yes no page -> Yes -> UK address page" in {
@@ -76,7 +74,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressUkYesNoPage, true).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.UkAddressController.onPageLoad())
+        .mustBe(UkAddressController.onPageLoad())
     }
 
     "Address in the UK yes no page -> No -> Non-UK address page" in {
@@ -84,24 +82,22 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressUkYesNoPage, false).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.NonUkAddressController.onPageLoad())
+        .mustBe(NonUkAddressController.onPageLoad())
     }
 
-    "UK address page -> Check your answers page" in {
-      val answers = emptyUserAnswers
-        .set(IndexPage, 0).success.value
-
-      navigator.nextPage(UkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+    "UK address page -> Start date page" in {
+      navigator.nextPage(UkAddressPage, emptyUserAnswers)
+        .mustBe(StartDateController.onPageLoad())
     }
 
-    "Non-UK address page -> Check your answers page" in {
-      val answers = emptyUserAnswers
-        .set(AddressYesNoPage, false).success.value
-        .set(IndexPage, 0).success.value
+    "Non-UK address page -> Start date page" in {
+      navigator.nextPage(NonUkAddressPage, emptyUserAnswers)
+        .mustBe(StartDateController.onPageLoad())
+    }
 
-      navigator.nextPage(NonUkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+    "Start date page -> Check your answers page" in {
+      navigator.nextPage(StartDatePage, emptyUserAnswers)
+        .mustBe(CheckDetailsController.onPageLoad())
     }
   }
 }

@@ -11,6 +11,7 @@
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 
 ->         /other/add                                                       otherBeneficiary.add.Routes
+->         /other/amend                                                     otherBeneficiary.amend.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
 ->         /trust/add                                                       trustBeneficiary.add.Routes

@@ -14,30 +14,28 @@
  * limitations under the License.
  *@
 
-@import controllers.other.add.routes._
+@import controllers.other.amend.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+  main_template: MainTemplate,
+  formHelper: FormWithCSRF
 )
 
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.addressUkYesNo.title")}"
+    title = s"${errorPrefix(form)} ${messages("site.address.uk.title")}"
 ) {
 
-    @formHelper(action = AddressUkYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_yes_no(
-            field = form("value"),
-            legend = messages("otherBeneficiary.addressUkYesNo.heading", name),
-            headingIsLegend = true
-        )
+        @components.heading("site.address.uk.heading", Some(name))
+
+        @components.uk_address(form)
 
         @components.submit_button()
 

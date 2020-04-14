@@ -14,32 +14,28 @@
  * limitations under the License.
  *@
 
-@import controllers.other.add.routes._
+@import viewmodels.AnswerSection
+@import controllers.other.amend.routes._
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.addressUkYesNo.title")}"
+    title = messages("otherBeneficiary.checkDetails.title")
 ) {
 
-    @formHelper(action = AddressUkYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(index), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading("otherBeneficiary.checkDetails.heading")
 
-        @components.input_yes_no(
-            field = form("value"),
-            legend = messages("otherBeneficiary.addressUkYesNo.heading", name),
-            headingIsLegend = true
-        )
+        @components.answer_section(answerSection)
 
         @components.submit_button()
-
     }
 }
