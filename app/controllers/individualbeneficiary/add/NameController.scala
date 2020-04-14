@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import config.annotations.AddIndividualBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-import forms.IndividualNameFormProvider
+import forms.NameFormProvider
 import javax.inject.Inject
 import models.Name
 import navigation.Navigator
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NameController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 standardActionSets: StandardActionSets,
-                                formProvider: IndividualNameFormProvider,
+                                formProvider: NameFormProvider,
                                 view: NameView,
                                 trustService: TrustService,
                                 repository: PlaybackRepository,

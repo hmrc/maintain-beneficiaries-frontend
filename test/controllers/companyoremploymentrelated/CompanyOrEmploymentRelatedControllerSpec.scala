@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.charity.amend
+package controllers.companyoremploymentrelated
 
 import base.SpecBase
-import config.annotations.AmendCharityBeneficiary
-import forms.StringFormProvider
-import navigation.{FakeNavigator, Navigator}
+import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
+import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.NamePage
+import pages.companyoremploymentrelated._
 import play.api.data.Form
-import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.charity.amend.NameView
+import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
-class NameControllerSpec extends SpecBase with MockitoSugar {
+class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new StringFormProvider().withPrefix("charityBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad().url
-  private val name: String = "Charity"
-  private val onwardRoute = Call("GET", "/foo")
+  val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
+  lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
+  val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type = CompanyOrEmploymentRelatedToAdd.Company
 
-  "Name Controller" must {
+  "AddNow Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
 
       val result = route(application, request).value
 
@@ -58,41 +54,55 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(NamePage, name).success.value
+      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name))(fakeRequest, messages).toString
+        view(form.fill(companyOrEmploymentRelatedBeneficiaryAnswer))(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the Name page when Company is selected" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].qualifiedWith(classOf[AmendCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", name))
+        FakeRequest(POST, companyOrEmploymentRelatedRoute)
+          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.add.routes.NameController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to feature not available page when Employment Related is selected" in {
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, companyOrEmploymentRelatedRoute)
+          .withFormUrlEncodedBody(("value", CompanyOrEmploymentRelatedToAdd.EmploymentRelated.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
 
       application.stop()
     }
@@ -101,11 +111,11 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, nameRoute)
+      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
 
       val result = route(application, request).value
 
@@ -114,14 +124,14 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm)(fakeRequest, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
 
       val result = route(application, request).value
 
@@ -136,8 +146,8 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", name))
+        FakeRequest(POST, companyOrEmploymentRelatedRoute)
+          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
 
       val result = route(application, request).value
 

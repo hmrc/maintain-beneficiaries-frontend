@@ -14,64 +14,71 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.charity.amend
+package controllers.companyoremploymentrelated.company.add
 
 import base.SpecBase
-import config.annotations.AmendCharityBeneficiary
-import forms.StringFormProvider
+import config.annotations.AddCompanyBeneficiary
+import forms.NonUkAddressFormProvider
+import models.NonUkAddress
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.NamePage
+import pages.companyoremploymentrelated.company.{NamePage, NonUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.charity.amend.NameView
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.companyoremploymentrelated.company.add.NonUkAddressView
 
-class NameControllerSpec extends SpecBase with MockitoSugar {
+class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new StringFormProvider().withPrefix("charityBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad().url
-  private val name: String = "Charity"
+  private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
+  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad().url
+  private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
+  private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
-  "Name Controller" must {
+  val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
+
+  "NonUkAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(NamePage, name).success.value
+      val answers = baseAnswers.set(NonUkAddressPage, answer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name))(fakeRequest, messages).toString
+        view(form.fill(answer), countryOptions, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -81,12 +88,12 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AmendCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddCompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", name))
+        FakeRequest(POST, nonUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "DE"))
 
       val result = route(application, request).value
 
@@ -99,20 +106,20 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, nameRoute)
+      val request = FakeRequest(POST, nonUkAddressRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[NameView]
+      val view = application.injector.instanceOf[NonUkAddressView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, countryOptions, name)(fakeRequest, messages).toString
 
        application.stop()
     }
@@ -121,7 +128,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, nameRoute)
+      val request = FakeRequest(GET, nonUkAddressRoute)
 
       val result = route(application, request).value
 
@@ -136,8 +143,8 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, nameRoute)
-          .withFormUrlEncodedBody(("value", name))
+        FakeRequest(POST, nonUkAddressRoute)
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "DE"))
 
       val result = route(application, request).value
 

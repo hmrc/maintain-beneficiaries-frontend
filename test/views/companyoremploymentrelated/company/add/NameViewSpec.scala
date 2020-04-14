@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company.add
 
-import controllers.charityortrust.charity.add.routes
+import controllers.companyoremploymentrelated.company.add.routes
 import forms.StringFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.html.companyoremploymentrelated.company.add.NameView
 
 class NameViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "companyBeneficiary.name"
 
   val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
   val view: NameView = viewFor[NameView](Some(emptyUserAnswers))

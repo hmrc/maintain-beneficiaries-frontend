@@ -14,38 +14,39 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company.add
 
-import controllers.charityortrust.charity.add.routes
-import forms.StringFormProvider
+import java.time.LocalDate
+
+import forms.DateFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.behaviours.QuestionViewBehaviours
+import views.html.companyoremploymentrelated.company.add.StartDateView
 
-class NameViewSpec extends StringViewBehaviours {
+class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "companyBeneficiary.startDate"
+  val name: String = "Company"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val form: Form[LocalDate] = new DateFormProvider().withPrefix(messageKeyPrefix)
+  val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
 
-  "Name view" must {
+  "StartDate view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, name)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(
+    behave like pageWithDateFields(
       form,
       applyView,
       messageKeyPrefix,
-      None,
-      routes.NameController.onSubmit().url,
-      "value"
+      "value",
+      name
     )
 
     behave like pageWithASubmitButton(applyView(form))

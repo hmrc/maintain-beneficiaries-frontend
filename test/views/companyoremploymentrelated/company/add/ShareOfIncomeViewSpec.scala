@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company.add
 
-import controllers.charityortrust.charity.add.routes
-import forms.StringFormProvider
+import controllers.companyoremploymentrelated.company.add.routes
+import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.behaviours.QuestionViewBehaviours
+import views.html.companyoremploymentrelated.company.add.ShareOfIncomeView
 
-class NameViewSpec extends StringViewBehaviours {
+class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "companyBeneficiary.shareOfIncome"
+  val name: String = "Company"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
+  val view: ShareOfIncomeView = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
 
-  "Name view" must {
+  "ShareOfIncome view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, name)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 

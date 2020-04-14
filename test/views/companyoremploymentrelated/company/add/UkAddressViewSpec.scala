@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company.add
 
-import controllers.charityortrust.charity.add.routes
-import forms.StringFormProvider
+import controllers.companyoremploymentrelated.company.add.routes
+import forms.UkAddressFormProvider
+import models.UkAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.behaviours.UkAddressViewBehaviours
+import views.html.companyoremploymentrelated.company.add.UkAddressView
 
-class NameViewSpec extends StringViewBehaviours {
+class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "site.address.uk"
+  val name: String = "Company"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
 
-  "Name view" must {
+  "UkAddressView" must {
+
+    val view = viewFor[UkAddressView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, name)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(
-      form,
+    behave like ukAddressPage(
       applyView,
-      messageKeyPrefix,
-      None,
-      routes.NameController.onSubmit().url,
-      "value"
+      Some(messageKeyPrefix),
+      routes.UkAddressController.onSubmit().url,
+      name
     )
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }

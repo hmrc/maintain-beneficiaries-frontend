@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.charity.amend
+package controllers.companyoremploymentrelated.company.add
 
 import base.SpecBase
-import config.annotations.AmendCharityBeneficiary
+import config.annotations.AddCompanyBeneficiary
 import forms.StringFormProvider
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.charityortrust.charity.NamePage
+import pages.companyoremploymentrelated.company.NamePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.charityortrust.charity.amend.NameView
+import views.html.companyoremploymentrelated.company.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[String] = new StringFormProvider().withPrefix("charityBeneficiary.name", 105)
+  private val form: Form[String] = new StringFormProvider().withPrefix("companyBeneficiary.name", 105)
   private val nameRoute: String = routes.NameController.onPageLoad().url
-  private val name: String = "Charity"
+  private val name: String = "Company"
   private val onwardRoute = Call("GET", "/foo")
 
   "Name Controller" must {
@@ -81,7 +81,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AmendCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[AddCompanyBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

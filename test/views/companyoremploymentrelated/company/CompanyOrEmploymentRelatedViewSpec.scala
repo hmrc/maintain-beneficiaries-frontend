@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company
 
-import controllers.charityortrust.charity.add.routes
-import forms.StringFormProvider
+import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
+import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.behaviours.OptionsViewBehaviours
+import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
-class NameViewSpec extends StringViewBehaviours {
+class CompanyOrEmploymentRelatedViewSpec extends OptionsViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "companyOrEmploymentRelated"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
+  val view: CompanyOrEmploymentRelatedView = viewFor[CompanyOrEmploymentRelatedView](Some(emptyUserAnswers))
 
-  "Name view" must {
+  "CompanyOrEmploymentRelated view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form)(fakeRequest, messages)
@@ -39,14 +39,9 @@ class NameViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(
-      form,
-      applyView,
-      messageKeyPrefix,
-      None,
-      routes.NameController.onSubmit().url,
-      "value"
-    )
+    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
+
+    behave like pageWithOptions(form, applyView, CompanyOrEmploymentRelatedToAdd.options)
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -18,7 +18,7 @@ package controllers.individualbeneficiary.add
 
 import base.SpecBase
 import config.annotations.AddIndividualBeneficiary
-import forms.IndividualNameFormProvider
+import forms.NameFormProvider
 import models.Name
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,7 +31,7 @@ import views.html.individualbeneficiary.add.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form = new IndividualNameFormProvider().withPrefix("individualBeneficiary.name")
+  private val form = new NameFormProvider().withPrefix("individualBeneficiary.name")
   private lazy val nameRoute = routes.NameController.onPageLoad().url
   private val name = Name("First", Some("Middle"), "Last")
 

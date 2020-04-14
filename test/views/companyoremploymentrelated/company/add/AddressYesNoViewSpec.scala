@@ -14,41 +14,35 @@
  * limitations under the License.
  */
 
-package views.charityortrust.charity.add
+package views.companyoremploymentrelated.company.add
 
-import controllers.charityortrust.charity.add.routes
-import forms.StringFormProvider
+import controllers.companyoremploymentrelated.company.add.routes
+import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.StringViewBehaviours
-import views.html.charityortrust.charity.add.NameView
+import views.behaviours.YesNoViewBehaviours
+import views.html.companyoremploymentrelated.company.add.AddressYesNoView
 
-class NameViewSpec extends StringViewBehaviours {
+class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.name"
+  val messageKeyPrefix = "companyBeneficiary.addressYesNo"
+  val name: String = "Company"
 
-  val form: Form[String] = new StringFormProvider().withPrefix(messageKeyPrefix, 105)
-  val view: NameView = viewFor[NameView](Some(emptyUserAnswers))
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "Name view" must {
+  "AddressYesNo view" must {
+
+    val view = viewFor[AddressYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, name)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithTextFields(
-      form,
-      applyView,
-      messageKeyPrefix,
-      None,
-      routes.NameController.onSubmit().url,
-      "value"
-    )
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.AddressYesNoController.onSubmit().url)
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }

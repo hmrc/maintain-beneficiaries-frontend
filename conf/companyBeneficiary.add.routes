@@ -1,0 +1,26 @@
+GET         /name                       controllers.companyoremploymentrelated.company.add.NameController.onPageLoad()
+POST        /name                       controllers.companyoremploymentrelated.company.add.NameController.onSubmit()
+
+GET         /discretion-yes-no          controllers.companyoremploymentrelated.company.add.DiscretionYesNoController.onPageLoad()
+POST        /discretion-yes-no          controllers.companyoremploymentrelated.company.add.DiscretionYesNoController.onSubmit()
+
+GET         /share-of-income            controllers.companyoremploymentrelated.company.add.ShareOfIncomeController.onPageLoad()
+POST        /share-of-income            controllers.companyoremploymentrelated.company.add.ShareOfIncomeController.onSubmit()
+
+GET         /has-address                controllers.companyoremploymentrelated.company.add.AddressYesNoController.onPageLoad()
+POST        /has-address                controllers.companyoremploymentrelated.company.add.AddressYesNoController.onSubmit()
+
+GET         /has-uk-address             controllers.companyoremploymentrelated.company.add.AddressUkYesNoController.onPageLoad()
+POST        /has-uk-address             controllers.companyoremploymentrelated.company.add.AddressUkYesNoController.onSubmit()
+
+GET         /uk-address                 controllers.companyoremploymentrelated.company.add.UkAddressController.onPageLoad()
+POST        /uk-address                 controllers.companyoremploymentrelated.company.add.UkAddressController.onSubmit()
+
+GET         /non-uk-address             controllers.companyoremploymentrelated.company.add.NonUkAddressController.onPageLoad()
+POST        /non-uk-address             controllers.companyoremploymentrelated.company.add.NonUkAddressController.onSubmit()
+
+GET         /start-date                 controllers.companyoremploymentrelated.company.add.StartDateController.onPageLoad()
+POST        /start-date                 controllers.companyoremploymentrelated.company.add.StartDateController.onSubmit()
+
+GET         /check-details              controllers.companyoremploymentrelated.company.add.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.companyoremploymentrelated.company.add.CheckDetailsController.onSubmit()
