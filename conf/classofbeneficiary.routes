@@ -14,5 +14,5 @@ POST       /check-details                            controllers.classofbenefici
 GET        /:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onPageLoad(index : Int)
 POST       /:index/remove                            controllers.classofbeneficiary.remove.RemoveClassOfBeneficiaryController.onSubmit(index : Int)
 
-GET        /:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
-POST       /:index/when-was-beneficiary-removed      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)
+GET        /:index/when-removed                      controllers.classofbeneficiary.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-removed                      controllers.classofbeneficiary.remove.WhenRemovedController.onSubmit(index: Int)

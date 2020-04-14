@@ -37,7 +37,7 @@ class NameRequiredAction @Inject()(val executionContext: ExecutionContext, val m
   private def getName[A](request: DataRequest[A]): String = {
     request.userAnswers.get(NamePage) match {
       case Some(name) => name.displayName
-      case _ => request.messages(messagesApi)("individualBeneficiary.defaultText")
+      case _ => request.messages(messagesApi)("individualBeneficiary.name.default")
     }
   }
 }

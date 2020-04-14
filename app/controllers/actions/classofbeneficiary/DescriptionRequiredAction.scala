@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.classofbeneficiary.actions
+package controllers.actions.classofbeneficiary
 
 import controllers.actions
 import controllers.actions.DescriptionRequest
