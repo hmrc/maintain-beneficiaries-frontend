@@ -21,7 +21,7 @@ import java.time.LocalDate
 import models.beneficiaries.CompanyBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
-import pages.charityortrust.charity._
+import pages.companyoremploymentrelated.company._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
