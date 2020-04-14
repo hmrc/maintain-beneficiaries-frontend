@@ -91,4 +91,12 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
   def addOtherBeneficiary(utr: String, beneficiary: OtherBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addOtherBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
+
+  private def amendOtherBeneficiaryUrl(utr: String, index: Int) =
+    s"${config.trustsUrl}/trusts/amend-other-beneficiary/$utr/$index"
+
+  def amendOtherBeneficiary(utr: String, index: Int, beneficiary: OtherBeneficiary)
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
+    http.POST[JsValue, HttpResponse](amendOtherBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
+  }
 }

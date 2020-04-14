@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.individualBeneficiary
 
 import java.time.LocalDate
 
 import base.SpecBase
 import models.{TypeOfTrust, UserAnswers}
-import navigation.individualBeneficiary.AddIndividualBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.{NamePage, _}
 
