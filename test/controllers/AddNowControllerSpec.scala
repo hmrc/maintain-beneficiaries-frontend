@@ -122,7 +122,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the next page when Individual beneficary is submitted" in {
+    "redirect to the next page when Individual beneficiary is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
@@ -142,7 +142,66 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the next page when Other beneficary is submitted" in {
+    "redirect to the next page when Charity or trust is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.CharityOrTrust.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.charityortrust.routes.CharityOrTrustController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Charity is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Charity.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Trust related is submitted" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Trust.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Other beneficiary is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
@@ -177,6 +236,44 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Company is submitted" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Company.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.add.routes.NameController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the next page when Employment related is submitted" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        ).build()
+
+      val request =
+        FakeRequest(POST, addNowRoute)
+          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.EmploymentRelated.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
 
       application.stop()
     }
