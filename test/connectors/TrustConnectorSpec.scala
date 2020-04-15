@@ -350,6 +350,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               trust = List(
                 TrustBeneficiary(
                   name = "Nelson Ltd ",
+                  utr = None,
                   address = None,
                   income = None,
                   incomeDiscretionYesNo = true,

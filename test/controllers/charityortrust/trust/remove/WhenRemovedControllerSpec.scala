@@ -65,6 +65,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   def trustBeneficiary(id: Int) = TrustBeneficiary(
     name = s"Some Name $id",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,

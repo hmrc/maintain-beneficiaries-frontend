@@ -14,28 +14,27 @@
  * limitations under the License.
  *@
 
+@import viewmodels.AnswerSection
 @import controllers.charityortrust.trust.add.routes._
 
 @this(
-  main_template: MainTemplate,
-  formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("site.address.uk.title")}"
-) {
+    title = messages("trustBeneficiary.checkDetails.title")
+    ) {
 
-    @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = CheckDetailsController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.error_summary(form.errors)
+        @components.heading("trustBeneficiary.checkDetails.heading")
 
-        @components.heading("site.address.uk.heading", Some(name))
-
-        @components.uk_address(form)
+        @components.answer_section(answerSection)
 
         @components.submit_button()
     }

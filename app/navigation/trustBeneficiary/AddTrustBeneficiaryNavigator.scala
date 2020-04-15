@@ -16,11 +16,11 @@
 
 package navigation.trustBeneficiary
 
-import controllers.charityortrust.charity.add.{routes => rts}
+import controllers.charityortrust.trust.add.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
 import navigation.Navigator
-import pages.charityortrust.charity._
+import pages.charityortrust.trust._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
@@ -30,11 +30,25 @@ class AddTrustBeneficiaryNavigator @Inject()() extends Navigator {
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => controllers.routes.SessionExpiredController.onPageLoad()
+    case NamePage => rts.DiscretionYesNoController.onPageLoad()
+    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
+    case UkAddressPage => rts.StartDateController.onPageLoad()
+    case NonUkAddressPage => rts.StartDateController.onPageLoad()
+    case StartDatePage => rts.CheckDetailsController.onPageLoad()
+  }
+
+  private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
+    case DiscretionYesNoPage => ua =>
+      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
+    case AddressYesNoPage => ua =>
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), rts.StartDateController.onPageLoad())
+    case AddressUkYesNoPage => ua =>
+      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
   }
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c)
+    simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
+      yesNoNavigation
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)

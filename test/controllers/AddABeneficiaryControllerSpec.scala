@@ -70,6 +70,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
   private val trustBeneficiary = TrustBeneficiary(
     name = "Trust Beneficiary Name",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
