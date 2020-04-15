@@ -182,7 +182,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the next page when Trust related is submitted" in {
+    "redirect to the next page when Trust is submitted" in {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
