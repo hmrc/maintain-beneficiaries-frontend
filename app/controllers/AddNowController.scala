@@ -19,6 +19,7 @@ package controllers
 import controllers.actions._
 import forms.AddBeneficiaryTypeFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import models.beneficiaries.TypeOfBeneficiaryToAdd
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import pages.AddNowPage
@@ -78,7 +79,8 @@ class AddNowController @Inject()(
                   case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
                   case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
                   case CharityOrTrust => Redirect(controllers.charityortrust.routes.CharityOrTrustController.onPageLoad())
-                  case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad())
+                  case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode))
+                  case Trust => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode))
                   case CompanyOrEmploymentRelated => Redirect(controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad())
                   case Company => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
                   case Other => Redirect(controllers.other.add.routes.DescriptionController.onPageLoad())
