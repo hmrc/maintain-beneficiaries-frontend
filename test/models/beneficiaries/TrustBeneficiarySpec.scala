@@ -46,6 +46,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[TrustBeneficiary]
         beneficiary mustBe TrustBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
@@ -72,6 +73,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[TrustBeneficiary]
         beneficiary mustBe TrustBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = Some("10000"),
           incomeDiscretionYesNo = false,
@@ -97,6 +99,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[TrustBeneficiary]
         beneficiary mustBe TrustBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = None,
           income = None,
           incomeDiscretionYesNo = true,
@@ -132,6 +135,7 @@ class TrustBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[TrustBeneficiary]
         beneficiary mustBe TrustBeneficiary(
           name = "Nelson Ltd ",
+          utr = None,
           address = Some(UkAddress(
             "Suite 10",
             "Wealthy Arena",

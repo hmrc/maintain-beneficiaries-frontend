@@ -36,7 +36,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix, "return.link")
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
 

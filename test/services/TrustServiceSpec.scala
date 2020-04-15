@@ -68,6 +68,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
 
   val trustBeneficiary = TrustBeneficiary(
     name = "Trust Beneficiary Name",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,
