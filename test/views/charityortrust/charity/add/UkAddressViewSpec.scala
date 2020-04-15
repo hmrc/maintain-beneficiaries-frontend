@@ -18,7 +18,7 @@ package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.UkAddressFormProvider
-import models.UkAddress
+import models.{NormalMode, UkAddress}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
@@ -45,7 +45,7 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
     behave like ukAddressPage(
       applyView,
       Some(messageKeyPrefix),
-      routes.UkAddressController.onSubmit().url,
+      routes.UkAddressController.onSubmit(NormalMode).url,
       name
     )
 

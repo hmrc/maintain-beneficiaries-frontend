@@ -16,7 +16,7 @@
 
 package views.charityortrust.trust.add
 
-import controllers.charityortrust.charity.add.routes
+import controllers.charityortrust.trust.add.routes
 import forms.IncomePercentageFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

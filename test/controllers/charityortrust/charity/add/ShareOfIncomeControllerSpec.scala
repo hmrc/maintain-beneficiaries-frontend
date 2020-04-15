@@ -19,6 +19,7 @@ package controllers.charityortrust.charity.add
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
 import forms.IncomePercentageFormProvider
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{NamePage, ShareOfIncomePage}
@@ -32,7 +33,7 @@ import views.html.charityortrust.charity.add.ShareOfIncomeView
 class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
-  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad().url
+  private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(NormalMode).url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50

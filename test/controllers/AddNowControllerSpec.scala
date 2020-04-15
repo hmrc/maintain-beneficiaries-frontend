@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
+import models.NormalMode
 import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
 import org.mockito.Matchers.any
@@ -177,7 +178,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode).url
 
       application.stop()
     }

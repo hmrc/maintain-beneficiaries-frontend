@@ -19,6 +19,7 @@ package controllers.charityortrust.charity.add
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
 import forms.YesNoFormProvider
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{AddressUkYesNoPage, NamePage}
@@ -32,7 +33,7 @@ import views.html.charityortrust.charity.add.AddressUkYesNoView
 class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("charityBeneficiary.addressUkYesNo")
-  private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad().url
+  private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(NormalMode).url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
 

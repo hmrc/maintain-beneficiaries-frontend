@@ -18,7 +18,7 @@ package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.NonUkAddressFormProvider
-import models.NonUkAddress
+import models.{NonUkAddress, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
@@ -49,7 +49,7 @@ class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
     behave like nonUkAddressPage(
       applyView,
       Some(messageKeyPrefix),
-      routes.NonUkAddressController.onSubmit().url,
+      routes.NonUkAddressController.onSubmit(NormalMode).url,
       name
     )
 

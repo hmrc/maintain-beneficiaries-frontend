@@ -18,6 +18,7 @@ package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.YesNoFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -41,7 +42,7 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.DiscretionYesNoController.onSubmit().url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.DiscretionYesNoController.onSubmit(NormalMode).url)
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -19,7 +19,7 @@ package controllers.charityortrust.charity.add
 import base.SpecBase
 import config.annotations.AddCharityBeneficiary
 import forms.NonUkAddressFormProvider
-import models.NonUkAddress
+import models.{NonUkAddress, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.charity.{NamePage, NonUkAddressPage}
@@ -35,7 +35,7 @@ import views.html.charityortrust.charity.add.NonUkAddressView
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad().url
+  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(NormalMode).url
   private val name: String = "Charity"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")

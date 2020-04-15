@@ -18,6 +18,7 @@ package controllers.charityortrust
 
 import base.SpecBase
 import forms.CharityOrTrustBeneficiaryTypeFormProvider
+import models.NormalMode
 import models.beneficiaries.CharityOrTrustToAdd
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust._
@@ -85,7 +86,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode).url
 
       application.stop()
     }

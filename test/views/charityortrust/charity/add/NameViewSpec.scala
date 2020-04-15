@@ -18,6 +18,7 @@ package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.StringFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -44,7 +45,7 @@ class NameViewSpec extends StringViewBehaviours {
       applyView,
       messageKeyPrefix,
       None,
-      routes.NameController.onSubmit().url,
+      routes.NameController.onSubmit(NormalMode).url,
       "value"
     )
 

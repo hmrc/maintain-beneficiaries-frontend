@@ -16,7 +16,7 @@
 
 package views.charityortrust.trust.add
 
-import controllers.charityortrust.charity.add.routes
+import controllers.charityortrust.trust.add.routes
 import forms.NonUkAddressFormProvider
 import models.NonUkAddress
 import play.api.data.Form
@@ -24,7 +24,7 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.NonUkAddressViewBehaviours
-import views.html.charityortrust.charity.add.NonUkAddressView
+import views.html.charityortrust.trust.add.NonUkAddressView
 
 class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 

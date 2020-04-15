@@ -16,13 +16,13 @@
 
 package views.charityortrust.trust.add
 
-import controllers.charityortrust.charity.add.routes
+import controllers.charityortrust.trust.add.routes
 import forms.UkAddressFormProvider
 import models.UkAddress
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
-import views.html.charityortrust.charity.add.UkAddressView
+import views.html.charityortrust.trust.add.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 

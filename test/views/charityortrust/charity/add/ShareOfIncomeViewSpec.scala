@@ -18,6 +18,7 @@ package views.charityortrust.charity.add
 
 import controllers.charityortrust.charity.add.routes
 import forms.IncomePercentageFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -45,7 +46,7 @@ class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
       applyView,
       messageKeyPrefix,
       None,
-      routes.NameController.onSubmit().url,
+      routes.NameController.onSubmit(NormalMode).url,
       "value"
     )
 
