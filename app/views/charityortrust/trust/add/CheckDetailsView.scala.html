@@ -25,14 +25,14 @@
 @(answerSection: AnswerSection)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("charityBeneficiary.checkDetails.title")
+    title = messages("trustBeneficiary.checkDetails.title")
     ) {
 
     @formHelper(action = CheckDetailsController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.heading("charityBeneficiary.checkDetails.heading")
+        @components.heading("trustBeneficiary.checkDetails.heading")
 
         @components.answer_section(answerSection)
 

@@ -39,7 +39,7 @@ import views.html.charityortrust.trust.add.CheckDetailsView
 
 class CheckDetailsViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "charityBeneficiary.checkDetails"
+  val messageKeyPrefix = "trustBeneficiary.checkDetails"
 
   "CheckDetails view" must {
 
