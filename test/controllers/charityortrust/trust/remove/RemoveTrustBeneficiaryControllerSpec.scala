@@ -48,6 +48,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
   def trustBeneficiary(id: Int, provisional : Boolean) = TrustBeneficiary(
     name = s"Some Name $id",
+    utr = None,
     address = None,
     income = None,
     incomeDiscretionYesNo = true,

@@ -15,6 +15,7 @@
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
 ->         /trust/add                                                       trustBeneficiary.add.Routes
+->         /trust/amend                                                     trustBeneficiary.amend.Routes
 ->         /trust/remove                                                    trustBeneficiary.remove.Routes
 
 ->         /company/add                                                     companyBeneficiary.add.Routes
