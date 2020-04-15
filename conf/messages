@@ -723,6 +723,11 @@ companyBeneficiary.startDate.error.past = The date the company beneficiary was a
 companyBeneficiary.checkDetails.title = Check company beneficiary details
 companyBeneficiary.checkDetails.heading = Check company beneficiary details
 
+companyBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+companyBeneficiary.checkDetails.utr.p1 = Some of the information we ask about company beneficiaries has changed.
+companyBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
+companyBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
+
 # Remove
 
 removeCompanyBeneficiary.title = Are you sure you want to remove the company beneficiary?

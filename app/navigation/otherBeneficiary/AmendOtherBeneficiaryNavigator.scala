@@ -14,44 +14,58 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.otherBeneficiary
 
-import controllers.companyoremploymentrelated.company.add.{routes => rts}
+import controllers.other.amend.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
-import pages.companyoremploymentrelated.company._
+import navigation.Navigator
+import pages.other._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class AddCompanyBeneficiaryNavigator @Inject()() extends Navigator {
+class AmendOtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DiscretionYesNoController.onPageLoad()
+    case DescriptionPage=> rts.DiscretionYesNoController.onPageLoad()
     case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
-    case UkAddressPage => rts.StartDateController.onPageLoad()
-    case NonUkAddressPage => rts.StartDateController.onPageLoad()
-    case StartDatePage => rts.CheckDetailsController.onPageLoad()
   }
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
       yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
     case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), rts.StartDateController.onPageLoad())
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), checkDetailsRoute(ua))
     case AddressUkYesNoPage => ua =>
       yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
   }
 
+  private val checkDetailsNavigation : PartialFunction[Page, UserAnswers => Call] = {
+    case UkAddressPage => ua =>
+      checkDetailsRoute(ua)
+    case NonUkAddressPage => ua =>
+      checkDetailsRoute(ua)
+  }
+
   val routes: PartialFunction[Page, UserAnswers => Call] =
     simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
-    yesNoNavigation
+      yesNoNavigation orElse
+      checkDetailsNavigation
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  }
+
+  def checkDetailsRoute(answers: UserAnswers) : Call = {
+    answers.get(IndexPage) match {
+      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case Some(x) =>
+        rts.CheckDetailsController.renderFromUserAnswers(x)
+    }
   }
 }

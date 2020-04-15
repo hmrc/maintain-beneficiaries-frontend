@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package navigation
+package navigation.companyBeneficiary
 
-import controllers.other.add.{routes => rts}
+import controllers.companyoremploymentrelated.company.add.{routes => rts}
 import javax.inject.Inject
 import models.UserAnswers
-import pages.other._
+import navigation.Navigator
+import pages.companyoremploymentrelated.company._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class AddOtherBeneficiaryNavigator @Inject()() extends Navigator {
+class AddCompanyBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case DescriptionPage => rts.DiscretionYesNoController.onPageLoad()
+    case NamePage => rts.DiscretionYesNoController.onPageLoad()
     case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
     case UkAddressPage => rts.StartDateController.onPageLoad()
     case NonUkAddressPage => rts.StartDateController.onPageLoad()

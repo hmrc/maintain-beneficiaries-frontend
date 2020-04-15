@@ -69,7 +69,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.company"),
       changeLabel = messages("site.change.details"),
-      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
+      changeUrl = Some(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.extractAndRender(index).url),
       removeLabel = messages("site.delete"),
       removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
     )
@@ -89,7 +89,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       name = beneficiary.description,
       typeLabel = messages("entities.beneficiaries.other"),
       changeLabel = messages("site.change.details"),
-      changeUrl = Some(controllers.routes.FeatureNotAvailableController.onPageLoad().url),
+      changeUrl = Some(controllers.other.amend.routes.CheckDetailsController.extractAndRender(index).url),
       removeLabel = messages("site.delete"),
       removeUrl = Some(controllers.other.remove.routes.RemoveOtherBeneficiaryController.onPageLoad(index).url)
     )
