@@ -21,6 +21,7 @@ import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.charityortrust.charity.NamePage
 import play.api.data.Form
@@ -46,7 +47,7 @@ class NameController @Inject()(
 
   val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name", 105)
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NamePage) match {
@@ -57,7 +58,7 @@ class NameController @Inject()(
       Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       form.bindFromRequest().fold(

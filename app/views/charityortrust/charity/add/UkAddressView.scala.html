@@ -27,7 +27,7 @@
     title = s"${errorPrefix(form)} ${messages("site.address.uk.title")}"
 ) {
 
-    @formHelper(action = UkAddressController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = UkAddressController.onSubmit(NormalMode), 'autoComplete -> "off") {
 
         @components.back_link()
 

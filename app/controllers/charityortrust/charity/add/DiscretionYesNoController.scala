@@ -22,6 +22,7 @@ import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.charityortrust.charity.DiscretionYesNoPage
 import play.api.data.Form
@@ -48,7 +49,7 @@ class DiscretionYesNoController @Inject()(
 
   val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.discretionYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(DiscretionYesNoPage) match {
@@ -59,7 +60,7 @@ class DiscretionYesNoController @Inject()(
       Ok(view(preparedForm, request.beneficiaryName))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
