@@ -64,6 +64,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/add-individual-beneficiary/$utr"
   private def addCharityBeneficiaryUrl(utr: String) = s"/trusts/add-charity-beneficiary/$utr"
   private def addCompanyBeneficiaryUrl(utr: String) = s"/trusts/add-company-beneficiary/$utr"
+  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-company-beneficiary/$utr/$index"
 
   "trust connector" when {
 
@@ -776,6 +777,74 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )
 
         val result = connector.addCompanyBeneficiary(utr, companyBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "amend company beneficiary" must {
+
+      val companyBeneficiary = CompanyBeneficiary(
+        name = "Company",
+        utr = None,
+        address = Some(UkAddress(
+          "Suite 10",
+          "Wealthy Arena",
+          Some("Trafagar Square"),
+          Some("London"),
+          "SE2 2HB"
+        )),
+        income = None,
+        incomeDiscretionYesNo = true,
+        entityStart = LocalDate.of(2017, 2, 28),
+        provisional = false
+      )
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCompanyBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendCompanyBeneficiary(utr, index, companyBeneficiary)
+
+        result.futureValue.status mustBe (OK)
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCompanyBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendCompanyBeneficiary(utr, index, companyBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
