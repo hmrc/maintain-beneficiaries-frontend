@@ -16,8 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
-import connectors.TrustConnector
+import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
 import forms.YesNoFormProvider
@@ -29,7 +28,6 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.charityortrust.charity.AddressUkYesNoView
 
@@ -39,11 +37,9 @@ class AddressUkYesNoController @Inject()(
                                           val controllerComponents: MessagesControllerComponents,
                                           standardActionSets: StandardActionSets,
                                           formProvider: YesNoFormProvider,
-                                          connector: TrustConnector,
                                           view: AddressUkYesNoView,
-                                          trustService: TrustService,
                                           repository: PlaybackRepository,
-                                          @AddCharityBeneficiary navigator: Navigator,
+                                          @CharityBeneficiary navigator: Navigator,
                                           nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

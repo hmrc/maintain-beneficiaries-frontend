@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @AddCharityBeneficiary navigator: Navigator,
+                                     @CharityBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,

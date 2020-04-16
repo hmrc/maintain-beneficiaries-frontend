@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
@@ -42,7 +42,7 @@ class NameController @Inject()(
                                 view: NameView,
                                 trustService: TrustService,
                                 repository: PlaybackRepository,
-                                @AddCharityBeneficiary navigator: Navigator
+                                @CharityBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name", 105)

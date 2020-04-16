@@ -22,9 +22,9 @@ import models.NormalMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._
 
-class AddCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class CharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new AddCharityBeneficiaryNavigator
+  val navigator = new CharityBeneficiaryNavigator
 
   "Charity beneficiary navigator" when {
 

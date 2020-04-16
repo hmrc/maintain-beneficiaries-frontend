@@ -18,7 +18,7 @@ package navigation.individualBeneficiary
 
 import controllers.individualbeneficiary.amend.{routes => rts}
 import javax.inject.Inject
-import models.{TypeOfTrust, UserAnswers}
+import models.{Mode, TypeOfTrust, UserAnswers}
 import navigation.Navigator
 import pages.individualbeneficiary._
 import pages.{Page, QuestionPage}
@@ -28,6 +28,8 @@ class AmendIndividualBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case RoleInCompanyPage => rts.DateOfBirthYesNoController.onPageLoad()

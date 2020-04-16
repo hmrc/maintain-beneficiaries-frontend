@@ -18,16 +18,18 @@ package navigation.charityBeneficiary
 
 import controllers.charityortrust.charity.{routes => rts}
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.charityortrust.charity._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class AddCharityBeneficiaryNavigator @Inject()() extends Navigator {
+class CharityBeneficiaryNavigator @Inject()() extends Navigator {
 
-  override def nextPage(page: Page, userAnswers: UserAnswers): Call =
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
+
+  override def nextPage(page: Page, userAnswers: UserAnswers): Call = nextPage(page, NormalMode, userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.DiscretionYesNoController.onPageLoad(NormalMode)

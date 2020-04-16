@@ -16,7 +16,7 @@
 
 package navigation
 
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import pages._
 import play.api.mvc.Call
 
@@ -24,4 +24,7 @@ class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Naviga
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     desiredRoute
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
+    nextPage(page, userAnswers)
 }
