@@ -17,12 +17,12 @@
 package utils.print
 
 import com.google.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import pages.charityortrust.charity._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
-import controllers.charityortrust.charity.amend.routes._
+import controllers.charityortrust.charity.routes._
 
 class AmendCharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
                                                    countryOptions: CountryOptions
@@ -35,14 +35,14 @@ class AmendCharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRow
     AnswerSection(
       None,
       Seq(
-        bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad().url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad().url),
-        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad().url),
+        bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
         bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr",""),
-        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad().url),
-        bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad().url),
-        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad().url)
+        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(CheckMode).url)
       ).flatten
     )
   }

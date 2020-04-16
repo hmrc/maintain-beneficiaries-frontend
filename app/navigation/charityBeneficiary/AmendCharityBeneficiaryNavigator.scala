@@ -16,9 +16,9 @@
 
 package navigation.charityBeneficiary
 
-import controllers.charityortrust.charity.amend.{routes => rts}
+import controllers.charityortrust.charity.{routes => rts}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import navigation.Navigator
 import pages.charityortrust.charity._
 import pages.{Page, QuestionPage}
@@ -30,17 +30,17 @@ class AmendCharityBeneficiaryNavigator @Inject()() extends Navigator {
     routes(page)(userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DiscretionYesNoController.onPageLoad()
-    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
+    case NamePage => rts.DiscretionYesNoController.onPageLoad(CheckMode)
+    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(CheckMode)
   }
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
-      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
+      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(CheckMode), rts.ShareOfIncomeController.onPageLoad(CheckMode))
     case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), checkDetailsRoute(ua))
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(CheckMode), checkDetailsRoute(ua))
     case AddressUkYesNoPage => ua =>
-      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
+      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(CheckMode), rts.NonUkAddressController.onPageLoad(CheckMode))
   }
 
   private val checkDetailsNavigation : PartialFunction[Page, UserAnswers => Call] = {
@@ -65,7 +65,7 @@ class AmendCharityBeneficiaryNavigator @Inject()() extends Navigator {
     answers.get(IndexPage) match {
       case None => controllers.routes.SessionExpiredController.onPageLoad()
       case Some(x) =>
-        rts.CheckDetailsController.renderFromUserAnswers(x)
+        controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
 }

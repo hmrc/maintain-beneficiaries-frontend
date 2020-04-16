@@ -17,7 +17,8 @@
 package navigation.charityBeneficiary
 
 import base.SpecBase
-import controllers.charityortrust.charity.amend.{routes => rts}
+import controllers.charityortrust.charity.{routes => rts}
+import models.CheckMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._
 
@@ -29,7 +30,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
 
     "Name page -> Discretion yes no page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(rts.DiscretionYesNoController.onPageLoad())
+        .mustBe(rts.DiscretionYesNoController.onPageLoad(CheckMode))
     }
 
     "Discretion yes no page -> Yes -> Address yes no page" in {
@@ -37,7 +38,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(DiscretionYesNoPage, true).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(rts.AddressYesNoController.onPageLoad(CheckMode))
     }
 
     "Discretion yes no page -> No -> Share of income page" in {
@@ -45,12 +46,12 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(DiscretionYesNoPage, false).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.ShareOfIncomeController.onPageLoad())
+        .mustBe(rts.ShareOfIncomeController.onPageLoad(CheckMode))
     }
 
     "Share of income page -> Address yes no page" in {
       navigator.nextPage(ShareOfIncomePage, emptyUserAnswers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(rts.AddressYesNoController.onPageLoad(CheckMode))
     }
 
     "Address yes no page -> No -> Check your answers page" in {
@@ -59,7 +60,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(IndexPage, 0).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+        .mustBe(controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
 
     "Address yes no page -> Yes -> Address in the UK yes no page" in {
@@ -67,7 +68,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressYesNoPage, true).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.AddressUkYesNoController.onPageLoad())
+        .mustBe(rts.AddressUkYesNoController.onPageLoad(CheckMode))
     }
 
     "Address in the UK yes no page -> Yes -> UK address page" in {
@@ -75,7 +76,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressUkYesNoPage, true).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.UkAddressController.onPageLoad())
+        .mustBe(rts.UkAddressController.onPageLoad(CheckMode))
     }
 
     "Address in the UK yes no page -> No -> Non-UK address page" in {
@@ -83,7 +84,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(AddressUkYesNoPage, false).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.NonUkAddressController.onPageLoad())
+        .mustBe(rts.NonUkAddressController.onPageLoad(CheckMode))
     }
 
     "UK address page -> Check your answers page" in {
@@ -91,7 +92,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(IndexPage, 0).success.value
 
       navigator.nextPage(UkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+        .mustBe(controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
 
     "Non-UK address page -> Check your answers page" in {
@@ -100,7 +101,7 @@ class AmendCharityBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPrope
         .set(IndexPage, 0).success.value
 
       navigator.nextPage(NonUkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+        .mustBe(controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
   }
 }
