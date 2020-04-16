@@ -142,7 +142,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     AddRow("Employment Related Endeavours", typeLabel = "Employment related", "Change details", Some(featureNotAvailable), "Remove", Some(
       controllers.companyoremploymentrelated.employment.remove.routes.RemoveEmploymentBeneficiaryController.onPageLoad(0).url
     )),
-    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(featureNotAvailable), "Remove", Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)),
+    AddRow("Trust Beneficiary Name", typeLabel = "Named trust", "Change details", Some(controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)),
     AddRow("Humanitarian Endeavours Ltd", typeLabel = "Named charity", "Change details", Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)),
     AddRow("Other Endeavours Ltd", typeLabel = "Other beneficiary", "Change details", Some(controllers.other.amend.routes.CheckDetailsController.extractAndRender(0).url), "Remove", Some(controllers.other.remove.routes.RemoveOtherBeneficiaryController.onPageLoad(0).url))
   )

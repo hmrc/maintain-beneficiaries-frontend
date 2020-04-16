@@ -1,0 +1,30 @@
+
+GET        /name                                    controllers.charityortrust.trust.amend.NameController.onPageLoad()
+POST       /name                                    controllers.charityortrust.trust.amend.NameController.onSubmit()
+
+GET        /has-discretion                          controllers.charityortrust.trust.amend.DiscretionYesNoController.onPageLoad()
+POST       /has-discretion                          controllers.charityortrust.trust.amend.DiscretionYesNoController.onSubmit()
+
+GET        /share-of-income                         controllers.charityortrust.trust.amend.ShareOfIncomeController.onPageLoad()
+POST       /share-of-income                         controllers.charityortrust.trust.amend.ShareOfIncomeController.onSubmit()
+
+GET        /has-address                             controllers.charityortrust.trust.amend.AddressYesNoController.onPageLoad()
+POST       /has-address                             controllers.charityortrust.trust.amend.AddressYesNoController.onSubmit()
+
+GET        /has-uk-address                          controllers.charityortrust.trust.amend.AddressUkYesNoController.onPageLoad()
+POST       /has-uk-address                          controllers.charityortrust.trust.amend.AddressUkYesNoController.onSubmit()
+
+GET        /uk-address                              controllers.charityortrust.trust.amend.UkAddressController.onPageLoad()
+POST       /uk-address                              controllers.charityortrust.trust.amend.UkAddressController.onSubmit()
+
+GET        /non-uk-address                          controllers.charityortrust.trust.amend.NonUkAddressController.onPageLoad()
+POST       /non-uk-address                          controllers.charityortrust.trust.amend.NonUkAddressController.onSubmit()
+
+GET        /:index/check-details                    controllers.charityortrust.trust.amend.CheckDetailsController.extractAndRender(index: Int)
+
+GET        /check-details-without-amend             controllers.charityortrust.trust.amend.CheckDetailsUtrController.onPageLoad()
+POST       /check-details-without-amend             controllers.charityortrust.trust.amend.CheckDetailsUtrController.onSubmit()
+
+GET        /:index/updated-details                  controllers.charityortrust.trust.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
+
+POST       /:index/check-details                    controllers.charityortrust.trust.amend.CheckDetailsController.onSubmit(index: Int)
