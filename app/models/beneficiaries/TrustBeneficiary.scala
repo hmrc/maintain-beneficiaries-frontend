@@ -18,22 +18,22 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.Address
+import models.{Address, Name}
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsResult, JsSuccess, JsValue, Reads, Writes, __}
+import play.api.libs.json.{JsPath, JsSuccess, Reads, Writes, __}
 
 final case class TrustBeneficiary(name: String,
-                                  utr: Option[String],
-                                  address : Option[Address],
-                                  income: Option[String],
-                                  incomeDiscretionYesNo: Boolean,
-                                  entityStart: LocalDate,
-                                  provisional : Boolean) extends Beneficiary
+                                    utr: Option[String],
+                                    address : Option[Address],
+                                    income: Option[String],
+                                    incomeDiscretionYesNo: Boolean,
+                                    entityStart: LocalDate,
+                                    provisional : Boolean) extends Beneficiary
 
 object TrustBeneficiary {
   implicit val reads: Reads[TrustBeneficiary] =
     ((__ \ 'organisationName).read[String] and
-      Reads(_ => JsSuccess(None)) and
+      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
@@ -58,7 +58,7 @@ object TrustBeneficiary {
       (__ \ "provisional").write[Boolean]
       ).apply(unlift(TrustBeneficiary.unapply))
 
-  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
+  private def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
       .map(Some(_))

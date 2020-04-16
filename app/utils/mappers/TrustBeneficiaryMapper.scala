@@ -52,7 +52,7 @@ class TrustBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        logger.error(s"Failed to rehydrate TrustBeneficiary from UserAnswers - $errors")
+        logger.error("Failed to rehydrate TrustBeneficiary from UserAnswers", errors)
         None
     }
   }
