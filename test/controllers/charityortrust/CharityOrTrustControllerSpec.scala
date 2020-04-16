@@ -90,7 +90,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to feature not available page when Trust is selected" in {
+    "redirect to trust name page when Trust is selected" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -102,7 +102,7 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.charityortrust.trust.add.routes.NameController.onPageLoad().url
 
       application.stop()
     }
