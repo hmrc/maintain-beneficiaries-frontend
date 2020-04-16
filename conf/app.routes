@@ -6,7 +6,7 @@
 ->         /individual/amend                                                individualBeneficiary.amend.Routes
 ->         /individual/remove                                               individualBeneficiary.remove.Routes
 
-->         /charity/add                                                     charityBeneficiary.add.Routes
+->         /charity/                                                        charityBeneficiary.Routes
 ->         /charity/amend                                                   charityBeneficiary.amend.Routes
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 

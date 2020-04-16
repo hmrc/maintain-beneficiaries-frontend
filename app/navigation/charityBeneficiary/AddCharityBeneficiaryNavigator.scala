@@ -16,7 +16,7 @@
 
 package navigation.charityBeneficiary
 
-import controllers.charityortrust.charity.add.{routes => rts}
+import controllers.charityortrust.charity.{routes => rts}
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator

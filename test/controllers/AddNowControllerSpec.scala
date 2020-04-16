@@ -178,7 +178,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode).url
 
       application.stop()
     }

@@ -23,7 +23,7 @@ import models.{NonUkAddress, NormalMode, UkAddress}
 import pages.charityortrust.charity._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
-import controllers.charityortrust.charity.add.routes._
+import controllers.charityortrust.charity.routes._
 
 class CharityBeneficiaryPrintHelperSpec extends SpecBase {
 

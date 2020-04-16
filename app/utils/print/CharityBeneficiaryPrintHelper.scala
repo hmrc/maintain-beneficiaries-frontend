@@ -22,7 +22,7 @@ import pages.charityortrust.charity._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
-import controllers.charityortrust.charity.add.routes._
+import controllers.charityortrust.charity.routes._
 
 class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
                                               countryOptions: CountryOptions

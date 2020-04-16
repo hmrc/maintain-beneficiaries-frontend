@@ -17,7 +17,7 @@
 package navigation.charityBeneficiary
 
 import base.SpecBase
-import controllers.charityortrust.charity.add.routes._
+import controllers.charityortrust.charity.routes._
 import models.NormalMode
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.charity._

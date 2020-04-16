@@ -67,13 +67,8 @@ class CharityOrTrustController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-<<<<<<< HEAD
-              case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad(NormalMode))
-              case Trust => Redirect(controllers.routes.FeatureNotAvailableController.onPageLoad())
-=======
-              case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad())
+              case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
               case Trust => Redirect(controllers.charityortrust.trust.add.routes.NameController.onPageLoad())
->>>>>>> 4d296b83b98bccce544e342fa5e9ad6e1e716996
             }
           }
       )
