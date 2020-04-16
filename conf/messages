@@ -747,3 +747,22 @@ companyBeneficiary.whenRemoved.error.required = The date the company beneficiary
 companyBeneficiary.whenRemoved.error.invalid = Enter a real date when the company beneficiary was removed from the trust
 companyBeneficiary.whenRemoved.error.future = The date the company beneficiary was removed from the trust must be today or in the past
 companyBeneficiary.whenRemoved.error.past = The date the company beneficiary was removed must be on or after the date they were added
+
+
+# Employment beneficiary
+
+# Remove
+
+removeEmploymentBeneficiary.title = Are you sure you want to remove the employment beneficiary?
+removeEmploymentBeneficiary.heading = Are you sure you want to remove {0}?
+removeEmploymentBeneficiary.error.required = Select yes if you want to remove the employment beneficiary
+
+employmentBeneficiary.whenRemoved.title = When was the employment beneficiary removed as a beneficiary?
+employmentBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
+employmentBeneficiary.whenRemoved.hint = For example, 31 3 1980
+employmentBeneficiary.whenRemoved.error.required.all = Enter the date the employment beneficiary was removed from the trust
+employmentBeneficiary.whenRemoved.error.required.two = The date the employment beneficiary was removed from the trust must include a {0} and {1}
+employmentBeneficiary.whenRemoved.error.required = The date the employment beneficiary was removed from the trust must include {0}
+employmentBeneficiary.whenRemoved.error.invalid = Enter a real date when the employment beneficiary was removed from the trust
+employmentBeneficiary.whenRemoved.error.future = The date the employment beneficiary was removed from the trust must be today or in the past
+employmentBeneficiary.whenRemoved.error.past = The date the employment beneficiary was removed must be on or after the date they were added

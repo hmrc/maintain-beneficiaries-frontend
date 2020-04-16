@@ -21,6 +21,8 @@
 ->         /company/amend                                                   companyBeneficiary.amend.Routes
 ->         /company/remove                                                  companyBeneficiary.remove.Routes
 
+->         /employment/remove                                               employmentBeneficiary.remove.Routes
+
 GET        /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /logout                                                          controllers.LogoutController.logout()

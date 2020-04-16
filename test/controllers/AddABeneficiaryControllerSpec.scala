@@ -171,6 +171,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
     override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
       Future.successful(companyBeneficiary)
+
+    override def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] =
+      Future.successful(employmentRelatedBeneficiary)
   }
 
   " AddABeneficiary Controller" when {
