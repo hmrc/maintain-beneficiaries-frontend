@@ -17,8 +17,8 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.charityortrust.trust.add.routes._
-import models.UserAnswers
+import controllers.charityortrust.trust.routes._
+import models.{NormalMode, UserAnswers}
 import pages.charityortrust.trust._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
@@ -35,13 +35,13 @@ class AddTrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConv
     AnswerSection(
       None,
       Seq(
-        bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad().url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad().url),
-        bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad().url),
-        bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad().url),
-        bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad().url),
-        bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad().url),
+        bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(NormalMode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(NormalMode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(NormalMode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
+        bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
+        bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(NormalMode).url),
         bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url)
       ).flatten
     )

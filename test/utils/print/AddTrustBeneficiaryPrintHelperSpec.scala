@@ -19,8 +19,8 @@ package utils.print
 import java.time.LocalDate
 
 import base.SpecBase
-import controllers.charityortrust.trust.add.routes._
-import models.{NonUkAddress, UkAddress}
+import controllers.charityortrust.trust.routes._
+import models.{NonUkAddress, NormalMode, UkAddress}
 import pages.charityortrust.trust._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
@@ -53,13 +53,13 @@ class AddTrustBeneficiaryPrintHelperSpec extends SpecBase {
       result mustBe AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow(label = Html(messages("trustBeneficiary.name.checkYourAnswersLabel")), answer = Html("Trust"), changeUrl = NameController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad().url),
-          AnswerRow(label = Html(messages("trustBeneficiary.nonUkAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = NonUkAddressController.onPageLoad().url),
+          AnswerRow(label = Html(messages("trustBeneficiary.name.checkYourAnswersLabel")), answer = Html("Trust"), changeUrl = NameController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad(NormalMode).url),
+          AnswerRow(label = Html(messages("trustBeneficiary.nonUkAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = NonUkAddressController.onPageLoad(NormalMode).url),
           AnswerRow(label = Html(messages("trustBeneficiary.startDate.checkYourAnswersLabel", name)), answer = Html("3 February 2019"), changeUrl = StartDateController.onPageLoad().url)
         )
       )

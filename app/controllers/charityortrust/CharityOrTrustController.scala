@@ -68,7 +68,7 @@ class CharityOrTrustController @Inject()(
           } yield {
             value match {
               case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
-              case Trust => Redirect(controllers.charityortrust.trust.add.routes.NameController.onPageLoad())
+              case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
             }
           }
       )
