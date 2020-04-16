@@ -11,11 +11,14 @@
 @import 'patterns/tag';
 @import 'conditionals';
 @import 'colours/palette';
+@import 'partials/_focus';
 @import 'location-autocomplete.min';
 @import 'patterns/add-to-a-list';
 @import 'patterns/symbol-input';
 
 @import 'partials/task-list';
+@import 'partials/_modal';
+@import 'patterns/check-your-answers';
 
 .push-text-top--3 {
   padding-top: govuk-spacing(3);
