@@ -38,12 +38,3 @@ POST        /when-added                 controllers.charityortrust.charity.Start
 
 GET         /check-details              controllers.charityortrust.charity.CheckDetailsController.onPageLoad()
 POST        /check-details              controllers.charityortrust.charity.CheckDetailsController.onSubmit()
-
-GET        /:index/check-details                    controllers.charityortrust.charity.amend.CheckDetailsController.extractAndRender(index: Int)
-
-GET        /check-details-without-amend             controllers.charityortrust.charity.amend.CheckDetailsUtrController.onPageLoad()
-POST       /check-details-without-amend             controllers.charityortrust.charity.amend.CheckDetailsUtrController.onSubmit()
-
-GET        /:index/updated-details                  controllers.charityortrust.charity.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
-
-POST       /:index/check-details                    controllers.charityortrust.charity.amend.CheckDetailsController.onSubmit(index: Int)
