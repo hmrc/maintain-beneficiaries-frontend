@@ -563,8 +563,6 @@ trustBeneficiary.startDate.error.invalid = Enter a real date
 trustBeneficiary.startDate.error.future = The date the trust beneficiary was added to the trust must be today or in the past
 trustBeneficiary.startDate.error.past = The date the trust beneficiary was added to the trust cannot be before the start date of the trust
 
-# Amend
-
 trustBeneficiary.checkDetails.title = Check trust beneficiary details
 trustBeneficiary.checkDetails.heading = Check trust beneficiary details
 
