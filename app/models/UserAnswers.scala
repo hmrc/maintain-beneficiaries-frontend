@@ -43,6 +43,7 @@ final case class UserAnswers(
       .flatMap(_.deleteAtPath(pages.charityortrust.trust.basePath))
       .flatMap(_.deleteAtPath(pages.companyoremploymentrelated.basePath))
       .flatMap(_.deleteAtPath(pages.companyoremploymentrelated.company.basePath))
+      .flatMap(_.deleteAtPath(pages.companyoremploymentrelated.employment.basePath))
       .flatMap(_.deleteAtPath(pages.other.basePath))
       .flatMap(_.remove(AddNowPage))
   }

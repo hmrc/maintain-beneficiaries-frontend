@@ -1,0 +1,6 @@
+
+GET        /:index/remove                            controllers.companyoremploymentrelated.employment.remove.RemoveEmploymentBeneficiaryController.onPageLoad(index: Int)
+POST       /:index/remove                            controllers.companyoremploymentrelated.employment.remove.RemoveEmploymentBeneficiaryController.onSubmit(index: Int)
+
+GET        /:index/when-removed                      controllers.companyoremploymentrelated.employment.remove.WhenRemovedController.onPageLoad(index: Int)
+POST       /:index/when-removed                      controllers.companyoremploymentrelated.employment.remove.WhenRemovedController.onSubmit(index: Int)
