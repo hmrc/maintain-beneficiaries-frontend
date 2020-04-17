@@ -38,9 +38,7 @@ class NameController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 standardActionSets: StandardActionSets,
                                 formProvider: StringFormProvider,
-                                connector: TrustConnector,
                                 view: NameView,
-                                trustService: TrustService,
                                 repository: PlaybackRepository,
                                 @CharityBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -69,7 +67,7 @@ class NameController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage, mode, updatedAnswers))
       )
   }
 }

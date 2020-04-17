@@ -39,9 +39,7 @@ class ShareOfIncomeController @Inject()(
                                          val controllerComponents: MessagesControllerComponents,
                                          standardActionSets: StandardActionSets,
                                          formProvider: IncomePercentageFormProvider,
-                                         connector: TrustConnector,
                                          view: ShareOfIncomeView,
-                                         trustService: TrustService,
                                          repository: PlaybackRepository,
                                          @CharityBeneficiary navigator: Navigator,
                                          nameAction: NameRequiredAction
@@ -71,7 +69,7 @@ class ShareOfIncomeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage, mode, updatedAnswers))
       )
   }
 }

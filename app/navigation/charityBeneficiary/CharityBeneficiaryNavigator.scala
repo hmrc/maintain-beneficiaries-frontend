@@ -27,34 +27,50 @@ import play.api.mvc.Call
 class CharityBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
-    routes(page)(userAnswers)
+    routes(mode)(page)(userAnswers)
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call = nextPage(page, NormalMode, userAnswers)
 
-  private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DiscretionYesNoController.onPageLoad(NormalMode)
-    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(NormalMode)
+  private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
+    case NamePage => rts.DiscretionYesNoController.onPageLoad(mode)
+    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(mode)
     case UkAddressPage => rts.StartDateController.onPageLoad()
     case NonUkAddressPage => rts.StartDateController.onPageLoad()
     case StartDatePage => rts.CheckDetailsController.onPageLoad()
   }
 
-  private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
+  private def yesNoNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
-      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(NormalMode), rts.ShareOfIncomeController.onPageLoad(NormalMode))
+      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(mode), rts.ShareOfIncomeController.onPageLoad(mode))
     case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(NormalMode), rts.StartDateController.onPageLoad())
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), rts.StartDateController.onPageLoad())
     case AddressUkYesNoPage => ua =>
-      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(NormalMode), rts.NonUkAddressController.onPageLoad(NormalMode))
+      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
   }
 
-  val routes: PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation andThen (c => (_:UserAnswers) => c) orElse
-    yesNoNavigation
+  private val checkDetailsNav : PartialFunction[Page, UserAnswers => Call] = {
+    case UkAddressPage => ua =>
+      checkDetailsRoute(ua)
+    case NonUkAddressPage => ua =>
+      checkDetailsRoute(ua)
+  }
+
+  def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
+    simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
+      yesNoNavigation(mode) orElse
+      checkDetailsNav
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+  }
+
+  def checkDetailsRoute(answers: UserAnswers) : Call = {
+    answers.get(IndexPage) match {
+      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case Some(x) =>
+        controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
+    }
   }
 }

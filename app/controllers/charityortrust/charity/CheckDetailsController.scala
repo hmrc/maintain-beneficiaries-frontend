@@ -21,6 +21,7 @@ import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import javax.inject.Inject
+import models.NormalMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -39,7 +40,6 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
                                         printHelper: CharityBeneficiaryPrintHelper,
                                         mapper: CharityBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
@@ -49,7 +49,7 @@ class CheckDetailsController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional = true, request.beneficiaryName)
       Ok(view(section))
   }
 

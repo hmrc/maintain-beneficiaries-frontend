@@ -22,14 +22,14 @@ import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import extractors.CharityBeneficiaryExtractor
 import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
-import utils.print.AmendCharityBeneficiaryPrintHelper
+import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsView
 
@@ -44,19 +44,16 @@ class CheckDetailsController @Inject()(
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
-                                        printHelper: AmendCharityBeneficiaryPrintHelper,
+                                        printHelper: CharityBeneficiaryPrintHelper,
                                         mapper: CharityBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
                                         extractor: CharityBeneficiaryExtractor,
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
-    val section: AnswerSection = printHelper(userAnswers, name)
+  private def render(userAnswers: UserAnswers, index: Int, name: String)
+                    (implicit request: Request[AnyContent]): Result = {
+    val section: AnswerSection = printHelper(userAnswers, provisional = false, name)
     Ok(view(section, index))
   }
 
