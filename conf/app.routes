@@ -36,10 +36,6 @@ GET        /unauthorised                                                    cont
 
 GET        /create-agent-services-account                                   controllers.CreateAgentServicesAccountController.onPageLoad()
 
-GET        /trust-not-claimed                                               controllers.TrustNotClaimedController.onPageLoad()
-
-GET        /agent-not-authorised                                            controllers.AgentNotAuthorisedController.onPageLoad()
-
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
