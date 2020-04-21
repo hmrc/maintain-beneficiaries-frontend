@@ -16,11 +16,12 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import navigation.Navigator
 import pages.charityortrust.charity.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @AddCharityBeneficiary navigator: Navigator,
+                                     @CharityBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,
@@ -68,7 +69,7 @@ class StartDateController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(StartDatePage, NormalMode, updatedAnswers))
       )
   }
 }

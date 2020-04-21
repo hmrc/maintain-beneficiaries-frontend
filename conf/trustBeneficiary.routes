@@ -1,0 +1,41 @@
+
+GET         /name                       controllers.charityortrust.trust.NameController.onPageLoad(mode: Mode = NormalMode)
+POST        /name                       controllers.charityortrust.trust.NameController.onSubmit(mode: Mode = NormalMode)
+GET         /change-name                       controllers.charityortrust.trust.NameController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-name                       controllers.charityortrust.trust.NameController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-discretion             controllers.charityortrust.trust.DiscretionYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-discretion             controllers.charityortrust.trust.DiscretionYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-discretion             controllers.charityortrust.trust.DiscretionYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-discretion             controllers.charityortrust.trust.DiscretionYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /share-of-income            controllers.charityortrust.trust.ShareOfIncomeController.onPageLoad(mode: Mode = NormalMode)
+POST        /share-of-income            controllers.charityortrust.trust.ShareOfIncomeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-share-of-income            controllers.charityortrust.trust.ShareOfIncomeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-share-of-income            controllers.charityortrust.trust.ShareOfIncomeController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-address                controllers.charityortrust.trust.AddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-address                controllers.charityortrust.trust.AddressYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-address                controllers.charityortrust.trust.AddressYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-address                controllers.charityortrust.trust.AddressYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-uk-address             controllers.charityortrust.trust.AddressUkYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-uk-address             controllers.charityortrust.trust.AddressUkYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-uk-address             controllers.charityortrust.trust.AddressUkYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-uk-address             controllers.charityortrust.trust.AddressUkYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /uk-address                 controllers.charityortrust.trust.UkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST        /uk-address                 controllers.charityortrust.trust.UkAddressController.onSubmit(mode: Mode = NormalMode)
+GET         /change-uk-address                 controllers.charityortrust.trust.UkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-uk-address                 controllers.charityortrust.trust.UkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET         /non-uk-address             controllers.charityortrust.trust.NonUkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST        /non-uk-address             controllers.charityortrust.trust.NonUkAddressController.onSubmit(mode: Mode = NormalMode)
+GET         /change-non-uk-address             controllers.charityortrust.trust.NonUkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-non-uk-address             controllers.charityortrust.trust.NonUkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET         /when-added                 controllers.charityortrust.trust.StartDateController.onPageLoad()
+POST        /when-added                 controllers.charityortrust.trust.StartDateController.onSubmit()
+
+GET         /check-details              controllers.charityortrust.trust.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.charityortrust.trust.CheckDetailsController.onSubmit()

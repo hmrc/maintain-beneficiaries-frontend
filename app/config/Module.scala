@@ -44,14 +44,12 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[ClassOfBeneficiary]).to(classOf[ClassOfBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddIndividualBeneficiary]).to(classOf[AddIndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendIndividualBeneficiary]).to(classOf[AmendIndividualBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AddCharityBeneficiary]).to(classOf[AddCharityBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AmendCharityBeneficiary]).to(classOf[AmendCharityBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[CharityBeneficiary]).to(classOf[CharityBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddOtherBeneficiary]).to(classOf[AddOtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendOtherBeneficiary]).to(classOf[AmendOtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddCompanyBeneficiary]).to(classOf[AddCompanyBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendCompanyBeneficiary]).to(classOf[AmendCompanyBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AddTrustBeneficiary]).to(classOf[AddTrustBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AmendTrustBeneficiary]).to(classOf[AmendTrustBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[TrustBeneficiary]).to(classOf[TrustBeneficiaryNavigator]).asEagerSingleton()
 
   }
 }

@@ -17,7 +17,7 @@
 package controllers.charityortrust.charity
 
 import base.SpecBase
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import forms.UkAddressFormProvider
 import models.{NormalMode, UkAddress}
 import navigation.{FakeNavigator, Navigator}
@@ -85,7 +85,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddCharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
@@ -38,11 +38,9 @@ class NameController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 standardActionSets: StandardActionSets,
                                 formProvider: StringFormProvider,
-                                connector: TrustConnector,
                                 view: NameView,
-                                trustService: TrustService,
                                 repository: PlaybackRepository,
-                                @AddCharityBeneficiary navigator: Navigator
+                                @CharityBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name", 105)
@@ -69,7 +67,7 @@ class NameController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage, mode, updatedAnswers))
       )
   }
 }

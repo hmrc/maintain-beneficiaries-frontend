@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import forms.NonUkAddressFormProvider
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NonUkAddressController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: PlaybackRepository,
-                                        @AddCharityBeneficiary navigator: Navigator,
+                                        @CharityBeneficiary navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredAction,
                                         formProvider: NonUkAddressFormProvider,
@@ -69,7 +69,7 @@ class NonUkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NonUkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NonUkAddressPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NonUkAddressPage, mode, updatedAnswers))
       )
   }
 }

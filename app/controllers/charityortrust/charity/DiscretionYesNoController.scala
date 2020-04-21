@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.charity
 
-import config.annotations.AddCharityBeneficiary
+import config.annotations.CharityBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
@@ -43,7 +43,7 @@ class DiscretionYesNoController @Inject()(
                                            view: DiscretionYesNoView,
                                            trustService: TrustService,
                                            repository: PlaybackRepository,
-                                           @AddCharityBeneficiary navigator: Navigator,
+                                           @CharityBeneficiary navigator: Navigator,
                                            nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -71,7 +71,7 @@ class DiscretionYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, mode, updatedAnswers))
       )
   }
 }
