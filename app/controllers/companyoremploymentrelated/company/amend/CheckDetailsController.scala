@@ -29,7 +29,7 @@ import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CompanyBeneficiaryMapper
-import utils.print.AmendCompanyBeneficiaryPrintHelper
+import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
 
@@ -44,7 +44,7 @@ class CheckDetailsController @Inject()(
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
-                                        printHelper: AmendCompanyBeneficiaryPrintHelper,
+                                        printHelper: CompanyBeneficiaryPrintHelper,
                                         mapper: CompanyBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
                                         extractor: CompanyBeneficiaryExtractor,

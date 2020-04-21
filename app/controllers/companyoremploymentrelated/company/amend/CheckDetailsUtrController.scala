@@ -16,17 +16,14 @@
 
 package controllers.companyoremploymentrelated.company.amend
 
-import config.{ErrorHandler, FrontendAppConfig}
-import connectors.TrustConnector
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.company.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.CompanyBeneficiaryMapper
-import utils.print.AmendCompanyBeneficiaryPrintHelper
+import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsUtrView
 
@@ -37,13 +34,9 @@ class CheckDetailsUtrController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsUtrView,
-                                        connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: AmendCompanyBeneficiaryPrintHelper,
-                                        mapper: CompanyBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        errorHandler: ErrorHandler
+                                        printHelper: CompanyBeneficiaryPrintHelper,
+                                        nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
