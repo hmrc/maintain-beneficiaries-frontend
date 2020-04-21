@@ -18,7 +18,7 @@ package navigation.charityBeneficiary
 
 import controllers.charityortrust.charity.{routes => rts}
 import javax.inject.Inject
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.charityortrust.charity._
 import pages.{Page, QuestionPage}
@@ -29,36 +29,38 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     routes(mode)(page)(userAnswers)
 
-  override def nextPage(page: Page, userAnswers: UserAnswers): Call = nextPage(page, NormalMode, userAnswers)
+  override def nextPage(page: Page, userAnswers: UserAnswers): Call =
+    nextPage(page, NormalMode, userAnswers)
 
   private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
     case NamePage => rts.DiscretionYesNoController.onPageLoad(mode)
     case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(mode)
-    case UkAddressPage => rts.StartDateController.onPageLoad()
-    case NonUkAddressPage => rts.StartDateController.onPageLoad()
     case StartDatePage => rts.CheckDetailsController.onPageLoad()
   }
 
   private def yesNoNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
       yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(mode), rts.ShareOfIncomeController.onPageLoad(mode))
-    case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), rts.StartDateController.onPageLoad())
     case AddressUkYesNoPage => ua =>
       yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
   }
 
-  private val checkDetailsNav : PartialFunction[Page, UserAnswers => Call] = {
-    case UkAddressPage => ua =>
-      checkDetailsRoute(ua)
-    case NonUkAddressPage => ua =>
-      checkDetailsRoute(ua)
+  private def navigationWithCheck(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
+    mode match {
+      case NormalMode => {
+        case UkAddressPage | NonUkAddressPage => _ =>
+          rts.StartDateController.onPageLoad()
+        case AddressYesNoPage => ua =>
+          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), rts.StartDateController.onPageLoad()))
+      }
+      case CheckMode => {
+        case UkAddressPage | NonUkAddressPage => ua =>
+          checkDetailsRoute(ua)
+        case AddressYesNoPage => ua =>
+          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), checkDetailsRoute(ua))
+      }
+    }
   }
-
-  def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
-      yesNoNavigation(mode) orElse
-      checkDetailsNav
 
   def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
     ua.get(fromPage)
@@ -73,4 +75,10 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
         controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
+
+  def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
+    simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
+      yesNoNavigation(mode) orElse
+      navigationWithCheck(mode)
+  
 }
