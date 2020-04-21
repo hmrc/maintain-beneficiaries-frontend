@@ -1,5 +1,6 @@
 .hmrc-add-to-a-list {
   font-size: 19px;
+  table-layout: fixed;
 
   @include media(tablet) {
     display: table;

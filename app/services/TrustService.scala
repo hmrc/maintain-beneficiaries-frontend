@@ -48,6 +48,9 @@ class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService
   override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
     getBeneficiaries(utr).map(_.company(index))
 
+  override def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] =
+    getBeneficiaries(utr).map(_.employmentRelated(index))
+
   override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     connector.removeBeneficiary(utr, beneficiary)
 
@@ -69,6 +72,8 @@ trait TrustService {
   def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary]
 
   def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary]
+
+  def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary]
 
   def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[HttpResponse]
 }
