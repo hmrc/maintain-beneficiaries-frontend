@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.trust
 
-import config.annotations.AddTrustBeneficiary
+import config.annotations.TrustBeneficiary
 import controllers.actions._
 import controllers.actions.trust.NameRequiredAction
 import forms.UkAddressFormProvider
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UkAddressController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      sessionRepository: PlaybackRepository,
-                                     @AddTrustBeneficiary navigator: Navigator,
+                                     @TrustBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: UkAddressFormProvider,

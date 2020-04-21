@@ -23,10 +23,9 @@ import controllers.actions.trust.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.TrustBeneficiaryMapper
-import utils.print.AddTrustBeneficiaryPrintHelper
+import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.trust.CheckDetailsView
 
@@ -39,8 +38,7 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: AddTrustBeneficiaryPrintHelper,
+                                        printHelper: TrustBeneficiaryPrintHelper,
                                         mapper: TrustBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
                                         errorHandler: ErrorHandler
@@ -49,7 +47,7 @@ class CheckDetailsController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, true, request.beneficiaryName)
       Ok(view(section))
   }
 

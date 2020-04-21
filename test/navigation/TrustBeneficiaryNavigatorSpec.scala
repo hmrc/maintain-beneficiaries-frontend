@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package navigation.trustBeneficiary
+package navigation
 
 import base.SpecBase
-import controllers.charityortrust.trust.amend.{routes => rts}
+import controllers.charityortrust.trust.routes._
+import models.{CheckMode, NormalMode}
+import navigation.trustBeneficiary.TrustBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.trust._
 
-class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new AmendTrustBeneficiaryNavigator
+  val navigator = new TrustBeneficiaryNavigator
 
-  "Trust beneficiary navigator" when {
+  "Charity beneficiary navigator" when {
 
     "Name page -> Discretion yes no page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(rts.DiscretionYesNoController.onPageLoad())
+        .mustBe(DiscretionYesNoController.onPageLoad(NormalMode))
     }
 
     "Discretion yes no page -> Yes -> Address yes no page" in {
@@ -37,7 +39,7 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(DiscretionYesNoPage, true).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(AddressYesNoController.onPageLoad(NormalMode))
     }
 
     "Discretion yes no page -> No -> Share of income page" in {
@@ -45,21 +47,20 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(DiscretionYesNoPage, false).success.value
 
       navigator.nextPage(DiscretionYesNoPage, answers)
-        .mustBe(rts.ShareOfIncomeController.onPageLoad())
+        .mustBe(ShareOfIncomeController.onPageLoad(NormalMode))
     }
 
     "Share of income page -> Address yes no page" in {
       navigator.nextPage(ShareOfIncomePage, emptyUserAnswers)
-        .mustBe(rts.AddressYesNoController.onPageLoad())
+        .mustBe(AddressYesNoController.onPageLoad(NormalMode))
     }
 
-    "Address yes no page -> No -> Check your answers page" in {
+    "Address yes no page -> No -> Start date page" in {
       val answers = emptyUserAnswers
         .set(AddressYesNoPage, false).success.value
-        .set(IndexPage, 0).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+        .mustBe(StartDateController.onPageLoad())
     }
 
     "Address yes no page -> Yes -> Address in the UK yes no page" in {
@@ -67,7 +68,7 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressYesNoPage, true).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(rts.AddressUkYesNoController.onPageLoad())
+        .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
     }
 
     "Address in the UK yes no page -> Yes -> UK address page" in {
@@ -75,7 +76,7 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressUkYesNoPage, true).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.UkAddressController.onPageLoad())
+        .mustBe(UkAddressController.onPageLoad(NormalMode))
     }
 
     "Address in the UK yes no page -> No -> Non-UK address page" in {
@@ -83,15 +84,39 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressUkYesNoPage, false).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(rts.NonUkAddressController.onPageLoad())
+        .mustBe(NonUkAddressController.onPageLoad(NormalMode))
+    }
+
+    "UK address page -> Start date page" in {
+      navigator.nextPage(UkAddressPage, emptyUserAnswers)
+        .mustBe(StartDateController.onPageLoad())
+    }
+
+    "Non-UK address page -> Start date page" in {
+      navigator.nextPage(NonUkAddressPage, emptyUserAnswers)
+        .mustBe(StartDateController.onPageLoad())
+    }
+
+    "Start date page -> Check your answers page" in {
+      navigator.nextPage(StartDatePage, emptyUserAnswers)
+        .mustBe(CheckDetailsController.onPageLoad())
+    }
+
+    "Address yes no page -> No -> Check your answers page" in {
+      val answers = emptyUserAnswers
+        .set(AddressYesNoPage, false).success.value
+        .set(IndexPage, 0).success.value
+
+      navigator.nextPage(AddressYesNoPage, CheckMode, answers)
+        .mustBe(controllers.charityortrust.trust.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
 
     "UK address page -> Check your answers page" in {
       val answers = emptyUserAnswers
         .set(IndexPage, 0).success.value
 
-      navigator.nextPage(UkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+      navigator.nextPage(UkAddressPage, CheckMode, answers)
+        .mustBe(controllers.charityortrust.trust.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
 
     "Non-UK address page -> Check your answers page" in {
@@ -99,8 +124,8 @@ class AmendTrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
         .set(AddressYesNoPage, false).success.value
         .set(IndexPage, 0).success.value
 
-      navigator.nextPage(NonUkAddressPage, answers)
-        .mustBe(rts.CheckDetailsController.renderFromUserAnswers(0))
+      navigator.nextPage(NonUkAddressPage, CheckMode, answers)
+        .mustBe(controllers.charityortrust.trust.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
   }
 }

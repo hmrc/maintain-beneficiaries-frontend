@@ -16,7 +16,7 @@
 
 package controllers.charityortrust.trust
 
-import config.annotations.AddTrustBeneficiary
+import config.annotations.TrustBeneficiary
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.trust.NameRequiredAction
@@ -43,7 +43,7 @@ class ShareOfIncomeController @Inject()(
                                          view: ShareOfIncomeView,
                                          trustService: TrustService,
                                          repository: PlaybackRepository,
-                                         @AddTrustBeneficiary navigator: Navigator,
+                                         @TrustBeneficiary navigator: Navigator,
                                          nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 

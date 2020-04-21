@@ -16,17 +16,14 @@
 
 package controllers.charityortrust.trust.amend
 
-import config.{ErrorHandler, FrontendAppConfig}
-import connectors.TrustConnector
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.trust.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.TrustBeneficiaryMapper
-import utils.print.AmendTrustBeneficiaryPrintHelper
+import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.trust.amend.CheckDetailsUtrView
 
@@ -37,19 +34,15 @@ class CheckDetailsUtrController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsUtrView,
-                                        connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: AmendTrustBeneficiaryPrintHelper,
-                                        mapper: TrustBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        errorHandler: ErrorHandler
+                                        printHelper: TrustBeneficiaryPrintHelper,
+                                        nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, false, request.beneficiaryName)
       Ok(view(section, request.beneficiaryName))
   }
 

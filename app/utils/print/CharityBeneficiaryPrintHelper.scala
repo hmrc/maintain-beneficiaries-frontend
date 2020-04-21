@@ -17,7 +17,7 @@
 package utils.print
 
 import com.google.inject.Inject
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import pages.charityortrust.charity._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions

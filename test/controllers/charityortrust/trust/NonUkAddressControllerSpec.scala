@@ -17,7 +17,7 @@
 package controllers.charityortrust.trust
 
 import base.SpecBase
-import config.annotations.AddTrustBeneficiary
+import config.annotations.TrustBeneficiary
 import forms.NonUkAddressFormProvider
 import models.{NonUkAddress, NormalMode}
 import navigation.{FakeNavigator, Navigator}
@@ -88,7 +88,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddTrustBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

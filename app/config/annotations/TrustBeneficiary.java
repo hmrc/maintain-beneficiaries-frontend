@@ -26,4 +26,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @BindingAnnotation
-public @interface AddTrustBeneficiary {}
+public @interface TrustBeneficiary {}
