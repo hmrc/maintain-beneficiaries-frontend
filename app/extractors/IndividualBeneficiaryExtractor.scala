@@ -32,6 +32,7 @@ class IndividualBeneficiaryExtractor @Inject()() {
   {
 
     answers.deleteAtPath(pages.individualbeneficiary.basePath)
+              .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
               .flatMap(_.set(NamePage, individual.name))
               .flatMap(answers => extractDateOfBirth(individual, answers))
               .flatMap(answers => extractShareOfIncome(individual, answers))
