@@ -18,15 +18,15 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, HowManyBeneficiaries}
-  import play.api.libs.json._
+import models.{Address, Description}
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class EmploymentRelatedBeneficiary(name: String,
                                         utr: Option[String],
                                         address: Option[Address],
-                                        description: Seq[String],
-                                        howManyBeneficiaries: HowManyBeneficiaries,
+                                        description: Description,
+                                        howManyBeneficiaries: String,
                                         entityStart: LocalDate,
                                         provisional : Boolean
                                        ) extends Beneficiary
@@ -38,21 +38,38 @@ object EmploymentRelatedBeneficiary {
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       readDescription and
-      (__ \ 'numberOfBeneficiary).read[HowManyBeneficiaries] and
+      (__ \ 'numberOfBeneficiary).read[String] and
       (__ \ 'entityStart).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
       ).apply(EmploymentRelatedBeneficiary.apply _)
 
-  def readDescription =
+  private def readDescription =
     ((__ \ 'description).read[String] and
     (__ \ 'description1).readNullable[String] and
     (__ \ 'description2).readNullable[String] and
     (__ \ 'description3).readNullable[String] and
     (__ \ 'description4).readNullable[String]).tupled.map{
       case (desc, desc1, desc2, desc3, desc4) =>
-        Seq(desc) ++ Seq(desc1, desc2, desc3, desc4).flatten
+        Description(desc, desc1, desc2, desc3, desc4)
     }
 
+  implicit val writes: Writes[EmploymentRelatedBeneficiary] =
+    ((__ \ 'organisationName).write[String] and
+      (__ \ 'identification \ 'utr).writeNullable[String] and
+      (__ \ 'identification \ 'address).writeNullable[Address] and
+      writeDescription and
+      (__ \ 'numberOfBeneficiary).write[String] and
+      (__ \ "entityStart").write[LocalDate] and
+      (__ \ "provisional").write[Boolean]
+      ).apply(unlift(EmploymentRelatedBeneficiary.unapply))
+
+  private def writeDescription =
+    ((__ \ 'description).write[String] and
+      (__ \ 'description1).writeNullable[String] and
+      (__ \ 'description2).writeNullable[String] and
+      (__ \ 'description3).writeNullable[String] and
+      (__ \ 'description4).writeNullable[String]
+      ).apply(unlift(Description.unapply))
 
   def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
     _.transform(subPath.json.pick)

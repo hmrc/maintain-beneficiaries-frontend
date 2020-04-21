@@ -21,9 +21,10 @@ import java.time.LocalDate
 import com.google.inject.Inject
 import models.beneficiaries.RoleInCompany
 import models.beneficiaries.RoleInCompany.NA
-import models.{Address, CombinedPassportOrIdCard, IdCard, IdentificationDetailOptions, Name, Passport, UserAnswers}
+import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, IdentificationDetailOptions, Name, Passport, UserAnswers}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
+import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import queries.Gettable
 import utils.countryOptions.CountryOptions
@@ -193,6 +194,30 @@ class AnswerRowConverter @Inject()() {
         AnswerRow(
           HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
           formatIdCardDetails(x, countryOptions),
+          changeUrl
+        )
+      }
+    }
+
+    def descriptionQuestion(query: Gettable[Description],
+                                    labelKey: String,
+                                    changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel")),
+          formatDescription(x),
+          changeUrl
+        )
+      }
+    }
+
+    def numberOfBeneficiariesQuestion(query: Gettable[HowManyBeneficiaries],
+                                      labelKey: String,
+                                      changeUrl: String): Option[AnswerRow] = {
+      userAnswers.get(query) map {x =>
+        AnswerRow(
+          HtmlFormat.escape(messages(s"$labelKey.checkYourAnswersLabel", name)),
+          formatNumberOfBeneficiaries(x),
           changeUrl
         )
       }

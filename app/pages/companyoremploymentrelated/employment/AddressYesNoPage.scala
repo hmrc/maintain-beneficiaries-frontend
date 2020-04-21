@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package pages.companyoremploymentrelated
+package pages.companyoremploymentrelated.employment
 
 import models.UserAnswers
-import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
-import models.beneficiaries.CompanyOrEmploymentRelatedToAdd._
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploymentRelatedToAdd] {
+case object AddressYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = basePath \ toString
 
-  override def toString: String = "companyOrEmploymentRelated"
+  override def toString: String = "addressYesNo"
 
-  override def cleanup(value: Option[CompanyOrEmploymentRelatedToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
-      case Some(Company) => userAnswers.deleteAtPath(employment.basePath)
-      case Some(EmploymentRelated) => userAnswers.deleteAtPath(company.basePath)
+      case Some(false) =>
+        userAnswers.remove(AddressUkYesNoPage)
+        .flatMap(_.remove(UkAddressPage))
+        .flatMap(_.remove(NonUkAddressPage))
       case _ => super.cleanup(value, userAnswers)
     }
   }
