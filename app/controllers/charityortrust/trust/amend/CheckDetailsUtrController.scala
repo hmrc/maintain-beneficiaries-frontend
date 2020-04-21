@@ -48,6 +48,6 @@ class CheckDetailsUtrController @Inject()(
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+      Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }

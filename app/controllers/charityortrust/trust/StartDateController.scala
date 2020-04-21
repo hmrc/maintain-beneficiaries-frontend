@@ -21,6 +21,7 @@ import controllers.actions.StandardActionSets
 import controllers.actions.trust.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import navigation.Navigator
 import pages.charityortrust.trust.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -68,7 +69,7 @@ class StartDateController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(StartDatePage, NormalMode, updatedAnswers))
       )
   }
 }

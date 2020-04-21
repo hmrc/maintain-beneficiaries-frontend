@@ -35,21 +35,21 @@ class CharityBeneficiaryPrintHelperSpec extends SpecBase {
 
   "CharityBeneficiaryPrintHelper" must {
 
+    val helper = injector.instanceOf[CharityBeneficiaryPrintHelper]
+
+    val userAnswers = emptyUserAnswers
+      .set(NamePage, name).success.value
+      .set(DiscretionYesNoPage, false).success.value
+      .set(ShareOfIncomePage, share).success.value
+      .set(AddressYesNoPage, true).success.value
+      .set(AddressUkYesNoPage, true).success.value
+      .set(UkAddressPage, ukAddress).success.value
+      .set(NonUkAddressPage, nonUKAddress).success.value
+      .set(StartDatePage, date).success.value
+
     "generate class of beneficiary section" when {
 
       "added" in {
-
-        val helper = injector.instanceOf[CharityBeneficiaryPrintHelper]
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DiscretionYesNoPage, false).success.value
-          .set(ShareOfIncomePage, share).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(AddressUkYesNoPage, true).success.value
-          .set(UkAddressPage, ukAddress).success.value
-          .set(NonUkAddressPage, nonUKAddress).success.value
-          .set(StartDatePage, date).success.value
 
         val result = helper(userAnswers, true, name)
         result mustBe AnswerSection(
@@ -68,17 +68,6 @@ class CharityBeneficiaryPrintHelperSpec extends SpecBase {
       }
 
       "amended" in {
-
-        val helper = injector.instanceOf[CharityBeneficiaryPrintHelper]
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DiscretionYesNoPage, false).success.value
-          .set(ShareOfIncomePage, share).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(AddressUkYesNoPage, true).success.value
-          .set(UkAddressPage, ukAddress).success.value
-          .set(NonUkAddressPage, nonUKAddress).success.value
 
         val result = helper(userAnswers, false, name)
         result mustBe AnswerSection(

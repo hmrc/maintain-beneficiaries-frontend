@@ -71,7 +71,7 @@ class DiscretionYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, mode, updatedAnswers))
       )
   }
 }
