@@ -16,9 +16,9 @@
 
 package navigation.companyBeneficiary
 
-import controllers.companyoremploymentrelated.company.add.{routes => rts}
+import controllers.companyoremploymentrelated.company.{routes => rts}
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.companyoremploymentrelated.company._
 import pages.{Page, QuestionPage}
@@ -32,8 +32,8 @@ class AddCompanyBeneficiaryNavigator @Inject()() extends Navigator {
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
-    case NamePage => rts.DiscretionYesNoController.onPageLoad()
-    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad()
+    case NamePage => rts.DiscretionYesNoController.onPageLoad(NormalMode)
+    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(NormalMode)
     case UkAddressPage => rts.StartDateController.onPageLoad()
     case NonUkAddressPage => rts.StartDateController.onPageLoad()
     case StartDatePage => rts.CheckDetailsController.onPageLoad()
@@ -41,11 +41,11 @@ class AddCompanyBeneficiaryNavigator @Inject()() extends Navigator {
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case DiscretionYesNoPage => ua =>
-      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(), rts.ShareOfIncomeController.onPageLoad())
+      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(NormalMode), rts.ShareOfIncomeController.onPageLoad(NormalMode))
     case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), rts.StartDateController.onPageLoad())
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(NormalMode), rts.StartDateController.onPageLoad())
     case AddressUkYesNoPage => ua =>
-      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
+      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(NormalMode), rts.NonUkAddressController.onPageLoad(NormalMode))
   }
 
   val routes: PartialFunction[Page, UserAnswers => Call] =
