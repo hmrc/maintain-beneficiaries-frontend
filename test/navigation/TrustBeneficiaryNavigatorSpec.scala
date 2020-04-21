@@ -19,7 +19,6 @@ package navigation
 import base.SpecBase
 import controllers.charityortrust.trust.routes._
 import models.{CheckMode, NormalMode}
-import navigation.trustBeneficiary.TrustBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.charityortrust.trust._
 

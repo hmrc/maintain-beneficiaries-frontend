@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package navigation.charityBeneficiary
+package navigation
 
 import base.SpecBase
 import controllers.charityortrust.charity.routes._

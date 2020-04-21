@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package navigation.charityBeneficiary
+package navigation
 
-import controllers.charityortrust.charity.{routes => rts}
+import controllers.charityortrust.trust.{routes => rts}
 import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import navigation.Navigator
-import pages.charityortrust.charity._
+import pages.charityortrust.trust._
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 
-class CharityBeneficiaryNavigator @Inject()() extends Navigator {
+class TrustBeneficiaryNavigator @Inject()() extends Navigator {
+
+  override def nextPage(page: Page, userAnswers: UserAnswers): Call =
+    routes(NormalMode)(page)(userAnswers)
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     routes(mode)(page)(userAnswers)
-
-  override def nextPage(page: Page, userAnswers: UserAnswers): Call =
-    nextPage(page, NormalMode, userAnswers)
 
   private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
     case NamePage => rts.DiscretionYesNoController.onPageLoad(mode)
@@ -58,7 +57,7 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
           checkDetailsRoute(ua)
         case AddressYesNoPage => ua =>
           yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), checkDetailsRoute(ua))
-      }
+        }
     }
   }
 
@@ -72,7 +71,7 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
     answers.get(IndexPage) match {
       case None => controllers.routes.SessionExpiredController.onPageLoad()
       case Some(x) =>
-        controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
+        controllers.charityortrust.trust.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
 
@@ -80,5 +79,5 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
     simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
       yesNoNavigation(mode) orElse
       navigationWithCheck(mode)
-  
+
 }
