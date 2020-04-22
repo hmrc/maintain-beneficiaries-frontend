@@ -130,7 +130,7 @@ object CheckAnswersFormatters {
   }
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
-    HtmlFormat.escape(messages(s"employmentBeneficiary.numberOfBeneficiaries.$answer"))
+    HtmlFormat.escape(messages(s"numberOfBeneficiaries.$answer"))
   }
 
 }
