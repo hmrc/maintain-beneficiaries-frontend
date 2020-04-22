@@ -18,10 +18,8 @@ package views.companyoremploymentrelated.employment.add
 
 import forms.NumberOfBeneficiariesFormProvider
 import models.HowManyBeneficiaries
-import models.HowManyBeneficiaries._
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewmodels.RadioOption
 import views.behaviours.OptionsViewBehaviours
 import views.html.companyoremploymentrelated.employment.add.NumberOfBeneficiariesView
 
@@ -32,15 +30,6 @@ class NumberOfBeneficiariesViewSpec extends OptionsViewBehaviours {
   val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
   val view: NumberOfBeneficiariesView = viewFor[NumberOfBeneficiariesView](Some(emptyUserAnswers))
 
-  val values: List[HowManyBeneficiaries] = List(
-    Over1, Over101, Over201, Over501, Over1001
-  )
-
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(messageKeyPrefix, value.toString)
-  }
-
   "NumberOfBeneficiaries view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
@@ -50,7 +39,7 @@ class NumberOfBeneficiariesViewSpec extends OptionsViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithOptions(form, applyView, options)
+    behave like pageWithOptions(form, applyView, HowManyBeneficiaries.options)
 
     behave like pageWithASubmitButton(applyView(form))
   }
