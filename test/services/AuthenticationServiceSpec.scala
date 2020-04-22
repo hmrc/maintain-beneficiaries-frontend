@@ -57,7 +57,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
   "invoking authenticate" when {
     "user is authenticated" must {
       "return the data request" in {
-        when(trustAuthConnector.authorised(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed))
+        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed))
 
         val app = buildApp
 
@@ -71,7 +71,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
     }
     "user requires additional action" must {
       "redirect to desired url" in {
-        when(trustAuthConnector.authorised(any())(any(), any())).thenReturn(Future.successful(TrustAuthDenied("some-url")))
+        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthDenied("some-url")))
 
         val app = buildApp
 
@@ -87,7 +87,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
     }
     "an internal server error is returned" must {
       "return an internal server error result" in {
-        when(trustAuthConnector.authorised(any())(any(), any())).thenReturn(Future.successful(TrustAuthInternalServerError))
+        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthInternalServerError))
 
         val app = buildApp
 
