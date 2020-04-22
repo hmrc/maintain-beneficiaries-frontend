@@ -273,7 +273,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad().url
 
       application.stop()
     }

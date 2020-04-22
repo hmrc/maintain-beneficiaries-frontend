@@ -23,9 +23,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo, _}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
-import models.HowManyBeneficiaries.Over501
 import models.beneficiaries._
-import models.{Name, TrustDetails, TypeOfTrust, UkAddress}
+import models.{Description, Name, TrustDetails, TypeOfTrust, UkAddress}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
@@ -341,8 +340,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
                   name = "Employment Related Endeavours",
                   utr = None,
                   address = None,
-                  description = Seq("Description 1"),
-                  howManyBeneficiaries = Over501,
+                  description = Description("Description 1", None, None, None, None),
+                  howManyBeneficiaries = "501",
                   entityStart = LocalDate.parse("2019-09-23"),
                   provisional = false
                 )

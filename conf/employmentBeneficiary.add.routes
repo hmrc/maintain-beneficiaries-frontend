@@ -1,0 +1,26 @@
+GET         /name                       controllers.companyoremploymentrelated.employment.add.NameController.onPageLoad()
+POST        /name                       controllers.companyoremploymentrelated.employment.add.NameController.onSubmit()
+
+GET         /has-address                controllers.companyoremploymentrelated.employment.add.AddressYesNoController.onPageLoad()
+POST        /has-address                controllers.companyoremploymentrelated.employment.add.AddressYesNoController.onSubmit()
+
+GET         /has-uk-address             controllers.companyoremploymentrelated.employment.add.AddressUkYesNoController.onPageLoad()
+POST        /has-uk-address             controllers.companyoremploymentrelated.employment.add.AddressUkYesNoController.onSubmit()
+
+GET         /uk-address                 controllers.companyoremploymentrelated.employment.add.UkAddressController.onPageLoad()
+POST        /uk-address                 controllers.companyoremploymentrelated.employment.add.UkAddressController.onSubmit()
+
+GET         /non-uk-address             controllers.companyoremploymentrelated.employment.add.NonUkAddressController.onPageLoad()
+POST        /non-uk-address             controllers.companyoremploymentrelated.employment.add.NonUkAddressController.onSubmit()
+
+GET         /description                controllers.companyoremploymentrelated.employment.add.DescriptionController.onPageLoad()
+POST        /description                controllers.companyoremploymentrelated.employment.add.DescriptionController.onSubmit()
+
+GET         /number-of-beneficiaries    controllers.companyoremploymentrelated.employment.add.NumberOfBeneficiariesController.onPageLoad()
+POST        /number-of-beneficiaries    controllers.companyoremploymentrelated.employment.add.NumberOfBeneficiariesController.onSubmit()
+
+GET         /when-added                 controllers.companyoremploymentrelated.employment.add.StartDateController.onPageLoad()
+POST        /when-added                 controllers.companyoremploymentrelated.employment.add.StartDateController.onSubmit()
+
+GET         /check-details              controllers.companyoremploymentrelated.employment.add.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.companyoremploymentrelated.employment.add.CheckDetailsController.onSubmit()

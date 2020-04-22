@@ -32,7 +32,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
   lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
   val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type = CompanyOrEmploymentRelatedToAdd.Company
 
-  "AddNow Controller" must {
+  "CompanyOrEmploymentRelatedController Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -90,7 +90,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       application.stop()
     }
 
-    "redirect to feature not available page when Employment Related is selected" in {
+    "redirect to the Name page when Employment Related is selected" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -102,7 +102,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.FeatureNotAvailableController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad().url
 
       application.stop()
     }

@@ -19,7 +19,7 @@ package models.beneficiaries
 import java.time.LocalDate
 
 import models.HowManyBeneficiaries._
-import models.{NonUkAddress, UkAddress}
+import models.{Description, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
@@ -66,8 +66,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             Some("London"),
             "SE2 2HB"
           )),
-          description = Seq("Description 1"),
-          howManyBeneficiaries = Over1001,
+          description = Description("Description 1", None, None, None, None),
+          howManyBeneficiaries = "1001",
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -106,8 +106,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             Some("314159"),
             "US"
           )),
-          description = Seq("Description 1"),
-          howManyBeneficiaries = Over201,
+          description = Description("Description 1", None, None, None, None),
+          howManyBeneficiaries = "201",
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -140,8 +140,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Beneficiary Large 24",
           utr = Some("3570719187"),
           address = None,
-          description = Seq("Description 1", "Description 2", "Description 3", "Description 4", "Description 5"),
-          howManyBeneficiaries = Over101,
+          description = Description("Description 1", Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
+          howManyBeneficiaries = "101",
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -170,8 +170,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Beneficiary Large 24",
           utr = Some("3570719187"),
           address = None,
-          description = Seq("Description 1"),
-          howManyBeneficiaries = Over501,
+          description = Description("Description 1", None, None, None, None),
+          howManyBeneficiaries = "501",
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -196,8 +196,8 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           name = "Beneficiary Large 25",
           utr = None,
           address = None,
-          description = Seq("Description 1"),
-          howManyBeneficiaries = Over1,
+          description = Description("Description 1", None, None, None, None),
+          howManyBeneficiaries = "1",
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
