@@ -28,11 +28,11 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
   case object Over501 extends WithName("over501") with HowManyBeneficiaries
   case object Over1001 extends WithName("over1001") with HowManyBeneficiaries
 
-  val values: Seq[HowManyBeneficiaries] = Seq(
+  val values: List[HowManyBeneficiaries] = List(
     Over1, Over101, Over201, Over501, Over1001
   )
 
-  val options: Seq[RadioOption] = values.map {
+  val options: List[RadioOption] = values.map {
     value =>
       RadioOption("employmentBeneficiary.numberOfBeneficiaries", value.toString)
   }
