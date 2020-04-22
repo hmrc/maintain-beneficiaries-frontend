@@ -130,13 +130,7 @@ object CheckAnswersFormatters {
   }
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
-    answer match {
-      case HowManyBeneficiaries.Over1 => HtmlFormat.escape(messages("employmentBeneficiary.numberOfBeneficiaries.over1"))
-      case HowManyBeneficiaries.Over101 => HtmlFormat.escape(messages("employmentBeneficiary.numberOfBeneficiaries.over101"))
-      case HowManyBeneficiaries.Over201 => HtmlFormat.escape(messages("employmentBeneficiary.numberOfBeneficiaries.over201"))
-      case HowManyBeneficiaries.Over501 => HtmlFormat.escape(messages("employmentBeneficiary.numberOfBeneficiaries.over501"))
-      case HowManyBeneficiaries.Over1001 => HtmlFormat.escape(messages("employmentBeneficiary.numberOfBeneficiaries.over1001"))
-    }
+    HtmlFormat.escape(messages(s"employmentBeneficiary.numberOfBeneficiaries.$answer"))
   }
 
 }
