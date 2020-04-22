@@ -162,12 +162,6 @@ entities.beneficiaries.company = Named company
 entities.beneficiaries.employmentRelated = Employment related
 entities.beneficiaries.other = Other beneficiary
 
-beneficiary.employmentRelated.howManyBeneficiaries.over1 = 1 to 100
-beneficiary.employmentRelated.howManyBeneficiaries.over101 = 101 to 200
-beneficiary.employmentRelated.howManyBeneficiaries.over201 = 201 to 500
-beneficiary.employmentRelated.howManyBeneficiaries.over501 = 501 to 1000
-beneficiary.employmentRelated.howManyBeneficiaries.over1001 = Over 1,001
-
 # CLASS OF BENEFICIARIES
 
 classOfBeneficiary.description.default = the class of beneficiaries
@@ -752,8 +746,71 @@ companyBeneficiary.whenRemoved.error.invalid = Enter a real date when the compan
 companyBeneficiary.whenRemoved.error.future = The date the company beneficiary was removed from the trust must be today or in the past
 companyBeneficiary.whenRemoved.error.past = The date the company beneficiary was removed must be on or after the date they were added
 
+# EMPLOYMENT RELATED
 
-# Employment beneficiary
+employmentBeneficiary.name.default = the employment related beneficiary
+
+# Add / Amend
+
+employmentBeneficiary.name.title = What is the business name?
+employmentBeneficiary.name.heading = What is the business name?
+employmentBeneficiary.name.checkYourAnswersLabel = What is the business name?
+employmentBeneficiary.name.error.required = Enter the business name
+employmentBeneficiary.name.error.invalidFormat = Business name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
+employmentBeneficiary.name.error.length = Business name cannot be more than 105 characters
+
+employmentBeneficiary.addressYesNo.title = Do you know the employment related beneficiary’s address?
+employmentBeneficiary.addressYesNo.heading = Do you know {0}’s address?
+employmentBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
+employmentBeneficiary.addressYesNo.error.required = Select yes if you know the employment related beneficiary’s address
+
+employmentBeneficiary.addressUkYesNo.title = Is the employment related beneficiary’s address in the UK?
+employmentBeneficiary.addressUkYesNo.heading = Is {0}’s address in the UK?
+employmentBeneficiary.addressUkYesNo.checkYourAnswersLabel = Is {0}’s address in the UK?
+employmentBeneficiary.addressUkYesNo.error.required = Select yes if the employment related beneficiary’s address is in the UK
+
+employmentBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
+
+employmentBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
+
+employmentBeneficiary.description.title = What is the description of the beneficiary?
+employmentBeneficiary.description.heading = What is the description of the beneficiary?
+employmentBeneficiary.description.checkYourAnswersLabel = What is the description of the beneficiary?
+employmentBeneficiary.description.hint = Do not include named or specific employees such as directors, they must be listed as individual beneficiaries. This must be 70 characters each or less
+employmentBeneficiary.description.description1 = Description 1
+employmentBeneficiary.description.description2 = Description 2 (optional)
+employmentBeneficiary.description.description3 = Description 3 (optional)
+employmentBeneficiary.description.description4 = Description 4 (optional)
+employmentBeneficiary.description.description5 = Description 5 (optional)
+employmentBeneficiary.description.error.required = Enter the description of your beneficiaries
+employmentBeneficiary.description.error.invalid = The description of your beneficiaries must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+employmentBeneficiary.description.error.length = The description of your beneficiaries must be 70 characters or less
+
+employmentBeneficiary.numberOfBeneficiaries.title = What is the approximate number of beneficiaries held in the trust?
+employmentBeneficiary.numberOfBeneficiaries.heading = What is the approximate number of beneficiaries held in the trust?
+employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel = What is the approximate number of beneficiaries held in the trust?
+employmentBeneficiary.numberOfBeneficiaries.error.required = Select the approximate number of beneficiaries held in the trust
+
+numberOfBeneficiaries.over1 = 1 to 100
+numberOfBeneficiaries.over101 = 101 to 200
+numberOfBeneficiaries.over201 = 201 to 500
+numberOfBeneficiaries.over501 = 501 to 1,000
+numberOfBeneficiaries.over1001 = Over 1,001
+
+employmentBeneficiary.startDate.title = When was the employment related beneficiary added as a beneficiary?
+employmentBeneficiary.startDate.heading = When was {0} added as a beneficiary?
+employmentBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
+employmentBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
+employmentBeneficiary.startDate.hint = For example, 31 3 1980
+employmentBeneficiary.startDate.error.required.all = Enter the date the employment related beneficiary was added to the trust
+employmentBeneficiary.startDate.error.required.two = The date the employment related beneficiary was added to the trust must include a {0} and a {1}
+employmentBeneficiary.startDate.error.required = The date the employment related beneficiary was added to the trust must include a {0}
+employmentBeneficiary.startDate.error.invalid = Enter a real date
+employmentBeneficiary.startDate.error.future = The date the employment related beneficiary was added to the trust must be today or in the past
+employmentBeneficiary.startDate.error.past = The date the employment related beneficiary was added to the trust cannot be before the start date of the trust
+
+employmentBeneficiary.checkDetails.title = Check employment related beneficiary details
+employmentBeneficiary.checkDetails.heading = Check employment related beneficiary details
 
 # Remove
 

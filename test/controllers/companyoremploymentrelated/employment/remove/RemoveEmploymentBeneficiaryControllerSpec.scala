@@ -21,7 +21,7 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
-import models.HowManyBeneficiaries
+import models.Description
 import models.beneficiaries.{Beneficiaries, EmploymentRelatedBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -51,8 +51,8 @@ class RemoveEmploymentBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     name = s"Some Name $id",
     utr = None,
     address = None,
-    description = Nil,
-    howManyBeneficiaries = HowManyBeneficiaries.Over501,
+    description = Description("Description", None, None, None, None),
+    howManyBeneficiaries = "501",
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
   )

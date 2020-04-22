@@ -19,7 +19,7 @@ package models.beneficiaries
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{HowManyBeneficiaries, Name}
+import models.{Description, HowManyBeneficiaries, Name}
 import viewmodels.RadioOption
 
 class BeneficiariesSpec extends SpecBase {
@@ -77,8 +77,8 @@ class BeneficiariesSpec extends SpecBase {
     "name",
     None,
     None,
-    Nil,
-    HowManyBeneficiaries.Over1,
+    description = Description("Description", None, None, None, None),
+    "1",
     LocalDate.parse("2019-02-03"),
     provisional = false
   )
