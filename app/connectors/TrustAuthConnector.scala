@@ -19,9 +19,8 @@ package connectors
 import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
 import javax.inject.Inject
-import play.api.http.Status._
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,16 +29,6 @@ case class TrustAuthResponseBody(redirectUrl: Option[String] = None)
 
 object TrustAuthResponseBody {
   implicit val format: Format[TrustAuthResponseBody] = Json.format[TrustAuthResponseBody]
-  implicit lazy val httpReads: HttpReads[TrustAuthResponseBody] =
-    new HttpReads[TrustAuthResponseBody] {
-      override def read(method: String, url: String, response: HttpResponse): TrustAuthResponseBody = {
-        response.status match {
-          case OK =>
-            response.json.as[TrustAuthResponseBody]
-          case _ => throw new RuntimeException
-        }
-      }
-    }
 }
 
 sealed trait TrustAuthResponse
@@ -60,8 +49,7 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-
-    http.GET[TrustAuthResponseBody](baseUrl + utr, Seq.empty, hc.headers)(TrustAuthResponseBody.httpReads, hc, ec).map {
+    http.GET[TrustAuthResponseBody](baseUrl + utr).map {
       case TrustAuthResponseBody(Some(redirectUrl)) => TrustAuthDenied(redirectUrl)
       case _ => TrustAuthAllowed
     }.recoverWith {
