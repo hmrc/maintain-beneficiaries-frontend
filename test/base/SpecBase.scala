@@ -18,7 +18,6 @@ package base
 
 import java.time.LocalDate
 
-import connectors.EnrolmentStoreConnector
 import controllers.actions._
 import models.TypeOfTrust
 import navigation.FakeNavigator
@@ -53,7 +52,6 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
         bind[PlaybackIdentifierAction].toInstance(new FakePlaybackIdentifierAction()),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[EnrolmentStoreConnector].toInstance(mockEnrolmentStoreConnector),
         bind[PlaybackRepository].toInstance(playbackRepository)
       )
 }
