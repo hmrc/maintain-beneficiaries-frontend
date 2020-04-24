@@ -32,6 +32,7 @@ class EmploymentRelatedBeneficiaryExtractor @Inject()() {
       .flatMap(_.set(NamePage, employmentRelatedBeneficiary.name))
       .flatMap(_.set(UtrPage, employmentRelatedBeneficiary.utr))
       .flatMap(answers => extractAddress(employmentRelatedBeneficiary.address, answers))
+      .flatMap(_.set(DescriptionPage, employmentRelatedBeneficiary.description))
       .flatMap(answers => extracthowManyBeneficiaries(employmentRelatedBeneficiary.howManyBeneficiaries, answers))
       .flatMap(_.set(StartDatePage, employmentRelatedBeneficiary.entityStart))
       .flatMap(_.set(IndexPage, index))

@@ -31,12 +31,14 @@ class AmendEmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.AddressYesNoController.onPageLoad()
+    case UkAddressPage => rts.DescriptionController.onPageLoad()
+    case NonUkAddressPage => rts.DescriptionController.onPageLoad()
     case DescriptionPage => rts.NumberOfBeneficiariesController.onPageLoad()
   }
 
   private val yesNoNavigation : PartialFunction[Page, UserAnswers => Call] = {
     case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), checkDetailsRoute(ua))
+      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(), rts.DescriptionController.onPageLoad())
     case AddressUkYesNoPage => ua =>
       yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(), rts.NonUkAddressController.onPageLoad())
   }

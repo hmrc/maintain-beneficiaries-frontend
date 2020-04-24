@@ -17,16 +17,17 @@
 package navigation.employmentRelatedBeneficiary
 
 import base.SpecBase
-import controllers.companyoremploymentrelated.employment.add.routes._
-import navigation.employmentBeneficiary.AddEmploymentRelatedBeneficiaryNavigator
+import controllers.companyoremploymentrelated.employment.amend.routes._
+import models.HowManyBeneficiaries.Over1
+import navigation.employmentBeneficiary.AmendEmploymentRelatedBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.companyoremploymentrelated.employment._
 
-class AddEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new AddEmploymentRelatedBeneficiaryNavigator
+  val navigator = new AmendEmploymentRelatedBeneficiaryNavigator
 
-  "Employment related beneficiary navigator" when {
+  "Amend employment related beneficiary navigator" when {
 
     "Name page -> Address yes no page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
@@ -80,14 +81,12 @@ class AddEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCh
         .mustBe(NumberOfBeneficiariesController.onPageLoad())
     }
 
-    "Number of beneficiaries page -> Start date page" in {
-      navigator.nextPage(NumberOfBeneficiariesPage, emptyUserAnswers)
-        .mustBe(StartDateController.onPageLoad())
-    }
+    "Number of beneficiaries page -> Check your answers page" in {
+      val answers = emptyUserAnswers
+        .set(IndexPage, 0).success.value
 
-    "Start date page -> Check your answers page" in {
-      navigator.nextPage(StartDatePage, emptyUserAnswers)
-        .mustBe(CheckDetailsController.onPageLoad())
+      navigator.nextPage(NumberOfBeneficiariesPage, answers)
+        .mustBe(CheckDetailsController.renderFromUserAnswers(0))
     }
   }
 }
