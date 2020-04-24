@@ -23,7 +23,7 @@
 )(implicit messages: Messages)
 
 @if(hint.nonEmpty) {
-  <span id="form-hint" class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
+  <span id="form-hint" class="form-hint" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
   @link.map { l =>
     <a id="link" href="@l.url" target="_blank">@l.text</a>
   }
