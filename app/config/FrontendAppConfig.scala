@@ -45,29 +45,16 @@ class FrontendAppConfig @Inject()(config: Configuration) {
 
   lazy val loginUrl: String = config.get[String]("urls.login")
   lazy val loginContinueUrl: String = config.get[String]("urls.loginContinue")
-  lazy val lostUtrUrl : String = config.get[String]("urls.lostUtr")
   lazy val logoutUrl: String = config.get[String]("urls.logout")
 
   lazy val trustsUrl: String = config.get[Service]("microservice.services.trusts").baseUrl
 
+  lazy val trustAuthUrl: String = config.get[Service]("microservice.services.trusts-auth").baseUrl
+
   lazy val trustsStoreUrl: String = config.get[Service]("microservice.services.trusts-store").baseUrl
-
-  lazy val enrolmentStoreProxyUrl: String = config.get[Service]("microservice.services.enrolment-store-proxy").baseUrl
-
-  lazy val relationshipName: String =
-    config.get[String]("microservice.services.self.relationship-establishment.name")
-  lazy val relationshipIdentifier: String =
-    config.get[String]("microservice.services.self.relationship-establishment.identifier")
-
-  def claimATrustUrl(utr: String) =
-    config.get[Service]("microservice.services.claim-a-trust-frontend").baseUrl + s"/claim-a-trust/save/$utr"
-
-  def verifyIdentityForATrustUrl(utr: String) =
-    config.get[Service]("microservice.services.verify-your-identity-for-a-trust-frontend").baseUrl + s"/verify-your-identity-for-a-trust/save/$utr"
 
   lazy val agentsSubscriptionsUrl: String = config.get[String]("urls.agentSubscriptions")
   lazy val agentServiceRegistrationUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
-  lazy val agentInvitationsUrl: String = config.get[String]("urls.agentInvitations")
 
   lazy val locationCanonicalList: String = config.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = config.get[String]("location.canonical.list.nonUK")
