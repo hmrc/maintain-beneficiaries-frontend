@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over101
 import models.beneficiaries._
-import models.{BeneficiaryType, Name, RemoveBeneficiary}
+import models.{BeneficiaryType, Description, Name, RemoveBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -99,8 +99,8 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     name = "Employment Related Endeavors Ltd",
     utr = None,
     address = None,
-    description = Seq("Other Endeavours Ltd"),
-    howManyBeneficiaries = Over101,
+    description = Description("Other Endeavours Ltd", None, None, None, None),
+    howManyBeneficiaries = "101",
     entityStart = LocalDate.parse("2012-03-14"),
     provisional = false
   )

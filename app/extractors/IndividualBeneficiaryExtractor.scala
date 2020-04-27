@@ -22,7 +22,7 @@ import models.{Address, CombinedPassportOrIdCard, IdCard, NationalInsuranceNumbe
 
 import scala.util.Try
 
-class IndividualBeneficiaryExtractor @Inject()() {
+class   IndividualBeneficiaryExtractor @Inject()() {
 
   import pages.individualbeneficiary._
 
@@ -32,6 +32,7 @@ class IndividualBeneficiaryExtractor @Inject()() {
   {
 
     answers.deleteAtPath(pages.individualbeneficiary.basePath)
+              .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
               .flatMap(_.set(NamePage, individual.name))
               .flatMap(answers => extractDateOfBirth(individual, answers))
               .flatMap(answers => extractShareOfIncome(individual, answers))

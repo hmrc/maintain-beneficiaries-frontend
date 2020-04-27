@@ -19,7 +19,7 @@ package extractors
 import java.time.LocalDate
 
 import generators.ModelGenerators
-import models.beneficiaries.IndividualBeneficiary
+import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, TypeOfTrust, UkAddress, UserAnswers}
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -67,6 +67,39 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
     result.get(NamePage).get mustBe name
     result.get(DateOfBirthYesNoPage).get mustBe true
     result.get(DateOfBirthPage).get mustBe date
+    result.get(NationalInsuranceNumberYesNoPage).get mustBe true
+    result.get(NationalInsuranceNumberPage).get mustBe "nino"
+    result.get(AddressYesNoPage) mustNot be(defined)
+    result.get(LiveInTheUkYesNoPage) mustNot be(defined)
+    result.get(UkAddressPage) mustNot be(defined)
+    result.get(NonUkAddressPage) mustNot be(defined)
+    result.get(PassportOrIdCardDetailsYesNoPage) mustNot be(defined)
+    result.get(PassportOrIdCardDetailsPage) mustNot be(defined)
+  }
+
+  "should populate user answers when individual has a role in the company" in {
+    val nino = NationalInsuranceNumber("nino")
+
+    val individual = IndividualBeneficiary(
+      name = name,
+      dateOfBirth = Some(date),
+      identification = Some(nino),
+      address = None,
+      vulnerableYesNo = false,
+      roleInCompany = Some(RoleInCompany.Director),
+      income = None,
+      incomeDiscretionYesNo = true,
+      entityStart = date,
+      provisional = true
+    )
+
+    val result = extractor(answers, individual, index).get
+
+    result.get(IndexPage).get mustBe index
+    result.get(NamePage).get mustBe name
+    result.get(DateOfBirthYesNoPage).get mustBe true
+    result.get(DateOfBirthPage).get mustBe date
+    result.get(RoleInCompanyPage).get mustBe RoleInCompany.Director
     result.get(NationalInsuranceNumberYesNoPage).get mustBe true
     result.get(NationalInsuranceNumberPage).get mustBe "nino"
     result.get(AddressYesNoPage) mustNot be(defined)

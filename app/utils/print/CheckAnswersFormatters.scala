@@ -18,7 +18,7 @@ package utils.print
 
 import java.time.format.DateTimeFormatter
 
-import models.{Address, CombinedPassportOrIdCard, IdCard, IdentificationDetailOptions, NonUkAddress, Passport, UkAddress}
+import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, IdentificationDetailOptions, NonUkAddress, Passport, UkAddress}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import utils.countryOptions.CountryOptions
@@ -115,5 +115,22 @@ object CheckAnswersFormatters {
   }
 
   def percentage(value: Int): Html = HtmlFormat.escape(s"$value%")
+
+  def formatDescription(description: Description): Html = {
+    val lines =
+      Seq(
+        Some(HtmlFormat.escape(description.description)),
+        description.description1.map(HtmlFormat.escape),
+        description.description2.map(HtmlFormat.escape),
+        description.description3.map(HtmlFormat.escape),
+        description.description4.map(HtmlFormat.escape)
+      ).flatten
+
+    Html(lines.mkString("<br />"))
+  }
+
+  def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
+    HtmlFormat.escape(messages(s"numberOfBeneficiaries.$answer"))
+  }
 
 }
