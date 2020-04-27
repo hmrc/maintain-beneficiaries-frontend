@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.companyoremploymentrelated.company.amend
+package controllers.companyoremploymentrelated.company
 
 import config.{ErrorHandler, FrontendAppConfig}
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.company.NameRequiredAction
-import extractors.CompanyBeneficiaryExtractor
 import javax.inject.Inject
-import models.UserAnswers
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
-import repositories.PlaybackRepository
-import services.TrustService
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CompanyBeneficiaryMapper
 import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
+import views.html.companyoremploymentrelated.company.CheckDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,57 +36,31 @@ class CheckDetailsController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsView,
-                                        service: TrustService,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
                                         printHelper: CompanyBeneficiaryPrintHelper,
                                         mapper: CompanyBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
-                                        extractor: CompanyBeneficiaryExtractor,
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
-    val section: AnswerSection = printHelper(userAnswers, false, name)
-    Ok(view(section, index))
-  }
-
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      service.getCompanyBeneficiary(request.userAnswers.utr, index) flatMap {
-        company =>
-          for {
-            extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
-            _ <- playbackRepository.set(extractedAnswers)
-          } yield {
-            if (company.utr.isDefined) {
-              Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
-            } else {
-              render(extractedAnswers, index, company.name)
-            }
-          }
-      }
+      val section: AnswerSection = printHelper(request.userAnswers, true, request.beneficiaryName)
+      Ok(view(section))
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
-    implicit request =>
-      render(request.userAnswers, index, request.beneficiaryName)
-  }
-
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers).map {
-        beneficiary =>
-          connector.amendCompanyBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
+      mapper(request.userAnswers) match {
+        case None =>
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+        case Some(beneficiary) =>
+          connector.addCompanyBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
-      }.getOrElse(Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate)))
+      }
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.companyoremploymentrelated.company.amend
+package controllers.companyoremploymentrelated.company
 
 import java.time.LocalDate
 
@@ -34,25 +34,23 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.CompanyBeneficiaryPrintHelper
-import views.html.companyoremploymentrelated.company.amend.CheckDetailsUtrView
+import views.html.companyoremploymentrelated.company.CheckDetailsView
 
 import scala.concurrent.Future
 
-class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   private val name: String = "Company"
-  private val utr: String = "UTRUTRUTR"
   private val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private lazy val checkDetailsUtrRoute = routes.CheckDetailsUtrController.onPageLoad().url
-  private lazy val submitDetailsUtrRoute = routes.CheckDetailsUtrController.onSubmit().url
+  private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad().url
+  private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit().url
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
     .set(AddNowPage, TypeOfBeneficiaryToAdd.CompanyOrEmploymentRelated).success.value
     .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.Company).success.value
     .set(NamePage, name).success.value
-    .set(UtrPage, utr).success.value
     .set(DiscretionYesNoPage, true).success.value
     .set(AddressYesNoPage, false).success.value
     .set(StartDatePage, date).success.value
@@ -63,18 +61,18 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, checkDetailsUtrRoute)
+      val request = FakeRequest(GET, checkDetailsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsUtrView]
+      val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[CompanyBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, false, name)
+      val answerSection = printHelper(userAnswers, true, name)
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, name)(fakeRequest, messages).toString
+        view(answerSection)(fakeRequest, messages).toString
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {
@@ -86,9 +84,9 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.amendCompanyBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(mockTrustConnector.addCompanyBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
-      val request = FakeRequest(POST, submitDetailsUtrRoute)
+      val request = FakeRequest(POST, submitDetailsRoute)
 
       val result = route(application, request).value
 

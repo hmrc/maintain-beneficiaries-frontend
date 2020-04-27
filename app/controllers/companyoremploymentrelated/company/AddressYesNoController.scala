@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.trust
+package controllers.companyoremploymentrelated.company
 
-import config.annotations.TrustBeneficiary
-import controllers.actions._
-import controllers.actions.trust.NameRequiredAction
-import forms.UkAddressFormProvider
+import config.annotations.CompanyBeneficiary
+import controllers.actions.StandardActionSets
+import controllers.actions.company.NameRequiredAction
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.charityortrust.trust.UkAddressPage
-import play.api.i18n.{I18nSupport, MessagesApi}
+import pages.companyoremploymentrelated.company.AddressYesNoPage
+import play.api.data.Form
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.trust.UkAddressView
+import views.html.companyoremploymentrelated.company.AddressYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UkAddressController @Inject()(
-                                     override val messagesApi: MessagesApi,
-                                     sessionRepository: PlaybackRepository,
-                                     @TrustBeneficiary navigator: Navigator,
-                                     standardActionSets: StandardActionSets,
-                                     nameAction: NameRequiredAction,
-                                     formProvider: UkAddressFormProvider,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     view: UkAddressView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AddressYesNoController @Inject()(
+                                        val controllerComponents: MessagesControllerComponents,
+                                        standardActionSets: StandardActionSets,
+                                        formProvider: YesNoFormProvider,
+                                        view: AddressYesNoView,
+                                        repository: PlaybackRepository,
+                                        @CompanyBeneficiary navigator: Navigator,
+                                        nameAction: NameRequiredAction
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider.withPrefix("companyBeneficiary.addressYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(UkAddressPage) match {
+      val preparedForm = request.userAnswers.get(AddressYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class UkAddressController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkAddressPage, mode, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage, value))
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(AddressYesNoPage, updatedAnswers))
       )
   }
 }

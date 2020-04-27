@@ -14,60 +14,61 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.trust
+package controllers.companyoremploymentrelated.company
 
-import config.annotations.TrustBeneficiary
-import controllers.actions._
-import controllers.actions.trust.NameRequiredAction
-import forms.UkAddressFormProvider
+import config.annotations.CompanyBeneficiary
+import controllers.actions.StandardActionSets
+import controllers.actions.company.NameRequiredAction
+import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
-import pages.charityortrust.trust.UkAddressPage
+import pages.companyoremploymentrelated.company.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.trust.UkAddressView
+import views.html.companyoremploymentrelated.company.StartDateView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UkAddressController @Inject()(
+class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
-                                     sessionRepository: PlaybackRepository,
-                                     @TrustBeneficiary navigator: Navigator,
+                                     playbackRepository: PlaybackRepository,
+                                     @CompanyBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
-                                     formProvider: UkAddressFormProvider,
+                                     formProvider: DateAddedToTrustFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
-                                     view: UkAddressView
+                                     view: StartDateView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(UkAddressPage) match {
+      val form = formProvider.withPrefixAndTrustStartDate("companyBeneficiary.startDate", request.userAnswers.whenTrustSetup)
+
+      val preparedForm = request.userAnswers.get(StartDatePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, request.beneficiaryName))
+      Ok(view(preparedForm, request.beneficiaryName))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
+
+      val form = formProvider.withPrefixAndTrustStartDate("companyBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkAddressPage, mode, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
+            _              <- playbackRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
       )
   }
 }

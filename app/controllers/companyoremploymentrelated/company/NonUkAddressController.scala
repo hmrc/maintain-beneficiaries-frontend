@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.trust
+package controllers.companyoremploymentrelated.company
 
-import config.annotations.TrustBeneficiary
+import config.annotations.CompanyBeneficiary
 import controllers.actions._
-import controllers.actions.trust.NameRequiredAction
+import controllers.actions.company.NameRequiredAction
 import forms.NonUkAddressFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.charityortrust.trust.NonUkAddressPage
+import pages.companyoremploymentrelated.company.NonUkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.charityortrust.trust.NonUkAddressView
+import views.html.companyoremploymentrelated.company.NonUkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class NonUkAddressController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: PlaybackRepository,
-                                        @TrustBeneficiary navigator: Navigator,
+                                        @CompanyBeneficiary navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredAction,
                                         formProvider: NonUkAddressFormProvider,
@@ -69,7 +69,7 @@ class NonUkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NonUkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NonUkAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NonUkAddressPage, updatedAnswers))
       )
   }
 }

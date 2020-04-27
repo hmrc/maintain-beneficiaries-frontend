@@ -71,7 +71,7 @@ class ShareOfIncomeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage, mode, updatedAnswers))
       )
   }
 }

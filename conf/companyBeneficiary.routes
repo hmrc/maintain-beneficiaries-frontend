@@ -1,0 +1,40 @@
+GET         /name                       controllers.companyoremploymentrelated.company.NameController.onPageLoad(mode: Mode = NormalMode)
+POST        /name                       controllers.companyoremploymentrelated.company.NameController.onSubmit(mode: Mode = NormalMode)
+GET         /change-name                       controllers.companyoremploymentrelated.company.NameController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-name                       controllers.companyoremploymentrelated.company.NameController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-discretion             controllers.companyoremploymentrelated.company.DiscretionYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onPageLoad(mode: Mode = NormalMode)
+POST        /share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-share-of-income            controllers.companyoremploymentrelated.company.ShareOfIncomeController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-address                controllers.companyoremploymentrelated.company.AddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-address                controllers.companyoremploymentrelated.company.AddressYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-address                controllers.companyoremploymentrelated.company.AddressYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-address                controllers.companyoremploymentrelated.company.AddressYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-uk-address             controllers.companyoremploymentrelated.company.AddressUkYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-uk-address             controllers.companyoremploymentrelated.company.AddressUkYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-uk-address             controllers.companyoremploymentrelated.company.AddressUkYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-uk-address             controllers.companyoremploymentrelated.company.AddressUkYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /uk-address                 controllers.companyoremploymentrelated.company.UkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST        /uk-address                 controllers.companyoremploymentrelated.company.UkAddressController.onSubmit(mode: Mode = NormalMode)
+GET         /change-uk-address                 controllers.companyoremploymentrelated.company.UkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-uk-address                 controllers.companyoremploymentrelated.company.UkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET         /non-uk-address             controllers.companyoremploymentrelated.company.NonUkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST        /non-uk-address             controllers.companyoremploymentrelated.company.NonUkAddressController.onSubmit(mode: Mode = NormalMode)
+GET         /change-non-uk-address             controllers.companyoremploymentrelated.company.NonUkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-non-uk-address             controllers.companyoremploymentrelated.company.NonUkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET         /when-added                 controllers.companyoremploymentrelated.company.StartDateController.onPageLoad()
+POST        /when-added                 controllers.companyoremploymentrelated.company.StartDateController.onSubmit()
+
+GET         /check-details              controllers.companyoremploymentrelated.company.CheckDetailsController.onPageLoad()
+POST        /check-details              controllers.companyoremploymentrelated.company.CheckDetailsController.onSubmit()

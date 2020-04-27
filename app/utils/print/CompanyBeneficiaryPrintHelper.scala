@@ -17,8 +17,8 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.companyoremploymentrelated.company.add.routes._
-import models.UserAnswers
+import controllers.companyoremploymentrelated.company.routes._
+import models.{CheckMode, UserAnswers}
 import pages.companyoremploymentrelated.company._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
@@ -28,22 +28,34 @@ class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
                                               countryOptions: CountryOptions
                                  ) {
 
-  def apply(userAnswers: UserAnswers, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
 
-    AnswerSection(
-      None,
-      Seq(
-        bound.stringQuestion(NamePage, "companyBeneficiary.name", NameController.onPageLoad().url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad().url),
-        bound.percentageQuestion(ShareOfIncomePage, "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad().url),
-        bound.yesNoQuestion(AddressYesNoPage, "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad().url),
-        bound.addressQuestion(UkAddressPage, "companyBeneficiary.ukAddress", UkAddressController.onPageLoad().url),
-        bound.addressQuestion(NonUkAddressPage, "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad().url),
+    val add = Seq(
+        bound.stringQuestion(NamePage, "companyBeneficiary.name", NameController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(UkAddressPage, "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(NonUkAddressPage, "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(CheckMode).url),
         bound.dateQuestion(StartDatePage, "companyBeneficiary.startDate", StartDateController.onPageLoad().url)
       ).flatten
+
+    val amend = Seq(
+        bound.stringQuestion(NamePage, "companyBeneficiary.name", NameController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "companyBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "companyBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "companyBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "companyBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(UkAddressPage, "companyBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
+        bound.addressQuestion(NonUkAddressPage, "companyBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(CheckMode).url)
+      ).flatten
+
+    AnswerSection(
+      None,
+      if (provisional) add else amend
     )
   }
 }

@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.trust
+package controllers.companyoremploymentrelated.company
 
-import config.annotations.TrustBeneficiary
+import config.annotations.CompanyBeneficiary
 import controllers.actions._
-import controllers.actions.trust.NameRequiredAction
+import controllers.actions.company.NameRequiredAction
 import forms.UkAddressFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.charityortrust.trust.UkAddressPage
+import pages.companyoremploymentrelated.company.UkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.trust.UkAddressView
+import views.html.companyoremploymentrelated.company.UkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkAddressController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      sessionRepository: PlaybackRepository,
-                                     @TrustBeneficiary navigator: Navigator,
+                                     @CompanyBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: UkAddressFormProvider,
@@ -67,7 +67,7 @@ class UkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkAddressPage, updatedAnswers))
       )
   }
 }

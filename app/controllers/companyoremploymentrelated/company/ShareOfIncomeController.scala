@@ -14,45 +14,41 @@
  * limitations under the License.
  */
 
-package controllers.charityortrust.trust
+package controllers.companyoremploymentrelated.company
 
-import config.annotations.TrustBeneficiary
-import connectors.TrustConnector
+import config.annotations.CompanyBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.trust.NameRequiredAction
-import forms.YesNoFormProvider
+import controllers.actions.company.NameRequiredAction
+import forms.IncomePercentageFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.charityortrust.trust.DiscretionYesNoPage
+import pages.companyoremploymentrelated.company.ShareOfIncomePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.charityortrust.trust.DiscretionYesNoView
+import views.html.companyoremploymentrelated.company.ShareOfIncomeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DiscretionYesNoController @Inject()(
-                                           val controllerComponents: MessagesControllerComponents,
-                                           standardActionSets: StandardActionSets,
-                                           formProvider: YesNoFormProvider,
-                                           connector: TrustConnector,
-                                           view: DiscretionYesNoView,
-                                           trustService: TrustService,
-                                           repository: PlaybackRepository,
-                                           @TrustBeneficiary navigator: Navigator,
-                                           nameAction: NameRequiredAction
+class ShareOfIncomeController @Inject()(
+                                         val controllerComponents: MessagesControllerComponents,
+                                         standardActionSets: StandardActionSets,
+                                         formProvider: IncomePercentageFormProvider,
+                                         view: ShareOfIncomeView,
+                                         repository: PlaybackRepository,
+                                         @CompanyBeneficiary navigator: Navigator,
+                                         nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("trustBeneficiary.discretionYesNo")
+  val form: Form[Int] = formProvider.withPrefix("companyBeneficiary.shareOfIncome")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(DiscretionYesNoPage) match {
+      val preparedForm = request.userAnswers.get(ShareOfIncomePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -69,9 +65,9 @@ class DiscretionYesNoController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShareOfIncomePage, updatedAnswers))
       )
   }
 }
