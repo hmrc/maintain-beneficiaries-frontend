@@ -115,6 +115,3 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
     )
   }
 }
-
-// List(FormError(firstName,List(individualBeneficiary.name.error.firstname.length),WrappedArray(35))) did not equal
-// List(FormError(firstName,List(individualBeneficiary.name.error.firstName.length),List(35)))

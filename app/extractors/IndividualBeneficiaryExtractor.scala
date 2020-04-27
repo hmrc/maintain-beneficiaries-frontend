@@ -22,7 +22,7 @@ import models.{Address, CombinedPassportOrIdCard, IdCard, NationalInsuranceNumbe
 
 import scala.util.Try
 
-class IndividualBeneficiaryExtractor @Inject()() {
+class   IndividualBeneficiaryExtractor @Inject()() {
 
   import pages.individualbeneficiary._
 
