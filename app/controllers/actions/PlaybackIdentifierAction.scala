@@ -31,7 +31,7 @@ class PlaybackIdentifierActionImpl @Inject()(
 
   override def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
     val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-    playbackAuthenticationService.authenticate(request.userAnswers.utr)(request, hc)
+    playbackAuthenticationService.authenticateForUtr(request.userAnswers.utr)(request, hc)
   }
 }
 
