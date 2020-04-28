@@ -837,6 +837,10 @@ employmentBeneficiary.startDate.error.past = The date the employment related ben
 employmentBeneficiary.checkDetails.title = Check employment related beneficiary details
 employmentBeneficiary.checkDetails.heading = Check employment related beneficiary details
 
+employmentBeneficiary.checkDetails.utr.checkYourAnswersLabel = What is {0}’s Unique Taxpayer Reference (UTR)?
+employmentBeneficiary.checkDetails.utr.p1 = Some of the information we ask about employment related beneficiaries has changed.
+employmentBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s details, you will need to remove them, then add them as a new beneficiary.
+employmentBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 # Remove
 
 removeEmploymentBeneficiary.title = Are you sure you want to remove the employment related beneficiary?
