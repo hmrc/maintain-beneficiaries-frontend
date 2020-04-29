@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{TrustAuthAllowed, TrustAuthDenied, TrustAuthInternalServerError}
+import models.{TrustAuthAgentAllowed, TrustAuthAllowed, TrustAuthDenied, TrustAuthInternalServerError}
 import org.scalatest.{AsyncFreeSpec, MustMatchers}
 import play.api.Application
 import play.api.http.Status
@@ -41,7 +41,8 @@ class TrustAuthConnectorSpec extends AsyncFreeSpec with MustMatchers with WireMo
     aResponse().withStatus(Status.OK).withBody(json.toString())
   }
 
-  private def allowedResponse = responseFromJson(Json.obj())
+  private def allowedResponse = responseFromJson(Json.obj("authorised" -> true))
+  private def allowedAgentResponse = responseFromJson(Json.obj("arn" -> "SomeArn"))
 
   private def redirectResponse(redirectUrl: String) = responseFromJson(Json.obj("redirectUrl" -> redirectUrl))
 
@@ -68,7 +69,7 @@ class TrustAuthConnectorSpec extends AsyncFreeSpec with MustMatchers with WireMo
           wiremock(authorisedUrlFor(utr), allowedResponse)
 
           connector.authorisedForUtr(utr) map { result =>
-            result mustEqual TrustAuthAllowed
+            result mustEqual TrustAuthAllowed()
           }
         }
       }
@@ -95,16 +96,17 @@ class TrustAuthConnectorSpec extends AsyncFreeSpec with MustMatchers with WireMo
     }
     "authorised" - {
 
-      "returns 'Allowed' when" - {
-        "service returns with no redirect url" in {
+      "returns 'Agent Allowed' when" - {
+        "service returns with agent authorised response" in {
 
-          wiremock(authorisedUrl, allowedResponse)
+          wiremock(authorisedUrl, allowedAgentResponse)
 
           connector.agentIsAuthorised() map { result =>
-            result mustEqual TrustAuthAllowed
+            result mustEqual TrustAuthAgentAllowed("SomeArn")
           }
         }
       }
+
       "returns 'Denied' when" - {
         "service returns a redirect url" in {
 

@@ -56,7 +56,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
   "invoking authenticateForUtr" when {
     "user is authenticated" must {
       "return the data request" in {
-        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed))
+        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed()))
 
         val app = buildApp
 

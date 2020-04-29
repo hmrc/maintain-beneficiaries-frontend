@@ -19,7 +19,7 @@ package connectors
 import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.{TrustAuthAgentAllowed, TrustAuthAllowed, TrustAuthDenied, TrustAuthInternalServerError, TrustAuthResponse, TrustAuthResponseBody}
+import models.{TrustAuthInternalServerError, TrustAuthResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -38,19 +38,15 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
 
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    mapResponse(http.GET[TrustAuthResponseBody](s"$baseUrl/agent-authorised"))
+    http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised")recoverWith {
+      case _ => Future.successful(TrustAuthInternalServerError)
+    }
   }
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    mapResponse(http.GET[TrustAuthResponseBody](s"$baseUrl/authorised/$utr"))
-  }
-
-  private def mapResponse(response: Future[TrustAuthResponseBody])(implicit ec: ExecutionContext) = response.map {
-    case TrustAuthResponseBody(Some(redirectUrl), None) => TrustAuthDenied(redirectUrl)
-    case TrustAuthResponseBody(None, Some(arn)) => TrustAuthAgentAllowed(arn)
-    case _ => TrustAuthAllowed
-  }.recoverWith {
-    case _ => Future.successful(TrustAuthInternalServerError)
+    http.GET[TrustAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
+      case _ => Future.successful(TrustAuthInternalServerError)
+    }
   }
 }

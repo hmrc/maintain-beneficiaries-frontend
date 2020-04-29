@@ -16,17 +16,29 @@
 
 package models
 
-import play.api.libs.json.{Format, Json}
-
-case class TrustAuthResponseBody(redirectUrl: Option[String] = None, arn: Option[String] = None)
-
-object TrustAuthResponseBody {
-  implicit val format: Format[TrustAuthResponseBody] = Json.format[TrustAuthResponseBody]
-}
+import play.api.libs.json.{Format, Json, Reads, __}
 
 sealed trait TrustAuthResponse
+object TrustAuthResponse {
+  implicit val reads: Reads[TrustAuthResponse] =
+    __.read[TrustAuthAllowed].widen[TrustAuthResponse] orElse
+      __.read[TrustAuthAgentAllowed].widen[TrustAuthResponse] orElse
+      __.read[TrustAuthDenied].widen[TrustAuthResponse]
+}
 
-case object TrustAuthAllowed extends TrustAuthResponse
+case class TrustAuthAllowed(authorised: Boolean = true) extends TrustAuthResponse
+case object TrustAuthAllowed {
+  implicit val format: Format[TrustAuthAllowed] = Json.format[TrustAuthAllowed]
+}
+
 case class TrustAuthAgentAllowed(arn: String) extends TrustAuthResponse
+case object TrustAuthAgentAllowed {
+  implicit val format: Format[TrustAuthAgentAllowed] = Json.format[TrustAuthAgentAllowed]
+}
+
 case class TrustAuthDenied(redirectUrl: String) extends TrustAuthResponse
+case object TrustAuthDenied {
+  implicit val format: Format[TrustAuthDenied] = Json.format[TrustAuthDenied]
+}
+
 case object TrustAuthInternalServerError extends TrustAuthResponse
