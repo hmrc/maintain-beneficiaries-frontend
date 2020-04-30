@@ -54,9 +54,8 @@ class CheckDetailsController @Inject()(
   private def render(userAnswers: UserAnswers,
                      index: Int,
                      name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
-    val section: AnswerSection = printHelper(userAnswers, false, name)
+                    (implicit request: Request[AnyContent]): Result = {
+    val section: AnswerSection = printHelper(userAnswers, provisional = false, name)
     Ok(view(section, index))
   }
 
