@@ -71,7 +71,7 @@ class CompanyBeneficiaryNavigator @Inject()() extends Navigator {
     answers.get(IndexPage) match {
       case None => controllers.routes.SessionExpiredController.onPageLoad()
       case Some(x) =>
-        controllers.charityortrust.charity.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
+        controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
 
