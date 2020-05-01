@@ -18,7 +18,7 @@ package navigation
 
 import controllers.classofbeneficiary.add.{routes => rts}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import pages.Page
 import pages.classofbeneficiary._
 import play.api.mvc.Call
@@ -30,5 +30,5 @@ class ClassOfBeneficiaryNavigator @Inject()() extends Navigator {
     case EntityStartPage => rts.CheckDetailsController.onPageLoad()
     case _ => controllers.routes.IndexController.onPageLoad(userAnswers.utr)
   }
-
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)
 }

@@ -19,6 +19,7 @@ package controllers.charityortrust
 import controllers.actions._
 import forms.CharityOrTrustBeneficiaryTypeFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import models.beneficiaries.CharityOrTrustToAdd
 import models.beneficiaries.CharityOrTrustToAdd._
 import pages.charityortrust.CharityOrTrustPage
@@ -66,8 +67,8 @@ class CharityOrTrustController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-              case Charity => Redirect(controllers.charityortrust.charity.add.routes.NameController.onPageLoad())
-              case Trust => Redirect(controllers.charityortrust.trust.add.routes.NameController.onPageLoad())
+              case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
+              case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
             }
           }
       )
