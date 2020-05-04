@@ -36,6 +36,31 @@ site.address.nonUk.line2 = Address line 2
 site.address.nonUk.line3 = Address line 3 (optional)
 site.address.nonUk.country = Country
 
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
+
+agentNotAuthorised.title = Sorry, you cannot access this trust
+agentNotAuthorised.heading = Sorry, you cannot access this trust
+agentNotAuthorised.subheading = This trust’s UTR: {0}
+agentNotAuthorised.p1 = The trustee who claimed the trust needs to give you authorisation.
+agentNotAuthorised.p2 = You can create an authorisation link to send to the trustee through
+agentNotAuthorised.p2.a = Agent Services.
+agentNotAuthorised.p3 = The trustee who claimed the trust must use the same Government Gateway account to approve your request.
+agentNotAuthorised.p4 = If you need help with this service
+agentNotAuthorised.p4.a = contact the trusts helpline (opens in a new window or tab).
+agentNotAuthorised.p5 = You can
+agentNotAuthorised.p5.a = return to register and maintain a trust for a client.
+
+createAgentServicesAccount.title = Create an agent services account
+createAgentServicesAccount.heading = Create an agent services account
+createAgentServicesAccount.paragraph1 = Before you can register a trust you will need to create an agent services account. You can do this now.
+createAgentServicesAccount.insetText = You need to be the person responsible for your firm’s tax or administrative matters. The account gives you administrative control over your firm’s access to new HMRC online services.
+createAgentServicesAccount.link = Check the guidance
+createAgentServicesAccount.paragraph2 = to find out what you will need to create an agent services account.
+createAgentServicesAccount.paragraph3 = Once you have created your agent services account, you can carry on with your trust registration.
+createAgentServicesAccount.cta = Create an agent services account
+
 trustNotClaimed.title = Sorry, you cannot access this trust
 trustNotClaimed.heading = Sorry, you cannot access this trust
 trustNotClaimed.subheading = This trust’s UTR: {0}

@@ -19,6 +19,7 @@ package controllers.companyoremploymentrelated
 import controllers.actions._
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
 import models.beneficiaries.CompanyOrEmploymentRelatedToAdd._
 import pages.companyoremploymentrelated.CompanyOrEmploymentRelatedPage
@@ -66,7 +67,7 @@ class CompanyOrEmploymentRelatedController @Inject()(
             _ <- repository.set(updatedAnswers)
           } yield {
             value match {
-              case Company => Redirect(controllers.companyoremploymentrelated.company.add.routes.NameController.onPageLoad())
+              case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
               case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad())
             }
           }

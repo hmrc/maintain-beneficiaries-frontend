@@ -18,7 +18,7 @@ package navigation.employmentBeneficiary
 
 import controllers.companyoremploymentrelated.employment.amend.{routes => rts}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.companyoremploymentrelated.employment._
 import pages.{Page, QuestionPage}
@@ -28,6 +28,9 @@ class AmendEmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
+    nextPage(page, userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case NamePage => rts.AddressYesNoController.onPageLoad()
@@ -66,4 +69,5 @@ class AmendEmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
         rts.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
+
 }

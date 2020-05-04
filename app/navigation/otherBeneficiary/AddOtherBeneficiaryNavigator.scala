@@ -18,7 +18,7 @@ package navigation.otherBeneficiary
 
 import controllers.other.add.{routes => rts}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.other._
 import pages.{Page, QuestionPage}
@@ -28,6 +28,8 @@ class AddOtherBeneficiaryNavigator @Inject()() extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     routes(page)(userAnswers)
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)
 
   private val simpleNavigation: PartialFunction[Page, Call] = {
     case DescriptionPage => rts.DiscretionYesNoController.onPageLoad()

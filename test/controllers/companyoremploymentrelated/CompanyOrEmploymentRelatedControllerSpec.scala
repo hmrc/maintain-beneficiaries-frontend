@@ -18,6 +18,7 @@ package controllers.companyoremploymentrelated
 
 import base.SpecBase
 import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
+import models.NormalMode
 import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated._
@@ -85,7 +86,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.add.routes.NameController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode).url
 
       application.stop()
     }

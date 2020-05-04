@@ -21,12 +21,13 @@ import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import javax.inject.Inject
+import models.CheckMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
-import utils.print.AmendCharityBeneficiaryPrintHelper
+import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsUtrView
 
@@ -37,24 +38,20 @@ class CheckDetailsUtrController @Inject()(
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsUtrView,
-                                        connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: AmendCharityBeneficiaryPrintHelper,
-                                        mapper: CharityBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        errorHandler: ErrorHandler
+                                        printHelper: CharityBeneficiaryPrintHelper,
+                                        nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional = false, request.beneficiaryName)
       Ok(view(section, request.beneficiaryName))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+      Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }
