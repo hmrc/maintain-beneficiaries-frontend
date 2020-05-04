@@ -19,40 +19,33 @@ package connectors
 import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
 import javax.inject.Inject
-import play.api.libs.json.{Format, Json}
+import models.{TrustAuthInternalServerError, TrustAuthResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class TrustAuthResponseBody(redirectUrl: Option[String] = None)
-
-object TrustAuthResponseBody {
-  implicit val format: Format[TrustAuthResponseBody] = Json.format[TrustAuthResponseBody]
-}
-
-sealed trait TrustAuthResponse
-
-object TrustAuthAllowed extends TrustAuthResponse
-case class TrustAuthDenied(redirectUrl: String) extends TrustAuthResponse
-object TrustAuthInternalServerError extends TrustAuthResponse
-
 @ImplementedBy(classOf[TrustAuthConnectorImpl])
 trait TrustAuthConnector {
+  def agentIsAuthorised()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
 }
 
 class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConfig)
   extends TrustAuthConnector {
 
-  val baseUrl: String = config.trustAuthUrl + "/trusts-auth/authorised/"
+  val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
+
+  override def agentIsAuthorised()
+                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
+    http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised")recoverWith {
+      case _ => Future.successful(TrustAuthInternalServerError)
+    }
+  }
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.GET[TrustAuthResponseBody](baseUrl + utr).map {
-      case TrustAuthResponseBody(Some(redirectUrl)) => TrustAuthDenied(redirectUrl)
-      case _ => TrustAuthAllowed
-    }.recoverWith {
+    http.GET[TrustAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
       case _ => Future.successful(TrustAuthInternalServerError)
     }
   }

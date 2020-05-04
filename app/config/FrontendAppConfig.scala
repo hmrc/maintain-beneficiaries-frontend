@@ -53,9 +53,6 @@ class FrontendAppConfig @Inject()(config: Configuration) {
 
   lazy val trustsStoreUrl: String = config.get[Service]("microservice.services.trusts-store").baseUrl
 
-  lazy val agentsSubscriptionsUrl: String = config.get[String]("urls.agentSubscriptions")
-  lazy val agentServiceRegistrationUrl = s"$agentsSubscriptionsUrl?continue=$loginContinueUrl"
-
   lazy val locationCanonicalList: String = config.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListNonUK: String = config.get[String]("location.canonical.list.nonUK")
 

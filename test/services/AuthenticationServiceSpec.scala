@@ -17,27 +17,25 @@
 package services
 
 import base.SpecBase
-import config.FrontendAppConfig
-import connectors.{TrustAuthAllowed, TrustAuthConnector, TrustAuthDenied, TrustAuthInternalServerError}
+import connectors.TrustAuthConnector
 import models.requests.{AgentUser, DataRequest}
+import models.{TrustAuthAgentAllowed, TrustAuthAllowed, TrustAuthDenied, TrustAuthInternalServerError}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{EitherValues, RecoverMethods}
 import play.api.inject.bind
-import play.api.mvc.{AnyContent, Result}
+import play.api.mvc.AnyContent
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
-import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
 class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherValues with RecoverMethods {
 
   private val utr = "0987654321"
-
-  private val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   private val agentEnrolment = Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None)
   private val trustsEnrolment = Enrolment("HMRC-TERS-ORG", List(EnrolmentIdentifier("SAUTR", utr)), "Activated", None)
@@ -48,22 +46,23 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
   ))
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-  private implicit val dataRequest = DataRequest[AnyContent](fakeRequest, emptyUserAnswers, AgentUser("internalId", enrolments, "arn"))
+  private implicit val dataRequest: DataRequest[AnyContent]
+  = DataRequest[AnyContent](fakeRequest, emptyUserAnswers, AgentUser("internalId", enrolments, "SomeVal"))
 
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
-  lazy val trustAuthConnector = mock[TrustAuthConnector]
+  private lazy val trustAuthConnector = mock[TrustAuthConnector]
 
-  "invoking authenticate" when {
+  "invoking authenticateForUtr" when {
     "user is authenticated" must {
       "return the data request" in {
-        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed))
+        when(trustAuthConnector.authorisedForUtr(any())(any(), any())).thenReturn(Future.successful(TrustAuthAllowed()))
 
         val app = buildApp
 
         val service = app.injector.instanceOf[AuthenticationService]
 
-        whenReady(service.authenticate[AnyContent](utr)) {
+        whenReady(service.authenticateForUtr[AnyContent](utr)) {
           result =>
             result.right.value mustBe dataRequest
         }
@@ -77,11 +76,11 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
 
         val service = app.injector.instanceOf[AuthenticationService]
 
-        whenReady(service.authenticate[AnyContent](utr)) {
+        whenReady(service.authenticateForUtr[AnyContent](utr)) {
           result =>
             val r = Future.successful(result.left.value)
             status(r) mustBe SEE_OTHER
-            redirectLocation(r) mustEqual Some("some-url")
+            redirectLocation(r) mustBe Some("some-url")
         }
       }
     }
@@ -93,7 +92,55 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
 
         val service = app.injector.instanceOf[AuthenticationService]
 
-        whenReady(service.authenticate[AnyContent](utr)) {
+        whenReady(service.authenticateForUtr[AnyContent](utr)) {
+          result =>
+            result.left.value.header.status mustBe INTERNAL_SERVER_ERROR
+        }
+      }
+    }
+
+  }
+
+  "invoking authenticateAgent" when {
+    "user is authenticated" must {
+      "return the data request" in {
+        when(trustAuthConnector.agentIsAuthorised()(any(), any())).thenReturn(Future.successful(TrustAuthAgentAllowed("SomeARN")))
+
+        val app = buildApp
+
+        val service = app.injector.instanceOf[AuthenticationService]
+
+        whenReady(service.authenticateAgent()) {
+          result =>
+            result.right.value mustBe "SomeARN"
+        }
+      }
+    }
+    "user requires additional action" must {
+      "redirect to desired url" in {
+        when(trustAuthConnector.agentIsAuthorised()(any(), any())).thenReturn(Future.successful(TrustAuthDenied("some-url")))
+
+        val app = buildApp
+
+        val service = app.injector.instanceOf[AuthenticationService]
+
+        whenReady(service.authenticateAgent()) {
+          result =>
+            val r = Future.successful(result.left.value)
+            status(r) mustBe SEE_OTHER
+            redirectLocation(r) mustBe Some("some-url")
+        }
+      }
+    }
+    "an internal server error is returned" must {
+      "return an internal server error result" in {
+        when(trustAuthConnector.agentIsAuthorised()(any(), any())).thenReturn(Future.successful(TrustAuthInternalServerError))
+
+        val app = buildApp
+
+        val service = app.injector.instanceOf[AuthenticationService]
+
+        whenReady(service.authenticateAgent()) {
           result =>
             result.left.value.header.status mustBe INTERNAL_SERVER_ERROR
         }

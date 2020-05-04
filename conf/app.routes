@@ -36,8 +36,6 @@ GET        /this-service-has-been-reset                                     cont
 
 GET        /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
 
-GET        /create-agent-services-account                                   controllers.CreateAgentServicesAccountController.onPageLoad()
-
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
