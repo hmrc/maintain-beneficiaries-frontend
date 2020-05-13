@@ -57,14 +57,14 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val description = "description"
   val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
-  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-individual-beneficiary/$utr/$index"
-  private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
-  private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/add-individual-beneficiary/$utr"
-  private def addCharityBeneficiaryUrl(utr: String) = s"/trusts/add-charity-beneficiary/$utr"
-  private def addCompanyBeneficiaryUrl(utr: String) = s"/trusts/add-company-beneficiary/$utr"
-  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-company-beneficiary/$utr/$index"
-  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"/trusts/add-large-beneficiary/$utr"
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/beneficiaries/amend-unidentified/$utr/$index"
+  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"/trusts/beneficiaries/amend-individual/$utr/$index"
+  private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/beneficiaries/add-unidentified/$utr"
+  private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/beneficiaries/add-individual/$utr"
+  private def addCharityBeneficiaryUrl(utr: String) = s"/trusts/beneficiaries/add-charity/$utr"
+  private def addCompanyBeneficiaryUrl(utr: String) = s"/trusts/beneficiaries/add-company/$utr"
+  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"/trusts/beneficiaries/amend-company/$utr/$index"
+  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"/trusts/beneficiaries/add-large/$utr"
 
   "trust connector" when {
 

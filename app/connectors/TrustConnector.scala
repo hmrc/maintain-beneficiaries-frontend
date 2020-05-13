@@ -40,102 +40,102 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
     http.GET[Beneficiaries](getBeneficiariesUrl(utr))
   }
 
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"${config.trustsUrl}/trusts/amend-unidentified-beneficiary/$utr/$index"
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"${config.trustsUrl}/trusts/beneficiaries/amend-unidentified/$utr/$index"
 
   def amendClassOfBeneficiary(utr: String, index: Int, description: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsString, HttpResponse](amendClassOfBeneficiaryUrl(utr, index), JsString(description))(implicitly[Writes[JsString]], HttpReads.readRaw, hc, ec)
   }
 
-  private def addClassOfBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-unidentified-beneficiary/$utr"
+  private def addClassOfBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-unidentified/$utr"
 
   def addClassOfBeneficiary(utr: String, beneficiary: ClassOfBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addClassOfBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
-  private def addIndividualBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-individual-beneficiary/$utr"
+  private def addIndividualBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-individual/$utr"
 
   def addIndividualBeneficiary(utr: String, beneficiary: IndividualBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addIndividualBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
-  private def removeBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/$utr/beneficiaries/remove"
+  private def removeBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/$utr/remove"
 
   def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.PUT[JsValue, HttpResponse](removeBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendIndividualBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-individual-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-individual/$utr/$index"
 
   def amendIndividualBeneficiary(utr: String, index: Int, individual: IndividualBeneficiary)
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
       http.POST[JsValue, HttpResponse](amendIndividualBeneficiaryUrl(utr, index), Json.toJson(individual))
     }
 
-  private def addCharityBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-charity-beneficiary/$utr"
+  private def addCharityBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-charity/$utr"
 
   def addCharityBeneficiary(utr: String, beneficiary: CharityBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addCharityBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendCharityBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-charity-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-charity/$utr/$index"
 
   def amendCharityBeneficiary(utr: String, index: Int, beneficiary: CharityBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](amendCharityBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
   }
 
-  private def addTrustBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-trust-beneficiary/$utr"
+  private def addTrustBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-trust/$utr"
 
   def addTrustBeneficiary(utr: String, beneficiary: TrustBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addTrustBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendTrustBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-trust-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-trust/$utr/$index"
 
   def amendTrustBeneficiary(utr: String, index: Int, beneficiary: TrustBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](amendTrustBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
   }
 
-  private def addCompanyBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-company-beneficiary/$utr"
+  private def addCompanyBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-company/$utr"
 
   def addCompanyBeneficiary(utr: String, beneficiary: CompanyBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addCompanyBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendCompanyBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-company-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-company/$utr/$index"
 
   def amendCompanyBeneficiary(utr: String, index: Int, beneficiary: CompanyBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](amendCompanyBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
   }
 
-  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-large-beneficiary/$utr"
+  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-large/$utr"
 
   def addEmploymentRelatedBeneficiary(utr: String, beneficiary: EmploymentRelatedBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addEmploymentRelatedBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendEmploymentRelatedBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-large-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-large/$utr/$index"
 
   def amendEmploymentRelatedBeneficiary(utr: String, index: Int, beneficiary: EmploymentRelatedBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](amendEmploymentRelatedBeneficiaryUrl(utr, index), Json.toJson(beneficiary))
   }
 
-  private def addOtherBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-other-beneficiary/$utr"
+  private def addOtherBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/beneficiaries/add-other/$utr"
 
   def addOtherBeneficiary(utr: String, beneficiary: OtherBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](addOtherBeneficiaryUrl(utr), Json.toJson(beneficiary))
   }
 
   private def amendOtherBeneficiaryUrl(utr: String, index: Int) =
-    s"${config.trustsUrl}/trusts/amend-other-beneficiary/$utr/$index"
+    s"${config.trustsUrl}/trusts/beneficiaries/amend-other/$utr/$index"
 
   def amendOtherBeneficiary(utr: String, index: Int, beneficiary: OtherBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpResponse] = {
