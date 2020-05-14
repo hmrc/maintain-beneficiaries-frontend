@@ -51,11 +51,13 @@ class CheckDetailsController @Inject()(
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val provisional = false
+
   private def render(userAnswers: UserAnswers,
                      index: Int,
                      name: String
                     )(implicit request: Request[AnyContent]): Result = {
-    val section: AnswerSection = printHelper(userAnswers, provisional = false, name)
+    val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(section, index))
   }
 
@@ -80,7 +82,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers, adding = false).map {
+      mapper(request.userAnswers, provisional).map {
         beneficiary =>
           connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

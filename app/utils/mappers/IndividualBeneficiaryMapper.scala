@@ -29,13 +29,13 @@ class IndividualBeneficiaryMapper {
 
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
-  def apply(answers: UserAnswers, adding: Boolean): Option[IndividualBeneficiary] = {
+  def apply(answers: UserAnswers, provisional: Boolean): Option[IndividualBeneficiary] = {
 
     val readFromUserAnswers: Reads[IndividualBeneficiary] =
       (
         NamePage.path.read[Name] and
         DateOfBirthPage.path.readNullable[LocalDate] and
-        readIdentification(adding) and
+        readIdentification(provisional) and
         readAddress and
         VPE1FormYesNoPage.path.read[Boolean] and
         RoleInCompanyPage.path.readNullable[RoleInCompany] and
@@ -54,10 +54,10 @@ class IndividualBeneficiaryMapper {
     }
   }
 
-  private def readIdentification(adding: Boolean): Reads[Option[IndividualIdentification]] = {
+  private def readIdentification(provisional: Boolean): Reads[Option[IndividualIdentification]] = {
     NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
       case true => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
-      case false => if (adding) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
+      case false => if (provisional) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
     }
   }
 

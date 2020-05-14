@@ -49,7 +49,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(VPE1FormYesNoPage, false).success.value
         .set(StartDatePage, startDate).success.value
 
-      val result = mapper(userAnswers, adding = true).get
+      val result = mapper(userAnswers, provisional = true).get
 
       result.name mustBe name
       result.roleInCompany mustBe None
@@ -79,7 +79,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(VPE1FormYesNoPage, false).success.value
         .set(StartDatePage, startDate).success.value
 
-      val result = mapper(userAnswers, adding = true).get
+      val result = mapper(userAnswers, provisional = true).get
 
       result.name mustBe name
       result.roleInCompany mustBe None
@@ -108,7 +108,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(VPE1FormYesNoPage, false).success.value
         .set(StartDatePage, startDate).success.value
 
-      val result = mapper(userAnswers, adding = true).get
+      val result = mapper(userAnswers, provisional = true).get
 
       result.name mustBe name
       result.roleInCompany mustBe None
@@ -132,7 +132,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(VPE1FormYesNoPage, false).success.value
         .set(StartDatePage, startDate).success.value
 
-      val result = mapper(userAnswers, adding = true).get
+      val result = mapper(userAnswers, provisional = true).get
 
       result.name mustBe name
       result.roleInCompany mustBe None
@@ -157,7 +157,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
         .set(VPE1FormYesNoPage, false).success.value
         .set(StartDatePage, startDate).success.value
 
-      val result = mapper(userAnswers, adding = true).get
+      val result = mapper(userAnswers, provisional = true).get
 
       result.name mustBe name
       result.roleInCompany mustBe Some(RoleInCompany.Employee)
@@ -190,7 +190,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
           .set(VPE1FormYesNoPage, false).success.value
           .set(StartDatePage, startDate).success.value
 
-        val result = mapper(userAnswers, adding = true).get
+        val result = mapper(userAnswers, provisional = true).get
 
         result.name mustBe name
         result.roleInCompany mustBe None
@@ -221,7 +221,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
           .set(VPE1FormYesNoPage, false).success.value
           .set(StartDatePage, startDate).success.value
 
-        val result = mapper(userAnswers, adding = true).get
+        val result = mapper(userAnswers, provisional = true).get
 
         result.name mustBe name
         result.roleInCompany mustBe None
@@ -258,7 +258,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
           .set(VPE1FormYesNoPage, false).success.value
           .set(StartDatePage, startDate).success.value
 
-        val result = mapper(userAnswers, adding = false).get
+        val result = mapper(userAnswers, provisional = false).get
 
         result.name mustBe name
         result.roleInCompany mustBe None

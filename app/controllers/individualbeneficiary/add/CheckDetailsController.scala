@@ -43,17 +43,19 @@ class CheckDetailsController @Inject()(
                                         nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val provisional = true
+
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, provisional = true, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
       Ok(view(section))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers, adding = true) match {
+      mapper(request.userAnswers, provisional) match {
         case None =>
           Future.successful(InternalServerError)
         case Some(beneficiary) =>
