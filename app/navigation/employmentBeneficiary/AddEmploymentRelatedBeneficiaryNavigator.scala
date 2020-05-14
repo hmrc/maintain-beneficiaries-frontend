@@ -16,7 +16,7 @@
 
 package navigation.employmentBeneficiary
 
-import controllers.companyoremploymentrelated.employment.add.{routes => rts}
+import controllers.companyoremploymentrelated.employment.{routes => rts}
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator

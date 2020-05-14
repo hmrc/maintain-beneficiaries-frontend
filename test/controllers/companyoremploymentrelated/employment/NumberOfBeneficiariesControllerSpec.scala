@@ -14,34 +14,38 @@
  * limitations under the License.
  */
 
-package controllers.companyoremploymentrelated
+package controllers.companyoremploymentrelated.employment
 
 import base.SpecBase
-import forms.CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider
-import models.NormalMode
-import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
+import config.annotations.AddEmploymentRelatedBeneficiary
+import forms.NumberOfBeneficiariesFormProvider
+import models.HowManyBeneficiaries
+import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.companyoremploymentrelated._
+import pages.companyoremploymentrelated.employment.NumberOfBeneficiariesPage
 import play.api.data.Form
+import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
+import views.html.companyoremploymentrelated.employment.NumberOfBeneficiariesView
 
-class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSugar {
+class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
-  lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
-  val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type = CompanyOrEmploymentRelatedToAdd.Company
+  private val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
+  private val numberOfBeneficiariesRoute: String = routes.NumberOfBeneficiariesController.onPageLoad().url
+  private val numberOfBeneficiaries: HowManyBeneficiaries = HowManyBeneficiaries.Over201
+  private val onwardRoute = Call("GET", "/foo")
 
-  "CompanyOrEmploymentRelatedController Controller" must {
+  "NumberOfBeneficiaries Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
+      val request = FakeRequest(GET, numberOfBeneficiariesRoute)
 
-      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
+      val view = application.injector.instanceOf[NumberOfBeneficiariesView]
 
       val result = route(application, request).value
 
@@ -55,55 +59,41 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
+      val answers = emptyUserAnswers.set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
+      val request = FakeRequest(GET, numberOfBeneficiariesRoute)
 
-      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
+      val view = application.injector.instanceOf[NumberOfBeneficiariesView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(companyOrEmploymentRelatedBeneficiaryAnswer))(fakeRequest, messages).toString
+        view(form.fill(numberOfBeneficiaries))(fakeRequest, messages).toString
 
       application.stop()
     }
 
-    "redirect to the Name page when Company is selected" in {
+    "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+          ).build()
 
       val request =
-        FakeRequest(POST, companyOrEmploymentRelatedRoute)
-          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
+        FakeRequest(POST, numberOfBeneficiariesRoute)
+          .withFormUrlEncodedBody(("value", numberOfBeneficiaries.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the Name page when Employment Related is selected" in {
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request =
-        FakeRequest(POST, companyOrEmploymentRelatedRoute)
-          .withFormUrlEncodedBody(("value", CompanyOrEmploymentRelatedToAdd.EmploymentRelated.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -112,11 +102,11 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, companyOrEmploymentRelatedRoute)
+      val request = FakeRequest(POST, numberOfBeneficiariesRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[CompanyOrEmploymentRelatedView]
+      val view = application.injector.instanceOf[NumberOfBeneficiariesView]
 
       val result = route(application, request).value
 
@@ -125,14 +115,14 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       contentAsString(result) mustEqual
         view(boundForm)(fakeRequest, messages).toString
 
-      application.stop()
+       application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, companyOrEmploymentRelatedRoute)
+      val request = FakeRequest(GET, numberOfBeneficiariesRoute)
 
       val result = route(application, request).value
 
@@ -147,8 +137,8 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, companyOrEmploymentRelatedRoute)
-          .withFormUrlEncodedBody(("value", companyOrEmploymentRelatedBeneficiaryAnswer.toString))
+        FakeRequest(POST, numberOfBeneficiariesRoute)
+          .withFormUrlEncodedBody(("value", numberOfBeneficiaries.toString))
 
       val result = route(application, request).value
 

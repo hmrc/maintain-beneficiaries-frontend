@@ -17,7 +17,7 @@
 package navigation.employmentRelatedBeneficiary
 
 import base.SpecBase
-import controllers.companyoremploymentrelated.employment.add.routes._
+import controllers.companyoremploymentrelated.employment.routes._
 import navigation.employmentBeneficiary.AddEmploymentRelatedBeneficiaryNavigator
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.companyoremploymentrelated.employment._

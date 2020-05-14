@@ -19,7 +19,7 @@ package utils.print
 import java.time.LocalDate
 
 import base.SpecBase
-import controllers.companyoremploymentrelated.employment.add.routes._
+import controllers.companyoremploymentrelated.employment.routes._
 import models.{Description, HowManyBeneficiaries, NonUkAddress, UkAddress}
 import pages.companyoremploymentrelated.employment._
 import play.twirl.api.Html

@@ -68,7 +68,7 @@ class CompanyOrEmploymentRelatedController @Inject()(
           } yield {
             value match {
               case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
-              case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad())
+              case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad())
             }
           }
       )

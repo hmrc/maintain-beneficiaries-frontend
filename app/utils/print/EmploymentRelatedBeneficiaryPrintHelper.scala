@@ -17,7 +17,7 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.companyoremploymentrelated.employment.add.routes._
+import controllers.companyoremploymentrelated.employment.routes._
 import models.UserAnswers
 import pages.companyoremploymentrelated.employment._
 import play.api.i18n.Messages
