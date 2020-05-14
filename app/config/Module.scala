@@ -19,9 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import config.annotations._
 import controllers.actions._
-import navigation.individualBeneficiary._
 import navigation.{CompanyBeneficiaryNavigator, _}
-import navigation._
 import navigation.employmentBeneficiary.{AddEmploymentRelatedBeneficiaryNavigator, AmendEmploymentRelatedBeneficiaryNavigator}
 import navigation.otherBeneficiary._
 import repositories.{MongoRepository, PlaybackRepository}
@@ -41,8 +39,7 @@ class Module extends AbstractModule {
     bind(classOf[AuthenticationService]).to(classOf[AuthenticationServiceImpl]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(classOf[ClassOfBeneficiary]).to(classOf[ClassOfBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AddIndividualBeneficiary]).to(classOf[AddIndividualBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AmendIndividualBeneficiary]).to(classOf[AmendIndividualBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[IndividualBeneficiary]).to(classOf[IndividualBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[CharityBeneficiary]).to(classOf[CharityBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AddOtherBeneficiary]).to(classOf[AddOtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[AmendOtherBeneficiary]).to(classOf[AmendOtherBeneficiaryNavigator]).asEagerSingleton()

@@ -1,0 +1,90 @@
+GET        /name                                     controllers.individualbeneficiary.NameController.onPageLoad(mode: Mode = NormalMode)
+POST       /name                                     controllers.individualbeneficiary.NameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-name                              controllers.individualbeneficiary.NameController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-name                              controllers.individualbeneficiary.NameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /know-date-of-birth                       controllers.individualbeneficiary.DateOfBirthYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /know-date-of-birth                       controllers.individualbeneficiary.DateOfBirthYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-know-date-of-birth                controllers.individualbeneficiary.DateOfBirthYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-know-date-of-birth                controllers.individualbeneficiary.DateOfBirthYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /date-of-birth                            controllers.individualbeneficiary.DateOfBirthController.onPageLoad(mode: Mode = NormalMode)
+POST       /date-of-birth                            controllers.individualbeneficiary.DateOfBirthController.onSubmit(mode: Mode = NormalMode)
+GET        /change-date-of-birth                     controllers.individualbeneficiary.DateOfBirthController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-date-of-birth                     controllers.individualbeneficiary.DateOfBirthController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-discretion                           controllers.individualbeneficiary.IncomeDiscretionYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-discretion                           controllers.individualbeneficiary.IncomeDiscretionYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-discretion                    controllers.individualbeneficiary.IncomeDiscretionYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-discretion                    controllers.individualbeneficiary.IncomeDiscretionYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /share-of-income                          controllers.individualbeneficiary.IncomePercentageController.onPageLoad(mode: Mode = NormalMode)
+POST       /share-of-income                          controllers.individualbeneficiary.IncomePercentageController.onSubmit(mode: Mode = NormalMode)
+GET        /change-share-of-income                   controllers.individualbeneficiary.IncomePercentageController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-share-of-income                   controllers.individualbeneficiary.IncomePercentageController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-national-insurance-number            controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-national-insurance-number            controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-national-insurance-number     controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-national-insurance-number     controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /national-insurance-number                controllers.individualbeneficiary.NationalInsuranceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /national-insurance-number                controllers.individualbeneficiary.NationalInsuranceNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-national-insurance-number         controllers.individualbeneficiary.NationalInsuranceNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-national-insurance-number         controllers.individualbeneficiary.NationalInsuranceNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-address                              controllers.individualbeneficiary.AddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-address                              controllers.individualbeneficiary.AddressYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-address                       controllers.individualbeneficiary.AddressYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-address                       controllers.individualbeneficiary.AddressYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-uk-address                           controllers.individualbeneficiary.LiveInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-uk-address                           controllers.individualbeneficiary.LiveInTheUkYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-uk-address                    controllers.individualbeneficiary.LiveInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-uk-address                    controllers.individualbeneficiary.LiveInTheUkYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /uk-address                               controllers.individualbeneficiary.UkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /uk-address                               controllers.individualbeneficiary.UkAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /change-uk-address                        controllers.individualbeneficiary.UkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-uk-address                        controllers.individualbeneficiary.UkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /non-uk-address                           controllers.individualbeneficiary.NonUkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /non-uk-address                           controllers.individualbeneficiary.NonUkAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /change-non-uk-address                    controllers.individualbeneficiary.NonUkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-non-uk-address                    controllers.individualbeneficiary.NonUkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-passport                             controllers.individualbeneficiary.PassportDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-passport                             controllers.individualbeneficiary.PassportDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-passport                      controllers.individualbeneficiary.PassportDetailsYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-passport                      controllers.individualbeneficiary.PassportDetailsYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /passport                                 controllers.individualbeneficiary.PassportDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /passport                                 controllers.individualbeneficiary.PassportDetailsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-passport                          controllers.individualbeneficiary.PassportDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-passport                          controllers.individualbeneficiary.PassportDetailsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /has-id-card                              controllers.individualbeneficiary.IdCardDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /has-id-card                              controllers.individualbeneficiary.IdCardDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-has-id-card                       controllers.individualbeneficiary.IdCardDetailsYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-has-id-card                       controllers.individualbeneficiary.IdCardDetailsYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /id-card                                  controllers.individualbeneficiary.IdCardDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /id-card                                  controllers.individualbeneficiary.IdCardDetailsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-id-card                           controllers.individualbeneficiary.IdCardDetailsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-id-card                           controllers.individualbeneficiary.IdCardDetailsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /vpe1-form-yes-no                         controllers.individualbeneficiary.VPE1FormYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /vpe1-form-yes-no                         controllers.individualbeneficiary.VPE1FormYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-vpe1-form-yes-no                  controllers.individualbeneficiary.VPE1FormYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-vpe1-form-yes-no                  controllers.individualbeneficiary.VPE1FormYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /role-in-company                          controllers.individualbeneficiary.RoleInCompanyController.onPageLoad(mode: Mode = NormalMode)
+POST       /role-in-company                          controllers.individualbeneficiary.RoleInCompanyController.onSubmit(mode: Mode = NormalMode)
+GET        /change-role-in-company                   controllers.individualbeneficiary.RoleInCompanyController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-role-in-company                   controllers.individualbeneficiary.RoleInCompanyController.onSubmit(mode: Mode = CheckMode)
+
+GET        /when-added                               controllers.individualbeneficiary.StartDateController.onPageLoad()
+POST       /when-added                               controllers.individualbeneficiary.StartDateController.onSubmit()
+
+GET        /check-details                            controllers.individualbeneficiary.add.CheckDetailsController.onPageLoad()
+POST       /check-details                            controllers.individualbeneficiary.add.CheckDetailsController.onSubmit()

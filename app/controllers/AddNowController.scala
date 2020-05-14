@@ -77,7 +77,7 @@ class AddNowController @Inject()(
               } yield {
                 value match {
                   case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
-                  case Individual => Redirect(controllers.individualbeneficiary.add.routes.NameController.onPageLoad())
+                  case Individual => Redirect(controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode))
                   case CharityOrTrust => Redirect(controllers.charityortrust.routes.CharityOrTrustController.onPageLoad())
                   case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
                   case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
