@@ -22,6 +22,8 @@ import controllers.individualbeneficiary.amend.{routes => amendRts}
 import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
 import pages.individualbeneficiary._
+import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 import pages.{Page, QuestionPage}
 import play.api.mvc.Call
 

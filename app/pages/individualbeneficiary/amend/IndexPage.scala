@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.individualbeneficiary
+package pages.individualbeneficiary.amend
 
 import pages.QuestionPage
+import pages.individualbeneficiary.basePath
 import play.api.libs.json.JsPath
 
-case object RemoveYesNoPage extends QuestionPage[Boolean] {
+case object IndexPage extends QuestionPage[Int] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "removeYesNo"
+  override def toString: String = "index"
 }

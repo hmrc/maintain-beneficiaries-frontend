@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.individualbeneficiary
+package pages.individualbeneficiary.add
 
-import java.time.LocalDate
-
+import models.Passport
 import pages.QuestionPage
+import pages.individualbeneficiary.basePath
 import play.api.libs.json.JsPath
 
-case object StartDatePage extends QuestionPage[LocalDate] {
+case object PassportDetailsPage extends QuestionPage[Passport] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "startDate"
+  override def toString: String = "passportDetails"
+
 }

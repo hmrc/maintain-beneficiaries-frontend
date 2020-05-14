@@ -23,7 +23,7 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.CheckMode
 import navigation.Navigator
-import pages.individualbeneficiary.PassportOrIdCardDetailsYesNoPage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository

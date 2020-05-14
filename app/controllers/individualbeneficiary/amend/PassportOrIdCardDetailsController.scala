@@ -23,7 +23,7 @@ import forms.CombinedPassportOrIdCardDetailsFormProvider
 import javax.inject.Inject
 import models.CheckMode
 import navigation.Navigator
-import pages.individualbeneficiary.PassportOrIdCardDetailsPage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository

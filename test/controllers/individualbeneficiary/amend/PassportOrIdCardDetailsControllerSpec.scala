@@ -26,7 +26,8 @@ import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsPage}
+import pages.individualbeneficiary.NamePage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

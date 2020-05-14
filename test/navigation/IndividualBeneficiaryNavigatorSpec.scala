@@ -21,6 +21,8 @@ import java.time.LocalDate
 import base.SpecBase
 import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsYesNoPage}
 import pages.individualbeneficiary.{NamePage, _}
 
 class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {

@@ -27,6 +27,7 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary._
+import pages.individualbeneficiary.add.StartDatePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

@@ -23,7 +23,7 @@ import forms.PassportDetailsFormProvider
 import javax.inject.Inject
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.individualbeneficiary.PassportDetailsPage
+import pages.individualbeneficiary.add.PassportDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository

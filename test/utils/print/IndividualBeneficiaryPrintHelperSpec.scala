@@ -22,6 +22,8 @@ import base.SpecBase
 import models.beneficiaries.RoleInCompany.NA
 import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
 import pages.individualbeneficiary._
+import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

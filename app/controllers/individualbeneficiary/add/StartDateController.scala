@@ -23,7 +23,7 @@ import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import models.NormalMode
 import navigation.Navigator
-import pages.individualbeneficiary.StartDatePage
+import pages.individualbeneficiary.add.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
