@@ -18,7 +18,7 @@ package views.individualbeneficiary.add
 
 import controllers.individualbeneficiary.add.routes
 import forms.IdCardDetailsFormProvider
-import models.{IdCard, Mode, Name, NormalMode}
+import models.{IdCard, Name}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
@@ -30,7 +30,6 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
 
   val messageKeyPrefix = "individualBeneficiary.idCardDetails"
   val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
   override val form: Form[IdCard] = new IdCardDetailsFormProvider().withPrefix(messageKeyPrefix)
 
   "IdCardDetails view" must {
@@ -40,7 +39,7 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, mode, countryOptions, name.displayName)(fakeRequest, messages)
+      view.apply(form, countryOptions, name.displayName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
@@ -52,7 +51,7 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
         form,
         applyView,
         messageKeyPrefix,
-        routes.IdCardDetailsController.onSubmit(mode).url,
+        routes.IdCardDetailsController.onSubmit().url,
         Seq(("country", None), ("number", None)),
         "expiryDate",
         name.displayName

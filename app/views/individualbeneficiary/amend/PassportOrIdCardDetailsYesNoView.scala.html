@@ -34,9 +34,9 @@
         @components.error_summary(form.errors)
 
         @components.input_yes_no(
-        field = form("value"),
-        legend = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.heading", name),
-        headingIsLegend = true
+            field = form("value"),
+            legend = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.heading", name),
+            headingIsLegend = true
         )
 
         @components.submit_button()

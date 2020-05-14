@@ -53,25 +53,17 @@ POST       /non-uk-address                           controllers.individualbenef
 GET        /change-non-uk-address                    controllers.individualbeneficiary.NonUkAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-non-uk-address                    controllers.individualbeneficiary.NonUkAddressController.onSubmit(mode: Mode = CheckMode)
 
-GET        /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
-POST       /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
-GET        /change-has-passport                      controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-has-passport                      controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit(mode: Mode = CheckMode)
+GET        /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onPageLoad()
+POST       /has-passport                             controllers.individualbeneficiary.add.PassportDetailsYesNoController.onSubmit()
 
-GET        /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad(mode: Mode = NormalMode)
-POST       /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-passport                          controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-passport                          controllers.individualbeneficiary.add.PassportDetailsController.onSubmit(mode: Mode = CheckMode)
+GET        /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onPageLoad()
+POST       /passport                                 controllers.individualbeneficiary.add.PassportDetailsController.onSubmit()
 
-GET        /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
-POST       /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
-GET        /change-has-id-card                       controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-has-id-card                       controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit(mode: Mode = CheckMode)
+GET        /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onPageLoad()
+POST       /has-id-card                              controllers.individualbeneficiary.add.IdCardDetailsYesNoController.onSubmit()
 
-GET        /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad(mode: Mode = NormalMode)
-POST       /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-id-card                           controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-id-card                           controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit(mode: Mode = CheckMode)
+GET        /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onPageLoad()
+POST       /id-card                                  controllers.individualbeneficiary.add.IdCardDetailsController.onSubmit()
 
 GET        /change-has-passport-or-id-card           controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onPageLoad()
 POST       /change-has-passport-or-id-card           controllers.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoController.onSubmit()

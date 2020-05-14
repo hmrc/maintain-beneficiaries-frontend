@@ -52,9 +52,9 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case LiveInTheUkYesNoPage => ua =>
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
     case PassportDetailsYesNoPage => ua =>
-        yesNoNav(ua, PassportDetailsYesNoPage, addRts.PassportDetailsController.onPageLoad(mode), addRts.IdCardDetailsYesNoController.onPageLoad(mode))
+        yesNoNav(ua, PassportDetailsYesNoPage, addRts.PassportDetailsController.onPageLoad(), addRts.IdCardDetailsYesNoController.onPageLoad())
     case IdCardDetailsYesNoPage => ua =>
-        yesNoNav(ua, IdCardDetailsYesNoPage, addRts.IdCardDetailsController.onPageLoad(mode), rts.VPE1FormYesNoController.onPageLoad(mode))
+        yesNoNav(ua, IdCardDetailsYesNoPage, addRts.IdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad(mode))
     case PassportOrIdCardDetailsYesNoPage => ua =>
       yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, amendRts.PassportOrIdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad(mode))
   }
@@ -80,7 +80,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         case VPE1FormYesNoPage => _ =>
           addRts.StartDateController.onPageLoad()
         case UkAddressPage | NonUkAddressPage => _ =>
-          addRts.PassportDetailsYesNoController.onPageLoad(mode)
+          addRts.PassportDetailsYesNoController.onPageLoad()
       }
       case CheckMode => {
         case VPE1FormYesNoPage => ua =>

@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.individualbeneficiary.IdCardDetailsYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -45,7 +45,7 @@ class IdCardDetailsYesNoController @Inject()(
 
   val form = formProvider.withPrefix("individualBeneficiary.idCardDetailsYesNo")
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(IdCardDetailsYesNoPage) match {
@@ -53,21 +53,21 @@ class IdCardDetailsYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, request.beneficiaryName))
+      Ok(view(preparedForm, request.beneficiaryName))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IdCardDetailsYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IdCardDetailsYesNoPage, NormalMode, updatedAnswers))
       )
   }
 }

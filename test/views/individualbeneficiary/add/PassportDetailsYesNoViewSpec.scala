@@ -18,7 +18,7 @@ package views.individualbeneficiary.add
 
 import controllers.individualbeneficiary.add.routes
 import forms.YesNoFormProvider
-import models.{Mode, Name, NormalMode}
+import models.Name
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -28,7 +28,6 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiary.passportDetailsYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "PassportDetailsYesNo view" must {
@@ -36,13 +35,13 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[PassportDetailsYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, mode, name.displayName)(fakeRequest, messages)
+      view.apply(form, name.displayName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportDetailsYesNoController.onSubmit(mode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportDetailsYesNoController.onSubmit().url)
 
     behave like pageWithASubmitButton(applyView(form))
   }
