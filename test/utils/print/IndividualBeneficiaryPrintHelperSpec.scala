@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import models.beneficiaries.RoleInCompany.NA
-import models.{CheckMode, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
+import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
 import pages.individualbeneficiary._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
@@ -35,7 +35,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
     val helper = injector.instanceOf[IndividualBeneficiaryPrintHelper]
 
-    val userAnswers = emptyUserAnswers
+    val baseAnswers = emptyUserAnswers
       .set(NamePage, name).success.value
       .set(RoleInCompanyPage, NA).success.value
       .set(DateOfBirthYesNoPage, true).success.value
@@ -48,16 +48,18 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
       .set(LiveInTheUkYesNoPage, true).success.value
       .set(UkAddressPage, ukAddress).success.value
       .set(NonUkAddressPage, nonUkAddress).success.value
-      .set(PassportDetailsYesNoPage, true).success.value
-      .set(PassportDetailsPage, Passport("GB", "1", LocalDate.of(2030, 10, 10))).success.value
-      .set(IdCardDetailsYesNoPage, true).success.value
-      .set(IdCardDetailsPage, IdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
       .set(VPE1FormYesNoPage, true).success.value
-      .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 
     "generate individual beneficiary section" when {
 
       "added" in {
+
+        val userAnswers = baseAnswers
+          .set(PassportDetailsYesNoPage, true).success.value
+          .set(PassportDetailsPage, Passport("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+          .set(IdCardDetailsYesNoPage, true).success.value
+          .set(IdCardDetailsPage, IdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+          .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 
         val result = helper(userAnswers, provisional = true, name.displayName)
         result mustBe AnswerSection(
@@ -75,18 +77,22 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.nonUkAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />Germany"), changeUrl = controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.add.routes.PassportDetailsController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.add.routes.IdCardDetailsYesNoController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.add.routes.IdCardDetailsController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.startDate.checkYourAnswersLabel", name.displayName)), answer = Html("1 January 2020"), changeUrl = controllers.individualbeneficiary.routes.StartDateController.onPageLoad().url)
+            AnswerRow(label = Html(messages("individualBeneficiary.startDate.checkYourAnswersLabel", name.displayName)), answer = Html("1 January 2020"), changeUrl = controllers.individualbeneficiary.add.routes.StartDateController.onPageLoad().url)
           )
         )
 
       }
 
       "amended" in {
+
+        val userAnswers = baseAnswers
+          .set(PassportOrIdCardDetailsYesNoPage, true).success.value
+          .set(PassportOrIdCardDetailsPage, CombinedPassportOrIdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
 
         val result = helper(userAnswers, provisional = false, name.displayName)
         result mustBe AnswerSection(
@@ -104,10 +110,8 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.nonUkAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />Germany"), changeUrl = controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url),
+            AnswerRow(label = Html(messages("individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel", name.displayName)), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad().url),
             AnswerRow(label = Html(messages("individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(CheckMode).url)
           )
         )

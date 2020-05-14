@@ -14,30 +14,31 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.routes._
+@import controllers.individualbeneficiary.amend.routes._
 @import utils.InputOption
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], name: String, countryOptions:Seq[InputOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.idCardDetails.title")}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportOrIdCardDetails.title", name)}"
 ) {
 
-    @formHelper(action = IdCardDetailsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = PassportOrIdCardDetailsController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("individualBeneficiary.idCardDetails.heading", Some(name))
+        @components.heading("individualBeneficiary.passportOrIdCardDetails.heading", Some(name))
 
-        @components.select(field = form("country"),
-            label = messages("individualBeneficiary.idCardDetails.country"),
+        @components.select(
+            field = form("country"),
+            label = messages("individualBeneficiary.passportOrIdCardDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some("address.country.select"),
@@ -47,16 +48,15 @@
 
         @components.input_text(
             field = form("number"),
-            label = messages("individualBeneficiary.idCardDetails.number"),
-            hint = Some(messages("individualBeneficiary.idCardDetails.number.hint"))
+            label = messages("individualBeneficiary.passportOrIdCardDetails.number")
         )
 
         @components.input_date(
             field = form("expiryDate"),
-            legend = messages("individualBeneficiary.idCardDetails.expiryDate"),
+            legend = messages("individualBeneficiary.passportOrIdCardDetails.expiryDate.title"),
             legendClass = "bold",
-            hint = Some(messages("individualBeneficiary.idCardDetails.expiryDate.hint")),
-            headingIsLegend = false
+            headingIsLegend = false,
+            hint = Some(messages(s"individualBeneficiary.passportOrIdCardDetails.expiryDate.hint"))
         )
 
         @components.submit_button()

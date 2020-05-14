@@ -1,6 +1,0 @@
-
-GET        /:index/check-details                    controllers.individualbeneficiary.amend.CheckDetailsController.extractAndRender(index: Int)
-
-GET        /:index/updated-details                  controllers.individualbeneficiary.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
-
-POST       /:index/check-details                    controllers.individualbeneficiary.amend.CheckDetailsController.onSubmit(index: Int)

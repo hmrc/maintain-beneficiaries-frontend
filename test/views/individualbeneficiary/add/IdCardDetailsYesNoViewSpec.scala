@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package views.individualbeneficiary
+package views.individualbeneficiary.add
 
-import controllers.individualbeneficiary.routes
+import controllers.individualbeneficiary.add.routes
 import forms.YesNoFormProvider
 import models.{Mode, Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.individualbeneficiary.PassportDetailsYesNoView
+import views.html.individualbeneficiary.add.IdCardDetailsYesNoView
 
-class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
+class IdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.passportDetailsYesNo"
+  val messageKeyPrefix = "individualBeneficiary.idCardDetailsYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
   val mode: Mode = NormalMode
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "PassportDetailsYesNo view" must {
+  "IdCardDetailsYesNo view" must {
 
-    val view = viewFor[PassportDetailsYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[IdCardDetailsYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, mode, name.displayName)(fakeRequest, messages)
@@ -42,7 +42,7 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportDetailsYesNoController.onSubmit(mode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.IdCardDetailsYesNoController.onSubmit(mode).url)
 
     behave like pageWithASubmitButton(applyView(form))
   }

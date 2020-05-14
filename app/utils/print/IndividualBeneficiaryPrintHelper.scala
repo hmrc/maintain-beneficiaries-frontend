@@ -44,12 +44,12 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(NormalMode).url),
       bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(NormalMode).url),
       bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(NormalMode).url),
-      bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(NormalMode).url),
-      bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad(NormalMode).url),
+      bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", controllers.individualbeneficiary.add.routes.PassportDetailsController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", controllers.individualbeneficiary.add.routes.IdCardDetailsYesNoController.onPageLoad(NormalMode).url),
+      bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", controllers.individualbeneficiary.add.routes.IdCardDetailsController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(NormalMode).url),
-      bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", controllers.individualbeneficiary.routes.StartDateController.onPageLoad().url)
+      bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", controllers.individualbeneficiary.add.routes.StartDateController.onPageLoad().url)
     ).flatten
 
     val amend: Seq[AnswerRow] = Seq(
@@ -65,10 +65,8 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(CheckMode).url),
       bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(CheckMode).url),
       bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(CheckMode).url),
-      bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(CheckMode).url),
-      bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(CheckMode).url),
-      bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(CheckMode).url),
-      bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(CheckMode).url),
+      bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url),
+      bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad().url),
       bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(CheckMode).url)
     ).flatten
 

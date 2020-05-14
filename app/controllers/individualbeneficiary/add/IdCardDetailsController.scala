@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.individualbeneficiary
+package controllers.individualbeneficiary.add
 
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
-import views.html.individualbeneficiary.IdCardDetailsView
+import views.html.individualbeneficiary.add.IdCardDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 

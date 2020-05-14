@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package views.individualbeneficiary
+package views.individualbeneficiary.amend
 
-import controllers.individualbeneficiary.routes
-import forms.PassportDetailsFormProvider
-import models.{Mode, Name, NormalMode, Passport}
+import forms.CombinedPassportOrIdCardDetailsFormProvider
+import models.{CombinedPassportOrIdCard, Name}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.behaviours.QuestionViewBehaviours
-import views.html.individualbeneficiary.PassportDetailsView
+import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
+import controllers.individualbeneficiary.amend.routes
 
-class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
+class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPassportOrIdCard] {
 
-  val messageKeyPrefix = "individualBeneficiary.passportDetails"
+  val messageKeyPrefix = "individualBeneficiary.passportOrIdCardDetails"
   val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
-  override val form: Form[Passport] = new PassportDetailsFormProvider().withPrefix(messageKeyPrefix)
 
-  "PassportDetails view" must {
+  override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider().withPrefix(messageKeyPrefix)
 
-    val view = viewFor[PassportDetailsView](Some(emptyUserAnswers))
+  "PassportOrIdCardDetails view" must {
+
+    val view = viewFor[PassportOrIdCardDetailsView](Some(emptyUserAnswers))
 
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, mode, countryOptions, name.displayName)(fakeRequest, messages)
+      view.apply(form, name.displayName, countryOptions)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
@@ -52,7 +52,7 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
         form,
         applyView,
         messageKeyPrefix,
-        routes.PassportDetailsController.onSubmit(mode).url,
+        routes.PassportOrIdCardDetailsController.onSubmit().url,
         Seq(("country", None), ("number", None)),
         "expiryDate",
         name.displayName

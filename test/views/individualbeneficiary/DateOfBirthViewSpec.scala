@@ -16,33 +16,44 @@
 
 package views.individualbeneficiary
 
-import controllers.individualbeneficiary.routes
-import forms.YesNoFormProvider
-import models.{Mode, Name, NormalMode}
+import java.time.LocalDate
+
+import forms.DateOfBirthFormProvider
+import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
-import views.html.individualbeneficiary.IdCardDetailsYesNoView
+import views.behaviours.QuestionViewBehaviours
+import views.html.individualbeneficiary.DateOfBirthView
 
-class IdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
+class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "individualBeneficiary.idCardDetailsYesNo"
+  val messageKeyPrefix = "individualBeneficiary.dateOfBirth"
   val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
-  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "IdCardDetailsYesNo view" must {
+  override val form: Form[LocalDate] = new DateOfBirthFormProvider().withPrefix(messageKeyPrefix)
 
-    val view = viewFor[IdCardDetailsYesNoView](Some(emptyUserAnswers))
+  "DateOfBirth view" must {
+
+    val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
+
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, mode, name.displayName)(fakeRequest, messages)
-
+      view.apply(form, NormalMode, name.displayName)(fakeRequest, messages)
+    
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.IdCardDetailsYesNoController.onSubmit(mode).url)
+    "fields" must {
+
+      behave like pageWithDateFields(
+        form,
+        applyView,
+        messageKeyPrefix,
+        "value",
+        name.displayName
+      )
+    }
 
     behave like pageWithASubmitButton(applyView(form))
   }

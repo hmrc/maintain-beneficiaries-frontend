@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.routes._
+@import controllers.individualbeneficiary.amend.routes._
 
 @this(
     main_template: MainTemplate,
@@ -24,20 +24,19 @@
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.startDate.title", name)}"
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportOrIdCardDetailsYesNo.title", name)}"
 ) {
 
-    @formHelper(action = StartDateController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = PassportOrIdCardDetailsYesNoController.onSubmit(), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.input_date(
-            field = form("value"),
-            legend = messages("individualBeneficiary.startDate.heading", name),
-            headingIsLegend = true,
-            hint = Some(messages("individualBeneficiary.startDate.hint"))
+        @components.input_yes_no(
+        field = form("value"),
+        legend = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.heading", name),
+        headingIsLegend = true
         )
 
         @components.submit_button()

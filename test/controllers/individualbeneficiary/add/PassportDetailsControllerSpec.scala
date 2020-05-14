@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.individualbeneficiary
+package controllers.individualbeneficiary.add
 
 import java.time.LocalDate
 
@@ -34,7 +34,7 @@ import play.api.test.Helpers._
 import repositories.PlaybackRepository
 import utils.InputOption
 import utils.countryOptions.CountryOptions
-import views.html.individualbeneficiary.PassportDetailsView
+import views.html.individualbeneficiary.add.PassportDetailsView
 
 import scala.concurrent.Future
 

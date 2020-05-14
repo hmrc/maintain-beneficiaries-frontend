@@ -3,7 +3,6 @@
 ->         /class-of-beneficiaries                                          classofbeneficiary.Routes
 
 ->         /individual                                                      individualBeneficiary.Routes
-->         /individual/amend                                                individualBeneficiary.amend.Routes
 ->         /individual/remove                                               individualBeneficiary.remove.Routes
 
 ->         /charity                                                         charityBeneficiary.Routes

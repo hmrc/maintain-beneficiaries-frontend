@@ -17,6 +17,8 @@
 package navigation
 
 import controllers.individualbeneficiary.{routes => rts}
+import controllers.individualbeneficiary.add.{routes => addRts}
+import controllers.individualbeneficiary.amend.{routes => amendRts}
 import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
 import pages.individualbeneficiary._
@@ -34,11 +36,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case RoleInCompanyPage => rts.DateOfBirthYesNoController.onPageLoad(mode)
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad(mode)
     case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad(mode)
-    case NationalInsuranceNumberPage => rts.VPE1FormYesNoController.onPageLoad(mode)
-    case UkAddressPage => rts.PassportDetailsYesNoController.onPageLoad(mode)
-    case NonUkAddressPage => rts.PassportDetailsYesNoController.onPageLoad(mode)
-    case PassportDetailsPage => rts.VPE1FormYesNoController.onPageLoad(mode)
-    case IdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad(mode)
+    case NationalInsuranceNumberPage | PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad(mode)
     case StartDatePage => controllers.individualbeneficiary.add.routes.CheckDetailsController.onPageLoad()
   }
 
@@ -54,9 +52,11 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case LiveInTheUkYesNoPage => ua =>
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
     case PassportDetailsYesNoPage => ua =>
-        yesNoNav(ua, PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(mode), rts.IdCardDetailsYesNoController.onPageLoad(mode))
+        yesNoNav(ua, PassportDetailsYesNoPage, addRts.PassportDetailsController.onPageLoad(mode), addRts.IdCardDetailsYesNoController.onPageLoad(mode))
     case IdCardDetailsYesNoPage => ua =>
-        yesNoNav(ua, IdCardDetailsYesNoPage, rts.IdCardDetailsController.onPageLoad(mode), rts.VPE1FormYesNoController.onPageLoad(mode))
+        yesNoNav(ua, IdCardDetailsYesNoPage, addRts.IdCardDetailsController.onPageLoad(mode), rts.VPE1FormYesNoController.onPageLoad(mode))
+    case PassportOrIdCardDetailsYesNoPage => ua =>
+      yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, amendRts.PassportOrIdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad(mode))
   }
 
   private def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
@@ -78,11 +78,15 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     mode match {
       case NormalMode => {
         case VPE1FormYesNoPage => _ =>
-          rts.StartDateController.onPageLoad()
+          addRts.StartDateController.onPageLoad()
+        case UkAddressPage | NonUkAddressPage => _ =>
+          addRts.PassportDetailsYesNoController.onPageLoad(mode)
       }
       case CheckMode => {
         case VPE1FormYesNoPage => ua =>
           modeNav(ua)
+        case UkAddressPage | NonUkAddressPage => _ =>
+          amendRts.PassportOrIdCardDetailsYesNoController.onPageLoad()
       }
     }
   }

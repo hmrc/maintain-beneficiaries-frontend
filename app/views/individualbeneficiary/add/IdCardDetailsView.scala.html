@@ -1,0 +1,64 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import controllers.individualbeneficiary.add.routes._
+@import utils.InputOption
+
+@this(
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
+)
+
+@(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.idCardDetails.title")}"
+) {
+
+    @formHelper(action = IdCardDetailsController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+        @components.heading("individualBeneficiary.idCardDetails.heading", Some(name))
+
+        @components.select(field = form("country"),
+            label = messages("individualBeneficiary.idCardDetails.country"),
+            labelClasses = Set("form-control-1-2 bold"),
+            options = countryOptions,
+            placeholder = Some("address.country.select"),
+            formGroupClasses = Set("autocomplete-wrapper form-control-2-1"),
+            selectAttribute = Set("data-non-uk-countries")
+        )
+
+        @components.input_text(
+            field = form("number"),
+            label = messages("individualBeneficiary.idCardDetails.number"),
+            hint = Some(messages("individualBeneficiary.idCardDetails.number.hint"))
+        )
+
+        @components.input_date(
+            field = form("expiryDate"),
+            legend = messages("individualBeneficiary.idCardDetails.expiryDate"),
+            legendClass = "bold",
+            hint = Some(messages("individualBeneficiary.idCardDetails.expiryDate.hint")),
+            headingIsLegend = false
+        )
+
+        @components.submit_button()
+    }
+}
