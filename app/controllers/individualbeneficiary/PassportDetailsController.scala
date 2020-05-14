@@ -69,7 +69,7 @@ class PassportDetailsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportDetailsPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsPage, mode, updatedAnswers))
       )
   }
 }

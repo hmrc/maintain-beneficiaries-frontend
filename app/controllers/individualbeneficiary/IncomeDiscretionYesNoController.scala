@@ -67,7 +67,7 @@ class IncomeDiscretionYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeDiscretionYesNoPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage, mode, updatedAnswers))
       )
   }
 }

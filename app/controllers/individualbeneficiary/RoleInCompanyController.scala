@@ -68,7 +68,7 @@ class RoleInCompanyController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RoleInCompanyPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RoleInCompanyPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(RoleInCompanyPage, mode, updatedAnswers))
       )
   }
 

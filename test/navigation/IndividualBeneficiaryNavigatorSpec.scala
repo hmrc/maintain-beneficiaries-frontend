@@ -19,7 +19,7 @@ package navigation
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{Mode, NormalMode, TypeOfTrust, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.{NamePage, _}
 
@@ -216,7 +216,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
     "amend journey" must {
 
-      val mode: Mode = NormalMode
+      val mode: Mode = CheckMode
       val index = 0
       val baseAnswers = emptyUserAnswers.set(IndexPage, index).success.value
 
@@ -378,7 +378,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
       }
 
       "ID card details page -> VPE1 Yes No page" in {
-        navigator.nextPage(IdCardDetailsPage, baseAnswers)
+        navigator.nextPage(IdCardDetailsPage, mode, baseAnswers)
           .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
       }
 

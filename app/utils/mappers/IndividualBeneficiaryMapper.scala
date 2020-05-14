@@ -19,7 +19,7 @@ package utils.mappers
 import java.time.LocalDate
 
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{Address, CombinedPassportOrIdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, UkAddress, UserAnswers}
+import models.{Address, CombinedPassportOrIdCard, IdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import org.slf4j.LoggerFactory
 import pages.individualbeneficiary._
 import play.api.libs.functional.syntax._
@@ -29,13 +29,13 @@ class IndividualBeneficiaryMapper {
 
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
-  def apply(answers: UserAnswers): Option[IndividualBeneficiary] = {
+  def apply(answers: UserAnswers, adding: Boolean): Option[IndividualBeneficiary] = {
 
     val readFromUserAnswers: Reads[IndividualBeneficiary] =
       (
         NamePage.path.read[Name] and
         DateOfBirthPage.path.readNullable[LocalDate] and
-        readIdentification and
+        readIdentification(adding) and
         readAddress and
         VPE1FormYesNoPage.path.read[Boolean] and
         RoleInCompanyPage.path.readNullable[RoleInCompany] and
@@ -54,14 +54,27 @@ class IndividualBeneficiaryMapper {
     }
   }
 
-  private def readIdentification: Reads[Option[IndividualIdentification]] = {
+  private def readIdentification(adding: Boolean): Reads[Option[IndividualIdentification]] = {
     NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
       case true => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
-      case false => readPassportOrIdCard
+      case false => if (adding) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
     }
   }
 
-  private def readPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
+  private def readSeparatePassportOrIdCard: Reads[Option[IndividualIdentification]] = {
+    (for {
+      hasNino <- NationalInsuranceNumberYesNoPage.path.readWithDefault(false)
+      hasAddress <- AddressYesNoPage.path.readWithDefault(false)
+      hasPassport <- PassportDetailsYesNoPage.path.readWithDefault(false)
+      hasIdCard <- IdCardDetailsYesNoPage.path.readWithDefault(false)
+    } yield (hasNino, hasAddress, hasPassport, hasIdCard)).flatMap[Option[IndividualIdentification]] {
+      case (false, true, true, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
+      case (false, true, false, true) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
+      case _ => Reads(_ => JsSuccess(None))
+    }
+  }
+
+  private def readCombinedPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
     NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap {
       case true => Reads(_ => JsSuccess(None))
       case false => readPassportOrIdIfAddressExists

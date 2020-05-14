@@ -53,7 +53,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers) match {
+      mapper(request.userAnswers, adding = true) match {
         case None =>
           Future.successful(InternalServerError)
         case Some(beneficiary) =>

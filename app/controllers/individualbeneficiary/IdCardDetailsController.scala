@@ -69,7 +69,7 @@ class IdCardDetailsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IdCardDetailsPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IdCardDetailsPage, mode, updatedAnswers))
       )
   }
 }

@@ -67,7 +67,7 @@ class DateOfBirthYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DateOfBirthYesNoPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DateOfBirthYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DateOfBirthYesNoPage, mode, updatedAnswers))
       )
   }
 }

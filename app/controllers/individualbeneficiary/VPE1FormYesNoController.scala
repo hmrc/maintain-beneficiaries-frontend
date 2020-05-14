@@ -67,7 +67,7 @@ class VPE1FormYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(VPE1FormYesNoPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(VPE1FormYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(VPE1FormYesNoPage, mode, updatedAnswers))
       )
   }
 }

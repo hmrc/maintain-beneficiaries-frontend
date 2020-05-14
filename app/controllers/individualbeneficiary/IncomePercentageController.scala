@@ -71,7 +71,7 @@ class IncomePercentageController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePercentagePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomePercentagePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IncomePercentagePage, mode, updatedAnswers))
       )
   }
 }

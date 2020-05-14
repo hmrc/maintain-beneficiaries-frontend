@@ -67,7 +67,7 @@ class NationalInsuranceNumberYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NationalInsuranceNumberYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NationalInsuranceNumberYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NationalInsuranceNumberYesNoPage, mode, updatedAnswers))
       )
   }
 }

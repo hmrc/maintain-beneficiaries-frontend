@@ -67,7 +67,7 @@ class LiveInTheUkYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(LiveInTheUkYesNoPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LiveInTheUkYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LiveInTheUkYesNoPage, mode, updatedAnswers))
       )
   }
 }

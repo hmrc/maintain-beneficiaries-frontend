@@ -81,7 +81,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers).map {
+      mapper(request.userAnswers, adding = false).map {
         beneficiary =>
           connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
