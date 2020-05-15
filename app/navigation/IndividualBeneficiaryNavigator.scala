@@ -39,7 +39,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case DateOfBirthPage => rts.IncomeDiscretionYesNoController.onPageLoad(mode)
     case IncomePercentagePage => rts.NationalInsuranceNumberYesNoController.onPageLoad(mode)
     case NationalInsuranceNumberPage | PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => rts.VPE1FormYesNoController.onPageLoad(mode)
-    case StartDatePage => controllers.individualbeneficiary.add.routes.CheckDetailsController.onPageLoad()
+    case StartDatePage => addRts.CheckDetailsController.onPageLoad()
   }
 
   private def yesNoNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
@@ -98,7 +98,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
       case None =>
         controllers.routes.SessionExpiredController.onPageLoad()
       case Some(x) =>
-        controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
+        amendRts.CheckDetailsController.renderFromUserAnswers(x)
     }
   }
 
