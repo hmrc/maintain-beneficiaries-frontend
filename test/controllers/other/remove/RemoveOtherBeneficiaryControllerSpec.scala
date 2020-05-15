@@ -26,7 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.other.RemoveYesNoPage
+import pages.other.remove.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

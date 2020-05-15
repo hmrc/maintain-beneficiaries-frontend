@@ -14,61 +14,60 @@
  * limitations under the License.
  */
 
-package controllers.other.add
+package controllers.other
 
 import config.annotations.OtherBeneficiary
-import controllers.actions.StandardActionSets
+import controllers.actions._
 import controllers.actions.other.DescriptionRequiredAction
-import forms.DateAddedToTrustFormProvider
+import forms.UkAddressFormProvider
 import javax.inject.Inject
+import models.Mode
 import navigation.Navigator
-import pages.other.add.StartDatePage
+import pages.other.UkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.other.add.StartDateView
+import views.html.other.UkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StartDateController @Inject()(
+class UkAddressController @Inject()(
                                      override val messagesApi: MessagesApi,
-                                     playbackRepository: PlaybackRepository,
+                                     sessionRepository: PlaybackRepository,
                                      @OtherBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      descriptionAction: DescriptionRequiredAction,
-                                     formProvider: DateAddedToTrustFormProvider,
+                                     formProvider: UkAddressFormProvider,
                                      val controllerComponents: MessagesControllerComponents,
-                                     view: StartDateView
+                                     view: UkAddressView
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction) {
+  val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
-      val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
-
-      val preparedForm = request.userAnswers.get(StartDatePage) match {
+      val preparedForm = request.userAnswers.get(UkAddressPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.description))
+      Ok(view(preparedForm, mode, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
     implicit request =>
-
-      val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description))),
+          Future.successful(BadRequest(view(formWithErrors, mode, request.description))),
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
-            _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(UkAddressPage, updatedAnswers))
       )
   }
 }

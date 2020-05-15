@@ -20,13 +20,12 @@ import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.beneficiaries.TypeOfBeneficiaryToAdd
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddNowPage
 import pages.other._
+import pages.other.add.StartDatePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -64,7 +63,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[OtherBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, description)
+      val answerSection = printHelper(userAnswers, provisional = true, description)
 
       status(result) mustEqual OK
 
