@@ -65,7 +65,7 @@ class DescriptionController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DescriptionPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DescriptionPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(DescriptionPage, mode, updatedAnswers))
       )
   }
 }

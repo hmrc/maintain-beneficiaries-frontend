@@ -69,7 +69,7 @@ class NonUkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NonUkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NonUkAddressPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NonUkAddressPage, mode, updatedAnswers))
       )
   }
 }

@@ -67,7 +67,7 @@ class UkAddressController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkAddressPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkAddressPage, mode, updatedAnswers))
       )
   }
 }

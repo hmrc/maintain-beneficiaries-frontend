@@ -75,8 +75,8 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     answers.get(IndexPage) match {
       case None =>
         controllers.routes.SessionExpiredController.onPageLoad()
-      case Some(x) =>
-        amendRts.CheckDetailsController.renderFromUserAnswers(x)
+      case Some(index) =>
+        amendRts.CheckDetailsController.renderFromUserAnswers(index)
     }
   }
 
