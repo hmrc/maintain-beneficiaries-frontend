@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import config.annotations._
 import controllers.actions._
 import navigation.employmentBeneficiary.{AddEmploymentRelatedBeneficiaryNavigator, AmendEmploymentRelatedBeneficiaryNavigator}
-import navigation.{CompanyBeneficiaryNavigator, _}
+import navigation._
 import repositories.{MongoRepository, PlaybackRepository}
 import services.{AuthenticationService, AuthenticationServiceImpl}
 
