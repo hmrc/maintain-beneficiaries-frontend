@@ -16,13 +16,14 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.AddIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.PassportDetailsFormProvider
 import javax.inject.Inject
+import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.individualbeneficiary.PassportDetailsPage
+import pages.individualbeneficiary.add.PassportDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PassportDetailsController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            sessionRepository: PlaybackRepository,
-                                           @AddIndividualBeneficiary navigator: Navigator,
+                                           @IndividualBeneficiary navigator: Navigator,
                                            standardActionSets: StandardActionSets,
                                            nameAction: NameRequiredAction,
                                            formProvider: PassportDetailsFormProvider,
@@ -68,7 +69,7 @@ class PassportDetailsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportDetailsPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsPage, NormalMode, updatedAnswers))
       )
   }
 }

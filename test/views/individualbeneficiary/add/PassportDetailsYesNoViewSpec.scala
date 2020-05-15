@@ -28,7 +28,6 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiary.passportDetailsYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
-
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "PassportDetailsYesNo view" must {
