@@ -22,7 +22,6 @@ import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.individualbeneficiary.remove.WhenRemovedView
@@ -31,7 +30,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       repository: PlaybackRepository,
                                        standardActionSets: StandardActionSets,
                                        formProvider: DateRemovedFromTrustFormProvider,
                                        trust: TrustService,

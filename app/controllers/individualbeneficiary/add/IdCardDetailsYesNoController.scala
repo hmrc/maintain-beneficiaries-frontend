@@ -16,13 +16,14 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.AddIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
+import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.individualbeneficiary.IdCardDetailsYesNoPage
+import pages.individualbeneficiary.add.IdCardDetailsYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdCardDetailsYesNoController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               sessionRepository: PlaybackRepository,
-                                              @AddIndividualBeneficiary navigator: Navigator,
+                                              @IndividualBeneficiary navigator: Navigator,
                                               standardActionSets: StandardActionSets,
                                               nameAction: NameRequiredAction,
                                               formProvider: YesNoFormProvider,
@@ -66,7 +67,7 @@ class IdCardDetailsYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IdCardDetailsYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IdCardDetailsYesNoPage, NormalMode, updatedAnswers))
       )
   }
 }

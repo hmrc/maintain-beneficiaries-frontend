@@ -19,14 +19,15 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.AmendIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsYesNoPage}
+import pages.individualbeneficiary.NamePage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -43,7 +44,7 @@ class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSu
 
   override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
     .set(NamePage, name).success.value
-  
+
   lazy val passportOrIdCardDetailsYesNoRoute = routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url
 
   "PassportOrIdCardDetailsYesNo Controller" must {
@@ -93,7 +94,7 @@ class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSu
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(fakeNavigator))
+        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
       val request =

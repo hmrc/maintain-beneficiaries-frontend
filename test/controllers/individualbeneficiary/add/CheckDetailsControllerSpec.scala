@@ -28,7 +28,8 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
-import pages.individualbeneficiary.{AddressYesNoPage, DateOfBirthPage, IncomeDiscretionYesNoPage, NamePage, NationalInsuranceNumberPage, NationalInsuranceNumberYesNoPage, StartDatePage, VPE1FormYesNoPage}
+import pages.individualbeneficiary.add.StartDatePage
+import pages.individualbeneficiary.{AddressYesNoPage, DateOfBirthPage, IncomeDiscretionYesNoPage, NamePage, NationalInsuranceNumberPage, NationalInsuranceNumberYesNoPage, VPE1FormYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -76,7 +77,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, name.displayName)
+      val answerSection = printHelper(userAnswers, provisional = true, name.displayName)
 
       status(result) mustEqual OK
 

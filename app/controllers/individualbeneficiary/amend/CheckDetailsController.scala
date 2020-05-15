@@ -28,8 +28,8 @@ import play.api.mvc._
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.AmendIndividualBeneficiaryMapper
-import utils.print.AmendIndividualBeneficiaryPrintHelper
+import utils.mappers.IndividualBeneficiaryMapper
+import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.individualbeneficiary.amend.CheckDetailsView
 
@@ -44,19 +44,20 @@ class CheckDetailsController @Inject()(
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         playbackRepository: PlaybackRepository,
-                                        printHelper: AmendIndividualBeneficiaryPrintHelper,
-                                        mapper: AmendIndividualBeneficiaryMapper,
+                                        printHelper: IndividualBeneficiaryPrintHelper,
+                                        mapper: IndividualBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
                                         extractor: IndividualBeneficiaryExtractor,
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val provisional = false
+
   private def render(userAnswers: UserAnswers,
                      index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
-    val section: AnswerSection = printHelper(userAnswers, name)
+                     name: String
+                    )(implicit request: Request[AnyContent]): Result = {
+    val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(section, index))
   }
 
@@ -81,7 +82,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers).map {
+      mapper(request.userAnswers, provisional).map {
         beneficiary =>
           connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

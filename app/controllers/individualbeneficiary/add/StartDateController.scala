@@ -16,13 +16,14 @@
 
 package controllers.individualbeneficiary.add
 
-import config.annotations.AddIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
+import models.NormalMode
 import navigation.Navigator
-import pages.individualbeneficiary.StartDatePage
+import pages.individualbeneficiary.add.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @AddIndividualBeneficiary navigator: Navigator,
+                                     @IndividualBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,
@@ -70,7 +71,7 @@ class StartDateController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(StartDatePage, NormalMode, updatedAnswers))
       )
   }
 }

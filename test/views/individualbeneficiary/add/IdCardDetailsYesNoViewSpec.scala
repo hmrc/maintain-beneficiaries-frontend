@@ -18,7 +18,7 @@ package views.individualbeneficiary.add
 
 import controllers.individualbeneficiary.add.routes
 import forms.YesNoFormProvider
-import models.Name
+import models.{Mode, Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -28,7 +28,6 @@ class IdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiary.idCardDetailsYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
-
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "IdCardDetailsYesNo view" must {
