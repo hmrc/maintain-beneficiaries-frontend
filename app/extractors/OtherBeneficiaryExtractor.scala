@@ -19,6 +19,8 @@ package extractors
 import com.google.inject.Inject
 import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
+import pages.other.add.StartDatePage
+import pages.other.amend.IndexPage
 
 import scala.util.Try
 

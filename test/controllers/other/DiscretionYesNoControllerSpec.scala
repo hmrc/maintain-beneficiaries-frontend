@@ -14,73 +14,68 @@
  * limitations under the License.
  */
 
-package controllers.other.add
-
-import java.time.LocalDate
+package controllers.other
 
 import base.SpecBase
 import config.annotations.OtherBeneficiary
-import forms.DateAddedToTrustFormProvider
-import models.TypeOfTrust
+import forms.YesNoFormProvider
+import models.{Mode, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.other.DescriptionPage
-import pages.other.add.StartDatePage
+import pages.other.{DescriptionPage, DiscretionYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.other.add.StartDateView
+import views.html.other.DiscretionYesNoView
 
-class StartDateControllerSpec extends SpecBase with MockitoSugar {
+class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  private val date: LocalDate = LocalDate.parse("2019-02-01")
-  private val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("otherBeneficiary.startDate", date)
-  private val startDateRoute: String = routes.StartDateController.onPageLoad().url
+  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("otherBeneficiary.discretionYesNo")
+  private val mode: Mode = NormalMode
+  private val discretionYesNoRoute: String = routes.DiscretionYesNoController.onPageLoad(mode).url
   private val description: String = "Other"
   private val onwardRoute = Call("GET", "/foo")
-  private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date, TypeOfTrust.WillTrustOrIntestacyTrust)
-    .set(DescriptionPage, description).success.value
+  val baseAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
-  "NonUkAddress Controller" must {
+  "DiscretionYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(GET, startDateRoute)
+      val request = FakeRequest(GET, discretionYesNoRoute)
 
-      val view = application.injector.instanceOf[StartDateView]
+      val view = application.injector.instanceOf[DiscretionYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, description)(request, messages).toString
+        view(form, mode, description)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(StartDatePage, answer).success.value
+      val answers = baseAnswers.set(DiscretionYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, startDateRoute)
+      val request = FakeRequest(GET, discretionYesNoRoute)
 
-      val view = application.injector.instanceOf[StartDateView]
+      val view = application.injector.instanceOf[DiscretionYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), description)(fakeRequest, messages).toString
+        view(form.fill(true), mode, description)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,18 +83,14 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
-        FakeRequest(POST, startDateRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> answer.getDayOfMonth.toString,
-            "value.month" -> answer.getMonthValue.toString,
-            "value.year"  -> answer.getYear.toString
-          )
+        FakeRequest(POST, discretionYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -114,18 +105,18 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
-      val request = FakeRequest(POST, startDateRoute)
+      val request = FakeRequest(POST, discretionYesNoRoute)
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[StartDateView]
+      val view = application.injector.instanceOf[DiscretionYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, description)(fakeRequest, messages).toString
+        view(boundForm, mode, description)(fakeRequest, messages).toString
 
        application.stop()
     }
@@ -134,7 +125,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, startDateRoute)
+      val request = FakeRequest(GET, discretionYesNoRoute)
 
       val result = route(application, request).value
 
@@ -149,12 +140,8 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, startDateRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> answer.getDayOfMonth.toString,
-            "value.month" -> answer.getMonthValue.toString,
-            "value.year"  -> answer.getYear.toString
-          )
+        FakeRequest(POST, discretionYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

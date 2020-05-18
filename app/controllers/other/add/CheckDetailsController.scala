@@ -23,7 +23,6 @@ import controllers.actions.other.DescriptionRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.OtherBeneficiaryMapper
 import utils.print.OtherBeneficiaryPrintHelper
@@ -48,7 +47,7 @@ class CheckDetailsController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.description)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional = true, request.description)
       Ok(view(section))
   }
 
