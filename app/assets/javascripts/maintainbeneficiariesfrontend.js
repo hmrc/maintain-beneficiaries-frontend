@@ -33,64 +33,30 @@ $(document).ready(function() {
     window.history.back();
   })
 
+   // =========================
+   // GOV.UK country lookup
+   // https://alphagov.github.io/accessible-autocomplete/#progressive-enhancement
+   // =========================
+   // auto complete country lookup, progressive enhancement
+   // using version 2.0.2
+   // need to invoke new enhanceSelectElement()
+   // =====
 
-  //======================================================
-  // Non-UK countries autocomplete
-  //======================================================
-    if(document.querySelectorAll('select[data-non-uk-countries]').length > 0){
+   if(document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
+      accessibleAutocomplete.enhanceSelectElement({
+           selectElement: document.querySelector("select[data-non-uk-countries]"),
+           minLength:2,
+           defaultValue: ''
+       });
+   }
 
-        var graphUrl = '/maintain-a-trust/beneficiaries/assets/javascripts/autocomplete/location-non-uk-autocomplete-graph.json'
-
-        openregisterLocationPicker({
-            defaultValue: '',
-            selectElement: document.querySelector('select[data-non-uk-countries]'),
-            url: graphUrl
-        })
-
-    }
-
-  //======================================================
-  // All countries autocomplete
-  //======================================================
-    if(document.querySelectorAll('select[data-all-countries]').length > 0){
-
-        var graphUrl = '/maintain-a-trust/beneficiaries/assets/javascripts/autocomplete/location-autocomplete-graph.json'
-
-        openregisterLocationPicker({
-            defaultValue: '',
-            selectElement: document.querySelector('select[data-all-countries]'),
-            url: graphUrl
-        })
-
-    }
-
-    //======================================================
-    // countries autocomplete fixes
-    //======================================================
-    // Prevent submission of blank country input. Correctly set country option for a valid country input if not selected from dropdown list
-
-    $("#submit.countryLookupHelper").on('click', function(e){
-
-        var idName = $("#value").length == 0 ? "#country" : "#value"
-        var inputText = $(idName).val().trim();
-        var listBox = $(idName+"__listbox li");
-        var optionSelected = $(idName+"-select option:selected");
-        if (inputText == "") {
-            optionSelected.removeAttr('selected')
-        }
-        else {
-            if (listBox.text() == "No results found") {
-                optionSelected.removeAttr('selected');
-            } else {
-                if (listBox.text() != "undefined") {
-                    var match = listBox.filter(function() {
-                          return $(this).text().toUpperCase() == inputText.toUpperCase();
-                    });
-                    if (match.length > 0) {match.trigger("click");} else {optionSelected.removeAttr('selected');}
-                }
-            }
-        }
-    })
+    if(document.querySelectorAll('select[data-all-countries]').length > 0) {
+          accessibleAutocomplete.enhanceSelectElement({
+               selectElement: document.querySelector("select[data-all-countries]"),
+               minLength:2,
+               defaultValue: ''
+           });
+       }
 
     // Assign aria-labbledby to the dynamically created country input
     if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper #value").attr('aria-labelledby', 'error-message-input');
