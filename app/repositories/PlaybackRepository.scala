@@ -16,15 +16,16 @@
 
 package repositories
 
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import akka.stream.Materializer
-import com.google.inject.Inject
-import models.UserAnswers
+import javax.inject.{Inject, Singleton}
+import models.{MongoDateTimeFormats, UserAnswers}
+import org.slf4j.LoggerFactory
 import play.api.Configuration
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
+import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
@@ -33,19 +34,24 @@ import utils.DateFormatter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PlaybackRepository @Inject()(
-                                    mongo: ReactiveMongoApi,
-                                    config: Configuration,
-                                    dateFormatter: DateFormatter
-                                  )(implicit ec: ExecutionContext, m: Materializer) extends MongoRepository {
+@Singleton
+class PlaybackRepositoryImpl @Inject()(
+                                        mongoApi: ReactiveMongoApi,
+                                        config: Configuration,
+                                        dateFormatter: DateFormatter
+                                      )(implicit ec: ExecutionContext, m: Materializer) extends PlaybackRepository {
+
+  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
   private val collectionName: String = "user-answers"
 
   private val cacheTtl = config.get[Int]("mongodb.playback.ttlSeconds")
 
-  private def collection: Future[JSONCollection] = {
-      mongo.database.map(_.collection[JSONCollection](collectionName))
-  }
+  private def collection: Future[JSONCollection] =
+    for {
+      _ <- ensureIndexes
+      res <- mongoApi.database.map(_.collection[JSONCollection](collectionName))
+    } yield res
 
   private val lastUpdatedIndex = Index(
     key = Seq("updatedAt" -> IndexType.Ascending),
@@ -58,14 +64,18 @@ class PlaybackRepository @Inject()(
     name = Some("internal-auth-id-index")
   )
 
-  val started = Future.sequence {
-      Seq(
-        collection.map(_.indexesManager.ensure(lastUpdatedIndex)),
-        collection.map(_.indexesManager.ensure(internalAuthIdIndex))
-      )
-  }.map(_ => ())
+  private lazy val ensureIndexes = {
+    logger.info("Ensuring collection indexes")
+    for {
+      collection              <- mongoApi.database.map(_.collection[JSONCollection](collectionName))
+      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
+      createdIdIndex          <- collection.indexesManager.ensure(internalAuthIdIndex)
+    } yield createdLastUpdatedIndex && createdIdIndex
+  }
 
   override def get(internalId: String): Future[Option[UserAnswers]] = {
+
+    logger.debug(s"PlaybackRepository getting user answers for $internalId")
 
     val selector = Json.obj(
       "internalId" -> internalId
@@ -73,14 +83,16 @@ class PlaybackRepository @Inject()(
 
     val modifier = Json.obj(
       "$set" -> Json.obj(
-        "updatedAt" -> Json.obj(
-          "$date" -> Timestamp.valueOf(LocalDateTime.now)
-        )
+        "updatedAt" -> MongoDateTimeFormats.localDateTimeWrite.writes(LocalDateTime.now)
       )
     )
 
     collection.flatMap {
-      _.findAndUpdate(selector, modifier, fetchNewObject = true, upsert = false).map(_.result[UserAnswers])
+      _.findAndUpdate(selector, modifier, fetchNewObject = true, upsert = false).map {
+        r =>
+          logger.debug(s"[PlaybackRepository][get] last mongo error ${r.lastError}")
+          r.result[UserAnswers]
+      }
     }
   }
 
@@ -100,13 +112,26 @@ class PlaybackRepository @Inject()(
       }
     }
   }
+
+  override def resetCache(internalId: String): Future[Option[JsObject]] = {
+
+    logger.debug(s"PlaybackRepository resetting cache for $internalId")
+
+    val selector = Json.obj(
+      "internalId" -> internalId
+    )
+
+    collection.flatMap(_.findAndRemove(selector, None, None, WriteConcern.Default, None, None, Seq.empty).map(
+      _.value
+    ))
+  }
 }
 
-trait MongoRepository {
-
-  val started: Future[Unit]
+trait PlaybackRepository {
 
   def get(internalId: String): Future[Option[UserAnswers]]
 
   def set(userAnswers: UserAnswers): Future[Boolean]
+
+  def resetCache(internalId: String): Future[Option[JsObject]]
 }
