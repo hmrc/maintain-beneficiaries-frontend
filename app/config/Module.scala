@@ -21,7 +21,7 @@ import config.annotations._
 import controllers.actions._
 import navigation.employmentBeneficiary.{AddEmploymentRelatedBeneficiaryNavigator, AmendEmploymentRelatedBeneficiaryNavigator}
 import navigation._
-import repositories.{MongoRepository, PlaybackRepository}
+import repositories.{PlaybackRepository, PlaybackRepositoryImpl}
 import services.{AuthenticationService, AuthenticationServiceImpl}
 
 class Module extends AbstractModule {
@@ -31,7 +31,7 @@ class Module extends AbstractModule {
     bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
-    bind(classOf[MongoRepository]).to(classOf[PlaybackRepository]).asEagerSingleton()
+    bind(classOf[PlaybackRepository]).to(classOf[PlaybackRepositoryImpl]).asEagerSingleton()
 
     // For session based storage instead of cred based, change to SessionIdentifierAction
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
