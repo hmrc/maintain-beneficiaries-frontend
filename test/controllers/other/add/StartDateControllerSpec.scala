@@ -19,12 +19,13 @@ package controllers.other.add
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.AddOtherBeneficiary
+import config.annotations.OtherBeneficiary
 import forms.DateAddedToTrustFormProvider
 import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.other.{DescriptionPage, StartDatePage}
+import pages.other.DescriptionPage
+import pages.other.add.StartDatePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -89,7 +90,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddOtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

@@ -16,13 +16,14 @@
 
 package controllers.individualbeneficiary.amend
 
-import config.annotations.AmendIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.CombinedPassportOrIdCardDetailsFormProvider
 import javax.inject.Inject
+import models.CheckMode
 import navigation.Navigator
-import pages.individualbeneficiary.PassportOrIdCardDetailsPage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -35,14 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class PassportOrIdCardDetailsController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    playbackRepository: PlaybackRepository,
-                                                   @AmendIndividualBeneficiary navigator: Navigator,
+                                                   @IndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: CombinedPassportOrIdCardDetailsFormProvider,
                                                    countryOptions: CountryOptions,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: PassportOrIdCardDetailsView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetails")
 
@@ -68,7 +69,7 @@ class PassportOrIdCardDetailsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, value))
             _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, CheckMode, updatedAnswers))
       )
   }
 }

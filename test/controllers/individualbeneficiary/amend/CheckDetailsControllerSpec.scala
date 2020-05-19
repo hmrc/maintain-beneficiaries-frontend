@@ -27,13 +27,14 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary._
+import pages.individualbeneficiary.add.StartDatePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
-import utils.print.AmendIndividualBeneficiaryPrintHelper
+import utils.print.IndividualBeneficiaryPrintHelper
 import views.html.individualbeneficiary.amend.CheckDetailsView
 
 import scala.concurrent.Future
@@ -99,8 +100,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[AmendIndividualBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, name.displayName)
+      val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
+      val answerSection = printHelper(userAnswers, provisional = false, name.displayName)
 
       status(result) mustEqual OK
 

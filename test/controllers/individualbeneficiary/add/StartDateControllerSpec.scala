@@ -19,14 +19,15 @@ package controllers.individualbeneficiary.add
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import config.annotations.AddIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import forms.DateAddedToTrustFormProvider
 import models.{Name, TypeOfTrust, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{NamePage, StartDatePage}
+import pages.individualbeneficiary.NamePage
+import pages.individualbeneficiary.add.StartDatePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -113,7 +114,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 

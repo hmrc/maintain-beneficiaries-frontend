@@ -19,14 +19,15 @@ package controllers.individualbeneficiary.amend
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.AmendIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
 import models.{CombinedPassportOrIdCard, Name, TypeOfTrust, UserAnswers}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsPage}
+import pages.individualbeneficiary.NamePage
+import pages.individualbeneficiary.amend.PassportOrIdCardDetailsPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -99,7 +100,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[AmendIndividualBeneficiary]).toInstance(fakeNavigator))
+        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
       val request =

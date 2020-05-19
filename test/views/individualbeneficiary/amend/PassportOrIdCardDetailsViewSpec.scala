@@ -33,7 +33,7 @@ class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPas
 
   override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider().withPrefix(messageKeyPrefix)
 
-  "PassportDetails view" must {
+  "PassportOrIdCardDetails view" must {
 
     val view = viewFor[PassportOrIdCardDetailsView](Some(emptyUserAnswers))
 

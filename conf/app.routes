@@ -2,23 +2,21 @@
 
 ->         /class-of-beneficiaries                                          classofbeneficiary.Routes
 
-->         /individual/add                                                  individualBeneficiary.add.Routes
-->         /individual/amend                                                individualBeneficiary.amend.Routes
+->         /individual                                                      individualBeneficiary.Routes
 ->         /individual/remove                                               individualBeneficiary.remove.Routes
 
-->         /charity/                                                        charityBeneficiary.Routes
+->         /charity                                                         charityBeneficiary.Routes
 ->         /charity/amend                                                   charityBeneficiary.amend.Routes
 ->         /charity/remove                                                  charityBeneficiary.remove.Routes
 
-->         /other/add                                                       otherBeneficiary.add.Routes
-->         /other/amend                                                     otherBeneficiary.amend.Routes
+->         /other                                                           otherBeneficiary.Routes
 ->         /other/remove                                                    otherBeneficiary.remove.Routes
 
-->         /trust/                                                          trustBeneficiary.Routes
+->         /trust                                                           trustBeneficiary.Routes
 ->         /trust/amend                                                     trustBeneficiary.amend.Routes
 ->         /trust/remove                                                    trustBeneficiary.remove.Routes
 
-->         /company/                                                        companyBeneficiary.Routes
+->         /company                                                         companyBeneficiary.Routes
 ->         /company/amend                                                   companyBeneficiary.amend.Routes
 ->         /company/remove                                                  companyBeneficiary.remove.Routes
 

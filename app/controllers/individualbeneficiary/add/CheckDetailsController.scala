@@ -23,7 +23,6 @@ import controllers.actions.individual.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.IndividualBeneficiaryMapper
 import utils.print.IndividualBeneficiaryPrintHelper
@@ -39,23 +38,24 @@ class CheckDetailsController @Inject()(
                                         view: CheckDetailsView,
                                         connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
                                         printHelper: IndividualBeneficiaryPrintHelper,
                                         mapper: IndividualBeneficiaryMapper,
                                         nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val provisional = true
+
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
       Ok(view(section))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers) match {
+      mapper(request.userAnswers, provisional) match {
         case None =>
           Future.successful(InternalServerError)
         case Some(beneficiary) =>

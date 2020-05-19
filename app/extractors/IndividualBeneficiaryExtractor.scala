@@ -19,6 +19,8 @@ package extractors
 import com.google.inject.Inject
 import models.beneficiaries.IndividualBeneficiary
 import models.{Address, CombinedPassportOrIdCard, IdCard, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
+import pages.individualbeneficiary.add.StartDatePage
+import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 
 import scala.util.Try
 

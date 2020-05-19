@@ -19,14 +19,15 @@ package controllers.individualbeneficiary.add
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.AddIndividualBeneficiary
+import config.annotations.IndividualBeneficiary
 import forms.IdCardDetailsFormProvider
 import models.{IdCard, Name, TypeOfTrust, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.{IdCardDetailsPage, NamePage}
+import pages.individualbeneficiary.NamePage
+import pages.individualbeneficiary.add.IdCardDetailsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -103,7 +104,7 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(classOf[AddIndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
 
           .build()
 

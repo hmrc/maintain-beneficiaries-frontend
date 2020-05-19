@@ -16,13 +16,13 @@
 
 package controllers.other.add
 
-import config.annotations.AddOtherBeneficiary
+import config.annotations.OtherBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.other.DescriptionRequiredAction
 import forms.DateAddedToTrustFormProvider
 import javax.inject.Inject
 import navigation.Navigator
-import pages.other.StartDatePage
+import pages.other.add.StartDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @AddOtherBeneficiary navigator: Navigator,
+                                     @OtherBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      descriptionAction: DescriptionRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,
