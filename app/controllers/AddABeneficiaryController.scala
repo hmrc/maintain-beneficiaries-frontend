@@ -102,7 +102,11 @@ class AddABeneficiaryController @Inject()(
                 _ <- repository.set(updatedAnswers)
               } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
-            Future.successful(Redirect(appConfig.maintainATrustOverview))
+            for {
+              _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+            } yield {
+              Redirect(appConfig.maintainATrustOverview)
+            }
           }
         }
       )
