@@ -17,9 +17,9 @@
 package controllers.companyoremploymentrelated.employment
 
 import base.SpecBase
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.UkAddressFormProvider
-import models.UkAddress
+import models.{NormalMode, UkAddress}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.employment.{NamePage, UkAddressPage}
@@ -33,7 +33,7 @@ import views.html.companyoremploymentrelated.employment.UkAddressView
 class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[UkAddress] = new UkAddressFormProvider()()
-  private val ukAddressRoute: String = routes.UkAddressController.onPageLoad().url
+  private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(NormalMode).url
   private val name: String = "Large"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = UkAddress("Line 1", "Line 2", None, None, "NE11NE")
@@ -55,7 +55,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, name)(request, messages).toString
+        view(form, NormalMode, name)(request, messages).toString
 
       application.stop()
     }
@@ -75,7 +75,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), name)(fakeRequest, messages).toString
+        view(form.fill(answer), NormalMode, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -85,7 +85,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
@@ -116,7 +116,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, name)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, name)(fakeRequest, messages).toString
 
        application.stop()
     }

@@ -23,7 +23,7 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.print.AmendEmploymentRelatedBeneficiaryPrintHelper
+import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.employment.amend.CheckDetailsUtrView
 
@@ -35,13 +35,13 @@ class CheckDetailsUtrController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         view: CheckDetailsUtrView,
                                         val appConfig: FrontendAppConfig,
-                                        printHelper: AmendEmploymentRelatedBeneficiaryPrintHelper,
+                                        printHelper: EmploymentRelatedBeneficiaryPrintHelper,
                                         nameAction: NameRequiredAction
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-      val section: AnswerSection = printHelper(request.userAnswers, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, false, request.beneficiaryName)
       Ok(view(section, request.beneficiaryName))
   }
 

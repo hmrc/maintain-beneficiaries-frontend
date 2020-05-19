@@ -19,7 +19,7 @@ package controllers.companyoremploymentrelated.employment
 import java.time.LocalDate
 
 import base.SpecBase
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.DateAddedToTrustFormProvider
 import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
@@ -89,7 +89,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =

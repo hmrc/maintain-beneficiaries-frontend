@@ -17,7 +17,7 @@
 package views.companyoremploymentrelated.employment
 
 import forms.NumberOfBeneficiariesFormProvider
-import models.HowManyBeneficiaries
+import models.{HowManyBeneficiaries, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.OptionsViewBehaviours
@@ -33,7 +33,7 @@ class NumberOfBeneficiariesViewSpec extends OptionsViewBehaviours {
   "NumberOfBeneficiaries view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, NormalMode)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

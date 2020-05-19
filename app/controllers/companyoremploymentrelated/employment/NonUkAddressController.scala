@@ -16,11 +16,12 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions._
 import controllers.actions.employment.NameRequiredAction
 import forms.NonUkAddressFormProvider
 import javax.inject.Inject
+import models.Mode
 import navigation.Navigator
 import pages.companyoremploymentrelated.employment.NonUkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NonUkAddressController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: PlaybackRepository,
-                                        @AddEmploymentRelatedBeneficiary navigator: Navigator,
+                                        @EmploymentRelatedBeneficiary navigator: Navigator,
                                         standardActionSets: StandardActionSets,
                                         nameAction: NameRequiredAction,
                                         formProvider: NonUkAddressFormProvider,
@@ -46,7 +47,7 @@ class NonUkAddressController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NonUkAddressPage) match {
@@ -54,21 +55,21 @@ class NonUkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, request.beneficiaryName))
+      Ok(view(preparedForm, mode, countryOptions.options, request.beneficiaryName))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, mode, countryOptions.options, request.beneficiaryName))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NonUkAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NonUkAddressPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NonUkAddressPage, mode, updatedAnswers))
       )
   }
 }

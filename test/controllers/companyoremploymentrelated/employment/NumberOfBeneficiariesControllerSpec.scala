@@ -17,9 +17,9 @@
 package controllers.companyoremploymentrelated.employment
 
 import base.SpecBase
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.NumberOfBeneficiariesFormProvider
-import models.HowManyBeneficiaries
+import models.{HowManyBeneficiaries, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.employment.NumberOfBeneficiariesPage
@@ -33,7 +33,7 @@ import views.html.companyoremploymentrelated.employment.NumberOfBeneficiariesVie
 class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
-  private val numberOfBeneficiariesRoute: String = routes.NumberOfBeneficiariesController.onPageLoad().url
+  private val numberOfBeneficiariesRoute: String = routes.NumberOfBeneficiariesController.onPageLoad(NormalMode).url
   private val numberOfBeneficiaries: HowManyBeneficiaries = HowManyBeneficiaries.Over201
   private val onwardRoute = Call("GET", "/foo")
 
@@ -52,7 +52,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -72,7 +72,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(numberOfBeneficiaries))(fakeRequest, messages).toString
+        view(form.fill(numberOfBeneficiaries), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -82,7 +82,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
@@ -113,7 +113,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, NormalMode)(fakeRequest, messages).toString
 
        application.stop()
     }

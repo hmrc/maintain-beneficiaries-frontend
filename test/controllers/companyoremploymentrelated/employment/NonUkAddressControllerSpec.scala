@@ -17,9 +17,9 @@
 package controllers.companyoremploymentrelated.employment
 
 import base.SpecBase
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.NonUkAddressFormProvider
-import models.NonUkAddress
+import models.{NonUkAddress, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.employment.{NamePage, NonUkAddressPage}
@@ -35,7 +35,7 @@ import views.html.companyoremploymentrelated.employment.NonUkAddressView
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad().url
+  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(NormalMode).url
   private val name: String = "Large"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
@@ -58,7 +58,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, name)(request, messages).toString
+        view(form, NormalMode, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
@@ -78,7 +78,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(answer), countryOptions, name)(fakeRequest, messages).toString
+        view(form.fill(answer), NormalMode, countryOptions, name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,7 +88,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
@@ -119,7 +119,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, name)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, countryOptions, name)(fakeRequest, messages).toString
 
        application.stop()
     }

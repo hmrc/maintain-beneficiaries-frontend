@@ -16,11 +16,11 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
 import forms.NumberOfBeneficiariesFormProvider
 import javax.inject.Inject
-import models.HowManyBeneficiaries
+import models.{HowManyBeneficiaries, Mode}
 import navigation.Navigator
 import pages.companyoremploymentrelated.employment.NumberOfBeneficiariesPage
 import play.api.data.Form
@@ -38,12 +38,12 @@ class NumberOfBeneficiariesController @Inject()(
                                                  formProvider: NumberOfBeneficiariesFormProvider,
                                                  view: NumberOfBeneficiariesView,
                                                  repository: PlaybackRepository,
-                                                 @AddEmploymentRelatedBeneficiary navigator: Navigator
+                                                 @EmploymentRelatedBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[HowManyBeneficiaries] = formProvider.apply()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NumberOfBeneficiariesPage) match {
@@ -51,22 +51,22 @@ class NumberOfBeneficiariesController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm))
+      Ok(view(preparedForm, mode))
 
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+          Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfBeneficiariesPage, value))
             _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NumberOfBeneficiariesPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NumberOfBeneficiariesPage, mode, updatedAnswers))
       )
   }
 }

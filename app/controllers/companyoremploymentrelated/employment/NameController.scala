@@ -16,10 +16,11 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
 import forms.StringFormProvider
 import javax.inject.Inject
+import models.Mode
 import navigation.Navigator
 import pages.companyoremploymentrelated.employment.NamePage
 import play.api.data.Form
@@ -37,12 +38,12 @@ class NameController @Inject()(
                                 formProvider: StringFormProvider,
                                 view: NameView,
                                 repository: PlaybackRepository,
-                                @AddEmploymentRelatedBeneficiary navigator: Navigator
+                                @EmploymentRelatedBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("employmentBeneficiary.name", 105)
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(NamePage) match {
@@ -50,22 +51,22 @@ class NameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm))
+      Ok(view(preparedForm, mode))
 
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
+          Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(NamePage, value))
             _ <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(NamePage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(NamePage, mode, updatedAnswers))
       )
   }
 }

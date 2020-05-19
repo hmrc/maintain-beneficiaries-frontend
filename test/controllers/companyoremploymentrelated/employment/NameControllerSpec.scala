@@ -17,8 +17,9 @@
 package controllers.companyoremploymentrelated.employment
 
 import base.SpecBase
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import forms.StringFormProvider
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.employment.NamePage
@@ -32,7 +33,7 @@ import views.html.companyoremploymentrelated.employment.NameView
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[String] = new StringFormProvider().withPrefix("employmentBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad().url
+  private val nameRoute: String = routes.NameController.onPageLoad(NormalMode).url
   private val name: String = "Large"
   private val onwardRoute = Call("GET", "/foo")
 
@@ -51,7 +52,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form)(request, messages).toString
+        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -71,7 +72,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(name))(fakeRequest, messages).toString
+        view(form.fill(name), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -81,7 +82,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[AddEmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
+            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           ).build()
 
       val request =
@@ -112,7 +113,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm, NormalMode)(fakeRequest, messages).toString
 
        application.stop()
     }

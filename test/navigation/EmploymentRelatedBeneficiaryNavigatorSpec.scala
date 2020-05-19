@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package navigation.employmentRelatedBeneficiary
+package navigation
 
 import base.SpecBase
-import controllers.companyoremploymentrelated.employment.amend.routes._
-import models.HowManyBeneficiaries.Over1
-import navigation.employmentBeneficiary.AmendEmploymentRelatedBeneficiaryNavigator
+import controllers.companyoremploymentrelated.employment.routes._
+import models.{CheckMode, NormalMode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.companyoremploymentrelated.employment._
 
-class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
+class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
-  val navigator = new AmendEmploymentRelatedBeneficiaryNavigator
+  val navigator = new EmploymentRelatedBeneficiaryNavigator
 
-  "Amend employment related beneficiary navigator" when {
+  "Employment related beneficiary navigator" when {
 
     "Name page -> Address yes no page" in {
       navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(AddressYesNoController.onPageLoad())
+        .mustBe(AddressYesNoController.onPageLoad(NormalMode))
     }
 
     "Address yes no page -> No -> Description page" in {
@@ -39,7 +38,7 @@ class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with Scala
         .set(AddressYesNoPage, false).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(DescriptionController.onPageLoad())
+        .mustBe(DescriptionController.onPageLoad(NormalMode))
     }
 
     "Address yes no page -> Yes -> Address in the UK yes no page" in {
@@ -47,7 +46,7 @@ class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with Scala
         .set(AddressYesNoPage, true).success.value
 
       navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(AddressUkYesNoController.onPageLoad())
+        .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
     }
 
     "Address in the UK yes no page -> Yes -> UK address page" in {
@@ -55,7 +54,7 @@ class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with Scala
         .set(AddressUkYesNoPage, true).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(UkAddressController.onPageLoad())
+        .mustBe(UkAddressController.onPageLoad(NormalMode))
     }
 
     "Address in the UK yes no page -> No -> Non-UK address page" in {
@@ -63,30 +62,40 @@ class AmendEmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with Scala
         .set(AddressUkYesNoPage, false).success.value
 
       navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(NonUkAddressController.onPageLoad())
+        .mustBe(NonUkAddressController.onPageLoad(NormalMode))
     }
 
     "UK address page -> Description page" in {
       navigator.nextPage(UkAddressPage, emptyUserAnswers)
-        .mustBe(DescriptionController.onPageLoad())
+        .mustBe(DescriptionController.onPageLoad(NormalMode))
     }
 
     "Non-UK address page -> Description page" in {
       navigator.nextPage(NonUkAddressPage, emptyUserAnswers)
-        .mustBe(DescriptionController.onPageLoad())
+        .mustBe(DescriptionController.onPageLoad(NormalMode))
     }
 
     "Description page -> Number of beneficiaries page" in {
       navigator.nextPage(DescriptionPage, emptyUserAnswers)
-        .mustBe(NumberOfBeneficiariesController.onPageLoad())
+        .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
+    }
+
+    "Number of beneficiaries page -> Start date page" in {
+      navigator.nextPage(NumberOfBeneficiariesPage, emptyUserAnswers)
+        .mustBe(StartDateController.onPageLoad())
+    }
+
+    "Start date page -> Check your answers page" in {
+      navigator.nextPage(StartDatePage, emptyUserAnswers)
+        .mustBe(CheckDetailsController.onPageLoad())
     }
 
     "Number of beneficiaries page -> Check your answers page" in {
       val answers = emptyUserAnswers
         .set(IndexPage, 0).success.value
 
-      navigator.nextPage(NumberOfBeneficiariesPage, answers)
-        .mustBe(CheckDetailsController.renderFromUserAnswers(0))
+      navigator.nextPage(NumberOfBeneficiariesPage, CheckMode, answers)
+        .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
     }
   }
 }

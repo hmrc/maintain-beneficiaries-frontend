@@ -16,7 +16,7 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.employment.NameRequiredAction
 import forms.DateAddedToTrustFormProvider
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartDateController @Inject()(
                                      override val messagesApi: MessagesApi,
                                      playbackRepository: PlaybackRepository,
-                                     @AddEmploymentRelatedBeneficiary navigator: Navigator,
+                                     @EmploymentRelatedBeneficiary navigator: Navigator,
                                      standardActionSets: StandardActionSets,
                                      nameAction: NameRequiredAction,
                                      formProvider: DateAddedToTrustFormProvider,

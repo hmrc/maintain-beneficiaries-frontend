@@ -18,7 +18,7 @@ package views.companyoremploymentrelated.employment
 
 import controllers.companyoremploymentrelated.employment.routes
 import forms.EmploymentRelatedBeneficiaryDescriptionFormProvider
-import models.Description
+import models.{Description, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -34,7 +34,7 @@ class DescriptionViewSpec extends QuestionViewBehaviours[Description] {
   "Description view" must {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form)(fakeRequest, messages)
+      view.apply(form, NormalMode)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -47,7 +47,7 @@ class DescriptionViewSpec extends QuestionViewBehaviours[Description] {
       applyView,
       messageKeyPrefix,
       None,
-      routes.NameController.onSubmit().url,
+      routes.NameController.onSubmit(NormalMode).url,
       "description",
       "description1",
       "description2",

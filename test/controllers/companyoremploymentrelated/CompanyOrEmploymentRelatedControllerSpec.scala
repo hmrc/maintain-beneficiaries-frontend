@@ -103,7 +103,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode).url
 
       application.stop()
     }

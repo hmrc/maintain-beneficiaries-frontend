@@ -16,11 +16,12 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.annotations.AddEmploymentRelatedBeneficiary
+import config.annotations.EmploymentRelatedBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.employment.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
+import models.Mode
 import navigation.Navigator
 import pages.companyoremploymentrelated.employment.AddressYesNoPage
 import play.api.data.Form
@@ -38,13 +39,13 @@ class AddressYesNoController @Inject()(
                                         formProvider: YesNoFormProvider,
                                         view: AddressYesNoView,
                                         repository: PlaybackRepository,
-                                        @AddEmploymentRelatedBeneficiary navigator: Navigator,
+                                        @EmploymentRelatedBeneficiary navigator: Navigator,
                                         nameAction: NameRequiredAction
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("employmentBeneficiary.addressYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(AddressYesNoPage) match {
@@ -52,21 +53,21 @@ class AddressYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.beneficiaryName))
+      Ok(view(preparedForm, mode, request.beneficiaryName))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddressYesNoPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddressYesNoPage, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddressYesNoPage, mode, updatedAnswers))
       )
   }
 }
