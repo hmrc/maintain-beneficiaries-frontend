@@ -17,8 +17,8 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.companyoremploymentrelated.employment.add.routes._
-import models.UserAnswers
+import controllers.companyoremploymentrelated.employment.routes._
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages.companyoremploymentrelated.employment._
 import play.api.i18n.Messages
 import utils.countryOptions.CountryOptions
@@ -28,22 +28,35 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
                                                         countryOptions: CountryOptions
                                  ) {
 
-  def apply(userAnswers: UserAnswers, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
 
+    val add = Seq(
+      bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
+      bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
+      bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(NormalMode).url),
+      bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad(NormalMode).url),
+      bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad(NormalMode).url),
+      bound.dateQuestion(StartDatePage, "employmentBeneficiary.startDate", StartDateController.onPageLoad().url)
+    ).flatten
+
+    val amend = Seq(
+      bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(CheckMode).url),
+      bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr",""),
+      bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
+      bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
+      bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
+      bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(CheckMode).url),
+      bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad(CheckMode).url),
+      bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad(CheckMode).url)
+    ).flatten
+
     AnswerSection(
       None,
-      Seq(
-        bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad().url),
-        bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad().url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad().url),
-        bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad().url),
-        bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad().url),
-        bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad().url),
-        bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad().url),
-        bound.dateQuestion(StartDatePage, "employmentBeneficiary.startDate", StartDateController.onPageLoad().url)
-      ).flatten
+      if (provisional) add else amend
     )
   }
 }

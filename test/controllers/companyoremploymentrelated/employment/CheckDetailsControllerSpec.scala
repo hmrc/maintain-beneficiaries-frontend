@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.companyoremploymentrelated.employment.amend
+package controllers.companyoremploymentrelated.employment
 
 import java.time.LocalDate
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.Description
-import models.HowManyBeneficiaries.Over1
 import models.beneficiaries.{CompanyOrEmploymentRelatedToAdd, TypeOfBeneficiaryToAdd}
+import models.{Description, HowManyBeneficiaries}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -36,49 +35,47 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
-import views.html.companyoremploymentrelated.employment.amend.CheckDetailsUtrView
+import views.html.companyoremploymentrelated.employment.CheckDetailsView
 
 import scala.concurrent.Future
 
-class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  private val name: String = "Employment"
-  private val description = Description("Some Description", None, None, None, None)
-  private val utr: String = "UTRUTRUTR"
+  private val name: String = "Large"
+  private val description: Description = Description("Description", None, None, None, None)
   private val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private lazy val checkDetailsUtrRoute = routes.CheckDetailsUtrController.onPageLoad().url
-  private lazy val submitDetailsUtrRoute = routes.CheckDetailsUtrController.onSubmit().url
+  private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad().url
+  private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit().url
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
     .set(AddNowPage, TypeOfBeneficiaryToAdd.CompanyOrEmploymentRelated).success.value
     .set(CompanyOrEmploymentRelatedPage, CompanyOrEmploymentRelatedToAdd.EmploymentRelated).success.value
     .set(NamePage, name).success.value
-    .set(UtrPage, utr).success.value
     .set(AddressYesNoPage, false).success.value
     .set(DescriptionPage, description).success.value
-    .set(NumberOfBeneficiariesPage, Over1).success.value
+    .set(NumberOfBeneficiariesPage, HowManyBeneficiaries.Over201).success.value
     .set(StartDatePage, date).success.value
 
-  "CheckDetailsUtr Controller" must {
+  "CheckDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, checkDetailsUtrRoute)
+      val request = FakeRequest(GET, checkDetailsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsUtrView]
+      val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[EmploymentRelatedBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, false, name)
+      val answerSection = printHelper(userAnswers, true, name)
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, name)(fakeRequest, messages).toString
+        view(answerSection)(fakeRequest, messages).toString
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {
@@ -90,9 +87,9 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.amendEmploymentRelatedBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
+      when(mockTrustConnector.addEmploymentRelatedBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK)))
 
-      val request = FakeRequest(POST, submitDetailsUtrRoute)
+      val request = FakeRequest(POST, submitDetailsRoute)
 
       val result = route(application, request).value
 

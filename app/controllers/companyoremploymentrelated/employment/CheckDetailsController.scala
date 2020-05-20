@@ -14,39 +14,53 @@
  * limitations under the License.
  */
 
-package controllers.companyoremploymentrelated.employment.amend
+package controllers.companyoremploymentrelated.employment
 
-import config.FrontendAppConfig
+import config.{ErrorHandler, FrontendAppConfig}
+import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.employment.NameRequiredAction
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.mappers.EmploymentRelatedBeneficiaryMapper
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
-import views.html.companyoremploymentrelated.employment.amend.CheckDetailsUtrView
+import views.html.companyoremploymentrelated.employment.CheckDetailsView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDetailsUtrController @Inject()(
+class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         standardActionSets: StandardActionSets,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsUtrView,
+                                        view: CheckDetailsView,
+                                        connector: TrustConnector,
                                         val appConfig: FrontendAppConfig,
                                         printHelper: EmploymentRelatedBeneficiaryPrintHelper,
-                                        nameAction: NameRequiredAction
+                                        mapper: EmploymentRelatedBeneficiaryMapper,
+                                        nameAction: NameRequiredAction,
+                                        errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-      val section: AnswerSection = printHelper(request.userAnswers, false, request.beneficiaryName)
-      Ok(view(section, request.beneficiaryName))
+
+      val section: AnswerSection = printHelper(request.userAnswers, true, request.beneficiaryName)
+      Ok(view(section))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
-      Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+
+      mapper(request.userAnswers) match {
+        case None =>
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+        case Some(beneficiary) =>
+          connector.addEmploymentRelatedBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
+            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+          )
+      }
   }
 }

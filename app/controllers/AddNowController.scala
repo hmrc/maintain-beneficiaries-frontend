@@ -83,7 +83,7 @@ class AddNowController @Inject()(
                   case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
                   case CompanyOrEmploymentRelated => Redirect(controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad())
                   case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
-                  case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.add.routes.NameController.onPageLoad())
+                  case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode))
                   case Other => Redirect(controllers.other.routes.DescriptionController.onPageLoad(NormalMode))
                 }
               }

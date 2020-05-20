@@ -19,7 +19,6 @@ package config
 import com.google.inject.AbstractModule
 import config.annotations._
 import controllers.actions._
-import navigation.employmentBeneficiary.{AddEmploymentRelatedBeneficiaryNavigator, AmendEmploymentRelatedBeneficiaryNavigator}
 import navigation._
 import repositories.{PlaybackRepository, PlaybackRepositoryImpl}
 import services.{AuthenticationService, AuthenticationServiceImpl}
@@ -43,8 +42,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(classOf[OtherBeneficiary]).to(classOf[OtherBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[CompanyBeneficiary]).to(classOf[CompanyBeneficiaryNavigator]).asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[TrustBeneficiary]).to(classOf[TrustBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AddEmploymentRelatedBeneficiary]).to(classOf[AddEmploymentRelatedBeneficiaryNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[AmendEmploymentRelatedBeneficiary]).to(classOf[AmendEmploymentRelatedBeneficiaryNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[EmploymentRelatedBeneficiary]).to(classOf[EmploymentRelatedBeneficiaryNavigator]).asEagerSingleton()
 
   }
 }

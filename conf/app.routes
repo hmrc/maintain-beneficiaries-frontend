@@ -20,7 +20,7 @@
 ->         /company/amend                                                   companyBeneficiary.amend.Routes
 ->         /company/remove                                                  companyBeneficiary.remove.Routes
 
-->         /employment/add                                                  employmentBeneficiary.add.Routes
+->         /employment/                                                     employmentBeneficiary.Routes
 ->         /employment/amend                                                employmentBeneficiary.amend.Routes
 ->         /employment/remove                                               employmentBeneficiary.remove.Routes
 
