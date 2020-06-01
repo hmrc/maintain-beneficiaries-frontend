@@ -40,7 +40,7 @@ object CountryOptions {
         Json.fromJson[Seq[Seq[String]]](locationJsValue).asOpt.map {
           _.map { countryList =>
             InputOption(countryList(1).replaceAll("country:", ""), countryList.head)
-          }
+          }.sortBy(x => x.label.toLowerCase)
         }
     }.getOrElse {
       throw new ConfigException.BadValue(fileName, "country json does not exist")
