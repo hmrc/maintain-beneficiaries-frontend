@@ -82,7 +82,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe (messages("error.browser.title.prefix") + " " + messages(errorMessage))
+          errorSpan.text mustBe s"""${messages("site.error")} ${messages(errorMessage)}"""
           doc.getElementsByTag("fieldset").first.attr("aria-describedby") contains errorSpan.attr("id")
         }
 
