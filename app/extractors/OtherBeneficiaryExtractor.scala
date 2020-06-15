@@ -19,14 +19,13 @@ package extractors
 import com.google.inject.Inject
 import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
+import pages.other.{AddressUkYesNoPage, AddressYesNoPage, DescriptionPage, DiscretionYesNoPage, NonUkAddressPage, ShareOfIncomePage, UkAddressPage}
 import pages.other.add.StartDatePage
 import pages.other.amend.IndexPage
 
 import scala.util.Try
 
 class OtherBeneficiaryExtractor @Inject()() {
-
-  import pages.other._
 
   def apply(answers: UserAnswers,
             otherBeneficiary : OtherBeneficiary,

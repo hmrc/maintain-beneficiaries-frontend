@@ -15,6 +15,7 @@ site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980
 site.inprogress = In Progress
 site.complete = Completed
+site.error = Error:
 
 site.return.link = Return to add a beneficiary
 site.beneficiary.defaultText = the beneficiary
