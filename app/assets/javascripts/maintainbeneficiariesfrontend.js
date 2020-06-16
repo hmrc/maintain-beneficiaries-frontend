@@ -61,6 +61,14 @@ $(document).ready(function() {
     // Assign aria-labbledby to the dynamically created country input
     if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper #value").attr('aria-labelledby', 'error-message-input');
 
+    // Override autocomplete styles to apply correct error component design pattern
+    if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").addClass('form-control-error');
+    $('.autocomplete__wrapper input').focus(function(e){
+        if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").css({"border" : "4px solid #0b0c0c", "-webkit-box-shadow" : "none", "box-shadow" : "none"});
+    })
+    $('.autocomplete__wrapper input').focusout(function(e){
+        if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").css("border", "4px solid #d4351c");
+    })
 
   //======================================================
   // countries autocomplete
