@@ -94,7 +94,7 @@
 
   // error focus state
   .form-control-error.form-control-error:focus {
-    border-color: #0b0c0c;
+    border-color: $input-border;
     -webkit-box-shadow: none;
     box-shadow: none
   }
