@@ -11,6 +11,10 @@
 @import 'patterns/tag';
 @import 'conditionals';
 @import 'colours/palette';
+
+// WCGA 2.1 https://design-system.service.gov.uk/styles/colour/
+@import 'govuk-colours-override';
+
 @import 'partials/_focus';
 @import 'location-autocomplete.min';
 @import 'patterns/add-to-a-list';
