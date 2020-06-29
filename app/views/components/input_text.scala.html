@@ -15,12 +15,13 @@
  *@
 
 @(
-        field: Field,
-        label: String,
-        inputClass: Option[String] = None,
-        hint: Option[String] = None,
-        labelClass: Option[String] = None,
-        headingIsLabel: Boolean = false
+    field: Field,
+    label: String,
+    inputClass: Option[String] = None,
+    hint: Option[String] = None,
+    labelClass: Option[String] = None,
+    headingIsLabel: Boolean = false,
+    inputMode: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -50,7 +51,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){hint-@{field.id}}"}
+            @if(inputMode.nonEmpty){inputmode="@inputMode"}@if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){hint-@{field.id}}"}
         />
     </div>
 </div>

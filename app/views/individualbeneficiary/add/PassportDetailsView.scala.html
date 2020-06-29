@@ -48,7 +48,8 @@
         @components.input_text(
             field = form("number"),
             label = messages("individualBeneficiary.passportDetails.number"),
-            hint = Some(messages("individualBeneficiary.passportDetails.number.hint"))
+            hint = Some(messages("individualBeneficiary.passportDetails.number.hint")),
+            inputMode = Some("numeric")
         )
 
         @components.input_date(
