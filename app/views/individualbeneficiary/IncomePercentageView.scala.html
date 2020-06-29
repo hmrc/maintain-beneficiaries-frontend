@@ -38,7 +38,8 @@
             label = messages("individualBeneficiary.shareOfIncome.heading", name),
             headingIsLabel = true,
             hint = Some(messages("individualBeneficiary.shareOfIncome.hint")),
-            labelClass=Some("heading-large")
+            labelClass=Some("heading-large"),
+            inputMode = Some("numeric")
         )
 
         @components.submit_button()
