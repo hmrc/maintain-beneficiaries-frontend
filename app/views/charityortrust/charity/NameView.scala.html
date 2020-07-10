@@ -27,7 +27,7 @@
     title = s"${errorPrefix(form)} ${messages("charityBeneficiary.name.title")}"
     ) {
 
-    @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "on") {
 
         @components.back_link()
 
@@ -38,7 +38,8 @@
             label = messages("charityBeneficiary.name.heading"),
             headingIsLabel = true,
             labelClass = Some("heading-large"),
-            inputClass = Some("form-control-3-4")
+            inputClass = Some("form-control-3-4"),
+            autocomplete = Some("name")
         )
 
         @components.submit_button()

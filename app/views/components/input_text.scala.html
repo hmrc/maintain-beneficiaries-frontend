@@ -21,7 +21,8 @@
     hint: Option[String] = None,
     labelClass: Option[String] = None,
     headingIsLabel: Boolean = false,
-    inputMode: Option[String] = None
+    inputMode: Option[String] = None,
+    autocomplete: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -51,6 +52,7 @@
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
+        autocomplete="@autocomplete"
             @if(inputMode.nonEmpty){inputmode="@inputMode"}@if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){hint-@{field.id}}"}
         />
     </div>
