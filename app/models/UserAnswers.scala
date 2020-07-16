@@ -26,7 +26,7 @@ import queries.{Gettable, Settable}
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
-                              internalAuthId: String,
+                              internalId: String,
                               utr: String,
                               whenTrustSetup: LocalDate,
                               trustType: TypeOfTrust,
