@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package base
+package repositories
 
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import repositories.{ActiveSessionRepository, PlaybackRepository}
+import javax.inject.{Inject, Singleton}
+import play.modules.reactivemongo.ReactiveMongoApi
 
-import scala.concurrent.Future
+@Singleton
+class TrustsMongoDriver @Inject()(val api : ReactiveMongoApi) extends MongoDriver
 
-trait Mocked extends MockitoSugar {
-
-  val playbackRepository: PlaybackRepository = mock[PlaybackRepository]
-
-  when(playbackRepository.set(any())).thenReturn(Future.successful(true))
-
-  val mockSessionRepository : ActiveSessionRepository = mock[ActiveSessionRepository]
-
-  when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+sealed trait MongoDriver {
+  val api : ReactiveMongoApi
 }

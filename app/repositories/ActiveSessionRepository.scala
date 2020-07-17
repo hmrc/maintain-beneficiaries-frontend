@@ -19,13 +19,12 @@ package repositories
 import java.time.LocalDateTime
 
 import akka.stream.Materializer
+import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
-import models.{MongoDateTimeFormats, UserAnswers}
+import models.{MongoDateTimeFormats, UtrSession}
 import org.slf4j.LoggerFactory
 import play.api.Configuration
 import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
@@ -35,17 +34,17 @@ import utils.DateFormatter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PlaybackRepositoryImpl @Inject()(
-                                        mongo: MongoDriver,
-                                        config: Configuration,
-                                        dateFormatter: DateFormatter
-                                      )(implicit ec: ExecutionContext, m: Materializer) extends PlaybackRepository {
+class ActiveSessionRepositoryImpl @Inject()(
+                                    mongo: MongoDriver,
+                                    config: Configuration,
+                                    dateFormatter: DateFormatter
+                                  )(implicit ec: ExecutionContext, m: Materializer) extends ActiveSessionRepository {
 
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
-  private val collectionName: String = "user-answers"
+  private val collectionName: String = "session"
 
-  private val cacheTtl = config.get[Int]("mongodb.playback.ttlSeconds")
+  private val cacheTtl = config.get[Int]("mongodb.session.ttlSeconds")
 
   private def collection: Future[JSONCollection] =
     for {
@@ -55,29 +54,26 @@ class PlaybackRepositoryImpl @Inject()(
 
   private val lastUpdatedIndex = Index(
     key = Seq("updatedAt" -> IndexType.Ascending),
-    name = Some("user-answers-updated-at-index"),
+    name = Some("session-updated-at-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
-  private val internalIdAndUtrIndex = Index(
-    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending),
-    name = Some("internal-id-and-utr-compound-index")
+  private val utrIndex = Index(
+    key = Seq("utr" -> IndexType.Ascending),
+    name = Some("utr-index")
   )
 
   private lazy val ensureIndexes = for {
       collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
       createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
-      createdIdIndex          <- collection.indexesManager.ensure(internalIdAndUtrIndex)
+      createdIdIndex          <- collection.indexesManager.ensure(utrIndex)
     } yield createdLastUpdatedIndex && createdIdIndex
 
-  override def get(internalId: String, utr: String): Future[Option[UserAnswers]] = {
+  override def get(internalId: String): Future[Option[UtrSession]] = {
 
-    logger.debug(s"PlaybackRepository getting user answers for $internalId")
+    logger.debug(s"ActiveSessionRepository getting active utr for $internalId")
 
-    val selector = Json.obj(
-      "internalId" -> internalId,
-      "utr" -> utr
-    )
+    val selector = Json.obj("internalId" -> internalId)
 
     val modifier = Json.obj(
       "$set" -> Json.obj(
@@ -88,18 +84,15 @@ class PlaybackRepositoryImpl @Inject()(
     for {
       col <- collection
       r <- col.findAndUpdate(selector, modifier, fetchNewObject = true, upsert = false)
-    } yield r.result[UserAnswers]
+    } yield r.result[UtrSession]
   }
 
-  override def set(userAnswers: UserAnswers): Future[Boolean] = {
+  override def set(session: UtrSession): Future[Boolean] = {
 
-    val selector = Json.obj(
-      "internalId" -> userAnswers.internalId,
-      "utr" -> userAnswers.utr
-    )
+    val selector = Json.obj("internalId" -> session.internalId)
 
     val modifier = Json.obj(
-      "$set" -> (userAnswers copy (updatedAt = LocalDateTime.now))
+      "$set" -> (session.copy(updatedAt = LocalDateTime.now))
     )
 
     for {
@@ -107,28 +100,12 @@ class PlaybackRepositoryImpl @Inject()(
       r <- col.update(ordered = false).one(selector, modifier, upsert = true, multi = false)
     } yield r.ok
   }
-
-  override def resetCache(internalId: String, utr: String): Future[Option[JsObject]] = {
-
-    logger.debug(s"PlaybackRepository resetting cache for $internalId")
-
-    val selector = Json.obj(
-      "internalId" -> internalId,
-      "utr" -> utr
-    )
-
-    for {
-      col <- collection
-      r <- col.findAndRemove(selector, None, None, WriteConcern.Default, None, None, Seq.empty)
-    } yield r.value
-  }
 }
 
-trait PlaybackRepository {
+@ImplementedBy(classOf[ActiveSessionRepositoryImpl])
+trait ActiveSessionRepository {
 
-  def get(internalId: String, utr: String): Future[Option[UserAnswers]]
+  def get(internalId: String): Future[Option[UtrSession]]
 
-  def set(userAnswers: UserAnswers): Future[Boolean]
-
-  def resetCache(internalId: String, utr: String): Future[Option[JsObject]]
+  def set(session: UtrSession): Future[Boolean]
 }

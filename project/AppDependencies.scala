@@ -20,8 +20,8 @@ object AppDependencies {
     "org.jsoup"               %  "jsoup"                    % "1.12.1"                % "test",
     "com.typesafe.play"       %% "play-test"                % current                 % "test",
     "org.mockito"             %  "mockito-all"              % "1.10.19"               % "test",
-    "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.3"                 % "test",
+    "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test, it",
+    "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.3"                 % "test, it",
     "org.scalacheck"          %% "scalacheck"               % "1.14.3"                % "test",
     "wolfendale"              %% "scalacheck-gen-regexp"    % "0.1.2"                 % "test",
     "com.github.tomakehurst"  %  "wiremock-standalone"      % "2.25.1"                % "test"
