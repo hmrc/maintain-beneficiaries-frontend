@@ -33,14 +33,11 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  actions: StandardActionSets,
                                  cacheRepository : PlaybackRepository,
-                                 activeSessionRepository: ActiveSessionRepository,
                                  connector: TrustConnector)
                                (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(utr: String): Action[AnyContent] = actions.authWithSession.async {
+  def onPageLoad(utr: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(utr) andThen actions.getData).async {
       implicit request =>
-
-        val session = UtrSession(request.user.internalId, utr)
 
         for {
           details <- connector.getTrustDetails(utr)
@@ -53,7 +50,6 @@ class IndexController @Inject()(
                 trustType = details.typeOfTrust)
             }
           }
-          _ <- activeSessionRepository.set(session)
           _ <- cacheRepository.set(ua)
         } yield {
           Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
