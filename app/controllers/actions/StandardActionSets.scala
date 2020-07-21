@@ -21,7 +21,8 @@ import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.{ActionBuilder, AnyContent}
 
 class StandardActionSets @Inject()(identify: IdentifierAction,
-                                   getData: DataRetrievalAction,
+                                   val saveSession: SaveActiveSessionProvider,
+                                   val getData: DataRetrievalAction,
                                    requireData: DataRequiredAction,
                                    playbackIdentifier: PlaybackIdentifierAction
                                   ){
