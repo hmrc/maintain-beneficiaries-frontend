@@ -84,6 +84,29 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
             doc.select(s"label[for='$field']").size() mustBe 1
           }
         }
+
+        s"show an error associated with the field '$field'" in {
+
+          val fieldId = if(field.contains("_")) {
+            field.replace("_", ".")
+          } else {
+            field
+          }
+
+          val doc = asDocument(createView(form.withError(FormError(fieldId, "error"))))
+
+          val errorSpan = doc.getElementsByClass("error-message").first
+
+          // error id is that of the input field
+          errorSpan.attr("id") must include(field)
+          errorSpan.getElementsByClass("visually-hidden").first().text() must include("Error:")
+
+          // input is described by error to screen readers
+          doc.getElementById(field).attr("aria-describedby") must include(errorSpan.attr("id"))
+
+          // error is linked with input
+          errorSpan.parent().getElementsByAttributeValue("for", field).get(0).attr("for") mustBe field
+        }
       }
     }
   }

@@ -17,12 +17,15 @@
 @(
     field: Field,
     label: String,
-    inputClass: Option[String] = None,
-    hint: Option[String] = None,
-    labelClass: Option[String] = None,
     headingIsLabel: Boolean = false,
+    inputClass: Option[String] = None,
     inputMode: Option[String] = None,
-    autocomplete: Option[String] = None
+    hint: Option[String] = None,
+    readerHint: Option[String] = None,
+    labelClass: Option[String] = None,
+    symbol: Option[String] = None,
+    optionalHtmlContent: Option[Html] = None,
+    autocomplete : Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -37,25 +40,31 @@
             @label
         </label>
     }
+    @if(optionalHtmlContent.nonEmpty){@optionalHtmlContent}
     @if(hint.nonEmpty){
-        <div class="form-hint" id="hint-@{field.id}">@hint</div>
+        <div id="@{field.id}_hint">
+            <span class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint</span>
+        </div>
     }
     @field.errors.map { error =>
         <span class="error-message" id="error-message-@{field.id}-input">
             <span class="visually-hidden">@messages("site.error") </span>@messages(error.message, error.args: _*)
         </span>
     }
-    <div class="form-control-wrapper">
+    <div class="form-control-wrapper" @if(symbol.isDefined){data-type="@{symbol}"}>
         <input
         class="form-control @inputClass @if(field.hasErrors){form-control-error}"
         type="text"
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
-        @if(autocomplete.nonEmpty){
+        @if(autocomplete.nonEmpty) {
             autocomplete="@{autocomplete.get}"
         }
-            @if(inputMode.nonEmpty){inputmode="@inputMode"}@if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){hint-@{field.id}}"}
+        @if(hint.nonEmpty || field.hasErrors) {
+            aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){@{field.id}_hint}"
+        }
+        @if(inputMode.nonEmpty){inputmode="@inputMode"}
         />
     </div>
 </div>
