@@ -15,6 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
+@import controllers.routes.SessionTimeoutController
 
 @this(
     appConfig: FrontendAppConfig,
@@ -28,11 +29,29 @@
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
   mainClass: Option[String] = None,
-  scriptElem: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  scriptElem: Option[Html] = None,
+  timeoutEnabled: Boolean = true)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
 
 @serviceInfoContent = {}
+
+@defaultScriptElem = {
+@if(timeoutEnabled) {
+    <script id="timeoutScript" tabindex="-1">
+            window.GOVUK.timeoutDialog({
+                timeout: @appConfig.timeoutLength,
+                countdown: @appConfig.countdownLength,
+                title: '@messages("timeout.title")',
+                message: '@messages("timeout.message")',
+                keepAliveUrl: '@SessionTimeoutController.keepAlive.url',
+                signOutUrl: '@SessionTimeoutController.timeout.url',
+                keepAliveButtonText: '@messages("timeout.keep-alive-button")'
+            });
+    </script>
+}
+@scriptElem.getOrElse(HtmlFormat.empty)
+}
 
 @sidebarContent = {
     @if(sidebarLinks.isDefined) {
@@ -48,5 +67,5 @@
                contentHeader = contentHeader,
                mainContent = article(mainContent),
                serviceInfoContent = serviceInfoContent,
-               scriptElem = scriptElem
+               scriptElem = Some(defaultScriptElem)
 )

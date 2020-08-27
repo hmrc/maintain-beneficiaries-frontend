@@ -17,6 +17,11 @@ site.inprogress = In Progress
 site.complete = Completed
 site.error = Error:
 
+#timeout dialog
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
+
 site.return.link = Return to add a beneficiary
 site.beneficiary.defaultText = the beneficiary
 

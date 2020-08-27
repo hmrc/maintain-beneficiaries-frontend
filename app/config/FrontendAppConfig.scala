@@ -47,6 +47,9 @@ class FrontendAppConfig @Inject()(config: Configuration) {
   lazy val loginContinueUrl: String = config.get[String]("urls.loginContinue")
   lazy val logoutUrl: String = config.get[String]("urls.logout")
 
+  lazy val countdownLength: String = config.get[String]("timeout.countdown")
+  lazy val timeoutLength: String = config.get[String]("timeout.length")
+
   lazy val trustsUrl: String = config.get[Service]("microservice.services.trusts").baseUrl
 
   lazy val trustAuthUrl: String = config.get[Service]("microservice.services.trusts-auth").baseUrl
