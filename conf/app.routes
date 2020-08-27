@@ -34,6 +34,10 @@ GET        /this-service-has-been-reset                                     cont
 
 GET        /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
 
+GET        /keep-alive                                                      controllers.SessionTimeoutController.keepAlive
+
+GET        /timeout                                                         controllers.SessionTimeoutController.timeout
+
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
