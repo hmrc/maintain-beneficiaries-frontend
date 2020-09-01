@@ -14,6 +14,7 @@ site.save.continue = Cadw ac yn eich blaen
 site.date.hint = Er enghraifft, 31 3 1980
 site.inprogress = Ar y gweill
 site.complete = Wedi’i chwblhau
+site.error = Gwall:
 site.return.link = Dychwelyd i ychwanegu buddiolwr
 site.beneficiary.defaultText = y buddiolwr
 site.address.uk.title = Beth yw’r cyfeiriad?
