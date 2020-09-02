@@ -383,7 +383,6 @@ individualBeneficiary.idCardDetails.country = ID card country of issue
 individualBeneficiary.idCardDetails.country.error.required = Enter the individual beneficiary’s ID card country of issue
 individualBeneficiary.idCardDetails.country.error.length = The individual beneficiary’s ID card country must be 100 characters or less
 individualBeneficiary.idCardDetails.number = ID card number
-individualBeneficiary.idCardDetails.number.hint = For example, 502135326
 individualBeneficiary.idCardDetails.number.error.required = Enter the individual beneficiary’s ID card number
 individualBeneficiary.idCardDetails.number.error.length = The individual beneficiary’s ID card number must be 30 characters or less
 individualBeneficiary.idCardDetails.number.error.invalid = ID card number can only include letters and numbers
