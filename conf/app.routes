@@ -42,7 +42,9 @@ GET        /feature-not-available                                           cont
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
+GET        /add-another                                                     controllers.AddABeneficiaryController.onPageLoad()
 POST       /add-another                                                     controllers.AddABeneficiaryController.submitAnother()
+GET        /complete                                                        controllers.AddABeneficiaryController.onPageLoad()
 POST       /complete                                                        controllers.AddABeneficiaryController.submitComplete()
 
 GET        /what-kind                                                       controllers.AddNowController.onPageLoad()
