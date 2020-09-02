@@ -25,7 +25,7 @@
 @(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("addNow.title")}"
+    title = s"${errorPrefix(form)}${messages("addNow.title")}"
     ) {
 
     @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {

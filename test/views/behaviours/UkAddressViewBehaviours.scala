@@ -19,6 +19,7 @@ package views.behaviours
 import models.UkAddress
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
+import views.ViewUtils
 
 
 trait UkAddressViewBehaviours extends ViewBehaviours {
@@ -67,7 +68,7 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$prefix.title", args: _*)}""")
+          assertEqualsValue(doc, "title", ViewUtils.breadcrumbTitle(s"""${messages("error.browser.title.prefix")} ${messages(s"$prefix.title", args: _*)}"""))
         }
       }
 

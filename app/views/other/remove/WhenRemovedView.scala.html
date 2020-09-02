@@ -24,7 +24,7 @@
 @(form: Form[_], index: Int, description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.whenRemoved.title", description)}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.whenRemoved.title", description)}"
 ) {
 
     @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {

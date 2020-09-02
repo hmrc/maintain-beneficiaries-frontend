@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.nationalInsuranceNumberYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.nationalInsuranceNumberYesNo.title")}"
 ) {
 
     @formHelper(action = NationalInsuranceNumberYesNoController.onSubmit(mode), 'autoComplete -> "off") {
