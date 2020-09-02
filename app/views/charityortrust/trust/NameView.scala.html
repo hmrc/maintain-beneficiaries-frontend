@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("trustBeneficiary.name.title")}"
+    title = s"${errorPrefix(form)}${messages("trustBeneficiary.name.title")}"
     ) {
 
     @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "on") {

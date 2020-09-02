@@ -25,7 +25,7 @@
 @(form: Form[_], countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("individualBeneficiary.passportDetails.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.passportDetails.title")}"
 ) {
 
     @formHelper(action = PassportDetailsController.onSubmit(), 'autoComplete -> "off") {

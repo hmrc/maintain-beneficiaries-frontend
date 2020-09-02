@@ -9,6 +9,7 @@ site.no = No
 site.yes = Yes
 site.continue = Continue
 site.service_name = Register and Maintain a Trust
+site.service_section = Beneficiaries
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
 site.save.continue = Save and continue
