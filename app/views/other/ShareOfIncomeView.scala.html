@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.shareOfIncome.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.shareOfIncome.title")}"
 ) {
 
     @formHelper(action = ShareOfIncomeController.onSubmit(mode), 'autoComplete -> "off") {

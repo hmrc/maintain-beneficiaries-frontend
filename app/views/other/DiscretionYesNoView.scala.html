@@ -24,7 +24,7 @@
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("otherBeneficiary.discretionYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.discretionYesNo.title")}"
 ) {
 
     @formHelper(action = DiscretionYesNoController.onSubmit(mode), 'autoComplete -> "off") {

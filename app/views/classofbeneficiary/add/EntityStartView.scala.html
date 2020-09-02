@@ -24,7 +24,7 @@
 @(form: Form[_], description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("classOfBeneficiary.entityStart.title")}"
+    title = s"${errorPrefix(form)}${messages("classOfBeneficiary.entityStart.title")}"
 ) {
 
     @formHelper(action = EntityStartController.onSubmit(), 'autoComplete -> "off") {
