@@ -19,15 +19,11 @@ package forms.behaviours
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import config.FrontendAppConfig
 import models.{IdCard, Passport}
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
-import play.api.test.Helpers.baseApplicationBuilder.injector
 
 trait DateBehaviours extends FieldBehaviours {
-
-  def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   def dateField(form: Form[_], key: String, validData: Gen[LocalDate]): Unit = {
 

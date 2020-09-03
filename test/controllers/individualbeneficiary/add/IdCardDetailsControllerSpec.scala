@@ -41,7 +41,7 @@ import scala.concurrent.Future
 
 class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new IdCardDetailsFormProvider()
+  val formProvider = new IdCardDetailsFormProvider(frontendAppConfig)
   private def form = formProvider.withPrefix("individualBeneficiary")
 
   def onwardRoute: Call = Call("GET", "/foo")

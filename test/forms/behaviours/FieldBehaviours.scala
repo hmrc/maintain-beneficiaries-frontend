@@ -16,13 +16,17 @@
 
 package forms.behaviours
 
+import config.FrontendAppConfig
 import forms.FormSpec
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.{Form, FormError}
+import play.api.test.Helpers.baseApplicationBuilder.injector
 
 trait FieldBehaviours extends FormSpec with ScalaCheckPropertyChecks with Generators {
+
+  def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
   def fieldThatBindsValidData(form: Form[_],
                               fieldName: String,

@@ -31,7 +31,7 @@ class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPas
   val messageKeyPrefix = "individualBeneficiary.passportOrIdCardDetails"
   val name: Name = Name("First", Some("Middle"), "Last")
 
-  override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider().withPrefix(messageKeyPrefix)
+  override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
   "PassportOrIdCardDetails view" must {
 
