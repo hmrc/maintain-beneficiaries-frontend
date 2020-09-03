@@ -28,7 +28,7 @@ class CombinedPassportOrIdCardFormProviderSpec extends StringFieldBehaviours {
   val maxLengthCountryField = 100
   val maxLengthNumberField = 30
 
-  val form = new CombinedPassportOrIdCardDetailsFormProvider().withPrefix(prefix)
+  val form = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(prefix)
 
   ".country" must {
 

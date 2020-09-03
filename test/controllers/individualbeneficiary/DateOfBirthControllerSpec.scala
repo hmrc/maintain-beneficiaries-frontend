@@ -39,7 +39,7 @@ import scala.concurrent.Future
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new DateFormProvider()
+  val formProvider = new DateFormProvider(frontendAppConfig)
   private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
 
   def onwardRoute = Call("GET", "/foo")

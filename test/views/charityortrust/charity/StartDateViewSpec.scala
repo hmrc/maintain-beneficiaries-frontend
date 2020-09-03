@@ -18,7 +18,7 @@ package views.charityortrust.charity
 
 import java.time.LocalDate
 
-import forms.DateFormProvider
+import forms.DateAddedToTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -29,7 +29,9 @@ class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
   val messageKeyPrefix = "charityBeneficiary.startDate"
   val name: String = "Charity"
 
-  val form: Form[LocalDate] = new DateFormProvider().withPrefix(messageKeyPrefix)
+  val startDate: LocalDate = LocalDate.parse("2020-02-03")
+
+  val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, startDate)
   val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
 
   "StartDate view" must {

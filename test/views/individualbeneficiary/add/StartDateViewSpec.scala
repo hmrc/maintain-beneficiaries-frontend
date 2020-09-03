@@ -18,7 +18,7 @@ package views.individualbeneficiary.add
 
 import java.time.LocalDate
 
-import forms.DateFormProvider
+import forms.DateAddedToTrustFormProvider
 import models.Name
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -30,7 +30,9 @@ class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
   val messageKeyPrefix = "individualBeneficiary.startDate"
   val name: Name = Name("First", None, "Last")
 
-  val form: Form[LocalDate] = new DateFormProvider().withPrefix(messageKeyPrefix)
+  val startDate: LocalDate = LocalDate.parse("2020-02-03")
+
+  val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, startDate)
   val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
 
   "StartDate view" must {
