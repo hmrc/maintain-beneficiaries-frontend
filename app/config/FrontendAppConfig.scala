@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
@@ -71,4 +73,18 @@ class FrontendAppConfig @Inject()(config: Configuration) {
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   lazy val accessibilityLinkUrl: String = config.get[String]("urls.accessibility")
+
+  private def getDate(entry: String): LocalDate = {
+
+    def getInt(path: String): Int = config.get[Int](path)
+
+    LocalDate.of(
+      getInt(s"dates.$entry.year"),
+      getInt(s"dates.$entry.month"),
+      getInt(s"dates.$entry.day")
+    )
+  }
+
+  lazy val minDate: LocalDate = getDate("minimum")
+  lazy val maxDate: LocalDate = getDate("maximum")
 }

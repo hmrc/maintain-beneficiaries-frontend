@@ -18,7 +18,7 @@ package views.individualbeneficiary
 
 import java.time.LocalDate
 
-import forms.DateOfBirthFormProvider
+import forms.DateFormProvider
 import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -30,7 +30,7 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
   val messageKeyPrefix = "individualBeneficiary.dateOfBirth"
   val name: Name = Name("First", Some("Middle"), "Last")
 
-  override val form: Form[LocalDate] = new DateOfBirthFormProvider().withPrefix(messageKeyPrefix)
+  override val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
   "DateOfBirth view" must {
 
