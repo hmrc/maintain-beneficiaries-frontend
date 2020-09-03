@@ -325,7 +325,6 @@ individualBeneficiary.idCardDetails.country = Y wlad yr anfonwyd y cerdyn adnabo
 individualBeneficiary.idCardDetails.country.error.required = Nodwch y wlad yr anfonwyd cerdyn adnabod y buddiolwr unigol ohoni
 individualBeneficiary.idCardDetails.country.error.length = Mae’n rhaid i wlad cerdyn adnabod y buddiolwr unigol fod yn 100 o gymeriadau neu lai
 individualBeneficiary.idCardDetails.number = Rhif cerdyn adnabod
-individualBeneficiary.idCardDetails.number.hint = Er enghraifft
 individualBeneficiary.idCardDetails.number.error.required = Nodwch rif cerdyn adnabod y buddiolwr unigol
 individualBeneficiary.idCardDetails.number.error.length = Mae’n rhaid i rif cerdyn adnabod y buddiolwr unigol fod yn 30 o gymeriadau neu lai
 individualBeneficiary.idCardDetails.number.error.invalid = Gall rhif y cerdyn adnabod gynnwys llythrennau a rhifau yn unig
