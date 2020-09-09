@@ -23,6 +23,7 @@ import play.api.inject.bind
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import org.mockito.Matchers.any
 
 class LanguageSwitchControllerSpec extends SpecBase {
 
@@ -121,7 +122,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       // the following are required for the Gov UK Wrapper
       when(mockConfig.analyticsToken).thenReturn(frontendAppConfig.analyticsToken)
       when(mockConfig.analyticsHost).thenReturn(frontendAppConfig.analyticsHost)
-      when(mockConfig.accessibilityLinkUrl).thenReturn(frontendAppConfig.accessibilityLinkUrl)
+      when(mockConfig.accessibilityLinkUrl(any())).thenReturn("accessibility link")
       when(mockConfig.betaFeedbackUrl).thenReturn(frontendAppConfig.betaFeedbackUrl)
       when(mockConfig.betaFeedbackUnauthenticatedUrl).thenReturn(frontendAppConfig.betaFeedbackUnauthenticatedUrl)
       when(mockConfig.routeToSwitchLanguage).thenReturn(frontendAppConfig.routeToSwitchLanguage)

@@ -87,7 +87,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(form, index, beneficiaries(index).name)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(form, index, beneficiaries(index).name)(request, messages).toString
 
       application.stop()
     }
@@ -115,7 +115,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), index, beneficiaries(index).name)(fakeRequest, messages).toString
+        view(form.fill(true), index, beneficiaries(index).name)(request, messages).toString
 
       application.stop()
     }
@@ -220,7 +220,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, beneficiaries(index).name)(fakeRequest, messages).toString
+        view(boundForm, index, beneficiaries(index).name)(request, messages).toString
 
       application.stop()
     }

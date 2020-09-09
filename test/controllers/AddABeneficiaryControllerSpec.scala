@@ -236,7 +236,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(yesNoForm)(fakeRequest, messages).toString
+          view(yesNoForm)(request, messages).toString
 
         application.stop()
       }
@@ -283,7 +283,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm)(fakeRequest, messages).toString
+          view(boundForm)(request, messages).toString
 
         application.stop()
       }
@@ -307,7 +307,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(request, messages).toString
 
         application.stop()
       }
@@ -378,7 +378,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(fakeRequest, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, beneficiaryRows, "The trust has 7 beneficiaries", Nil)(request, messages).toString
 
         application.stop()
       }
@@ -452,7 +452,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         val content = contentAsString(result)
 
-        content mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(fakeRequest, messages).toString
+        content mustEqual view(beneficiaryRows.inProgress, beneficiaryRows.complete, "The trust has 175 beneficiaries")(request, messages).toString
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 

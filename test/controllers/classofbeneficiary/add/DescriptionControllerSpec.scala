@@ -66,7 +66,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(description))(fakeRequest, messages).toString
+        view(form.fill(description))(request, messages).toString
 
       application.stop()
     }
@@ -104,7 +104,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm)(request, messages).toString
 
        application.stop()
     }

@@ -74,7 +74,7 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, name)(fakeRequest, messages).toString
+        view(answerSection, name)(request, messages).toString
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {

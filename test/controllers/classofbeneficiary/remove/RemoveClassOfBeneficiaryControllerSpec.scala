@@ -85,7 +85,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(request, messages).toString
 
       application.stop()
     }
@@ -109,7 +109,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, form.fill(true), 0, description, formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, form.fill(true), 0, description, formRoute)(request, messages).toString
 
       application.stop()
     }
@@ -214,7 +214,7 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(messagesPrefix, boundForm, index, description, formRoute)(fakeRequest, messages).toString
+        view(messagesPrefix, boundForm, index, description, formRoute)(request, messages).toString
 
       application.stop()
     }

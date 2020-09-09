@@ -86,7 +86,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(form, index, description)(fakeRequest, messages).toString
+      contentAsString(result) mustEqual view(form, index, description)(request, messages).toString
 
       application.stop()
     }
@@ -110,7 +110,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), 0, description)(fakeRequest, messages).toString
+        view(form.fill(true), 0, description)(request, messages).toString
 
       application.stop()
     }
@@ -215,7 +215,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, description)(fakeRequest, messages).toString
+        view(boundForm, index, description)(request, messages).toString
 
       application.stop()
     }

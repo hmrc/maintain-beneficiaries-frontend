@@ -16,28 +16,29 @@
 
 package config
 
+import java.net.{URI, URLEncoder}
+
 import java.time.LocalDate
 
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Call
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.mvc.{Call, Request}
 
 @Singleton
-class FrontendAppConfig @Inject()(config: Configuration) {
+class FrontendAppConfig @Inject()(val configuration: Configuration) {
 
-  private val contactHost: String = config.get[String]("contact-frontend.host")
+  private val contactHost: String = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier: String = "trusts"
 
-  private val assetsUrl: String = config.get[String]("assets.url")
+  private val assetsUrl: String = configuration.get[String]("assets.url")
 
-  lazy val maintainATrustOverview: String = config.get[String]("urls.maintainATrustOverview")
+  lazy val maintainATrustOverview: String = configuration.get[String]("urls.maintainATrustOverview")
 
-  val assetsPrefix: String   = assetsUrl + config.get[String]("assets.version")
-  val analyticsToken: String = config.get[String](s"google-analytics.token")
-  val analyticsHost: String  = config.get[String](s"google-analytics.host")
+  val assetsPrefix: String   = assetsUrl + configuration.get[String]("assets.version")
+  val analyticsToken: String = configuration.get[String](s"google-analytics.token")
+  val analyticsHost: String  = configuration.get[String](s"google-analytics.host")
 
   val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
@@ -45,24 +46,24 @@ class FrontendAppConfig @Inject()(config: Configuration) {
   val betaFeedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   val betaFeedbackUnauthenticatedUrl: String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
-  lazy val loginUrl: String = config.get[String]("urls.login")
-  lazy val loginContinueUrl: String = config.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = config.get[String]("urls.logout")
+  lazy val loginUrl: String = configuration.get[String]("urls.login")
+  lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
+  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
 
-  lazy val countdownLength: String = config.get[String]("timeout.countdown")
-  lazy val timeoutLength: String = config.get[String]("timeout.length")
+  lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
+  lazy val timeoutLength: String = configuration.get[String]("timeout.length")
 
-  lazy val trustsUrl: String = config.get[Service]("microservice.services.trusts").baseUrl
+  lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
 
-  lazy val trustAuthUrl: String = config.get[Service]("microservice.services.trusts-auth").baseUrl
+  lazy val trustAuthUrl: String = configuration.get[Service]("microservice.services.trusts-auth").baseUrl
 
-  lazy val trustsStoreUrl: String = config.get[Service]("microservice.services.trusts-store").baseUrl
+  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
 
-  lazy val locationCanonicalList: String = config.get[String]("location.canonical.list.all")
-  lazy val locationCanonicalListNonUK: String = config.get[String]("location.canonical.list.nonUK")
+  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
+  lazy val locationCanonicalListNonUK: String = configuration.get[String]("location.canonical.list.nonUK")
 
   lazy val languageTranslationEnabled: Boolean =
-    config.get[Boolean]("microservice.services.features.welsh-translation")
+    configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
@@ -72,11 +73,16 @@ class FrontendAppConfig @Inject()(config: Configuration) {
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
-  lazy val accessibilityLinkUrl: String = config.get[String]("urls.accessibility")
+  private lazy val accessibilityBaseLinkUrl: String = configuration.get[String]("urls.accessibility")
+
+  def accessibilityLinkUrl(implicit request: Request[_]): String = {
+    val userAction = URLEncoder.encode(new URI(request.uri).getPath, "UTF-8")
+    s"$accessibilityBaseLinkUrl?userAction=$userAction"
+  }
 
   private def getDate(entry: String): LocalDate = {
 
-    def getInt(path: String): Int = config.get[Int](path)
+    def getInt(path: String): Int = configuration.get[Int](path)
 
     LocalDate.of(
       getInt(s"dates.$entry.year"),

@@ -88,7 +88,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, description)(fakeRequest, messages).toString
+        view(form, index, description)(getRequest, messages).toString
 
       application.stop()
     }
@@ -130,7 +130,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, description)(fakeRequest, messages).toString
+        view(boundForm, index, description)(request, messages).toString
 
       application.stop()
     }

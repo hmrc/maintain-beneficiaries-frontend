@@ -68,7 +68,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, name.displayName, countryOptions)(fakeRequest, messages).toString
+        view(form, name.displayName, countryOptions)(request, messages).toString
 
       application.stop()
     }
@@ -88,7 +88,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validData), name.displayName, countryOptions)(fakeRequest, messages).toString
+        view(form.fill(validData), name.displayName, countryOptions)(request, messages).toString
 
       application.stop()
     }
@@ -139,7 +139,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, name.displayName, countryOptions)(fakeRequest, messages).toString
+        view(boundForm, name.displayName, countryOptions)(request, messages).toString
 
       application.stop()
     }
