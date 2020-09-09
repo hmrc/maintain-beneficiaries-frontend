@@ -74,7 +74,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, name)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, name)(request, messages).toString
 
       application.stop()
     }
@@ -115,7 +115,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, name)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, name)(request, messages).toString
 
        application.stop()
     }

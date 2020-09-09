@@ -72,7 +72,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(date), description)(fakeRequest, messages).toString
+        view(form.fill(date), description)(request, messages).toString
 
       application.stop()
     }
@@ -116,7 +116,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, description)(fakeRequest, messages).toString
+        view(boundForm, description)(request, messages).toString
 
        application.stop()
     }

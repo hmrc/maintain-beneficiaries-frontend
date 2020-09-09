@@ -68,7 +68,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(companyOrEmploymentRelatedBeneficiaryAnswer))(fakeRequest, messages).toString
+        view(form.fill(companyOrEmploymentRelatedBeneficiaryAnswer))(request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm)(fakeRequest, messages).toString
+        view(boundForm)(request, messages).toString
 
       application.stop()
     }

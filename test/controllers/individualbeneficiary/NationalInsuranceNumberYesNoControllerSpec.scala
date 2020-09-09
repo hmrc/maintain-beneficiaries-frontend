@@ -61,7 +61,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name.displayName)(fakeRequest, messages).toString
+        view(form, NormalMode, name.displayName)(request, messages).toString
 
       application.stop()
     }
@@ -81,7 +81,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, name.displayName)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, name.displayName)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +126,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, name.displayName)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, name.displayName)(request, messages).toString
 
       application.stop()
     }
