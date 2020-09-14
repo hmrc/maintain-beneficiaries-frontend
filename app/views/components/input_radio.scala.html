@@ -28,7 +28,11 @@
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
-    <fieldset @if(fieldSetClass.nonEmpty){class="@fieldSetClass.get"} id="@{field.id}" @if(field.hasErrors || hint.nonEmpty){aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){hint-@{field.id}}"}>
+    <fieldset @if(fieldSetClass.nonEmpty){class="@fieldSetClass.get"} id="@{field.id}"
+        @if(field.hasErrors || hint.nonEmpty){
+            aria-describedby="@if(hint.nonEmpty){hint-@{field.id}}@if(hint.nonEmpty && field.hasErrors){ }@if(field.hasErrors){error-message-@{field.id}-input}"
+        }
+    >
         @if(headingIsLegend){
             <legend>
                 <h1 @if(legendClass.nonEmpty){class="@legendClass" }else{class="heading-large"}>@legend</h1>

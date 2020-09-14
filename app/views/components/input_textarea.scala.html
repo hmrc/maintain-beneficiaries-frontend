@@ -27,7 +27,7 @@
     <label class="form-label" for="@{field.id}">
         <span class="bold @labelClass">@label</span>
         @hint.map { hint =>
-            <span class="form-hint">@hint</span>
+            <span id="@{field.id}_hint" class="form-hint">@hint</span>
         }
         @field.errors.map { error =>
             <span class="error-message" id="error-message-@{field.id}-input">
@@ -40,7 +40,9 @@
             class="form-control form-control--full-width @inputClass"
             id="@{field.id}"
             name="@{field.id}"
-            @if(field.hasErrors) { aria-describedby="error-message-@{field.id}-input" }
+            @if(hint.nonEmpty || field.hasErrors) {
+                aria-describedby="@if(hint.nonEmpty){@{field.id}_hint}@if(hint.nonEmpty && field.hasErrors){ }@if(field.hasErrors){error-message-@{field.id}-input}"
+            }
             rows="5"
         >@{field.value}</textarea>
     </div>

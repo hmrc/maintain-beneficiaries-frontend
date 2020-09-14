@@ -62,7 +62,7 @@
             autocomplete="@{autocomplete.get}"
         }
         @if(hint.nonEmpty || field.hasErrors) {
-            aria-describedby="@if(field.hasErrors){error-message-@{field.id}-input}@if(field.hasErrors && hint.nonEmpty){ }@if(hint.nonEmpty){@{field.id}_hint}"
+            aria-describedby="@if(hint.nonEmpty){@{field.id}_hint}@if(field.hasErrors && hint.nonEmpty){ }@if(field.hasErrors){error-message-@{field.id}-input}"
         }
         @if(inputMode.nonEmpty){inputmode="@inputMode"}
         />

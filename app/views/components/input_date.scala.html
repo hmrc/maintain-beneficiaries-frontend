@@ -28,7 +28,11 @@
 )(implicit messages: Messages)
 
 <div class="form-group @if(field("day").hasErrors || field("month").hasErrors || field("year").hasErrors || field.hasErrors){form-group-error}">
-    <fieldset>
+    <fieldset role="group"
+        @if(hint.nonEmpty || field.hasErrors) {
+            aria-describedby="@if(hint.nonEmpty){form-hint}@if(hint.nonEmpty && field.hasErrors){ }@if(field.hasErrors){error-message-@{field.id}-input}"
+        }
+    >
         <legend>
             @if(headingIsLegend){<h1 class="legend-as-heading">}
             <span class="@legendClass">
