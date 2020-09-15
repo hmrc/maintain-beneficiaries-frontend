@@ -49,7 +49,7 @@
         <div class="form-date">
             @List("day", "month", "year").map { part =>
               <div class="form-control-wrapper form-group form-group-@part">
-                <label class="form-label" for="@field(part).id">@messages(s"date.$part")<span class="visually-hidden"> @messages("date.hidden")</span></label>
+                <label class="form-label" for="@field(part).id">@messages(s"date.$part")</label>
                 <input class="form-control @if(field(part).hasErrors || field.error.exists(_.args.contains(part))){form-control-error}" id="@field(part).id" name="@field(part).name" type="text" value="@field(part).value" inputmode="numeric" />
               </div>
             }

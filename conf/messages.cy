@@ -112,7 +112,6 @@ checkYourAnswers.heading = Gwirio’ch Atebion
 date.day = Diwrnod
 date.month = Mis
 date.year = Blwyddyn
-date.hidden = mewn rhifau
 session_expired.title = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.guidance = Mae’r manylion a roddwyd gennych wedi’u dileu gan nad ydych wedi mynd yn eich blaen â’r gwasanaeth ers 15 munud.

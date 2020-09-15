@@ -127,7 +127,6 @@ checkYourAnswers.heading = Check Your Answers
 date.day = Day
 date.month = Month
 date.year = Year
-date.hidden =  in numbers
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
