@@ -21,11 +21,10 @@
 @if(data.nonEmpty){
 
 <div class="form-group">
- <h2 id="data-list-heading--@id--hidden" class="visually-hidden">@messages("entities.beneficiary") @messages(s"site.$id")</h2>
- <h3 id="data-list-heading--@id" aria-hidden="true">@messages(s"site.$id")</h3>
- <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short" aria-describedby="data-list-heading--@id--hidden">
-   @for(item <- data) {
-    @components.data_list_row(item)
+ <h2 id="data-list-heading--@id">@messages(s"site.$id")</h2>
+ <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
+  @for(item <- data) {
+  @components.data_list_row(item)
   }
  </dl>
 </div>
