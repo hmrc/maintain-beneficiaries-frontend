@@ -17,7 +17,7 @@
 @(overrideMessage : Option[String] = None, submitClass: Option[String] = None)(implicit messages: Messages)
 
 <div class="section">
- <button id="submit" class="button  @if(submitClass.nonEmpty){@{submitClass.get}}">
+ <button id="submit" formnovalidate class="button @if(submitClass.nonEmpty){@{submitClass.get}}">
   @if(overrideMessage.isEmpty) {
   @messages("site.continue")
   } else {
