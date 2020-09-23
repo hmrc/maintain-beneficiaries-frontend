@@ -17,7 +17,8 @@
 @(
     field: Field,
     label: String,
-    hint: Option[String] = None
+    hint: Option[String] = None,
+    symbol: Option[String] = None
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -40,7 +41,7 @@
         </span>
     }
 
-    <div class="form-control-wrapper">
+    <div class="form-control-wrapper" @if(symbol.isDefined){data-type="@{symbol}"}>
         <input
                 class="form-control @if(field.hasErrors){form-control-error}"
                 id="@{field.id}"
@@ -50,6 +51,9 @@
                 value="@{field.value}"
                 @if(hint.nonEmpty || field.hasErrors) {
                     aria-describedby="@if(hint.nonEmpty){@{field.id}_hint}@if(field.hasErrors && hint.nonEmpty){ }@if(field.hasErrors){error-message-@{field.id}-input}"
+                }
+                @if(symbol.nonEmpty) {
+                    aria-label='@{label} @{symbol.get}'
                 }
                 pattern="[0-9]*"
                 inputmode="numeric"

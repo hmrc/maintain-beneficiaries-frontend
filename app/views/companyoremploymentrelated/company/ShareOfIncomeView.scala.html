@@ -36,7 +36,8 @@
         @components.input_number(
             field = form("value"),
             label = messages("companyBeneficiary.shareOfIncome.heading", name),
-            hint = Some(messages("companyBeneficiary.shareOfIncome.hint"))
+            hint = Some(messages("companyBeneficiary.shareOfIncome.hint")),
+            symbol = Some("percentage")
         )
 
         @components.submit_button()
