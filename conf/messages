@@ -555,7 +555,7 @@ trustBeneficiary.shareOfIncome.hint = Round this down to a whole number
 trustBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s assets the trust beneficiary is entitled to
 trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
 trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the trust beneficiary is entitled to must be a whole number
-trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust  beneficiary is entitled to must be 100 or less
+trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the trust beneficiary is entitled to must be 100 or less
 
 trustBeneficiary.addressYesNo.title = Do you know the trust beneficiary’s address?
 trustBeneficiary.addressYesNo.heading = Do you know {0}’s address?
