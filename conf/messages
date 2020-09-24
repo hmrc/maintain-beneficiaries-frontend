@@ -696,7 +696,7 @@ isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Employees and/or
 
 companyBeneficiary.name.default = the company beneficiary
 
-# Add / Amend
+# Add / Amend
 
 companyBeneficiary.name.title = What is the company’s name?
 companyBeneficiary.name.heading = What is the company’s name?
