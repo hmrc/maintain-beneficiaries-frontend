@@ -17,8 +17,8 @@
 @import controllers.other.routes._
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
@@ -33,16 +33,13 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_text(
+        @components.input_number(
             field = form("value"),
             label = messages("otherBeneficiary.shareOfIncome.heading", name),
-            headingIsLabel = true,
             hint = Some(messages("otherBeneficiary.shareOfIncome.hint")),
-            labelClass=Some("heading-large"),
-            inputMode = Some("numeric")
+            symbol = Some("percentage")
         )
 
         @components.submit_button()
-
     }
 }
