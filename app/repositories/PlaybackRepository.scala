@@ -18,28 +18,23 @@ package repositories
 
 import java.time.LocalDateTime
 
-import akka.stream.Materializer
 import javax.inject.{Inject, Singleton}
 import models.{MongoDateTimeFormats, UserAnswers}
 import org.slf4j.LoggerFactory
 import play.api.Configuration
 import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import reactivemongo.play.json.collection.JSONCollection
-import utils.DateFormatter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PlaybackRepositoryImpl @Inject()(
-                                        mongo: MongoDriver,
-                                        config: Configuration,
-                                        dateFormatter: DateFormatter
-                                      )(implicit ec: ExecutionContext, m: Materializer) extends PlaybackRepository {
+class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
+                                       config: Configuration
+                                      )(implicit ec: ExecutionContext) extends PlaybackRepository {
 
   private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
@@ -87,7 +82,19 @@ class PlaybackRepositoryImpl @Inject()(
 
     for {
       col <- collection
-      r <- col.findAndUpdate(selector, modifier, fetchNewObject = true, upsert = false)
+      r <- col.findAndUpdate(
+        selector = selector,
+        update = modifier,
+        fetchNewObject = true,
+        upsert = false,
+        sort = None,
+        fields = None,
+        bypassDocumentValidation = false,
+        writeConcern = WriteConcern.Default,
+        maxTime = None,
+        collation = None,
+        arrayFilters = Nil
+      )
     } yield r.result[UserAnswers]
   }
 

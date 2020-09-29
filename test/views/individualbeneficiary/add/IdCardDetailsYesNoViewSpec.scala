@@ -18,7 +18,7 @@ package views.individualbeneficiary.add
 
 import controllers.individualbeneficiary.add.routes
 import forms.YesNoFormProvider
-import models.{Mode, Name, NormalMode}
+import models.Name
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours

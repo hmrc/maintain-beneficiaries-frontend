@@ -63,8 +63,6 @@ class RemoveCharityBeneficiaryController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      import scala.concurrent.ExecutionContext.Implicits._
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
           trustService.getCharityBeneficiary(request.userAnswers.utr, index).map {

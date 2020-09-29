@@ -20,8 +20,6 @@ import java.time.LocalDate
 
 import base.SpecBase
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
-import play.twirl.api.Html
-import viewmodels.{AnswerRow, AnswerSection}
 
 class ClassOfBeneficiaryMapperSpec extends SpecBase {
 

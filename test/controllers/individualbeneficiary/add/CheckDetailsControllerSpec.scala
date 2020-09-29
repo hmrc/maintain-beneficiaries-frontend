@@ -21,23 +21,18 @@ import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustConnector
 import models.Name
-import models.beneficiaries.TypeOfBeneficiaryToAdd
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddNowPage
-import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
+import pages.individualbeneficiary._
 import pages.individualbeneficiary.add.StartDatePage
-import pages.individualbeneficiary.{AddressYesNoPage, DateOfBirthPage, IncomeDiscretionYesNoPage, NamePage, NationalInsuranceNumberPage, NationalInsuranceNumberYesNoPage, VPE1FormYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
-import utils.countryOptions.CountryOptions
-import utils.print.{AnswerRowConverter, IndividualBeneficiaryPrintHelper}
-import viewmodels.AnswerSection
+import utils.print.IndividualBeneficiaryPrintHelper
 import views.html.individualbeneficiary.add.CheckDetailsView
 
 import scala.concurrent.Future
@@ -66,8 +61,6 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   "CheckDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val bound = new AnswerRowConverter().bind(userAnswers, name.displayName, mock[CountryOptions])
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -25,7 +25,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 class LogoutController @Inject()(appConfig: FrontendAppConfig, val controllerComponents: MessagesControllerComponents) extends FrontendBaseController {
 
   def logout: Action[AnyContent] = Action {
-    implicit request =>
       Redirect(appConfig.logoutUrl).withNewSession
   }
 }

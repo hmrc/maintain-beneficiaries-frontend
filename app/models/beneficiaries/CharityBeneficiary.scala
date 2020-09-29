@@ -18,9 +18,9 @@ package models.beneficiaries
 
 import java.time.LocalDate
 
-import models.{Address, Name}
+import models.Address
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, JsSuccess, Reads, Writes, __}
+import play.api.libs.json._
 
 final case class CharityBeneficiary(name: String,
                                     utr: Option[String],

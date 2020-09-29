@@ -19,7 +19,7 @@ package models.beneficiaries
 import java.time.LocalDate
 
 import base.SpecBase
-import models.{Description, HowManyBeneficiaries, Name}
+import models.{Description, Name}
 import viewmodels.RadioOption
 
 class BeneficiariesSpec extends SpecBase {

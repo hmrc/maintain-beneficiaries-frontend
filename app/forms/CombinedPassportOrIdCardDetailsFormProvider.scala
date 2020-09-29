@@ -16,8 +16,6 @@
 
 package forms
 
-import java.time.LocalDate
-
 import config.FrontendAppConfig
 import forms.mappings.{Constraints, Mappings}
 import javax.inject.Inject

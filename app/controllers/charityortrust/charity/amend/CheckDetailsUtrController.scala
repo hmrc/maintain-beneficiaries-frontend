@@ -16,22 +16,16 @@
 
 package controllers.charityortrust.charity.amend
 
-import config.{ErrorHandler, FrontendAppConfig}
-import connectors.TrustConnector
+import config.FrontendAppConfig
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import javax.inject.Inject
-import models.CheckMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.mappers.CharityBeneficiaryMapper
 import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsUtrView
-
-import scala.concurrent.ExecutionContext
 
 class CheckDetailsUtrController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -41,7 +35,7 @@ class CheckDetailsUtrController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         printHelper: CharityBeneficiaryPrintHelper,
                                         nameAction: NameRequiredAction
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
@@ -51,7 +45,6 @@ class CheckDetailsUtrController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
       Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }

@@ -21,10 +21,8 @@ import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import javax.inject.Inject
-import models.NormalMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
 import utils.print.CharityBeneficiaryPrintHelper

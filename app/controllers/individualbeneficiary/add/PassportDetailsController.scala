@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.PassportDetailsFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.NormalMode
 import navigation.Navigator
 import pages.individualbeneficiary.add.PassportDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}

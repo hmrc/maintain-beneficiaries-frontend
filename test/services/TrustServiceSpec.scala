@@ -19,7 +19,6 @@ package services
 import java.time.LocalDate
 
 import connectors.TrustConnector
-import models.HowManyBeneficiaries.Over101
 import models.beneficiaries._
 import models.{BeneficiaryType, Description, Name, RemoveBeneficiary}
 import org.mockito.Matchers.any

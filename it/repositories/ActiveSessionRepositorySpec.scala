@@ -4,8 +4,6 @@ import models.UtrSession
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
-import scala.language.implicitConversions
-
 class ActiveSessionRepositorySpec extends AsyncFreeSpec with MustMatchers
   with ScalaFutures with OptionValues with MongoSuite {
 

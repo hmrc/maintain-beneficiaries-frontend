@@ -19,7 +19,6 @@ package views.classofbeneficiary.remove
 import java.time.LocalDate
 
 import forms.DateRemovedFromTrustFormProvider
-import models.Name
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours

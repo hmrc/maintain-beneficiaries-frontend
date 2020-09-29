@@ -27,8 +27,6 @@ import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsUtrView
 
-import scala.concurrent.ExecutionContext
-
 class CheckDetailsUtrController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         standardActionSets: StandardActionSets,
@@ -37,7 +35,7 @@ class CheckDetailsUtrController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         printHelper: CompanyBeneficiaryPrintHelper,
                                         nameAction: NameRequiredAction
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
@@ -46,7 +44,6 @@ class CheckDetailsUtrController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
       Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }
