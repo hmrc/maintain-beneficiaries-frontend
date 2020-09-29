@@ -27,8 +27,6 @@ import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.trust.amend.CheckDetailsUtrView
 
-import scala.concurrent.ExecutionContext
-
 class CheckDetailsUtrController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         standardActionSets: StandardActionSets,
@@ -37,17 +35,15 @@ class CheckDetailsUtrController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         printHelper: TrustBeneficiaryPrintHelper,
                                         nameAction: NameRequiredAction
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-
       val section: AnswerSection = printHelper(request.userAnswers, false, request.beneficiaryName)
       Ok(view(section, request.beneficiaryName))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
       Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }

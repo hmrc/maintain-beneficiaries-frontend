@@ -30,7 +30,7 @@ import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HttpResponse
 import views.html.classofbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.Future
@@ -67,8 +67,6 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "return OK and the correct view for a GET" in {
 
       val index = 0
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))

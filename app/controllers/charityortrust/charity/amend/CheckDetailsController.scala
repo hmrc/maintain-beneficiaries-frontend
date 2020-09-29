@@ -22,7 +22,7 @@ import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import extractors.CharityBeneficiaryExtractor
 import javax.inject.Inject
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.PlaybackRepository

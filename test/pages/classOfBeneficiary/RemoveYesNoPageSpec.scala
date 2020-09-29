@@ -16,19 +16,12 @@
 
 package pages.classOfBeneficiary
 
-import java.time.LocalDate
-
-import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
 import pages.classofbeneficiary.RemoveYesNoPage
 
 class RemoveYesNoPageSpec extends PageBehaviours {
 
   "RemoveYesNoPage" must {
-
-    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
-      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.now())
-    }
 
     beRetrievable[Boolean](RemoveYesNoPage)
 

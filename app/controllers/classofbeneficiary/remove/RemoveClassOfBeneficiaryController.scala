@@ -20,7 +20,6 @@ import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import navigation.Navigator
 import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -66,8 +65,6 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
-
-      import scala.concurrent.ExecutionContext.Implicits._
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {

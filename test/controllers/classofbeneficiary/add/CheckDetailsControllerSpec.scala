@@ -32,8 +32,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
-import utils.countryOptions.CountryOptions
-import utils.print.{AnswerRowConverter, ClassOfBeneficiaryPrintHelper}
+import utils.print.ClassOfBeneficiaryPrintHelper
 import views.html.classofbeneficiary.add.CheckDetailsView
 
 import scala.concurrent.Future
@@ -55,8 +54,6 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   "CheckDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val bound = new AnswerRowConverter().bind(userAnswers, description, mock[CountryOptions])
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

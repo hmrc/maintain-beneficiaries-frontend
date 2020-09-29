@@ -19,12 +19,12 @@ package controllers
 import java.time.LocalDate
 
 import connectors.TrustConnector
-import controllers.actions.{DataRetrievalAction, IdentifierAction, StandardActionSets}
+import controllers.actions.StandardActionSets
 import javax.inject.Inject
-import models.{UserAnswers, UtrSession}
+import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.{ActiveSessionRepository, PlaybackRepository}
+import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
