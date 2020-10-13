@@ -35,7 +35,7 @@ selectAttribute: Set[String] = Set.empty
     </label>
     @if(labelAsHeading){</h1>}
     @hint.map{ hintText =>
-        <span class="form-hint">@messages(hintText)</span>
+        <span id="form-hint" class="form-hint">@messages(hintText)</span>
     }
 
     @field.errors.headOption.map{ error =>
@@ -43,7 +43,13 @@ selectAttribute: Set[String] = Set.empty
             <span class="visually-hidden">@messages("site.error") </span>@messages(error.message, error.args:_*)
         </span>
     }
-    <select class='form-control @selectClasses.mkString(" ")' id="@field.id" name="@field.name" aria-labelledby="@field.id-label" @selectAttribute>
+    <select class='form-control @selectClasses.mkString(" ")'
+            id="@field.id"
+            name="@field.name"
+            @if(hint.nonEmpty || field.hasErrors) {
+            aria-describedby="@if(hint.nonEmpty){form-hint}@if(hint.nonEmpty && field.hasErrors){ }@if(field.hasErrors){error-message-input}"
+            }
+            @selectAttribute>
         @placeholder.map{ ph =>
             <option value="">@messages(ph)</option>
         }
