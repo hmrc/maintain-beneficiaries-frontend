@@ -12,11 +12,14 @@
 @import 'conditionals';
 @import 'colours/palette';
 
+// Autocomplete country lookup
+@import 'location-autocomplete.min';
+@import 'patterns/autocomplete';
+
 // WCGA 2.1 https://design-system.service.gov.uk/styles/colour/
 @import 'govuk-colours-override';
 
 @import 'partials/_focus';
-@import 'location-autocomplete.min';
 @import 'patterns/add-to-a-list';
 @import 'patterns/symbol-input';
 
@@ -159,21 +162,6 @@
   margin-top: .625em;
 }
 
-#value__listbox, #country__listbox {
-    @media (min-width: 641px) {
-      width: calc(75% - 4px;)
-    }
-}
-
-#country {
-    @media (min-width: 641px) {
-      width:75%;
-    }
-}
-
-.autocomplete__wrapper span {
-  display: none;
-}
 
 .heading-confirmation {
   background-color: #00703c;

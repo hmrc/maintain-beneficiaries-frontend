@@ -33,57 +33,6 @@ $(document).ready(function() {
     window.history.back();
   })
 
-   // =========================
-   // GOV.UK country lookup
-   // https://alphagov.github.io/accessible-autocomplete/#progressive-enhancement
-   // =========================
-   // auto complete country lookup, progressive enhancement
-   // using version 2.0.2
-   // need to invoke new enhanceSelectElement()
-   // =====
-
-   if(document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
-      accessibleAutocomplete.enhanceSelectElement({
-           selectElement: document.querySelector("select[data-non-uk-countries]"),
-           minLength:2,
-           defaultValue: ''
-       });
-   }
-
-    if(document.querySelectorAll('select[data-all-countries]').length > 0) {
-          accessibleAutocomplete.enhanceSelectElement({
-               selectElement: document.querySelector("select[data-all-countries]"),
-               minLength:2,
-               defaultValue: ''
-           });
-       }
-
-    // Assign aria-labbledby to the dynamically created country input
-    if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper #value").attr('aria-labelledby', 'error-message-input');
-
-    // Override autocomplete styles to apply correct error component design pattern
-    if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").addClass('form-control-error');
-    $('.autocomplete__wrapper input').focus(function(e){
-        if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").css({"border" : "4px solid #0b0c0c", "-webkit-box-shadow" : "none", "box-shadow" : "none"});
-    })
-    $('.autocomplete__wrapper input').focusout(function(e){
-        if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").css("border", "4px solid #d4351c");
-    })
-
-  //======================================================
-  // countries autocomplete
-  //======================================================
-    // temporary fix for IE not registering clicks on the text of the results list for the country autocomplete
-    $('body').on('mouseup', ".autocomplete__option > strong", function(e){
-        e.preventDefault(); $(this).parent().trigger('click');
-    })
-    // temporary fix for the autocomplete holding onto the last matching country when a user then enters an invalid or blank country
-    $('input[role="combobox"]').on('keydown', function(e){
-        if (e.which != 13 && e.which != 9) {
-             var sel = document.querySelector('.autocomplete-wrapper select');
-             sel.value = "";
-        }
-    })
 
 
 
@@ -105,7 +54,7 @@ $(document).ready(function() {
 
 
   //======================================================
-  // Move immediate forcus to any error summary
+  // Move immediate focus to any error summary
   //======================================================
   if ($('.error-summary a').length > 0){
     $('.error-summary').focus();

@@ -1,0 +1,26 @@
+
+/// ===================
+//
+// Custom styling of the .autocomplete country lookup
+// This overrides the default styles defined in location-autocomplete.min.scss to fix the following issues:
+//
+// - assets-frontend has a default 50% width for input fields, this is not wanted for the country lookup
+//
+/// ==================
+
+.autocomplete__wrapper {
+
+    input {
+       width: 100%;
+    }
+
+}
+
+.js-enabled {
+    select[data-all-countries] {
+        display: none;
+    }
+    select[data-non-uk-countries] {
+        display: none;
+    }
+}
