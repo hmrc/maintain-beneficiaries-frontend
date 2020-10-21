@@ -22,37 +22,35 @@ import models.{Address, CombinedPassportOrIdCard, IdCard, NationalInsuranceNumbe
 import pages.individualbeneficiary.add.StartDatePage
 import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-class   IndividualBeneficiaryExtractor @Inject()() {
+class IndividualBeneficiaryExtractor @Inject()() {
 
   import pages.individualbeneficiary._
 
   def apply(answers: UserAnswers,
             individual : IndividualBeneficiary,
-            index: Int): Try[UserAnswers] =
-  {
+            index: Int): Try[UserAnswers] = {
 
     answers.deleteAtPath(pages.individualbeneficiary.basePath)
-              .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
-              .flatMap(_.set(NamePage, individual.name))
-              .flatMap(answers => extractDateOfBirth(individual, answers))
-              .flatMap(answers => extractShareOfIncome(individual, answers))
-              .flatMap(answers => extractAddress(individual.address, answers))
-              .flatMap(answers => extractIdentification(individual, answers))
-              .flatMap(_.set(VPE1FormYesNoPage, individual.vulnerableYesNo))
-              .flatMap(_.set(StartDatePage, individual.entityStart))
-              .flatMap(_.set(IndexPage, index))
-    }
+      .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
+      .flatMap(_.set(NamePage, individual.name))
+      .flatMap(answers => extractDateOfBirth(individual, answers))
+      .flatMap(answers => extractShareOfIncome(individual, answers))
+      .flatMap(answers => extractAddress(individual.address, answers))
+      .flatMap(answers => extractIdentification(individual, answers))
+      .flatMap(_.set(VPE1FormYesNoPage, individual.vulnerableYesNo))
+      .flatMap(_.set(StartDatePage, individual.entityStart))
+      .flatMap(_.set(IndexPage, index))
+  }
 
   private def extractIdentification(individualBeneficiary: IndividualBeneficiary,
-                                    answers: UserAnswers) : Try[UserAnswers] =
-  {
+                                    answers: UserAnswers) : Try[UserAnswers] = {
     individualBeneficiary.identification match {
       case Some(NationalInsuranceNumber(nino)) =>
         answers.set(NationalInsuranceNumberYesNoPage, true)
           .flatMap(_.set(NationalInsuranceNumberPage, nino))
-      case Some(p : Passport) =>
+      case Some(p: Passport) =>
         answers.set(NationalInsuranceNumberYesNoPage, false)
           .flatMap(_.set(PassportOrIdCardDetailsYesNoPage, true))
           .flatMap(_.set(PassportOrIdCardDetailsPage, p.asCombined))
@@ -66,13 +64,12 @@ class   IndividualBeneficiaryExtractor @Inject()() {
           .flatMap(_.set(PassportOrIdCardDetailsPage, combined))
       case _ =>
         answers.set(NationalInsuranceNumberYesNoPage, false)
+          .flatMap(answers => extractPassportOrIdCardDetailsYesNo(individualBeneficiary.address.isDefined, answers))
     }
   }
 
-
   private def extractDateOfBirth(individualBeneficiary: IndividualBeneficiary,
-                                 answers: UserAnswers) : Try[UserAnswers] =
-  {
+                                 answers: UserAnswers) : Try[UserAnswers] = {
     individualBeneficiary.dateOfBirth match {
       case Some(dob) =>
         answers.set(DateOfBirthYesNoPage, true)
@@ -96,8 +93,7 @@ class   IndividualBeneficiaryExtractor @Inject()() {
   }
 
   private def extractAddress(address: Option[Address],
-                             answers: UserAnswers) : Try[UserAnswers] =
-  {
+                             answers: UserAnswers) : Try[UserAnswers] = {
     address match {
       case Some(uk: UkAddress) =>
         answers.set(AddressYesNoPage, true)
@@ -109,6 +105,14 @@ class   IndividualBeneficiaryExtractor @Inject()() {
           .flatMap(_.set(NonUkAddressPage, nonUk))
       case _ =>
         answers.set(AddressYesNoPage, false)
+    }
+  }
+
+  private def extractPassportOrIdCardDetailsYesNo(hasAddress: Boolean, answers: UserAnswers): Try[UserAnswers] = {
+    if (hasAddress) {
+      answers.set(PassportOrIdCardDetailsYesNoPage, false)
+    } else {
+      Success(answers)
     }
   }
 

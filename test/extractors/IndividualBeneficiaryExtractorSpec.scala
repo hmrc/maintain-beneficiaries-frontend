@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import generators.ModelGenerators
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, TypeOfTrust, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, TypeOfTrust, UkAddress, UserAnswers}
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
@@ -37,11 +37,13 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
     TypeOfTrust.WillTrustOrIntestacyTrust,
     Json.obj()
   )
+
   val index = 0
 
-  val name = Name("First", None, "Last")
-  val date = LocalDate.parse("1996-02-03")
-  val address = UkAddress("Line 1", "Line 2", None, None, "postcode")
+  val name: Name = Name("First", None, "Last")
+  val date: LocalDate = LocalDate.parse("1996-02-03")
+  val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
+  val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, "FR")
 
   val extractor = new IndividualBeneficiaryExtractor()
 
@@ -119,7 +121,7 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
       name = name,
       dateOfBirth = Some(date),
       identification = Some(combined),
-      address = Some(address),
+      address = Some(ukAddress),
       vulnerableYesNo = false,
       roleInCompany = None,
       income = None,
@@ -138,20 +140,20 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
     result.get(NationalInsuranceNumberPage) mustNot be(defined)
     result.get(AddressYesNoPage).get mustBe true
     result.get(LiveInTheUkYesNoPage).get mustBe true
-    result.get(UkAddressPage).get mustBe address
+    result.get(UkAddressPage).get mustBe ukAddress
     result.get(NonUkAddressPage) mustNot be(defined)
     result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
     result.get(PassportOrIdCardDetailsPage).get mustBe combined
 
   }
 
-  "should populate user answers when individual has no NINO or passport/ID card" in {
+  "should populate user answers when individual has a non-UK address and no NINO or passport/ID card" in {
 
     val individual = IndividualBeneficiary(
       name = name,
       dateOfBirth = Some(date),
       identification = None,
-      address = Some(address),
+      address = Some(nonUkAddress),
       vulnerableYesNo = false,
       roleInCompany = None,
       income = None,
@@ -169,10 +171,10 @@ class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropert
     result.get(NationalInsuranceNumberYesNoPage).get mustBe false
     result.get(NationalInsuranceNumberPage) mustNot be(defined)
     result.get(AddressYesNoPage).get mustBe true
-    result.get(LiveInTheUkYesNoPage).get mustBe true
-    result.get(UkAddressPage).get mustBe address
-    result.get(NonUkAddressPage) mustNot be(defined)
-    result.get(PassportOrIdCardDetailsYesNoPage) mustNot be(defined)
+    result.get(LiveInTheUkYesNoPage).get mustBe false
+    result.get(UkAddressPage) mustNot be(defined)
+    result.get(NonUkAddressPage).get mustBe nonUkAddress
+    result.get(PassportOrIdCardDetailsYesNoPage).get mustBe false
     result.get(PassportOrIdCardDetailsPage) mustNot be(defined)
   }
 
