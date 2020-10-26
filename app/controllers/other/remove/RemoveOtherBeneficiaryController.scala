@@ -18,9 +18,11 @@ package controllers.other.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.other.remove.RemoveYesNoPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,12 +40,15 @@ class RemoveOtherBeneficiaryController @Inject()(
                                                     trustService: TrustService,
                                                     formProvider: RemoveIndexFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    view: RemoveIndexView
+                                                    view: RemoveIndexView,
+                                                    errorHandler: ErrorHandler
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val messagesPrefix: String = "removeOtherBeneficiary"
 
   private val form = formProvider.apply(messagesPrefix)
+
+  private val logger = Logger(getClass)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
@@ -88,6 +93,12 @@ class RemoveOtherBeneficiaryController @Inject()(
                     Redirect(controllers.other.remove.routes.WhenRemovedController.onPageLoad(index).url)
                   }
                 }
+            } recoverWith {
+              case _ =>
+                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  s" error removing an other beneficiary as could not get beneficiary $index from trusts service")
+
+                Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))

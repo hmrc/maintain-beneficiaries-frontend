@@ -18,13 +18,17 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
+import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 @Singleton
 class LogoutController @Inject()(appConfig: FrontendAppConfig, val controllerComponents: MessagesControllerComponents) extends FrontendBaseController {
 
-  def logout: Action[AnyContent] = Action {
+  private val logger = Logger(getClass)
+
+  def logout: Action[AnyContent] = Action { implicit request =>
+      logger.info(s"[Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
       Redirect(appConfig.logoutUrl).withNewSession
   }
 }

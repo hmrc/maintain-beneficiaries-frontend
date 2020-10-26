@@ -20,14 +20,14 @@ import java.time.LocalDate
 
 import models.beneficiaries.TrustBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
-import org.slf4j.LoggerFactory
 import pages.charityortrust.trust._
+import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
 class TrustBeneficiaryMapper {
 
-  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
+  private val logger = Logger(getClass)
 
   def apply(answers: UserAnswers): Option[TrustBeneficiary] = {
     val readFromUserAnswers: Reads[TrustBeneficiary] =
@@ -52,7 +52,7 @@ class TrustBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        logger.error("Failed to rehydrate TrustBeneficiary from UserAnswers", errors)
+        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate TrustBeneficiary from UserAnswers due to $errors")
         None
     }
   }

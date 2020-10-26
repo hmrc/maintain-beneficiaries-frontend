@@ -21,7 +21,6 @@ import java.time.LocalDateTime
 import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import models.{MongoDateTimeFormats, UtrSession}
-import org.slf4j.LoggerFactory
 import play.api.Configuration
 import play.api.libs.json._
 import reactivemongo.api.WriteConcern
@@ -36,8 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
                                             config: Configuration
                                            )(implicit ec: ExecutionContext) extends ActiveSessionRepository {
-
-  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
 
   private val collectionName: String = "session"
 
@@ -67,9 +64,6 @@ class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
     } yield createdLastUpdatedIndex && createdIdIndex
 
   override def get(internalId: String): Future[Option[UtrSession]] = {
-
-    logger.debug(s"ActiveSessionRepository getting active utr for $internalId")
-
     val selector = Json.obj("internalId" -> internalId)
 
     val modifier = Json.obj(

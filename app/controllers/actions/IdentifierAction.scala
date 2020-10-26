@@ -42,6 +42,8 @@ class AuthenticatedIdentifierAction @Inject()(
                                              )
                                              (implicit val executionContext: ExecutionContext) extends IdentifierAction {
 
+  private val logger = Logger(getClass)
+
   private def authoriseAgent[A](internalId: String,
                                 enrolments: Enrolments,
                                 block: IdentifierRequest[A] => Future[Result])
@@ -63,16 +65,14 @@ class AuthenticatedIdentifierAction @Inject()(
 
     trustsAuthFunctions.authorised().retrieve(retrievals) {
       case Some(internalId) ~ Some(Agent) ~ enrolments =>
-        Logger.info(s"[AuthenticatedIdentifierAction] successfully identified as an Agent")
         authoriseAgent(internalId, enrolments, block)(request, hc)
       case Some(internalId) ~ Some(Organisation) ~ enrolments =>
-        Logger.info(s"[AuthenticatedIdentifierAction] successfully identified as Organisation")
         block(IdentifierRequest(request, OrganisationUser(internalId, enrolments)))
       case Some(_) ~ _ ~ _ =>
-        Logger.info(s"[AuthenticatedIdentifierAction] Unauthorised due to affinityGroup being Individual")
+        logger.info(s"[Authentication][Session ID: ${utils.Session.id(hc)}] Unauthorised due to affinityGroup being Individual")
         Future.successful(Redirect(controllers.routes.UnauthorisedController.onPageLoad()))
       case _ =>
-        Logger.warn(s"[AuthenticatedIdentifierAction] Unable to retrieve internal id")
+        logger.warn(s"[Authentication][Session ID: ${utils.Session.id(hc)}]] Unable to retrieve internal id")
         throw new UnauthorizedException("Unable to retrieve internal Id")
     } recover trustsAuthFunctions.recoverFromAuthorisation
   }

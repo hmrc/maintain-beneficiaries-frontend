@@ -29,7 +29,6 @@ class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnec
   def recoverFromAuthorisation: PartialFunction[Throwable, Result] = {
     case _: NoActiveSession => redirectToLogin
     case e: AuthorisationException =>
-      Logger.error(s"Recovered error: $e")
       Redirect(controllers.routes.UnauthorisedController.onPageLoad())
   }
 

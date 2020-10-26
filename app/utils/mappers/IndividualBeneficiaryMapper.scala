@@ -20,16 +20,16 @@ import java.time.LocalDate
 
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import models.{Address, CombinedPassportOrIdCard, IdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
-import org.slf4j.LoggerFactory
 import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
 class IndividualBeneficiaryMapper {
 
-  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
+  private val logger = Logger(getClass)
 
   def apply(answers: UserAnswers, provisional: Boolean): Option[IndividualBeneficiary] = {
 
@@ -51,7 +51,7 @@ class IndividualBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        logger.error(s"Failed to rehydrate IndividualBeneficiary from UserAnswers due to $errors")
+        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate IndividualBeneficiary from UserAnswers due to $errors")
         None
     }
   }

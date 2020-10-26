@@ -20,14 +20,14 @@ import java.time.LocalDate
 
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import models.{Address, Description, HowManyBeneficiaries, NonUkAddress, UkAddress, UserAnswers}
-import org.slf4j.LoggerFactory
 import pages.companyoremploymentrelated.employment._
+import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
 class EmploymentRelatedBeneficiaryMapper {
 
-  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
+  private val logger = Logger(getClass)
 
   def apply(answers: UserAnswers): Option[EmploymentRelatedBeneficiary] = {
     val readFromUserAnswers: Reads[EmploymentRelatedBeneficiary] =
@@ -45,7 +45,7 @@ class EmploymentRelatedBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        logger.error("Failed to rehydrate EmploymentRelatedBeneficiary from UserAnswers", errors)
+        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate EmploymentRelatedBeneficiary from UserAnswers due to $errors")
         None
     }
   }
