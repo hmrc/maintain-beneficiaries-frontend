@@ -62,7 +62,7 @@ class CheckDetailsController @Inject()(
       mapper(request.userAnswers) match {
         case None =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error in mapping user answers to CompanyBeneficiary, isNew: $provisional")
+            s" error in mapping user answers to CompanyBeneficiary")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>

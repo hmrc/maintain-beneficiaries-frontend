@@ -83,7 +83,7 @@ class CheckDetailsController @Inject()(
       } recoverWith {
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error showing the user the check answers for employment beneficiary $index, isNew: $provisional ${e.getMessage}")
+            s" error showing the user the check answers for employment beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }

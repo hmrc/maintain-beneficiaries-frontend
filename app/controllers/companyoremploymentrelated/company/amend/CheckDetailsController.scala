@@ -82,7 +82,7 @@ class CheckDetailsController @Inject()(
       } recoverWith {
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error showing the user the check answers for company beneficiary $index, isNew: $provisional ${e.getMessage}")
+            s" error showing the user the check answers for company beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
@@ -103,7 +103,7 @@ class CheckDetailsController @Inject()(
           )
       }.getOrElse {
         logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-          s" error mapping user answers to company beneficiary $index, isNew: $provisional")
+          s" error mapping user answers to company beneficiary $index")
 
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
