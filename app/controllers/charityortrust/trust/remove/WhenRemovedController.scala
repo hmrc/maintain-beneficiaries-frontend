@@ -53,9 +53,9 @@ class WhenRemovedController @Inject()(
           val form = formProvider.withPrefixAndEntityStartDate("trustBeneficiary.whenRemoved", beneficiary.entityStart)
           Ok(view(form, index, beneficiary.name))
       } recoverWith {
-        case _ =>
+        case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error showing the user the trust beneficiary to remove, problem getting other beneficiary $index from trusts service")
+            s" error showing the user the trust beneficiary to remove, problem getting other beneficiary $index from trusts service ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
@@ -79,9 +79,9 @@ class WhenRemovedController @Inject()(
               }
           )
       } recoverWith {
-        case _ =>
+        case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error removing a trust beneficiary as could not get beneficiary $index from trusts service")
+            s" error removing a trust beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }

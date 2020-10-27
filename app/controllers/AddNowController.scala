@@ -63,8 +63,10 @@ class AddNowController @Inject()(
           Ok(view(preparedForm, beneficiaries.nonMaxedOutOptions))
 
       } recoverWith {
-        case _ =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}] unable add a new beneficiary due to an error getting beneficiaries from trusts")
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
@@ -98,8 +100,10 @@ class AddNowController @Inject()(
               }
           )
       } recoverWith {
-        case _ =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}] unable add a new beneficiary due to an error getting beneficiaries from trusts")
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }

@@ -79,9 +79,9 @@ class CheckDetailsController @Inject()(
             }
           }
       } recoverWith {
-        case _ =>
+        case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error showing the user the check answers for charity beneficiary $index, isNew: $provisional")
+            s" error showing the user the check answers for charity beneficiary $index, isNew: $provisional ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }

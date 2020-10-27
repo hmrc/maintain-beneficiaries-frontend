@@ -62,9 +62,9 @@ class RemoveCompanyBeneficiaryController @Inject()(
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.name))
       } recoverWith {
-        case _ =>
+        case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error getting company beneficiary $index from trusts service")
+            s" error getting company beneficiary $index from trusts service ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
@@ -102,9 +102,9 @@ class RemoveCompanyBeneficiaryController @Inject()(
                   }
                 }
             } recoverWith {
-              case _ =>
+              case e =>
                 logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-                  s" error removing a company beneficiary as could not get beneficiary $index from trusts service")
+                  s" error removing a company beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
                 Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
             }
