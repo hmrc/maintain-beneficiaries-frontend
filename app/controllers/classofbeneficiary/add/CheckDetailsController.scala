@@ -16,11 +16,12 @@
 
 package controllers.classofbeneficiary.add
 
-import config.FrontendAppConfig
+import config.{ErrorHandler, FrontendAppConfig}
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.classofbeneficiary.DescriptionRequiredAction
 import javax.inject.Inject
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -42,8 +43,11 @@ class CheckDetailsController @Inject()(
                                         playbackRepository: PlaybackRepository,
                                         printHelper: ClassOfBeneficiaryPrintHelper,
                                         mapper: ClassOfBeneficiaryMapper,
-                                        descriptionAction: DescriptionRequiredAction
+                                        descriptionAction: DescriptionRequiredAction,
+                                        errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
@@ -57,7 +61,10 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers) match {
         case None =>
-          Future.successful(InternalServerError)
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error in mapping user answers to ClassOfBeneficiary")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>
           connector.addClassOfBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

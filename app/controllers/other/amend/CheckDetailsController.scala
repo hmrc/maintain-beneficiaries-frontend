@@ -54,13 +54,14 @@ class CheckDetailsController @Inject()(
 
   private val logger = Logger(getClass)
 
+  private val provisional: Boolean = false
 
   private def render(userAnswers: UserAnswers,
                      index: Int,
                      name: String)
                     (implicit request: Request[AnyContent]): Result=
   {
-    val section: AnswerSection = printHelper(userAnswers, provisional = false, name)
+    val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(section, index))
   }
 
@@ -79,7 +80,7 @@ class CheckDetailsController @Inject()(
       } recoverWith {
         case _ =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-            s" error showing the user the check answers for other beneficiary $index")
+            s" error showing the user the check answers for other beneficiary $index, isNew: $provisional")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
@@ -100,7 +101,7 @@ class CheckDetailsController @Inject()(
           )
       }.getOrElse {
         logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
-          s" error mapping user answers to other beneficiary $index")
+          s" error mapping user answers to other beneficiary $index, isNew: $provisional")
 
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }

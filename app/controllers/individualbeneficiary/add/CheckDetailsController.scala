@@ -20,7 +20,9 @@ import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
+import handlers.ErrorHandler
 import javax.inject.Inject
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -40,8 +42,11 @@ class CheckDetailsController @Inject()(
                                         val appConfig: FrontendAppConfig,
                                         printHelper: IndividualBeneficiaryPrintHelper,
                                         mapper: IndividualBeneficiaryMapper,
-                                        nameAction: NameRequiredAction
+                                        nameAction: NameRequiredAction,
+                                        errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   private val provisional = true
 
@@ -57,7 +62,8 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers, provisional) match {
         case None =>
-          Future.successful(InternalServerError)
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}] error in mapping user answers to IndividualBeneficiary, isNew: $provisional")
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>
           connector.addIndividualBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

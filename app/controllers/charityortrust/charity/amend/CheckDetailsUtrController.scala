@@ -37,10 +37,12 @@ class CheckDetailsUtrController @Inject()(
                                         nameAction: NameRequiredAction
                                       ) extends FrontendBaseController with I18nSupport {
 
+  private val provisional: Boolean = false
+
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, provisional = false, request.beneficiaryName)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
       Ok(view(section, request.beneficiaryName))
   }
 

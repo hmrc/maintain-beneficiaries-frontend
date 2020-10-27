@@ -18,9 +18,11 @@ package controllers.classofbeneficiary.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.classofbeneficiary.RemoveYesNoPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -38,8 +40,11 @@ class RemoveClassOfBeneficiaryController @Inject()(
                                                     trustService: TrustService,
                                                     formProvider: RemoveIndexFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    view: RemoveIndexView
+                                                    view: RemoveIndexView,
+                                                    errorHandler: ErrorHandler
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   private def formRoute(index: Int): Call =
     controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
@@ -59,6 +64,12 @@ class RemoveClassOfBeneficiaryController @Inject()(
       trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
           Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+      } recoverWith {
+        case _ =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error getting class of beneficiary $index from trusts service")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
 
   }
@@ -80,9 +91,11 @@ class RemoveClassOfBeneficiaryController @Inject()(
             trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)).map(_ =>
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)).map { _ =>
+                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                      s" removed new class of beneficiary $index")
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-                  )
+                  }
                 } else {
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
@@ -91,6 +104,12 @@ class RemoveClassOfBeneficiaryController @Inject()(
                     Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url)
                   }
                 }
+            } recoverWith {
+              case _ =>
+                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  s" error removing a class of beneficiary as could not get beneficiary $index from trusts service")
+
+                Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))

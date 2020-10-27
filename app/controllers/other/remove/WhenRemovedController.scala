@@ -72,9 +72,11 @@ class WhenRemovedController @Inject()(
               Future.successful(BadRequest(view(formWithErrors, index, beneficiary.description)))
             },
             value =>
-              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index, value)).map(_ =>
+              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index, value)).map { _ =>
+                logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  s" removed existing other beneficiary $index")
                 Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-              )
+              }
           )
       } recoverWith {
         case _ =>

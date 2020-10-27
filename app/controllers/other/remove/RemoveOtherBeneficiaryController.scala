@@ -61,6 +61,12 @@ class RemoveOtherBeneficiaryController @Inject()(
       trustService.getOtherBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.description))
+      } recoverWith {
+        case _ =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error getting other beneficiary $index from trusts service")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
 
   }
@@ -82,9 +88,11 @@ class RemoveOtherBeneficiaryController @Inject()(
             trustService.getOtherBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index)).map(_ =>
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index)).map { _ =>
+                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                      s" removed new other beneficiary $index")
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-                  )
+                  }
                 } else {
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
