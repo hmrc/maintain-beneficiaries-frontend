@@ -21,6 +21,7 @@ import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.other.DescriptionRequiredAction
 import javax.inject.Inject
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -44,10 +45,14 @@ class CheckDetailsController @Inject()(
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val provisional: Boolean = true
+
+  private val logger = Logger(getClass)
+
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
 
-      val section: AnswerSection = printHelper(request.userAnswers, provisional = true, request.description)
+      val section: AnswerSection = printHelper(request.userAnswers, provisional, request.description)
       Ok(view(section))
   }
 
@@ -56,6 +61,9 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers) match {
         case None =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error in mapping user answers to OtherBeneficiary")
+
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>
           connector.addOtherBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>

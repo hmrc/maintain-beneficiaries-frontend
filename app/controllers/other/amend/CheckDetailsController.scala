@@ -23,6 +23,7 @@ import controllers.actions.other.DescriptionRequiredAction
 import extractors.OtherBeneficiaryExtractor
 import javax.inject.Inject
 import models.UserAnswers
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.PlaybackRepository
@@ -51,12 +52,16 @@ class CheckDetailsController @Inject()(
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val logger = Logger(getClass)
+
+  private val provisional: Boolean = false
+
   private def render(userAnswers: UserAnswers,
                      index: Int,
                      name: String)
                     (implicit request: Request[AnyContent]): Result=
   {
-    val section: AnswerSection = printHelper(userAnswers, provisional = false, name)
+    val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(section, index))
   }
 
@@ -72,6 +77,12 @@ class CheckDetailsController @Inject()(
           } yield {
               render(extractedF, index, other.description)
           }
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error showing the user the check answers for other beneficiary $index ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
@@ -88,6 +99,11 @@ class CheckDetailsController @Inject()(
           connector.amendOtherBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
-      }.getOrElse(Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate)))
+      }.getOrElse {
+        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          s" error mapping user answers to other beneficiary $index, isNew: $provisional")
+
+        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+      }
   }
 }

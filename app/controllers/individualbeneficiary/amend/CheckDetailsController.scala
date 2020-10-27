@@ -23,6 +23,7 @@ import controllers.actions.individual.NameRequiredAction
 import extractors.IndividualBeneficiaryExtractor
 import javax.inject.Inject
 import models.UserAnswers
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.PlaybackRepository
@@ -51,6 +52,8 @@ class CheckDetailsController @Inject()(
                                         errorHandler: ErrorHandler
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
+  private val logger = Logger(getClass)
+
   private val provisional = false
 
   private def render(userAnswers: UserAnswers,
@@ -71,6 +74,12 @@ class CheckDetailsController @Inject()(
             extractedF <- Future.fromTry(extractedAnswers)
             _ <- playbackRepository.set(extractedF)
           } yield render(extractedF, index, individual.name.displayName)
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error showing the user the check answers for individual beneficiary $index ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
@@ -87,6 +96,11 @@ class CheckDetailsController @Inject()(
           connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
-      }.getOrElse(Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate)))
+      }.getOrElse {
+        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          s" error mapping user answers to individual beneficiary $index, isNew: $provisional")
+
+        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+      }
   }
 }

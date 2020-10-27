@@ -18,9 +18,11 @@ package controllers.charityortrust.charity.remove
 
 import controllers.actions.StandardActionSets
 import forms.RemoveIndexFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.charityortrust.charity.RemoveYesNoPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,8 +40,11 @@ class RemoveCharityBeneficiaryController @Inject()(
                                                        trustService: TrustService,
                                                        formProvider: RemoveIndexFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
-                                                       view: RemoveIndexView
+                                                       view: RemoveIndexView,
+                                                       errorHandler: ErrorHandler
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   private val messagesPrefix: String = "removeCharityBeneficiary"
 
@@ -56,6 +61,12 @@ class RemoveCharityBeneficiaryController @Inject()(
       trustService.getCharityBeneficiary(request.userAnswers.utr, index).map {
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.name))
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error getting charity beneficiary $index from trusts service ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
 
   }
@@ -77,9 +88,11 @@ class RemoveCharityBeneficiaryController @Inject()(
             trustService.getCharityBeneficiary(request.userAnswers.utr, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CharityBeneficiary, index)).map(_ =>
+                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.CharityBeneficiary, index)).map { _ =>
+                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                      s" removed new charity beneficiary $index")
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-                  )
+                  }
                 } else {
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
@@ -88,6 +101,12 @@ class RemoveCharityBeneficiaryController @Inject()(
                     Redirect(controllers.charityortrust.charity.remove.routes.WhenRemovedController.onPageLoad(index))
                   }
                 }
+            } recoverWith {
+              case e =>
+                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  s" error removing a charity beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
+
+                Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))

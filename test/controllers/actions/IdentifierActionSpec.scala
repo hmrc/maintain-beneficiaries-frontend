@@ -71,7 +71,7 @@ class IdentifierActionSpec extends SpecBase {
           .thenReturn(authRetrievals(AffinityGroup.Agent, noEnrollment))
 
         val mockAuthService = mock[AuthenticationService]
-        when (mockAuthService.authenticateAgent()(any())).thenReturn(Future.successful(Left(Redirect("test-redirect-url"))))
+        when (mockAuthService.authenticateAgent()(any(), any())).thenReturn(Future.successful(Left(Redirect("test-redirect-url"))))
 
         val action = actionToTest(application, mockAuthService)
 

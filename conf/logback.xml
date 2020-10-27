@@ -49,7 +49,13 @@
 
     <loggern name="uk.gov.hmrc.play.bootstrap.audit.DefaultAuditConnector" level="OFF"/>
 
-    <logger name="application" level="WARN"/>
+    <logger name="controllers" level="INFO"/>
+    <logger name="mapping" level="INFO"/>
+    <logger name="services" level="INFO"/>
+    <logger name="models" level="INFO"/>
+    <logger name="extractors" level="INFO"/>
+    <logger name="repositories" level="INFO"/>
+    <logger name="connectors" level="INFO"/>
 
     <logger name="connector" level="INFO">
         <appender-ref ref="STDOUT"/>

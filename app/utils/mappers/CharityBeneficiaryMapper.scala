@@ -20,14 +20,14 @@ import java.time.LocalDate
 
 import models.beneficiaries.CharityBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
-import org.slf4j.LoggerFactory
 import pages.charityortrust.charity._
+import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
 class CharityBeneficiaryMapper {
 
-  private val logger = LoggerFactory.getLogger("application." + this.getClass.getCanonicalName)
+  private val logger = Logger(getClass)
 
   def apply(answers: UserAnswers): Option[CharityBeneficiary] = {
     val readFromUserAnswers: Reads[CharityBeneficiary] =
@@ -52,7 +52,7 @@ class CharityBeneficiaryMapper {
       case JsSuccess(value, _) =>
         Some(value)
       case JsError(errors) =>
-        logger.error("Failed to rehydrate CharityBeneficiary from UserAnswers", errors)
+        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate CharityBeneficiary from UserAnswers due to $errors")
         None
     }
   }

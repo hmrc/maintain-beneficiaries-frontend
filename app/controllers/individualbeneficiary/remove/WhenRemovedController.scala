@@ -18,8 +18,10 @@ package controllers.individualbeneficiary.remove
 
 import controllers.actions.StandardActionSets
 import forms.DateRemovedFromTrustFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
@@ -35,8 +37,11 @@ class WhenRemovedController @Inject()(
                                        trust: TrustService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: WhenRemovedView,
-                                       trustService: TrustService
+                                       trustService: TrustService,
+                                       errorHandler: ErrorHandler
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
@@ -45,6 +50,12 @@ class WhenRemovedController @Inject()(
         beneficiary =>
           val form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", beneficiary.entityStart)
           Ok(view(form, index, beneficiary.name.displayName))
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error showing the user the individual beneficiary to remove, problem getting individual beneficiary $index from trusts service ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
@@ -58,11 +69,20 @@ class WhenRemovedController @Inject()(
             formWithErrors => {
               Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name.displayName)))
             },
-            value =>
-              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map(_ =>
+            value => {
+              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map { _ =>
+                logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  s" removed existing individual beneficiary $index")
                 Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-              )
+              }
+            }
           )
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error removing an individual beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 }

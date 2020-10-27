@@ -18,11 +18,13 @@ package controllers
 
 import controllers.actions._
 import forms.AddBeneficiaryTypeFormProvider
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.NormalMode
 import models.beneficiaries.TypeOfBeneficiaryToAdd
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import pages.AddNowPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,10 +42,13 @@ class AddNowController @Inject()(
                                   view: AddNowView,
                                   formProvider: AddBeneficiaryTypeFormProvider,
                                   repository: PlaybackRepository,
-                                  trustService: TrustService
+                                  trustService: TrustService,
+                                  errorHandler: ErrorHandler
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[TypeOfBeneficiaryToAdd] = formProvider()
+
+  private val logger = Logger(getClass)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
@@ -57,6 +62,12 @@ class AddNowController @Inject()(
 
           Ok(view(preparedForm, beneficiaries.nonMaxedOutOptions))
 
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
@@ -88,6 +99,12 @@ class AddNowController @Inject()(
                 }
               }
           )
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 }

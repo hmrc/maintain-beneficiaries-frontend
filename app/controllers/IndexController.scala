@@ -22,6 +22,7 @@ import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import javax.inject.Inject
 import models.UserAnswers
+import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -35,6 +36,8 @@ class IndexController @Inject()(
                                  cacheRepository : PlaybackRepository,
                                  connector: TrustConnector)
                                (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  private val logger = Logger(getClass)
 
   def onPageLoad(utr: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(utr) andThen actions.getData).async {
       implicit request =>
@@ -52,6 +55,7 @@ class IndexController @Inject()(
           }
           _ <- cacheRepository.set(ua)
         } yield {
+          logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $utr] user has started maintaining beneficiaries")
           Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
         }
     }

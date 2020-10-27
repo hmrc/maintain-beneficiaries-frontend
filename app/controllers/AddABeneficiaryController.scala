@@ -20,9 +20,11 @@ import config.FrontendAppConfig
 import connectors.TrustStoreConnector
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
 import models.{AddABeneficiary, Enumerable}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,35 +48,47 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            completeView: MaxedOutBeneficiariesView,
                                            val appConfig: FrontendAppConfig,
-                                           trustStoreConnector: TrustStoreConnector
+                                           trustStoreConnector: TrustStoreConnector,
+                                            errorHandler: ErrorHandler
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
 
   val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
+  private val logger = Logger(getClass)
+
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      for {
+      (for {
         beneficiaries <- trustService.getBeneficiaries(request.userAnswers.utr)
         updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
         _ <- repository.set(updatedAnswers)
       } yield {
         beneficiaries match {
           case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
+            logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+              s" asking user if they want to add a beneficiary, no beneficiaries in trust")
+
             Ok(yesNoView(yesNoForm))
           case all: Beneficiaries =>
 
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
             if (beneficiaries.nonMaxedOutOptions.isEmpty) {
+              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                s" showing user their beneficiaries, maximum number of beneficiaries reached")
+
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
                 heading = all.addToHeading
               ))
             } else {
+              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                s" showing user their beneficiaries, user is not at the maximum beneficiaries")
+
               Ok(addAnotherView(
                 form = addAnotherForm,
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
@@ -84,6 +98,12 @@ class AddABeneficiaryController @Inject()(
               ))
             }
         }
+      }) recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable to show add to page due to an error getting beneficiaries from trusts ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
@@ -149,6 +169,12 @@ class AddABeneficiaryController @Inject()(
               }
           }
         )
+      } recoverWith {
+        case e =>
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 

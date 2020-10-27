@@ -20,6 +20,7 @@ import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
 import javax.inject.Inject
 import models.{TrustAuthInternalServerError, TrustAuthResponse}
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -36,17 +37,23 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
 
   val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
 
+  private val logger = Logger(getClass)
+
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised")recoverWith {
-      case _ => Future.successful(TrustAuthInternalServerError)
+    http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
+      case e =>
+        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}")
+        Future.successful(TrustAuthInternalServerError)
     }
   }
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
     http.GET[TrustAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
-      case _ => Future.successful(TrustAuthInternalServerError)
+      case e =>
+        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}")
+        Future.successful(TrustAuthInternalServerError)
     }
   }
 }
