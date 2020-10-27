@@ -42,8 +42,8 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
     http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
-      case _ =>
-        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception")
+      case e =>
+        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)
     }
   }
@@ -51,8 +51,8 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
     http.GET[TrustAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
-      case _ =>
-        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception")
+      case e =>
+        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)
     }
   }
