@@ -33,12 +33,17 @@
             </a>
         </dd>
     }
-    @data.removeUrl.map{ removeUrl =>
-        <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__remove">
-            <a href="@removeUrl">
-                <span aria-hidden="true">@data.removeLabel</span>
-                <span class="visually-hidden">@messages("site.hidden-delete", data.name)</span>
-            </a>
-        </dd>
+    @if(data.removeUrl.isDefined){
+    <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__remove">
+        <a href="@data.removeUrl">
+            <span aria-hidden="true">@data.removeLabel</span>
+            <span class="visually-hidden">@messages("site.hidden-delete", data.name)</span>
+        </a>
+    </dd>
+    } else {
+    <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__remove">
+        <span aria-hidden="true">@messages("site.cannotRemove")</span>
+        <span class="visually-hidden">@messages("site.cannotRemove-hidden", data.name)</span>
+    </dd>
     }
 </div>
