@@ -21,7 +21,6 @@
     inputClass: Option[String] = None,
     inputMode: Option[String] = None,
     hint: Option[String] = None,
-    readerHint: Option[String] = None,
     labelClass: Option[String] = None,
     symbol: Option[String] = None,
     optionalHtmlContent: Option[Html] = None,
@@ -43,7 +42,7 @@
     @if(optionalHtmlContent.nonEmpty){@optionalHtmlContent}
     @if(hint.nonEmpty){
         <div id="@{field.id}_hint">
-            <span class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint</span>
+            <span class="form-hint form-field">@hint</span>
         </div>
     }
     @field.errors.map { error =>

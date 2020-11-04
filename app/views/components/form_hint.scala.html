@@ -18,12 +18,11 @@
 
 @(
     hint: Option[String] = None,
-    readerHint: Option[String] = None,
     link: Option[Link] = None
 )(implicit messages: Messages)
 
 @if(hint.nonEmpty) {
-  <span id="form-hint" class="form-hint" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
+  <span id="form-hint" class="form-hint">@hint
   @link.map { l =>
     <a id="link" href="@l.url" target="_blank">@l.text</a>
   }
