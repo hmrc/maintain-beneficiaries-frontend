@@ -16,16 +16,34 @@
 
 package models
 
-import generators.{Generators, ModelGenerators}
-import org.scalatest.{MustMatchers, WordSpec}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import base.SpecBase
 
-class NameSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with ModelGenerators with Generators {
-  "displayName properties" in {
-    forAll(arbitraryName.arbitrary) { (name:Name) =>
-      name.displayName must startWith(name.firstName + " ")
-      name.displayName must endWith(" " + name.lastName)
-      name.displayName.length mustBe name.firstName.length + name.lastName.length + 1
+class NameSpec extends SpecBase {
+
+  private val nameWithNoMiddleName: Name = Name("Joe", None, "Bloggs")
+  private val nameWithMiddleName: Name = Name("Joe", Some("Joseph"), "Bloggs")
+
+  ".displayName" must {
+    "display first name and last name only" when {
+      "has a middle name" in {
+        nameWithMiddleName.displayName mustBe "Joe Bloggs"
+      }
+
+      "has no middle name" in {
+        nameWithNoMiddleName.displayName mustBe "Joe Bloggs"
+      }
+    }
+  }
+
+  ".displayFullName" must {
+    "display full name" when {
+      "has a middle name" in {
+        nameWithMiddleName.displayFullName mustBe "Joe Joseph Bloggs"
+      }
+
+      "has no middle name" in {
+        nameWithNoMiddleName.displayFullName mustBe "Joe Bloggs"
+      }
     }
   }
 }
