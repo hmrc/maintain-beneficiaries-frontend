@@ -22,13 +22,13 @@ import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.individualbeneficiary.remove.RemoveYesNoPage
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.individualbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,11 +42,9 @@ class RemoveIndividualBeneficiaryController @Inject()(
                                                        val controllerComponents: MessagesControllerComponents,
                                                        view: RemoveIndexView,
                                                        errorHandler: ErrorHandler
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val messagesPrefix: String = "removeIndividualBeneficiary"
-
-  private val logger = Logger(getClass)
 
   private val form = formProvider.apply(messagesPrefix)
 

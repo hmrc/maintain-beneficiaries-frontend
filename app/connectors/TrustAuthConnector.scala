@@ -20,9 +20,9 @@ import com.google.inject.ImplementedBy
 import config.FrontendAppConfig
 import javax.inject.Inject
 import models.{TrustAuthInternalServerError, TrustAuthResponse}
-import play.api.Logger
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.Logging
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,11 +33,9 @@ trait TrustAuthConnector {
 }
 
 class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConfig)
-  extends TrustAuthConnector {
+  extends TrustAuthConnector with Logging {
 
-  val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
-
-  private val logger = Logger(getClass)
+  private val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
 
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {

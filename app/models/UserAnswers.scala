@@ -19,7 +19,6 @@ package models
 import java.time.{LocalDate, LocalDateTime}
 
 import pages.AddNowPage
-import play.api.Logger
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
@@ -66,7 +65,7 @@ final case class UserAnswers(
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = setValue(page, value)
 
-  private def setValue[A](page: Settable[A], value: A)(implicit writes: Writes[A]) = {
+  private def setValue[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Success(jsValue)

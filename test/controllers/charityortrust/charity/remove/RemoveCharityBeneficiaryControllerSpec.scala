@@ -183,7 +183,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
           .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, beneficiaries, Nil)))
 
         when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200)))
+          .thenReturn(Future.successful(HttpResponse(200, "")))
 
         val request =
           FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index).url)

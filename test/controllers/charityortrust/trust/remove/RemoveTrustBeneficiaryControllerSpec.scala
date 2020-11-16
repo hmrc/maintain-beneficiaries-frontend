@@ -179,7 +179,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
           .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, beneficiaries, Nil, Nil)))
 
         when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200)))
+          .thenReturn(Future.successful(HttpResponse(200, "")))
 
         val request =
           FakeRequest(POST, routes.RemoveTrustBeneficiaryController.onSubmit(index).url)

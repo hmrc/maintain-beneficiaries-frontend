@@ -18,18 +18,16 @@ package utils.mappers
 
 import java.time.LocalDate
 
+import models._
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{Address, CombinedPassportOrIdCard, IdCard, IndividualIdentification, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class IndividualBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class IndividualBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers, provisional: Boolean): Option[IndividualBeneficiary] = {
 

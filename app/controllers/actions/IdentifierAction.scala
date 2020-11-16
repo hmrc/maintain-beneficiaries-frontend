@@ -17,9 +17,8 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import config.FrontendAppConfig
 import models.requests.{AgentUser, IdentifierRequest, OrganisationUser}
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import services.AuthenticationService
@@ -35,19 +34,15 @@ import scala.concurrent.{ExecutionContext, Future}
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
 
 class AuthenticatedIdentifierAction @Inject()(
-                                               config: FrontendAppConfig,
                                                trustsAuthFunctions: TrustsAuthorisedFunctions,
                                                val parser: BodyParsers.Default,
                                                playbackAuthenticationService: AuthenticationService
-                                             )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction {
-
-  private val logger = Logger(getClass)
+                                             )(implicit val executionContext: ExecutionContext) extends IdentifierAction with Logging {
 
   private def authoriseAgent[A](internalId: String,
                                 enrolments: Enrolments,
                                 block: IdentifierRequest[A] => Future[Result])
-                               (implicit request: Request[A], hc: HeaderCarrier) = {
+                               (implicit request: Request[A], hc: HeaderCarrier): Future[Result] = {
 
     playbackAuthenticationService.authenticateAgent() flatMap {
       case Right(arn) => block(IdentifierRequest(request, AgentUser(internalId, enrolments, arn)))

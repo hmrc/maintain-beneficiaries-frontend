@@ -22,13 +22,11 @@ import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.other._
 import pages.other.add.StartDatePage
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class OtherBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class OtherBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers): Option[OtherBeneficiary] = {
     val readFromUserAnswers: Reads[OtherBeneficiary] =

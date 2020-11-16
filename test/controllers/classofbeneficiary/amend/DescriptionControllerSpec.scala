@@ -48,7 +48,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
   when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
     .thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date, provisional = false)), Nil, Nil, Nil, Nil, Nil)))
   when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any()))
-    .thenReturn(Future.successful(HttpResponse(OK)))
+    .thenReturn(Future.successful(HttpResponse(OK, "")))
 
   val mockTrustService: TrustService = mock[TrustService]
 

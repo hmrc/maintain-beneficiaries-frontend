@@ -22,33 +22,31 @@ import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.companyoremploymentrelated.employment.RemoveYesNoPage
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.companyoremploymentrelated.employment.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveEmploymentBeneficiaryController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    repository: PlaybackRepository,
-                                                    standardActionSets: StandardActionSets,
-                                                    trustService: TrustService,
-                                                    formProvider: RemoveIndexFormProvider,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: RemoveIndexView,
-                                                    errorHandler: ErrorHandler
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                       override val messagesApi: MessagesApi,
+                                                       repository: PlaybackRepository,
+                                                       standardActionSets: StandardActionSets,
+                                                       trustService: TrustService,
+                                                       formProvider: RemoveIndexFormProvider,
+                                                       val controllerComponents: MessagesControllerComponents,
+                                                       view: RemoveIndexView,
+                                                       errorHandler: ErrorHandler
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val messagesPrefix: String = "removeEmploymentBeneficiary"
 
   private val form = formProvider.apply(messagesPrefix)
-
-  private val logger = Logger(getClass)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>

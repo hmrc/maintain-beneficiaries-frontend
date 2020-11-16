@@ -21,13 +21,11 @@ import java.time.LocalDate
 import models.beneficiaries.CharityBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.charityortrust.charity._
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class CharityBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class CharityBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers): Option[CharityBeneficiary] = {
     val readFromUserAnswers: Reads[CharityBeneficiary] =

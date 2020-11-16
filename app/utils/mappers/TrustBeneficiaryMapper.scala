@@ -21,13 +21,11 @@ import java.time.LocalDate
 import models.beneficiaries.TrustBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.charityortrust.trust._
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class TrustBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class TrustBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers): Option[TrustBeneficiary] = {
     val readFromUserAnswers: Reads[TrustBeneficiary] =
