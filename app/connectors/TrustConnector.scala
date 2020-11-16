@@ -18,11 +18,11 @@ package connectors
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.{RemoveBeneficiary, TrustDetails}
 import models.beneficiaries._
-import play.api.libs.json.{JsString, JsValue, Json, Writes}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import models.{RemoveBeneficiary, TrustDetails}
+import play.api.libs.json.{JsString, JsValue, Json}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +43,7 @@ class TrustConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
   private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"${config.trustsUrl}/trusts/amend-unidentified-beneficiary/$utr/$index"
 
   def amendClassOfBeneficiary(utr: String, index: Int, description: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    http.POST[JsString, HttpResponse](amendClassOfBeneficiaryUrl(utr, index), JsString(description))(implicitly[Writes[JsString]], HttpReads.readRaw, hc, ec)
+    http.POST[JsString, HttpResponse](amendClassOfBeneficiaryUrl(utr, index), JsString(description))
   }
 
   private def addClassOfBeneficiaryUrl(utr: String) = s"${config.trustsUrl}/trusts/add-unidentified-beneficiary/$utr"

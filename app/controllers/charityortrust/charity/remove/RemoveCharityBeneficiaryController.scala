@@ -22,29 +22,27 @@ import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.charityortrust.charity.RemoveYesNoPage
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.charityortrust.charity.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveCharityBeneficiaryController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       repository: PlaybackRepository,
-                                                       standardActionSets: StandardActionSets,
-                                                       trustService: TrustService,
-                                                       formProvider: RemoveIndexFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       view: RemoveIndexView,
-                                                       errorHandler: ErrorHandler
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private val logger = Logger(getClass)
+                                                    override val messagesApi: MessagesApi,
+                                                    repository: PlaybackRepository,
+                                                    standardActionSets: StandardActionSets,
+                                                    trustService: TrustService,
+                                                    formProvider: RemoveIndexFormProvider,
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    view: RemoveIndexView,
+                                                    errorHandler: ErrorHandler
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val messagesPrefix: String = "removeCharityBeneficiary"
 

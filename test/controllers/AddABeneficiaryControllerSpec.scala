@@ -159,7 +159,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
       Future.successful(individualBeneficiary)
 
     override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
-      Future.successful(HttpResponse(OK))
+      Future.successful(HttpResponse(OK, ""))
 
     override def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] =
       Future.successful(charityBeneficiary)
@@ -326,7 +326,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
           FakeRequest(POST, submitAnotherRoute)
             .withFormUrlEncodedBody(("value", AddABeneficiary.NoComplete.toString))
 
-        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse.apply(200)))
+        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse(200, "")))
 
         val result = route(application, request).value
 
@@ -529,7 +529,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         val request = FakeRequest(POST, submitCompleteRoute)
 
-        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse.apply(200)))
+        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse(200, "")))
 
         val result = route(application, request).value
 

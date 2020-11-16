@@ -21,13 +21,11 @@ import java.time.LocalDate
 import models.beneficiaries.CompanyBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.companyoremploymentrelated.company._
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class CompanyBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class CompanyBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers): Option[CompanyBeneficiary] = {
     val readFromUserAnswers: Reads[CompanyBeneficiary] =

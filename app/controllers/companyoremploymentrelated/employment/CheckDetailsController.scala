@@ -16,15 +16,16 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import config.{ErrorHandler, FrontendAppConfig}
+import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.employment.NameRequiredAction
+import handlers.ErrorHandler
 import javax.inject.Inject
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.EmploymentRelatedBeneficiaryMapper
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
@@ -43,11 +44,9 @@ class CheckDetailsController @Inject()(
                                         mapper: EmploymentRelatedBeneficiaryMapper,
                                         nameAction: NameRequiredAction,
                                         errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val provisional: Boolean = true
-
-  private val logger = Logger(getClass)
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>

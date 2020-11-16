@@ -21,13 +21,11 @@ import java.time.LocalDate
 import models.UserAnswers
 import models.beneficiaries.ClassOfBeneficiary
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsError, JsSuccess, Reads}
 
-class ClassOfBeneficiaryMapper {
-
-  private val logger = Logger(getClass)
+class ClassOfBeneficiaryMapper extends Logging {
 
   def apply(answers: UserAnswers): Option[ClassOfBeneficiary] = {
     val readFromUserAnswers: Reads[ClassOfBeneficiary] =

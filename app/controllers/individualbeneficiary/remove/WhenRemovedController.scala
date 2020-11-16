@@ -21,11 +21,11 @@ import forms.DateRemovedFromTrustFormProvider
 import handlers.ErrorHandler
 import javax.inject.Inject
 import models.{BeneficiaryType, RemoveBeneficiary}
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.individualbeneficiary.remove.WhenRemovedView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,9 +39,7 @@ class WhenRemovedController @Inject()(
                                        view: WhenRemovedView,
                                        trustService: TrustService,
                                        errorHandler: ErrorHandler
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private val logger = Logger(getClass)
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>

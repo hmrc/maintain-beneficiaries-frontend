@@ -18,7 +18,6 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import play.api.Logger
 import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedFunctions, NoActiveSession}
@@ -27,8 +26,9 @@ class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnec
                                           val config: FrontendAppConfig) extends AuthorisedFunctions {
 
   def recoverFromAuthorisation: PartialFunction[Throwable, Result] = {
-    case _: NoActiveSession => redirectToLogin
-    case e: AuthorisationException =>
+    case _: NoActiveSession =>
+      redirectToLogin
+    case _: AuthorisationException =>
       Redirect(controllers.routes.UnauthorisedController.onPageLoad())
   }
 

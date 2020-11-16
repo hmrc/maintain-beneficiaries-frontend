@@ -16,19 +16,20 @@
 
 package controllers.companyoremploymentrelated.employment.amend
 
-import config.{ErrorHandler, FrontendAppConfig}
+import config.FrontendAppConfig
 import connectors.TrustConnector
 import controllers.actions._
 import controllers.actions.employment.NameRequiredAction
 import extractors.EmploymentRelatedBeneficiaryExtractor
+import handlers.ErrorHandler
 import javax.inject.Inject
 import models.UserAnswers
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import repositories.PlaybackRepository
 import services.TrustService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.EmploymentRelatedBeneficiaryMapper
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
@@ -50,9 +51,7 @@ class CheckDetailsController @Inject()(
                                         nameAction: NameRequiredAction,
                                         extractor: EmploymentRelatedBeneficiaryExtractor,
                                         errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
-
-  private val logger = Logger(getClass)
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val provisional: Boolean = false
 

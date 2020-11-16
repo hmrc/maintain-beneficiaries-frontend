@@ -17,10 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
-import config.{ErrorHandler, FrontendAppConfig}
+import config.FrontendAppConfig
+import handlers.ErrorHandler
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 class LanguageSwitchController @Inject()(
                                           appConfig: FrontendAppConfig,
