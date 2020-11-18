@@ -27,7 +27,7 @@ class CheckAnswersFormattersSpec extends SpecBase {
 
   "CheckAnswersFormatters" when {
 
-    ".dateFormatter" when {
+    ".formatDate" when {
 
       def messages(langCode: String): MessagesImpl = {
         val lang: Lang = Lang(langCode)
