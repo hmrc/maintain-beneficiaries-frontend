@@ -17,6 +17,7 @@
 package utils.print
 
 import java.time.{LocalDate => JavaDate}
+import java.util.Calendar
 
 import javax.inject.Inject
 import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, IdentificationDetailOptions, NonUkAddress, Passport, UkAddress}
@@ -30,7 +31,12 @@ import utils.countryOptions.CountryOptions
 class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils) {
 
   def formatDate(date: JavaDate)(implicit messages: Messages): String = {
-    val convertedDate: JodaDate = JodaDate.parse(date.toString)
+    def calendar: Calendar = {
+      val c = Calendar.getInstance()
+      c.set(date.getYear, date.getMonthValue - 1, date.getDayOfMonth)
+      c
+    }
+    val convertedDate: JodaDate = JodaDate.fromCalendarFields(calendar)
     languageUtils.Dates.formatDate(convertedDate)
   }
 
