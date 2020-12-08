@@ -14,15 +14,18 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    config: FrontendAppConfig
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("trustNotClaimed.title")
-    ) {
+) {
 
     @components.back_link()
 
@@ -40,7 +43,7 @@
         <li class="bold">@messages("trustNotClaimed.bullet.2.title")</li>
         <p>@messages("trustNotClaimed.bullet.2.p1")</p>
         <p>@messages("trustNotClaimed.bullet.2.p2")</p>
-        <p>@messages("trustNotClaimed.bullet.2.p3") <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts" target="_blank">@messages("trustNotClaimed.bullet.2.p3.a")</a></p>
+        <p>@messages("trustNotClaimed.bullet.2.p3") <a href="@config.helplineUrl" target="_blank">@messages("trustNotClaimed.bullet.2.p3.a")</a></p>
         <p>@messages("trustNotClaimed.bullet.2.p4") <a href="@controllers.routes.IndexController.onPageLoad(utr)">@messages("trustNotClaimed.bullet.2.p4.a")</a></p>
     </ol>
 

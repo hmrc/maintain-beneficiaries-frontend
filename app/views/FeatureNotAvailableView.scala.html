@@ -14,22 +14,25 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    config: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("featureNotAvailable.title")
-    ) {
+) {
 
-@components.back_link()
+    @components.back_link()
 
-@components.heading("featureNotAvailable.heading")
+    @components.heading("featureNotAvailable.heading")
 
-<p>@messages("featureNotAvailable.p1") <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts" target="_blank">@messages("featureNotAvailable.link")</a></p>
+    <p>@messages("featureNotAvailable.p1") <a href="@config.helplineUrl" target="_blank">@messages("featureNotAvailable.link")</a></p>
 
-<p>@messages("featureNotAvailable.p2")</p>
+    <p>@messages("featureNotAvailable.p2")</p>
 
 }
