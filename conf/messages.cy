@@ -165,19 +165,21 @@ entities.beneficiaries.charity = Elusen a enwyd
 entities.beneficiaries.company = Cwmni a enwyd
 entities.beneficiaries.employmentRelated = Yn ymwneud â chyflogaeth
 entities.beneficiaries.other = Buddiolwr arall
+
 classOfBeneficiary.description.default = dosbarth y buddiolwyr
 classOfBeneficiary.description.title = Beth yw’r disgrifiad ar gyfer dosbarth y buddiolwyr?
 classOfBeneficiary.description.heading = Beth yw’r disgrifiad ar gyfer dosbarth y buddiolwyr?
 classOfBeneficiary.description.checkYourAnswersLabel = Beth yw’r disgrifiad ar gyfer dosbarth y buddiolwyr?
 classOfBeneficiary.description.hint = Mae’n rhaid i hwn fod yn 56 o gymeriadau neu lai. Er enghraifft wyrion ac wyresau’r dyfodol a gor-wyrion a gor-wyresau’r dyfodol.
 classOfBeneficiary.description.error.required = Nodwch y disgrifiad ar gyfer dosbarth y buddiolwyr
-classOfBeneficiary.description.error.invalidFormat = Mae’n rhaid i ddisgrifiad y dosbarth yn y weithred ymddiriedolaeth gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+classOfBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad ar gyfer dosbarth y buddiolwyr gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 classOfBeneficiary.description.error.length = Mae’n rhaid i’r disgrifiad ar gyfer dosbarth y buddiolwyr fod yn 56 cymeriad neu lai
 classOfBeneficiary.description.return.link = Dychwelyd i ychwanegu buddiolwr
+
 classOfBeneficiary.entityStart.title = Pryd ychwanegwyd dosbarth y buddiolwyr fel buddiolwr?
 classOfBeneficiary.entityStart.heading = Pryd ychwanegwyd {0} fel buddiolwr?
 classOfBeneficiary.entityStart.checkYourAnswersLabel = Pryd ychwanegwyd {0} fel buddiolwr?
-classOfBeneficiary.entityStart.hint = Gwiriwch y weithred ymddiriedolaeth neu’r ddogfen pŵer penodi. Er enghraifft, rhifau 31 3 1980
+classOfBeneficiary.entityStart.hint = Gwiriwch y weithred ymddiriedolaeth neu’r ddogfen pŵer penodi. Er enghraifft, 31 3 1980.
 classOfBeneficiary.entityStart.error.required.all = Nodwch y dyddiad yr ychwanegwyd dosbarth y buddiolwyr at yr ymddiriedolaeth
 classOfBeneficiary.entityStart.error.required.two = Mae’n rhaid i’r dyddiad yr ychwanegwyd dosbarth y buddiolwyr at yr ymddiriedolaeth gynnwys {0} a {1}
 classOfBeneficiary.entityStart.error.required = Mae’n rhaid i’r dyddiad yr ychwanegwyd dosbarth y buddiolwyr at yr ymddiriedolaeth gynnwys {0}
@@ -198,6 +200,7 @@ classOfBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y ty
 classOfBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd dosbarth y buddiolwyr o’r ymddiriedolaeth
 classOfBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd dosbarth y buddiolwyr o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 classOfBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd dosbarth y buddiolwyr fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
 individualBeneficiary.name.default = y buddiolwr unigol
 individualBeneficiary.return.link = Dychwelyd i ychwanegu buddiolwr
 individualBeneficiary.name.checkYourAnswersLabel = Beth yw enw’r unigolyn?
@@ -395,7 +398,7 @@ charityBeneficiary.discretionYesNo.error.required = Dewiswch ‘Iawn’ os oes g
 charityBeneficiary.shareOfIncome.title = Pa ganran o asedion yr ymddiriedolaeth y mae gan fuddiolwr yr elusen hawl iddi?
 charityBeneficiary.shareOfIncome.heading = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
 charityBeneficiary.shareOfIncome.checkYourAnswersLabel = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
-charityBeneficiary.shareOfIncome.hint = Talgrynnwch hwn i lawr rif cyfan
+charityBeneficiary.shareOfIncome.hint = Talgrynnwch hyn i lawr i rif cyfan.
 charityBeneficiary.shareOfIncome.error.required = Nodwch pa ganran o asedion yr ymddiriedolaeth y mae gan fuddiolwr yr elusen hawl iddi
 charityBeneficiary.shareOfIncome.error.integer = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan fuddiolwr yr elusen hawl iddi fod yn rhif cyfan
 charityBeneficiary.shareOfIncome.error.non_numeric = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan fuddiolwr yr elusen hawl iddi fod yn rhif cyfan
@@ -404,10 +407,12 @@ charityBeneficiary.addressYesNo.title = A ydych yn gwybod cyfeiriad buddiolwr yr
 charityBeneficiary.addressYesNo.heading = A ydych yn gwybod cyfeiriad {0}?
 charityBeneficiary.addressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad {0}?
 charityBeneficiary.addressYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad buddiolwr yr elusen
-charityBeneficiary.addressUkYesNo.title = A yw cyfeiriad buddiolwr yr elusen yn y DU?
+
+charityBeneficiary.addressUkYesNo.title = A yw cyfeiriad buddiolwr yr ymddiriedolaeth yn y DU?
 charityBeneficiary.addressUkYesNo.heading = A yw cyfeiriad {0} yn y DU?
 charityBeneficiary.addressUkYesNo.checkYourAnswersLabel = A yw cyfeiriad {0} yn y DU?
-charityBeneficiary.addressUkYesNo.error.required = Dewiswch ‘Iawn’ os yw cyfeiriad buddiolwr yr elusen yn y DU
+charityBeneficiary.addressUkYesNo.error.required = Dewiswch ‘Iawn’ os yw cyfeiriad buddiolwr yr ymddiriedolaeth yn y DU
+
 charityBeneficiary.ukAddress.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
 charityBeneficiary.nonUkAddress.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
 charityBeneficiary.startDate.title = Pryd ychwanegwyd buddiolwr yr elusen fel buddiolwr?
@@ -439,13 +444,15 @@ charityBeneficiary.checkDetails.utr.p3 = Pan ofynnwyd am y dyddiad yr ychwanegwy
 removeCharityBeneficiary.title = A ydych yn siŵr eich bod am dynnu buddiolwr yr elusen?
 removeCharityBeneficiary.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeCharityBeneficiary.error.required = Dewiswch ‘Iawn’ os ydych am dynnu buddiolwr yr elusen
+
 trustBeneficiary.name.default = buddiolwr yr ymddiriedolaeth
 trustBeneficiary.name.title = Beth yw enw’r ymddiriedolaeth?
 trustBeneficiary.name.heading = Beth yw enw’r ymddiriedolaeth?
 trustBeneficiary.name.checkYourAnswersLabel = Beth yw enw’r ymddiriedolaeth?
 trustBeneficiary.name.error.required = Nodwch enw’r ymddiriedolaeth
-trustBeneficiary.name.error.invalidFormat = Mae’n rhaid i enw’r ymddiriedolaeth gynnwys y llythrennau a i z, rhifau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+trustBeneficiary.name.error.invalidFormat = Mae’n rhaid i enw’r ymddiriedolaeth gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 trustBeneficiary.name.error.length = Mae’n rhaid i enw’r ymddiriedolaeth fod yn 105 o gymeriadau neu lai
+
 trustBeneficiary.discretionYesNo.title = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai buddiolwr yr ymddiriedolaeth ei gael?
 trustBeneficiary.discretionYesNo.heading = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai {0} ei gael?
 trustBeneficiary.discretionYesNo.checkYourAnswersLabel = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai {0} ei gael?
@@ -498,40 +505,47 @@ trustBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y tynn
 trustBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd buddiolwr yr ymddiriedolaeth o’r ymddiriedolaeth
 trustBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr yr ymddiriedolaeth o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 trustBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr yr ymddiriedolaeth fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
 otherBeneficiary.description.default = y buddiolwr arall
-otherBeneficiary.description.title = Beth yw’r disgrifiad o’r buddiolwr eraill?
-otherBeneficiary.description.heading = Beth yw’r disgrifiad o’r buddiolwr eraill?
-otherBeneficiary.description.checkYourAnswersLabel = Beth yw’r disgrifiad o’r buddiolwr eraill?
-otherBeneficiary.description.hint = Peidiwch â chynnwys unigolion penodol neu benodol rhaid iddynt gael eu rhestru fel buddiolwyr unigol. Mae’n rhaid i hwn fod yn 70 o gymeriadau neu lai.
+otherBeneficiary.description.title = Beth yw’r disgrifiad o’r buddiolwr arall?
+otherBeneficiary.description.heading = Beth yw’r disgrifiad o’r buddiolwr arall?
+otherBeneficiary.description.checkYourAnswersLabel = Beth yw’r disgrifiad o’r buddiolwr arall?
+otherBeneficiary.description.hint = Peidiwch â chynnwys unigolion a enwyd nac unigolion penodol – rhaid iddynt gael eu rhestru fel buddiolwyr unigol. Mae’n rhaid i hwn fod yn 70 o gymeriadau neu lai.
 otherBeneficiary.description.error.required = Nodwch y disgrifiad o’r buddiolwr arall
 otherBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad o’r buddiolwr arall gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 otherBeneficiary.description.error.length = Mae’n rhaid i’r disgrifiad o’r buddiolwr arall fod yn 70 o gymeriadau neu lai
+
 otherBeneficiary.discretionYesNo.title = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai’r buddiolwr hwn ei gael?
-otherBeneficiary.discretionYesNo.heading = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai’r buddiolwr hwn ei gael?
-otherBeneficiary.discretionYesNo.checkYourAnswersLabel = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai’r buddiolwr hwn ei gael?
+otherBeneficiary.discretionYesNo.heading = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai {0} ei gael?
+otherBeneficiary.discretionYesNo.checkYourAnswersLabel = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai {0} ei gael?
 otherBeneficiary.discretionYesNo.hint = Gweler y weithred ymddiriedolaeth am fanylion
 otherBeneficiary.discretionYesNo.error.required = Dewiswch ‘Iawn’ os oes gan yr ymddiriedolwyr ddisgresiwn dros faint o incwm y gallai’r buddiolwr arall ei gael
+
 otherBeneficiary.shareOfIncome.title = Pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwr arall hawl iddi?
-otherBeneficiary.shareOfIncome.heading = Pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwr hawl iddi?
-otherBeneficiary.shareOfIncome.checkYourAnswersLabel = Pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwr hawl iddi?
-otherBeneficiary.shareOfIncome.hint = Talgrynnwch hwn i rif cyfan.
+otherBeneficiary.shareOfIncome.heading = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
+otherBeneficiary.shareOfIncome.checkYourAnswersLabel = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
+otherBeneficiary.shareOfIncome.hint = Talgrynnwch hwn i lawr i rif cyfan.
 otherBeneficiary.shareOfIncome.error.required = Nodwch pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwr arall hawl iddi
 otherBeneficiary.shareOfIncome.error.integer = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan y buddiolwr arall hawl iddi fod yn rhif cyfan
 otherBeneficiary.shareOfIncome.error.non_numeric = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan y buddiolwr arall hawl iddi fod yn rhif cyfan
 otherBeneficiary.shareOfIncome.error.less_than_100 = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan y buddiolwr arall hawl iddi fod yn 100 neu’n llai
+
 otherBeneficiary.addressYesNo.title = A ydych yn gwybod beth yw cyfeiriad y buddiolwr arall?
-otherBeneficiary.addressYesNo.heading = A ydych yn gwybod cyfeiriad y buddiolwr arall?
-otherBeneficiary.addressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad y buddiolwr arall?
+otherBeneficiary.addressYesNo.heading = A ydych yn gwybod cyfeiriad {0}?
+otherBeneficiary.addressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad {0}?
 otherBeneficiary.addressYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad y buddiolwr arall
+
 otherBeneficiary.addressUkYesNo.title = A yw cyfeiriad y buddiolwr arall yn y DU?
-otherBeneficiary.addressUkYesNo.heading = A yw cyfeiriad y buddiolwr hwn yn y DU?
-otherBeneficiary.addressUkYesNo.checkYourAnswersLabel = A yw cyfeiriad y buddiolwr hwn yn y DU?
+otherBeneficiary.addressUkYesNo.heading = A yw cyfeiriad {0} yn y DU?
+otherBeneficiary.addressUkYesNo.checkYourAnswersLabel = A yw cyfeiriad {0} yn y DU?
 otherBeneficiary.addressUkYesNo.error.required = Dewiswch ‘Iawn’ os yw cyfeiriad y buddiolwr arall yn y DU
-otherBeneficiary.ukAddress.checkYourAnswersLabel = Beth yw cyfeiriad y buddiolwr hwn?
-otherBeneficiary.nonUkAddress.checkYourAnswersLabel = Beth yw cyfeiriad y buddiolwr hwn?
+
+otherBeneficiary.ukAddress.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
+otherBeneficiary.nonUkAddress.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
+
 otherBeneficiary.startDate.title = Pryd ychwanegwyd y buddiolwr hwn fel buddiolwr?
-otherBeneficiary.startDate.heading = Pryd ychwanegwyd y buddiolwr hwn fel buddiolwr?
-otherBeneficiary.startDate.checkYourAnswersLabel = Pryd ychwanegwyd y buddiolwr hwn fel buddiolwr?
+otherBeneficiary.startDate.heading = Pryd ychwanegwyd {0} fel buddiolwr?
+otherBeneficiary.startDate.checkYourAnswersLabel = Pryd ychwanegwyd {0} fel buddiolwr?
 otherBeneficiary.startDate.paragraph = Gwiriwch y weithred ymddiriedolaeth neu’r ddogfen pŵer penodi.
 otherBeneficiary.startDate.hint = Er enghraifft, 31 3 1980
 otherBeneficiary.startDate.error.required.all = Nodwch y dyddiad yr ychwanegwyd y buddiolwr arall at yr ymddiriedolaeth
@@ -540,11 +554,14 @@ otherBeneficiary.startDate.error.required = Mae’n rhaid i’r dyddiad yr ychwa
 otherBeneficiary.startDate.error.invalid = Nodwch ddyddiad go iawn
 otherBeneficiary.startDate.error.future = Mae’n rhaid i’r dyddiad yr ychwanegwyd y buddiolwr arall at yr ymddiriedolaeth fod heddiw neu yn y gorffennol
 otherBeneficiary.startDate.error.past = Ni all y dyddiad yr ychwanegwyd y buddiolwr arall at yr ymddiriedolaeth fod cyn dyddiad dechrau’r ymddiriedolaeth
+
 otherBeneficiary.checkDetails.title = Gwiriwch fanylion y buddiolwr arall
 otherBeneficiary.checkDetails.heading = Gwiriwch fanylion y buddiolwr arall
+
 removeOtherBeneficiary.title = A ydych yn siŵr eich bod am dynnu’r buddiolwr arall?
 removeOtherBeneficiary.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeOtherBeneficiary.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r buddiolwr arall
+
 otherBeneficiary.whenRemoved.title = Pryd y tynnwyd y buddiolwr arall fel buddiolwr?
 otherBeneficiary.whenRemoved.heading = Pryd y tynnwyd {0} fel buddiolwr?
 otherBeneficiary.whenRemoved.hint = Er enghraifft, 31 3 1980
@@ -554,10 +571,11 @@ otherBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y tynn
 otherBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd y buddiolwr arall o’r ymddiriedolaeth
 otherBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd y buddiolwr arall o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 otherBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd y buddiolwr arall fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
 companyOrEmploymentRelated.title = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
 companyOrEmploymentRelated.heading = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
 companyOrEmploymentRelated.checkYourAnswersLabel = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
-companyOrEmploymentRelated.hint = Er enghraifft, byddai cyflogeion a’u plant, eu priod neu wragedd gweddw yn gysylltiedig â chyflogaeth.
+companyOrEmploymentRelated.hint = Er enghraifft, byddai cyflogeion a’u plant, eu priod neu eu gweddwon yn gysylltiedig â chyflogaeth.
 companyOrEmploymentRelated.error.required = Dewiswch y math o fuddiolwr y mae angen i chi ei ychwanegu
 isTheBeneficiaryACompanyOrEmploymentRelated.company = Cwmni
 isTheBeneficiaryACompanyOrEmploymentRelated.employmentRelated = Cyflogeion a/neu eu teuluoedd
@@ -576,7 +594,7 @@ companyBeneficiary.discretionYesNo.error.required = Dewiswch ‘Iawn’ os oes g
 companyBeneficiary.shareOfIncome.title = Pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwr hawl iddi?
 companyBeneficiary.shareOfIncome.heading = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
 companyBeneficiary.shareOfIncome.checkYourAnswersLabel = Pa ganran o asedion yr ymddiriedolaeth y mae gan {0} hawl iddi?
-companyBeneficiary.shareOfIncome.hint = Talgrynnwch hwn i lawr i rif cyfan
+companyBeneficiary.shareOfIncome.hint = Talgrynnwch hwn i lawr i rif cyfan.
 companyBeneficiary.shareOfIncome.error.required = Nodwch pa ganran o asedion yr ymddiriedolaeth y mae gan fuddiolwr y cwmni hawl iddi
 companyBeneficiary.shareOfIncome.error.integer = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan fuddiolwr y cwmni hawl iddi fod yn rhif cyfan
 companyBeneficiary.shareOfIncome.error.non_numeric = Mae’n rhaid i ganran asedion yr ymddiriedolaeth y mae gan fuddiolwr y cwmni hawl iddi fod yn rhif cyfan
