@@ -19,13 +19,14 @@ package utils.countryOptions
 import base.SpecBase
 import com.typesafe.config.ConfigException
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import utils.InputOption
 
 class CountryOptionsSpec extends SpecBase with MockitoSugar {
 
   "Country Options" must {
 
-    "build correctly the InputOptions with all country list and country code" in {
+    "build correctly the English InputOptions with all country list and country code" in {
 
       val application = applicationBuilder()
         .configure(Map(
@@ -33,8 +34,28 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
         ))
         .build()
 
-        val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
-        countryOption.options mustEqual Seq(InputOption("SP", "Spain"), InputOption("GB", "United Kingdom"))
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      implicit val messages = MessagesImpl(lang = Lang(ENGLISH), messagesApi = messagesApi)
+
+      val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
+      countryOption.options mustEqual Seq(InputOption("ES", "Spain"), InputOption("GB", "United Kingdom"))
+
+      application.stop()
+    }
+
+    "build correctly the Welsh InputOptions with all country list and country code" in {
+
+      val application = applicationBuilder()
+        .configure(Map(
+          "location.canonical.list.allCY" -> "countries-canonical-list-test-cy.json"
+        ))
+        .build()
+
+      val messagesApi = app.injector.instanceOf[MessagesApi]
+      implicit val messages = MessagesImpl(lang = Lang(WELSH), messagesApi = messagesApi)
+
+      val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
+      countryOption.options mustEqual Seq(InputOption("ES", "Sbaen"), InputOption("GB", "Y Deyrnas Unedig"))
 
       application.stop()
     }

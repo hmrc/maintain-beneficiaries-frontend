@@ -4,7 +4,7 @@
     "country:AD"
   ],
   [
-    "United Arab Emirates",
+    "Yr Emiraethau Arabaidd Unedig",
     "country:AE"
   ],
   [
@@ -12,7 +12,7 @@
     "country:AF"
   ],
   [
-    "Antigua and Barbuda",
+    "Antigua a Barbuda",
     "country:AG"
   ],
   [
@@ -28,7 +28,7 @@
     "country:AM"
   ],
   [
-    "Dutch Antilles",
+    "Antilles yr Iseldiroedd",
     "country:AN"
   ],
   [
@@ -40,27 +40,27 @@
     "country:AQ"
   ],
   [
-    "Argentina",
+    "Yr Ariannin",
     "country:AR"
   ],
   [
-    "American Samoa",
+    "Samoa America",
     "country:AS"
   ],
   [
-    "Austria",
+    "Awstria",
     "country:AT"
   ],
   [
-    "Australia",
+    "Awstralia",
     "country:AU"
   ],
   [
-    "Aruba",
+    "Arwba",
     "country:AW"
   ],
   [
-    "Aland Islands",
+    "Ynysoedd Åland",
     "country:AX"
   ],
   [
@@ -68,7 +68,7 @@
     "country:AZ"
   ],
   [
-    "Bosnia and Herzegovina",
+    "Bosnia a Herzegovina",
     "country:BA"
   ],
   [
@@ -80,7 +80,7 @@
     "country:BD"
   ],
   [
-    "Belgium",
+    "Gwlad Belg",
     "country:BE"
   ],
   [
@@ -88,7 +88,7 @@
     "country:BF"
   ],
   [
-    "Bulgaria",
+    "Bwlgaria",
     "country:BG"
   ],
   [
@@ -104,7 +104,7 @@
     "country:BJ"
   ],
   [
-    "Saint Barthelemy",
+    "Saint Barthélemy",
     "country:BL"
   ],
   [
@@ -120,11 +120,11 @@
     "country:BO"
   ],
   [
-    "Bonaire, Sint Eustatius and Saba",
+    "Bonaire, Sint Eustatius a Saba",
     "country:BQ"
   ],
   [
-    "Brazil",
+    "Brasil",
     "country:BR"
   ],
   [
@@ -136,7 +136,7 @@
     "country:BT"
   ],
   [
-    "Bouvet Islands",
+    "Ynys Bouvet",
     "country:BV"
   ],
   [
@@ -156,31 +156,31 @@
     "country:CA"
   ],
   [
-    "Cocos (Keeling) Islands",
+    "Ynysoedd Cocos (Keeling)",
     "country:CC"
   ],
   [
-    "Democratic Republic of the Congo",
+    "Gweriniaeth Ddemocrataidd y Congo",
     "country:CD"
   ],
   [
-    "Central African Republic",
+    "Gweriniaeth Canol Affrica",
     "country:CF"
   ],
   [
-    "Republic of the Congo",
+    "Gweriniaeth y Congo",
     "country:CG"
   ],
   [
-    "Switzerland",
+    "Y Swistir",
     "country:CH"
   ],
   [
-    "Cote d'Ivoire",
+    "Côte d’Ivoire",
     "country:CI"
   ],
   [
-    "Cook Islands",
+    "Ynysoedd Cook",
     "country:CK"
   ],
   [
@@ -192,7 +192,7 @@
     "country:CM"
   ],
   [
-    "China",
+    "Tsieina",
     "country:CN"
   ],
   [
@@ -204,7 +204,7 @@
     "country:CR"
   ],
   [
-    "Serbia and Montenegro",
+    "Serbia a Montenegro",
     "country:CS"
   ],
   [
@@ -212,7 +212,7 @@
     "country:CU"
   ],
   [
-    "Cape Verde",
+    "Cabo Verde",
     "country:CV"
   ],
   [
@@ -220,7 +220,7 @@
     "country:CW"
   ],
   [
-    "Christmas Island",
+    "Ynys y Nadolig",
     "country:CX"
   ],
   [
@@ -228,11 +228,11 @@
     "country:CY"
   ],
   [
-    "Czech Republic",
+    "Y Weriniaeth Tsiec",
     "country:CZ"
   ],
   [
-    "Germany",
+    "Yr Almaen",
     "country:DE"
   ],
   [
@@ -240,7 +240,7 @@
     "country:DJ"
   ],
   [
-    "Denmark",
+    "Denmarc",
     "country:DK"
   ],
   [
@@ -248,7 +248,7 @@
     "country:DM"
   ],
   [
-    "Dominican Republic",
+    "Gweriniaeth Dominica",
     "country:DO"
   ],
   [
@@ -264,11 +264,11 @@
     "country:EE"
   ],
   [
-    "Egypt",
+    "Yr Aifft",
     "country:EG"
   ],
   [
-    "Western Sahara",
+    "Gorllewin Sahara",
     "country:EH"
   ],
   [
@@ -276,7 +276,7 @@
     "country:ER"
   ],
   [
-    "Spain",
+    "Sbaen",
     "country:ES"
   ],
   [
@@ -284,15 +284,15 @@
     "country:ET"
   ],
   [
-    "Finland",
+    "Y Ffindir",
     "country:FI"
   ],
   [
-    "Fiji",
+    "Ffiji",
     "country:FJ"
   ],
   [
-    "Falkland Islands",
+    "Ynysoedd Falkland",
     "country:FK"
   ],
   [
@@ -300,16 +300,20 @@
     "country:FM"
   ],
   [
-    "Faroe Islands",
+    "Ynysoedd Ffaröe",
     "country:FO"
   ],
   [
-    "France",
+    "Ffrainc",
     "country:FR"
   ],
   [
     "Gabon",
     "country:GA"
+  ],
+  [
+    "Y Deyrnas Unedig",
+    "country:GB"
   ],
   [
     "Grenada",
@@ -320,7 +324,7 @@
     "country:GE"
   ],
   [
-    "French Guiana",
+    "Guiana Ffrainc",
     "country:GF"
   ],
   [
@@ -336,7 +340,7 @@
     "country:GI"
   ],
   [
-    "Greenland",
+    "Yr Ynys Las",
     "country:GL"
   ],
   [
@@ -344,7 +348,7 @@
     "country:GM"
   ],
   [
-    "Guinea",
+    "Gini",
     "country:GN"
   ],
   [
@@ -352,27 +356,27 @@
     "country:GP"
   ],
   [
-    "Equatorial Guinea",
+    "Gini Gyhydeddol",
     "country:GQ"
   ],
   [
-    "Greece",
+    "Gwlad Groeg",
     "country:GR"
   ],
   [
-    "South Georgia and the Southern Sandwich Islands",
+    "Ynysoedd De Georgia a De Sandwich",
     "country:GS"
   ],
   [
-    "Guatemala",
+    "Gwatemala",
     "country:GT"
   ],
   [
-    "Guam",
+    "Gwam",
     "country:GU"
   ],
   [
-    "Guinea-Bissau",
+    "Guiné-Bissau",
     "country:GW"
   ],
   [
@@ -384,7 +388,7 @@
     "country:HK"
   ],
   [
-    "Heard Island and McDonald Islands",
+    "Ynys Heard ac Ynysoedd McDonald",
     "country:HM"
   ],
   [
@@ -400,7 +404,7 @@
     "country:HT"
   ],
   [
-    "Hungary",
+    "Hwngari",
     "country:HU"
   ],
   [
@@ -408,7 +412,7 @@
     "country:ID"
   ],
   [
-    "Ireland",
+    "Iwerddon",
     "country:IE"
   ],
   [
@@ -416,7 +420,7 @@
     "country:IL"
   ],
   [
-    "Isle of Man",
+    "Ynys Manaw",
     "country:IM"
   ],
   [
@@ -424,11 +428,11 @@
     "country:IN"
   ],
   [
-    "British Indian Ocean Territory",
+    "Tiriogaeth Brydeinig Cefnfor India",
     "country:IO"
   ],
   [
-    "Iraq",
+    "Irac",
     "country:IQ"
   ],
   [
@@ -436,11 +440,11 @@
     "country:IR"
   ],
   [
-    "Iceland",
+    "Gwlad yr Iâ",
     "country:IS"
   ],
   [
-    "Italy",
+    "Yr Eidal",
     "country:IT"
   ],
   [
@@ -452,7 +456,7 @@
     "country:JM"
   ],
   [
-    "Jordan",
+    "Gwlad yr Iorddonen",
     "country:JO"
   ],
   [
@@ -480,15 +484,15 @@
     "country:KM"
   ],
   [
-    "Saint Kitts and Nevis",
+    "Sant Kitts a Nevis",
     "country:KN"
   ],
   [
-    "North Korea",
+    "Gogledd Korea",
     "country:KP"
   ],
   [
-    "South Korea",
+    "De Korea",
     "country:KR"
   ],
   [
@@ -496,7 +500,7 @@
     "country:KW"
   ],
   [
-    "Cayman Islands",
+    "Ynysoedd Caiman",
     "country:KY"
   ],
   [
@@ -508,7 +512,7 @@
     "country:LA"
   ],
   [
-    "Lebanon",
+    "Libanus",
     "country:LB"
   ],
   [
@@ -536,7 +540,7 @@
     "country:LT"
   ],
   [
-    "Luxembourg",
+    "Lwcsembwrg",
     "country:LU"
   ],
   [
@@ -548,7 +552,7 @@
     "country:LY"
   ],
   [
-    "Morocco",
+    "Moroco",
     "country:MA"
   ],
   [
@@ -564,7 +568,7 @@
     "country:ME"
   ],
   [
-    "Saint Martin (French part)",
+    "Saint Martin (Rhan Ffrengig)",
     "country:MF"
   ],
   [
@@ -572,7 +576,7 @@
     "country:MG"
   ],
   [
-    "Marshall Islands",
+    "Ynysoedd Marshall",
     "country:MH"
   ],
   [
@@ -596,7 +600,7 @@
     "country:MO"
   ],
   [
-    "Northern Mariana Islands",
+    "Ynysoedd Gogledd Mariana",
     "country:MP"
   ],
   [
@@ -628,7 +632,7 @@
     "country:MW"
   ],
   [
-    "Mexico",
+    "Mecsico",
     "country:MX"
   ],
   [
@@ -636,7 +640,7 @@
     "country:MY"
   ],
   [
-    "Mozambique",
+    "Moçambique",
     "country:MZ"
   ],
   [
@@ -644,7 +648,7 @@
     "country:NA"
   ],
   [
-    "New Caledonia",
+    "Caledonia Newydd",
     "country:NC"
   ],
   [
@@ -652,7 +656,7 @@
     "country:NE"
   ],
   [
-    "Norfolk Islands",
+    "Ynys Norfolk",
     "country:NF"
   ],
   [
@@ -664,11 +668,11 @@
     "country:NI"
   ],
   [
-    "Netherlands",
+    "Yr Iseldiroedd",
     "country:NL"
   ],
   [
-    "Norway",
+    "Norwy",
     "country:NO"
   ],
   [
@@ -684,7 +688,7 @@
     "country:NU"
   ],
   [
-    "New Zealand",
+    "Seland Newydd",
     "country:NZ"
   ],
   [
@@ -692,23 +696,23 @@
     "country:OM"
   ],
   [
-    "Panama",
+    "Panamá",
     "country:PA"
   ],
   [
-    "Peru",
+    "Periw",
     "country:PE"
   ],
   [
-    "French Polynesia",
+    "Polynesia Ffrengig",
     "country:PF"
   ],
   [
-    "Papua New Guinea",
+    "Papua Guinea Newydd",
     "country:PG"
   ],
   [
-    "Philippines",
+    "Pilipinas",
     "country:PH"
   ],
   [
@@ -716,15 +720,15 @@
     "country:PK"
   ],
   [
-    "Poland",
+    "Gwlad Pwyl",
     "country:PL"
   ],
   [
-    "Saint Pierre and Miquelon",
+    "Saint Pierre a Miquelon",
     "country:PM"
   ],
   [
-    "Pitcairn Islands",
+    "Ynysoedd Pitcairn",
     "country:PN"
   ],
   [
@@ -732,11 +736,11 @@
     "country:PR"
   ],
   [
-    "Palestine",
+    "Palesteina",
     "country:PS"
   ],
   [
-    "Portugal",
+    "Portiwgal",
     "country:PT"
   ],
   [
@@ -756,7 +760,7 @@
     "country:RE"
   ],
   [
-    "Romania",
+    "România",
     "country:RO"
   ],
   [
@@ -764,7 +768,7 @@
     "country:RS"
   ],
   [
-    "Russia",
+    "Rwsia",
     "country:RU"
   ],
   [
@@ -776,7 +780,7 @@
     "country:SA"
   ],
   [
-    "Solomon Islands",
+    "Ynysoedd Solomon",
     "country:SB"
   ],
   [
@@ -784,7 +788,7 @@
     "country:SC"
   ],
   [
-    "Sudan",
+    "Swdan",
     "country:SD"
   ],
   [
@@ -792,11 +796,11 @@
     "country:SE"
   ],
   [
-    "Singapore",
+    "Singapôr",
     "country:SG"
   ],
   [
-    "Saint Helena, Ascension and Tristan da Cunha",
+    "Saint Helena, Ynys y Dyrchafael a Tristan da Cunha",
     "country:SH"
   ],
   [
@@ -804,7 +808,7 @@
     "country:SI"
   ],
   [
-    "Svalbard and Jan Mayen",
+    "Svalbard a Jan Mayen",
     "country:SJ"
   ],
   [
@@ -832,11 +836,11 @@
     "country:SR"
   ],
   [
-    "South Sudan",
+    "De Swdan",
     "country:SS"
   ],
   [
-    "Sao Tome and Principe",
+    "São Tomé a Príncipe",
     "country:ST"
   ],
   [
@@ -844,7 +848,7 @@
     "country:SV"
   ],
   [
-    "Sint Maarten (Dutch part)",
+    "Sint Maarten (Rhan Iseldiraidd)",
     "country:SX"
   ],
   [
@@ -852,19 +856,19 @@
     "country:SY"
   ],
   [
-    "Swaziland",
+    "Gwlad Swazi",
     "country:SZ"
   ],
   [
-    "Turks and Caicos Islands",
+    "Ynysoedd Turks a Caicos",
     "country:TC"
   ],
   [
-    "Chad",
+    "Tchad",
     "country:TD"
   ],
   [
-    "French Southern Territories",
+    "Tiriogaethau Deheuol Ffrainc",
     "country:TF"
   ],
   [
@@ -872,7 +876,7 @@
     "country:TG"
   ],
   [
-    "Thailand",
+    "Gwlad Thai",
     "country:TH"
   ],
   [
@@ -884,7 +888,7 @@
     "country:TK"
   ],
   [
-    "East Timor",
+    "Timor-Leste",
     "country:TL"
   ],
   [
@@ -900,11 +904,11 @@
     "country:TO"
   ],
   [
-    "Turkey",
+    "Twrci",
     "country:TR"
   ],
   [
-    "Trinidad and Tobago",
+    "Trinidad a Thobago",
     "country:TT"
   ],
   [
@@ -920,7 +924,7 @@
     "country:TZ"
   ],
   [
-    "Ukraine",
+    "Ukrain",
     "country:UA"
   ],
   [
@@ -928,11 +932,11 @@
     "country:UG"
   ],
   [
-    "United States Minor Outlying Islands",
+    "Mân Ynysoedd Pellennig yr Unol Daleithiau",
     "country:UM"
   ],
   [
-    "United States of America",
+    "Unol Daleithiau America",
     "country:US"
   ],
   [
@@ -944,11 +948,11 @@
     "country:UZ"
   ],
   [
-    "Vatican City",
+    "Dinas y Fatican",
     "country:VA"
   ],
   [
-    "Saint Vincent and the Grenadines",
+    "Saint Vincent a’r Grenadines",
     "country:VC"
   ],
   [
@@ -956,15 +960,15 @@
     "country:VE"
   ],
   [
-    "British Virgin Islands",
+    "Ynysoedd y Wyryf (Prydeinig)",
     "country:VG"
   ],
   [
-    "United States Virgin Islands",
+    "Ynysoedd y Wyryf (U.D.)",
     "country:VI"
   ],
   [
-    "Vietnam",
+    "Viet Nam",
     "country:VN"
   ],
   [
@@ -972,7 +976,7 @@
     "country:VU"
   ],
   [
-    "Wallis and Futuna",
+    "Wallis a Futuna",
     "country:WF"
   ],
   [
@@ -988,7 +992,7 @@
     "country:YT"
   ],
   [
-    "South Africa",
+    "De Affrica",
     "country:ZA"
   ],
   [
