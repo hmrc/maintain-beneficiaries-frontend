@@ -33,6 +33,9 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
   this: TestSuite =>
 
+  final val ENGLISH = "en"
+  final val WELSH = "cy"
+
   lazy val draftId = "id"
   lazy val userInternalId = "internalId"
 
