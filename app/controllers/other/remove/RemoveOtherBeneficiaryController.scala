@@ -60,6 +60,11 @@ class RemoveOtherBeneficiaryController @Inject()(
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.description))
       } recoverWith {
+        case iobe: IndexOutOfBoundsException =>
+          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            s" error getting other beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException")
+
+          Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
             s" error getting other beneficiary $index from trusts service ${e.getMessage}")
