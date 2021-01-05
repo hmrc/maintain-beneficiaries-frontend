@@ -20,14 +20,12 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import connectors.TrustConnector
-import controllers.other.remove.routes
 import forms.DateRemovedFromTrustFormProvider
 import models.Name
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.other.remove.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -35,7 +33,6 @@ import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
 import views.html.individualbeneficiary.remove.WhenRemovedView
-import views.html.other.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
@@ -167,6 +164,22 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to the Add Beneficiaries page when we get an IndexOutOfBoundsException" in {
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+
+      val result = route(application, getRequest()).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
 
       application.stop()
     }
