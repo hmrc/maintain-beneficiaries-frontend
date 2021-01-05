@@ -20,12 +20,14 @@ import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
 import connectors.TrustConnector
+import controllers.other.remove.routes
 import forms.DateRemovedFromTrustFormProvider
 import models.Name
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.other.remove.RemoveYesNoPage
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -33,6 +35,7 @@ import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
 import views.html.individualbeneficiary.remove.WhenRemovedView
+import views.html.other.remove.RemoveIndexView
 
 import scala.concurrent.Future
 
@@ -99,6 +102,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
       application.stop()
     }
+
 
     "redirect to the next page when valid data is submitted" in {
 

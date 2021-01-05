@@ -114,6 +114,27 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
       application.stop()
     }
 
+    "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(RemoveYesNoPage, true).success.value
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+
+      val request = FakeRequest(GET, routes.RemoveTrustBeneficiaryController.onPageLoad(0).url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+
+      application.stop()
+    }
+
     "not removing the beneficiary" must {
 
       "redirect to the add to page when valid data is submitted" in {
