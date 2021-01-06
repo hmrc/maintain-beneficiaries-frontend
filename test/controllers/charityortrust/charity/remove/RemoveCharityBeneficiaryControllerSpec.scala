@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,6 +114,27 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       contentAsString(result) mustEqual
         view(form.fill(true), index, beneficiaries(index).name)(request, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(RemoveYesNoPage, true).success.value
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+
+      val request = FakeRequest(GET, routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
 
       application.stop()
     }
