@@ -30,7 +30,7 @@ selectAttribute: Set[String] = Set.empty
 
 <div id="@field.id-form" class='form-group @formGroupClasses.mkString(" ") @if(field.hasErrors) {form-group-error}'>
     @if(labelAsHeading){<h1 class="label-as-heading">}
-    <label id="@field.id-label" class="form-label" for="@field.id">
+    <label class="form-label" for="@field.id">
         <span class='@labelClasses.mkString(" ")'>@messages(label)</span>
     </label>
     @if(labelAsHeading){</h1>}
