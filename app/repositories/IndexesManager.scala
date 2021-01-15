@@ -6,8 +6,8 @@ import reactivemongo.play.json.collection.JSONCollection
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class DropCollectionIndexes @Inject()(mongo: MongoDriver,
-                                               config: Configuration
+abstract class IndexesManager @Inject()(mongo: MongoDriver,
+                                        config: Configuration
                                               )(implicit ec: ExecutionContext) extends Logging {
 
   val collectionName: String
@@ -17,7 +17,7 @@ abstract class DropCollectionIndexes @Inject()(mongo: MongoDriver,
       collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
       indexes <- collection.indexesManager.list()
     } yield {
-      logger.info(s"[PlaybackRepository] indexes found on mongo collection $indexes")
+      logger.info(s"[IndexesManager] indexes found on mongo collection $collectionName: $indexes")
       ()
     }
   }
@@ -32,11 +32,11 @@ abstract class DropCollectionIndexes @Inject()(mongo: MongoDriver,
         for {
           collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
           _ <- collection.indexesManager.dropAll()
-          _ <- Future.successful(logger.info(s"[PlaybackRepository] dropped indexes on collection $collectionName"))
+          _ <- Future.successful(logger.info(s"[IndexesManager] dropped indexes on collection $collectionName"))
           _ <- logIndexes
         } yield ()
       } else {
-        logger.info(s"[PlaybackRepository] indexes not modified")
+        logger.info(s"[IndexesManager] indexes not modified on collection $collectionName")
         Future.successful(())
       }
     } yield ()
