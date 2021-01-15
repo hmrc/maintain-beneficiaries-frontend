@@ -16,10 +16,7 @@
 
 package repositories
 
-import java.time.LocalDateTime
-
 import com.google.inject.ImplementedBy
-import javax.inject.{Inject, Singleton}
 import models.{MongoDateTimeFormats, UtrSession}
 import play.api.Configuration
 import play.api.libs.json._
@@ -29,14 +26,16 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import reactivemongo.play.json.collection.JSONCollection
 
+import java.time.LocalDateTime
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
                                             config: Configuration
-                                           )(implicit ec: ExecutionContext) extends ActiveSessionRepository {
+                                           )(implicit ec: ExecutionContext) extends DropCollectionIndexes(mongo, config) with ActiveSessionRepository {
 
-  private val collectionName: String = "session"
+  override val collectionName: String = "session"
 
   private val cacheTtl = config.get[Int]("mongodb.session.ttlSeconds")
 
