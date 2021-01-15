@@ -16,10 +16,8 @@
 
 package repositories
 
-import java.time.LocalDateTime
-import javax.inject.{Inject, Singleton}
 import models.{MongoDateTimeFormats, UserAnswers}
-import play.api.{Configuration, Logging}
+import play.api.Configuration
 import play.api.libs.json._
 import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
@@ -27,14 +25,16 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import reactivemongo.play.json.collection.JSONCollection
 
+import java.time.LocalDateTime
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
                                        config: Configuration
-                                      )(implicit ec: ExecutionContext) extends PlaybackRepository with Logging {
+                                      )(implicit ec: ExecutionContext) extends DropCollectionIndexes(mongo, config) with PlaybackRepository {
 
-  private val collectionName: String = "user-answers"
+  override val collectionName: String = "user-answers"
 
   private val cacheTtl = config.get[Int]("mongodb.playback.ttlSeconds")
 
@@ -60,36 +60,6 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
       createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
       createdIdIndex          <- collection.indexesManager.ensure(internalIdAndUtrIndex)
     } yield createdLastUpdatedIndex && createdIdIndex
-
-  private final def logIndexes: Future[Unit] = {
-    for {
-      collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-      indices <- collection.indexesManager.list()
-    } yield {
-      logger.info(s"[PlaybackRepository] indices found on mongo collection $indices")
-      ()
-    }
-  }
-
-  final val dropIndexes: Unit = {
-
-    val dropIndexesFeatureEnabled: Boolean = config.get[Boolean]("microservice.services.features.mongo.dropIndexes")
-
-    for {
-      _ <- logIndexes
-      _ <- if (dropIndexesFeatureEnabled) {
-        for {
-          collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-          _ <- collection.indexesManager.dropAll()
-          _ <- Future.successful(logger.info(s"[PlaybackRepository] dropped indexes on collection $collectionName"))
-          _ <- logIndexes
-        } yield ()
-      } else {
-        logger.info(s"[PlaybackRepository] indexes not modified")
-        Future.successful(())
-      }
-    } yield ()
-  }
 
   override def get(internalId: String, utr: String): Future[Option[UserAnswers]] = {
 
