@@ -40,8 +40,9 @@ site.address.nonUk.line2 = Address line 2
 site.address.nonUk.line3 = Address line 3 (optional)
 site.address.nonUk.country = Country
 
+#timeout dialog
 timeout.title=Your application will time out soon
-timeout.message=We will reset your application if you do not respond in
+timeout.message=We will sign you out if you do not respond in
 timeout.keep-alive-button=Continue application
 
 agentNotAuthorised.title = Sorry, you cannot access this trust
@@ -130,9 +131,10 @@ date.day = Day
 date.month = Month
 date.year = Year
 
-session_expired.title = For your security, this service has been reset
-session_expired.heading = For your security, this service has been reset
-session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
+session_expired.title = For your security, we signed you out
+session_expired.heading = For your security, we signed you out
+session_expired.guidance = This is because you have been inactive on the service for 15 minutes.
+session_expired.guidance.2 = You will need to sign in to continue maintaining the trust.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
