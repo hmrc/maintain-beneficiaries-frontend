@@ -15,9 +15,9 @@ abstract class DropCollectionIndexes @Inject()(mongo: MongoDriver,
   private final def logIndexes: Future[Unit] = {
     for {
       collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-      indices <- collection.indexesManager.list()
+      indexes <- collection.indexesManager.list()
     } yield {
-      logger.info(s"[PlaybackRepository] indices found on mongo collection $indices")
+      logger.info(s"[PlaybackRepository] indexes found on mongo collection $indexes")
       ()
     }
   }
