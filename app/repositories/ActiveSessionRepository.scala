@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
                                             config: Configuration
-                                           )(implicit ec: ExecutionContext) extends DropCollectionIndexes(mongo, config) with ActiveSessionRepository {
+                                           )(implicit ec: ExecutionContext) extends IndexesManager(mongo, config) with ActiveSessionRepository {
 
   override val collectionName: String = "session"
 

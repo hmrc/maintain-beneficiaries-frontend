@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
                                        config: Configuration
-                                      )(implicit ec: ExecutionContext) extends DropCollectionIndexes(mongo, config) with PlaybackRepository {
+                                      )(implicit ec: ExecutionContext) extends IndexesManager(mongo, config) with PlaybackRepository {
 
   override val collectionName: String = "user-answers"
 
