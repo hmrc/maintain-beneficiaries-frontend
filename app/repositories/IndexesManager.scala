@@ -47,7 +47,7 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
       res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
     } yield res
 
-  def ensureIndexes: Future[Boolean] = {
+  private def ensureIndexes: Future[Boolean] = {
 
     lazy val lastUpdatedIndex: Index = Index(
       key = Seq("updatedAt" -> IndexType.Ascending),
