@@ -17,14 +17,11 @@
 package repositories
 
 import com.google.inject.ImplementedBy
-import models.{MongoDateTimeFormats, UtrSession}
+import models.UtrSession
 import play.api.Configuration
 import play.api.libs.json._
-import reactivemongo.api.WriteConcern
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-import reactivemongo.play.json.collection.JSONCollection
 
 import java.time.LocalDateTime
 import javax.inject.{Inject, Singleton}
@@ -37,69 +34,32 @@ class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
 
   override val collectionName: String = "session"
 
-  private val cacheTtl = config.get[Int]("mongodb.session.ttlSeconds")
+  override val cacheTtl: Int = config.get[Int]("mongodb.session.ttlSeconds")
 
-  private def collection: Future[JSONCollection] =
-    for {
-      _ <- ensureIndexes
-      res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-    } yield res
+  override val lastUpdatedIndexName: String = "session-updated-at-index"
 
-  private val lastUpdatedIndex = Index(
-    key = Seq("updatedAt" -> IndexType.Ascending),
-    name = Some("session-updated-at-index"),
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
-  )
-
-  private val utrIndex = Index(
+  override def idIndex: Index = Index(
     key = Seq("utr" -> IndexType.Ascending),
     name = Some("utr-index")
   )
 
-  private lazy val ensureIndexes = for {
-      collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
-      createdIdIndex          <- collection.indexesManager.ensure(utrIndex)
-    } yield createdLastUpdatedIndex && createdIdIndex
+  private def selector(internalId: String): JsObject = Json.obj(
+    "internalId" -> internalId
+  )
 
   override def get(internalId: String): Future[Option[UtrSession]] = {
-    val selector = Json.obj("internalId" -> internalId)
-
-    val modifier = Json.obj(
-      "$set" -> Json.obj(
-        "updatedAt" -> MongoDateTimeFormats.localDateTimeWrite.writes(LocalDateTime.now)
-      )
-    )
-
-    for {
-      col <- collection
-      r <- col.findAndUpdate(
-        selector = selector,
-        update = modifier,
-        fetchNewObject = true,
-        upsert = false,
-        sort = None,
-        fields = None,
-        bypassDocumentValidation = false,
-        writeConcern = WriteConcern.Default,
-        maxTime = None,
-        collation = None,
-        arrayFilters = Nil
-      )
-    } yield r.result[UtrSession]
+    findCollectionAndUpdate[UtrSession](selector(internalId))
   }
 
   override def set(session: UtrSession): Future[Boolean] = {
 
-    val selector = Json.obj("internalId" -> session.internalId)
-
     val modifier = Json.obj(
-      "$set" -> (session.copy(updatedAt = LocalDateTime.now))
+      "$set" -> session.copy(updatedAt = LocalDateTime.now)
     )
 
     for {
       col <- collection
-      r <- col.update(ordered = false).one(selector, modifier, upsert = true, multi = false)
+      r <- col.update(ordered = false).one(selector(session.internalId), modifier, upsert = true, multi = false)
     } yield r.ok
   }
 }
