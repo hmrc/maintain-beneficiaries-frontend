@@ -39,13 +39,7 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
 
   val lastUpdatedIndexName: String
 
-  val lastUpdatedIndex: Index = Index(
-    key = Seq("updatedAt" -> IndexType.Ascending),
-    name = Some(lastUpdatedIndexName),
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
-  )
-
-  val idIndex: Index
+  def idIndex: Index
 
   def collection: Future[JSONCollection] =
     for {
@@ -53,41 +47,20 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
       res <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
     } yield res
 
-  private final def logIndexes: Future[Unit] = {
-    for {
-      collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-      indexes <- collection.indexesManager.list()
-    } yield {
-      logger.info(s"[IndexesManager] indexes found on mongo collection $collectionName: $indexes")
-      ()
-    }
-  }
+  def ensureIndexes: Future[Boolean] = {
 
-  final val dropIndexes: Unit = {
-
-    val dropIndexesFeatureEnabled: Boolean = config.get[Boolean]("microservice.services.features.mongo.dropIndexes")
+    lazy val lastUpdatedIndex: Index = Index(
+      key = Seq("updatedAt" -> IndexType.Ascending),
+      name = Some(lastUpdatedIndexName),
+      options = BSONDocument("expireAfterSeconds" -> cacheTtl)
+    )
 
     for {
-      _ <- logIndexes
-      _ <- if (dropIndexesFeatureEnabled) {
-        for {
-          collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-          _ <- collection.indexesManager.dropAll()
-          _ <- Future.successful(logger.info(s"[IndexesManager] dropped indexes on collection $collectionName"))
-          _ <- logIndexes
-        } yield ()
-      } else {
-        logger.info(s"[IndexesManager] indexes not modified on collection $collectionName")
-        Future.successful(())
-      }
-    } yield ()
+      collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+      createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
+      createdIdIndex          <- collection.indexesManager.ensure(idIndex)
+    } yield createdLastUpdatedIndex && createdIdIndex
   }
-
-  def ensureIndexes: Future[Boolean] = for {
-    collection              <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
-    createdLastUpdatedIndex <- collection.indexesManager.ensure(lastUpdatedIndex)
-    createdIdIndex          <- collection.indexesManager.ensure(idIndex)
-  } yield createdLastUpdatedIndex && createdIdIndex
 
   def findCollectionAndUpdate[T](selector: JsObject)(implicit rds: Reads[T]): Future[Option[T]] = {
 
@@ -113,6 +86,36 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
         arrayFilters = Nil
       )
     } yield r.result[T]
+  }
+
+  final val dropIndexes: Unit = {
+
+    val dropIndexesFeatureEnabled: Boolean = config.get[Boolean]("microservice.services.features.mongo.dropIndexes")
+
+    def logIndexes: Future[Unit] = {
+      for {
+        collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+        indexes <- collection.indexesManager.list()
+      } yield {
+        logger.info(s"[IndexesManager] indexes found on mongo collection $collectionName: $indexes")
+        ()
+      }
+    }
+
+    for {
+      _ <- logIndexes
+      _ <- if (dropIndexesFeatureEnabled) {
+        for {
+          collection <- mongo.api.database.map(_.collection[JSONCollection](collectionName))
+          _ <- collection.indexesManager.dropAll()
+          _ <- Future.successful(logger.info(s"[IndexesManager] dropped indexes on collection $collectionName"))
+          _ <- logIndexes
+        } yield ()
+      } else {
+        logger.info(s"[IndexesManager] indexes not modified on collection $collectionName")
+        Future.successful(())
+      }
+    } yield ()
   }
 
 }

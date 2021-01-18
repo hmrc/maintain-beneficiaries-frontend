@@ -38,7 +38,7 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
 
   override val lastUpdatedIndexName: String = "user-answers-updated-at-index"
 
-  override val idIndex: Index = Index(
+  override def idIndex: Index = Index(
     key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending),
     name = Some("internal-id-and-utr-compound-index")
   )
