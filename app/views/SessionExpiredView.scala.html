@@ -14,18 +14,27 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    appConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("session_expired.title")
+    title = messages("session_expired.title"),
+    canSignOut = false
     ) {
 
     @components.heading("session_expired.heading")
 
     <p>@messages("session_expired.guidance")</p>
     <p>@messages("session_expired.guidance.2")</p>
+
+    @components.button_link(
+            messageKey = messages("site.sign_in"),
+            href = appConfig.loginUrl
+    )
 }
