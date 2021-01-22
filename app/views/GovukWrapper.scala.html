@@ -40,7 +40,9 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+  scriptElem: Option[Html] = None,
+  canSignOut: Boolean = true
+  )(implicit request: Request[_], messages: Messages)
 
 @headContent = {
     @head(
@@ -52,11 +54,13 @@
 }
 
 @headerNavLinks = {
-    <li>
-        <a id="logOut" href="@controllers.routes.LogoutController.logout" data-target="link - click:@title:@Messages("site.sign_out")">
-        @Messages("site.sign_out")
-        </a>
-    </li>
+    @if(canSignOut) {
+        <li>
+            <a id="logOut" href="@controllers.routes.LogoutController.logout" data-target="link - click:@title:@Messages("site.sign_out")">
+            @Messages("site.sign_out")
+            </a>
+        </li>
+    }
 }
 
 @insideHeader = {
