@@ -27,6 +27,8 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
 
+import scala.util.Try
+
 class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils) {
 
   def formatDate(date: JavaDate)(implicit messages: Messages): String = {
@@ -42,7 +44,10 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils) {
     }
   }
 
-  def formatNino(nino: String): Html = HtmlFormat.escape(Nino(nino).formatted)
+  def formatNino(nino: String): Html = {
+    val formatted = Try(Nino(nino).formatted).getOrElse(nino)
+    HtmlFormat.escape(formatted)
+  }
 
   def formatAddress(address: Address, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
     address match {
