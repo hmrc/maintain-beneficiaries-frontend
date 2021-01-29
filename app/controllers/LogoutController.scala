@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
-import controllers.actions.IdentifierAction
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import play.api.Logging
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -35,27 +35,35 @@ class LogoutController @Inject()(
                                   appConfig: FrontendAppConfig,
                                   val controllerComponents: MessagesControllerComponents,
                                   identify: IdentifierAction,
+                                  getData: DataRetrievalAction,
+                                  requireData: DataRequiredAction,
+                                  config: FrontendAppConfig,
                                   auditConnector: AuditConnector
                                 )(implicit val ec: ExecutionContext) extends FrontendBaseController with Logging {
 
-  def logout: Action[AnyContent] = identify {
+  def logout: Action[AnyContent] = (identify andThen getData andThen requireData) {
       request =>
 
         implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
         logger.info(s"[Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
 
-        val auditData = Map(
-          "sessionId" -> Session.id(hc),
-          "event" -> "signout",
-          "service" -> "maintain-beneficiaries-frontend",
-          "userGroup" -> request.user.affinityGroup.toString
-        )
+        if(config.logoutAudit) {
 
-        auditConnector.sendExplicitAudit(
-          "trusts",
-          auditData
-        )
+          val auditData = Map(
+            "sessionId" -> Session.id(hc),
+            "event" -> "signout",
+            "service" -> "maintain-beneficiaries-frontend",
+            "userGroup" -> request.user.affinityGroup.toString,
+            "utr" -> request.userAnswers.utr
+          )
+
+          auditConnector.sendExplicitAudit(
+            "trusts",
+            auditData
+          )
+
+        }
 
         Redirect(appConfig.logoutUrl).withSession(session = ("feedbackId", Session.id(hc)))
     }
