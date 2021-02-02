@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import org.mockito.Mockito.when
+import play.api.Configuration
 import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import org.mockito.Matchers.any
 
 class LanguageSwitchControllerSpec extends SpecBase {
 
@@ -33,20 +33,23 @@ class LanguageSwitchControllerSpec extends SpecBase {
   private val welsh = "cymraeg"
   private val fakeUrl: String = "fakeUrl"
 
-  private val mockConfig = mock[FrontendAppConfig]
-  when(mockConfig.languageMap).thenReturn(frontendAppConfig.languageMap)
+  private lazy val config: Configuration = injector.instanceOf[FrontendAppConfig].configuration
+
+  def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig = {
+    new FrontendAppConfig(config) {
+      override lazy val languageTranslationEnabled: Boolean = languageToggleEnabled
+    }
+  }
 
   "LanguageSwitch Controller" when {
 
     "language toggle enabled" when {
 
-      when(mockConfig.languageTranslationEnabled).thenReturn(true)
-
       "English selected" must {
         "switch to English" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(bind[FrontendAppConfig].toInstance(mockConfig))
+          val application = new GuiceApplicationBuilder()
+            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
             .build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -68,8 +71,8 @@ class LanguageSwitchControllerSpec extends SpecBase {
       "Welsh selected" must {
         "switch to Welsh" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(bind[FrontendAppConfig].toInstance(mockConfig))
+          val application = new GuiceApplicationBuilder()
+            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
             .build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -91,12 +94,10 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
     "language toggle disabled" must {
 
-      when(mockConfig.languageTranslationEnabled).thenReturn(false)
-
       "default to English" in {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[FrontendAppConfig].toInstance(mockConfig))
+        val application = new GuiceApplicationBuilder()
+          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig(false)))
           .build()
 
         val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
@@ -117,29 +118,19 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
     "no referer in header" must {
 
-      when(mockConfig.languageTranslationEnabled).thenReturn(true)
+      "redirect to login continue url" in {
 
-      // the following are required for the Gov UK Wrapper
-      when(mockConfig.analyticsToken).thenReturn(frontendAppConfig.analyticsToken)
-      when(mockConfig.analyticsHost).thenReturn(frontendAppConfig.analyticsHost)
-      when(mockConfig.accessibilityLinkUrl(any())).thenReturn("accessibility link")
-      when(mockConfig.betaFeedbackUrl).thenReturn(frontendAppConfig.betaFeedbackUrl)
-      when(mockConfig.betaFeedbackUnauthenticatedUrl).thenReturn(frontendAppConfig.betaFeedbackUnauthenticatedUrl)
-      when(mockConfig.routeToSwitchLanguage).thenReturn(frontendAppConfig.routeToSwitchLanguage)
-      when(mockConfig.reportAProblemPartialUrl).thenReturn(frontendAppConfig.reportAProblemPartialUrl)
-      when(mockConfig.reportAProblemNonJSUrl).thenReturn(frontendAppConfig.reportAProblemNonJSUrl)
-
-      "redirect to internal server error template" in {
-
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[FrontendAppConfig].toInstance(mockConfig))
+        val application = new GuiceApplicationBuilder()
+          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
           .build()
 
         val request = FakeRequest(GET, switchLanguageRoute(welsh))
 
         val result = route(application, request).value
 
-        status(result) mustEqual INTERNAL_SERVER_ERROR
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual frontendAppConfig().loginContinueUrl
 
         application.stop()
       }

@@ -15,7 +15,6 @@
  *@
 
 @import play.twirl.api.HtmlFormat
-@import views.html.components.language_selection
 @import views.html.layouts.GovUkTemplate
 
 @this(
@@ -114,7 +113,7 @@
 @mainContentHeader = {
 
     @if(appConfig.languageTranslationEnabled) {
-        @language_selection(
+        @views.html.language_selection(
             appConfig.languageMap,
             appConfig.routeToSwitchLanguage,
             Some("translate u-align--right"))
