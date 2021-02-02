@@ -31,7 +31,7 @@ class LanguageSwitchController @Inject()(
                                           cc: MessagesControllerComponents
                                         ) extends LanguageController(configuration, languageUtils, cc) {
 
-  override def fallbackURL: String = appConfig.maintainATrustOverview
+  override def fallbackURL: String = appConfig.loginContinueUrl
 
   override def languageMap: Map[String, Lang] = appConfig.languageMap
 }
