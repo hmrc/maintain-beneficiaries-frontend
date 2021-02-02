@@ -118,7 +118,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
     "no referer in header" must {
 
-      "redirect to internal server error template" in {
+      "redirect to login continue url" in {
 
         val application = new GuiceApplicationBuilder()
           .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
