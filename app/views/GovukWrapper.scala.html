@@ -19,7 +19,7 @@
 
 @this(
     header_nav: HeaderNav,
-    head: Head,
+    head: HeadWithTrackingConsent,
     footer: Footer,
     serviceInfo: ServiceInfo,
     main_content_header: MainContentHeader,
@@ -47,7 +47,6 @@
     @head(
       linkElem = None,
       headScripts = None)
-    <script src='@routes.Assets.versioned("javascripts/gtm.js")'></script>
     <meta name="format-detection" content="telephone=no" />
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/maintainbeneficiariesfrontend-app.css")' />
 }
@@ -75,7 +74,7 @@
 
 @bodyEnd = {
     @footer(
-      analyticsToken = Some(appConfig.analyticsToken),
+      analyticsToken = None,
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
       scriptElem = scriptElem,

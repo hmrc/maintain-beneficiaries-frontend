@@ -40,7 +40,6 @@ class FrontendAppConfig @Inject()(val configuration: Configuration) {
   lazy val maintainATrustOverview: String = configuration.get[String]("urls.maintainATrustOverview")
 
   val assetsPrefix: String   = assetsUrl + configuration.get[String]("assets.version")
-  val analyticsToken: String = configuration.get[String](s"google-analytics.token")
   val analyticsHost: String  = configuration.get[String](s"google-analytics.host")
 
   val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
