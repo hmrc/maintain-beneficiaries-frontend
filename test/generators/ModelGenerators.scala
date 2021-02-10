@@ -16,11 +16,12 @@
 
 package generators
 
-import java.time.{Instant, LocalDate, ZoneOffset}
-
+import models.BeneficiaryType._
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 
 trait ModelGenerators {
 
@@ -126,5 +127,16 @@ trait ModelGenerators {
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))
     }
+
+  implicit lazy val arbitraryBeneficiaryType: Gen[BeneficiaryType] =
+    Gen.oneOf[BeneficiaryType](
+      IndividualBeneficiary,
+      ClassOfBeneficiary,
+      CompanyBeneficiary,
+      EmploymentRelatedBeneficiary,
+      TrustBeneficiary,
+      CharityBeneficiary,
+      OtherBeneficiary
+    )
 
 }
