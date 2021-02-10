@@ -16,8 +16,6 @@
 
 package connectors
 
-import java.time.LocalDate
-
 import base.SpecBase
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo, _}
@@ -30,6 +28,8 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+
+import java.time.LocalDate
 
 class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   with Inside with BeforeAndAfterAll with BeforeAndAfterEach with IntegrationPatience {
@@ -57,20 +57,21 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val description = "description"
   val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-unidentified-beneficiary/$utr/$index"
-  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-individual-beneficiary/$utr/$index"
-  private def addClassOfBeneficiaryUrl(utr: String) = s"/trusts/add-unidentified-beneficiary/$utr"
-  private def addIndividualBeneficiaryUrl(utr: String) = s"/trusts/add-individual-beneficiary/$utr"
-  private def addCharityBeneficiaryUrl(utr: String) = s"/trusts/add-charity-beneficiary/$utr"
-  private def addCompanyBeneficiaryUrl(utr: String) = s"/trusts/add-company-beneficiary/$utr"
-  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"/trusts/amend-company-beneficiary/$utr/$index"
-  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"/trusts/add-large-beneficiary/$utr"
+  private val baseUrl: String = "/trusts/beneficiaries"
+
+  private def getBeneficiariesUrl(utr: String) = s"$baseUrl/$utr/transformed"
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-unidentified/$utr/$index"
+  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-individual/$utr/$index"
+  private def addClassOfBeneficiaryUrl(utr: String) = s"$baseUrl/add-unidentified/$utr"
+  private def addIndividualBeneficiaryUrl(utr: String) = s"$baseUrl/add-individual/$utr"
+  private def addCharityBeneficiaryUrl(utr: String) = s"$baseUrl/add-charity/$utr"
+  private def addCompanyBeneficiaryUrl(utr: String) = s"$baseUrl/add-company/$utr"
+  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-company/$utr/$index"
+  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"$baseUrl/add-large/$utr"
 
   "trust connector" when {
 
     "get trusts details" in {
-
-      val utr = "1000000008"
 
       val json = Json.parse(
         """
@@ -118,8 +119,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
       "return a default empty list beneficiaries" in {
 
-        val utr = "1000000008"
-
         val json = Json.parse(
           """
             |{
@@ -139,7 +138,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          get(urlEqualTo(s"/trusts/$utr/transformed/beneficiaries"))
+          get(urlEqualTo(getBeneficiariesUrl(utr)))
             .willReturn(okJson(json.toString))
         )
 
@@ -165,7 +164,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     "get beneficiaries" must {
 
       "parse the response and return the beneficiaries" in {
-        val utr = "1000000008"
 
         val json = Json.parse(
           """
@@ -290,7 +288,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          get(urlEqualTo(s"/trusts/$utr/transformed/beneficiaries"))
+          get(urlEqualTo(getBeneficiariesUrl(utr)))
             .willReturn(okJson(json.toString))
         )
 
@@ -408,7 +406,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.amendClassOfBeneficiary(utr, index, description)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -462,7 +460,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -497,7 +495,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
       val individualBeneficiary = IndividualBeneficiary(
         name = Name("Nicola", Some("Andrey"), "Jackson"),
-        dateOfBirth = Some(LocalDate.of(1970, 2, 28)),
+        dateOfBirth = Some(date),
         identification = None,
         address = Some(UkAddress(
           "Suite 10",
@@ -510,7 +508,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         roleInCompany = None,
         income = None,
         incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
+        entityStart = date,
         provisional = true
       )
 
@@ -664,7 +662,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )),
         income = None,
         incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
+        entityStart = date,
         provisional = true
       )
 
@@ -687,7 +685,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.addCharityBeneficiary(utr, charityBeneficiary)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -732,7 +730,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )),
         income = None,
         incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
+        entityStart = date,
         provisional = true
       )
 
@@ -755,7 +753,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.addCompanyBeneficiary(utr, companyBeneficiary)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -800,7 +798,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )),
         income = None,
         incomeDiscretionYesNo = true,
-        entityStart = LocalDate.of(2017, 2, 28),
+        entityStart = date,
         provisional = false
       )
 
@@ -823,7 +821,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
         val result = connector.amendCompanyBeneficiary(utr, index, companyBeneficiary)
 
-        result.futureValue.status mustBe (OK)
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
@@ -868,7 +866,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )),
         description = Description("Description", None, None, None, None),
         howManyBeneficiaries = "501",
-        entityStart = LocalDate.of(2017, 2, 28),
+        entityStart = date,
         provisional = true
       )
 
