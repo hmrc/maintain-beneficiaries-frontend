@@ -149,7 +149,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
   "trust connector" when {
 
-    "get trusts details" in {
+    "getTrustsDetails" in {
 
       val json = Json.parse(
         """
@@ -193,17 +193,213 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-    "get beneficiaries returns a trust with empty lists" must {
+    "getBeneficiaries" when {
 
-      "return a default empty list beneficiaries" in {
+      "there are no beneficiaries" must {
 
-        val json = Json.parse(
-          """
-            |{
-            | "beneficiary": {
-            | }
-            |}
-            |""".stripMargin)
+        "return a default empty list beneficiaries" in {
+
+          val json = Json.parse(
+            """
+              |{
+              | "beneficiary": {
+              | }
+              |}
+              |""".stripMargin)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(getBeneficiariesUrl(utr)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.getBeneficiaries(utr)
+
+          whenReady(processed) {
+            result =>
+              result mustBe Beneficiaries(
+                individualDetails = Nil,
+                unidentified = Nil,
+                company = Nil,
+                employmentRelated = Nil,
+                trust = Nil,
+                charity = Nil,
+                other = Nil)
+          }
+
+          application.stop()
+        }
+      }
+
+      "there are beneficiaries" must {
+
+        "parse the response and return the beneficiaries" in {
+
+          val json = Json.parse(
+            """
+              |{
+              | "beneficiary": {
+              |   "charity": [
+              |				{
+              |					"lineNo": "1",
+              |					"bpMatchStatus": "01",
+              |					"entityStart": "2019-02-28",
+              |					"organisationName": "1234567890 QwErTyUiOp ,.(/)&'- name",
+              |					"beneficiaryDiscretion": false,
+              |					"beneficiaryShareOfIncome": "100",
+              |					"identification": {
+              |						"address": {
+              |							"line1": "1234567890 QwErTyUiOp ,.(/)&'- name",
+              |							"line2": "1234567890 QwErTyUiOp ,.(/)&'- name",
+              |							"line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
+              |							"country": "DE"
+              |						}
+              |					},
+              |         "provisional": false
+              |				}
+              |			],
+              |   "individualDetails": [
+              |     {
+              |         "lineNo": "7",
+              |         "bpMatchStatus": "01",
+              |         "entityStart": "2000-01-01",
+              |         "name": {
+              |           "firstName": "first",
+              |           "lastName": "last"
+              |         },
+              |         "vulnerableBeneficiary": false,
+              |         "provisional": false
+              |      }
+              |    ],
+              |    "unidentified": [
+              |      {
+              |        "lineNo": "311",
+              |        "description": "Beneficiary Unidentified 25",
+              |        "beneficiaryDiscretion": false,
+              |        "beneficiaryShareOfIncome": "25",
+              |        "entityStart": "2019-09-23",
+              |        "provisional": false
+              |      },
+              |      {
+              |         "lineNo": "309",
+              |         "description": "Beneficiary Unidentified 23",
+              |         "entityStart": "2019-09-23",
+              |         "provisional": false
+              |       }
+              |  ],
+              |  "trust": [
+              |    {
+              |       "lineNo": "1",
+              |       "bpMatchStatus": "01",
+              |       "organisationName": "Nelson Ltd ",
+              |       "beneficiaryDiscretion": true,
+              |       "beneficiaryShareOfIncome": "0",
+              |       "identification": {
+              |         "safeId": "2222200000000"
+              |       },
+              |       "entityStart": "2017-02-28",
+              |       "provisional": false
+              |    }
+              |  ],
+              |  "company": [
+              |   {
+              |                "lineNo": "184",
+              |                "bpMatchStatus": "01",
+              |                "organisationName": "Company Ltd",
+              |                "entityStart": "2019-09-23",
+              |                "provisional": false
+              |              }
+              |  ],
+              |  "large": [
+              |  {
+              |                "lineNo": "254",
+              |                "bpMatchStatus": "01",
+              |                "organisationName": "Employment Related Endeavours",
+              |                "description": "Description 1",
+              |                "numberOfBeneficiary": "501",
+              |                "entityStart": "2019-09-23",
+              |                "provisional": false
+              |              }
+              |  ],
+              |  "charity": [
+              |    {
+              |       "lineNo": "1",
+              |       "bpMatchStatus": "01",
+              |       "organisationName": "Humanitarian Endeavours Ltd",
+              |       "beneficiaryDiscretion": true,
+              |       "beneficiaryShareOfIncome": "0",
+              |       "identification": {
+              |         "safeId": "2222200000000"
+              |       },
+              |       "entityStart": "2012-03-14",
+              |       "provisional": false
+              |    }
+              |  ],
+              |  "other": [
+              |              {
+              |                "lineNo": "286",
+              |                "description": "Other Endeavours Ltd",
+              |                "entityStart": "2019-09-23",
+              |                "provisional": false
+              |              }
+              |              ]
+              | }
+              |}
+              |""".stripMargin)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(getBeneficiariesUrl(utr)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.getBeneficiaries(utr)
+
+          whenReady(processed) {
+            result =>
+              result mustBe Beneficiaries(
+                individualDetails = List(individualBeneficiary),
+                unidentified = List(
+                  unidentifiedBeneficiary,
+                  unidentifiedBeneficiary.copy(description = "Beneficiary Unidentified 23")
+                ),
+                company = List(companyBeneficiary),
+                employmentRelated = List(employmentRelatedBeneficiary),
+                trust = List(trustBeneficiary),
+                charity = List(charityBeneficiary),
+                other = List(otherBeneficiary)
+              )
+          }
+
+          application.stop()
+        }
+
+      }
+    }
+
+    "addClassOfBeneficiary" must {
+
+      val classOfBeneficiary = ClassOfBeneficiary(description, date, provisional = true)
+
+      "Return OK when the request is successful" in {
 
         val application = applicationBuilder()
           .configure(
@@ -216,144 +412,18 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          get(urlEqualTo(getBeneficiariesUrl(utr)))
-            .willReturn(okJson(json.toString))
+          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+            .willReturn(ok)
         )
 
-        val processed = connector.getBeneficiaries(utr)
+        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
 
-        whenReady(processed) {
-          result =>
-            result mustBe Beneficiaries(
-              individualDetails = Nil,
-              unidentified = Nil,
-              company = Nil,
-              employmentRelated = Nil,
-              trust = Nil,
-              charity = Nil,
-              other = Nil)
-        }
+        result.futureValue.status mustBe OK
 
         application.stop()
       }
 
-    }
-
-    "get beneficiaries" must {
-
-      "parse the response and return the beneficiaries" in {
-
-        val json = Json.parse(
-          """
-            |{
-            | "beneficiary": {
-            |   "charity": [
-            |				{
-            |					"lineNo": "1",
-            |					"bpMatchStatus": "01",
-            |					"entityStart": "2019-02-28",
-            |					"organisationName": "1234567890 QwErTyUiOp ,.(/)&'- name",
-            |					"beneficiaryDiscretion": false,
-            |					"beneficiaryShareOfIncome": "100",
-            |					"identification": {
-            |						"address": {
-            |							"line1": "1234567890 QwErTyUiOp ,.(/)&'- name",
-            |							"line2": "1234567890 QwErTyUiOp ,.(/)&'- name",
-            |							"line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
-            |							"country": "DE"
-            |						}
-            |					},
-            |         "provisional": false
-            |				}
-            |			],
-            |   "individualDetails": [
-            |     {
-            |         "lineNo": "7",
-            |         "bpMatchStatus": "01",
-            |         "entityStart": "2000-01-01",
-            |         "name": {
-            |           "firstName": "first",
-            |           "lastName": "last"
-            |         },
-            |         "vulnerableBeneficiary": false,
-            |         "provisional": false
-            |      }
-            |    ],
-            |    "unidentified": [
-            |      {
-            |        "lineNo": "311",
-            |        "description": "Beneficiary Unidentified 25",
-            |        "beneficiaryDiscretion": false,
-            |        "beneficiaryShareOfIncome": "25",
-            |        "entityStart": "2019-09-23",
-            |        "provisional": false
-            |      },
-            |      {
-            |         "lineNo": "309",
-            |         "description": "Beneficiary Unidentified 23",
-            |         "entityStart": "2019-09-23",
-            |         "provisional": false
-            |       }
-            |  ],
-            |  "trust": [
-            |    {
-            |       "lineNo": "1",
-            |       "bpMatchStatus": "01",
-            |       "organisationName": "Nelson Ltd ",
-            |       "beneficiaryDiscretion": true,
-            |       "beneficiaryShareOfIncome": "0",
-            |       "identification": {
-            |         "safeId": "2222200000000"
-            |       },
-            |       "entityStart": "2017-02-28",
-            |       "provisional": false
-            |    }
-            |  ],
-            |  "company": [
-            |   {
-            |                "lineNo": "184",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Company Ltd",
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
-            |  ],
-            |  "large": [
-            |  {
-            |                "lineNo": "254",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Employment Related Endeavours",
-            |                "description": "Description 1",
-            |                "numberOfBeneficiary": "501",
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
-            |  ],
-            |  "charity": [
-            |    {
-            |       "lineNo": "1",
-            |       "bpMatchStatus": "01",
-            |       "organisationName": "Humanitarian Endeavours Ltd",
-            |       "beneficiaryDiscretion": true,
-            |       "beneficiaryShareOfIncome": "0",
-            |       "identification": {
-            |         "safeId": "2222200000000"
-            |       },
-            |       "entityStart": "2012-03-14",
-            |       "provisional": false
-            |    }
-            |  ],
-            |  "other": [
-            |              {
-            |                "lineNo": "286",
-            |                "description": "Other Endeavours Ltd",
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
-            |              ]
-            | }
-            |}
-            |""".stripMargin)
+      "return Bad Request when the request is unsuccessful" in {
 
         val application = applicationBuilder()
           .configure(
@@ -366,27 +436,13 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          get(urlEqualTo(getBeneficiariesUrl(utr)))
-            .willReturn(okJson(json.toString))
+          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+            .willReturn(badRequest)
         )
 
-        val processed = connector.getBeneficiaries(utr)
+        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
 
-        whenReady(processed) {
-          result =>
-            result mustBe Beneficiaries(
-              individualDetails = List(individualBeneficiary),
-              unidentified = List(
-                unidentifiedBeneficiary,
-                unidentifiedBeneficiary.copy(description = "Beneficiary Unidentified 23")
-              ),
-              company = List(companyBeneficiary),
-              employmentRelated = List(employmentRelatedBeneficiary),
-              trust = List(trustBeneficiary),
-              charity = List(charityBeneficiary),
-              other = List(otherBeneficiary)
-            )
-        }
+        result.map(response => response.status mustBe BAD_REQUEST)
 
         application.stop()
       }
@@ -437,60 +493,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )
 
         val result = connector.amendClassOfBeneficiary(utr, index, description)
-
-        result.map(response => response.status mustBe BAD_REQUEST)
-
-        application.stop()
-      }
-
-    }
-
-    "addClassOfBeneficiary" must {
-
-      val classOfBeneficiary = ClassOfBeneficiary(description, date, provisional = true)
-
-      "Return OK when the request is successful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
-            .willReturn(ok)
-        )
-
-        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
-
-        result.futureValue.status mustBe OK
-
-        application.stop()
-      }
-
-      "return Bad Request when the request is unsuccessful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
-            .willReturn(badRequest)
-        )
-
-        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -655,6 +657,58 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
+    "amendCharityBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
     "addCompanyBeneficiary" must {
 
       "Return OK when the request is successful" in {
@@ -811,110 +865,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-    "amendCharityBeneficiary" must {
-
-      "Return OK when the request is successful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
-            .willReturn(ok)
-        )
-
-        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
-
-        result.futureValue.status mustBe OK
-
-        application.stop()
-      }
-
-      "return Bad Request when the request is unsuccessful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
-            .willReturn(badRequest)
-        )
-
-        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
-
-        result.map(response => response.status mustBe BAD_REQUEST)
-
-        application.stop()
-      }
-
-    }
-
-    "amendTrustBeneficiary" must {
-
-      "Return OK when the request is successful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
-            .willReturn(ok)
-        )
-
-        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
-
-        result.futureValue.status mustBe OK
-
-        application.stop()
-      }
-
-      "return Bad Request when the request is unsuccessful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
-            .willReturn(badRequest)
-        )
-
-        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
-
-        result.map(response => response.status mustBe BAD_REQUEST)
-
-        application.stop()
-      }
-
-    }
-
     "amendEmploymentRelatedBeneficiary" must {
 
       "Return OK when the request is successful" in {
@@ -959,58 +909,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )
 
         val result = connector.amendEmploymentRelatedBeneficiary(utr, index, employmentRelatedBeneficiary)
-
-        result.map(response => response.status mustBe BAD_REQUEST)
-
-        application.stop()
-      }
-
-    }
-
-    "amendOtherBeneficiary" must {
-
-      "Return OK when the request is successful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
-            .willReturn(ok)
-        )
-
-        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
-
-        result.futureValue.status mustBe OK
-
-        application.stop()
-      }
-
-      "return Bad Request when the request is unsuccessful" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustConnector]
-
-        server.stubFor(
-          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
-            .willReturn(badRequest)
-        )
-
-        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -1071,6 +969,58 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
+    "amendTrustBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
     "addOtherBeneficiary" must {
 
       "Return OK when the request is successful" in {
@@ -1115,6 +1065,58 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         )
 
         val result = connector.addOtherBeneficiary(utr, otherBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "amendOtherBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
