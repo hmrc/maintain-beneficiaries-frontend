@@ -22,9 +22,10 @@ import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo,
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.beneficiaries._
-import models.{Description, Name, TrustDetails, TypeOfTrust, UkAddress}
+import models.{BeneficiaryType, Description, Name, RemoveBeneficiary, TrustDetails, TypeOfTrust}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -57,17 +58,94 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   val description = "description"
   val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private val baseUrl: String = "/trusts/beneficiaries"
+  private val trustsUrl: String = "/trusts"
+  private val beneficiariesUrl: String = s"$trustsUrl/beneficiaries"
 
-  private def getBeneficiariesUrl(utr: String) = s"$baseUrl/$utr/transformed"
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-unidentified/$utr/$index"
-  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-individual/$utr/$index"
-  private def addClassOfBeneficiaryUrl(utr: String) = s"$baseUrl/add-unidentified/$utr"
-  private def addIndividualBeneficiaryUrl(utr: String) = s"$baseUrl/add-individual/$utr"
-  private def addCharityBeneficiaryUrl(utr: String) = s"$baseUrl/add-charity/$utr"
-  private def addCompanyBeneficiaryUrl(utr: String) = s"$baseUrl/add-company/$utr"
-  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"$baseUrl/amend-company/$utr/$index"
-  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"$baseUrl/add-large/$utr"
+  private def getTrustDetailsUrl(utr: String) = s"$trustsUrl/$utr/trust-details"
+  private def getBeneficiariesUrl(utr: String) = s"$beneficiariesUrl/$utr/transformed"
+  private def addClassOfBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-unidentified/$utr"
+  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-unidentified/$utr/$index"
+  private def addIndividualBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-individual/$utr"
+  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-individual/$utr/$index"
+  private def addCharityBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-charity/$utr"
+  private def amendCharityBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-charity/$utr/$index"
+  private def addTrustBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-trust/$utr"
+  private def amendTrustBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-trust/$utr/$index"
+  private def addCompanyBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-company/$utr"
+  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-company/$utr/$index"
+  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-large/$utr"
+  private def amendEmploymentRelatedBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-large/$utr/$index"
+  private def addOtherBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-other/$utr"
+  private def amendOtherBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-other/$utr/$index"
+  private def removeBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/$utr/remove"
+
+  private val individualBeneficiary = IndividualBeneficiary(
+    name = Name("first", None, "last"),
+    dateOfBirth = None,
+    identification = None,
+    address = None,
+    vulnerableYesNo = false,
+    roleInCompany = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2000-01-01"),
+    provisional = false
+  )
+
+  private val unidentifiedBeneficiary = ClassOfBeneficiary(
+    description = "Beneficiary Unidentified 25",
+    entityStart = LocalDate.parse("2019-09-23"),
+    provisional = false
+  )
+
+  private val companyBeneficiary = CompanyBeneficiary(
+    name = "Company Ltd",
+    utr = None,
+    address = None,
+    None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2019-09-23"),
+    provisional = false
+  )
+
+  private val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
+    name = "Employment Related Endeavours",
+    utr = None,
+    address = None,
+    description = Description("Description 1", None, None, None, None),
+    howManyBeneficiaries = "501",
+    entityStart = LocalDate.parse("2019-09-23"),
+    provisional = false
+  )
+
+  private val trustBeneficiary = TrustBeneficiary(
+    name = "Nelson Ltd ",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2017-02-28"),
+    provisional = false
+  )
+
+  private val charityBeneficiary = CharityBeneficiary(
+    name = "Humanitarian Endeavours Ltd",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2012-03-14"),
+    provisional = false
+  )
+
+  private val otherBeneficiary = OtherBeneficiary(
+    description = "Other Endeavours Ltd",
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = true,
+    entityStart = LocalDate.parse("2019-09-23"),
+    provisional = false
+  )
 
   "trust connector" when {
 
@@ -102,7 +180,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       val connector = application.injector.instanceOf[TrustConnector]
 
       server.stubFor(
-        get(urlEqualTo(s"/trusts/$utr/trust-details"))
+        get(urlEqualTo(getTrustDetailsUrl(utr)))
           .willReturn(okJson(json.toString))
       )
 
@@ -297,86 +375,16 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         whenReady(processed) {
           result =>
             result mustBe Beneficiaries(
-              individualDetails = List(
-                IndividualBeneficiary(
-                  name = Name("first", None, "last"),
-                  dateOfBirth = None,
-                  identification = None,
-                  address = None,
-                  vulnerableYesNo = false,
-                  roleInCompany = None,
-                  income = None,
-                  incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2000-01-01"),
-                  provisional = false
-                )
-              ),
+              individualDetails = List(individualBeneficiary),
               unidentified = List(
-                ClassOfBeneficiary(
-                  description = "Beneficiary Unidentified 25",
-                  entityStart = LocalDate.parse("2019-09-23"),
-                  provisional = false
-                ),
-                ClassOfBeneficiary(
-                  description = "Beneficiary Unidentified 23",
-                  entityStart = LocalDate.parse("2019-09-23"),
-                  provisional = false
-                )
+                unidentifiedBeneficiary,
+                unidentifiedBeneficiary.copy(description = "Beneficiary Unidentified 23")
               ),
-              company = List(
-                CompanyBeneficiary(
-                  name = "Company Ltd",
-                  utr = None,
-                  address = None,
-                  None,
-                  incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2019-09-23"),
-                  provisional = false
-                )
-              ),
-              employmentRelated = List(
-                EmploymentRelatedBeneficiary(
-                  name = "Employment Related Endeavours",
-                  utr = None,
-                  address = None,
-                  description = Description("Description 1", None, None, None, None),
-                  howManyBeneficiaries = "501",
-                  entityStart = LocalDate.parse("2019-09-23"),
-                  provisional = false
-                )
-              ),
-              trust = List(
-                TrustBeneficiary(
-                  name = "Nelson Ltd ",
-                  utr = None,
-                  address = None,
-                  income = None,
-                  incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2017-02-28"),
-                  provisional = false
-                )
-              ),
-              charity = List(
-                CharityBeneficiary(
-                  name = "Humanitarian Endeavours Ltd",
-                  utr = None,
-                  address = None,
-                  income = None,
-                  incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2012-03-14"),
-                  provisional = false
-                )
-              ),
-              other = List(
-                OtherBeneficiary(
-                  description = "Other Endeavours Ltd",
-                  address = None,
-                  income = None,
-                  incomeDiscretionYesNo = true,
-                  entityStart = LocalDate.parse("2019-09-23"),
-                  provisional = false
-                )
-              )
+              company = List(companyBeneficiary),
+              employmentRelated = List(employmentRelatedBeneficiary),
+              trust = List(trustBeneficiary),
+              charity = List(charityBeneficiary),
+              other = List(otherBeneficiary)
             )
         }
 
@@ -493,25 +501,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     "addIndividualBeneficiary" must {
 
-      val individualBeneficiary = IndividualBeneficiary(
-        name = Name("Nicola", Some("Andrey"), "Jackson"),
-        dateOfBirth = Some(date),
-        identification = None,
-        address = Some(UkAddress(
-          "Suite 10",
-          "Wealthy Arena",
-          Some("Trafagar Square"),
-          Some("London"),
-          "SE2 2HB"
-        )),
-        vulnerableYesNo = true,
-        roleInCompany = None,
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = date,
-        provisional = true
-      )
-
       "Return OK when the request is successful" in {
 
         val application = applicationBuilder()
@@ -562,7 +551,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-    "amending an individual beneficiary" must {
+    "amendIndividualBeneficiary" must {
 
       "Return OK when the request is successful" in {
 
@@ -581,24 +570,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             .willReturn(ok)
         )
 
-        val individual = IndividualBeneficiary(
-          name = Name(
-            firstName = "First",
-            middleName = None,
-            lastName = "Last"
-          ),
-          dateOfBirth = None,
-          identification = None,
-          address = None,
-          vulnerableYesNo = false,
-          roleInCompany = None,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.parse("2020-03-27"),
-          provisional = false
-        )
-
-        val result = connector.amendIndividualBeneficiary(utr, index, individual)
+        val result = connector.amendIndividualBeneficiary(utr, index, individualBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -622,24 +594,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             .willReturn(badRequest)
         )
 
-        val individual = IndividualBeneficiary(
-          name = Name(
-            firstName = "First",
-            middleName = None,
-            lastName = "Last"
-          ),
-          dateOfBirth = None,
-          identification = None,
-          address = None,
-          roleInCompany = None,
-          vulnerableYesNo = false,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.parse("2020-03-27"),
-          provisional = false
-        )
-
-        val result = connector.amendIndividualBeneficiary(utr, index, individual)
+        val result = connector.amendIndividualBeneficiary(utr, index, individualBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -650,22 +605,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     "addCharityBeneficiary" must {
 
-      val charityBeneficiary = CharityBeneficiary(
-        name = "Charity",
-        utr = None,
-        address = Some(UkAddress(
-          "Suite 10",
-          "Wealthy Arena",
-          Some("Trafagar Square"),
-          Some("London"),
-          "SE2 2HB"
-        )),
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = date,
-        provisional = true
-      )
-
       "Return OK when the request is successful" in {
 
         val application = applicationBuilder()
@@ -716,23 +655,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-    "add company beneficiary" must {
-
-      val companyBeneficiary = CompanyBeneficiary(
-        name = "Company",
-        utr = None,
-        address = Some(UkAddress(
-          "Suite 10",
-          "Wealthy Arena",
-          Some("Trafagar Square"),
-          Some("London"),
-          "SE2 2HB"
-        )),
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = date,
-        provisional = true
-      )
+    "addCompanyBeneficiary" must {
 
       "Return OK when the request is successful" in {
 
@@ -784,23 +707,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-    "amend company beneficiary" must {
-
-      val companyBeneficiary = CompanyBeneficiary(
-        name = "Company",
-        utr = None,
-        address = Some(UkAddress(
-          "Suite 10",
-          "Wealthy Arena",
-          Some("Trafagar Square"),
-          Some("London"),
-          "SE2 2HB"
-        )),
-        income = None,
-        incomeDiscretionYesNo = true,
-        entityStart = date,
-        provisional = false
-      )
+    "amendCompanyBeneficiary" must {
 
       "Return OK when the request is successful" in {
 
@@ -854,22 +761,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     "addEmploymentRelatedBeneficiary" must {
 
-      val largeBeneficiary = EmploymentRelatedBeneficiary(
-        name = "Large",
-        None,
-        address = Some(UkAddress(
-          "Suite 10",
-          "Wealthy Arena",
-          Some("Trafagar Square"),
-          Some("London"),
-          "SE2 2HB"
-        )),
-        description = Description("Description", None, None, None, None),
-        howManyBeneficiaries = "501",
-        entityStart = date,
-        provisional = true
-      )
-
       "Return OK when the request is successful" in {
 
         val application = applicationBuilder()
@@ -887,7 +778,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             .willReturn(ok)
         )
 
-        val result = connector.addEmploymentRelatedBeneficiary(utr, largeBeneficiary)
+        val result = connector.addEmploymentRelatedBeneficiary(utr, employmentRelatedBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -911,7 +802,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             .willReturn(badRequest)
         )
 
-        val result = connector.addEmploymentRelatedBeneficiary(utr, largeBeneficiary)
+        val result = connector.addEmploymentRelatedBeneficiary(utr, employmentRelatedBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -920,6 +811,379 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
     }
 
-  }
+    "amendCharityBeneficiary" must {
 
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "amendTrustBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "amendEmploymentRelatedBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendEmploymentRelatedBeneficiary(utr, index, employmentRelatedBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendEmploymentRelatedBeneficiary(utr, index, employmentRelatedBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "amendOtherBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+            .willReturn(ok)
+        )
+
+        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "addTrustBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addTrustBeneficiaryUrl(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.addTrustBeneficiary(utr, trustBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addTrustBeneficiaryUrl(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.addTrustBeneficiary(utr, trustBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "addOtherBeneficiary" must {
+
+      "Return OK when the request is successful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addOtherBeneficiaryUrl(utr)))
+            .willReturn(ok)
+        )
+
+        val result = connector.addOtherBeneficiary(utr, otherBeneficiary)
+
+        result.futureValue.status mustBe OK
+
+        application.stop()
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        val application = applicationBuilder()
+          .configure(
+            Seq(
+              "microservice.services.trusts.port" -> server.port(),
+              "auditing.enabled" -> false
+            ): _*
+          ).build()
+
+        val connector = application.injector.instanceOf[TrustConnector]
+
+        server.stubFor(
+          post(urlEqualTo(addOtherBeneficiaryUrl(utr)))
+            .willReturn(badRequest)
+        )
+
+        val result = connector.addOtherBeneficiary(utr, otherBeneficiary)
+
+        result.map(response => response.status mustBe BAD_REQUEST)
+
+        application.stop()
+      }
+
+    }
+
+    "removeBeneficiary" must {
+
+      def removeBeneficiary(beneficiaryType: BeneficiaryType): RemoveBeneficiary = RemoveBeneficiary(beneficiaryType, index, date)
+
+      "Return OK when the request is successful" in {
+
+        forAll(arbitraryBeneficiaryType) {
+          beneficiaryType =>
+
+            val application = applicationBuilder()
+              .configure(
+                Seq(
+                  "microservice.services.trusts.port" -> server.port(),
+                  "auditing.enabled" -> false
+                ): _*
+              ).build()
+
+            val connector = application.injector.instanceOf[TrustConnector]
+
+            server.stubFor(
+              put(urlEqualTo(removeBeneficiaryUrl(utr)))
+                .willReturn(ok)
+            )
+
+            val result = connector.removeBeneficiary(utr, removeBeneficiary(beneficiaryType))
+
+            result.futureValue.status mustBe OK
+
+            application.stop()
+        }
+      }
+
+      "return Bad Request when the request is unsuccessful" in {
+
+        forAll(arbitraryBeneficiaryType) {
+          beneficiaryType =>
+
+            val application = applicationBuilder()
+              .configure(
+                Seq(
+                  "microservice.services.trusts.port" -> server.port(),
+                  "auditing.enabled" -> false
+                ): _*
+              ).build()
+
+            val connector = application.injector.instanceOf[TrustConnector]
+
+            server.stubFor(
+              put(urlEqualTo(removeBeneficiaryUrl(utr)))
+                .willReturn(badRequest)
+            )
+
+            val result = connector.removeBeneficiary(utr, removeBeneficiary(beneficiaryType))
+
+            result.map(response => response.status mustBe BAD_REQUEST)
+
+            application.stop()
+        }
+      }
+
+    }
+
+  }
 }
