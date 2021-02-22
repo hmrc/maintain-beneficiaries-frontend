@@ -22,16 +22,13 @@ import models.{CheckMode, NormalMode, UserAnswers}
 import pages.other._
 import pages.other.add.StartDatePage
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                            countryOptions: CountryOptions
-                                 ) {
+class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     val add: Seq[AnswerRow] = Seq(
       bound.stringQuestion(DescriptionPage, "otherBeneficiary.description", DescriptionController.onPageLoad(NormalMode).url),

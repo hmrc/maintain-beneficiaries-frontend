@@ -17,20 +17,17 @@
 package utils.print
 
 import com.google.inject.Inject
+import controllers.charityortrust.charity.routes._
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.charityortrust.charity._
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
-import controllers.charityortrust.charity.routes._
 
-class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                              countryOptions: CountryOptions
-                                             ) {
+class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     val add: Seq[AnswerRow] = Seq(
       bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(NormalMode).url),

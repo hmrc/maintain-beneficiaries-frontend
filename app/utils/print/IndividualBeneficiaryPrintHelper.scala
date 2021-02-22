@@ -19,19 +19,16 @@ package utils.print
 import com.google.inject.Inject
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
-class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                                 countryOptions: CountryOptions
-                                            ) {
+class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
-    val bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound = answerRowConverter.bind(userAnswers, name)
 
     val add: Seq[AnswerRow] = Seq(
       bound.nameQuestion(NamePage, "individualBeneficiary.name", controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode).url),

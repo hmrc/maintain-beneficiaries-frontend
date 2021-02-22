@@ -21,16 +21,13 @@ import controllers.companyoremploymentrelated.company.routes._
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.companyoremploymentrelated.company._
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                              countryOptions: CountryOptions
-                                 ) {
+class CompanyBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     val add = Seq(
         bound.stringQuestion(NamePage, "companyBeneficiary.name", NameController.onPageLoad(NormalMode).url),

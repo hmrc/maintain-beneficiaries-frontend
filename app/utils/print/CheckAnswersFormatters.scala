@@ -16,135 +16,135 @@
 
 package utils.print
 
-import java.time.{LocalDate => JavaDate}
-
-import javax.inject.Inject
-import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, IdentificationDetailOptions, NonUkAddress, Passport, UkAddress}
+import models._
+import models.beneficiaries.RoleInCompany
+import models.beneficiaries.RoleInCompany.NA
 import org.joda.time.{LocalDate => JodaDate}
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.Html
+import play.twirl.api.HtmlFormat.escape
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.language.LanguageUtils
 import utils.countryOptions.CountryOptions
 
+import java.time.{LocalDate => JavaDate}
+import javax.inject.Inject
 import scala.util.Try
 
-class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils) {
+class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
+                                       countryOptions: CountryOptions) {
 
-  def formatDate(date: JavaDate)(implicit messages: Messages): String = {
+  def formatDate(date: JavaDate)(implicit messages: Messages): Html = {
     val convertedDate: JodaDate = new JodaDate(date.getYear, date.getMonthValue, date.getDayOfMonth)
-    languageUtils.Dates.formatDate(convertedDate)
+    escape(languageUtils.Dates.formatDate(convertedDate))
   }
 
   def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
     if (answer) {
-      HtmlFormat.escape(messages("site.yes"))
+      escape(messages("site.yes"))
     } else {
-      HtmlFormat.escape(messages("site.no"))
+      escape(messages("site.no"))
     }
   }
 
   def formatNino(nino: String): Html = {
     val formatted = Try(Nino(nino).formatted).getOrElse(nino)
-    HtmlFormat.escape(formatted)
+    escape(formatted)
   }
 
-  def formatAddress(address: Address, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
+  def formatAddress(address: Address)(implicit messages: Messages): Html = {
     address match {
       case a: UkAddress => formatUkAddress(a)
-      case a: NonUkAddress => formatNonUkAddress(a, countryOptions)
+      case a: NonUkAddress => formatNonUkAddress(a)
     }
   }
 
   private def formatUkAddress(address: UkAddress): Html = {
     val lines =
       Seq(
-        Some(HtmlFormat.escape(address.line1)),
-        Some(HtmlFormat.escape(address.line2)),
-        address.line3.map(HtmlFormat.escape),
-        address.line4.map(HtmlFormat.escape),
-        Some(HtmlFormat.escape(address.postcode))
+        Some(escape(address.line1)),
+        Some(escape(address.line2)),
+        address.line3.map(escape),
+        address.line4.map(escape),
+        Some(escape(address.postcode))
       ).flatten
 
     Html(lines.mkString("<br />"))
   }
 
-  private def formatNonUkAddress(address: NonUkAddress, countryOptions: CountryOptions)(implicit messages: Messages): Html = {
+  private def formatNonUkAddress(address: NonUkAddress)(implicit messages: Messages): Html = {
     val lines =
       Seq(
-        Some(HtmlFormat.escape(address.line1)),
-        Some(HtmlFormat.escape(address.line2)),
-        address.line3.map(HtmlFormat.escape),
-        Some(country(address.country, countryOptions))
+        Some(escape(address.line1)),
+        Some(escape(address.line2)),
+        address.line3.map(escape),
+        Some(country(address.country))
       ).flatten
 
     Html(lines.mkString("<br />"))
   }
 
-  private def country(code: String, countryOptions: CountryOptions)(implicit messages: Messages): String =
+  private def country(code: String)(implicit messages: Messages): String =
     countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
 
   def formatIdentificationDetails(identificationDetailOptions: IdentificationDetailOptions): Html = {
     identificationDetailOptions match {
-      case IdentificationDetailOptions.IdCard => HtmlFormat.escape("ID card")
-      case IdentificationDetailOptions.Passport => HtmlFormat.escape("Passport")
+      case IdentificationDetailOptions.IdCard => escape("ID card")
+      case IdentificationDetailOptions.Passport => escape("Passport")
     }
   }
 
-  def formatPassportOrIdCardDetails(id: CombinedPassportOrIdCard, countryOptions: CountryOptions)
+  def formatPassportOrIdCardDetails(id: CombinedPassportOrIdCard)
                                    (implicit messages: Messages): Html = {
     val lines =
       Seq(
-        Some(country(id.countryOfIssue, countryOptions)),
-        Some(HtmlFormat.escape(id.number)),
-        Some(HtmlFormat.escape(formatDate(id.expirationDate)))
+        Some(country(id.countryOfIssue)),
+        Some(escape(id.number)),
+        Some(formatDate(id.expirationDate))
       ).flatten
 
     Html(lines.mkString("<br />"))
   }
 
 
-  def formatPassportDetails(passport: Passport, countryOptions: CountryOptions)
+  def formatPassportDetails(passport: Passport)
                            (implicit messages: Messages): Html = {
-    val lines =
-      Seq(
-        Some(country(passport.countryOfIssue, countryOptions)),
-        Some(HtmlFormat.escape(passport.number)),
-        Some(HtmlFormat.escape(formatDate(passport.expirationDate)))
-      ).flatten
-
-    Html(lines.mkString("<br />"))
+    formatPassportOrIdCardDetails(passport.asCombined)
   }
 
-  def formatIdCardDetails(idCard: IdCard, countryOptions: CountryOptions)
+  def formatIdCardDetails(idCard: IdCard)
                          (implicit messages: Messages): Html = {
-    val lines =
-      Seq(
-        Some(country(idCard.countryOfIssue, countryOptions)),
-        Some(HtmlFormat.escape(idCard.number)),
-        Some(HtmlFormat.escape(formatDate(idCard.expirationDate)))
-      ).flatten
-
-    Html(lines.mkString("<br />"))
+    formatPassportOrIdCardDetails(idCard.asCombined)
   }
 
-  def percentage(value: Int): Html = HtmlFormat.escape(s"$value%")
+  def percentage(value: Int): Html = escape(s"$value%")
 
   def formatDescription(description: Description): Html = {
     val lines =
       Seq(
-        Some(HtmlFormat.escape(description.description)),
-        description.description1.map(HtmlFormat.escape),
-        description.description2.map(HtmlFormat.escape),
-        description.description3.map(HtmlFormat.escape),
-        description.description4.map(HtmlFormat.escape)
+        Some(escape(description.description)),
+        description.description1.map(escape),
+        description.description2.map(escape),
+        description.description3.map(escape),
+        description.description4.map(escape)
       ).flatten
 
     Html(lines.mkString("<br />"))
   }
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
-    HtmlFormat.escape(messages(s"numberOfBeneficiaries.$answer"))
+    formatEnum("numberOfBeneficiaries", answer)
+  }
+
+  def formatRoleInCompany(answer: RoleInCompany)(implicit messages: Messages): Html = {
+    answer match {
+      case NA => escape(messages("individualBeneficiary.roleInCompany.checkYourAnswersLabel.na"))
+      case _ => formatEnum("individualBeneficiary.roleInCompany", answer)
+    }
+  }
+
+  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html = {
+    escape(messages(s"$key.$answer"))
   }
 
 }

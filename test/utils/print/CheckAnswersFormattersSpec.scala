@@ -16,11 +16,11 @@
 
 package utils.print
 
-import java.time.LocalDate
-
 import base.SpecBase
 import play.api.i18n.{Lang, MessagesImpl}
 import play.twirl.api.Html
+
+import java.time.LocalDate
 
 class CheckAnswersFormattersSpec extends SpecBase {
 
@@ -40,16 +40,16 @@ class CheckAnswersFormattersSpec extends SpecBase {
       "in English mode" must {
         "format date in English" in {
 
-          val result: String = checkAnswersFormatters.formatDate(date)(messages("en"))
-          result mustBe "3 February 1996"
+          val result: Html = checkAnswersFormatters.formatDate(date)(messages("en"))
+          result mustBe Html("3 February 1996")
         }
       }
 
       "in Welsh mode" must {
         "format date in Welsh" in {
 
-          val result: String = checkAnswersFormatters.formatDate(date)(messages("cy"))
-          result mustBe "3 Chwefror 1996"
+          val result: Html = checkAnswersFormatters.formatDate(date)(messages("cy"))
+          result mustBe Html("3 Chwefror 1996")
         }
       }
     }

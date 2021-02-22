@@ -20,16 +20,13 @@ import com.google.inject.Inject
 import models.UserAnswers
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.i18n.Messages
-import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 
-class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                              countryOptions: CountryOptions
-                                 ) {
+class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, description: String)(implicit messages: Messages) = {
+  def apply(userAnswers: UserAnswers, description: String)(implicit messages: Messages): AnswerSection = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description, countryOptions)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description)
 
     AnswerSection(
       None,
