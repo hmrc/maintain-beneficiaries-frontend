@@ -20,8 +20,11 @@ import models.UserAnswers
 import play.api.Configuration
 import play.api.libs.json._
 import reactivemongo.api.WriteConcern
+import reactivemongo.api.bson.BSONDocument
+import reactivemongo.api.bson.collection.BSONSerializationPack
+import reactivemongo.api.indexes.Index.Aux
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+import reactivemongo.play.json.collection.Helpers.idWrites
 
 import java.time.LocalDateTime
 import javax.inject.{Inject, Singleton}
@@ -38,9 +41,29 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
 
   override val lastUpdatedIndexName: String = "user-answers-updated-at-index"
 
-  override def idIndex: Index = Index(
-    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending),
-    name = Some("internal-id-and-utr-compound-index")
+  override def idIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
+    key = Seq("internalId" -> IndexType.Ascending),
+    name = Some("internal-id-and-utr-compound-index"),
+    expireAfterSeconds = None,
+    options = BSONDocument.empty,
+    unique = true,
+    background = false,
+    dropDups = false,
+    sparse = false,
+    version = None,
+    partialFilter = None,
+    storageEngine = None,
+    weights = None,
+    defaultLanguage = None,
+    languageOverride = None,
+    textIndexVersion = None,
+    sphereIndexVersion = None,
+    bits = None,
+    min = None,
+    max = None,
+    bucketSize = None,
+    collation = None,
+    wildcardProjection = None
   )
 
   private def selector(internalId: String, utr: String): JsObject = Json.obj(
