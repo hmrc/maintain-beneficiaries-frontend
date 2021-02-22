@@ -20,9 +20,11 @@ import models.MongoDateTimeFormats
 import play.api.libs.json.{JsObject, Json, Reads}
 import play.api.{Configuration, Logging}
 import reactivemongo.api.WriteConcern
+import reactivemongo.api.bson.BSONDocument
+import reactivemongo.api.bson.collection.BSONSerializationPack
+import reactivemongo.api.indexes.Index.Aux
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+import reactivemongo.play.json.collection.Helpers.idWrites
 import reactivemongo.play.json.collection.JSONCollection
 
 import java.time.LocalDateTime
@@ -39,7 +41,7 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
 
   val lastUpdatedIndexName: String
 
-  def idIndex: Index
+  def idIndex: Aux[BSONSerializationPack.type]
 
   def collection: Future[JSONCollection] =
     for {
@@ -49,10 +51,29 @@ abstract class IndexesManager @Inject()(mongo: MongoDriver,
 
   private def ensureIndexes: Future[Boolean] = {
 
-    lazy val lastUpdatedIndex: Index = Index(
+    lazy val lastUpdatedIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
       key = Seq("updatedAt" -> IndexType.Ascending),
       name = Some(lastUpdatedIndexName),
-      options = BSONDocument("expireAfterSeconds" -> cacheTtl)
+      expireAfterSeconds = Some(cacheTtl),
+      options = BSONDocument.empty,
+      unique = true,
+      background = false,
+      dropDups = false,
+      sparse = false,
+      version = None,
+      partialFilter = None,
+      storageEngine = None,
+      weights = None,
+      defaultLanguage = None,
+      languageOverride = None,
+      textIndexVersion = None,
+      sphereIndexVersion = None,
+      bits = None,
+      min = None,
+      max = None,
+      bucketSize = None,
+      collation = None,
+      wildcardProjection = None
     )
 
     for {

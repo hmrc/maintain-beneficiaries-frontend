@@ -20,8 +20,11 @@ import com.google.inject.ImplementedBy
 import models.UtrSession
 import play.api.Configuration
 import play.api.libs.json._
+import reactivemongo.api.bson.BSONDocument
+import reactivemongo.api.bson.collection.BSONSerializationPack
+import reactivemongo.api.indexes.Index.Aux
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+import reactivemongo.play.json.collection.Helpers.idWrites
 
 import java.time.LocalDateTime
 import javax.inject.{Inject, Singleton}
@@ -38,9 +41,29 @@ class ActiveSessionRepositoryImpl @Inject()(mongo: MongoDriver,
 
   override val lastUpdatedIndexName: String = "session-updated-at-index"
 
-  override def idIndex: Index = Index(
+  override def idIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
     key = Seq("utr" -> IndexType.Ascending),
-    name = Some("utr-index")
+    name = Some("utr-index"),
+    expireAfterSeconds = None,
+    options = BSONDocument.empty,
+    unique = true,
+    background = false,
+    dropDups = false,
+    sparse = false,
+    version = None,
+    partialFilter = None,
+    storageEngine = None,
+    weights = None,
+    defaultLanguage = None,
+    languageOverride = None,
+    textIndexVersion = None,
+    sphereIndexVersion = None,
+    bits = None,
+    min = None,
+    max = None,
+    bucketSize = None,
+    collation = None,
+    wildcardProjection = None
   )
 
   private def selector(internalId: String): JsObject = Json.obj(
