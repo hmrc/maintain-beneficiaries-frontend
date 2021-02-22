@@ -42,7 +42,7 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
   override val lastUpdatedIndexName: String = "user-answers-updated-at-index"
 
   override def idIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
-    key = Seq("internalId" -> IndexType.Ascending),
+    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending),
     name = Some("internal-id-and-utr-compound-index"),
     expireAfterSeconds = None,
     options = BSONDocument.empty,
