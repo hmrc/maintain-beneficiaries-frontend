@@ -32,9 +32,15 @@ class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
 
   "EmploymentRelatedBeneficiaryMapper" must {
 
-    "generate employment related beneficiary model" in {
+    val mapper = injector.instanceOf[EmploymentRelatedBeneficiaryMapper]
 
-      val mapper = injector.instanceOf[EmploymentRelatedBeneficiaryMapper]
+    "return None for empty user answers" in {
+
+      val result = mapper(emptyUserAnswers)
+      result mustBe None
+    }
+
+    "generate employment related beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value

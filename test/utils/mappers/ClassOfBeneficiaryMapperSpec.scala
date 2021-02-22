@@ -28,9 +28,15 @@ class ClassOfBeneficiaryMapperSpec extends SpecBase {
 
   "ClassOfBeneficiaryMapper" must {
 
-    "generate class of beneficiary model" in {
+    val mapper = injector.instanceOf[ClassOfBeneficiaryMapper]
 
-      val mapper = injector.instanceOf[ClassOfBeneficiaryMapper]
+    "return None for empty user answers" in {
+
+      val result = mapper(emptyUserAnswers)
+      result mustBe None
+    }
+
+    "generate class of beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
         .set(DescriptionPage, description).success.value

@@ -29,7 +29,7 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    val add = Seq(
+    lazy val add = Seq(
       bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
@@ -40,7 +40,7 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
       bound.dateQuestion(StartDatePage, "employmentBeneficiary.startDate", StartDateController.onPageLoad().url)
     ).flatten
 
-    val amend = Seq(
+    lazy val amend = Seq(
       bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(CheckMode).url),
       bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr",""),
       bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
@@ -52,8 +52,8 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
     ).flatten
 
     AnswerSection(
-      None,
-      if (provisional) add else amend
+      headingKey = None,
+      rows = if (provisional) add else amend
     )
   }
 }

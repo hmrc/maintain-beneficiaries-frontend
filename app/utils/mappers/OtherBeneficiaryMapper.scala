@@ -16,17 +16,16 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.other._
 import pages.other.add.StartDatePage
-import play.api.Logging
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.{JsSuccess, Reads}
 
-class OtherBeneficiaryMapper extends Logging {
+import java.time.LocalDate
+
+class OtherBeneficiaryMapper extends Mapper[OtherBeneficiary] {
 
   def apply(answers: UserAnswers): Option[OtherBeneficiary] = {
     val readFromUserAnswers: Reads[OtherBeneficiary] =
@@ -46,12 +45,6 @@ class OtherBeneficiaryMapper extends Logging {
         Reads(_ => JsSuccess(true))
       ) (OtherBeneficiary.apply _ )
 
-    answers.data.validate[OtherBeneficiary](readFromUserAnswers) match {
-      case JsSuccess(value, _) =>
-        Some(value)
-      case JsError(errors) =>
-        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate OtherBeneficiary from UserAnswers due to $errors")
-        None
-    }
+    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
 }

@@ -29,8 +29,8 @@ class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description)
 
     AnswerSection(
-      None,
-      Seq(
+      headingKey = None,
+      rows = Seq(
         bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
         bound.dateQuestion(EntityStartPage, "classOfBeneficiary.entityStart", controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
       ).flatten

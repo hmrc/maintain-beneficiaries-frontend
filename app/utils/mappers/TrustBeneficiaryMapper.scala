@@ -16,16 +16,15 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import models.beneficiaries.TrustBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.charityortrust.trust._
-import play.api.Logging
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.{JsSuccess, Reads}
 
-class TrustBeneficiaryMapper extends Logging {
+import java.time.LocalDate
+
+class TrustBeneficiaryMapper extends Mapper[TrustBeneficiary] {
 
   def apply(answers: UserAnswers): Option[TrustBeneficiary] = {
     val readFromUserAnswers: Reads[TrustBeneficiary] =
@@ -46,12 +45,6 @@ class TrustBeneficiaryMapper extends Logging {
         Reads(_ => JsSuccess(true))
       ) (TrustBeneficiary.apply _ )
 
-    answers.data.validate[TrustBeneficiary](readFromUserAnswers) match {
-      case JsSuccess(value, _) =>
-        Some(value)
-      case JsError(errors) =>
-        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate TrustBeneficiary from UserAnswers due to $errors")
-        None
-    }
+    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
 }

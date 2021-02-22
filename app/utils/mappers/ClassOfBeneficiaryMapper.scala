@@ -16,16 +16,15 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.beneficiaries.ClassOfBeneficiary
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
-import play.api.Logging
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.Reads
 
-class ClassOfBeneficiaryMapper extends Logging {
+import java.time.LocalDate
+
+class ClassOfBeneficiaryMapper extends Mapper[ClassOfBeneficiary] {
 
   def apply(answers: UserAnswers): Option[ClassOfBeneficiary] = {
     val readFromUserAnswers: Reads[ClassOfBeneficiary] =
@@ -37,12 +36,6 @@ class ClassOfBeneficiaryMapper extends Logging {
           ClassOfBeneficiary(desc, start, provisional = true)
       )
 
-    answers.data.validate[ClassOfBeneficiary](readFromUserAnswers) match {
-      case JsSuccess(value, _) =>
-        Some(value)
-      case JsError(errors) =>
-        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate ClassOfBeneficiary from UserAnswers due to $errors")
-        None
-    }
+    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
 }

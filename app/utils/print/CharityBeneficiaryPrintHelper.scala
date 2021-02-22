@@ -29,7 +29,7 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    val add: Seq[AnswerRow] = Seq(
+    lazy val add: Seq[AnswerRow] = Seq(
       bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(NormalMode).url),
       bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(NormalMode).url),
@@ -40,11 +40,11 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
       bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url)
     ).flatten
 
-    val amend: Seq[AnswerRow] = Seq(
+    lazy val amend: Seq[AnswerRow] = Seq(
       bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
       bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
-      bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr",""),
+      bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr", ""),
       bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
       bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
@@ -52,8 +52,8 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
     ).flatten
 
     AnswerSection(
-      None,
-      if (provisional) add else amend
+      headingKey = None,
+      rows = if (provisional) add else amend
     )
   }
 

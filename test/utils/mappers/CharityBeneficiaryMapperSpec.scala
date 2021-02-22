@@ -31,9 +31,15 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
 
   "CharityBeneficiaryMapper" must {
 
-    "generate charity beneficiary model" in {
+    val mapper = injector.instanceOf[CharityBeneficiaryMapper]
 
-      val mapper = injector.instanceOf[CharityBeneficiaryMapper]
+    "return None for empty user answers" in {
+
+      val result = mapper(emptyUserAnswers)
+      result mustBe None
+    }
+
+    "generate charity beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value

@@ -16,18 +16,17 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import models._
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
-import play.api.Logging
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsSuccess, Reads}
+import play.api.libs.json.{JsSuccess, Reads}
 
-class IndividualBeneficiaryMapper extends Logging {
+import java.time.LocalDate
+
+class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
 
   def apply(answers: UserAnswers, provisional: Boolean): Option[IndividualBeneficiary] = {
 
@@ -45,13 +44,7 @@ class IndividualBeneficiaryMapper extends Logging {
         Reads(_ => JsSuccess(true))
       ) (IndividualBeneficiary.apply _)
 
-    answers.data.validate[IndividualBeneficiary](readFromUserAnswers) match {
-      case JsSuccess(value, _) =>
-        Some(value)
-      case JsError(errors) =>
-        logger.error(s"[UTR: ${answers.utr}] Failed to rehydrate IndividualBeneficiary from UserAnswers due to $errors")
-        None
-    }
+    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
 
   private def readIdentification(provisional: Boolean): Reads[Option[IndividualIdentification]] = {

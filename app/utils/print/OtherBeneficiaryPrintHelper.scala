@@ -30,7 +30,7 @@ class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    val add: Seq[AnswerRow] = Seq(
+    lazy val add: Seq[AnswerRow] = Seq(
       bound.stringQuestion(DescriptionPage, "otherBeneficiary.description", DescriptionController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(DiscretionYesNoPage, "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(NormalMode).url),
       bound.percentageQuestion(ShareOfIncomePage, "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(NormalMode).url),
@@ -41,7 +41,7 @@ class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
       bound.dateQuestion(StartDatePage, "otherBeneficiary.startDate", controllers.other.add.routes.StartDateController.onPageLoad().url)
     ).flatten
 
-    val amend: Seq[AnswerRow] = Seq(
+    lazy val amend: Seq[AnswerRow] = Seq(
       bound.stringQuestion(DescriptionPage, "otherBeneficiary.description", DescriptionController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(DiscretionYesNoPage, "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
       bound.percentageQuestion(ShareOfIncomePage, "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
@@ -52,8 +52,8 @@ class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
     ).flatten
 
     AnswerSection(
-      None,
-      if (provisional) add else amend
+      headingKey = None,
+      rows = if (provisional) add else amend
     )
   }
 }

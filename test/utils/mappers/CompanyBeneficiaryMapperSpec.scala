@@ -31,9 +31,15 @@ class CompanyBeneficiaryMapperSpec extends SpecBase {
 
   "CompanyBeneficiaryMapper" must {
 
-    "generate company beneficiary model" in {
+    val mapper = injector.instanceOf[CompanyBeneficiaryMapper]
 
-      val mapper = injector.instanceOf[CompanyBeneficiaryMapper]
+    "return None for empty user answers" in {
+
+      val result = mapper(emptyUserAnswers)
+      result mustBe None
+    }
+
+    "generate company beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value

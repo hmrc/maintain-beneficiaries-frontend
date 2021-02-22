@@ -16,11 +16,11 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.UkAddress
 import pages.charityortrust.trust._
+
+import java.time.LocalDate
 
 class TrustBeneficiaryMapperSpec extends SpecBase {
 
@@ -31,9 +31,15 @@ class TrustBeneficiaryMapperSpec extends SpecBase {
 
   "TrustBeneficiaryMapper" must {
 
-    "generate trust beneficiary model" in {
+    val mapper = injector.instanceOf[TrustBeneficiaryMapper]
 
-      val mapper = injector.instanceOf[TrustBeneficiaryMapper]
+    "return None for empty user answers" in {
+
+      val result = mapper(emptyUserAnswers)
+      result mustBe None
+    }
+
+    "generate trust beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
         .set(NamePage, name).success.value

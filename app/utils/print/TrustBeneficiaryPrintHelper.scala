@@ -29,22 +29,22 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-      val add = Seq(
-        bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(NormalMode).url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(NormalMode).url),
-        bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(NormalMode).url),
-        bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
-        bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
-        bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(NormalMode).url),
-        bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url)
-      ).flatten
+    lazy val add = Seq(
+      bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(NormalMode).url),
+      bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
+      bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
+      bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(NormalMode).url),
+      bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url)
+    ).flatten
 
-    val amend = Seq(
+    lazy val amend = Seq(
       bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(CheckMode).url),
       bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(CheckMode).url),
-      bound.stringQuestion(UtrPage, "trustBeneficiary.checkDetails.utr",""),
+      bound.stringQuestion(UtrPage, "trustBeneficiary.checkDetails.utr", ""),
       bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
       bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
@@ -52,8 +52,8 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
     ).flatten
 
     AnswerSection(
-      None,
-      if (provisional) add else amend
+      headingKey = None,
+      rows = if (provisional) add else amend
     )
   }
 }
