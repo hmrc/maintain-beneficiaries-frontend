@@ -69,7 +69,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
         Some(escape(address.postcode))
       ).flatten
 
-    Html(lines.mkString("<br />"))
+    breakLines(lines)
   }
 
   private def formatNonUkAddress(address: NonUkAddress)(implicit messages: Messages): Html = {
@@ -81,11 +81,11 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
         Some(country(address.country))
       ).flatten
 
-    Html(lines.mkString("<br />"))
+    breakLines(lines)
   }
 
-  private def country(code: String)(implicit messages: Messages): String =
-    countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse("")
+  private def country(code: String)(implicit messages: Messages): Html =
+    escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
   def formatIdentificationDetails(identificationDetailOptions: IdentificationDetailOptions): Html = {
     identificationDetailOptions match {
@@ -103,7 +103,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
         Some(formatDate(id.expirationDate))
       ).flatten
 
-    Html(lines.mkString("<br />"))
+    breakLines(lines)
   }
 
 
@@ -129,7 +129,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
         description.description4.map(escape)
       ).flatten
 
-    Html(lines.mkString("<br />"))
+    breakLines(lines)
   }
 
   def formatNumberOfBeneficiaries(answer: HowManyBeneficiaries)(implicit messages: Messages): Html = {
@@ -145,6 +145,10 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
 
   def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html = {
     escape(messages(s"$key.$answer"))
+  }
+
+  private def breakLines(lines: Seq[Html]): Html = {
+    Html(lines.mkString("<br />"))
   }
 
 }
