@@ -29,7 +29,8 @@ final case class UserAnswers(internalId: String,
                              whenTrustSetup: LocalDate,
                              trustType: TypeOfTrust,
                              data: JsObject = Json.obj(),
-                             updatedAt: LocalDateTime = LocalDateTime.now) {
+                             updatedAt: LocalDateTime = LocalDateTime.now,
+                             is5mldEnabled: Boolean = false) {
 
   def cleanup: Try[UserAnswers] = {
     this
@@ -110,7 +111,8 @@ object UserAnswers {
       (__ \ "whenTrustSetup").read[LocalDate] and
       (__ \ "trustType").read[TypeOfTrust] and
       (__ \ "data").read[JsObject] and
-      (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead)
+      (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead) and
+      (__ \ "is5mldEnabled").readWithDefault[Boolean](false)
     ) (UserAnswers.apply _)
 
   implicit lazy val writes: Writes[UserAnswers] = (
@@ -119,7 +121,8 @@ object UserAnswers {
       (__ \ "whenTrustSetup").write[LocalDate] and
       (__ \ "trustType").write[TypeOfTrust] and
       (__ \ "data").write[JsObject] and
-      (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite)
+      (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite) and
+      (__ \ "is5mldEnabled").write[Boolean]
     ) (unlift(UserAnswers.unapply))
 
 }
