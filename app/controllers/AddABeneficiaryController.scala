@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.TrustStoreConnector
+import connectors.TrustsStoreConnector
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import handlers.ErrorHandler
@@ -48,8 +48,8 @@ class AddABeneficiaryController @Inject()(
                                            yesNoView: AddABeneficiaryYesNoView,
                                            completeView: MaxedOutBeneficiariesView,
                                            val appConfig: FrontendAppConfig,
-                                           trustStoreConnector: TrustStoreConnector,
-                                            errorHandler: ErrorHandler
+                                           trustStoreConnector: TrustsStoreConnector,
+                                           errorHandler: ErrorHandler
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()

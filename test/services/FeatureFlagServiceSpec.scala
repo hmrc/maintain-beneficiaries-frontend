@@ -17,7 +17,7 @@
 package services
 
 import base.SpecBase
-import connectors.TrustStoreConnector
+import connectors.TrustsStoreConnector
 import models.FeatureResponse
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -30,7 +30,7 @@ class FeatureFlagServiceSpec extends SpecBase {
 
   "is5mldEnabled" must {
 
-    val mockConnector = mock[TrustStoreConnector]
+    val mockConnector = mock[TrustsStoreConnector]
 
     val featureFlagService = new FeatureFlagService(mockConnector)
 

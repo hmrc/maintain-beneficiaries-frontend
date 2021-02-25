@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import base.SpecBase
-import connectors.{TrustConnector, TrustStoreConnector}
+import connectors.{TrustConnector, TrustsStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
 import models.{AddABeneficiary, Description, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
@@ -49,7 +49,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
   lazy val submitYesNoRoute : String = controllers.routes.AddABeneficiaryController.submitOne().url
   lazy val submitCompleteRoute : String = controllers.routes.AddABeneficiaryController.submitComplete().url
 
-  val mockStoreConnector : TrustStoreConnector = mock[TrustStoreConnector]
+  val mockStoreConnector : TrustsStoreConnector = mock[TrustsStoreConnector]
 
   val addTrusteeForm = new AddABeneficiaryFormProvider()()
   val yesNoForm = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
@@ -319,7 +319,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService),
-          bind(classOf[TrustStoreConnector]).toInstance(mockStoreConnector)
+          bind(classOf[TrustsStoreConnector]).toInstance(mockStoreConnector)
         )).build()
 
         val request =
@@ -524,7 +524,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(Seq(
           bind(classOf[TrustService]).toInstance(fakeService),
-          bind(classOf[TrustStoreConnector]).toInstance(mockStoreConnector)
+          bind(classOf[TrustsStoreConnector]).toInstance(mockStoreConnector)
         )).build()
 
         val request = FakeRequest(POST, submitCompleteRoute)

@@ -52,7 +52,7 @@ class TrustsStoreConnectorSpec extends SpecBase
             ): _*
           ).build()
 
-        val connector = application.injector.instanceOf[TrustStoreConnector]
+        val connector = application.injector.instanceOf[TrustsStoreConnector]
 
         val json = Json.parse(
           """
@@ -89,7 +89,7 @@ class TrustsStoreConnectorSpec extends SpecBase
             ): _*
           ).build()
 
-        val connector = application.injector.instanceOf[TrustStoreConnector]
+        val connector = application.injector.instanceOf[TrustsStoreConnector]
 
         server.stubFor(
           post(urlEqualTo(url))
@@ -119,7 +119,7 @@ class TrustsStoreConnectorSpec extends SpecBase
             ): _*
           ).build()
 
-        val connector = application.injector.instanceOf[TrustStoreConnector]
+        val connector = application.injector.instanceOf[TrustsStoreConnector]
 
         server.stubFor(
           get(urlEqualTo(url))
@@ -148,7 +148,7 @@ class TrustsStoreConnectorSpec extends SpecBase
             ): _*
           ).build()
 
-        val connector = application.injector.instanceOf[TrustStoreConnector]
+        val connector = application.injector.instanceOf[TrustsStoreConnector]
 
         server.stubFor(
           get(urlEqualTo(url))
