@@ -56,17 +56,17 @@ class RemoveEmploymentBeneficiaryController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      trustService.getEmploymentBeneficiary(request.userAnswers.utr, index).map {
+      trustService.getEmploymentBeneficiary(request.userAnswers.identifier, index).map {
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.name))
       } recoverWith {
         case iobe: IndexOutOfBoundsException =>
-          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting employment beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException")
 
           Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting employment beneficiary $index from trusts service ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -79,7 +79,7 @@ class RemoveEmploymentBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trustService.getEmploymentBeneficiary(request.userAnswers.utr, index).map {
+          trustService.getEmploymentBeneficiary(request.userAnswers.identifier, index).map {
             beneficiary =>
               BadRequest(view(formWithErrors, index, beneficiary.name))
           }
@@ -88,11 +88,11 @@ class RemoveEmploymentBeneficiaryController @Inject()(
 
           if (value) {
 
-            trustService.getEmploymentBeneficiary(request.userAnswers.utr, index).flatMap {
+            trustService.getEmploymentBeneficiary(request.userAnswers.identifier, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.EmploymentRelatedBeneficiary, index)).map { _ =>
-                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  trustService.removeBeneficiary(request.userAnswers.identifier, RemoveBeneficiary(BeneficiaryType.EmploymentRelatedBeneficiary, index)).map { _ =>
+                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                       s" removed new employment beneficiary $index")
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   }
@@ -106,7 +106,7 @@ class RemoveEmploymentBeneficiaryController @Inject()(
                 }
             } recoverWith {
               case e =>
-                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                   s" error removing an employment beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
                 Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

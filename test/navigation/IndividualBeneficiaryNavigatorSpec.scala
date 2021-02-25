@@ -16,12 +16,10 @@
 
 package navigation
 
-import java.time.LocalDate
-
 import base.SpecBase
-import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, TypeOfTrust}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsYesNoPage}
 import pages.individualbeneficiary.{NamePage, _}
 
@@ -38,7 +36,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
       "employment related trust" must {
 
         "Name page -> Role in company page" in {
-          navigator.nextPage(NamePage, mode, UserAnswers("id", "utr", LocalDate.parse("2019-02-10"), TypeOfTrust.EmployeeRelated))
+          navigator.nextPage(NamePage, mode, emptyUserAnswers.copy(trustType = Some(TypeOfTrust.EmployeeRelated)))
             .mustBe(controllers.individualbeneficiary.routes.RoleInCompanyController.onPageLoad(mode))
         }
 
@@ -225,7 +223,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
       "employment related trust" must {
 
         "Name page -> Role in company page" in {
-          navigator.nextPage(NamePage, mode, UserAnswers("id", "utr", LocalDate.parse("2019-02-10"), TypeOfTrust.EmployeeRelated))
+          navigator.nextPage(NamePage, mode, emptyUserAnswers.copy(trustType = Some(TypeOfTrust.EmployeeRelated)))
             .mustBe(controllers.individualbeneficiary.routes.RoleInCompanyController.onPageLoad(mode))
         }
 

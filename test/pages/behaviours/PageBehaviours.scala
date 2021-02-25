@@ -16,20 +16,17 @@
 
 package pages.behaviours
 
-import java.time.LocalDate
-
+import base.SpecBase
 import generators.Generators
-import models.{TypeOfTrust, UserAnswers}
+import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+import org.scalatest.OptionValues
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, TryValues, WordSpec}
 import pages.QuestionPage
 import play.api.libs.json._
 
-trait PageBehaviours extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues with TryValues {
-
-  val emptyUserAnswers: UserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust, Json.obj())
+trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators with OptionValues {
 
   class BeRetrievable[A] {
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {

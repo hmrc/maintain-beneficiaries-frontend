@@ -60,12 +60,12 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers) match {
         case None =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error in mapping user answers to OtherBeneficiary")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
         case Some(beneficiary) =>
-          connector.addTrustBeneficiary(request.userAnswers.utr, beneficiary).map(_ =>
+          connector.addTrustBeneficiary(request.userAnswers.identifier, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
       }

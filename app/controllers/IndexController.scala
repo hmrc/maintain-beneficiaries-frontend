@@ -17,15 +17,16 @@
 package controllers
 
 import java.time.LocalDate
-
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
+
 import javax.inject.Inject
 import models.UserAnswers
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,27 +34,32 @@ import scala.concurrent.{ExecutionContext, Future}
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  actions: StandardActionSets,
-                                 cacheRepository : PlaybackRepository,
-                                 connector: TrustConnector)
-                               (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+                                 cacheRepository: PlaybackRepository,
+                                 connector: TrustConnector,
+                                 featureFlagService: FeatureFlagService
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad(utr: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(utr) andThen actions.getData).async {
+  def onPageLoad(identifier: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(identifier) andThen actions.getData).async {
       implicit request =>
 
         for {
-          details <- connector.getTrustDetails(utr)
+          details <- connector.getTrustDetails(identifier)
+          is5mldEnabled <- featureFlagService.is5mldEnabled()
           ua <- Future.successful {
             request.userAnswers.getOrElse {
               UserAnswers(
                 internalId = request.user.internalId,
-                utr = utr,
+                identifier = identifier,
                 whenTrustSetup = LocalDate.parse(details.startDate),
-                trustType = details.typeOfTrust)
+                trustType = details.typeOfTrust,
+                is5mldEnabled = is5mldEnabled,
+                isTaxable = details.trustTaxable.getOrElse(true)
+              )
             }
           }
           _ <- cacheRepository.set(ua)
         } yield {
-          logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $utr] user has started maintaining beneficiaries")
+          logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $identifier] user has started maintaining beneficiaries")
           Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
         }
     }

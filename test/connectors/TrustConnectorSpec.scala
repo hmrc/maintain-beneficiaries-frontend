@@ -53,7 +53,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     server.stop()
   }
 
-  val utr = "1000000008"
+  val identifier = "1000000008"
   val index = 0
   val description = "description"
   val date: LocalDate = LocalDate.parse("2019-02-03")
@@ -61,23 +61,23 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private val trustsUrl: String = "/trusts"
   private val beneficiariesUrl: String = s"$trustsUrl/beneficiaries"
 
-  private def getTrustDetailsUrl(utr: String) = s"$trustsUrl/$utr/trust-details"
-  private def getBeneficiariesUrl(utr: String) = s"$beneficiariesUrl/$utr/transformed"
-  private def addClassOfBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-unidentified/$utr"
-  private def amendClassOfBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-unidentified/$utr/$index"
-  private def addIndividualBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-individual/$utr"
-  private def amendIndividualBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-individual/$utr/$index"
-  private def addCharityBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-charity/$utr"
-  private def amendCharityBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-charity/$utr/$index"
-  private def addTrustBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-trust/$utr"
-  private def amendTrustBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-trust/$utr/$index"
-  private def addCompanyBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-company/$utr"
-  private def amendCompanyBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-company/$utr/$index"
-  private def addEmploymentRelatedBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-large/$utr"
-  private def amendEmploymentRelatedBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-large/$utr/$index"
-  private def addOtherBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/add-other/$utr"
-  private def amendOtherBeneficiaryUrl(utr: String, index: Int) = s"$beneficiariesUrl/amend-other/$utr/$index"
-  private def removeBeneficiaryUrl(utr: String) = s"$beneficiariesUrl/$utr/remove"
+  private def getTrustDetailsUrl(identifier: String) = s"$trustsUrl/$identifier/trust-details"
+  private def getBeneficiariesUrl(identifier: String) = s"$beneficiariesUrl/$identifier/transformed"
+  private def addClassOfBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-unidentified/$identifier"
+  private def amendClassOfBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-unidentified/$identifier/$index"
+  private def addIndividualBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-individual/$identifier"
+  private def amendIndividualBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-individual/$identifier/$index"
+  private def addCharityBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-charity/$identifier"
+  private def amendCharityBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-charity/$identifier/$index"
+  private def addTrustBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-trust/$identifier"
+  private def amendTrustBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-trust/$identifier/$index"
+  private def addCompanyBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-company/$identifier"
+  private def amendCompanyBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-company/$identifier/$index"
+  private def addEmploymentRelatedBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-large/$identifier"
+  private def amendEmploymentRelatedBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-large/$identifier/$index"
+  private def addOtherBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-other/$identifier"
+  private def amendOtherBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-other/$identifier/$index"
+  private def removeBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/$identifier/remove"
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name("first", None, "last"),
@@ -180,15 +180,15 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
       val connector = application.injector.instanceOf[TrustConnector]
 
       server.stubFor(
-        get(urlEqualTo(getTrustDetailsUrl(utr)))
+        get(urlEqualTo(getTrustDetailsUrl(identifier)))
           .willReturn(okJson(json.toString))
       )
 
-      val processed = connector.getTrustDetails(utr)
+      val processed = connector.getTrustDetails(identifier)
 
       whenReady(processed) {
         r =>
-          r mustBe TrustDetails(startDate = "1920-03-28", typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust)
+          r mustBe TrustDetails(startDate = "1920-03-28", typeOfTrust = Some(TypeOfTrust.WillTrustOrIntestacyTrust), trustTaxable = None)
       }
 
     }
@@ -218,11 +218,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           val connector = application.injector.instanceOf[TrustConnector]
 
           server.stubFor(
-            get(urlEqualTo(getBeneficiariesUrl(utr)))
+            get(urlEqualTo(getBeneficiariesUrl(identifier)))
               .willReturn(okJson(json.toString))
           )
 
-          val processed = connector.getBeneficiaries(utr)
+          val processed = connector.getBeneficiaries(identifier)
 
           whenReady(processed) {
             result =>
@@ -367,11 +367,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           val connector = application.injector.instanceOf[TrustConnector]
 
           server.stubFor(
-            get(urlEqualTo(getBeneficiariesUrl(utr)))
+            get(urlEqualTo(getBeneficiariesUrl(identifier)))
               .willReturn(okJson(json.toString))
           )
 
-          val processed = connector.getBeneficiaries(utr)
+          val processed = connector.getBeneficiaries(identifier)
 
           whenReady(processed) {
             result =>
@@ -412,11 +412,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+          post(urlEqualTo(addClassOfBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
+        val result = connector.addClassOfBeneficiary(identifier, classOfBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -436,11 +436,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addClassOfBeneficiaryUrl(utr)))
+          post(urlEqualTo(addClassOfBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addClassOfBeneficiary(utr, classOfBeneficiary)
+        val result = connector.addClassOfBeneficiary(identifier, classOfBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -464,11 +464,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendClassOfBeneficiary(utr, index, description)
+        val result = connector.amendClassOfBeneficiary(identifier, index, description)
 
         result.futureValue.status mustBe OK
 
@@ -488,11 +488,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendClassOfBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendClassOfBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendClassOfBeneficiary(utr, index, description)
+        val result = connector.amendClassOfBeneficiary(identifier, index, description)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -516,11 +516,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addIndividualBeneficiaryUrl(utr)))
+          post(urlEqualTo(addIndividualBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addIndividualBeneficiary(utr, individualBeneficiary)
+        val result = connector.addIndividualBeneficiary(identifier, individualBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -540,11 +540,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addIndividualBeneficiaryUrl(utr)))
+          post(urlEqualTo(addIndividualBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addIndividualBeneficiary(utr, individualBeneficiary)
+        val result = connector.addIndividualBeneficiary(identifier, individualBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -568,11 +568,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendIndividualBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendIndividualBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendIndividualBeneficiary(utr, index, individualBeneficiary)
+        val result = connector.amendIndividualBeneficiary(identifier, index, individualBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -592,11 +592,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendIndividualBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendIndividualBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendIndividualBeneficiary(utr, index, individualBeneficiary)
+        val result = connector.amendIndividualBeneficiary(identifier, index, individualBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -620,11 +620,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addCharityBeneficiaryUrl(utr)))
+          post(urlEqualTo(addCharityBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addCharityBeneficiary(utr, charityBeneficiary)
+        val result = connector.addCharityBeneficiary(identifier, charityBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -644,11 +644,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addCharityBeneficiaryUrl(utr)))
+          post(urlEqualTo(addCharityBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addCharityBeneficiary(utr, charityBeneficiary)
+        val result = connector.addCharityBeneficiary(identifier, charityBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -672,11 +672,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendCharityBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+        val result = connector.amendCharityBeneficiary(identifier, index, charityBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -696,11 +696,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendCharityBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendCharityBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendCharityBeneficiary(utr, index, charityBeneficiary)
+        val result = connector.amendCharityBeneficiary(identifier, index, charityBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -724,11 +724,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addCompanyBeneficiaryUrl(utr)))
+          post(urlEqualTo(addCompanyBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addCompanyBeneficiary(utr, companyBeneficiary)
+        val result = connector.addCompanyBeneficiary(identifier, companyBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -748,11 +748,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addCompanyBeneficiaryUrl(utr)))
+          post(urlEqualTo(addCompanyBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addCompanyBeneficiary(utr, companyBeneficiary)
+        val result = connector.addCompanyBeneficiary(identifier, companyBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -776,11 +776,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendCompanyBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendCompanyBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendCompanyBeneficiary(utr, index, companyBeneficiary)
+        val result = connector.amendCompanyBeneficiary(identifier, index, companyBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -800,11 +800,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendCompanyBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendCompanyBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendCompanyBeneficiary(utr, index, companyBeneficiary)
+        val result = connector.amendCompanyBeneficiary(identifier, index, companyBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -828,11 +828,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addEmploymentRelatedBeneficiaryUrl(utr)))
+          post(urlEqualTo(addEmploymentRelatedBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addEmploymentRelatedBeneficiary(utr, employmentRelatedBeneficiary)
+        val result = connector.addEmploymentRelatedBeneficiary(identifier, employmentRelatedBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -852,11 +852,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addEmploymentRelatedBeneficiaryUrl(utr)))
+          post(urlEqualTo(addEmploymentRelatedBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addEmploymentRelatedBeneficiary(utr, employmentRelatedBeneficiary)
+        val result = connector.addEmploymentRelatedBeneficiary(identifier, employmentRelatedBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -880,11 +880,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendEmploymentRelatedBeneficiary(utr, index, employmentRelatedBeneficiary)
+        val result = connector.amendEmploymentRelatedBeneficiary(identifier, index, employmentRelatedBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -904,11 +904,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendEmploymentRelatedBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendEmploymentRelatedBeneficiary(utr, index, employmentRelatedBeneficiary)
+        val result = connector.amendEmploymentRelatedBeneficiary(identifier, index, employmentRelatedBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -932,11 +932,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addTrustBeneficiaryUrl(utr)))
+          post(urlEqualTo(addTrustBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addTrustBeneficiary(utr, trustBeneficiary)
+        val result = connector.addTrustBeneficiary(identifier, trustBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -956,11 +956,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addTrustBeneficiaryUrl(utr)))
+          post(urlEqualTo(addTrustBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addTrustBeneficiary(utr, trustBeneficiary)
+        val result = connector.addTrustBeneficiary(identifier, trustBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -984,11 +984,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendTrustBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+        val result = connector.amendTrustBeneficiary(identifier, index, trustBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -1008,11 +1008,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendTrustBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendTrustBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendTrustBeneficiary(utr, index, trustBeneficiary)
+        val result = connector.amendTrustBeneficiary(identifier, index, trustBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -1036,11 +1036,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addOtherBeneficiaryUrl(utr)))
+          post(urlEqualTo(addOtherBeneficiaryUrl(identifier)))
             .willReturn(ok)
         )
 
-        val result = connector.addOtherBeneficiary(utr, otherBeneficiary)
+        val result = connector.addOtherBeneficiary(identifier, otherBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -1060,11 +1060,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(addOtherBeneficiaryUrl(utr)))
+          post(urlEqualTo(addOtherBeneficiaryUrl(identifier)))
             .willReturn(badRequest)
         )
 
-        val result = connector.addOtherBeneficiary(utr, otherBeneficiary)
+        val result = connector.addOtherBeneficiary(identifier, otherBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -1088,11 +1088,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendOtherBeneficiaryUrl(identifier, index)))
             .willReturn(ok)
         )
 
-        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
+        val result = connector.amendOtherBeneficiary(identifier, index, otherBeneficiary)
 
         result.futureValue.status mustBe OK
 
@@ -1112,11 +1112,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         val connector = application.injector.instanceOf[TrustConnector]
 
         server.stubFor(
-          post(urlEqualTo(amendOtherBeneficiaryUrl(utr, index)))
+          post(urlEqualTo(amendOtherBeneficiaryUrl(identifier, index)))
             .willReturn(badRequest)
         )
 
-        val result = connector.amendOtherBeneficiary(utr, index, otherBeneficiary)
+        val result = connector.amendOtherBeneficiary(identifier, index, otherBeneficiary)
 
         result.map(response => response.status mustBe BAD_REQUEST)
 
@@ -1145,11 +1145,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             val connector = application.injector.instanceOf[TrustConnector]
 
             server.stubFor(
-              put(urlEqualTo(removeBeneficiaryUrl(utr)))
+              put(urlEqualTo(removeBeneficiaryUrl(identifier)))
                 .willReturn(ok)
             )
 
-            val result = connector.removeBeneficiary(utr, removeBeneficiary(beneficiaryType))
+            val result = connector.removeBeneficiary(identifier, removeBeneficiary(beneficiaryType))
 
             result.futureValue.status mustBe OK
 
@@ -1173,11 +1173,11 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             val connector = application.injector.instanceOf[TrustConnector]
 
             server.stubFor(
-              put(urlEqualTo(removeBeneficiaryUrl(utr)))
+              put(urlEqualTo(removeBeneficiaryUrl(identifier)))
                 .willReturn(badRequest)
             )
 
-            val result = connector.removeBeneficiary(utr, removeBeneficiary(beneficiaryType))
+            val result = connector.removeBeneficiary(identifier, removeBeneficiary(beneficiaryType))
 
             result.map(response => response.status mustBe BAD_REQUEST)
 

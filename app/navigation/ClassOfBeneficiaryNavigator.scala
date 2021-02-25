@@ -28,7 +28,7 @@ class ClassOfBeneficiaryNavigator @Inject()() extends Navigator {
   override def nextPage(page: Page, userAnswers: UserAnswers): Call = page match {
     case DescriptionPage => rts.EntityStartController.onPageLoad()
     case EntityStartPage => rts.CheckDetailsController.onPageLoad()
-    case _ => controllers.routes.IndexController.onPageLoad(userAnswers.utr)
+    case _ => controllers.routes.IndexController.onPageLoad(userAnswers.identifier)
   }
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)
 }

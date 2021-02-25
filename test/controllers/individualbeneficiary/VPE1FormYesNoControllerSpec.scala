@@ -16,12 +16,10 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
-import models.{Name, NormalMode, TypeOfTrust, UserAnswers}
+import models.{Name, NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -44,7 +42,7 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider.withPrefix("individualBeneficiary.vpe1FormYesNo")
   val name = Name("FirstName", None, "LastName")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
   lazy val vpe1FormControllerRoute = routes.VPE1FormYesNoController.onPageLoad(NormalMode).url
@@ -53,7 +51,7 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request = FakeRequest(GET, vpe1FormControllerRoute)
 
@@ -71,7 +69,7 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(VPE1FormYesNoPage, true).success.value
+      val userAnswers = baseAnswers.set(VPE1FormYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -96,7 +94,7 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
 
           .build()
@@ -116,7 +114,7 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, vpe1FormControllerRoute)

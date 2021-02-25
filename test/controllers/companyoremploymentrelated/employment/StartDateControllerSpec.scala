@@ -16,12 +16,9 @@
 
 package controllers.companyoremploymentrelated.employment
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.EmploymentRelatedBeneficiary
 import forms.DateAddedToTrustFormProvider
-import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.employment.{NamePage, StartDatePage}
@@ -32,6 +29,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.companyoremploymentrelated.employment.StartDateView
 
+import java.time.LocalDate
+
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   private val date: LocalDate = LocalDate.parse("2019-02-01")
@@ -41,7 +40,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date,TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
     .set(NamePage, name).success.value
 
   "NonUkAddress Controller" must {

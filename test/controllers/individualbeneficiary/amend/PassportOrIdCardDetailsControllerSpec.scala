@@ -16,12 +16,10 @@
 
 package controllers.individualbeneficiary.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
-import models.{CombinedPassportOrIdCard, Name, TypeOfTrust, UserAnswers}
+import models.{CombinedPassportOrIdCard, Name}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -36,6 +34,7 @@ import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
@@ -46,7 +45,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(),TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
   lazy val passportOrIdCardDetailsRoute = routes.PassportOrIdCardDetailsController.onPageLoad().url
@@ -57,7 +56,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request = FakeRequest(GET, passportOrIdCardDetailsRoute)
 
@@ -75,7 +74,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(PassportOrIdCardDetailsPage, validData).success.value
+      val userAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, validData).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -99,7 +98,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(baseAnswers))
         .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
@@ -124,7 +123,7 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, passportOrIdCardDetailsRoute)

@@ -83,7 +83,7 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
 
     for {
       col <- collection
-      r <- col.update(ordered = false).one(selector(userAnswers.internalId, userAnswers.utr), modifier, upsert = true, multi = false)
+      r <- col.update(ordered = false).one(selector(userAnswers.internalId, userAnswers.identifier), modifier, upsert = true, multi = false)
     } yield r.ok
   }
 

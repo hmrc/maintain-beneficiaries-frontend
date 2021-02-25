@@ -18,10 +18,8 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class TrustDetails(startDate: String, typeOfTrust: Option[TypeOfTrust], trustTaxable: Option[Boolean])
+case class FeatureResponse(name: String, isEnabled: Boolean)
 
-object TrustDetails {
-
-  implicit val formats: Format[TrustDetails] = Json.format[TrustDetails]
-
+object FeatureResponse {
+  implicit val format: Format[FeatureResponse] = Json.format[FeatureResponse]
 }

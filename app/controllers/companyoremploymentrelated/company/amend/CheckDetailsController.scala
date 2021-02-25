@@ -66,7 +66,7 @@ class CheckDetailsController @Inject()(
   def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      service.getCompanyBeneficiary(request.userAnswers.utr, index) flatMap {
+      service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap {
         company =>
           for {
             extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
@@ -80,7 +80,7 @@ class CheckDetailsController @Inject()(
           }
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error showing the user the check answers for company beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -97,11 +97,11 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers).map {
         beneficiary =>
-          connector.amendCompanyBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
+          connector.amendCompanyBeneficiary(request.userAnswers.identifier, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
       }.getOrElse {
-        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
           s" error mapping user answers to company beneficiary $index")
 
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

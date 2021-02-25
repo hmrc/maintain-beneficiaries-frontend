@@ -72,7 +72,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
   }
 
   private def trustTypeNav(mode: Mode, ua: UserAnswers): Call = ua.trustType match {
-    case TypeOfTrust.EmployeeRelated => rts.RoleInCompanyController.onPageLoad(mode)
+    case Some(TypeOfTrust.EmployeeRelated) => rts.RoleInCompanyController.onPageLoad(mode)
     case _ => rts.DateOfBirthYesNoController.onPageLoad(mode)
   }
 

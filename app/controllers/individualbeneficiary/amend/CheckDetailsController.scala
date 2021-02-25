@@ -66,7 +66,7 @@ class CheckDetailsController @Inject()(
   def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      service.getIndividualBeneficiary(request.userAnswers.utr, index) flatMap {
+      service.getIndividualBeneficiary(request.userAnswers.identifier, index) flatMap {
         individual =>
           val extractedAnswers = extractor(request.userAnswers, individual, index)
           for {
@@ -75,7 +75,7 @@ class CheckDetailsController @Inject()(
           } yield render(extractedF, index, individual.name.displayName)
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error showing the user the check answers for individual beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -92,11 +92,11 @@ class CheckDetailsController @Inject()(
 
       mapper(request.userAnswers, provisional).map {
         beneficiary =>
-          connector.amendIndividualBeneficiary(request.userAnswers.utr, index, beneficiary).map(_ =>
+          connector.amendIndividualBeneficiary(request.userAnswers.identifier, index, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
       }.getOrElse {
-        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
           s" error mapping user answers to individual beneficiary $index, isNew: $provisional")
 
         Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

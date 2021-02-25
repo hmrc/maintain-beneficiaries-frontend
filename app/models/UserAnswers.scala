@@ -16,24 +16,24 @@
 
 package models
 
-import java.time.{LocalDate, LocalDateTime}
-
 import pages.AddNowPage
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
+import java.time.{LocalDate, LocalDateTime}
 import scala.util.{Failure, Success, Try}
 
-final case class UserAnswers(
-                              internalId: String,
-                              utr: String,
-                              whenTrustSetup: LocalDate,
-                              trustType: TypeOfTrust,
-                              data: JsObject = Json.obj(),
-                              updatedAt: LocalDateTime = LocalDateTime.now
-                            ) {
+final case class UserAnswers(internalId: String,
+                             identifier: String,
+                             whenTrustSetup: LocalDate,
+                             trustType: Option[TypeOfTrust],
+                             data: JsObject = Json.obj(),
+                             updatedAt: LocalDateTime = LocalDateTime.now,
+                             is5mldEnabled: Boolean = false,
+                             isTaxable: Boolean = true) {
 
-  def cleanup : Try[UserAnswers] = {
+  def cleanup: Try[UserAnswers] = {
     this
       .deleteAtPath(pages.classofbeneficiary.basePath)
       .flatMap(_.deleteAtPath(pages.individualbeneficiary.basePath))
@@ -106,31 +106,26 @@ final case class UserAnswers(
 
 object UserAnswers {
 
-  implicit lazy val reads: Reads[UserAnswers] = {
+  implicit lazy val reads: Reads[UserAnswers] = (
+    (__ \ "internalId").read[String] and
+      ((__ \ "utr").read[String] or (__ \ "identifier").read[String]) and
+      (__ \ "whenTrustSetup").read[LocalDate] and
+      (__ \ "trustType").readNullable[TypeOfTrust] and
+      (__ \ "data").read[JsObject] and
+      (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead) and
+      (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
+      (__ \ "isTaxable").readWithDefault[Boolean](true)
+    ) (UserAnswers.apply _)
 
-    import play.api.libs.functional.syntax._
+  implicit lazy val writes: Writes[UserAnswers] = (
+    (__ \ "internalId").write[String] and
+      (__ \ "identifier").write[String] and
+      (__ \ "whenTrustSetup").write[LocalDate] and
+      (__ \ "trustType").writeNullable[TypeOfTrust] and
+      (__ \ "data").write[JsObject] and
+      (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite) and
+      (__ \ "is5mldEnabled").write[Boolean] and
+      (__ \ "isTaxable").write[Boolean]
+    ) (unlift(UserAnswers.unapply))
 
-    (
-      (__ \ "internalId").read[String] and
-        (__ \ "utr").read[String] and
-        (__ \ "whenTrustSetup").read[LocalDate] and
-        (__ \ "trustType").read[TypeOfTrust] and
-        (__ \ "data").read[JsObject] and
-        (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead)
-      ) (UserAnswers.apply _)
-  }
-
-  implicit lazy val writes: OWrites[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "internalId").write[String] and
-        (__ \ "utr").write[String] and
-        (__ \ "whenTrustSetup").write[LocalDate] and
-        (__ \ "trustType").write[TypeOfTrust] and
-        (__ \ "data").write[JsObject] and
-        (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite)
-      ) (unlift(UserAnswers.unapply))
-  }
 }

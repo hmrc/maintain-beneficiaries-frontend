@@ -31,103 +31,103 @@ class TrustConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
   private val trustsUrl: String = s"${config.trustsUrl}/trusts"
   private val beneficiariesUrl: String = s"$trustsUrl/beneficiaries"
 
-  def getTrustDetails(utr: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustDetails] = {
-    val url: String = s"$trustsUrl/$utr/trust-details"
+  def getTrustDetails(identifier: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustDetails] = {
+    val url: String = s"$trustsUrl/$identifier/trust-details"
     http.GET[TrustDetails](url)
   }
 
-  def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = {
-    val url: String = s"$beneficiariesUrl/$utr/transformed"
+  def getBeneficiaries(identifier: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = {
+    val url: String = s"$beneficiariesUrl/$identifier/transformed"
     http.GET[Beneficiaries](url)
   }
 
-  def addClassOfBeneficiary(utr: String, beneficiary: ClassOfBeneficiary)
+  def addClassOfBeneficiary(identifier: String, beneficiary: ClassOfBeneficiary)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-unidentified/$utr"
+    val url: String = s"$beneficiariesUrl/add-unidentified/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendClassOfBeneficiary(utr: String, index: Int, description: String)
+  def amendClassOfBeneficiary(identifier: String, index: Int, description: String)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-unidentified/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-unidentified/$identifier/$index"
     http.POST[JsString, HttpResponse](url, JsString(description))
   }
 
-  def addIndividualBeneficiary(utr: String, beneficiary: IndividualBeneficiary)
+  def addIndividualBeneficiary(identifier: String, beneficiary: IndividualBeneficiary)
                               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-individual/$utr"
+    val url: String = s"$beneficiariesUrl/add-individual/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendIndividualBeneficiary(utr: String, index: Int, individual: IndividualBeneficiary)
+  def amendIndividualBeneficiary(identifier: String, index: Int, individual: IndividualBeneficiary)
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-individual/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-individual/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(individual))
   }
 
-  def addCharityBeneficiary(utr: String, beneficiary: CharityBeneficiary)
+  def addCharityBeneficiary(identifier: String, beneficiary: CharityBeneficiary)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-charity/$utr"
+    val url: String = s"$beneficiariesUrl/add-charity/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendCharityBeneficiary(utr: String, index: Int, beneficiary: CharityBeneficiary)
+  def amendCharityBeneficiary(identifier: String, index: Int, beneficiary: CharityBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-charity/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-charity/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def addTrustBeneficiary(utr: String, beneficiary: TrustBeneficiary)
+  def addTrustBeneficiary(identifier: String, beneficiary: TrustBeneficiary)
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-trust/$utr"
+    val url: String = s"$beneficiariesUrl/add-trust/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendTrustBeneficiary(utr: String, index: Int, beneficiary: TrustBeneficiary)
+  def amendTrustBeneficiary(identifier: String, index: Int, beneficiary: TrustBeneficiary)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-trust/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-trust/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def addCompanyBeneficiary(utr: String, beneficiary: CompanyBeneficiary)
+  def addCompanyBeneficiary(identifier: String, beneficiary: CompanyBeneficiary)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-company/$utr"
+    val url: String = s"$beneficiariesUrl/add-company/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendCompanyBeneficiary(utr: String, index: Int, beneficiary: CompanyBeneficiary)
+  def amendCompanyBeneficiary(identifier: String, index: Int, beneficiary: CompanyBeneficiary)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-company/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-company/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def addEmploymentRelatedBeneficiary(utr: String, beneficiary: EmploymentRelatedBeneficiary)
+  def addEmploymentRelatedBeneficiary(identifier: String, beneficiary: EmploymentRelatedBeneficiary)
                                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-large/$utr"
+    val url: String = s"$beneficiariesUrl/add-large/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendEmploymentRelatedBeneficiary(utr: String, index: Int, beneficiary: EmploymentRelatedBeneficiary)
+  def amendEmploymentRelatedBeneficiary(identifier: String, index: Int, beneficiary: EmploymentRelatedBeneficiary)
                                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-large/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-large/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def addOtherBeneficiary(utr: String, beneficiary: OtherBeneficiary)
+  def addOtherBeneficiary(identifier: String, beneficiary: OtherBeneficiary)
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/add-other/$utr"
+    val url: String = s"$beneficiariesUrl/add-other/$identifier"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def amendOtherBeneficiary(utr: String, index: Int, beneficiary: OtherBeneficiary)
+  def amendOtherBeneficiary(identifier: String, index: Int, beneficiary: OtherBeneficiary)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/amend-other/$utr/$index"
+    val url: String = s"$beneficiariesUrl/amend-other/$identifier/$index"
     http.POST[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
-  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)
+  def removeBeneficiary(identifier: String, beneficiary: RemoveBeneficiary)
                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$beneficiariesUrl/$utr/remove"
+    val url: String = s"$beneficiariesUrl/$identifier/remove"
     http.PUT[JsValue, HttpResponse](url, Json.toJson(beneficiary))
   }
 
