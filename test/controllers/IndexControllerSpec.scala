@@ -34,12 +34,13 @@ class IndexControllerSpec extends SpecBase {
 
   "Index Controller" must {
 
-    "populate user answers and redirect" in {
+    val identifier = "1234567890"
+    val startDate = "2019-06-01"
+    val trustType = TypeOfTrust.WillTrustOrIntestacyTrust
+    val is5mldEnabled = false
+    val isTaxable = false
 
-      val is5mldEnabled = false
-      val trustType = TypeOfTrust.WillTrustOrIntestacyTrust
-      val startDate = "2019-06-01"
-      val identifier = "1234567890"
+    "populate user answers and redirect" in {
 
       reset(playbackRepository)
 
@@ -50,7 +51,7 @@ class IndexControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       when(mockTrustConnector.getTrustDetails(any())(any(), any()))
-        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType))))
+        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
       when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
         .thenReturn(Future.successful(is5mldEnabled))
@@ -77,6 +78,45 @@ class IndexControllerSpec extends SpecBase {
       uaCaptor.getValue.whenTrustSetup mustBe LocalDate.parse(startDate)
       uaCaptor.getValue.trustType.get mustBe trustType
       uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
+      uaCaptor.getValue.isTaxable mustBe isTaxable
+
+      application.stop()
+    }
+
+    "default isTaxable to true if trustTaxable is None i.e. 4mld" in {
+
+      reset(playbackRepository)
+
+      val mockTrustConnector = mock[TrustConnector]
+      val mockFeatureFlagService = mock[FeatureFlagService]
+
+      when(playbackRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = None)))
+
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(is5mldEnabled))
+
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustConnector].toInstance(mockTrustConnector),
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
+
+      val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result) mustBe Some(controllers.routes.AddABeneficiaryController.onPageLoad().url)
+
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(playbackRepository).set(uaCaptor.capture)
+
+      uaCaptor.getValue.isTaxable mustBe true
 
       application.stop()
     }

@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class TrustDetails(startDate: String, typeOfTrust: Option[TypeOfTrust])
+case class TrustDetails(startDate: String, typeOfTrust: Option[TypeOfTrust], trustTaxable: Option[Boolean])
 
 object TrustDetails {
 

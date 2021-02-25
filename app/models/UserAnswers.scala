@@ -30,10 +30,8 @@ final case class UserAnswers(internalId: String,
                              trustType: Option[TypeOfTrust],
                              data: JsObject = Json.obj(),
                              updatedAt: LocalDateTime = LocalDateTime.now,
-                             is5mldEnabled: Boolean = false) {
-
-  // TODO - when migrating from taxable to non-taxable will this check be invalid?
-  def isTaxable: Boolean = identifier.length == 10
+                             is5mldEnabled: Boolean = false,
+                             isTaxable: Boolean = true) {
 
   def cleanup: Try[UserAnswers] = {
     this
@@ -115,7 +113,8 @@ object UserAnswers {
       (__ \ "trustType").readNullable[TypeOfTrust] and
       (__ \ "data").read[JsObject] and
       (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead) and
-      (__ \ "is5mldEnabled").readWithDefault[Boolean](false)
+      (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
+      (__ \ "isTaxable").readWithDefault[Boolean](true)
     ) (UserAnswers.apply _)
 
   implicit lazy val writes: Writes[UserAnswers] = (
@@ -125,7 +124,8 @@ object UserAnswers {
       (__ \ "trustType").writeNullable[TypeOfTrust] and
       (__ \ "data").write[JsObject] and
       (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite) and
-      (__ \ "is5mldEnabled").write[Boolean]
+      (__ \ "is5mldEnabled").write[Boolean] and
+      (__ \ "isTaxable").write[Boolean]
     ) (unlift(UserAnswers.unapply))
 
 }

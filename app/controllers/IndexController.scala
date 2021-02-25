@@ -52,7 +52,8 @@ class IndexController @Inject()(
                 identifier = identifier,
                 whenTrustSetup = LocalDate.parse(details.startDate),
                 trustType = details.typeOfTrust,
-                is5mldEnabled = is5mldEnabled
+                is5mldEnabled = is5mldEnabled,
+                isTaxable = details.trustTaxable.getOrElse(true)
               )
             }
           }

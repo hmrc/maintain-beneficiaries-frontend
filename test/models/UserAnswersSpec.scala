@@ -109,22 +109,5 @@ class UserAnswersSpec extends SpecBase {
         )
       }
     }
-
-    "determine if identifier relates to trust being taxable/non-taxable" when {
-
-      "taxable" in {
-
-        val identifier = "1234567890"
-        val userAnswers = emptyUserAnswers.copy(identifier = identifier)
-        userAnswers.isTaxable mustBe true
-      }
-
-      "non-taxable" in {
-
-        val identifier = "NTTRUST00000001"
-        val userAnswers = emptyUserAnswers.copy(identifier = identifier)
-        userAnswers.isTaxable mustBe false
-      }
-    }
   }
 }
