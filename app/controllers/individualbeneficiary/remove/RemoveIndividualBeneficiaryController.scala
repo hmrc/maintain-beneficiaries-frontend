@@ -56,17 +56,17 @@ class RemoveIndividualBeneficiaryController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      trustService.getIndividualBeneficiary(request.userAnswers.utr, index).map {
+      trustService.getIndividualBeneficiary(request.userAnswers.identifier, index).map {
         beneficiary =>
           Ok(view(preparedForm, index, beneficiary.name.displayName))
       } recoverWith {
         case iobe: IndexOutOfBoundsException =>
-          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting individual beneficiary $index from trusts service  ${iobe.getMessage}: IndexOutOfBoundsException")
 
           Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting individual beneficiary $index from trusts service ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -79,7 +79,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          trustService.getIndividualBeneficiary(request.userAnswers.utr, index).map {
+          trustService.getIndividualBeneficiary(request.userAnswers.identifier, index).map {
             beneficiary =>
               BadRequest(view(formWithErrors, index, beneficiary.name.displayName))
           }
@@ -88,11 +88,11 @@ class RemoveIndividualBeneficiaryController @Inject()(
 
           if (value) {
 
-            trustService.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
+            trustService.getIndividualBeneficiary(request.userAnswers.identifier, index).flatMap {
               beneficiary =>
                 if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index)).map { _ =>
-                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                  trustService.removeBeneficiary(request.userAnswers.identifier, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index)).map { _ =>
+                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                       s" removed new individual beneficiary $index")
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   }
@@ -106,7 +106,7 @@ class RemoveIndividualBeneficiaryController @Inject()(
                 }
             } recoverWith {
               case e =>
-                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                   s" error removing an individual beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
                 Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

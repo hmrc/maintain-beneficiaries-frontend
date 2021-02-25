@@ -44,7 +44,7 @@ class DescriptionController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getUnidentifiedBeneficiary(request.userAnswers.utr, index).map {
+      trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
         case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
         case _ => Ok(view(form, index))
       }
@@ -58,7 +58,7 @@ class DescriptionController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, index))),
 
         value =>
-          connector.amendClassOfBeneficiary(request.userAnswers.utr, index, value).map(_ =>
+          connector.amendClassOfBeneficiary(request.userAnswers.identifier, index, value).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
           )
       )

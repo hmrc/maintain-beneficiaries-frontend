@@ -16,32 +16,98 @@
 
 package models
 
-import java.time.LocalDate
-
-import org.scalatest.{FreeSpec, MustMatchers}
+import base.SpecBase
+import models.TypeOfTrust.EmployeeRelated
 import play.api.libs.json.{JsPath, Json}
 
+import java.time.{LocalDate, LocalDateTime}
 import scala.util.Success
 
-class UserAnswersSpec extends FreeSpec with MustMatchers {
+class UserAnswersSpec extends SpecBase {
 
-  "delete data removes data from the Json Object" in {
-    val json = Json.obj(
-      "field" -> Json.obj(
-        "innerfield" -> "value"
+  "UserAnswers" must {
+
+    "delete data removes data from the Json Object" in {
+      val json = Json.obj(
+        "field" -> Json.obj(
+          "innerfield" -> "value"
+        )
       )
-    )
 
-    val ua = new UserAnswers(
-      "ID",
-      "UTRUTRUTR",
-      LocalDate.of(1999, 10, 20),
-      TypeOfTrust.WillTrustOrIntestacyTrust,
-      json
-    )
+      val ua = new UserAnswers(
+        "ID",
+        "UTRUTRUTR",
+        LocalDate.of(1999, 10, 20),
+        TypeOfTrust.WillTrustOrIntestacyTrust,
+        json
+      )
 
-    ua.deleteAtPath(JsPath \ "field" \ "innerfield") mustBe Success(ua.copy(data = Json.obj(
-      "field" -> Json.obj()
-    )))
+      ua.deleteAtPath(JsPath \ "field" \ "innerfield") mustBe Success(ua.copy(data = Json.obj(
+        "field" -> Json.obj()
+      )))
+    }
+
+    "read successfully" when {
+
+      val internalId: String = "internalId"
+      val identifier: String = "1234567890"
+      val date: String = "2000-01-01"
+      val trustType: TypeOfTrust = EmployeeRelated
+      val dateTime: String = "2020-01-01T09:30:15"
+
+      "identifier key is 'utr'" in {
+
+        val json = Json.parse(
+          s"""
+            |{
+            |  "internalId": "$internalId",
+            |  "utr": "$identifier",
+            |  "whenTrustSetup": "$date",
+            |  "trustType": "$trustType",
+            |  "data": {},
+            |  "updatedAt": {
+            |    "$$date": 1577871015000
+            |  }
+            |}
+            |""".stripMargin
+        )
+
+        json.as[UserAnswers] mustBe UserAnswers(
+          internalId = internalId,
+          identifier = identifier,
+          whenTrustSetup = LocalDate.parse(date),
+          trustType = trustType,
+          data = Json.obj(),
+          updatedAt = LocalDateTime.parse(dateTime)
+        )
+      }
+
+      "identifier key is 'identifier'" in {
+
+        val json = Json.parse(
+          s"""
+             |{
+             |  "internalId": "$internalId",
+             |  "identifier": "$identifier",
+             |  "whenTrustSetup": "$date",
+             |  "trustType": "$trustType",
+             |  "data": {},
+             |  "updatedAt": {
+             |    "$$date": 1577871015000
+             |  }
+             |}
+             |""".stripMargin
+        )
+
+        json.as[UserAnswers] mustBe UserAnswers(
+          internalId = internalId,
+          identifier = identifier,
+          whenTrustSetup = LocalDate.parse(date),
+          trustType = trustType,
+          data = Json.obj(),
+          updatedAt = LocalDateTime.parse(dateTime)
+        )
+      }
+    }
   }
 }

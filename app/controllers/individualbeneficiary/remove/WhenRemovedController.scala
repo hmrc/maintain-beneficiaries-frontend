@@ -44,18 +44,18 @@ class WhenRemovedController @Inject()(
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getIndividualBeneficiary(request.userAnswers.utr, index).map {
+      trust.getIndividualBeneficiary(request.userAnswers.identifier, index).map {
         beneficiary =>
           val form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", beneficiary.entityStart)
           Ok(view(form, index, beneficiary.name.displayName))
       } recoverWith {
         case iobe: IndexOutOfBoundsException =>
-          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error showing the user the individual beneficiary to remove, problem getting individual beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException")
 
           Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error showing the user the individual beneficiary to remove, problem getting individual beneficiary $index from trusts service ${e.getMessage}: ${e.getClass}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -65,7 +65,7 @@ class WhenRemovedController @Inject()(
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trust.getIndividualBeneficiary(request.userAnswers.utr, index).flatMap {
+      trust.getIndividualBeneficiary(request.userAnswers.identifier, index).flatMap {
         beneficiary =>
           val form = formProvider.withPrefixAndEntityStartDate("individualBeneficiary.whenRemoved", beneficiary.entityStart)
           form.bindFromRequest().fold(
@@ -73,8 +73,8 @@ class WhenRemovedController @Inject()(
               Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name.displayName)))
             },
             value => {
-              trustService.removeBeneficiary(request.userAnswers.utr, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map { _ =>
-                logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+              trustService.removeBeneficiary(request.userAnswers.identifier, RemoveBeneficiary(BeneficiaryType.IndividualBeneficiary, index, value)).map { _ =>
+                logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                   s" removed existing individual beneficiary $index")
                 Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
               }
@@ -82,7 +82,7 @@ class WhenRemovedController @Inject()(
           )
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error removing an individual beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}: ${e.getClass}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

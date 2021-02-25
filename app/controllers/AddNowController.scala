@@ -51,7 +51,7 @@ class AddNowController @Inject()(
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getBeneficiaries(request.userAnswers.utr).map {
+      trustService.getBeneficiaries(request.userAnswers.identifier).map {
         beneficiaries =>
           val preparedForm = request.userAnswers.get(AddNowPage) match {
             case None => form
@@ -62,7 +62,7 @@ class AddNowController @Inject()(
 
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -72,7 +72,7 @@ class AddNowController @Inject()(
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      trustService.getBeneficiaries(request.userAnswers.utr).flatMap {
+      trustService.getBeneficiaries(request.userAnswers.identifier).flatMap {
         beneficiaries =>
 
           form.bindFromRequest().fold(
@@ -99,7 +99,7 @@ class AddNowController @Inject()(
           )
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))

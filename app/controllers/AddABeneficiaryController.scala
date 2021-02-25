@@ -60,13 +60,13 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       (for {
-        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.utr)
+        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.identifier)
         updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
         _ <- repository.set(updatedAnswers)
       } yield {
         beneficiaries match {
           case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
-            logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+            logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
               s" asking user if they want to add a beneficiary, no beneficiaries in trust")
 
             Ok(yesNoView(yesNoForm))
@@ -75,7 +75,7 @@ class AddABeneficiaryController @Inject()(
             val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
 
             if (beneficiaries.nonMaxedOutOptions.isEmpty) {
-              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                 s" showing user their beneficiaries, maximum number of beneficiaries reached")
 
               Ok(completeView(
@@ -84,7 +84,7 @@ class AddABeneficiaryController @Inject()(
                 heading = all.addToHeading
               ))
             } else {
-              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                 s" showing user their beneficiaries, user is not at the maximum beneficiaries")
 
               Ok(addAnotherView(
@@ -98,7 +98,7 @@ class AddABeneficiaryController @Inject()(
         }
       }) recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" unable to show add to page due to an error getting beneficiaries from trusts ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -121,7 +121,7 @@ class AddABeneficiaryController @Inject()(
               } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
             for {
-              _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+              _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
             } yield {
               Redirect(appConfig.maintainATrustOverview)
             }
@@ -133,7 +133,7 @@ class AddABeneficiaryController @Inject()(
   def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
     implicit request =>
 
-      trustService.getBeneficiaries(request.userAnswers.utr).flatMap { beneficiaries =>
+      trustService.getBeneficiaries(request.userAnswers.identifier).flatMap { beneficiaries =>
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
@@ -161,7 +161,7 @@ class AddABeneficiaryController @Inject()(
 
             case AddABeneficiary.NoComplete =>
               for {
-                _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+                _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
               } yield {
                 Redirect(appConfig.maintainATrustOverview)
               }
@@ -169,7 +169,7 @@ class AddABeneficiaryController @Inject()(
         )
       } recoverWith {
         case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.utr}]" +
+          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
@@ -180,7 +180,7 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       for {
-        _ <- trustStoreConnector.setTaskComplete(request.userAnswers.utr)
+        _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
       } yield {
         Redirect(appConfig.maintainATrustOverview)
       }
