@@ -16,17 +16,17 @@
 
 package controllers.classofbeneficiary.add
 
-import java.time.LocalDate
-
 import base.SpecBase
 import forms.DateAddedToTrustFormProvider
-import models.{TypeOfTrust, UserAnswers}
+import models.UserAnswers
 import org.scalatestplus.mockito.MockitoSugar
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.classofbeneficiary.add.EntityStartView
+
+import java.time.LocalDate
 
 class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
@@ -79,7 +79,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val answers = UserAnswers("internalId", "UTRUTRUTR", date, TypeOfTrust.WillTrustOrIntestacyTrust)
+      val answers = emptyUserAnswers.copy(whenTrustSetup = date)
 
       val application =
         applicationBuilder(userAnswers = Some(answers)).build()

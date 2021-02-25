@@ -16,13 +16,11 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.RoleInCompanyFormProvider
 import models.beneficiaries.RoleInCompany.Director
-import models.{Name, NormalMode, TypeOfTrust, UserAnswers}
+import models.{Name, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -45,7 +43,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
   val name = Name("FirstName", None, "LastName")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
   lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(NormalMode).url
@@ -54,7 +52,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request = FakeRequest(GET, roleInCompanyControllerRoute)
 
@@ -72,7 +70,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(RoleInCompanyPage, Director).success.value
+      val userAnswers = baseAnswers.set(RoleInCompanyPage, Director).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -97,7 +95,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
@@ -118,7 +116,7 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, roleInCompanyControllerRoute)

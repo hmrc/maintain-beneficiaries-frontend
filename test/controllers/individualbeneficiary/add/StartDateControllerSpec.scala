@@ -16,12 +16,10 @@
 
 package controllers.individualbeneficiary.add
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.DateAddedToTrustFormProvider
-import models.{Name, TypeOfTrust, UserAnswers}
+import models.Name
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -36,6 +34,7 @@ import play.api.test.Helpers._
 import repositories.PlaybackRepository
 import views.html.individualbeneficiary.add.StartDateView
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
@@ -52,9 +51,8 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   val name = Name("New", None, "Beneficiary")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", date, TypeOfTrust.WillTrustOrIntestacyTrust)
-    .set(NamePage, name)
-    .success.value
+  val baseAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
+    .set(NamePage, name).success.value
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, startDateRoute)
@@ -71,7 +69,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val result = route(application, getRequest()).value
 
@@ -87,7 +85,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = baseAnswers
         .set(StartDatePage, validAnswer).success.value
         .set(NamePage, name).success.value
 
@@ -112,7 +110,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
@@ -129,7 +127,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, startDateRoute)

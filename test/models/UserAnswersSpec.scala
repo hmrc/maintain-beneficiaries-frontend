@@ -38,7 +38,7 @@ class UserAnswersSpec extends SpecBase {
         "ID",
         "UTRUTRUTR",
         LocalDate.of(1999, 10, 20),
-        TypeOfTrust.WillTrustOrIntestacyTrust,
+        Some(TypeOfTrust.WillTrustOrIntestacyTrust),
         json
       )
 
@@ -76,7 +76,7 @@ class UserAnswersSpec extends SpecBase {
           internalId = internalId,
           identifier = identifier,
           whenTrustSetup = LocalDate.parse(date),
-          trustType = trustType,
+          trustType = Some(trustType),
           data = Json.obj(),
           updatedAt = LocalDateTime.parse(dateTime)
         )
@@ -103,7 +103,7 @@ class UserAnswersSpec extends SpecBase {
           internalId = internalId,
           identifier = identifier,
           whenTrustSetup = LocalDate.parse(date),
-          trustType = trustType,
+          trustType = Some(trustType),
           data = Json.obj(),
           updatedAt = LocalDateTime.parse(dateTime)
         )

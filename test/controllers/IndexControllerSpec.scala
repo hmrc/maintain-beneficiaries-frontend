@@ -50,7 +50,7 @@ class IndexControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       when(mockTrustConnector.getTrustDetails(any())(any(), any()))
-        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = trustType)))
+        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType))))
 
       when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
         .thenReturn(Future.successful(is5mldEnabled))
@@ -75,7 +75,7 @@ class IndexControllerSpec extends SpecBase {
       uaCaptor.getValue.internalId mustBe "id"
       uaCaptor.getValue.identifier mustBe identifier
       uaCaptor.getValue.whenTrustSetup mustBe LocalDate.parse(startDate)
-      uaCaptor.getValue.trustType mustBe trustType
+      uaCaptor.getValue.trustType.get mustBe trustType
       uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
 
       application.stop()

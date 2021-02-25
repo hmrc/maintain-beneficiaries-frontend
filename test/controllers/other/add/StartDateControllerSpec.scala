@@ -16,12 +16,9 @@
 
 package controllers.other.add
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.DateAddedToTrustFormProvider
-import models.TypeOfTrust
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.DescriptionPage
@@ -33,6 +30,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.other.add.StartDateView
 
+import java.time.LocalDate
+
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
   private val date: LocalDate = LocalDate.parse("2019-02-01")
@@ -42,7 +41,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", date, TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
     .set(DescriptionPage, description).success.value
 
   "NonUkAddress Controller" must {

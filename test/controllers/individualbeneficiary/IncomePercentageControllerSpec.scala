@@ -16,12 +16,10 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.IncomePercentageFormProvider
-import models.{Name, NormalMode, TypeOfTrust, UserAnswers}
+import models.{Name, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -50,9 +48,8 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private val name = Name("New", None, "Beneficiary")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
-    .set(NamePage, name)
-    .success.value
+  val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(NamePage, name).success.value
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, incomePercentageRoute)
@@ -65,7 +62,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val result = route(application, getRequest()).value
 
@@ -81,7 +78,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = baseAnswers
         .set(IncomePercentagePage, validAnswer).success.value
         .set(NamePage, name).success.value
 
@@ -106,7 +103,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
           )
@@ -123,7 +120,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, incomePercentageRoute)

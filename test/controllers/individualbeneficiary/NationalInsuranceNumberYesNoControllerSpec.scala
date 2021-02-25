@@ -16,12 +16,10 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
-import models.{Name, NormalMode, TypeOfTrust, UserAnswers}
+import models.{Name, NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -41,7 +39,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
   val form = formProvider.withPrefix("individualBeneficiary.nationalInsuranceNumberYesNo")
   val name = Name("FirstName", None, "LastName")
 
-  override val emptyUserAnswers = UserAnswers("id", "UTRUTRUTR", LocalDate.now(), TypeOfTrust.WillTrustOrIntestacyTrust)
+  val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
   lazy val nationalInsuranceNumberYesNoRoute = routes.NationalInsuranceNumberYesNoController.onPageLoad(NormalMode).url
@@ -50,7 +48,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request = FakeRequest(GET, nationalInsuranceNumberYesNoRoute)
 
@@ -68,7 +66,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(NationalInsuranceNumberYesNoPage, true).success.value
+      val userAnswers = baseAnswers.set(NationalInsuranceNumberYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +90,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(baseAnswers))
         .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
         .build()
 
@@ -111,7 +109,7 @@ class NationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSu
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       val request =
         FakeRequest(POST, nationalInsuranceNumberYesNoRoute)

@@ -16,27 +16,17 @@
 
 package extractors
 
+import base.SpecBase
+import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
+import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, UkAddress, UserAnswers}
+import pages.individualbeneficiary._
+import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+
 import java.time.LocalDate
 
-import generators.ModelGenerators
-import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, TypeOfTrust, UkAddress, UserAnswers}
-import org.scalatest.{FreeSpec, MustMatchers}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
-import play.api.libs.json.Json
+class IndividualBeneficiaryExtractorSpec extends SpecBase {
 
-class IndividualBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropertyChecks with ModelGenerators with MustMatchers {
-
-  import pages.individualbeneficiary._
-
-  val answers: UserAnswers = UserAnswers(
-    "Id",
-    "UTRUTRUTR",
-    LocalDate.of(1987, 12, 31),
-    TypeOfTrust.WillTrustOrIntestacyTrust,
-    Json.obj()
-  )
+  val answers: UserAnswers = emptyUserAnswers
 
   val index = 0
 

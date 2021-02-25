@@ -16,27 +16,18 @@
 
 package extractors
 
-import java.time.LocalDate
-
-import generators.ModelGenerators
+import base.SpecBase
 import models.HowManyBeneficiaries.Over1
 import models.beneficiaries.EmploymentRelatedBeneficiary
-import models.{Description, NonUkAddress, TypeOfTrust, UkAddress, UserAnswers}
-import org.scalatest.{FreeSpec, MustMatchers}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import models.{Description, NonUkAddress, UkAddress}
 import pages.companyoremploymentrelated.employment._
-import play.api.libs.json.Json
 
-class EmploymentRelatedBeneficiaryExtractorSpec extends FreeSpec with ScalaCheckPropertyChecks with ModelGenerators with MustMatchers {
+import java.time.LocalDate
 
+class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
 
-  val answers: UserAnswers = UserAnswers(
-    "Id",
-    "UTRUTRUTR",
-    LocalDate.of(1987, 12, 31),
-    TypeOfTrust.WillTrustOrIntestacyTrust,
-    Json.obj()
-  )
+  val answers = emptyUserAnswers
+
   val index = 0
 
   val name = "Employment Related Name"
