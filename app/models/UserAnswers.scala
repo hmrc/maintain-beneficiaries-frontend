@@ -32,6 +32,9 @@ final case class UserAnswers(internalId: String,
                              updatedAt: LocalDateTime = LocalDateTime.now,
                              is5mldEnabled: Boolean = false) {
 
+  // TODO - when migrating from taxable to non-taxable will this check be invalid?
+  def isTaxable: Boolean = identifier.length == 10
+
   def cleanup: Try[UserAnswers] = {
     this
       .deleteAtPath(pages.classofbeneficiary.basePath)
