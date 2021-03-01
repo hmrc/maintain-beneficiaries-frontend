@@ -16,13 +16,24 @@
 
 package models.beneficiaries
 
+import models.Address
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 import viewmodels.RadioOption
 
+import java.time.LocalDate
+
 trait Beneficiary
+
+trait OrgBeneficiary extends Beneficiary {
+  val name: String
+  val utr: Option[String]
+  val income: Option[String]
+  val address: Option[Address]
+  val entityStart: LocalDate
+}
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          unidentified: List[ClassOfBeneficiary],

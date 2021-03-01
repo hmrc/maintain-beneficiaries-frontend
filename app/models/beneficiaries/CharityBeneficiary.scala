@@ -29,7 +29,7 @@ final case class CharityBeneficiary(name: String,
                                     incomeDiscretionYesNo: Option[Boolean],
                                     countryOfResidence: Option[String] = None,
                                     entityStart: LocalDate,
-                                    provisional: Boolean) extends Beneficiary
+                                    provisional: Boolean) extends OrgBeneficiary
 
 object CharityBeneficiary {
   implicit val reads: Reads[CharityBeneficiary] = (

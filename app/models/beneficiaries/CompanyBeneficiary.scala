@@ -28,8 +28,7 @@ case class CompanyBeneficiary(name: String,
                               income: Option[String],
                               incomeDiscretionYesNo: Boolean,
                               entityStart: LocalDate,
-                              provisional : Boolean
-                             ) extends Beneficiary
+                              provisional : Boolean) extends Beneficiary
 
 object CompanyBeneficiary {
 
