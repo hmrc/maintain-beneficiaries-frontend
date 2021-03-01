@@ -16,16 +16,17 @@
 
 package navigation
 
-import controllers.other.{routes => rts}
 import controllers.other.add.{routes => addRts}
 import controllers.other.amend.{routes => amendRts}
-import javax.inject.Inject
+import controllers.other.{routes => rts}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.Page
 import pages.other._
 import pages.other.add.StartDatePage
 import pages.other.amend.IndexPage
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
+
+import javax.inject.Inject
 
 class OtherBeneficiaryNavigator @Inject()() extends Navigator {
 
@@ -46,12 +47,6 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(mode), rts.ShareOfIncomeController.onPageLoad(mode))
     case AddressUkYesNoPage => ua =>
       yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
-  }
-
-  private def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
   private def modeNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {

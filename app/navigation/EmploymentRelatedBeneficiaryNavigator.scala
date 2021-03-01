@@ -17,11 +17,12 @@
 package navigation
 
 import controllers.companyoremploymentrelated.employment.{routes => rts}
-import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.Page
 import pages.companyoremploymentrelated.employment._
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
+
+import javax.inject.Inject
 
 class EmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
 
@@ -71,11 +72,5 @@ class EmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
     simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
       yesNoNavigation(mode) orElse
       navigationWithCheck(mode)
-
-  def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
-  }
 
 }

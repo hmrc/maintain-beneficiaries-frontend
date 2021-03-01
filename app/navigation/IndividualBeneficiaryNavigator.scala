@@ -16,16 +16,17 @@
 
 package navigation
 
-import controllers.individualbeneficiary.{routes => rts}
 import controllers.individualbeneficiary.add.{routes => addRts}
 import controllers.individualbeneficiary.amend.{routes => amendRts}
-import javax.inject.Inject
+import controllers.individualbeneficiary.{routes => rts}
 import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
+import pages.Page
 import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
+import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
+
+import javax.inject.Inject
 
 class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
 
@@ -59,12 +60,6 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         yesNoNav(ua, IdCardDetailsYesNoPage, addRts.IdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad(mode))
     case PassportOrIdCardDetailsYesNoPage => ua =>
       yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, amendRts.PassportOrIdCardDetailsController.onPageLoad(), rts.VPE1FormYesNoController.onPageLoad(mode))
-  }
-
-  private def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
   private def trustTypeNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
