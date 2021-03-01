@@ -17,7 +17,8 @@
 package extractors
 
 import base.SpecBase
-import models.{NonUkAddress, UkAddress}
+import models.Constant.GB
+import models.{NonUkAddress, UkAddress, UserAnswers}
 import models.beneficiaries.CharityBeneficiary
 import pages.charityortrust.charity._
 
@@ -31,7 +32,8 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
   private val utr: String = "utr"
   private val income: Int = 50
   private val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "AB1 1AB")
-  private val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, "FR")
+  private val country: String = "FR"
+  private val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, country)
   private val date: LocalDate = LocalDate.parse("1996-02-03")
 
   private val extractor: CharityBeneficiaryExtractor = injector.instanceOf[CharityBeneficiaryExtractor]
@@ -41,6 +43,8 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
     "Populate user answers" when {
 
       "4mld" when {
+
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
 
         "has minimal data" in {
 
@@ -55,12 +59,15 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
             provisional = false
           )
 
-          val result = extractor.apply(emptyUserAnswers, beneficiary, index).get
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
 
           result.get(NamePage).get mustBe name
           result.get(UtrPage) mustBe None
           result.get(DiscretionYesNoPage).get mustBe true
           result.get(ShareOfIncomePage) mustBe None
+          result.get(CountryOfResidenceYesNoPage) mustBe None
+          result.get(CountryOfResidenceUkYesNoPage) mustBe None
+          result.get(CountryOfResidencePage) mustBe None
           result.get(AddressYesNoPage).get mustBe false
           result.get(AddressUkYesNoPage) mustBe None
           result.get(UkAddressPage) mustBe None
@@ -82,12 +89,15 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
             provisional = false
           )
 
-          val result = extractor.apply(emptyUserAnswers, beneficiary, index).get
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
 
           result.get(NamePage).get mustBe name
           result.get(UtrPage).get mustBe utr
           result.get(DiscretionYesNoPage).get mustBe false
           result.get(ShareOfIncomePage).get mustBe income
+          result.get(CountryOfResidenceYesNoPage) mustBe None
+          result.get(CountryOfResidenceUkYesNoPage) mustBe None
+          result.get(CountryOfResidencePage) mustBe None
           result.get(AddressYesNoPage).get mustBe true
           result.get(AddressUkYesNoPage).get mustBe true
           result.get(UkAddressPage).get mustBe ukAddress
@@ -109,18 +119,89 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
             provisional = false
           )
 
-          val result = extractor.apply(emptyUserAnswers, beneficiary, index).get
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
 
           result.get(NamePage).get mustBe name
           result.get(UtrPage) mustBe None
           result.get(DiscretionYesNoPage).get mustBe false
           result.get(ShareOfIncomePage).get mustBe income
+          result.get(CountryOfResidenceYesNoPage) mustBe None
+          result.get(CountryOfResidenceUkYesNoPage) mustBe None
+          result.get(CountryOfResidencePage) mustBe None
           result.get(AddressYesNoPage).get mustBe true
           result.get(AddressUkYesNoPage).get mustBe false
           result.get(UkAddressPage) mustBe None
           result.get(NonUkAddressPage).get mustBe nonUkAddress
           result.get(StartDatePage).get mustBe date
           result.get(IndexPage).get mustBe index
+        }
+      }
+
+      "5mld" when {
+
+        "taxable" when {
+
+          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+
+          "has UK country of residence" in {
+
+            val beneficiary = CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = Some(true),
+              countryOfResidence = Some(GB),
+              entityStart = date,
+              provisional = false
+            )
+
+            val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+            result.get(NamePage).get mustBe name
+            result.get(UtrPage) mustBe None
+            result.get(DiscretionYesNoPage).get mustBe true
+            result.get(ShareOfIncomePage) mustBe None
+            result.get(CountryOfResidenceYesNoPage).get mustBe true
+            result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+            result.get(CountryOfResidencePage).get mustBe GB
+            result.get(AddressYesNoPage).get mustBe false
+            result.get(AddressUkYesNoPage) mustBe None
+            result.get(UkAddressPage) mustBe None
+            result.get(NonUkAddressPage) mustBe None
+            result.get(StartDatePage).get mustBe date
+            result.get(IndexPage).get mustBe index
+          }
+
+          "has non-UK country of residence" in {
+
+            val beneficiary = CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = Some(true),
+              countryOfResidence = Some(country),
+              entityStart = date,
+              provisional = false
+            )
+
+            val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+            result.get(NamePage).get mustBe name
+            result.get(UtrPage) mustBe None
+            result.get(DiscretionYesNoPage).get mustBe true
+            result.get(ShareOfIncomePage) mustBe None
+            result.get(CountryOfResidenceYesNoPage).get mustBe true
+            result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+            result.get(CountryOfResidencePage).get mustBe country
+            result.get(AddressYesNoPage).get mustBe false
+            result.get(AddressUkYesNoPage) mustBe None
+            result.get(UkAddressPage) mustBe None
+            result.get(NonUkAddressPage) mustBe None
+            result.get(StartDatePage).get mustBe date
+            result.get(IndexPage).get mustBe index
+          }
         }
       }
     }

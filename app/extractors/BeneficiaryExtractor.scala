@@ -16,13 +16,14 @@
 
 package extractors
 
+import models.Constant.GB
 import models.beneficiaries.{Beneficiary, OrgBeneficiary}
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.{EmptyPage, QuestionPage}
 import play.api.libs.json.JsPath
 
 import java.time.LocalDate
-import scala.util.Try
+import scala.util.{Success, Try}
 
 trait BeneficiaryExtractor[T <: Beneficiary] {
 
@@ -35,6 +36,10 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   def shareOfIncomeYesNoPage: QuestionPage[Boolean] = new EmptyPage[Boolean]
   def shareOfIncomePage: QuestionPage[Int] = new EmptyPage[Int]
 
+  def countryOfResidenceYesNoPage: QuestionPage[Boolean] = new EmptyPage[Boolean]
+  def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = new EmptyPage[Boolean]
+  def countryOfResidencePage: QuestionPage[String] = new EmptyPage[String]
+
   def addressYesNoPage: QuestionPage[Boolean] = new EmptyPage[Boolean]
   def ukAddressYesNoPage: QuestionPage[Boolean] = new EmptyPage[Boolean]
   def ukAddressPage: QuestionPage[UkAddress] = new EmptyPage[UkAddress]
@@ -46,7 +51,20 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
 
   def basePath: JsPath
 
-  def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
+  def extractUserAnswersForOrgBeneficiary(answers: UserAnswers,
+                                          entity: OrgBeneficiary,
+                                          index: Int): Try[UserAnswers] = {
+    answers.deleteAtPath(basePath)
+      .flatMap(_.set(namePage, entity.name))
+      .flatMap(_.set(utrPage, entity.utr))
+      .flatMap(answers => extractShareOfIncome(entity.income, answers))
+      .flatMap(answers => extractCountryOfResidence(entity.countryOfResidence, answers))
+      .flatMap(answers => extractAddress(entity.address, answers))
+      .flatMap(_.set(startDatePage, entity.entityStart))
+      .flatMap(_.set(indexPage, index))
+  }
+
+  private def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
     shareOfIncome match {
       case Some(income) => answers
         .set(shareOfIncomeYesNoPage, false)
@@ -56,19 +74,26 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
     }
   }
 
-  def extractUserAnswersForOrgBeneficiary(answers: UserAnswers,
-                                          entity: OrgBeneficiary,
-                                          index: Int): Try[UserAnswers] = {
-    answers.deleteAtPath(basePath)
-      .flatMap(_.set(namePage, entity.name))
-      .flatMap(answers => extractAddress(entity.address, answers))
-      .flatMap(answers => extractShareOfIncome(entity.income, answers))
-      .flatMap(_.set(utrPage, entity.utr))
-      .flatMap(_.set(startDatePage, entity.entityStart))
-      .flatMap(_.set(indexPage, index))
+  private def extractCountryOfResidence(countryOfResidence: Option[String], answers: UserAnswers): Try[UserAnswers] = {
+    if (answers.is5mldEnabled) {
+      countryOfResidence match {
+        case Some(GB) => answers
+          .set(countryOfResidenceYesNoPage, true)
+          .flatMap(_.set(ukCountryOfResidenceYesNoPage, true))
+          .flatMap(_.set(countryOfResidencePage, GB))
+        case Some(country) => answers
+          .set(countryOfResidenceYesNoPage, true)
+          .flatMap(_.set(ukCountryOfResidenceYesNoPage, false))
+          .flatMap(_.set(countryOfResidencePage, country))
+        case None => answers
+          .set(countryOfResidenceYesNoPage, false)
+      }
+    } else {
+      Success(answers)
+    }
   }
 
-  def extractAddress(address: Option[Address], answers: UserAnswers): Try[UserAnswers] = {
+  private def extractAddress(address: Option[Address], answers: UserAnswers): Try[UserAnswers] = {
     address match {
       case Some(uk: UkAddress) => answers
         .set(addressYesNoPage, true)

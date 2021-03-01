@@ -41,6 +41,10 @@ class CharityBeneficiaryExtractor extends BeneficiaryExtractor[CharityBeneficiar
   override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = DiscretionYesNoPage
   override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
 
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+
   override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
   override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
   override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage

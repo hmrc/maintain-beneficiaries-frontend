@@ -31,6 +31,7 @@ trait OrgBeneficiary extends Beneficiary {
   val name: String
   val utr: Option[String]
   val income: Option[String]
+  val countryOfResidence: Option[String]
   val address: Option[Address]
   val entityStart: LocalDate
 }
