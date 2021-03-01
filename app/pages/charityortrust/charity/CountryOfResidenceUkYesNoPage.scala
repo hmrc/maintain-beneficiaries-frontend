@@ -14,10 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-  final val GB = "GB"
+import scala.util.Try
 
+case object CountryOfResidenceUkYesNoPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "countryOfResidenceUkYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(CountryOfResidencePage)
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
+  }
 }

@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-  final val GB = "GB"
+case object CountryOfResidencePage extends QuestionPage[String] {
 
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "countryOfResidence"
 }

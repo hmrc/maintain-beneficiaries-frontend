@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class CountryOfResidencePageSpec extends PageBehaviours {
 
+  "CountryOfResidencePage" must {
+
+    beRetrievable[String](CountryOfResidencePage)
+
+    beSettable[String](CountryOfResidencePage)
+
+    beRemovable[String](CountryOfResidencePage)
+  }
 }
