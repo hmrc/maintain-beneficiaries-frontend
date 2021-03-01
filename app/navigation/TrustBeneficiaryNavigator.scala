@@ -17,11 +17,12 @@
 package navigation
 
 import controllers.charityortrust.trust.{routes => rts}
-import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.Page
 import pages.charityortrust.trust._
-import pages.{Page, QuestionPage}
 import play.api.mvc.Call
+
+import javax.inject.Inject
 
 class TrustBeneficiaryNavigator @Inject()() extends Navigator {
 
@@ -59,12 +60,6 @@ class TrustBeneficiaryNavigator @Inject()() extends Navigator {
           yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), checkDetailsRoute(ua))
         }
     }
-  }
-
-  def yesNoNav(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call = {
-    ua.get(fromPage)
-      .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 
   def checkDetailsRoute(answers: UserAnswers) : Call = {
