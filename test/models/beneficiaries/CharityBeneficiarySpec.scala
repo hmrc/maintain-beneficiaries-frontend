@@ -17,8 +17,7 @@
 package models.beneficiaries
 
 import java.time.LocalDate
-
-import models.UkAddress
+import models.{NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
@@ -26,156 +25,238 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
 
   "CharityBeneficiary" must {
     "deserialise from backend JSON" when {
-      "there is conflicting income info" in {
-        val json = Json.parse(
-          """
-            |{
-            |  "lineNo": "1",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "Nelson Ltd ",
-            |  "beneficiaryDiscretion": true,
-            |  "beneficiaryShareOfIncome": "0",
-            |  "identification": {
-            |    "safeId": "2222200000000"
-            |  },
-            |  "entityStart": "2017-02-28",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
 
-        val beneficiary = json.as[CharityBeneficiary]
-        beneficiary mustBe CharityBeneficiary(
-          name = "Nelson Ltd ",
-          utr = None,
-          address = None,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28),
-          provisional = false
-        )
-      }
-      "there is no discretion for income info" in {
-        val json = Json.parse(
-          """
-            |{
-            |  "lineNo": "1",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "Nelson Ltd ",
-            |  "beneficiaryShareOfIncome": "10000",
-            |  "identification": {
-            |    "safeId": "2222200000000"
-            |  },
-            |  "entityStart": "2017-02-28",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+      "taxable" when {
 
-        val beneficiary = json.as[CharityBeneficiary]
-        beneficiary mustBe CharityBeneficiary(
-          name = "Nelson Ltd ",
-          utr = None,
-          address = None,
-          income = Some("10000"),
-          incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
-          provisional = false
-        )
-      }
-      "there is no income at all" in {
-        val json = Json.parse(
-          """
-            |{
-            |  "lineNo": "1",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "Nelson Ltd ",
-            |  "identification": {
-            |    "safeId": "2222200000000"
-            |  },
-            |  "entityStart": "2017-02-28",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+        "there is conflicting income info" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "beneficiaryDiscretion": true,
+              |  "beneficiaryShareOfIncome": "0",
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
 
-        val beneficiary = json.as[CharityBeneficiary]
-        beneficiary mustBe CharityBeneficiary(
-          name = "Nelson Ltd ",
-          utr = None,
-          address = None,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2017, 2, 28),
-          provisional = false
-        )
-      }
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = true,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
 
-      "there is a UTR" in {
-        val json = Json.parse(
-          """
-            |{
-            |                "lineNo": "236",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Charity 25",
-            |                "identification": {
-            |                  "utr": "2570719166"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
-            |""".stripMargin)
+        "there is no discretion for income info" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "beneficiaryShareOfIncome": "10000",
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
 
-        val beneficiary = json.as[CharityBeneficiary]
-        beneficiary mustBe CharityBeneficiary(
-          name = "Beneficiary Charity 25",
-          utr = Some("2570719166"),
-          address = None,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
-      }
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = Some("10000"),
+            incomeDiscretionYesNo = false,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
 
-      "there is a UK address" in {
-        val json = Json.parse(
-          """
-            |{
-            |  "lineNo": "1",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "Nelson Ltd ",
-            |  "beneficiaryShareOfIncome": "10000",
-            |  "beneficiaryDiscretion": false,
-            |  "identification": {
-            |    "safeId": "2222200000000",
-            |    "address": {
-            |          "line1": "Suite 10",
-            |          "line2": "Wealthy Arena",
-            |          "line3": "Trafagar Square",
-            |          "line4": "London",
-            |          "postCode": "SE2 2HB",
-            |          "country": "GB"
-            |       }
-            |  },
-            |  "entityStart": "2017-02-28",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+        "there is no income at all" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
 
-        val beneficiary = json.as[CharityBeneficiary]
-        beneficiary mustBe CharityBeneficiary(
-          name = "Nelson Ltd ",
-          utr = None,
-          address = Some(UkAddress(
-            "Suite 10",
-            "Wealthy Arena",
-            Some("Trafagar Square"),
-            Some("London"),
-            "SE2 2HB"
-          )),
-          income = Some("10000"),
-          incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2017, 2, 28),
-          provisional = false
-        )
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = true,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
+
+        "there is a UTR" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "236",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Beneficiary Charity 25",
+              |  "identification": {
+              |    "utr": "2570719166"
+              |  },
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Beneficiary Charity 25",
+            utr = Some("2570719166"),
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = true,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "there is a UK address" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "beneficiaryShareOfIncome": "10000",
+              |  "beneficiaryDiscretion": false,
+              |  "identification": {
+              |    "safeId": "2222200000000",
+              |    "address": {
+              |      "line1": "Suite 10",
+              |      "line2": "Wealthy Arena",
+              |      "line3": "Trafagar Square",
+              |      "line4": "London",
+              |      "postCode": "SE2 2HB",
+              |      "country": "GB"
+              |    }
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = Some(UkAddress(
+              line1 = "Suite 10",
+              line2 = "Wealthy Arena",
+              line3 = Some("Trafagar Square"),
+              line4 = Some("London"),
+              postcode = "SE2 2HB"
+            )),
+            income = Some("10000"),
+            incomeDiscretionYesNo = false,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
+
+        "there is a non-UK address" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "beneficiaryShareOfIncome": "10000",
+              |  "beneficiaryDiscretion": false,
+              |  "identification": {
+              |    "safeId": "2222200000000",
+              |    "address": {
+              |      "line1": "Suite 10",
+              |      "line2": "Wealthy Arena",
+              |      "line3": "Paris",
+              |      "country": "FR"
+              |    }
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = Some(NonUkAddress(
+              line1 = "Suite 10",
+              line2 = "Wealthy Arena",
+              line3 = Some("Paris"),
+              country = "FR"
+            )),
+            income = Some("10000"),
+            incomeDiscretionYesNo = false,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
+
+        "there is a country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "beneficiaryDiscretion": true,
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "countryOfResidence": "GB",
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = true,
+            countryOfResidence = Some("GB"),
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
       }
     }
   }
