@@ -203,6 +203,71 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
             result.get(IndexPage).get mustBe index
           }
         }
+
+        "non-taxable" when {
+
+          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+          "has no country of residence" in {
+
+            val beneficiary = CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = None,
+              countryOfResidence = None,
+              entityStart = date,
+              provisional = false
+            )
+
+            val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+            result.get(NamePage).get mustBe name
+            result.get(UtrPage) mustBe None
+            result.get(DiscretionYesNoPage) mustBe None
+            result.get(ShareOfIncomePage) mustBe None
+            result.get(CountryOfResidenceYesNoPage).get mustBe false
+            result.get(CountryOfResidenceUkYesNoPage) mustBe None
+            result.get(CountryOfResidencePage) mustBe None
+            result.get(AddressYesNoPage) mustBe None
+            result.get(AddressUkYesNoPage) mustBe None
+            result.get(UkAddressPage) mustBe None
+            result.get(NonUkAddressPage) mustBe None
+            result.get(StartDatePage).get mustBe date
+            result.get(IndexPage).get mustBe index
+          }
+
+          "has country of residence" in {
+
+            val beneficiary = CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = None,
+              countryOfResidence = Some(country),
+              entityStart = date,
+              provisional = false
+            )
+
+            val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+            result.get(NamePage).get mustBe name
+            result.get(UtrPage) mustBe None
+            result.get(DiscretionYesNoPage) mustBe None
+            result.get(ShareOfIncomePage) mustBe None
+            result.get(CountryOfResidenceYesNoPage).get mustBe true
+            result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+            result.get(CountryOfResidencePage).get mustBe country
+            result.get(AddressYesNoPage) mustBe None
+            result.get(AddressUkYesNoPage) mustBe None
+            result.get(UkAddressPage) mustBe None
+            result.get(NonUkAddressPage) mustBe None
+            result.get(StartDatePage).get mustBe date
+            result.get(IndexPage).get mustBe index
+          }
+        }
       }
     }
   }

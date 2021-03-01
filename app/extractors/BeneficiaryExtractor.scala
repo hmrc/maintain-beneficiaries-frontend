@@ -65,12 +65,16 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   }
 
   private def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
-    shareOfIncome match {
-      case Some(income) => answers
-        .set(shareOfIncomeYesNoPage, false)
-        .flatMap(_.set(shareOfIncomePage, income.toInt))
-      case None => answers
-        .set(shareOfIncomeYesNoPage, true)
+    if (answers.isTaxable) {
+      shareOfIncome match {
+        case Some(income) => answers
+          .set(shareOfIncomeYesNoPage, false)
+          .flatMap(_.set(shareOfIncomePage, income.toInt))
+        case None => answers
+          .set(shareOfIncomeYesNoPage, true)
+      }
+    } else {
+      Success(answers)
     }
   }
 
@@ -94,17 +98,21 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   }
 
   private def extractAddress(address: Option[Address], answers: UserAnswers): Try[UserAnswers] = {
-    address match {
-      case Some(uk: UkAddress) => answers
-        .set(addressYesNoPage, true)
-        .flatMap(_.set(ukAddressYesNoPage, true))
-        .flatMap(_.set(ukAddressPage, uk))
-      case Some(nonUk: NonUkAddress) => answers
-        .set(addressYesNoPage, true)
-        .flatMap(_.set(ukAddressYesNoPage, false))
-        .flatMap(_.set(nonUkAddressPage, nonUk))
-      case _ => answers
-        .set(addressYesNoPage, false)
+    if (answers.isTaxable) {
+      address match {
+        case Some(uk: UkAddress) => answers
+          .set(addressYesNoPage, true)
+          .flatMap(_.set(ukAddressYesNoPage, true))
+          .flatMap(_.set(ukAddressPage, uk))
+        case Some(nonUk: NonUkAddress) => answers
+          .set(addressYesNoPage, true)
+          .flatMap(_.set(ukAddressYesNoPage, false))
+          .flatMap(_.set(nonUkAddressPage, nonUk))
+        case _ => answers
+          .set(addressYesNoPage, false)
+      }
+    } else {
+      Success(answers)
     }
   }
 
