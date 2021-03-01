@@ -490,7 +490,7 @@ charityBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {
 charityBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the charity beneficiary’s country of residence
 charityBeneficiary.countryOfResidenceYesNo.hint = The country of residence is usually where the charity is registered.
 
-charityBeneficiary.countryOfResidenceUkYesNo.title = Does charity beneficiary have UK residency?
+charityBeneficiary.countryOfResidenceUkYesNo.title = Does the charity beneficiary have UK residency?
 charityBeneficiary.countryOfResidenceUkYesNo.heading = Does {0} have UK residency?
 charityBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
 charityBeneficiary.countryOfResidenceUkYesNo.error.required = Select yes if the charity beneficiary has UK residency
