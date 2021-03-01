@@ -60,7 +60,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
             utr = None,
             address = None,
             income = None,
-            incomeDiscretionYesNo = true,
+            incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
             entityStart = date,
             provisional = true
@@ -85,7 +85,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
             utr = None,
             address = Some(ukAddress),
             income = Some("50"),
-            incomeDiscretionYesNo = false,
+            incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
             entityStart = date,
             provisional = true
@@ -110,7 +110,7 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
             utr = None,
             address = Some(nonUkAddress),
             income = Some("50"),
-            incomeDiscretionYesNo = false,
+            incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
             entityStart = date,
             provisional = true
@@ -120,84 +120,156 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
 
       "5mld" when {
 
-        "no country of residence" in {
+        "taxable" when {
 
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, true).success.value
-            .set(CountryOfResidenceYesNoPage, false).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, true).success.value
-            .set(UkAddressPage, ukAddress).success.value
-            .set(StartDatePage, date).success.value
+          "no country of residence" in {
 
-          val result = mapper(userAnswers).get
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DiscretionYesNoPage, true).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(AddressUkYesNoPage, true).success.value
+              .set(UkAddressPage, ukAddress).success.value
+              .set(StartDatePage, date).success.value
 
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(ukAddress),
-            income = None,
-            incomeDiscretionYesNo = true,
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
+            val result = mapper(userAnswers).get
+
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = Some(ukAddress),
+              income = None,
+              incomeDiscretionYesNo = Some(true),
+              countryOfResidence = None,
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DiscretionYesNoPage, false).success.value
+              .set(ShareOfIncomePage, share).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(AddressUkYesNoPage, true).success.value
+              .set(UkAddressPage, ukAddress).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = Some(ukAddress),
+              income = Some("50"),
+              incomeDiscretionYesNo = Some(false),
+              countryOfResidence = Some("GB"),
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "non-UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DiscretionYesNoPage, false).success.value
+              .set(ShareOfIncomePage, share).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+              .set(CountryOfResidencePage, "FR").success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(AddressUkYesNoPage, false).success.value
+              .set(NonUkAddressPage, nonUkAddress).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = Some(nonUkAddress),
+              income = Some("50"),
+              incomeDiscretionYesNo = Some(false),
+              countryOfResidence = Some("FR"),
+              entityStart = date,
+              provisional = true
+            )
+          }
         }
 
-        "UK country of residence" in {
+        "non-taxable" when {
 
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(CountryOfResidenceYesNoPage, true).success.value
-            .set(CountryOfResidenceUkYesNoPage, true).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, true).success.value
-            .set(UkAddressPage, ukAddress).success.value
-            .set(StartDatePage, date).success.value
+          "no country of residence" in {
 
-          val result = mapper(userAnswers).get
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(StartDatePage, date).success.value
 
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(ukAddress),
-            income = Some("50"),
-            incomeDiscretionYesNo = false,
-            countryOfResidence = Some("GB"),
-            entityStart = date,
-            provisional = true
-          )
-        }
+            val result = mapper(userAnswers).get
 
-        "non-UK country of residence" in {
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = None,
+              countryOfResidence = None,
+              entityStart = date,
+              provisional = true
+            )
+          }
 
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(CountryOfResidenceYesNoPage, true).success.value
-            .set(CountryOfResidenceUkYesNoPage, false).success.value
-            .set(CountryOfResidencePage, "FR").success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, false).success.value
-            .set(NonUkAddressPage, nonUkAddress).success.value
-            .set(StartDatePage, date).success.value
+          "UK country of residence" in {
 
-          val result = mapper(userAnswers).get
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(StartDatePage, date).success.value
 
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(nonUkAddress),
-            income = Some("50"),
-            incomeDiscretionYesNo = false,
-            countryOfResidence = Some("FR"),
-            entityStart = date,
-            provisional = true
-          )
+            val result = mapper(userAnswers).get
+
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = None,
+              countryOfResidence = Some("GB"),
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "non-UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+              .set(CountryOfResidencePage, "FR").success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe CharityBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              income = None,
+              incomeDiscretionYesNo = None,
+              countryOfResidence = Some("FR"),
+              entityStart = date,
+              provisional = true
+            )
+          }
         }
       }
     }

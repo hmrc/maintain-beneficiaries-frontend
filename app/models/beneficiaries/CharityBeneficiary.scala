@@ -16,17 +16,17 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
-
 import models.Address
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 final case class CharityBeneficiary(name: String,
                                     utr: Option[String],
                                     address: Option[Address],
                                     income: Option[String],
-                                    incomeDiscretionYesNo: Boolean,
+                                    incomeDiscretionYesNo: Option[Boolean],
                                     countryOfResidence: Option[String] = None,
                                     entityStart: LocalDate,
                                     provisional: Boolean) extends Beneficiary
@@ -42,12 +42,14 @@ object CharityBeneficiary {
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map {
+    case (name, None, None, None, None, country, entityStart, provisional) =>
+      CharityBeneficiary(name, None, None, None, None, country, entityStart, provisional)
     case (name, utr, address, None, _, country, entityStart, provisional) =>
-      CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, country, entityStart, provisional)
+      CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
     case (name, utr, address, _, Some(true), country, entityStart, provisional) =>
-      CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, country, entityStart, provisional)
+      CharityBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
     case (name, utr, address, income, _, country, entityStart, provisional) =>
-      CharityBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, country, entityStart, provisional)
+      CharityBeneficiary(name, utr, address, income, incomeDiscretionYesNo = Some(false), country, entityStart, provisional)
   }
 
   implicit val writes: Writes[CharityBeneficiary] = (
@@ -55,7 +57,7 @@ object CharityBeneficiary {
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
       (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]

@@ -51,7 +51,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             utr = None,
             address = None,
             income = None,
-            incomeDiscretionYesNo = true,
+            incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
             entityStart = LocalDate.of(2017, 2, 28),
             provisional = false
@@ -80,35 +80,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             utr = None,
             address = None,
             income = Some("10000"),
-            incomeDiscretionYesNo = false,
-            countryOfResidence = None,
-            entityStart = LocalDate.of(2017, 2, 28),
-            provisional = false
-          )
-        }
-
-        "there is no income at all" in {
-          val json = Json.parse(
-            """
-              |{
-              |  "lineNo": "1",
-              |  "bpMatchStatus": "01",
-              |  "organisationName": "Nelson Ltd ",
-              |  "identification": {
-              |    "safeId": "2222200000000"
-              |  },
-              |  "entityStart": "2017-02-28",
-              |  "provisional": false
-              |}
-              |""".stripMargin)
-
-          val beneficiary = json.as[CharityBeneficiary]
-          beneficiary mustBe CharityBeneficiary(
-            name = "Nelson Ltd ",
-            utr = None,
-            address = None,
-            income = None,
-            incomeDiscretionYesNo = true,
+            incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
             entityStart = LocalDate.of(2017, 2, 28),
             provisional = false
@@ -136,7 +108,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             utr = Some("2570719166"),
             address = None,
             income = None,
-            incomeDiscretionYesNo = true,
+            incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
             entityStart = LocalDate.of(2019, 9, 23),
             provisional = false
@@ -180,7 +152,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
               postcode = "SE2 2HB"
             )),
             income = Some("10000"),
-            incomeDiscretionYesNo = false,
+            incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
             entityStart = LocalDate.of(2017, 2, 28),
             provisional = false
@@ -221,7 +193,7 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
               country = "FR"
             )),
             income = Some("10000"),
-            incomeDiscretionYesNo = false,
+            incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
             entityStart = LocalDate.of(2017, 2, 28),
             provisional = false
@@ -251,7 +223,67 @@ class CharityBeneficiarySpec extends WordSpec with MustMatchers {
             utr = None,
             address = None,
             income = None,
-            incomeDiscretionYesNo = true,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = Some("GB"),
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
+      }
+
+      "non-taxable" when {
+
+        "there is no country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2017, 2, 28),
+            provisional = false
+          )
+        }
+
+        "there is a country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "1",
+              |  "bpMatchStatus": "01",
+              |  "organisationName": "Nelson Ltd ",
+              |  "identification": {
+              |    "safeId": "2222200000000"
+              |  },
+              |  "countryOfResidence": "GB",
+              |  "entityStart": "2017-02-28",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[CharityBeneficiary]
+          beneficiary mustBe CharityBeneficiary(
+            name = "Nelson Ltd ",
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
             countryOfResidence = Some("GB"),
             entityStart = LocalDate.of(2017, 2, 28),
             provisional = false

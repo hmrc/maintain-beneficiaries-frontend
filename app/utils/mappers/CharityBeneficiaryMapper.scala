@@ -40,7 +40,7 @@ class CharityBeneficiaryMapper extends Mapper[CharityBeneficiary] {
           case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
           case None => Reads(_ => JsSuccess(None))
         } and
-        DiscretionYesNoPage.path.read[Boolean] and
+        DiscretionYesNoPage.path.readNullable[Boolean] and
         CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
           case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
             case true => Reads(_ => JsSuccess(Some(GB)))
