@@ -41,7 +41,7 @@ class NameController @Inject()(
                                 @CharityBeneficiary navigator: Navigator
                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name", 105)
+  private val form: Form[String] = formProvider.withPrefix("charityBeneficiary.name", 105)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr {
     implicit request =>

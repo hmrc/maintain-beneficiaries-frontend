@@ -19,36 +19,36 @@ package controllers.charityortrust.charity
 import config.annotations.CharityBeneficiary
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
-import forms.IncomePercentageFormProvider
-import javax.inject.Inject
+import forms.YesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.charityortrust.charity.ShareOfIncomePage
+import pages.charityortrust.charity.CountryOfResidenceYesNoPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.charityortrust.charity.ShareOfIncomeView
+import views.html.charityortrust.charity.CountryOfResidenceYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ShareOfIncomeController @Inject()(
-                                         val controllerComponents: MessagesControllerComponents,
-                                         standardActionSets: StandardActionSets,
-                                         formProvider: IncomePercentageFormProvider,
-                                         view: ShareOfIncomeView,
-                                         repository: PlaybackRepository,
-                                         @CharityBeneficiary navigator: Navigator,
-                                         nameAction: NameRequiredAction
-                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CountryOfResidenceYesNoController @Inject()(
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   standardActionSets: StandardActionSets,
+                                                   formProvider: YesNoFormProvider,
+                                                   view: CountryOfResidenceYesNoView,
+                                                   repository: PlaybackRepository,
+                                                   @CharityBeneficiary navigator: Navigator,
+                                                   nameAction: NameRequiredAction
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Int] = formProvider.withPrefix("charityBeneficiary.shareOfIncome")
+  private val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.countryOfResidenceYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ShareOfIncomePage) match {
+      val preparedForm = request.userAnswers.get(CountryOfResidenceYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class ShareOfIncomeController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage, mode, updatedAnswers))
       )
   }
 }

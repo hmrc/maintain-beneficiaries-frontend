@@ -18,8 +18,8 @@
 @import utils.InputOption
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)

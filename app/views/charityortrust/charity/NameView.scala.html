@@ -25,7 +25,7 @@
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("charityBeneficiary.name.title")}"
-    ) {
+) {
 
     @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "on") {
 
