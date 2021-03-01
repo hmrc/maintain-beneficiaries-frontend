@@ -53,7 +53,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     utr = None,
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2012-03-14"),
     provisional = provisional
   )

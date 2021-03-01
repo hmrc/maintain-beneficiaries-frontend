@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+import java.time.LocalDate
 
+class StartDatePageSpec extends PageBehaviours {
+
+  "StartDatePage" must {
+
+    beRetrievable[LocalDate](StartDatePage)
+
+    beSettable[LocalDate](StartDatePage)
+
+    beRemovable[LocalDate](StartDatePage)
+  }
 }

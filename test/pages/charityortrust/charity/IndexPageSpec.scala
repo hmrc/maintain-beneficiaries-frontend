@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class IndexPageSpec extends PageBehaviours {
 
+  "IndexPage" must {
+
+    beRetrievable[Int](IndexPage)
+
+    beSettable[Int](IndexPage)
+
+    beRemovable[Int](IndexPage)
+  }
 }

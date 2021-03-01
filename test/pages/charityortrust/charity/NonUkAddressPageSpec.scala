@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import models.NonUkAddress
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class NonUkAddressPageSpec extends PageBehaviours {
 
+  "NonUkAddressPage" must {
+
+    beRetrievable[NonUkAddress](NonUkAddressPage)
+
+    beSettable[NonUkAddress](NonUkAddressPage)
+
+    beRemovable[NonUkAddress](NonUkAddressPage)
+  }
 }

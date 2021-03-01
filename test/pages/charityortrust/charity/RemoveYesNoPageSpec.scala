@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class RemoveYesNoPageSpec extends PageBehaviours {
 
+  "RemoveYesNoPage" must {
+
+    beRetrievable[Boolean](RemoveYesNoPage)
+
+    beSettable[Boolean](RemoveYesNoPage)
+
+    beRemovable[Boolean](RemoveYesNoPage)
+  }
 }

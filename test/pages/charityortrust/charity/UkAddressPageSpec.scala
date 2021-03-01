@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import models.UkAddress
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class UkAddressPageSpec extends PageBehaviours {
 
+  "UkAddressPage" must {
+
+    beRetrievable[UkAddress](UkAddressPage)
+
+    beSettable[UkAddress](UkAddressPage)
+
+    beRemovable[UkAddress](UkAddressPage)
+  }
 }

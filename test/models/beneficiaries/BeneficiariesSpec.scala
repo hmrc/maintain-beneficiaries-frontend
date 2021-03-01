@@ -25,70 +25,70 @@ import viewmodels.RadioOption
 class BeneficiariesSpec extends SpecBase {
 
   private val individualBeneficiary = IndividualBeneficiary(
-    Name("First", None, "last"),
-    None,
-    None,
-    None,
+    name = Name("First", None, "last"),
+    dateOfBirth = None,
+    identification = None,
+    address = None,
     vulnerableYesNo = false,
-    None,
-    None  ,
+    roleInCompany = None,
+    income = None  ,
     incomeDiscretionYesNo = true,
-    LocalDate.parse("2019-02-03"),
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val classOfBeneficiaries = ClassOfBeneficiary(
-    "description",
-    LocalDate.parse("2019-02-03"),
+    description = "description",
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val charityBeneficiary = CharityBeneficiary(
-    "name",
-    None,
-    None,
-    None,
-    incomeDiscretionYesNo = true,
-    LocalDate.parse("2019-02-03"),
+    name = "name",
+    utr = None,
+    address = None,
+    income = None,
+    incomeDiscretionYesNo = Some(true),
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val trustBeneficiary = TrustBeneficiary(
-    "name",
-    None,
-    None,
-    None,
+    name = "name",
+    utr = None,
+    address = None,
+    income = None,
     incomeDiscretionYesNo = true,
-    LocalDate.parse("2019-02-03"),
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val companyBeneficiary = CompanyBeneficiary(
-    "name",
-    None,
-    None,
-    None,
+    name = "name",
+    utr = None,
+    address = None,
+    income = None,
     incomeDiscretionYesNo = true,
-    LocalDate.parse("2019-02-03"),
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
-    "name",
-    None,
-    None,
+    name = "name",
+    utr = None,
+    address = None,
     description = Description("Description", None, None, None, None),
-    "1",
-    LocalDate.parse("2019-02-03"),
+    howManyBeneficiaries = "1",
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
   private val otherBeneficiary = OtherBeneficiary(
-    "description",
-    None,
-    None,
+    description = "description",
+    address = None,
+    income = None,
     incomeDiscretionYesNo = true,
-    LocalDate.parse("2019-02-03"),
+    entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
 
@@ -111,7 +111,8 @@ class BeneficiariesSpec extends SpecBase {
         RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
         RadioOption("whatTypeOfBeneficiary.charityOrTrust", "charityOrTrust", "whatTypeOfBeneficiary.charityOrTrust"),
         RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
-        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other"))
+        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
+      )
 
       beneficiaries.maxedOutOptions mustBe Nil
 
@@ -126,7 +127,8 @@ class BeneficiariesSpec extends SpecBase {
         RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
         RadioOption("whatTypeOfBeneficiary.trust", "trust", "whatTypeOfBeneficiary.trust"),
         RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
-        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other"))
+        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
+      )
 
       beneficiaries.maxedOutOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.charity", "charity", "whatTypeOfBeneficiary.charity")
@@ -137,13 +139,13 @@ class BeneficiariesSpec extends SpecBase {
     "have no available options if all beneficiary types are maxed out" in {
 
       val beneficiaries = Beneficiaries(
-        individualBeneficiaires,
-        classesOfBeneficiaires,
-        companyBeneficiaires,
-        employmentRelatedBeneficiaires,
-        trustBeneficiaires,
-        charityBeneficiaires,
-        otherBeneficiaires
+        individualDetails = individualBeneficiaires,
+        unidentified = classesOfBeneficiaires,
+        company = companyBeneficiaires,
+        employmentRelated = employmentRelatedBeneficiaires,
+        trust = trustBeneficiaires,
+        charity = charityBeneficiaires,
+        other = otherBeneficiaires
       )
 
       beneficiaries.nonMaxedOutOptions mustBe Nil
@@ -155,7 +157,8 @@ class BeneficiariesSpec extends SpecBase {
         RadioOption("whatTypeOfBeneficiary.trust", "trust", "whatTypeOfBeneficiary.trust"),
         RadioOption("whatTypeOfBeneficiary.company", "company", "whatTypeOfBeneficiary.company"),
         RadioOption("whatTypeOfBeneficiary.employmentRelated", "employmentRelated", "whatTypeOfBeneficiary.employmentRelated"),
-        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other"))
+        RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
+      )
 
     }
 

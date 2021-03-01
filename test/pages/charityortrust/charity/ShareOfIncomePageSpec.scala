@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.charity
 
-object Constant {
+import pages.behaviours.PageBehaviours
 
-  final val GB = "GB"
+class ShareOfIncomePageSpec extends PageBehaviours {
 
+  "ShareOfIncomePage" must {
+
+    beRetrievable[Int](ShareOfIncomePage)
+
+    beSettable[Int](ShareOfIncomePage)
+
+    beRemovable[Int](ShareOfIncomePage)
+  }
 }
