@@ -41,9 +41,9 @@ class AddressUkYesNoController @Inject()(
                                           repository: PlaybackRepository,
                                           @CharityBeneficiary navigator: Navigator,
                                           nameAction: NameRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.addressUkYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.addressUkYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>

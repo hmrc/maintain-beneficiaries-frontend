@@ -17,11 +17,9 @@
 package controllers.charityortrust.charity
 
 import config.annotations.CharityBeneficiary
-import connectors.TrustConnector
 import controllers.actions.StandardActionSets
 import controllers.actions.charity.NameRequiredAction
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.charityortrust.charity.AddressYesNoPage
@@ -29,25 +27,23 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.charityortrust.charity.AddressYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddressYesNoController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         standardActionSets: StandardActionSets,
                                         formProvider: YesNoFormProvider,
-                                        connector: TrustConnector,
                                         view: AddressYesNoView,
-                                        trustService: TrustService,
                                         repository: PlaybackRepository,
                                         @CharityBeneficiary navigator: Navigator,
                                         nameAction: NameRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.addressYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("charityBeneficiary.addressYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>

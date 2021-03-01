@@ -14,27 +14,30 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
-@import controllers.charityortrust.charity.amend.routes._
+@import controllers.charityortrust.charity.routes._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(answerSection: AnswerSection, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("charityBeneficiary.checkDetails.title")
+    title = s"${errorPrefix(form)}${messages("charityBeneficiary.countryOfResidenceUkYesNo.title")}"
 ) {
 
-    @formHelper(action = CheckDetailsController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = CountryOfResidenceUkYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
-        @components.heading("charityBeneficiary.checkDetails.heading")
+        @components.error_summary(form.errors)
 
-        @components.answer_section(answerSection)
+        @components.input_yes_no(
+            field = form("value"),
+            legend = messages("charityBeneficiary.countryOfResidenceUkYesNo.heading", name),
+            headingIsLegend = true
+        )
 
         @components.submit_button()
     }

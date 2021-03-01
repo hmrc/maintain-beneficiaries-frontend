@@ -41,6 +41,8 @@ site.address.nonUk.line2 = Address line 2
 site.address.nonUk.line3 = Address line 3 (optional)
 site.address.nonUk.country = Country
 
+site.address.country.select = Select a country
+
 #timeout dialog
 timeout.title=Your application will time out soon
 timeout.message=We will sign you out if you do not respond in

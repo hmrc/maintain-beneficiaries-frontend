@@ -20,10 +20,12 @@ import config.annotations.CharityBeneficiary
 import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import forms.NonUkAddressFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, NonUkAddress}
 import navigation.Navigator
 import pages.charityortrust.charity.NonUkAddressPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
@@ -45,7 +47,7 @@ class NonUkAddressController @Inject()(
                                         val countryOptions: CountryOptionsNonUK
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[NonUkAddress] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>

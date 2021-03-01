@@ -28,14 +28,14 @@ import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsUtrView
 
 class CheckDetailsUtrController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsUtrView,
-                                        val appConfig: FrontendAppConfig,
-                                        printHelper: CharityBeneficiaryPrintHelper,
-                                        nameAction: NameRequiredAction
-                                      ) extends FrontendBaseController with I18nSupport {
+                                           override val messagesApi: MessagesApi,
+                                           standardActionSets: StandardActionSets,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: CheckDetailsUtrView,
+                                           val appConfig: FrontendAppConfig,
+                                           printHelper: CharityBeneficiaryPrintHelper,
+                                           nameAction: NameRequiredAction
+                                         ) extends FrontendBaseController with I18nSupport {
 
   private val provisional: Boolean = false
 
@@ -47,6 +47,6 @@ class CheckDetailsUtrController @Inject()(
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-      Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+    Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
 }
