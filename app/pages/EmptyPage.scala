@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.JsPath
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
-
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+class EmptyPage[T] extends QuestionPage[T] {
+  override def path: JsPath = JsPath
 }
