@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package pages.classOfBeneficiary
+package pages.classofbeneficiary
 
 import pages.behaviours.PageBehaviours
-import pages.classofbeneficiary.RemoveYesNoPage
 
 class RemoveYesNoPageSpec extends PageBehaviours {
 
