@@ -293,6 +293,24 @@ individualBeneficiary.shareOfIncome.error.integer = The percentage of the trust�
 individualBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s assets the individual beneficiary is entitled to must be a whole number
 individualBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s assets the individual beneficiary is entitled to must be 100 or less
 
+individualBeneficiary.countryOfNationalityYesNo.title = Do you know the individual beneficiary’s country of nationality?
+individualBeneficiary.countryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
+individualBeneficiary.countryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
+individualBeneficiary.countryOfNationalityYesNo.error.required = Select yes if you know the individual beneficiary’s country of nationality
+individualBeneficiary.countryOfNationalityYesNo.hint = The country of nationality is usually where the individual was born and where their passport is registered.
+
+individualBeneficiary.countryOfNationalityUkYesNo.title = Does the individual beneficiary have UK nationality?
+individualBeneficiary.countryOfNationalityUkYesNo.heading = Does {0} have UK nationality?
+individualBeneficiary.countryOfNationalityUkYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
+individualBeneficiary.countryOfNationalityUkYesNo.error.required = Select yes if the individual beneficiary has UK nationality
+
+individualBeneficiary.countryOfNationality.title = What is the individual beneficiary’s country of nationality?
+individualBeneficiary.countryOfNationality.heading = What is {0}’s country of nationality?
+individualBeneficiary.countryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
+individualBeneficiary.countryOfNationality.error.required = Enter a country
+individualBeneficiary.countryOfNationality.error.length = The country of nationality must be 100 characters or less
+individualBeneficiary.countryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 individualBeneficiary.nationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you know {0}’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.title = Do you know the individual’s National Insurance number?
 individualBeneficiary.nationalInsuranceNumberYesNo.heading = Do you know {0}’s National Insurance number?
@@ -304,6 +322,24 @@ individualBeneficiary.nationalInsuranceNumber.heading = What is {0}’s National
 individualBeneficiary.nationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
 individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual beneficiary’s National Insurance number in the correct format
+
+individualBeneficiary.countryOfResidenceYesNo.title = Do you know the individual beneficiary’s country of residence?
+individualBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+individualBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+individualBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know the individual beneficiary’s country of residence
+individualBeneficiary.countryOfResidenceYesNo.hint = The country of residence is usually where the individual lives and works most of the time during the tax year.
+
+individualBeneficiary.countryOfResidenceUkYesNo.title = Does the individual beneficiary have UK residency?
+individualBeneficiary.countryOfResidenceUkYesNo.heading = Does {0} have UK residency?
+individualBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+individualBeneficiary.countryOfResidenceUkYesNo.error.required = Select yes if the individual beneficiary has UK residency
+
+individualBeneficiary.countryOfResidence.title = What is the individual beneficiary’s country of residence?
+individualBeneficiary.countryOfResidence.heading = What is {0}’s country of residence?
+individualBeneficiary.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+individualBeneficiary.countryOfResidence.error.required = Enter a country
+individualBeneficiary.countryOfResidence.error.length = The country of residence must be 100 characters or less
+individualBeneficiary.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 individualBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 individualBeneficiary.addressYesNo.title = Do you know the individual beneficiary’s address?

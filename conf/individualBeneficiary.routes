@@ -23,6 +23,21 @@ POST       /share-of-income                          controllers.individualbenef
 GET        /change-share-of-income                   controllers.individualbeneficiary.IncomePercentageController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-share-of-income                   controllers.individualbeneficiary.IncomePercentageController.onSubmit(mode: Mode = CheckMode)
 
+GET         /do-you-know-country-of-nationality           controllers.individualbeneficiary.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /do-you-know-country-of-nationality           controllers.individualbeneficiary.CountryOfNationalityYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-do-you-know-country-of-nationality    controllers.individualbeneficiary.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-do-you-know-country-of-nationality    controllers.individualbeneficiary.CountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-uk-country-of-nationality                controllers.individualbeneficiary.CountryOfNationalityUkYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-uk-country-of-nationality                controllers.individualbeneficiary.CountryOfNationalityUkYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-uk-country-of-nationality         controllers.individualbeneficiary.CountryOfNationalityUkYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-uk-country-of-nationality         controllers.individualbeneficiary.CountryOfNationalityUkYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /country-of-nationality                       controllers.individualbeneficiary.CountryOfNationalityController.onPageLoad(mode: Mode = NormalMode)
+POST        /country-of-nationality                       controllers.individualbeneficiary.CountryOfNationalityController.onSubmit(mode: Mode = NormalMode)
+GET         /change-country-of-nationality                controllers.individualbeneficiary.CountryOfNationalityController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-country-of-nationality                controllers.individualbeneficiary.CountryOfNationalityController.onSubmit(mode: Mode = CheckMode)
+
 GET        /has-national-insurance-number            controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /has-national-insurance-number            controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-has-national-insurance-number     controllers.individualbeneficiary.NationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = CheckMode)
@@ -32,6 +47,21 @@ GET        /national-insurance-number                controllers.individualbenef
 POST       /national-insurance-number                controllers.individualbeneficiary.NationalInsuranceNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-national-insurance-number         controllers.individualbeneficiary.NationalInsuranceNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-national-insurance-number         controllers.individualbeneficiary.NationalInsuranceNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET         /do-you-know-country-of-residence           controllers.individualbeneficiary.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /do-you-know-country-of-residence           controllers.individualbeneficiary.CountryOfResidenceYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-do-you-know-country-of-residence    controllers.individualbeneficiary.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-do-you-know-country-of-residence    controllers.individualbeneficiary.CountryOfResidenceYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /has-uk-country-of-residence                controllers.individualbeneficiary.CountryOfResidenceUkYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST        /has-uk-country-of-residence                controllers.individualbeneficiary.CountryOfResidenceUkYesNoController.onSubmit(mode: Mode = NormalMode)
+GET         /change-has-uk-country-of-residence         controllers.individualbeneficiary.CountryOfResidenceUkYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-has-uk-country-of-residence         controllers.individualbeneficiary.CountryOfResidenceUkYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET         /country-of-residence                       controllers.individualbeneficiary.CountryOfResidenceController.onPageLoad(mode: Mode = NormalMode)
+POST        /country-of-residence                       controllers.individualbeneficiary.CountryOfResidenceController.onSubmit(mode: Mode = NormalMode)
+GET         /change-country-of-residence                controllers.individualbeneficiary.CountryOfResidenceController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-country-of-residence                controllers.individualbeneficiary.CountryOfResidenceController.onSubmit(mode: Mode = CheckMode)
 
 GET        /has-address                              controllers.individualbeneficiary.AddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /has-address                              controllers.individualbeneficiary.AddressYesNoController.onSubmit(mode: Mode = NormalMode)
