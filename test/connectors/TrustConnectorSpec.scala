@@ -123,7 +123,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     utr = None,
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2017-02-28"),
     provisional = false
   )

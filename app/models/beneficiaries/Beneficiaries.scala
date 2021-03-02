@@ -22,8 +22,6 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 import viewmodels.RadioOption
 
-trait Beneficiary
-
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
                          unidentified: List[ClassOfBeneficiary],
                          company: List[CompanyBeneficiary],
@@ -44,13 +42,13 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
 
   private val options: BeneficiaryOptions = {
     (individualDetails.size, Individual) ::
-    (unidentified.size, ClassOfBeneficiaries) ::
-    (charity.size, Charity) ::
-    (trust.size, Trust) ::
-    (company.size, Company) ::
-    (employmentRelated.size, EmploymentRelated) ::
-    (other.size, Other) ::
-    Nil
+      (unidentified.size, ClassOfBeneficiaries) ::
+      (charity.size, Charity) ::
+      (trust.size, Trust) ::
+      (company.size, Company) ::
+      (employmentRelated.size, EmploymentRelated) ::
+      (other.size, Other) ::
+      Nil
   }
 
   val nonMaxedOutOptions: List[RadioOption] = {
@@ -88,13 +86,13 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
 }
 
 object Beneficiaries {
-  implicit val reads: Reads[Beneficiaries] =
-    ((__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
+  implicit val reads: Reads[Beneficiaries] = (
+    (__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "company").readWithDefault[List[CompanyBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "large").readWithDefault[List[EmploymentRelatedBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "trust").readWithDefault[List[TrustBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "charity").readWithDefault[List[CharityBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "other").readWithDefault[List[OtherBeneficiary]](Nil)
-      ).apply(Beneficiaries.apply _)
+    ).apply(Beneficiaries.apply _)
 }

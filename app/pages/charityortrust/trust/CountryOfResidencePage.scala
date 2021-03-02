@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.trust
 
-import play.api.libs.json.{Format, Json}
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
+case object CountryOfResidencePage extends QuestionPage[String] {
 
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "countryOfResidence"
 }

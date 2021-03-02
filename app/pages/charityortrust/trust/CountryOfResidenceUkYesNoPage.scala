@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.trust
 
-import play.api.libs.json.{Format, Json}
+import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
+import scala.util.Try
 
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+case object CountryOfResidenceUkYesNoPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = basePath \ toString
+
+  override def toString: String = "countryOfResidenceUkYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(CountryOfResidencePage)
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
+  }
 }

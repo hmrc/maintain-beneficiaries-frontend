@@ -21,19 +21,22 @@ import java.time.LocalDate
 import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json.{Reads, Writes, __}
 
-final case class ClassOfBeneficiary(description: String, entityStart: LocalDate, provisional : Boolean)
-  extends Beneficiary
+final case class ClassOfBeneficiary(description: String,
+                                    entityStart: LocalDate,
+                                    provisional: Boolean) extends Beneficiary
 
 object ClassOfBeneficiary {
 
-  implicit val reads: Reads[ClassOfBeneficiary] =
-    ((__ \ 'description).read[String] and
+  implicit val reads: Reads[ClassOfBeneficiary] = (
+    (__ \ 'description).read[String] and
       (__ \ 'entityStart).read[LocalDate] and
-      (__ \ 'lineNo).readNullable[String].map(_.isEmpty)).apply(ClassOfBeneficiary.apply _)
+      (__ \ 'lineNo).readNullable[String].map(_.isEmpty)
+    ).apply(ClassOfBeneficiary.apply _)
 
-  implicit val writes: Writes[ClassOfBeneficiary] =
-    ((__ \ 'description).write[String] and
+  implicit val writes: Writes[ClassOfBeneficiary] = (
+    (__ \ 'description).write[String] and
       (__ \ 'entityStart).write[LocalDate] and
-      (__ \ "provisional").write[Boolean]).apply(unlift(ClassOfBeneficiary.unapply))
+      (__ \ "provisional").write[Boolean]
+    ).apply(unlift(ClassOfBeneficiary.unapply))
 
 }

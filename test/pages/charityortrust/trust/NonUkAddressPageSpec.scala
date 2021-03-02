@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.trust
 
-import play.api.libs.json.{Format, Json}
+import models.NonUkAddress
+import pages.behaviours.PageBehaviours
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
+class NonUkAddressPageSpec extends PageBehaviours {
 
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+  "NonUkAddressPage" must {
+
+    beRetrievable[NonUkAddress](NonUkAddressPage)
+
+    beSettable[NonUkAddress](NonUkAddressPage)
+
+    beRemovable[NonUkAddress](NonUkAddressPage)
+  }
 }

@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.trust
 
-import play.api.libs.json.{Format, Json}
+import models.UkAddress
+import pages.behaviours.PageBehaviours
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
+class UkAddressPageSpec extends PageBehaviours {
 
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+  "UkAddressPage" must {
+
+    beRetrievable[UkAddress](UkAddressPage)
+
+    beSettable[UkAddress](UkAddressPage)
+
+    beRemovable[UkAddress](UkAddressPage)
+  }
 }

@@ -16,53 +16,43 @@
 
 package extractors
 
-import com.google.inject.Inject
 import models.beneficiaries.CharityBeneficiary
-import models.{Address, NonUkAddress, UkAddress, UserAnswers}
+import models.{NonUkAddress, UkAddress, UserAnswers}
+import pages.QuestionPage
+import pages.charityortrust.charity._
+import play.api.libs.json.JsPath
 
+import java.time.LocalDate
 import scala.util.Try
 
-class CharityBeneficiaryExtractor @Inject()() {
+class CharityBeneficiaryExtractor extends BeneficiaryExtractor[CharityBeneficiary] {
 
-  import pages.charityortrust.charity._
+  override def apply(answers: UserAnswers,
+                     charityBeneficiary: CharityBeneficiary,
+                     index: Int): Try[UserAnswers] = {
 
-  def apply(answers: UserAnswers,
-            charityBeneficiary : CharityBeneficiary,
-            index: Int): Try[UserAnswers] =
-  {
-
-    answers.deleteAtPath(pages.charityortrust.charity.basePath)
-              .flatMap(_.set(NamePage, charityBeneficiary.name))
-              .flatMap(answers => extractAddress(charityBeneficiary.address, answers))
-              .flatMap(answers => extractShareOfIncome(charityBeneficiary, answers))
-              .flatMap(_.set(UtrPage, charityBeneficiary.utr))
-              .flatMap(_.set(StartDatePage, charityBeneficiary.entityStart))
-              .flatMap(_.set(IndexPage, index))
-    }
-
-  private def extractShareOfIncome(charityBeneficiary: CharityBeneficiary, answers: UserAnswers) : Try[UserAnswers] = {
-    charityBeneficiary.income match {
-      case Some(income) =>
-        answers.set(DiscretionYesNoPage, false)
-          .flatMap(_.set(ShareOfIncomePage, income.toInt))
-      case None =>
-        // Assumption that user answered yes as the share of income is not provided
-        answers.set(DiscretionYesNoPage, true)
-    }
+    extractUserAnswersForOrgBeneficiary(answers, charityBeneficiary, index)
   }
 
-  private def extractAddress(address: Option[Address], answers: UserAnswers) : Try[UserAnswers] = {
-    address match {
-      case Some(uk: UkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, true))
-          .flatMap(_.set(UkAddressPage, uk))
-      case Some(nonUk: NonUkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, false))
-          .flatMap(_.set(NonUkAddressPage, nonUk))
-      case _ =>
-        answers.set(AddressYesNoPage, false)
-    }
-  }
+  override def namePage: QuestionPage[String] = NamePage
+
+  override def utrPage: QuestionPage[String] = UtrPage
+
+  override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = DiscretionYesNoPage
+  override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
+
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+
+  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
+
+  override def startDatePage: QuestionPage[LocalDate] = StartDatePage
+
+  override def indexPage: QuestionPage[Int] = IndexPage
+
+  override def basePath: JsPath = pages.charityortrust.charity.basePath
 }

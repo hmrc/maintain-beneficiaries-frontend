@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package pages.charityortrust.trust
 
-import play.api.libs.json.{Format, Json}
+import pages.behaviours.PageBehaviours
 
-case class Description(description: String,
-                       description1: Option[String],
-                       description2: Option[String],
-                       description3: Option[String],
-                       description4: Option[String])
+import java.time.LocalDate
 
-object Description {
-  implicit lazy val formats: Format[Description] = Json.format[Description]
+class StartDatePageSpec extends PageBehaviours {
+
+  "StartDatePage" must {
+
+    beRetrievable[LocalDate](StartDatePage)
+
+    beSettable[LocalDate](StartDatePage)
+
+    beRemovable[LocalDate](StartDatePage)
+  }
 }
