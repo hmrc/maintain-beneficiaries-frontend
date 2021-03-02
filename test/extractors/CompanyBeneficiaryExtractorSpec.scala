@@ -44,7 +44,7 @@ class CompanyBeneficiaryExtractorSpec extends SpecBase {
 
       "4mld" when {
 
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true, isUnderlyingData5mld = false)
 
         "has minimal data" in {
 
@@ -141,132 +141,200 @@ class CompanyBeneficiaryExtractorSpec extends SpecBase {
 
         "taxable" when {
 
-          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+          "underlying trust data is 4mld" when {
 
-          "has UK country of residence" in {
+            val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = false)
 
-            val beneficiary = CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = Some(true),
-              countryOfResidence = Some(GB),
-              entityStart = date,
-              provisional = false
-            )
+            "has no country of residence" in {
 
-            val result = extractor.apply(baseAnswers, beneficiary, index).get
+              val beneficiary = CompanyBeneficiary(
+                name = name,
+                utr = None,
+                address = None,
+                income = None,
+                incomeDiscretionYesNo = Some(true),
+                countryOfResidence = None,
+                entityStart = date,
+                provisional = false
+              )
 
-            result.get(NamePage).get mustBe name
-            result.get(UtrPage) mustBe None
-            result.get(DiscretionYesNoPage).get mustBe true
-            result.get(ShareOfIncomePage) mustBe None
-            result.get(CountryOfResidenceYesNoPage).get mustBe true
-            result.get(CountryOfResidenceUkYesNoPage).get mustBe true
-            result.get(CountryOfResidencePage).get mustBe GB
-            result.get(AddressYesNoPage).get mustBe false
-            result.get(AddressUkYesNoPage) mustBe None
-            result.get(UkAddressPage) mustBe None
-            result.get(NonUkAddressPage) mustBe None
-            result.get(StartDatePage).get mustBe date
-            result.get(IndexPage).get mustBe index
+              val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+              result.get(NamePage).get mustBe name
+              result.get(UtrPage) mustBe None
+              result.get(DiscretionYesNoPage).get mustBe true
+              result.get(ShareOfIncomePage) mustBe None
+              result.get(CountryOfResidenceYesNoPage) mustBe None
+              result.get(CountryOfResidenceUkYesNoPage) mustBe None
+              result.get(CountryOfResidencePage) mustBe None
+              result.get(AddressYesNoPage).get mustBe false
+              result.get(AddressUkYesNoPage) mustBe None
+              result.get(UkAddressPage) mustBe None
+              result.get(NonUkAddressPage) mustBe None
+              result.get(StartDatePage).get mustBe date
+              result.get(IndexPage).get mustBe index
+            }
           }
 
-          "has non-UK country of residence" in {
+          "underlying trust data is 5mld" when {
 
-            val beneficiary = CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = Some(true),
-              countryOfResidence = Some(country),
-              entityStart = date,
-              provisional = false
-            )
+            val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = true)
 
-            val result = extractor.apply(baseAnswers, beneficiary, index).get
+            "has no country of residence" in {
 
-            result.get(NamePage).get mustBe name
-            result.get(UtrPage) mustBe None
-            result.get(DiscretionYesNoPage).get mustBe true
-            result.get(ShareOfIncomePage) mustBe None
-            result.get(CountryOfResidenceYesNoPage).get mustBe true
-            result.get(CountryOfResidenceUkYesNoPage).get mustBe false
-            result.get(CountryOfResidencePage).get mustBe country
-            result.get(AddressYesNoPage).get mustBe false
-            result.get(AddressUkYesNoPage) mustBe None
-            result.get(UkAddressPage) mustBe None
-            result.get(NonUkAddressPage) mustBe None
-            result.get(StartDatePage).get mustBe date
-            result.get(IndexPage).get mustBe index
+              val beneficiary = CompanyBeneficiary(
+                name = name,
+                utr = None,
+                address = None,
+                income = None,
+                incomeDiscretionYesNo = Some(true),
+                countryOfResidence = None,
+                entityStart = date,
+                provisional = false
+              )
+
+              val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+              result.get(NamePage).get mustBe name
+              result.get(UtrPage) mustBe None
+              result.get(DiscretionYesNoPage).get mustBe true
+              result.get(ShareOfIncomePage) mustBe None
+              result.get(CountryOfResidenceYesNoPage).get mustBe false
+              result.get(CountryOfResidenceUkYesNoPage) mustBe None
+              result.get(CountryOfResidencePage) mustBe None
+              result.get(AddressYesNoPage).get mustBe false
+              result.get(AddressUkYesNoPage) mustBe None
+              result.get(UkAddressPage) mustBe None
+              result.get(NonUkAddressPage) mustBe None
+              result.get(StartDatePage).get mustBe date
+              result.get(IndexPage).get mustBe index
+            }
+
+            "has UK country of residence" in {
+
+              val beneficiary = CompanyBeneficiary(
+                name = name,
+                utr = None,
+                address = None,
+                income = None,
+                incomeDiscretionYesNo = Some(true),
+                countryOfResidence = Some(GB),
+                entityStart = date,
+                provisional = false
+              )
+
+              val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+              result.get(NamePage).get mustBe name
+              result.get(UtrPage) mustBe None
+              result.get(DiscretionYesNoPage).get mustBe true
+              result.get(ShareOfIncomePage) mustBe None
+              result.get(CountryOfResidenceYesNoPage).get mustBe true
+              result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+              result.get(CountryOfResidencePage).get mustBe GB
+              result.get(AddressYesNoPage).get mustBe false
+              result.get(AddressUkYesNoPage) mustBe None
+              result.get(UkAddressPage) mustBe None
+              result.get(NonUkAddressPage) mustBe None
+              result.get(StartDatePage).get mustBe date
+              result.get(IndexPage).get mustBe index
+            }
+
+            "has non-UK country of residence" in {
+
+              val beneficiary = CompanyBeneficiary(
+                name = name,
+                utr = None,
+                address = None,
+                income = None,
+                incomeDiscretionYesNo = Some(true),
+                countryOfResidence = Some(country),
+                entityStart = date,
+                provisional = false
+              )
+
+              val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+              result.get(NamePage).get mustBe name
+              result.get(UtrPage) mustBe None
+              result.get(DiscretionYesNoPage).get mustBe true
+              result.get(ShareOfIncomePage) mustBe None
+              result.get(CountryOfResidenceYesNoPage).get mustBe true
+              result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+              result.get(CountryOfResidencePage).get mustBe country
+              result.get(AddressYesNoPage).get mustBe false
+              result.get(AddressUkYesNoPage) mustBe None
+              result.get(UkAddressPage) mustBe None
+              result.get(NonUkAddressPage) mustBe None
+              result.get(StartDatePage).get mustBe date
+              result.get(IndexPage).get mustBe index
+            }
           }
         }
+      }
 
-        "non-taxable" when {
+      "non-taxable" when {
 
-          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false, isUnderlyingData5mld = true)
 
-          "has no country of residence" in {
+        "has no country of residence" in {
 
-            val beneficiary = CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = None,
-              countryOfResidence = None,
-              entityStart = date,
-              provisional = false
-            )
+          val beneficiary = CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = None,
+            entityStart = date,
+            provisional = false
+          )
 
-            val result = extractor.apply(baseAnswers, beneficiary, index).get
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
 
-            result.get(NamePage).get mustBe name
-            result.get(UtrPage) mustBe None
-            result.get(DiscretionYesNoPage) mustBe None
-            result.get(ShareOfIncomePage) mustBe None
-            result.get(CountryOfResidenceYesNoPage).get mustBe false
-            result.get(CountryOfResidenceUkYesNoPage) mustBe None
-            result.get(CountryOfResidencePage) mustBe None
-            result.get(AddressYesNoPage) mustBe None
-            result.get(AddressUkYesNoPage) mustBe None
-            result.get(UkAddressPage) mustBe None
-            result.get(NonUkAddressPage) mustBe None
-            result.get(StartDatePage).get mustBe date
-            result.get(IndexPage).get mustBe index
-          }
+          result.get(NamePage).get mustBe name
+          result.get(UtrPage) mustBe None
+          result.get(DiscretionYesNoPage) mustBe None
+          result.get(ShareOfIncomePage) mustBe None
+          result.get(CountryOfResidenceYesNoPage).get mustBe false
+          result.get(CountryOfResidenceUkYesNoPage) mustBe None
+          result.get(CountryOfResidencePage) mustBe None
+          result.get(AddressYesNoPage) mustBe None
+          result.get(AddressUkYesNoPage) mustBe None
+          result.get(UkAddressPage) mustBe None
+          result.get(NonUkAddressPage) mustBe None
+          result.get(StartDatePage).get mustBe date
+          result.get(IndexPage).get mustBe index
+        }
 
-          "has country of residence" in {
+        "has country of residence" in {
 
-            val beneficiary = CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = None,
-              countryOfResidence = Some(country),
-              entityStart = date,
-              provisional = false
-            )
+          val beneficiary = CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = Some(country),
+            entityStart = date,
+            provisional = false
+          )
 
-            val result = extractor.apply(baseAnswers, beneficiary, index).get
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
 
-            result.get(NamePage).get mustBe name
-            result.get(UtrPage) mustBe None
-            result.get(DiscretionYesNoPage) mustBe None
-            result.get(ShareOfIncomePage) mustBe None
-            result.get(CountryOfResidenceYesNoPage).get mustBe true
-            result.get(CountryOfResidenceUkYesNoPage).get mustBe false
-            result.get(CountryOfResidencePage).get mustBe country
-            result.get(AddressYesNoPage) mustBe None
-            result.get(AddressUkYesNoPage) mustBe None
-            result.get(UkAddressPage) mustBe None
-            result.get(NonUkAddressPage) mustBe None
-            result.get(StartDatePage).get mustBe date
-            result.get(IndexPage).get mustBe index
-          }
+          result.get(NamePage).get mustBe name
+          result.get(UtrPage) mustBe None
+          result.get(DiscretionYesNoPage) mustBe None
+          result.get(ShareOfIncomePage) mustBe None
+          result.get(CountryOfResidenceYesNoPage).get mustBe true
+          result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+          result.get(CountryOfResidencePage).get mustBe country
+          result.get(AddressYesNoPage) mustBe None
+          result.get(AddressUkYesNoPage) mustBe None
+          result.get(UkAddressPage) mustBe None
+          result.get(NonUkAddressPage) mustBe None
+          result.get(StartDatePage).get mustBe date
+          result.get(IndexPage).get mustBe index
         }
       }
     }
