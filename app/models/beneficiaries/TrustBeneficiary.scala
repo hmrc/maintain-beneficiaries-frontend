@@ -26,7 +26,8 @@ final case class TrustBeneficiary(name: String,
                                   utr: Option[String],
                                   address: Option[Address],
                                   income: Option[String],
-                                  incomeDiscretionYesNo: Boolean,
+                                  incomeDiscretionYesNo: Option[Boolean],
+                                  countryOfResidence: Option[String] = None,
                                   entityStart: LocalDate,
                                   provisional: Boolean) extends Beneficiary
 
@@ -38,15 +39,18 @@ object TrustBeneficiary extends BeneficiaryReads {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
+      (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map {
-    case (name, utr, address, None, _, entityStart, provisional) =>
-      TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, utr, address, _, Some(true), entityStart, provisional) =>
-      TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, utr, address, income, _, entityStart, provisional) =>
-      TrustBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
+    case (name, None, None, None, None, country, entityStart, provisional) =>
+      TrustBeneficiary(name, None, None, None, None, country, entityStart, provisional)
+    case (name, utr, address, None, _, country, entityStart, provisional) =>
+      TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
+    case (name, utr, address, _, Some(true), country, entityStart, provisional) =>
+      TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
+    case (name, utr, address, income, _, country, entityStart, provisional) =>
+      TrustBeneficiary(name, utr, address, income, incomeDiscretionYesNo = Some(false), country, entityStart, provisional)
   }
 
   implicit val writes: Writes[TrustBeneficiary] = (
@@ -54,7 +58,8 @@ object TrustBeneficiary extends BeneficiaryReads {
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
+      (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(TrustBeneficiary.unapply))
