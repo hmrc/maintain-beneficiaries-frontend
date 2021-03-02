@@ -25,18 +25,18 @@ import play.api.libs.json._
 final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
                                        identification: Option[IndividualIdentification],
-                                       address : Option[Address],
+                                       address: Option[Address],
                                        vulnerableYesNo: Boolean,
                                        roleInCompany: Option[RoleInCompany],
                                        income: Option[String],
                                        incomeDiscretionYesNo: Boolean,
                                        entityStart: LocalDate,
-                                       provisional : Boolean) extends Beneficiary
+                                       provisional: Boolean) extends Beneficiary
 
-object IndividualBeneficiary {
+object IndividualBeneficiary extends BeneficiaryReads {
 
-  implicit val reads: Reads[IndividualBeneficiary] =
-    ((__ \ 'name).read[Name] and
+  implicit val reads: Reads[IndividualBeneficiary] = (
+    (__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
       __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
@@ -45,19 +45,18 @@ object IndividualBeneficiary {
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
-      (__ \ "provisional").readWithDefault(false)).tupled.map{
+      (__ \ "provisional").readWithDefault(false)
+    ).tupled.map{
+    case (name, dob, nino, identification, vulnerable, employment, None, _, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable,  employment, income, _, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = false, entityStart, provisional)
+  }
 
-      case (name, dob, nino, identification, vulnerable, employment, None, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable, employment, _, Some(true), entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, dob, nino, identification, vulnerable,  employment, income, _, entityStart, provisional) =>
-        IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = false, entityStart, provisional)
-
-    }
-
-  implicit val writes: Writes[IndividualBeneficiary] =
-    ((__ \ 'name).write[Name] and
+  implicit val writes: Writes[IndividualBeneficiary] = (
+    (__ \ 'name).write[Name] and
       (__ \ 'dateOfBirth).writeNullable[LocalDate] and
       (__ \ 'identification).writeNullable[IndividualIdentification] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
@@ -69,10 +68,4 @@ object IndividualBeneficiary {
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(IndividualBeneficiary.unapply))
 
-  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
-    _.transform(subPath.json.pick)
-      .flatMap(_.validate[T])
-      .map(Some(_))
-      .recoverWith(_ => JsSuccess(None))
-  )
 }

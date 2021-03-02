@@ -30,38 +30,33 @@ case class CompanyBeneficiary(name: String,
                               entityStart: LocalDate,
                               provisional : Boolean) extends Beneficiary
 
-object CompanyBeneficiary {
+object CompanyBeneficiary extends BeneficiaryReads {
 
-  implicit val reads: Reads[CompanyBeneficiary] =
-    ((__ \ 'organisationName).read[String] and
+  implicit val reads: Reads[CompanyBeneficiary] = (
+    (__ \ 'organisationName).read[String] and
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
-      (__ \ "provisional").readWithDefault(false)).tupled.map {
-      case (name, utr, address, None, _, entityStart, provisional) =>
-        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, utr, address, _, Some(true), entityStart, provisional) =>
-        CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-      case (name, utr, address, income, _, entityStart, provisional) =>
-        CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
-    }
+      (__ \ "provisional").readWithDefault(false)
+    ).tupled.map {
+    case (name, utr, address, None, _, entityStart, provisional) =>
+      CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+    case (name, utr, address, _, Some(true), entityStart, provisional) =>
+      CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
+    case (name, utr, address, income, _, entityStart, provisional) =>
+      CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
+  }
 
-  implicit val writes: Writes[CompanyBeneficiary] =
-    ((__ \ 'organisationName).write[String] and
+  implicit val writes: Writes[CompanyBeneficiary] = (
+    (__ \ 'organisationName).write[String] and
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
       (__ \ 'beneficiaryDiscretion).write[Boolean] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-      ).apply(unlift(CompanyBeneficiary.unapply))
+    ).apply(unlift(CompanyBeneficiary.unapply))
 
-  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
-    _.transform(subPath.json.pick)
-      .flatMap(_.validate[T])
-      .map(Some(_))
-      .recoverWith(_ => JsSuccess(None))
-  )
 }

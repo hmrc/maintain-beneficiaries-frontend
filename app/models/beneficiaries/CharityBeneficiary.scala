@@ -31,7 +31,8 @@ final case class CharityBeneficiary(name: String,
                                     entityStart: LocalDate,
                                     provisional: Boolean) extends OrgBeneficiary
 
-object CharityBeneficiary {
+object CharityBeneficiary extends BeneficiaryReads {
+
   implicit val reads: Reads[CharityBeneficiary] = (
     (__ \ 'organisationName).read[String] and
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
@@ -63,10 +64,4 @@ object CharityBeneficiary {
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(CharityBeneficiary.unapply))
 
-  private def readNullableAtSubPath[T:Reads](subPath: JsPath): Reads[Option[T]] = Reads (
-    _.transform(subPath.json.pick)
-      .flatMap(_.validate[T])
-      .map(Some(_))
-      .recoverWith(_ => JsSuccess(None))
-  )
 }

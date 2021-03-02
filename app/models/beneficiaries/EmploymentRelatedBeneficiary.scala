@@ -16,11 +16,11 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
-
 import models.{Address, Description}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 case class EmploymentRelatedBeneficiary(name: String,
                                         utr: Option[String],
@@ -28,53 +28,28 @@ case class EmploymentRelatedBeneficiary(name: String,
                                         description: Description,
                                         howManyBeneficiaries: String,
                                         entityStart: LocalDate,
-                                        provisional : Boolean
-                                       ) extends Beneficiary
+                                        provisional: Boolean) extends Beneficiary
 
-object EmploymentRelatedBeneficiary {
+object EmploymentRelatedBeneficiary extends BeneficiaryReads {
 
-  implicit val rds: Reads[EmploymentRelatedBeneficiary] =
-    ((__ \ 'organisationName).read[String] and
+  implicit val reads: Reads[EmploymentRelatedBeneficiary] = (
+    (__ \ 'organisationName).read[String] and
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
-      readDescription and
+      __.read[Description] and
       (__ \ 'numberOfBeneficiary).read[String] and
       (__ \ 'entityStart).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-      ).apply(EmploymentRelatedBeneficiary.apply _)
+    ).apply(EmploymentRelatedBeneficiary.apply _)
 
-  private def readDescription =
-    ((__ \ 'description).read[String] and
-    (__ \ 'description1).readNullable[String] and
-    (__ \ 'description2).readNullable[String] and
-    (__ \ 'description3).readNullable[String] and
-    (__ \ 'description4).readNullable[String]).tupled.map{
-      case (desc, desc1, desc2, desc3, desc4) =>
-        Description(desc, desc1, desc2, desc3, desc4)
-    }
-
-  implicit val writes: Writes[EmploymentRelatedBeneficiary] =
-    ((__ \ 'organisationName).write[String] and
+  implicit val writes: Writes[EmploymentRelatedBeneficiary] = (
+    (__ \ 'organisationName).write[String] and
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
-      writeDescription and
+      __.write[Description] and
       (__ \ 'numberOfBeneficiary).write[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-      ).apply(unlift(EmploymentRelatedBeneficiary.unapply))
+    ).apply(unlift(EmploymentRelatedBeneficiary.unapply))
 
-  private def writeDescription =
-    ((__ \ 'description).write[String] and
-      (__ \ 'description1).writeNullable[String] and
-      (__ \ 'description2).writeNullable[String] and
-      (__ \ 'description3).writeNullable[String] and
-      (__ \ 'description4).writeNullable[String]
-      ).apply(unlift(Description.unapply))
-
-  def readNullableAtSubPath[T:Reads](subPath : JsPath) : Reads[Option[T]] = Reads (
-    _.transform(subPath.json.pick)
-      .flatMap(_.validate[T])
-      .map(Some(_))
-      .recoverWith(_ => JsSuccess(None))
-  )
 }
