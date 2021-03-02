@@ -33,7 +33,7 @@ trait OrgBeneficiary extends Beneficiary {
 }
 
 trait BeneficiaryReads {
-  def readNullableAtSubPath[T:Reads](subPath: JsPath): Reads[Option[T]] = Reads(
+  def readNullableAtSubPath[T: Reads](subPath: JsPath): Reads[Option[T]] = Reads(
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
       .map(Some(_))

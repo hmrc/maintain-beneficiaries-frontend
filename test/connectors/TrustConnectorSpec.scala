@@ -248,25 +248,6 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
             """
               |{
               |  "beneficiary": {
-              |    "charity": [
-              |		   {
-              |				 "lineNo": "1",
-              |				 "bpMatchStatus": "01",
-              |				 "entityStart": "2019-02-28",
-              |				 "organisationName": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |				 "beneficiaryDiscretion": false,
-              |				 "beneficiaryShareOfIncome": "100",
-              |				 "identification": {
-              |					 "address": {
-              |						 "line1": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |				 		 "line2": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |						 "line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |						 "country": "DE"
-              |					 }
-              |				 },
-              |        "provisional": false
-              |			 }
-              |		 ],
               |    "individualDetails": [
               |      {
               |        "lineNo": "7",
