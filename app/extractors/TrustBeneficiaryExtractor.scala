@@ -54,5 +54,5 @@ class TrustBeneficiaryExtractor extends BeneficiaryExtractor[TrustBeneficiary] {
 
   override def indexPage: QuestionPage[Int] = IndexPage
 
-  override def basePath: JsPath = pages.charityortrust.charity.basePath
+  override def basePath: JsPath = pages.charityortrust.trust.basePath
 }
