@@ -26,7 +26,7 @@ import models.{BeneficiaryType, Description, Name, RemoveBeneficiary, TrustDetai
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -78,6 +78,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private def addOtherBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-other/$identifier"
   private def amendOtherBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-other/$identifier/$index"
   private def removeBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/$identifier/remove"
+  private def isTrust5mldUrl(identifier: String) = s"$trustsUrl/$identifier/is-trust-5mld"
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name("first", None, "last"),
@@ -1167,6 +1168,67 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         }
       }
 
+    }
+
+    "isTrust5mld" must {
+
+      "return true" when {
+        "untransformed data is 5mld" in {
+
+          val json = JsBoolean(true)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(isTrust5mldUrl(identifier)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.isTrust5mld(identifier)
+
+          whenReady(processed) {
+            r =>
+              r mustBe true
+          }
+        }
+      }
+
+      "return false" when {
+        "untransformed data is 4mld" in {
+
+          val json = JsBoolean(false)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(isTrust5mldUrl(identifier)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.isTrust5mld(identifier)
+
+          whenReady(processed) {
+            r =>
+              r mustBe false
+          }
+        }
+      }
     }
 
   }
