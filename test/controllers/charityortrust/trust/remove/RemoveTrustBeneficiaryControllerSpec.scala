@@ -51,7 +51,7 @@ class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
     utr = None,
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
   )
