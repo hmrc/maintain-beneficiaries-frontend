@@ -18,7 +18,7 @@ package controllers.individualbeneficiary
 
 import config.annotations.IndividualBeneficiary
 import controllers.actions.StandardActionSets
-import controllers.actions.charity.NameRequiredAction
+import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.Mode
