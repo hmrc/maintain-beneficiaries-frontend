@@ -17,8 +17,10 @@
 package navigation
 
 import base.SpecBase
-import controllers.other.routes._
-import models.{CheckMode, Mode, NormalMode}
+import controllers.other.amend.{routes => amendRts}
+import controllers.other.add.{routes => addRts}
+import controllers.other.{routes => rts}
+import models.{CheckMode, NormalMode}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.other._
 import pages.other.add.StartDatePage
@@ -27,162 +29,391 @@ import pages.other.amend.IndexPage
 class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
   val navigator = new OtherBeneficiaryNavigator
+  val index: Int = 0
 
   "Other beneficiary navigator" when {
 
-    "add journey" must {
+    "4mld" must {
 
-      val mode: Mode = NormalMode
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
 
-      "Name page -> Discretion yes no page" in {
-        navigator.nextPage(DescriptionPage, mode, emptyUserAnswers)
-          .mustBe(DiscretionYesNoController.onPageLoad(mode))
+      "Description page -> Discretion yes no page" in {
+        navigator.nextPage(DescriptionPage, baseAnswers)
+          .mustBe(rts.DiscretionYesNoController.onPageLoad(NormalMode))
       }
 
-      "Discretion yes no page -> Yes -> Address yes no page" in {
-        val answers = emptyUserAnswers
-          .set(DiscretionYesNoPage, true).success.value
+      "Discretion yes no page" when {
+        "-> Yes -> Address yes no page" in {
+          val answers = baseAnswers
+            .set(DiscretionYesNoPage, true).success.value
 
-        navigator.nextPage(DiscretionYesNoPage, mode, answers)
-          .mustBe(AddressYesNoController.onPageLoad(mode))
-      }
+          navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+        }
 
-      "Discretion yes no page -> No -> Share of income page" in {
-        val answers = emptyUserAnswers
-          .set(DiscretionYesNoPage, false).success.value
+        "-> No -> Share of income page" in {
+          val answers = baseAnswers
+            .set(DiscretionYesNoPage, false).success.value
 
-        navigator.nextPage(DiscretionYesNoPage, mode, answers)
-          .mustBe(ShareOfIncomeController.onPageLoad(mode))
+          navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
+            .mustBe(rts.ShareOfIncomeController.onPageLoad(NormalMode))
+        }
       }
 
       "Share of income page -> Address yes no page" in {
-        navigator.nextPage(ShareOfIncomePage, mode, emptyUserAnswers)
-          .mustBe(AddressYesNoController.onPageLoad(mode))
+        navigator.nextPage(ShareOfIncomePage, NormalMode, baseAnswers)
+          .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
       }
 
-      "Address yes no page -> No -> Start date page" in {
-        val answers = emptyUserAnswers
-          .set(AddressYesNoPage, false).success.value
+      "Address yes no page" when {
+        "-> Yes -> Address in the UK yes no page" in {
+          val answers = baseAnswers
+            .set(AddressYesNoPage, true).success.value
 
-        navigator.nextPage(AddressYesNoPage, mode, answers)
-          .mustBe(controllers.other.add.routes.StartDateController.onPageLoad())
+          navigator.nextPage(AddressYesNoPage, NormalMode, answers)
+            .mustBe(rts.AddressUkYesNoController.onPageLoad(NormalMode))
+        }
+
+        "-> No" when {
+          "NormalMode" must {
+            "-> Start date page" in {
+              val answers = baseAnswers
+                .set(AddressYesNoPage, false).success.value
+
+              navigator.nextPage(AddressYesNoPage, NormalMode, answers)
+                .mustBe(addRts.StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+                .set(AddressYesNoPage, false).success.value
+
+              navigator.nextPage(AddressYesNoPage, CheckMode, answers)
+                .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
       }
 
-      "Address yes no page -> Yes -> Address in the UK yes no page" in {
-        val answers = emptyUserAnswers
-          .set(AddressYesNoPage, true).success.value
+      "Address in the UK yes no page" when {
+        "-> Yes -> UK address page" in {
+          val answers = baseAnswers
+            .set(AddressUkYesNoPage, true).success.value
 
-        navigator.nextPage(AddressYesNoPage, mode, answers)
-          .mustBe(AddressUkYesNoController.onPageLoad(mode))
+          navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
+            .mustBe(rts.UkAddressController.onPageLoad(NormalMode))
+        }
+
+        "-> No -> Non-UK address page" in {
+          val answers = baseAnswers
+            .set(AddressUkYesNoPage, false).success.value
+
+          navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
+            .mustBe(rts.NonUkAddressController.onPageLoad(NormalMode))
+        }
       }
 
-      "Address in the UK yes no page -> Yes -> UK address page" in {
-        val answers = emptyUserAnswers
-          .set(AddressUkYesNoPage, true).success.value
+      "UK address page" when {
+        "NormalMode" must {
+          "-> Start date page" in {
+            navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
+              .mustBe(addRts.StartDateController.onPageLoad())
+          }
+        }
 
-        navigator.nextPage(AddressUkYesNoPage, mode, answers)
-          .mustBe(UkAddressController.onPageLoad(mode))
+        "CheckMode" must {
+          "-> Check your answers page" in {
+            val answers = baseAnswers
+              .set(IndexPage, index).success.value
+
+            navigator.nextPage(UkAddressPage, CheckMode, answers)
+              .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+          }
+        }
       }
 
-      "Address in the UK yes no page -> No -> Non-UK address page" in {
-        val answers = emptyUserAnswers
-          .set(AddressUkYesNoPage, false).success.value
+      "Non-UK address page" when {
+        "NormalMode" must {
+          "-> Start date page" in {
+            navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
+              .mustBe(addRts.StartDateController.onPageLoad())
+          }
+        }
 
-        navigator.nextPage(AddressUkYesNoPage, mode, answers)
-          .mustBe(NonUkAddressController.onPageLoad(mode))
-      }
+        "CheckMode" must {
+          "-> Check your answers page" in {
+            val answers = baseAnswers
+              .set(IndexPage, index).success.value
 
-      "UK address page -> Start date page" in {
-        navigator.nextPage(UkAddressPage, mode, emptyUserAnswers)
-          .mustBe(controllers.other.add.routes.StartDateController.onPageLoad())
-      }
-
-      "Non-UK address page -> Start date page" in {
-        navigator.nextPage(NonUkAddressPage, mode, emptyUserAnswers)
-          .mustBe(controllers.other.add.routes.StartDateController.onPageLoad())
+            navigator.nextPage(NonUkAddressPage, CheckMode, answers)
+              .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+          }
+        }
       }
 
       "Start date page -> Check your answers page" in {
-        navigator.nextPage(StartDatePage, mode, emptyUserAnswers)
-          .mustBe(controllers.other.add.routes.CheckDetailsController.onPageLoad())
+        navigator.nextPage(StartDatePage, NormalMode, baseAnswers)
+          .mustBe(addRts.CheckDetailsController.onPageLoad())
       }
-
     }
 
-    "amend journey" must {
+    "5mld" when {
 
-      val mode: Mode = CheckMode
-      val index = 0
-      val baseAnswers = emptyUserAnswers.set(IndexPage, index).success.value
+      "taxable" must {
 
-      "Name page -> Discretion yes no page" in {
-        navigator.nextPage(DescriptionPage, mode, baseAnswers)
-          .mustBe(DiscretionYesNoController.onPageLoad(mode))
+        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+
+        "Description page -> Discretion yes no page" in {
+          navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
+            .mustBe(rts.DiscretionYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Discretion yes no page" when {
+          "-> Yes -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(DiscretionYesNoPage, true).success.value
+
+            navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
+              .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Share of income page" in {
+            val answers = baseAnswers
+              .set(DiscretionYesNoPage, false).success.value
+
+            navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
+              .mustBe(rts.ShareOfIncomeController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Share of income page -> Country of residence yes no page" in {
+          navigator.nextPage(ShareOfIncomePage, NormalMode, baseAnswers)
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Country of residence yes no page" when {
+          "-> Yes -> Country of residence UK yes no page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceYesNoPage, true).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
+              .mustBe(rts.CountryOfResidenceUkYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceYesNoPage, false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
+              .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence UK yes no page" when {
+          "-> Yes -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+
+            navigator.nextPage(CountryOfResidenceUkYesNoPage, NormalMode, answers)
+              .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Country of residence page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+
+            navigator.nextPage(CountryOfResidenceUkYesNoPage, NormalMode, answers)
+              .mustBe(rts.CountryOfResidenceController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence page -> Address yes no page" in {
+          navigator.nextPage(CountryOfResidencePage, NormalMode, baseAnswers)
+            .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Address yes no page" when {
+          "-> Yes -> Address in the UK yes no page" in {
+            val answers = baseAnswers
+              .set(AddressYesNoPage, true).success.value
+
+            navigator.nextPage(AddressYesNoPage, NormalMode, answers)
+              .mustBe(rts.AddressUkYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No" when {
+            "NormalMode" must {
+              "-> Start date page" in {
+                val answers = baseAnswers
+                  .set(AddressYesNoPage, false).success.value
+
+                navigator.nextPage(AddressYesNoPage, NormalMode, answers)
+                  .mustBe(addRts.StartDateController.onPageLoad())
+              }
+            }
+
+            "CheckMode" must {
+              "-> Check your answers page" in {
+                val answers = baseAnswers
+                  .set(IndexPage, index).success.value
+                  .set(AddressYesNoPage, false).success.value
+
+                navigator.nextPage(AddressYesNoPage, CheckMode, answers)
+                  .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+              }
+            }
+          }
+        }
+
+        "Address in the UK yes no page" when {
+          "-> Yes -> UK address page" in {
+            val answers = baseAnswers
+              .set(AddressUkYesNoPage, true).success.value
+
+            navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
+              .mustBe(rts.UkAddressController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Non-UK address page" in {
+            val answers = baseAnswers
+              .set(AddressUkYesNoPage, false).success.value
+
+            navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
+              .mustBe(rts.NonUkAddressController.onPageLoad(NormalMode))
+          }
+        }
+
+        "UK address page" when {
+          "NormalMode" must {
+            "-> Start date page" in {
+              navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
+                .mustBe(addRts.StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+
+              navigator.nextPage(UkAddressPage, CheckMode, answers)
+                .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
+
+        "Non-UK address page" when {
+          "NormalMode" must {
+            "-> Start date page" in {
+              navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
+                .mustBe(addRts.StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+
+              navigator.nextPage(NonUkAddressPage, CheckMode, answers)
+                .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
+
+        "Start date page -> Check your answers page" in {
+          navigator.nextPage(StartDatePage, NormalMode, baseAnswers)
+            .mustBe(addRts.CheckDetailsController.onPageLoad())
+        }
       }
 
-      "Discretion yes no page -> Yes -> Address yes no page" in {
-        val answers = baseAnswers
-          .set(DiscretionYesNoPage, true).success.value
+      "non-taxable" must {
 
-        navigator.nextPage(DiscretionYesNoPage, mode, answers)
-          .mustBe(AddressYesNoController.onPageLoad(mode))
+        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+        "Description page -> Country of residence yes no page" in {
+          navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
+            .mustBe(rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Country of residence yes no page" when {
+          "-> Yes -> Country of residence UK yes no page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceYesNoPage, true).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
+              .mustBe(rts.CountryOfResidenceUkYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceYesNoPage, false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
+              .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence UK yes no page" when {
+          "-> Yes" when {
+            "NormalMode" must {
+              "-> Start date page" in {
+                val answers = baseAnswers
+                  .set(CountryOfResidenceUkYesNoPage, true).success.value
+
+                navigator.nextPage(CountryOfResidenceUkYesNoPage, NormalMode, answers)
+                  .mustBe(addRts.StartDateController.onPageLoad())
+              }
+            }
+
+            "CheckMode" must {
+              "-> Check your answers page" in {
+                val answers = baseAnswers
+                  .set(IndexPage, index).success.value
+                  .set(CountryOfResidenceUkYesNoPage, true).success.value
+
+                navigator.nextPage(CountryOfResidenceUkYesNoPage, CheckMode, answers)
+                  .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+              }
+            }
+          }
+
+          "-> No -> Country of residence page" in {
+            val answers = baseAnswers
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+
+            navigator.nextPage(CountryOfResidenceUkYesNoPage, NormalMode, answers)
+              .mustBe(rts.CountryOfResidenceController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence page" when {
+          "NormalMode" must {
+            "-> Start date page" in {
+              navigator.nextPage(CountryOfResidencePage, NormalMode, baseAnswers)
+                .mustBe(addRts.StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+
+              navigator.nextPage(CountryOfResidencePage, CheckMode, answers)
+                .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
+
+        "Start date page -> Check your answers page" in {
+          navigator.nextPage(StartDatePage, NormalMode, baseAnswers)
+            .mustBe(addRts.CheckDetailsController.onPageLoad())
+        }
       }
-
-      "Discretion yes no page -> No -> Share of income page" in {
-        val answers = baseAnswers
-          .set(DiscretionYesNoPage, false).success.value
-
-        navigator.nextPage(DiscretionYesNoPage, mode, answers)
-          .mustBe(ShareOfIncomeController.onPageLoad(mode))
-      }
-
-      "Share of income page -> Address yes no page" in {
-        navigator.nextPage(ShareOfIncomePage, mode, baseAnswers)
-          .mustBe(AddressYesNoController.onPageLoad(mode))
-      }
-
-      "Address yes no page -> No -> Check details page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage, false).success.value
-
-        navigator.nextPage(AddressYesNoPage, mode, answers)
-          .mustBe(controllers.other.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-      }
-
-      "Address yes no page -> Yes -> Address in the UK yes no page" in {
-        val answers = baseAnswers
-          .set(AddressYesNoPage, true).success.value
-
-        navigator.nextPage(AddressYesNoPage, mode, answers)
-          .mustBe(AddressUkYesNoController.onPageLoad(mode))
-      }
-
-      "Address in the UK yes no page -> Yes -> UK address page" in {
-        val answers = baseAnswers
-          .set(AddressUkYesNoPage, true).success.value
-
-        navigator.nextPage(AddressUkYesNoPage, mode, answers)
-          .mustBe(UkAddressController.onPageLoad(mode))
-      }
-
-      "Address in the UK yes no page -> No -> Non-UK address page" in {
-        val answers = baseAnswers
-          .set(AddressUkYesNoPage, false).success.value
-
-        navigator.nextPage(AddressUkYesNoPage, mode, answers)
-          .mustBe(NonUkAddressController.onPageLoad(mode))
-      }
-
-      "UK address page -> Check details page" in {
-        navigator.nextPage(UkAddressPage, mode, baseAnswers)
-          .mustBe(controllers.other.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-      }
-
-      "Non-UK address page -> Check details page" in {
-        navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-          .mustBe(controllers.other.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-      }
-
     }
   }
 }
