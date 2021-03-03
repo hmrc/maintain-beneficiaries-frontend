@@ -45,6 +45,7 @@ class IndexController @Inject()(
         for {
           details <- connector.getTrustDetails(identifier)
           is5mldEnabled <- featureFlagService.is5mldEnabled()
+          isUnderlyingData5mld <- connector.isTrust5mld(identifier)
           ua <- Future.successful {
             request.userAnswers.getOrElse {
               UserAnswers(
@@ -53,7 +54,8 @@ class IndexController @Inject()(
                 whenTrustSetup = LocalDate.parse(details.startDate),
                 trustType = details.typeOfTrust,
                 is5mldEnabled = is5mldEnabled,
-                isTaxable = details.trustTaxable.getOrElse(true)
+                isTaxable = details.trustTaxable.getOrElse(true),
+                isUnderlyingData5mld = isUnderlyingData5mld
               )
             }
           }

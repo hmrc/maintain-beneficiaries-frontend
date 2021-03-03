@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-package models.beneficiaries
+package pages.companyoremploymentrelated.company
 
-import models.Address
-import play.api.libs.json.{JsPath, JsSuccess, Reads}
+import pages.behaviours.PageBehaviours
 
 import java.time.LocalDate
 
-trait Beneficiary
+class StartDatePageSpec extends PageBehaviours {
 
-trait OrgBeneficiary extends Beneficiary {
-  val name: String
-  val utr: Option[String]
-  val income: Option[String]
-  val countryOfResidence: Option[String]
-  val address: Option[Address]
-  val entityStart: LocalDate
-}
+  "StartDatePage" must {
 
-trait BeneficiaryReads {
-  def readNullableAtSubPath[T: Reads](subPath: JsPath): Reads[Option[T]] = Reads(
-    _.transform(subPath.json.pick)
-      .flatMap(_.validate[T])
-      .map(Some(_))
-      .recoverWith(_ => JsSuccess(None))
-  )
+    beRetrievable[LocalDate](StartDatePage)
+
+    beSettable[LocalDate](StartDatePage)
+
+    beRemovable[LocalDate](StartDatePage)
+  }
 }

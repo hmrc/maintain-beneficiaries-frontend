@@ -31,7 +31,8 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
   val share: Int = 50
   val date: LocalDate = LocalDate.parse("2019-02-03")
   val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
-  val nonUKAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, "DE")
+  val country: String = "DE"
+  val nonUKAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, country)
 
   "CompanyBeneficiaryPrintHelper" must {
 
@@ -43,6 +44,9 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
         .set(NamePage, name).success.value
         .set(DiscretionYesNoPage, false).success.value
         .set(ShareOfIncomePage, share).success.value
+        .set(CountryOfResidenceYesNoPage, true).success.value
+        .set(CountryOfResidenceUkYesNoPage, false).success.value
+        .set(CountryOfResidencePage, country).success.value
         .set(AddressYesNoPage, true).success.value
         .set(AddressUkYesNoPage, true).success.value
         .set(UkAddressPage, ukAddress).success.value
@@ -51,7 +55,7 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
 
       "add" in {
 
-        val result = helper(userAnswers, true, name)
+        val result = helper(userAnswers, provisional = true, name)
 
         result mustBe AnswerSection(
           headingKey = None,
@@ -59,6 +63,9 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("companyBeneficiary.name.checkYourAnswersLabel")), answer = Html("Company"), changeUrl = NameController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidence.checkYourAnswersLabel", name)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad(NormalMode).url),
@@ -69,7 +76,7 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
       }
       "amend" in {
 
-        val result = helper(userAnswers, false, name)
+        val result = helper(userAnswers, provisional = false, name)
 
         result mustBe AnswerSection(
           headingKey = None,
@@ -77,6 +84,9 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("companyBeneficiary.name.checkYourAnswersLabel")), answer = Html("Company"), changeUrl = NameController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidence.checkYourAnswersLabel", name)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad(CheckMode).url),

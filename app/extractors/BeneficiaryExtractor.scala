@@ -79,7 +79,7 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   }
 
   private def extractCountryOfResidence(countryOfResidence: Option[String], answers: UserAnswers): Try[UserAnswers] = {
-    if (answers.is5mldEnabled) {
+    if (answers.is5mldEnabled && answers.isUnderlyingData5mld) {
       countryOfResidence match {
         case Some(GB) => answers
           .set(countryOfResidenceYesNoPage, true)

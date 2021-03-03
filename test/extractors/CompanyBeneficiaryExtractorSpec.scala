@@ -18,17 +18,17 @@ package extractors
 
 import base.SpecBase
 import models.Constant.GB
+import models.beneficiaries.CompanyBeneficiary
 import models.{NonUkAddress, UkAddress, UserAnswers}
-import models.beneficiaries.CharityBeneficiary
-import pages.charityortrust.charity._
+import pages.companyoremploymentrelated.company._
 
 import java.time.LocalDate
 
-class CharityBeneficiaryExtractorSpec extends SpecBase {
+class CompanyBeneficiaryExtractorSpec extends SpecBase {
 
   private val index: Int = 0
 
-  private val name: String = "Charity"
+  private val name: String = "Company"
   private val utr: String = "utr"
   private val income: Int = 50
   private val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "AB1 1AB")
@@ -36,9 +36,9 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
   private val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, country)
   private val date: LocalDate = LocalDate.parse("1996-02-03")
 
-  private val extractor: CharityBeneficiaryExtractor = injector.instanceOf[CharityBeneficiaryExtractor]
+  private val extractor: CompanyBeneficiaryExtractor = injector.instanceOf[CompanyBeneficiaryExtractor]
 
-  "CharityBeneficiaryExtractor" must {
+  "CompanyBeneficiaryExtractor" must {
 
     "Populate user answers" when {
 
@@ -48,7 +48,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
         "has minimal data" in {
 
-          val beneficiary = CharityBeneficiary(
+          val beneficiary = CompanyBeneficiary(
             name = name,
             utr = None,
             address = None,
@@ -78,7 +78,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
         "has UK address" in {
 
-          val beneficiary = CharityBeneficiary(
+          val beneficiary = CompanyBeneficiary(
             name = name,
             utr = Some(utr),
             address = Some(ukAddress),
@@ -108,7 +108,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
         "has non-UK address" in {
 
-          val beneficiary = CharityBeneficiary(
+          val beneficiary = CompanyBeneficiary(
             name = name,
             utr = None,
             address = Some(nonUkAddress),
@@ -147,7 +147,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
             "has no country of residence" in {
 
-              val beneficiary = CharityBeneficiary(
+              val beneficiary = CompanyBeneficiary(
                 name = name,
                 utr = None,
                 address = None,
@@ -182,7 +182,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
             "has no country of residence" in {
 
-              val beneficiary = CharityBeneficiary(
+              val beneficiary = CompanyBeneficiary(
                 name = name,
                 utr = None,
                 address = None,
@@ -212,7 +212,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
             "has UK country of residence" in {
 
-              val beneficiary = CharityBeneficiary(
+              val beneficiary = CompanyBeneficiary(
                 name = name,
                 utr = None,
                 address = None,
@@ -242,7 +242,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
             "has non-UK country of residence" in {
 
-              val beneficiary = CharityBeneficiary(
+              val beneficiary = CompanyBeneficiary(
                 name = name,
                 utr = None,
                 address = None,
@@ -279,7 +279,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
         "has no country of residence" in {
 
-          val beneficiary = CharityBeneficiary(
+          val beneficiary = CompanyBeneficiary(
             name = name,
             utr = None,
             address = None,
@@ -309,7 +309,7 @@ class CharityBeneficiaryExtractorSpec extends SpecBase {
 
         "has country of residence" in {
 
-          val beneficiary = CharityBeneficiary(
+          val beneficiary = CompanyBeneficiary(
             name = name,
             utr = None,
             address = None,
