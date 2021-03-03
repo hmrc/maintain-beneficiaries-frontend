@@ -143,7 +143,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     description = "Other Endeavours Ltd",
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-09-23"),
     provisional = false
   )
@@ -331,6 +331,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               |      {
               |        "lineNo": "286",
               |        "description": "Other Endeavours Ltd",
+              |        "beneficiaryDiscretion": true,
               |        "entityStart": "2019-09-23",
               |        "provisional": false
               |      }
