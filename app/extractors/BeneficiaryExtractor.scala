@@ -27,7 +27,11 @@ import scala.util.{Success, Try}
 
 trait BeneficiaryExtractor[T <: Beneficiary] {
 
-  def apply(userAnswers: UserAnswers, beneficiary: T, index: Int): Try[UserAnswers]
+  def apply(answers: UserAnswers, beneficiary: T, index: Int): Try[UserAnswers] = {
+    answers.deleteAtPath(basePath)
+      .flatMap(_.set(startDatePage, beneficiary.entityStart))
+      .flatMap(_.set(indexPage, index))
+  }
 
   def namePage: QuestionPage[String] = new EmptyPage[String]
 
@@ -52,19 +56,16 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   def basePath: JsPath
 
   def extractUserAnswersForOrgBeneficiary(answers: UserAnswers,
-                                          entity: OrgBeneficiary,
-                                          index: Int): Try[UserAnswers] = {
-    answers.deleteAtPath(basePath)
-      .flatMap(_.set(namePage, entity.name))
+                                          entity: OrgBeneficiary): Try[UserAnswers] = {
+    answers
+      .set(namePage, entity.name)
       .flatMap(_.set(utrPage, entity.utr))
       .flatMap(answers => extractShareOfIncome(entity.income, answers))
       .flatMap(answers => extractCountryOfResidence(entity.countryOfResidence, answers))
       .flatMap(answers => extractAddress(entity.address, answers))
-      .flatMap(_.set(startDatePage, entity.entityStart))
-      .flatMap(_.set(indexPage, index))
   }
 
-  private def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
+  def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
     if (answers.isTaxable) {
       shareOfIncome match {
         case Some(income) => answers
@@ -78,7 +79,7 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
     }
   }
 
-  private def extractCountryOfResidence(countryOfResidence: Option[String], answers: UserAnswers): Try[UserAnswers] = {
+  def extractCountryOfResidence(countryOfResidence: Option[String], answers: UserAnswers): Try[UserAnswers] = {
     if (answers.is5mldEnabled && answers.isUnderlyingData5mld) {
       countryOfResidence match {
         case Some(GB) => answers
@@ -97,7 +98,7 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
     }
   }
 
-  private def extractAddress(address: Option[Address], answers: UserAnswers): Try[UserAnswers] = {
+  def extractAddress(address: Option[Address], answers: UserAnswers): Try[UserAnswers] = {
     if (answers.isTaxable) {
       address match {
         case Some(uk: UkAddress) => answers
