@@ -27,11 +27,12 @@ import scala.util.Try
 
 class TrustBeneficiaryExtractor extends BeneficiaryExtractor[TrustBeneficiary] {
 
-  def apply(answers: UserAnswers,
-            trustBeneficiary: TrustBeneficiary,
-            index: Int): Try[UserAnswers] = {
+  override def apply(answers: UserAnswers,
+                     trustBeneficiary: TrustBeneficiary,
+                     index: Int): Try[UserAnswers] = {
 
-    extractUserAnswersForOrgBeneficiary(answers, trustBeneficiary, index)
+    super.apply(answers, trustBeneficiary, index)
+      .flatMap(answers => extractUserAnswersForOrgBeneficiary(answers, trustBeneficiary))
   }
 
   override def namePage: QuestionPage[String] = NamePage

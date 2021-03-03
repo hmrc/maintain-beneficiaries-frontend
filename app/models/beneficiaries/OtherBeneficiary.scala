@@ -16,16 +16,17 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
-
 import models.Address
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
+
+import java.time.LocalDate
 
 final case class OtherBeneficiary(description: String,
                                   address: Option[Address],
                                   income: Option[String],
-                                  incomeDiscretionYesNo: Boolean,
+                                  incomeDiscretionYesNo: Option[Boolean],
+                                  countryOfResidence: Option[String] = None,
                                   entityStart: LocalDate,
                                   provisional: Boolean) extends Beneficiary
 
@@ -36,22 +37,26 @@ object OtherBeneficiary {
       (__ \ 'address).readNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
+      (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map {
-    case (name, address, None, _, entityStart, provisional) =>
-      OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, address, _, Some(true), entityStart, provisional) =>
-      OtherBeneficiary(name, address, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, address, income, _, entityStart, provisional) =>
-      OtherBeneficiary(name, address, income, incomeDiscretionYesNo = false, entityStart, provisional)
+    case (description, None, None, None, country, entityStart, provisional) =>
+      OtherBeneficiary(description, None, None, None, country, entityStart, provisional)
+    case (description, address, None, _, country, entityStart, provisional) =>
+      OtherBeneficiary(description, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
+    case (description, address, _, Some(true), country, entityStart, provisional) =>
+      OtherBeneficiary(description, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
+    case (description, address, income, _, country, entityStart, provisional) =>
+      OtherBeneficiary(description, address, income, incomeDiscretionYesNo = Some(false), country, entityStart, provisional)
   }
 
   implicit val writes: Writes[OtherBeneficiary] = (
     (__ \ 'description).write[String] and
       (__ \ 'address).writeNullable[Address] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
+      (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(OtherBeneficiary.unapply))

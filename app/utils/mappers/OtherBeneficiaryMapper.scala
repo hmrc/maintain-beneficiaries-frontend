@@ -16,6 +16,7 @@
 
 package utils.mappers
 
+import models.Constant.GB
 import models.beneficiaries.OtherBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.other._
@@ -28,9 +29,8 @@ import java.time.LocalDate
 class OtherBeneficiaryMapper extends Mapper[OtherBeneficiary] {
 
   def apply(answers: UserAnswers): Option[OtherBeneficiary] = {
-    val readFromUserAnswers: Reads[OtherBeneficiary] =
-      (
-        DescriptionPage.path.read[String] and
+    val readFromUserAnswers: Reads[OtherBeneficiary] = (
+      DescriptionPage.path.read[String] and
         AddressUkYesNoPage.path.readNullable[Boolean].flatMap {
           case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
           case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
@@ -40,10 +40,17 @@ class OtherBeneficiaryMapper extends Mapper[OtherBeneficiary] {
           case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
           case None => Reads(_ => JsSuccess(None))
         } and
-        DiscretionYesNoPage.path.read[Boolean] and
+        DiscretionYesNoPage.path.readNullable[Boolean] and
+        CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+          case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
+            case true => Reads(_ => JsSuccess(Some(GB)))
+            case false => CountryOfResidencePage.path.read[String].map(Some(_))
+          }
+          case _ => Reads(_ => JsSuccess(None))
+        } and
         StartDatePage.path.read[LocalDate] and
         Reads(_ => JsSuccess(true))
-      ) (OtherBeneficiary.apply _ )
+      )(OtherBeneficiary.apply _ )
 
     mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
