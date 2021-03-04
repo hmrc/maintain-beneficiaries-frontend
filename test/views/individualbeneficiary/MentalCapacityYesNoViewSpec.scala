@@ -22,18 +22,18 @@ import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.individualbeneficiary.LegallyIncapableYesNoView
+import views.html.individualbeneficiary.MentalCapacityYesNoView
 
-class LegallyIncapableYesNoViewSpec extends YesNoViewBehaviours {
+class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.legallyIncapableYesNo"
+  val messageKeyPrefix = "individualBeneficiary.mentalCapacityYesNo"
   val name: Name = Name("First", None, "Last")
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "LegallyIncapableYesNoView" must {
+  "MentalCapacityYesNoView" must {
 
-    val view = viewFor[LegallyIncapableYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[MentalCapacityYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, name.displayName)(fakeRequest, messages)
@@ -42,7 +42,7 @@ class LegallyIncapableYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.LegallyIncapableYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.MentalCapacityYesNoController.onSubmit(NormalMode).url)
 
     behave like pageWithHint(form, applyView, s"$messageKeyPrefix.hint")
 

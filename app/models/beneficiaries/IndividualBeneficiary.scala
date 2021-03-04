@@ -32,7 +32,7 @@ final case class IndividualBeneficiary(name: Name,
                                        incomeDiscretionYesNo: Option[Boolean] = None,
                                        countryOfResidence: Option[String] = None,
                                        nationality: Option[String] = None,
-                                       legallyIncapable: Option[Boolean] = None,
+                                       mentalCapacityYesNo: Option[Boolean] = None,
                                        entityStart: LocalDate,
                                        provisional: Boolean) extends Beneficiary
 
@@ -49,18 +49,18 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ 'nationality).readNullable[String] and
-      (__ \ 'legallyIncapable).readNullable[Boolean] and
+      (__ \ 'legallyIncapable).readNullable[Boolean].map(_.map(!_)) and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map{
-    case (name, dob, None, None, None, None, None, None, country, nationality, legallyIncapable, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, None, None, None, None, None, None, country, nationality, legallyIncapable.map(!_), entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable, employment, None, _, country, nationality, legallyIncapable, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), country, nationality, legallyIncapable, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable,  employment, income, _, country, nationality, legallyIncapable, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = Some(false), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
+    case (name, dob, None, None, None, None, None, None, country, nationality, mentalCapacity, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, None, None, None, None, None, None, country, nationality, mentalCapacity, entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable, employment, None, _, country, nationality, mentalCapacity, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, mentalCapacity, entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), country, nationality, mentalCapacity, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, mentalCapacity, entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable,  employment, income, _, country, nationality, mentalCapacity, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = Some(false), country, nationality, mentalCapacity, entityStart, provisional)
   }
 
   implicit val writes: Writes[IndividualBeneficiary] = (
@@ -74,11 +74,9 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
       (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ 'nationality).writeNullable[String] and
-      (__ \ 'legallyIncapable).writeNullable[Boolean] and
+      (__ \ 'legallyIncapable).writeNullable[Boolean](x => JsBoolean(!x)) and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ) ((ib : IndividualBeneficiary) => (ib.name,
-      ib.dateOfBirth, ib.identification, ib.address, ib.vulnerableYesNo, ib.roleInCompany, ib.income, ib.incomeDiscretionYesNo,
-      ib.countryOfResidence, ib.nationality, ib.legallyIncapable.map(!_), ib.entityStart, ib.provisional))
-  
+    ).apply(unlift(IndividualBeneficiary.unapply))
+
 }

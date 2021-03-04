@@ -23,32 +23,32 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.individualbeneficiary.LegallyIncapableYesNoPage
+import pages.individualbeneficiary.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.i18n._
 import play.api.mvc._
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.individualbeneficiary.LegallyIncapableYesNoView
+import views.html.individualbeneficiary.MentalCapacityYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class LegallyIncapableYesNoController @Inject()(
+class MentalCapacityYesNoController @Inject()(
                                                    val controllerComponents: MessagesControllerComponents,
                                                    repository: PlaybackRepository,
                                                    @IndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
                                                    formProvider: YesNoFormProvider,
-                                                   view: LegallyIncapableYesNoView
+                                                   view: MentalCapacityYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.legallyIncapableYesNo")
+  private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.mentalCapacityYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
       implicit request =>
 
-        val preparedForm = request.userAnswers.get(LegallyIncapableYesNoPage) match {
+        val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage) match {
           case None => form
           case Some(value) => form.fill(value)
         }
@@ -65,9 +65,9 @@ class LegallyIncapableYesNoController @Inject()(
 
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(LegallyIncapableYesNoPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage, value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(LegallyIncapableYesNoPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage, mode, updatedAnswers))
         )
     }
 }

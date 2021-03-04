@@ -18,15 +18,15 @@ package pages.individualbeneficiary
 
 import pages.behaviours.PageBehaviours
 
-class LegallyIncapableYesNoPageSpec extends PageBehaviours {
+class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
-  "LegallyIncapableYesNoPage" must {
+  "MentalCapacityYesNoPage" must {
 
-    beRetrievable[Boolean](LegallyIncapableYesNoPage)
+    beRetrievable[Boolean](MentalCapacityYesNoPage)
 
-    beSettable[Boolean](LegallyIncapableYesNoPage)
+    beSettable[Boolean](MentalCapacityYesNoPage)
 
-    beRemovable[Boolean](LegallyIncapableYesNoPage)
+    beRemovable[Boolean](MentalCapacityYesNoPage)
 
   }
 }

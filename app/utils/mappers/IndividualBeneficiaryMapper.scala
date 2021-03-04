@@ -55,7 +55,7 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
           }
           case _ => Reads(_ => JsSuccess(None))
         } and
-        LegallyIncapableYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
+        MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
           case Some(true) => Reads(_ => JsSuccess(Some(false)))
           case Some(false) => Reads(_ => JsSuccess(Some(true)))
           case _ => Reads(_ => JsSuccess(None))

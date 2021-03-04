@@ -80,7 +80,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -132,7 +132,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -173,7 +173,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -211,7 +211,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -267,7 +267,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -322,7 +322,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10000"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -376,7 +376,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -414,7 +414,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -452,7 +452,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -490,7 +490,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -529,7 +529,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = None,
             entityStart = testEntityStart,
             provisional = false
@@ -567,7 +567,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = Some("GB"),
             countryOfResidence = Some("GB"),
-            legallyIncapable = Some(false),
+            mentalCapacityYesNo = Some(false),
             incomeDiscretionYesNo = None,
             entityStart = testEntityStart,
             provisional = false
@@ -604,7 +604,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -656,7 +656,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -705,7 +705,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -750,7 +750,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -791,7 +791,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -833,7 +833,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -875,7 +875,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -922,7 +922,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            legallyIncapable = None,
+            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = None,
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -959,7 +959,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = Some("GB"),
             countryOfResidence = Some("GB"),
-            legallyIncapable = Some(true),
+            mentalCapacityYesNo = Some(true),
             incomeDiscretionYesNo = None,
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false

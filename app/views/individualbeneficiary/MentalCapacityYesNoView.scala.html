@@ -24,10 +24,10 @@
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.legallyIncapableYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.mentalCapacityYesNo.title")}"
 ) {
 
-    @formHelper(action = LegallyIncapableYesNoController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = MentalCapacityYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -35,9 +35,9 @@
 
         @components.input_yes_no(
             field = form("value"),
-            legend = messages("individualBeneficiary.legallyIncapableYesNo.heading", name),
+            legend = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
             headingIsLegend = true,
-            hint = Some(messages("individualBeneficiary.legallyIncapableYesNo.hint"))
+            hint = Some(messages("individualBeneficiary.mentalCapacityYesNo.hint"))
         )
 
         @components.submit_button()

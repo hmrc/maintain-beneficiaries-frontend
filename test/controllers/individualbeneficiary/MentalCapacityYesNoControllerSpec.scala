@@ -21,24 +21,24 @@ import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
 import models.{Name, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.individualbeneficiary.{LegallyIncapableYesNoPage, NamePage}
+import pages.individualbeneficiary.{MentalCapacityYesNoPage, NamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.individualbeneficiary.LegallyIncapableYesNoView
+import views.html.individualbeneficiary.MentalCapacityYesNoView
 
-class LegallyIncapableYesNoControllerSpec extends SpecBase {
+class MentalCapacityYesNoControllerSpec extends SpecBase {
 
-  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("individualBeneficiary.legallyIncapableYesNo")
-  private val onPageLoadRoute: String = routes.LegallyIncapableYesNoController.onPageLoad(NormalMode).url
+  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("individualBeneficiary.mentalCapacityYesNo")
+  private val onPageLoadRoute: String = routes.MentalCapacityYesNoController.onPageLoad(NormalMode).url
   private val name: Name = Name("FirstName", None, "LastName")
   private val onwardRoute = Call("GET", "/foo")
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
-  "LegallyIncapableYesNoController" must {
+  "MentalCapacityYesNoController" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -46,7 +46,7 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, onPageLoadRoute)
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       val result = route(application, request).value
 
@@ -60,13 +60,13 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = baseAnswers.set(LegallyIncapableYesNoPage, true).success.value
+      val answers = baseAnswers.set(MentalCapacityYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
       val request = FakeRequest(GET, onPageLoadRoute)
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       val result = route(application, request).value
 
@@ -107,7 +107,7 @@ class LegallyIncapableYesNoControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[LegallyIncapableYesNoView]
+      val view = application.injector.instanceOf[MentalCapacityYesNoView]
 
       val result = route(application, request).value
 

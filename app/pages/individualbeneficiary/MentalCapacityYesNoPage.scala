@@ -19,10 +19,10 @@ package pages.individualbeneficiary
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object LegallyIncapableYesNoPage extends QuestionPage[Boolean] {
+case object MentalCapacityYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "legallyIncapableYesNo"
+  override def toString: String = "mentalCapacityYesNo"
 
 }
