@@ -46,10 +46,10 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
       dateOfBirth = Some(date),
       identification = Some(nino),
       address = None,
-      vulnerableYesNo = false,
+      vulnerableYesNo = Some(false),
       roleInCompany = None,
       income = None,
-      incomeDiscretionYesNo = true,
+      incomeDiscretionYesNo = Some(true),
       entityStart = date,
       provisional = true
     )
@@ -78,10 +78,10 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
       dateOfBirth = Some(date),
       identification = Some(nino),
       address = None,
-      vulnerableYesNo = false,
+      vulnerableYesNo = Some(false),
       roleInCompany = Some(RoleInCompany.Director),
       income = None,
-      incomeDiscretionYesNo = true,
+      incomeDiscretionYesNo = Some(true),
       entityStart = date,
       provisional = true
     )
@@ -112,10 +112,10 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
       dateOfBirth = Some(date),
       identification = Some(combined),
       address = Some(ukAddress),
-      vulnerableYesNo = false,
+      vulnerableYesNo = Some(false),
       roleInCompany = None,
       income = None,
-      incomeDiscretionYesNo = true,
+      incomeDiscretionYesNo = Some(true),
       entityStart = date,
       provisional = true
     )
@@ -144,10 +144,10 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
       dateOfBirth = Some(date),
       identification = None,
       address = Some(nonUkAddress),
-      vulnerableYesNo = false,
+      vulnerableYesNo = Some(false),
       roleInCompany = None,
       income = None,
-      incomeDiscretionYesNo = true,
+      incomeDiscretionYesNo = Some(true),
       entityStart = date,
       provisional = true
     )
@@ -175,10 +175,10 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
       dateOfBirth = None,
       identification = None,
       address = None,
-      vulnerableYesNo = false,
+      vulnerableYesNo = Some(false),
       roleInCompany = None,
       income = None,
-      incomeDiscretionYesNo = true,
+      incomeDiscretionYesNo = Some(true),
       entityStart = date,
       provisional = true
     )

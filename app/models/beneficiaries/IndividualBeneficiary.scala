@@ -26,10 +26,13 @@ final case class IndividualBeneficiary(name: Name,
                                        dateOfBirth: Option[LocalDate],
                                        identification: Option[IndividualIdentification],
                                        address: Option[Address],
-                                       vulnerableYesNo: Boolean,
+                                       vulnerableYesNo: Option[Boolean] = None,
                                        roleInCompany: Option[RoleInCompany],
                                        income: Option[String],
-                                       incomeDiscretionYesNo: Boolean,
+                                       incomeDiscretionYesNo: Option[Boolean] = None,
+                                       countryOfResidence: Option[String] = None,
+                                       nationality: Option[String] = None,
+                                       legallyIncapable: Option[Boolean] = None,
                                        entityStart: LocalDate,
                                        provisional: Boolean) extends Beneficiary
 
@@ -40,19 +43,24 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
       __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
-      (__ \ 'vulnerableBeneficiary).read[Boolean] and
+      (__ \ 'vulnerableBeneficiary).readNullable[Boolean] and
       (__ \ 'beneficiaryType).readNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
+      (__ \ 'countryOfResidence).readNullable[String] and
+      (__ \ 'nationality).readNullable[String] and
+      (__ \ 'legallyIncapable).readNullable[Boolean] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map{
-    case (name, dob, nino, identification, vulnerable, employment, None, _, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = true, entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable,  employment, income, _, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = false, entityStart, provisional)
+    case (name, dob, None, None, None, None, None, None, country, nationality, legallyIncapable, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, None, None, None, None, None, None, country, nationality, legallyIncapable.map(!_), entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable, employment, None, _, country, nationality, legallyIncapable, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), country, nationality, legallyIncapable, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
+    case (name, dob, nino, identification, vulnerable,  employment, income, _, country, nationality, legallyIncapable, entityStart, provisional) =>
+      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = Some(false), country, nationality, legallyIncapable.map(!_), entityStart, provisional)
   }
 
   implicit val writes: Writes[IndividualBeneficiary] = (
@@ -60,12 +68,17 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'dateOfBirth).writeNullable[LocalDate] and
       (__ \ 'identification).writeNullable[IndividualIdentification] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
-      (__ \ 'vulnerableBeneficiary).write[Boolean] and
+      (__ \ 'vulnerableBeneficiary).writeNullable[Boolean] and
       (__ \ 'beneficiaryType).writeNullable[RoleInCompany] and
       (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).write[Boolean] and
+      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
+      (__ \ 'countryOfResidence).writeNullable[String] and
+      (__ \ 'nationality).writeNullable[String] and
+      (__ \ 'legallyIncapable).writeNullable[Boolean] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(IndividualBeneficiary.unapply))
-
+    ) ((ib : IndividualBeneficiary) => (ib.name,
+      ib.dateOfBirth, ib.identification, ib.address, ib.vulnerableYesNo, ib.roleInCompany, ib.income, ib.incomeDiscretionYesNo,
+      ib.countryOfResidence, ib.nationality, ib.legallyIncapable.map(!_), ib.entityStart, ib.provisional))
+  
 }
