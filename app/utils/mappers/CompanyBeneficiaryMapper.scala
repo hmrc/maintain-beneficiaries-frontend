@@ -16,6 +16,7 @@
 
 package utils.mappers
 
+import models.Constant.GB
 import models.beneficiaries.CompanyBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.companyoremploymentrelated.company._
@@ -30,20 +31,27 @@ class CompanyBeneficiaryMapper extends Mapper[CompanyBeneficiary] {
     val readFromUserAnswers: Reads[CompanyBeneficiary] =
       (
         NamePage.path.read[String] and
-        Reads(_ => JsSuccess(None)) and
-        AddressUkYesNoPage.path.readNullable[Boolean].flatMap {
-          case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
-          case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
-          case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
-        } and
-        ShareOfIncomePage.path.readNullable[Int].flatMap[Option[String]] {
-          case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
-          case None => Reads(_ => JsSuccess(None))
-        } and
-        DiscretionYesNoPage.path.read[Boolean] and
-        StartDatePage.path.read[LocalDate] and
-        Reads(_ => JsSuccess(true))
-      ) (CompanyBeneficiary.apply _ )
+          Reads(_ => JsSuccess(None)) and
+          AddressUkYesNoPage.path.readNullable[Boolean].flatMap {
+            case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
+            case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
+            case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
+          } and
+          ShareOfIncomePage.path.readNullable[Int].flatMap[Option[String]] {
+            case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
+            case None => Reads(_ => JsSuccess(None))
+          } and
+          DiscretionYesNoPage.path.readNullable[Boolean] and
+          CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+            case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
+              case true => Reads(_ => JsSuccess(Some(GB)))
+              case false => CountryOfResidencePage.path.read[String].map(Some(_))
+            }
+            case _ => Reads(_ => JsSuccess(None))
+          } and
+          StartDatePage.path.read[LocalDate] and
+          Reads(_ => JsSuccess(true))
+        ) (CompanyBeneficiary.apply _ )
 
     mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }

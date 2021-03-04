@@ -26,7 +26,7 @@ import models.{BeneficiaryType, Description, Name, RemoveBeneficiary, TrustDetai
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Inside}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -78,6 +78,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private def addOtherBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-other/$identifier"
   private def amendOtherBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-other/$identifier/$index"
   private def removeBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/$identifier/remove"
+  private def isTrust5mldUrl(identifier: String) = s"$trustsUrl/$identifier/is-trust-5mld"
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name("first", None, "last"),
@@ -102,8 +103,8 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     name = "Company Ltd",
     utr = None,
     address = None,
-    None,
-    incomeDiscretionYesNo = true,
+    income = None,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-09-23"),
     provisional = false
   )
@@ -142,7 +143,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     description = "Other Endeavours Ltd",
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-09-23"),
     provisional = false
   )
@@ -247,37 +248,18 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
           val json = Json.parse(
             """
               |{
-              | "beneficiary": {
-              |   "charity": [
-              |				{
-              |					"lineNo": "1",
-              |					"bpMatchStatus": "01",
-              |					"entityStart": "2019-02-28",
-              |					"organisationName": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |					"beneficiaryDiscretion": false,
-              |					"beneficiaryShareOfIncome": "100",
-              |					"identification": {
-              |						"address": {
-              |							"line1": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |							"line2": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |							"line3": "1234567890 QwErTyUiOp ,.(/)&'- name",
-              |							"country": "DE"
-              |						}
-              |					},
-              |         "provisional": false
-              |				}
-              |			],
-              |   "individualDetails": [
-              |     {
-              |         "lineNo": "7",
-              |         "bpMatchStatus": "01",
-              |         "entityStart": "2000-01-01",
-              |         "name": {
-              |           "firstName": "first",
-              |           "lastName": "last"
-              |         },
-              |         "vulnerableBeneficiary": false,
-              |         "provisional": false
+              |  "beneficiary": {
+              |    "individualDetails": [
+              |      {
+              |        "lineNo": "7",
+              |        "bpMatchStatus": "01",
+              |        "entityStart": "2000-01-01",
+              |        "name": {
+              |          "firstName": "first",
+              |          "lastName": "last"
+              |        },
+              |        "vulnerableBeneficiary": false,
+              |        "provisional": false
               |      }
               |    ],
               |    "unidentified": [
@@ -290,69 +272,71 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
               |        "provisional": false
               |      },
               |      {
-              |         "lineNo": "309",
-              |         "description": "Beneficiary Unidentified 23",
-              |         "entityStart": "2019-09-23",
-              |         "provisional": false
-              |       }
-              |  ],
-              |  "trust": [
-              |    {
-              |       "lineNo": "1",
-              |       "bpMatchStatus": "01",
-              |       "organisationName": "Nelson Ltd ",
-              |       "beneficiaryDiscretion": true,
-              |       "beneficiaryShareOfIncome": "0",
-              |       "identification": {
-              |         "safeId": "2222200000000"
-              |       },
-              |       "entityStart": "2017-02-28",
-              |       "provisional": false
-              |    }
-              |  ],
-              |  "company": [
-              |   {
-              |                "lineNo": "184",
-              |                "bpMatchStatus": "01",
-              |                "organisationName": "Company Ltd",
-              |                "entityStart": "2019-09-23",
-              |                "provisional": false
-              |              }
-              |  ],
-              |  "large": [
-              |  {
-              |                "lineNo": "254",
-              |                "bpMatchStatus": "01",
-              |                "organisationName": "Employment Related Endeavours",
-              |                "description": "Description 1",
-              |                "numberOfBeneficiary": "501",
-              |                "entityStart": "2019-09-23",
-              |                "provisional": false
-              |              }
-              |  ],
-              |  "charity": [
-              |    {
-              |       "lineNo": "1",
-              |       "bpMatchStatus": "01",
-              |       "organisationName": "Humanitarian Endeavours Ltd",
-              |       "beneficiaryDiscretion": true,
-              |       "beneficiaryShareOfIncome": "0",
-              |       "identification": {
-              |         "safeId": "2222200000000"
-              |       },
-              |       "entityStart": "2012-03-14",
-              |       "provisional": false
-              |    }
-              |  ],
-              |  "other": [
-              |              {
-              |                "lineNo": "286",
-              |                "description": "Other Endeavours Ltd",
-              |                "entityStart": "2019-09-23",
-              |                "provisional": false
-              |              }
-              |              ]
-              | }
+              |        "lineNo": "309",
+              |        "description": "Beneficiary Unidentified 23",
+              |        "entityStart": "2019-09-23",
+              |        "provisional": false
+              |      }
+              |    ],
+              |    "trust": [
+              |      {
+              |        "lineNo": "1",
+              |        "bpMatchStatus": "01",
+              |        "organisationName": "Nelson Ltd ",
+              |        "beneficiaryDiscretion": true,
+              |        "beneficiaryShareOfIncome": "0",
+              |        "identification": {
+              |          "safeId": "2222200000000"
+              |        },
+              |        "entityStart": "2017-02-28",
+              |        "provisional": false
+              |      }
+              |    ],
+              |    "company": [
+              |      {
+              |        "lineNo": "184",
+              |        "bpMatchStatus": "01",
+              |        "organisationName": "Company Ltd",
+              |        "beneficiaryDiscretion": true,
+              |        "entityStart": "2019-09-23",
+              |        "provisional": false
+              |      }
+              |    ],
+              |    "large": [
+              |      {
+              |        "lineNo": "254",
+              |        "bpMatchStatus": "01",
+              |        "organisationName": "Employment Related Endeavours",
+              |        "description": "Description 1",
+              |        "numberOfBeneficiary": "501",
+              |        "entityStart": "2019-09-23",
+              |        "provisional": false
+              |      }
+              |    ],
+              |    "charity": [
+              |      {
+              |        "lineNo": "1",
+              |        "bpMatchStatus": "01",
+              |        "organisationName": "Humanitarian Endeavours Ltd",
+              |        "beneficiaryDiscretion": true,
+              |        "beneficiaryShareOfIncome": "0",
+              |        "identification": {
+              |          "safeId": "2222200000000"
+              |        },
+              |        "entityStart": "2012-03-14",
+              |        "provisional": false
+              |      }
+              |    ],
+              |    "other": [
+              |      {
+              |        "lineNo": "286",
+              |        "description": "Other Endeavours Ltd",
+              |        "beneficiaryDiscretion": true,
+              |        "entityStart": "2019-09-23",
+              |        "provisional": false
+              |      }
+              |    ]
+              |  }
               |}
               |""".stripMargin)
 
@@ -1185,6 +1169,67 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
         }
       }
 
+    }
+
+    "isTrust5mld" must {
+
+      "return true" when {
+        "untransformed data is 5mld" in {
+
+          val json = JsBoolean(true)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(isTrust5mldUrl(identifier)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.isTrust5mld(identifier)
+
+          whenReady(processed) {
+            r =>
+              r mustBe true
+          }
+        }
+      }
+
+      "return false" when {
+        "untransformed data is 4mld" in {
+
+          val json = JsBoolean(false)
+
+          val application = applicationBuilder()
+            .configure(
+              Seq(
+                "microservice.services.trusts.port" -> server.port(),
+                "auditing.enabled" -> false
+              ): _*
+            ).build()
+
+          val connector = application.injector.instanceOf[TrustConnector]
+
+          server.stubFor(
+            get(urlEqualTo(isTrust5mldUrl(identifier)))
+              .willReturn(okJson(json.toString))
+          )
+
+          val processed = connector.isTrust5mld(identifier)
+
+          whenReady(processed) {
+            r =>
+              r mustBe false
+          }
+        }
+      }
     }
 
   }

@@ -31,7 +31,8 @@ class CharityBeneficiaryExtractor extends BeneficiaryExtractor[CharityBeneficiar
                      charityBeneficiary: CharityBeneficiary,
                      index: Int): Try[UserAnswers] = {
 
-    extractUserAnswersForOrgBeneficiary(answers, charityBeneficiary, index)
+    super.apply(answers, charityBeneficiary, index)
+      .flatMap(answers => extractUserAnswersForOrgBeneficiary(answers, charityBeneficiary))
   }
 
   override def namePage: QuestionPage[String] = NamePage

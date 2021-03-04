@@ -39,6 +39,7 @@ class IndexControllerSpec extends SpecBase {
     val trustType = TypeOfTrust.WillTrustOrIntestacyTrust
     val is5mldEnabled = false
     val isTaxable = false
+    val isUnderlyingData5mld = false
 
     "populate user answers and redirect" in {
 
@@ -55,6 +56,9 @@ class IndexControllerSpec extends SpecBase {
 
       when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
         .thenReturn(Future.successful(is5mldEnabled))
+
+      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+        .thenReturn(Future.successful(isUnderlyingData5mld))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
@@ -79,6 +83,7 @@ class IndexControllerSpec extends SpecBase {
       uaCaptor.getValue.trustType.get mustBe trustType
       uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
       uaCaptor.getValue.isTaxable mustBe isTaxable
+      uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
 
       application.stop()
     }
@@ -98,6 +103,9 @@ class IndexControllerSpec extends SpecBase {
 
       when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
         .thenReturn(Future.successful(is5mldEnabled))
+
+      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+        .thenReturn(Future.successful(isUnderlyingData5mld))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(

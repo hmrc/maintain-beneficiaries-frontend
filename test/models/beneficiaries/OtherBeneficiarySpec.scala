@@ -26,174 +26,266 @@ class OtherBeneficiarySpec extends WordSpec with MustMatchers {
 
   "OtherBeneficiary" must {
     "deserialise from backend JSON" when {
-      "with UK address" in {
 
-        val json = Json.parse(
-          """{
-            |                "lineNo": "262",
-            |                "description": "Beneficiary Other 1",
-            |                "address": {
-            |                  "line1": "Ben Other Line 1",
-            |                  "line2": "Ben Other Line 2",
-            |                  "line3": "Ben Other Line 3",
-            |                  "line4": "Ben Other Line 4",
-            |                  "postCode": "AB1 2BA",
-            |                  "country": "GB"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }""".stripMargin)
+      "taxable" when {
 
-        val beneficiary = json.as[OtherBeneficiary]
+        "with UK address" in {
 
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 1",
-          address = Some(UkAddress(
-            "Ben Other Line 1",
-            "Ben Other Line 2",
-            Some("Ben Other Line 3"),
-            Some("Ben Other Line 4"),
-            "AB1 2BA"
-          )),
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "262",
+              |  "description": "Beneficiary Other 1",
+              |  "address": {
+              |    "line1": "Ben Other Line 1",
+              |    "line2": "Ben Other Line 2",
+              |    "line3": "Ben Other Line 3",
+              |    "line4": "Ben Other Line 4",
+              |    "postCode": "AB1 2BA",
+              |    "country": "GB"
+              |  },
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 1",
+            address = Some(UkAddress(
+              "Ben Other Line 1",
+              "Ben Other Line 2",
+              Some("Ben Other Line 3"),
+              Some("Ben Other Line 4"),
+              "AB1 2BA"
+            )),
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "with foreign address" in {
+
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "263",
+              |  "description": "Beneficiary Other 24",
+              |  "address": {
+              |    "line1": "Ben Other Line 1",
+              |    "line2": "Ben Other Line 2",
+              |    "line3": "Ben Other Line 3",
+              |    "country": "RU"
+              |  },
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 24",
+            address = Some(NonUkAddress(
+              "Ben Other Line 1",
+              "Ben Other Line 2",
+              Some("Ben Other Line 3"),
+              "RU"
+            )),
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "with no identification" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "274",
+              |  "description": "Beneficiary Other 13",
+              |  "beneficiaryDiscretion": false,
+              |  "beneficiaryShareOfIncome": "20",
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 13",
+            address = None,
+            income = Some("20"),
+            incomeDiscretionYesNo = Some(false),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "there is conflicting income info" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "276",
+              |  "description": "Beneficiary Other 15",
+              |  "entityStart": "2019-09-23",
+              |  "beneficiaryDiscretion": true,
+              |  "beneficiaryShareOfIncome": "0",
+              |  "provisional": false
+              |}
+              |""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 15",
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "there is no discretion for income info" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "275",
+              |  "description": "Beneficiary Other 14",
+              |  "entityStart": "2019-09-23",
+              |  "beneficiaryDiscretion": false,
+              |  "beneficiaryShareOfIncome": "20",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 14",
+            address = None,
+            income = Some("20"),
+            incomeDiscretionYesNo = Some(false),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "there is no income at all" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "274",
+              |  "description": "Beneficiary Other 13",
+              |  "address": {
+              |    "line1": "Ben Other Line 1",
+              |    "line2": "Ben Other Line 2",
+              |    "line3": "Ben Other Line 3",
+              |    "line4": "Ben Other Line 4",
+              |    "postCode": "AB1 2BA",
+              |    "country": "GB"
+              |  },
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 13",
+            address = Some(UkAddress(
+              "Ben Other Line 1",
+              "Ben Other Line 2",
+              Some("Ben Other Line 3"),
+              Some("Ben Other Line 4"),
+              "AB1 2BA"
+            )),
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
+
+        "there is a country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "274",
+              |  "description": "Beneficiary Other 13",
+              |  "beneficiaryDiscretion": true,
+              |  "countryOfResidence": "FR",
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
+
+          val beneficiary = json.as[OtherBeneficiary]
+
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 13",
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = Some("FR"),
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
       }
 
-      "with foreign address" in {
+      "non-taxable" when {
 
-        val json = Json.parse(
-          """{
-            |                "lineNo": "263",
-            |                "description": "Beneficiary Other 24",
-            |                "address": {
-            |                  "line1": "Ben Other Line 1",
-            |                  "line2": "Ben Other Line 2",
-            |                  "line3": "Ben Other Line 3",
-            |                  "country": "RU"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }""".stripMargin)
+        "there is no country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "274",
+              |  "description": "Beneficiary Other 13",
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
 
-        val beneficiary = json.as[OtherBeneficiary]
+          val beneficiary = json.as[OtherBeneficiary]
 
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 24",
-          address = Some(NonUkAddress(
-            "Ben Other Line 1",
-            "Ben Other Line 2",
-            Some("Ben Other Line 3"),
-            "RU"
-          )),
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
-      }
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 13",
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = None,
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
 
-      "with no identification" in {
-        val json = Json.parse(
-          """{
-            |                "lineNo": "274",
-            |                "description": "Beneficiary Other 13",
-            |                "beneficiaryDiscretion": false,
-            |                "beneficiaryShareOfIncome": "20",
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }""".stripMargin)
+        "there is a country of residence" in {
+          val json = Json.parse(
+            """
+              |{
+              |  "lineNo": "274",
+              |  "description": "Beneficiary Other 13",
+              |  "countryOfResidence": "GB",
+              |  "entityStart": "2019-09-23",
+              |  "provisional": false
+              |}""".stripMargin)
 
-        val beneficiary = json.as[OtherBeneficiary]
+          val beneficiary = json.as[OtherBeneficiary]
 
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 13",
-          address = None,
-          income = Some("20"),
-          incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
-      }
-
-      "there is conflicting income info" in {
-        val json = Json.parse(
-          """
-            |{
-            |                "lineNo": "276",
-            |                "description": "Beneficiary Other 15",
-            |                "entityStart": "2019-09-23",
-            |                "beneficiaryDiscretion": true,
-            |                "beneficiaryShareOfIncome": "0",
-            |                "provisional": false
-            |              }
-            |""".stripMargin)
-
-        val beneficiary = json.as[OtherBeneficiary]
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 15",
-          address = None,
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
-      }
-      "there is no discretion for income info" in {
-        val json = Json.parse(
-          """{
-            |                "lineNo": "275",
-            |                "description": "Beneficiary Other 14",
-            |                "entityStart": "2019-09-23",
-            |                "beneficiaryDiscretion": false,
-            |                "beneficiaryShareOfIncome": "20",
-            |                "provisional": false
-            |              }""".stripMargin)
-
-        val beneficiary = json.as[OtherBeneficiary]
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 14",
-          address = None,
-          income = Some("20"),
-          incomeDiscretionYesNo = false,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
-      }
-      "there is no income at all" in {
-        val json = Json.parse(
-          """{
-            |                "lineNo": "274",
-            |                "description": "Beneficiary Other 13",
-            |                "address": {
-            |                  "line1": "Ben Other Line 1",
-            |                  "line2": "Ben Other Line 2",
-            |                  "line3": "Ben Other Line 3",
-            |                  "line4": "Ben Other Line 4",
-            |                  "postCode": "AB1 2BA",
-            |                  "country": "GB"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }""".stripMargin)
-
-        val beneficiary = json.as[OtherBeneficiary]
-        beneficiary mustBe OtherBeneficiary(
-          description = "Beneficiary Other 13",
-          address = Some(UkAddress(
-            "Ben Other Line 1",
-            "Ben Other Line 2",
-            Some("Ben Other Line 3"),
-            Some("Ben Other Line 4"),
-            "AB1 2BA"
-          )),
-          income = None,
-          incomeDiscretionYesNo = true,
-          entityStart = LocalDate.of(2019, 9, 23),
-          provisional = false
-        )
+          beneficiary mustBe OtherBeneficiary(
+            description = "Beneficiary Other 13",
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = Some("GB"),
+            entityStart = LocalDate.of(2019, 9, 23),
+            provisional = false
+          )
+        }
       }
     }
   }

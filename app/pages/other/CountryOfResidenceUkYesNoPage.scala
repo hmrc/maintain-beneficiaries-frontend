@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package pages.classOfBeneficiary
+package pages.other
 
-import pages.behaviours.PageBehaviours
-import pages.classofbeneficiary.RemoveYesNoPage
+import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class RemoveYesNoPageSpec extends PageBehaviours {
+import scala.util.Try
 
-  "RemoveYesNoPage" must {
+case object CountryOfResidenceUkYesNoPage extends QuestionPage[Boolean] {
 
-    beRetrievable[Boolean](RemoveYesNoPage)
+  override def path: JsPath = basePath \ toString
 
-    beSettable[Boolean](RemoveYesNoPage)
+  override def toString: String = "countryOfResidenceUkYesNo"
 
-    beRemovable[Boolean](RemoveYesNoPage)
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(CountryOfResidencePage)
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
   }
 }

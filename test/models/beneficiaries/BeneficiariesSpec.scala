@@ -68,7 +68,7 @@ class BeneficiariesSpec extends SpecBase {
     utr = None,
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )
@@ -87,7 +87,7 @@ class BeneficiariesSpec extends SpecBase {
     description = "description",
     address = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )

@@ -16,53 +16,45 @@
 
 package extractors
 
-import com.google.inject.Inject
 import models.beneficiaries.OtherBeneficiary
-import models.{Address, NonUkAddress, UkAddress, UserAnswers}
-import pages.other.{AddressUkYesNoPage, AddressYesNoPage, DescriptionPage, DiscretionYesNoPage, NonUkAddressPage, ShareOfIncomePage, UkAddressPage}
+import models.{NonUkAddress, UkAddress, UserAnswers}
+import pages.QuestionPage
+import pages.other._
 import pages.other.add.StartDatePage
 import pages.other.amend.IndexPage
+import play.api.libs.json.JsPath
 
+import java.time.LocalDate
 import scala.util.Try
 
-class OtherBeneficiaryExtractor @Inject()() {
+class OtherBeneficiaryExtractor extends BeneficiaryExtractor[OtherBeneficiary] {
 
-  def apply(answers: UserAnswers,
-            otherBeneficiary : OtherBeneficiary,
-            index: Int): Try[UserAnswers] =
-  {
+  override def apply(answers: UserAnswers,
+                     otherBeneficiary: OtherBeneficiary,
+                     index: Int): Try[UserAnswers] = {
 
-    answers.deleteAtPath(pages.other.basePath)
-              .flatMap(_.set(DescriptionPage, otherBeneficiary.description))
-              .flatMap(answers => extractAddress(otherBeneficiary.address, answers))
-              .flatMap(answers => extractShareOfIncome(otherBeneficiary, answers))
-              .flatMap(_.set(StartDatePage, otherBeneficiary.entityStart))
-              .flatMap(_.set(IndexPage, index))
-    }
-
-  private def extractShareOfIncome(otherBeneficiary: OtherBeneficiary, answers: UserAnswers) : Try[UserAnswers] = {
-    otherBeneficiary.income match {
-      case Some(income) =>
-        answers.set(DiscretionYesNoPage, false)
-          .flatMap(_.set(ShareOfIncomePage, income.toInt))
-      case None =>
-        // Assumption that user answered yes as the share of income is not provided
-        answers.set(DiscretionYesNoPage, true)
-    }
+    super.apply(answers, otherBeneficiary, index)
+      .flatMap(_.set(DescriptionPage, otherBeneficiary.description))
+      .flatMap(answers => extractShareOfIncome(otherBeneficiary.income, answers))
+      .flatMap(answers => extractCountryOfResidence(otherBeneficiary.countryOfResidence, answers))
+      .flatMap(answers => extractAddress(otherBeneficiary.address, answers))
   }
 
-  private def extractAddress(address: Option[Address], answers: UserAnswers) : Try[UserAnswers] = {
-    address match {
-      case Some(uk: UkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, true))
-          .flatMap(_.set(UkAddressPage, uk))
-      case Some(nonUk: NonUkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, false))
-          .flatMap(_.set(NonUkAddressPage, nonUk))
-      case _ =>
-        answers.set(AddressYesNoPage, false)
-    }
-  }
+  override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = DiscretionYesNoPage
+  override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
+
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+
+  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
+
+  override def startDatePage: QuestionPage[LocalDate] = StartDatePage
+
+  override def indexPage: QuestionPage[Int] = IndexPage
+
+  override def basePath: JsPath = pages.other.basePath
 }

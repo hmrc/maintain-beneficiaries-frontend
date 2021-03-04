@@ -21,7 +21,9 @@ import play.api.libs.json.{JsPath, JsSuccess, Reads}
 
 import java.time.LocalDate
 
-trait Beneficiary
+trait Beneficiary {
+  val entityStart: LocalDate
+}
 
 trait OrgBeneficiary extends Beneficiary {
   val name: String
@@ -29,11 +31,10 @@ trait OrgBeneficiary extends Beneficiary {
   val income: Option[String]
   val countryOfResidence: Option[String]
   val address: Option[Address]
-  val entityStart: LocalDate
 }
 
 trait BeneficiaryReads {
-  def readNullableAtSubPath[T:Reads](subPath: JsPath): Reads[Option[T]] = Reads(
+  def readNullableAtSubPath[T: Reads](subPath: JsPath): Reads[Option[T]] = Reads(
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
       .map(Some(_))

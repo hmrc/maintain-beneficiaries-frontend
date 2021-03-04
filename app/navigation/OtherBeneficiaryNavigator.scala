@@ -36,47 +36,82 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     nextPage(page, NormalMode, userAnswers)
 
-  private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
-    case DescriptionPage => rts.DiscretionYesNoController.onPageLoad(mode)
-    case ShareOfIncomePage => rts.AddressYesNoController.onPageLoad(mode)
-    case StartDatePage => addRts.CheckDetailsController.onPageLoad()
+  private def simpleNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
+    case DescriptionPage => ua => if (ua.isTaxable) {
+      rts.DiscretionYesNoController.onPageLoad(mode)
+    } else {
+      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
+    }
+    case ShareOfIncomePage => ua => navigateAwayFromShareOfIncomeQuestions(ua, mode)
+    case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidenceQuestions(ua, mode)
+    case UkAddressPage | NonUkAddressPage => ua => navigateToStartDateOrCheckAnswers(ua, mode)
+    case StartDatePage => _ => addRts.CheckDetailsController.onPageLoad()
   }
 
   private def yesNoNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
-    case DiscretionYesNoPage => ua =>
-      yesNoNav(ua, DiscretionYesNoPage, rts.AddressYesNoController.onPageLoad(mode), rts.ShareOfIncomeController.onPageLoad(mode))
-    case AddressUkYesNoPage => ua =>
-      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
+    case DiscretionYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = DiscretionYesNoPage,
+      yesCall = navigateAwayFromShareOfIncomeQuestions(ua, mode),
+      noCall = rts.ShareOfIncomeController.onPageLoad(mode)
+    )
+    case CountryOfResidenceYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = CountryOfResidenceYesNoPage,
+      yesCall = rts.CountryOfResidenceUkYesNoController.onPageLoad(mode),
+      noCall = rts.AddressYesNoController.onPageLoad(mode)
+    )
+    case CountryOfResidenceUkYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = CountryOfResidenceUkYesNoPage,
+      yesCall = navigateAwayFromCountryOfResidenceQuestions(ua, mode),
+      noCall = rts.CountryOfResidenceController.onPageLoad(mode)
+    )
+    case AddressYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = AddressYesNoPage,
+      yesCall = rts.AddressUkYesNoController.onPageLoad(mode),
+      noCall = navigateToStartDateOrCheckAnswers(ua, mode)
+    )
+    case AddressUkYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = AddressUkYesNoPage,
+      yesCall = rts.UkAddressController.onPageLoad(mode),
+      noCall = rts.NonUkAddressController.onPageLoad(mode)
+    )
   }
 
-  private def modeNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
+  private def navigateAwayFromShareOfIncomeQuestions(ua: UserAnswers, mode: Mode): Call = {
+    if (ua.is5mldEnabled) {
+      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
+    } else {
+      rts.AddressYesNoController.onPageLoad(mode)
+    }
+  }
+
+  private def navigateAwayFromCountryOfResidenceQuestions(ua: UserAnswers, mode: Mode): Call = {
+    if (ua.isTaxable) {
+      rts.AddressYesNoController.onPageLoad(mode)
+    } else {
+      navigateToStartDateOrCheckAnswers(ua, mode)
+    }
+  }
+
+  private def navigateToStartDateOrCheckAnswers(ua: UserAnswers, mode: Mode): Call = {
     mode match {
-      case NormalMode => {
-        case UkAddressPage | NonUkAddressPage => _ =>
-          addRts.StartDateController.onPageLoad()
-        case AddressYesNoPage => ua =>
-          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), addRts.StartDateController.onPageLoad()))
-      }
-      case CheckMode => {
-        case UkAddressPage | NonUkAddressPage => ua =>
-          modeNav(ua)
-        case AddressYesNoPage => ua =>
-          yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), modeNav(ua))
-      }
+      case NormalMode => addRts.StartDateController.onPageLoad()
+      case CheckMode => checkDetailsRoute(ua)
     }
   }
 
-  private def modeNav(answers: UserAnswers) : Call = {
+  private def checkDetailsRoute(answers: UserAnswers): Call = {
     answers.get(IndexPage) match {
-      case None =>
-        controllers.routes.SessionExpiredController.onPageLoad()
-      case Some(index) =>
-        amendRts.CheckDetailsController.renderFromUserAnswers(index)
+      case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
+      case None => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
 
-  private def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
-      yesNoNavigation(mode) orElse
-      modeNavigation(mode)
+  def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
+    simpleNavigation(mode) orElse
+      yesNoNavigation(mode)
 }
