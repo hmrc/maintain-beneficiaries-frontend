@@ -107,7 +107,6 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
 
   private def readAddress: Reads[Option[Address]] = {
     NationalInsuranceNumberYesNoPage.path.readNullable[Boolean].flatMap {
-      case Some(true) => Reads(_ => JsSuccess(None))
       case Some(false) => AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
         case true => readUkOrNonUkAddress
         case false => Reads(_ => JsSuccess(None))
@@ -125,7 +124,6 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
 
   private def readIncome: Reads[Option[String]] = {
     IncomeDiscretionYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
-      case Some(true) => Reads(_ => JsSuccess(None))
       case Some(false) => IncomePercentagePage.path.read[Int].map(value => Some(value.toString))
       case _ => Reads(_ => JsSuccess(None))
     }
