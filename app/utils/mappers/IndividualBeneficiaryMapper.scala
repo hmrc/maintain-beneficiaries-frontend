@@ -17,6 +17,7 @@
 package utils.mappers
 
 import models._
+import models.Constant.GB
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
@@ -36,10 +37,29 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
         DateOfBirthPage.path.readNullable[LocalDate] and
         readIdentification(provisional) and
         readAddress and
-        VPE1FormYesNoPage.path.read[Boolean] and
+        VPE1FormYesNoPage.path.readNullable[Boolean] and
         RoleInCompanyPage.path.readNullable[RoleInCompany] and
         readIncome and
-        IncomeDiscretionYesNoPage.path.read[Boolean] and
+        IncomeDiscretionYesNoPage.path.readNullable[Boolean] and
+        CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+          case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
+            case true => Reads(_ => JsSuccess(Some(GB)))
+            case false => CountryOfResidencePage.path.read[String].map(Some(_))
+          }
+          case _ => Reads(_ => JsSuccess(None))
+        } and
+        CountryOfNationalityYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+          case Some(true) => CountryOfNationalityUkYesNoPage.path.read[Boolean].flatMap {
+            case true => Reads(_ => JsSuccess(Some(GB)))
+            case false => CountryOfNationalityPage.path.read[String].map(Some(_))
+          }
+          case _ => Reads(_ => JsSuccess(None))
+        } and
+        MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
+          case Some(true) => Reads(_ => JsSuccess(Some(false)))
+          case Some(false) => Reads(_ => JsSuccess(Some(true)))
+          case _ => Reads(_ => JsSuccess(None))
+        } and
         StartDatePage.path.read[LocalDate] and
         Reads(_ => JsSuccess(true))
       ) (IndividualBeneficiary.apply _)
@@ -48,9 +68,10 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
   }
 
   private def readIdentification(provisional: Boolean): Reads[Option[IndividualIdentification]] = {
-    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-      case true => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
-      case false => if (provisional) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
+    NationalInsuranceNumberYesNoPage.path.readNullable[Boolean].flatMap[Option[IndividualIdentification]] {
+      case Some(true) => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
+      case Some(false) => if (provisional) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
+      case _ => Reads(_ => JsSuccess(None))
     }
   }
 
@@ -85,12 +106,12 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
   }
 
   private def readAddress: Reads[Option[Address]] = {
-    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap {
-      case true => Reads(_ => JsSuccess(None))
-      case false => AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
+    NationalInsuranceNumberYesNoPage.path.readNullable[Boolean].flatMap {
+      case Some(false) => AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
         case true => readUkOrNonUkAddress
         case false => Reads(_ => JsSuccess(None))
       }
+      case _ => Reads(_ => JsSuccess(None))
     }
   }
 
@@ -102,9 +123,9 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
   }
 
   private def readIncome: Reads[Option[String]] = {
-    IncomeDiscretionYesNoPage.path.read[Boolean].flatMap[Option[String]] {
-      case true => Reads(_ => JsSuccess(None))
-      case false => IncomePercentagePage.path.read[Int].map(value => Some(value.toString))
+    IncomeDiscretionYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+      case Some(false) => IncomePercentagePage.path.read[Int].map(value => Some(value.toString))
+      case _ => Reads(_ => JsSuccess(None))
     }
   }
 }

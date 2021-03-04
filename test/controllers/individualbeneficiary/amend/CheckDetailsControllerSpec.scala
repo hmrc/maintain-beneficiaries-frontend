@@ -62,10 +62,10 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     dateOfBirth = Some(LocalDate.parse("2010-02-03")),
     identification = Some(NationalInsuranceNumber("AA123456A")),
     address = None,
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-03-09"),
     provisional = false
   )

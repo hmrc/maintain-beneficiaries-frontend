@@ -85,10 +85,10 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     dateOfBirth = None,
     identification = None,
     address = None,
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2000-01-01"),
     provisional = false
   )

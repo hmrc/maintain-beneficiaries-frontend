@@ -41,10 +41,10 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
     identification = None,
     address = None,
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = false,
+    incomeDiscretionYesNo = Some(false),
     entityStart = LocalDate.of(2012, 4, 15),
     provisional = false
   )

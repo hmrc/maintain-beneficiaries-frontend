@@ -54,10 +54,10 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
     dateOfBirth = None,
     identification = None,
     address = None,
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = false,
+    incomeDiscretionYesNo = Some(false),
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
   )

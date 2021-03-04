@@ -29,10 +29,10 @@ class BeneficiariesSpec extends SpecBase {
     dateOfBirth = None,
     identification = None,
     address = None,
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None  ,
-    incomeDiscretionYesNo = true,
+    incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )

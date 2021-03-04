@@ -60,10 +60,10 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     identification = Some(NationalInsuranceNumber("JS123456A")),
     address = None,
     entityStart = LocalDate.parse("2019-02-28"),
-    vulnerableYesNo = false,
+    vulnerableYesNo = Some(false),
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = false,
+    incomeDiscretionYesNo = Some(false),
     provisional = false
   )
 

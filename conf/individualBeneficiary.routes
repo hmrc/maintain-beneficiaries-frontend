@@ -111,6 +111,11 @@ POST       /role-in-company                          controllers.individualbenef
 GET        /change-role-in-company                   controllers.individualbeneficiary.RoleInCompanyController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-role-in-company                   controllers.individualbeneficiary.RoleInCompanyController.onSubmit(mode: Mode = CheckMode)
 
+GET        /legally-capable                         controllers.individualbeneficiary.MentalCapacityYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /legally-capable                         controllers.individualbeneficiary.MentalCapacityYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-legally-capable                  controllers.individualbeneficiary.MentalCapacityYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-legally-capable                  controllers.individualbeneficiary.MentalCapacityYesNoController.onSubmit(mode: Mode = CheckMode)
+
 GET        /when-added                               controllers.individualbeneficiary.add.StartDateController.onPageLoad()
 POST       /when-added                               controllers.individualbeneficiary.add.StartDateController.onSubmit()
 

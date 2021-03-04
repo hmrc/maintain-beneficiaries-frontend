@@ -463,6 +463,12 @@ individualBeneficiary.startDate.error.invalid = Enter a real date
 individualBeneficiary.startDate.error.future = The date the individual beneficiary was added to the trust must be today or in the past
 individualBeneficiary.startDate.error.past = The date the individual beneficiary was added to the trust cannot be before the start date of the trust
 
+individualBeneficiary.mentalCapacityYesNo.title = Does the individual beneficiary have mental capacity at the time of registration?
+individualBeneficiary.mentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
+individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
+individualBeneficiary.mentalCapacityYesNo.error.required = Select yes if you know the individual beneficiary has mental capacity at the time of registration
+individualBeneficiary.mentalCapacityYesNo.hint = An individual beneficiary does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
+
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
 

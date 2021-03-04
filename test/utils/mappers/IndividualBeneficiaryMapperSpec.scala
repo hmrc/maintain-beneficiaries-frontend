@@ -39,252 +39,502 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
     "adding" must {
 
-      "return None for empty user answers" in {
+      "4mld" when {
 
-        val result = mapper(emptyUserAnswers, provisional = true)
-        result mustBe None
+        "return None for empty user answers" in {
+
+          val result = mapper(emptyUserAnswers, provisional = true)
+          result mustBe None
+        }
+
+        "generate class of individual model with nino and income discretion" in {
+
+          val nino = "AA123456A"
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, true).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, true).success.value
+            .set(NationalInsuranceNumberPage, nino).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe Some(NationalInsuranceNumber(nino))
+          result.address mustBe None
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+        "generate class of individual model with UK address and no income discretion" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, true).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, false).success.value
+            .set(IncomePercentagePage, 45).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(LiveInTheUkYesNoPage, true).success.value
+            .set(UkAddressPage, ukAddress).success.value
+            .set(PassportDetailsYesNoPage, false).success.value
+            .set(IdCardDetailsYesNoPage, false).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(false)
+          result.income mustBe Some("45")
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe None
+          result.address mustBe Some(ukAddress)
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+        "generate class of individual model with non-UK address" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, true).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(LiveInTheUkYesNoPage, false).success.value
+            .set(NonUkAddressPage, nonUkAddress).success.value
+            .set(PassportDetailsYesNoPage, false).success.value
+            .set(IdCardDetailsYesNoPage, false).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe None
+          result.address mustBe Some(nonUkAddress)
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+        "generate class of individual model with neither nino nor address" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, false).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe None
+          result.address mustBe None
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+        "generate class of individual model with role in company" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(RoleInCompanyPage, RoleInCompany.Employee).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, false).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe Some(RoleInCompany.Employee)
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe None
+          result.address mustBe None
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+
+        "generate class of individual model with passport" in {
+
+          val passport = Passport("SP", "123456789", LocalDate.of(2024, 8, 16))
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, true).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(LiveInTheUkYesNoPage, false).success.value
+            .set(NonUkAddressPage, nonUkAddress).success.value
+            .set(PassportDetailsYesNoPage, true).success.value
+            .set(PassportDetailsPage, passport).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe Some(passport)
+          result.address mustBe Some(nonUkAddress)
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
+        "generate class of individual model with id card" in {
+
+          val idcard = IdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, false).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(LiveInTheUkYesNoPage, true).success.value
+            .set(UkAddressPage, ukAddress).success.value
+            .set(PassportDetailsYesNoPage, false).success.value
+            .set(IdCardDetailsYesNoPage, true).success.value
+            .set(IdCardDetailsPage, idcard).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = true).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe None
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe Some(idcard)
+          result.address mustBe Some(ukAddress)
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
       }
 
-      "generate class of individual model with nino and income discretion" in {
+      "5mld" when {
 
-        val nino = "AA123456A"
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, true).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, true).success.value
-          .set(NationalInsuranceNumberPage, nino).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
-
-        val result = mapper(userAnswers, provisional = true).get
-
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe Some(NationalInsuranceNumber(nino))
-        result.address mustBe None
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
-
-      "generate class of individual model with UK address and no income discretion" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, true).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, false).success.value
-          .set(IncomePercentagePage, 45).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(LiveInTheUkYesNoPage, true).success.value
-          .set(UkAddressPage, ukAddress).success.value
-          .set(PassportDetailsYesNoPage, false).success.value
-          .set(IdCardDetailsYesNoPage, false).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
-
-        val result = mapper(userAnswers, provisional = true).get
-
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe false
-        result.income mustBe Some("45")
-        result.identification mustBe None
-        result.address mustBe Some(ukAddress)
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
-
-      "generate class of individual model with non-UK address" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, true).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(LiveInTheUkYesNoPage, false).success.value
-          .set(NonUkAddressPage, nonUkAddress).success.value
-          .set(PassportDetailsYesNoPage, false).success.value
-          .set(IdCardDetailsYesNoPage, false).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
-
-        val result = mapper(userAnswers, provisional = true).get
-
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe None
-        result.address mustBe Some(nonUkAddress)
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
-
-      "generate class of individual model with neither nino nor address" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, false).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
-
-        val result = mapper(userAnswers, provisional = true).get
-
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe None
-        result.address mustBe None
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
-
-      "generate class of individual model with role in company" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(RoleInCompanyPage, RoleInCompany.Employee).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, false).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
-
-        val result = mapper(userAnswers, provisional = true).get
-
-        result.name mustBe name
-        result.roleInCompany mustBe Some(RoleInCompany.Employee)
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe None
-        result.address mustBe None
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
+        "taxable" when {
 
 
+          "no country of nationality, no country of residence, not legally incapable" in {
 
-      "generate class of individual model with passport" in {
+            val nino = "AA123456A"
 
-        val passport = Passport("SP", "123456789", LocalDate.of(2024, 8, 16))
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(IncomeDiscretionYesNoPage, true).success.value
+              .set(CountryOfNationalityYesNoPage, false).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, false).success.value
+              .set(NationalInsuranceNumberYesNoPage, true).success.value
+              .set(NationalInsuranceNumberPage, nino).success.value
+              .set(VPE1FormYesNoPage, false).success.value
+              .set(StartDatePage, startDate).success.value
 
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, true).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(LiveInTheUkYesNoPage, false).success.value
-          .set(NonUkAddressPage, nonUkAddress).success.value
-          .set(PassportDetailsYesNoPage, true).success.value
-          .set(PassportDetailsPage, passport).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
+            val result = mapper(userAnswers, provisional = true).get
 
-        val result = mapper(userAnswers, provisional = true).get
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe Some(true)
+            result.income mustBe None
+            result.countryOfResidence mustBe None
+            result.nationality mustBe None
+            result.mentalCapacityYesNo mustBe Some(true)
+            result.identification mustBe Some(NationalInsuranceNumber(nino))
+            result.address mustBe None
+            result.vulnerableYesNo mustBe Some(false)
+            result.entityStart mustBe startDate
+          }
 
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe Some(passport)
-        result.address mustBe Some(nonUkAddress)
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
-      }
+          "UK country of nationality, UK country of residence, legally incapable" in {
 
-      "generate class of individual model with id card" in {
+            val nino = "AA123456A"
 
-        val idcard = IdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(IncomeDiscretionYesNoPage, true).success.value
+              .set(CountryOfNationalityYesNoPage, true).success.value
+              .set(CountryOfNationalityUkYesNoPage, true).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, true).success.value
+              .set(NationalInsuranceNumberYesNoPage, true).success.value
+              .set(NationalInsuranceNumberPage, nino).success.value
+              .set(VPE1FormYesNoPage, false).success.value
+              .set(StartDatePage, startDate).success.value
 
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, false).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(LiveInTheUkYesNoPage, true).success.value
-          .set(UkAddressPage, ukAddress).success.value
-          .set(PassportDetailsYesNoPage, false).success.value
-          .set(IdCardDetailsYesNoPage, true).success.value
-          .set(IdCardDetailsPage, idcard).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
+            val result = mapper(userAnswers, provisional = true).get
 
-        val result = mapper(userAnswers, provisional = true).get
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe Some(true)
+            result.income mustBe None
+            result.countryOfResidence mustBe Some("GB")
+            result.nationality mustBe Some("GB")
+            result.mentalCapacityYesNo mustBe Some(false)
+            result.identification mustBe Some(NationalInsuranceNumber(nino))
+            result.address mustBe None
+            result.vulnerableYesNo mustBe Some(false)
+            result.entityStart mustBe startDate
+          }
 
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe None
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe Some(idcard)
-        result.address mustBe Some(ukAddress)
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
+        }
+
+        "non-taxable" when {
+
+          "no country of nationality, no country of residence, not legally incapable" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(CountryOfNationalityYesNoPage, false).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, false).success.value
+              .set(StartDatePage, startDate).success.value
+
+            val result = mapper(userAnswers, provisional = true).get
+
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe None
+            result.income mustBe None
+            result.countryOfResidence mustBe None
+            result.nationality mustBe None
+            result.mentalCapacityYesNo mustBe Some(true)
+            result.identification mustBe None
+            result.address mustBe None
+            result.vulnerableYesNo mustBe None
+            result.entityStart mustBe startDate
+          }
+
+          "UK country of nationality, UK country of residence, and legally incapable" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(CountryOfNationalityYesNoPage, true).success.value
+              .set(CountryOfNationalityUkYesNoPage, true).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, true).success.value
+              .set(StartDatePage, startDate).success.value
+
+            val result = mapper(userAnswers, provisional = true).get
+
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe None
+            result.income mustBe None
+            result.countryOfResidence mustBe Some("GB")
+            result.nationality mustBe Some("GB")
+            result.mentalCapacityYesNo mustBe Some(false)
+            result.identification mustBe None
+            result.address mustBe None
+            result.vulnerableYesNo mustBe None
+            result.entityStart mustBe startDate
+          }
+
+        }
+
       }
 
     }
 
     "amending" must {
 
-      "return None for empty user answers" in {
+      "4mld" when {
 
-        val result = mapper(emptyUserAnswers, provisional = false)
-        result mustBe None
+        "return None for empty user answers" in {
+
+          val result = mapper(emptyUserAnswers, provisional = false)
+          result mustBe None
+        }
+
+        "generate class of individual model with passport or ID card" in {
+
+          val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+
+          val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(DateOfBirthYesNoPage, true).success.value
+            .set(DateOfBirthPage, dateOfBirth).success.value
+            .set(IncomeDiscretionYesNoPage, true).success.value
+            .set(NationalInsuranceNumberYesNoPage, false).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(LiveInTheUkYesNoPage, false).success.value
+            .set(NonUkAddressPage, nonUkAddress).success.value
+            .set(PassportOrIdCardDetailsYesNoPage, true).success.value
+            .set(PassportOrIdCardDetailsPage, passport).success.value
+            .set(VPE1FormYesNoPage, false).success.value
+            .set(StartDatePage, startDate).success.value
+
+          val result = mapper(userAnswers, provisional = false).get
+
+          result.name mustBe name
+          result.roleInCompany mustBe None
+          result.dateOfBirth mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income mustBe None
+          result.countryOfResidence mustBe None
+          result.nationality mustBe None
+          result.mentalCapacityYesNo mustBe None
+          result.identification mustBe Some(passport)
+          result.address mustBe Some(nonUkAddress)
+          result.vulnerableYesNo mustBe Some(false)
+          result.entityStart mustBe startDate
+        }
+
       }
 
-      "generate class of individual model with passport or ID card" in {
+      "5mld" when {
 
-        val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+        "taxable" when {
 
-        val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
+          "UK country of nationality, UK country of residence, and legally incapable" in {
 
-        val userAnswers = emptyUserAnswers
-          .set(NamePage, name).success.value
-          .set(DateOfBirthYesNoPage, true).success.value
-          .set(DateOfBirthPage, dateOfBirth).success.value
-          .set(IncomeDiscretionYesNoPage, true).success.value
-          .set(NationalInsuranceNumberYesNoPage, false).success.value
-          .set(AddressYesNoPage, true).success.value
-          .set(LiveInTheUkYesNoPage, false).success.value
-          .set(NonUkAddressPage, nonUkAddress).success.value
-          .set(PassportOrIdCardDetailsYesNoPage, true).success.value
-          .set(PassportOrIdCardDetailsPage, passport).success.value
-          .set(VPE1FormYesNoPage, false).success.value
-          .set(StartDatePage, startDate).success.value
+            val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
 
-        val result = mapper(userAnswers, provisional = false).get
+            val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
 
-        result.name mustBe name
-        result.roleInCompany mustBe None
-        result.dateOfBirth mustBe Some(dateOfBirth)
-        result.incomeDiscretionYesNo mustBe true
-        result.income mustBe None
-        result.identification mustBe Some(passport)
-        result.address mustBe Some(nonUkAddress)
-        result.vulnerableYesNo mustBe false
-        result.entityStart mustBe startDate
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(IncomeDiscretionYesNoPage, true).success.value
+              .set(CountryOfNationalityYesNoPage, false).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, false).success.value
+              .set(NationalInsuranceNumberYesNoPage, false).success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(LiveInTheUkYesNoPage, false).success.value
+              .set(NonUkAddressPage, nonUkAddress).success.value
+              .set(PassportOrIdCardDetailsYesNoPage, true).success.value
+              .set(PassportOrIdCardDetailsPage, passport).success.value
+              .set(VPE1FormYesNoPage, false).success.value
+              .set(StartDatePage, startDate).success.value
+
+            val result = mapper(userAnswers, provisional = false).get
+
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe Some(true)
+            result.income mustBe None
+            result.countryOfResidence mustBe None
+            result.nationality mustBe None
+            result.mentalCapacityYesNo mustBe Some(true)
+            result.identification mustBe Some(passport)
+            result.address mustBe Some(nonUkAddress)
+            result.vulnerableYesNo mustBe Some(false)
+            result.entityStart mustBe startDate
+          }
+
+        }
+
+        "non-taxable" when {
+
+          "UK country of nationality, UK country of residence, and legally incapable" in {
+
+            val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(DateOfBirthYesNoPage, true).success.value
+              .set(DateOfBirthPage, dateOfBirth).success.value
+              .set(CountryOfNationalityYesNoPage, true).success.value
+              .set(CountryOfNationalityUkYesNoPage, true).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, true).success.value
+              .set(StartDatePage, startDate).success.value
+
+            val result = mapper(userAnswers, provisional = false).get
+
+            result.name mustBe name
+            result.roleInCompany mustBe None
+            result.dateOfBirth mustBe Some(dateOfBirth)
+            result.incomeDiscretionYesNo mustBe None
+            result.income mustBe None
+            result.countryOfResidence mustBe Some("GB")
+            result.nationality mustBe Some("GB")
+            result.mentalCapacityYesNo mustBe Some(false)
+            result.identification mustBe None
+            result.address mustBe None
+            result.vulnerableYesNo mustBe None
+            result.entityStart mustBe startDate
+          }
+
+        }
+
       }
 
     }
