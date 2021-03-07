@@ -17,7 +17,7 @@
 package utils.mappers
 
 import base.SpecBase
-import models.Constant.GB
+import utils.Constants.GB
 import models.beneficiaries.OtherBeneficiary
 import models.{NonUkAddress, UkAddress}
 import pages.other._

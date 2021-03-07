@@ -145,9 +145,8 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
 
   private def navigateAwayFromCountryOfResidencyQuestions(ua: UserAnswers, mode: Mode): Call = {
     (ua.get(NationalInsuranceNumberYesNoPage), ua.isTaxable) match {
-      case (Some(true), _) => rts.MentalCapacityYesNoController.onPageLoad(mode)
+      case (Some(true), _) | (_, false) => rts.MentalCapacityYesNoController.onPageLoad(mode)
       case (_, true) => rts.AddressYesNoController.onPageLoad(mode)
-      case _ => rts.MentalCapacityYesNoController.onPageLoad(mode)
     }
   }
 
