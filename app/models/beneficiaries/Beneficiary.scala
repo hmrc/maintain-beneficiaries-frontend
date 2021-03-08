@@ -16,7 +16,7 @@
 
 package models.beneficiaries
 
-import models.{Address, IndividualIdentification, Name}
+import models.Address
 import play.api.libs.json.{JsPath, JsSuccess, Reads}
 import java.time.LocalDate
 
@@ -30,19 +30,6 @@ trait OrgBeneficiary extends Beneficiary {
   val income: Option[String]
   val countryOfResidence: Option[String]
   val address: Option[Address]
-}
-
-trait IndBeneficiary extends Beneficiary {
-  val name: Name
-  val dateOfBirth: Option[LocalDate]
-  val roleInCompany: Option[RoleInCompany]
-  val income: Option[String]
-  val nationality: Option[String]
-  val countryOfResidence: Option[String]
-  val identification: Option[IndividualIdentification]
-  val address: Option[Address]
-  val mentalCapacityYesNo: Option[Boolean]
-  val vulnerableYesNo: Option[Boolean]
 }
 
 trait BeneficiaryReads {
