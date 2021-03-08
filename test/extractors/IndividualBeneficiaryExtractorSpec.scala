@@ -124,7 +124,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           result.get(MentalCapacityYesNoPage) mustBe None
           result.get(NationalInsuranceNumberYesNoPage).get mustBe true
           result.get(NationalInsuranceNumberPage).get mustBe "nino"
-          result.get(AddressYesNoPage).get mustBe false
+          result.get(AddressYesNoPage) mustNot be(defined)
           result.get(LiveInTheUkYesNoPage) mustNot be(defined)
           result.get(UkAddressPage) mustNot be(defined)
           result.get(NonUkAddressPage) mustNot be(defined)
@@ -170,7 +170,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           result.get(RoleInCompanyPage).get mustBe RoleInCompany.Director
           result.get(NationalInsuranceNumberYesNoPage).get mustBe true
           result.get(NationalInsuranceNumberPage).get mustBe "nino"
-          result.get(AddressYesNoPage).get mustBe false
+          result.get(AddressYesNoPage) mustNot be(defined)
           result.get(LiveInTheUkYesNoPage) mustNot be(defined)
           result.get(UkAddressPage) mustNot be(defined)
           result.get(NonUkAddressPage) mustNot be(defined)
