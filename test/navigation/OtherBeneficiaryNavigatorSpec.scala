@@ -348,12 +348,27 @@ class OtherBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .mustBe(rts.CountryOfResidenceUkYesNoController.onPageLoad(NormalMode))
           }
 
-          "-> No -> Address yes no page" in {
-            val answers = baseAnswers
-              .set(CountryOfResidenceYesNoPage, false).success.value
+          "-> No" when {
+            "NormalMode" must {
+              "-> Start date page" in {
+                val answers = baseAnswers
+                  .set(CountryOfResidenceYesNoPage, false).success.value
 
-            navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
-              .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+                navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
+                  .mustBe(addRts.StartDateController.onPageLoad())
+              }
+            }
+
+            "CheckMode" must {
+              "-> Check your answers page" in {
+                val answers = baseAnswers
+                  .set(IndexPage, index).success.value
+                  .set(CountryOfResidenceYesNoPage, false).success.value
+
+                navigator.nextPage(CountryOfResidenceYesNoPage, CheckMode, answers)
+                  .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
+              }
+            }
           }
         }
 
