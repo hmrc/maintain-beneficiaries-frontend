@@ -24,6 +24,11 @@ import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
 class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
+  
+  private val name = "Large Beneficiary"
+  private val description = "Description"
+  private val utr = "3570719187"
+  private val date = "2019-09-23"
 
   "EmploymentRelatedBeneficiary" must {
 
@@ -32,12 +37,12 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
       "with UK address" in {
 
         val json = Json.parse(
-          """
+          s"""
             |{
             |  "lineNo": "260",
             |  "bpMatchStatus": "01",
-            |  "organisationName": "Beneficiary Large 24",
-            |  "description": "Description 1",
+            |  "organisationName": "$name",
+            |  "description": "$description",
             |  "numberOfBeneficiary": "1001",
             |  "identification": {
             |    "address": {
@@ -49,7 +54,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |      "country": "GB"
             |    }
             |  },
-            |  "entityStart": "2019-09-23",
+            |  "entityStart": "$date",
             |  "provisional": false
             |}
             |""".stripMargin)
@@ -57,7 +62,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
         beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = "Beneficiary Large 24",
+          name = name,
           utr = None,
           address = Some(UkAddress(
             "Suite 10",
@@ -66,21 +71,22 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             Some("London"),
             "SE2 2HB"
           )),
-          description = Description("Description 1", None, None, None, None),
+          description = Description(description, None, None, None, None),
           howManyBeneficiaries = Over1001,
-          entityStart = LocalDate.of(2019, 9, 23),
+          entityStart = LocalDate.parse(date),
           provisional = false
         )
       }
+
       "with foreign address" in {
 
         val json = Json.parse(
-          """
+          s"""
             |{
             |  "lineNo": "260",
             |  "bpMatchStatus": "01",
-            |  "organisationName": "Beneficiary Large 24",
-            |  "description": "Description 1",
+            |  "organisationName": "$name",
+            |  "description": "$description",
             |  "numberOfBeneficiary": "201",
             |  "identification": {
             |    "address": {
@@ -90,7 +96,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             |      "country": "US"
             |    }
             |  },
-            |  "entityStart": "2019-09-23",
+            |  "entityStart": "$date",
             |  "provisional": false
             |}
             |""".stripMargin)
@@ -98,7 +104,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
         beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = "Beneficiary Large 24",
+          name = name,
           utr = None,
           address = Some(NonUkAddress(
             "123 Sesame Street",
@@ -106,30 +112,30 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             Some("314159"),
             "US"
           )),
-          description = Description("Description 1", None, None, None, None),
+          description = Description(description, None, None, None, None),
           howManyBeneficiaries = Over201,
-          entityStart = LocalDate.of(2019, 9, 23),
+          entityStart = LocalDate.parse(date),
           provisional = false
         )
       }
 
       "with multiple descriptions" in {
         val json = Json.parse(
-          """
+          s"""
             |{
             |  "lineNo": "260",
             |  "bpMatchStatus": "01",
-            |  "organisationName": "Beneficiary Large 24",
-            |  "description": "Description 1",
+            |  "organisationName": "$name",
+            |  "description": "$description",
             |  "description1": "Description 2",
             |  "description2": "Description 3",
             |  "description3": "Description 4",
             |  "description4": "Description 5",
             |  "numberOfBeneficiary": "101",
             |  "identification": {
-            |    "utr": "3570719187"
+            |    "utr": "$utr"
             |  },
-            |  "entityStart": "2019-09-23",
+            |  "entityStart": "$date",
             |  "provisional": false
             |}
             |""".stripMargin)
@@ -137,29 +143,29 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
         beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = "Beneficiary Large 24",
-          utr = Some("3570719187"),
+          name = name,
+          utr = Some(utr),
           address = None,
-          description = Description("Description 1", Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
+          description = Description(description, Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
           howManyBeneficiaries = Over101,
-          entityStart = LocalDate.of(2019, 9, 23),
+          entityStart = LocalDate.parse(date),
           provisional = false
         )
       }
 
       "with utr" in {
         val json = Json.parse(
-          """
+          s"""
             |{
             |  "lineNo": "260",
             |  "bpMatchStatus": "01",
-            |  "organisationName": "Beneficiary Large 24",
-            |  "description": "Description 1",
+            |  "organisationName": "$name",
+            |  "description": "$description",
             |  "numberOfBeneficiary": "501",
             |  "identification": {
-            |    "utr": "3570719187"
+            |    "utr": "$utr"
             |  },
-            |  "entityStart": "2019-09-23",
+            |  "entityStart": "$date",
             |  "provisional": false
             |}
             |""".stripMargin)
@@ -167,25 +173,26 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
         beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = "Beneficiary Large 24",
-          utr = Some("3570719187"),
+          name = name,
+          utr = Some(utr),
           address = None,
-          description = Description("Description 1", None, None, None, None),
+          description = Description(description, None, None, None, None),
           howManyBeneficiaries = Over501,
-          entityStart = LocalDate.of(2019, 9, 23),
+          entityStart = LocalDate.parse(date),
           provisional = false
         )
       }
+
       "with no identification" in {
         val json = Json.parse(
-          """
+          s"""
             |{
             |  "lineNo": "260",
             |  "bpMatchStatus": "01",
-            |  "organisationName": "Beneficiary Large 25",
-            |  "description": "Description 1",
+            |  "organisationName": "$name",
+            |  "description": "$description",
             |  "numberOfBeneficiary": "1",
-            |  "entityStart": "2019-09-23",
+            |  "entityStart": "$date",
             |  "provisional": false
             |}
             |""".stripMargin)
@@ -193,16 +200,15 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
         beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = "Beneficiary Large 25",
+          name = name,
           utr = None,
           address = None,
-          description = Description("Description 1", None, None, None, None),
+          description = Description(description, None, None, None, None),
           howManyBeneficiaries = Over1,
-          entityStart = LocalDate.of(2019, 9, 23),
+          entityStart = LocalDate.parse(date),
           provisional = false
         )
       }
-
     }
   }
 }
