@@ -35,10 +35,15 @@ class EmploymentRelatedBeneficiaryExtractor extends BeneficiaryExtractor[Employm
     super.apply(answers, employmentRelatedBeneficiary, index)
       .flatMap(_.set(NamePage, employmentRelatedBeneficiary.name))
       .flatMap(_.set(UtrPage, employmentRelatedBeneficiary.utr))
+      .flatMap(answers => extractCountryOfResidence(employmentRelatedBeneficiary.countryOfResidence, answers))
       .flatMap(answers => extractAddress(employmentRelatedBeneficiary.address, answers))
       .flatMap(_.set(DescriptionPage, employmentRelatedBeneficiary.description))
       .flatMap(_.set(NumberOfBeneficiariesPage, employmentRelatedBeneficiary.howManyBeneficiaries))
   }
+
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
 
   override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
   override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage

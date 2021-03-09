@@ -27,6 +27,7 @@ case class EmploymentRelatedBeneficiary(name: String,
                                         address: Option[Address],
                                         description: Description,
                                         howManyBeneficiaries: HowManyBeneficiaries,
+                                        countryOfResidence: Option[String] = None,
                                         entityStart: LocalDate,
                                         provisional: Boolean) extends Beneficiary
 
@@ -38,9 +39,10 @@ object EmploymentRelatedBeneficiary extends BeneficiaryReads {
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       __.read[Description] and
       (__ \ 'numberOfBeneficiary).read[HowManyBeneficiaries] and
+      (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ 'entityStart).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    ).apply(EmploymentRelatedBeneficiary.apply _)
+    )(EmploymentRelatedBeneficiary.apply _)
 
   implicit val writes: Writes[EmploymentRelatedBeneficiary] = (
     (__ \ 'organisationName).write[String] and
@@ -48,8 +50,9 @@ object EmploymentRelatedBeneficiary extends BeneficiaryReads {
       (__ \ 'identification \ 'address).writeNullable[Address] and
       __.write[Description] and
       (__ \ 'numberOfBeneficiary).write[HowManyBeneficiaries] and
+      (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(EmploymentRelatedBeneficiary.unapply))
+    )(unlift(EmploymentRelatedBeneficiary.unapply))
 
 }

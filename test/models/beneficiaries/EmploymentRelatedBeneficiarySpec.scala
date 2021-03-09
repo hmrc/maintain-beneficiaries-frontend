@@ -16,8 +16,9 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
+import models.Constant.GB
 
+import java.time.LocalDate
 import models.HowManyBeneficiaries._
 import models.{Description, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
@@ -34,180 +35,241 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
 
     "deserialise from backend JSON" when {
 
-      "with UK address" in {
+      "taxable" when {
 
-        val json = Json.parse(
-          s"""
-            |{
-            |  "lineNo": "260",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "$name",
-            |  "description": "$description",
-            |  "numberOfBeneficiary": "1001",
-            |  "identification": {
-            |    "address": {
-            |      "line1": "Suite 10",
-            |      "line2": "Wealthy Arena",
-            |      "line3": "Trafagar Square",
-            |      "line4": "London",
-            |      "postCode": "SE2 2HB",
-            |      "country": "GB"
-            |    }
-            |  },
-            |  "entityStart": "$date",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+        "with UK address" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "1001",
+               |  "identification": {
+               |    "address": {
+               |      "line1": "Suite 10",
+               |      "line2": "Wealthy Arena",
+               |      "line3": "Trafagar Square",
+               |      "line4": "London",
+               |      "postCode": "SE2 2HB",
+               |      "country": "GB"
+               |    }
+               |  },
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
 
-        val beneficiary = json.as[EmploymentRelatedBeneficiary]
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
-        beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = name,
-          utr = None,
-          address = Some(UkAddress(
-            "Suite 10",
-            "Wealthy Arena",
-            Some("Trafagar Square"),
-            Some("London"),
-            "SE2 2HB"
-          )),
-          description = Description(description, None, None, None, None),
-          howManyBeneficiaries = Over1001,
-          entityStart = LocalDate.parse(date),
-          provisional = false
-        )
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(UkAddress(
+              "Suite 10",
+              "Wealthy Arena",
+              Some("Trafagar Square"),
+              Some("London"),
+              "SE2 2HB"
+            )),
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over1001,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
+
+        "with foreign address" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "201",
+               |  "identification": {
+               |    "address": {
+               |      "line1": "123 Sesame Street",
+               |      "line2": "Hollywood, CA",
+               |      "line3": "314159",
+               |      "country": "US"
+               |    }
+               |  },
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
+
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
+
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(NonUkAddress(
+              "123 Sesame Street",
+              "Hollywood, CA",
+              Some("314159"),
+              "US"
+            )),
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over201,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
+
+        "with multiple descriptions" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "description1": "Description 2",
+               |  "description2": "Description 3",
+               |  "description3": "Description 4",
+               |  "description4": "Description 5",
+               |  "numberOfBeneficiary": "101",
+               |  "identification": {
+               |    "utr": "$utr"
+               |  },
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
+
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
+
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = Some(utr),
+            address = None,
+            description = Description(description, Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
+            howManyBeneficiaries = Over101,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
+
+        "with utr" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "501",
+               |  "identification": {
+               |    "utr": "$utr"
+               |  },
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
+
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
+
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = Some(utr),
+            address = None,
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over501,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
+
+        "with no identification" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "1",
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
+
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
+
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over1,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
       }
 
-      "with foreign address" in {
+      "non-taxable" when {
 
-        val json = Json.parse(
-          s"""
-            |{
-            |  "lineNo": "260",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "$name",
-            |  "description": "$description",
-            |  "numberOfBeneficiary": "201",
-            |  "identification": {
-            |    "address": {
-            |      "line1": "123 Sesame Street",
-            |      "line2": "Hollywood, CA",
-            |      "line3": "314159",
-            |      "country": "US"
-            |    }
-            |  },
-            |  "entityStart": "$date",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+        "there is no country of residence" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "1",
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
 
-        val beneficiary = json.as[EmploymentRelatedBeneficiary]
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
-        beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = name,
-          utr = None,
-          address = Some(NonUkAddress(
-            "123 Sesame Street",
-            "Hollywood, CA",
-            Some("314159"),
-            "US"
-          )),
-          description = Description(description, None, None, None, None),
-          howManyBeneficiaries = Over201,
-          entityStart = LocalDate.parse(date),
-          provisional = false
-        )
-      }
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over1,
+            countryOfResidence = None,
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
 
-      "with multiple descriptions" in {
-        val json = Json.parse(
-          s"""
-            |{
-            |  "lineNo": "260",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "$name",
-            |  "description": "$description",
-            |  "description1": "Description 2",
-            |  "description2": "Description 3",
-            |  "description3": "Description 4",
-            |  "description4": "Description 5",
-            |  "numberOfBeneficiary": "101",
-            |  "identification": {
-            |    "utr": "$utr"
-            |  },
-            |  "entityStart": "$date",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
+        "there is a country of residence" in {
+          val json = Json.parse(
+            s"""
+               |{
+               |  "lineNo": "260",
+               |  "bpMatchStatus": "01",
+               |  "organisationName": "$name",
+               |  "countryOfResidence": "$GB",
+               |  "description": "$description",
+               |  "numberOfBeneficiary": "1",
+               |  "entityStart": "$date",
+               |  "provisional": false
+               |}
+               |""".stripMargin)
 
-        val beneficiary = json.as[EmploymentRelatedBeneficiary]
+          val beneficiary = json.as[EmploymentRelatedBeneficiary]
 
-        beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = name,
-          utr = Some(utr),
-          address = None,
-          description = Description(description, Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
-          howManyBeneficiaries = Over101,
-          entityStart = LocalDate.parse(date),
-          provisional = false
-        )
-      }
-
-      "with utr" in {
-        val json = Json.parse(
-          s"""
-            |{
-            |  "lineNo": "260",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "$name",
-            |  "description": "$description",
-            |  "numberOfBeneficiary": "501",
-            |  "identification": {
-            |    "utr": "$utr"
-            |  },
-            |  "entityStart": "$date",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
-
-        val beneficiary = json.as[EmploymentRelatedBeneficiary]
-
-        beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = name,
-          utr = Some(utr),
-          address = None,
-          description = Description(description, None, None, None, None),
-          howManyBeneficiaries = Over501,
-          entityStart = LocalDate.parse(date),
-          provisional = false
-        )
-      }
-
-      "with no identification" in {
-        val json = Json.parse(
-          s"""
-            |{
-            |  "lineNo": "260",
-            |  "bpMatchStatus": "01",
-            |  "organisationName": "$name",
-            |  "description": "$description",
-            |  "numberOfBeneficiary": "1",
-            |  "entityStart": "$date",
-            |  "provisional": false
-            |}
-            |""".stripMargin)
-
-        val beneficiary = json.as[EmploymentRelatedBeneficiary]
-
-        beneficiary mustBe EmploymentRelatedBeneficiary(
-          name = name,
-          utr = None,
-          address = None,
-          description = Description(description, None, None, None, None),
-          howManyBeneficiaries = Over1,
-          entityStart = LocalDate.parse(date),
-          provisional = false
-        )
+          beneficiary mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            description = Description(description, None, None, None, None),
+            howManyBeneficiaries = Over1,
+            countryOfResidence = Some(GB),
+            entityStart = LocalDate.parse(date),
+            provisional = false
+          )
+        }
       }
     }
   }
