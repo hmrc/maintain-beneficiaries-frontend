@@ -902,6 +902,24 @@ employmentBeneficiary.name.error.required = Enter the business name
 employmentBeneficiary.name.error.invalidFormat = Business name must only include letters a to z, numbers, ampersands (&), apostrophes, forward slashes, full stops, hyphens, round brackets and spaces
 employmentBeneficiary.name.error.length = Business name cannot be more than 105 characters
 
+employmentBeneficiary.countryOfResidenceYesNo.title = Do you know this beneficiary’s country of residence?
+employmentBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+employmentBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know this beneficiary’s country of residence
+employmentBeneficiary.countryOfResidenceYesNo.hint = The country of residence is usually where the business group is registered. The business group has UK residency if it is registered with Companies House.
+
+employmentBeneficiary.countryOfResidenceInTheUkYesNo.title = Does this beneficiary have UK residency?
+employmentBeneficiary.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+employmentBeneficiary.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+employmentBeneficiary.countryOfResidenceInTheUkYesNo.error.required = Select yes if the beneficiary has UK residency
+
+employmentBeneficiary.countryOfResidence.title = What is this beneficiary’s country of residence?
+employmentBeneficiary.countryOfResidence.heading = What is {0}’s country of residence?
+employmentBeneficiary.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+employmentBeneficiary.countryOfResidence.error.required = Enter a country
+employmentBeneficiary.countryOfResidence.error.length = The country of residence must be 100 characters or less
+employmentBeneficiary.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 employmentBeneficiary.addressYesNo.title = Do you know the employment related beneficiary’s address?
 employmentBeneficiary.addressYesNo.heading = Do you know {0}’s address?
 employmentBeneficiary.addressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
