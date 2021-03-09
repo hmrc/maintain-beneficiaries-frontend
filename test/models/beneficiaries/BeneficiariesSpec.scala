@@ -17,8 +17,8 @@
 package models.beneficiaries
 
 import java.time.LocalDate
-
 import base.SpecBase
+import models.HowManyBeneficiaries.Over1
 import models.{Description, Name}
 import viewmodels.RadioOption
 
@@ -78,7 +78,7 @@ class BeneficiariesSpec extends SpecBase {
     utr = None,
     address = None,
     description = Description("Description", None, None, None, None),
-    howManyBeneficiaries = "1",
+    howManyBeneficiaries = Over1,
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
   )

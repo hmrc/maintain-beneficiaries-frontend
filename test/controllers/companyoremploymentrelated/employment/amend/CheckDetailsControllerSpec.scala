@@ -59,7 +59,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     address = Some(UkAddress("Line 1", "Line 2", None, None, "NE98 1ZZ")),
     entityStart = LocalDate.parse("2019-03-09"),
     description = Description("Some Description", None, None, None, None),
-    howManyBeneficiaries = "over1",
+    howManyBeneficiaries = Over1,
     provisional = false
   )
 

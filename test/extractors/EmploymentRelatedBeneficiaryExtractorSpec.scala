@@ -45,7 +45,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
       utr = None,
       address = None,
       description = description,
-      howManyBeneficiaries = howManyBeneficiaries.toString,
+      howManyBeneficiaries = howManyBeneficiaries,
       entityStart = date,
       provisional = true
     )
@@ -69,7 +69,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
       utr = None,
       address = Some(address),
       description = description,
-      howManyBeneficiaries = howManyBeneficiaries.toString,
+      howManyBeneficiaries = howManyBeneficiaries,
       entityStart = date,
       provisional = true
     )
@@ -93,7 +93,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
       utr = None,
       address = Some(nonUkAddress),
       description = description,
-      howManyBeneficiaries = howManyBeneficiaries.toString,
+      howManyBeneficiaries = howManyBeneficiaries,
       entityStart = date,
       provisional = true
     )
@@ -119,7 +119,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
       utr = Some(utr),
       address = None,
       description = description,
-      howManyBeneficiaries = howManyBeneficiaries.toString,
+      howManyBeneficiaries = howManyBeneficiaries,
       entityStart = date,
       provisional = true
     )

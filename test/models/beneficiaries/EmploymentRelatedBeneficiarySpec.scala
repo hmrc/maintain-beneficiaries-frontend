@@ -34,24 +34,24 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "260",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Large 24",
-            |                "description": "Description 1",
-            |                "numberOfBeneficiary": "1001",
-            |                "identification": {
-            |                   "address": {
-            |                   "line1": "Suite 10",
-            |                   "line2": "Wealthy Arena",
-            |                   "line3": "Trafagar Square",
-            |                   "line4": "London",
-            |                   "postCode": "SE2 2HB",
-            |                   "country": "GB"
-            |                  }
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
+            |  "lineNo": "260",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Beneficiary Large 24",
+            |  "description": "Description 1",
+            |  "numberOfBeneficiary": "1001",
+            |  "identification": {
+            |    "address": {
+            |      "line1": "Suite 10",
+            |      "line2": "Wealthy Arena",
+            |      "line3": "Trafagar Square",
+            |      "line4": "London",
+            |      "postCode": "SE2 2HB",
+            |      "country": "GB"
+            |    }
+            |  },
+            |  "entityStart": "2019-09-23",
+            |  "provisional": false
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
@@ -67,7 +67,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             "SE2 2HB"
           )),
           description = Description("Description 1", None, None, None, None),
-          howManyBeneficiaries = "1001",
+          howManyBeneficiaries = Over1001,
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -77,22 +77,22 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "260",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Large 24",
-            |                "description": "Description 1",
-            |                "numberOfBeneficiary": "201",
-            |                "identification": {
-            |                "address": {
-            |                   "line1": "123 Sesame Street",
-            |                   "line2": "Hollywood, CA",
-            |                   "line3": "314159",
-            |                   "country": "US"
-            |                   }
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
+            |  "lineNo": "260",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Beneficiary Large 24",
+            |  "description": "Description 1",
+            |  "numberOfBeneficiary": "201",
+            |  "identification": {
+            |    "address": {
+            |      "line1": "123 Sesame Street",
+            |      "line2": "Hollywood, CA",
+            |      "line3": "314159",
+            |      "country": "US"
+            |    }
+            |  },
+            |  "entityStart": "2019-09-23",
+            |  "provisional": false
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
@@ -107,7 +107,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
             "US"
           )),
           description = Description("Description 1", None, None, None, None),
-          howManyBeneficiaries = "201",
+          howManyBeneficiaries = Over201,
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -117,21 +117,21 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "260",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Large 24",
-            |                "description": "Description 1",
-            |                "description1": "Description 2",
-            |                "description2": "Description 3",
-            |                "description3": "Description 4",
-            |                "description4": "Description 5",
-            |                "numberOfBeneficiary": "101",
-            |                "identification": {
-            |                  "utr": "3570719187"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
+            |  "lineNo": "260",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Beneficiary Large 24",
+            |  "description": "Description 1",
+            |  "description1": "Description 2",
+            |  "description2": "Description 3",
+            |  "description3": "Description 4",
+            |  "description4": "Description 5",
+            |  "numberOfBeneficiary": "101",
+            |  "identification": {
+            |    "utr": "3570719187"
+            |  },
+            |  "entityStart": "2019-09-23",
+            |  "provisional": false
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
@@ -141,7 +141,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           utr = Some("3570719187"),
           address = None,
           description = Description("Description 1", Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
-          howManyBeneficiaries = "101",
+          howManyBeneficiaries = Over101,
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -151,17 +151,17 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "260",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Large 24",
-            |                "description": "Description 1",
-            |                "numberOfBeneficiary": "501",
-            |                "identification": {
-            |                  "utr": "3570719187"
-            |                },
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
+            |  "lineNo": "260",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Beneficiary Large 24",
+            |  "description": "Description 1",
+            |  "numberOfBeneficiary": "501",
+            |  "identification": {
+            |    "utr": "3570719187"
+            |  },
+            |  "entityStart": "2019-09-23",
+            |  "provisional": false
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
@@ -171,7 +171,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           utr = Some("3570719187"),
           address = None,
           description = Description("Description 1", None, None, None, None),
-          howManyBeneficiaries = "501",
+          howManyBeneficiaries = Over501,
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )
@@ -180,14 +180,14 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
         val json = Json.parse(
           """
             |{
-            |                "lineNo": "260",
-            |                "bpMatchStatus": "01",
-            |                "organisationName": "Beneficiary Large 25",
-            |                "description": "Description 1",
-            |                "numberOfBeneficiary": "1",
-            |                "entityStart": "2019-09-23",
-            |                "provisional": false
-            |              }
+            |  "lineNo": "260",
+            |  "bpMatchStatus": "01",
+            |  "organisationName": "Beneficiary Large 25",
+            |  "description": "Description 1",
+            |  "numberOfBeneficiary": "1",
+            |  "entityStart": "2019-09-23",
+            |  "provisional": false
+            |}
             |""".stripMargin)
 
         val beneficiary = json.as[EmploymentRelatedBeneficiary]
@@ -197,7 +197,7 @@ class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
           utr = None,
           address = None,
           description = Description("Description 1", None, None, None, None),
-          howManyBeneficiaries = "1",
+          howManyBeneficiaries = Over1,
           entityStart = LocalDate.of(2019, 9, 23),
           provisional = false
         )

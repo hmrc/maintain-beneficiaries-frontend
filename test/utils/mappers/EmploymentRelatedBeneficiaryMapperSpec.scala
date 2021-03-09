@@ -17,8 +17,8 @@
 package utils.mappers
 
 import java.time.LocalDate
-
 import base.SpecBase
+import models.HowManyBeneficiaries.Over201
 import models.{Description, HowManyBeneficiaries, UkAddress}
 import pages.companyoremploymentrelated.employment._
 
@@ -56,7 +56,7 @@ class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
       result.name mustBe name
       result.address.get mustBe ukAddress
       result.description mustBe description
-      result.howManyBeneficiaries mustBe "201"
+      result.howManyBeneficiaries mustBe Over201
       result.entityStart mustBe date
       result.provisional mustBe true
       result.utr mustNot be(defined)

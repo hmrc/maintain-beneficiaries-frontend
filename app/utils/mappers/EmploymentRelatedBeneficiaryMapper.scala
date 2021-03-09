@@ -33,7 +33,7 @@ class EmploymentRelatedBeneficiaryMapper extends Mapper[EmploymentRelatedBenefic
         Reads(_ => JsSuccess(None)) and
         readAddress and
         DescriptionPage.path.read[Description] and
-        readNumberOfBeneficiaries and
+        NumberOfBeneficiariesPage.path.read[HowManyBeneficiaries] and
         StartDatePage.path.read[LocalDate] and
         Reads(_ => JsSuccess(true))
       ) (EmploymentRelatedBeneficiary.apply _ )
@@ -46,16 +46,6 @@ class EmploymentRelatedBeneficiaryMapper extends Mapper[EmploymentRelatedBenefic
       case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
       case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
       case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
-    }
-  }
-
-  private def readNumberOfBeneficiaries: Reads[String] = {
-    NumberOfBeneficiariesPage.path.read[HowManyBeneficiaries].map {
-      case HowManyBeneficiaries.Over1 => "1"
-      case HowManyBeneficiaries.Over101 => "101"
-      case HowManyBeneficiaries.Over201 => "201"
-      case HowManyBeneficiaries.Over501 => "501"
-      case HowManyBeneficiaries.Over1001 => "1001"
     }
   }
 }
