@@ -25,77 +25,335 @@ import pages.companyoremploymentrelated.employment._
 class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
   val navigator = new EmploymentRelatedBeneficiaryNavigator
+  val index: Int = 0
 
   "Employment related beneficiary navigator" when {
 
-    "Name page -> Address yes no page" in {
-      navigator.nextPage(NamePage, emptyUserAnswers)
-        .mustBe(AddressYesNoController.onPageLoad(NormalMode))
+    "4mld" must {
+
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
+
+      "Name page -> Address yes no page" in {
+        navigator.nextPage(NamePage, NormalMode, baseAnswers)
+          .mustBe(AddressYesNoController.onPageLoad(NormalMode))
+      }
+
+      "Address yes no page" when {
+
+        val page = AddressYesNoPage
+
+        "-> Yes -> Address in the UK yes no page" in {
+          val answers = baseAnswers
+            .set(page, true).success.value
+
+          navigator.nextPage(page, NormalMode, answers)
+            .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
+        }
+
+        "-> No -> Description page" in {
+          val answers = baseAnswers
+            .set(page, false).success.value
+
+          navigator.nextPage(page, NormalMode, answers)
+            .mustBe(DescriptionController.onPageLoad(NormalMode))
+        }
+      }
+
+      "Address in the UK yes no page" when {
+
+        val page = AddressUkYesNoPage
+
+        "-> Yes -> UK address page" in {
+          val answers = baseAnswers
+            .set(page, true).success.value
+
+          navigator.nextPage(page, NormalMode, answers)
+            .mustBe(UkAddressController.onPageLoad(NormalMode))
+        }
+
+        "-> No => Non-UK address page" in {
+          val answers = baseAnswers
+            .set(page, false).success.value
+
+          navigator.nextPage(page, NormalMode, answers)
+            .mustBe(NonUkAddressController.onPageLoad(NormalMode))
+        }
+      }
+
+      "UK address page -> Description page" in {
+        navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
+          .mustBe(DescriptionController.onPageLoad(NormalMode))
+      }
+
+      "Non-UK address page -> Description page" in {
+        navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
+          .mustBe(DescriptionController.onPageLoad(NormalMode))
+      }
+
+      "Description page -> Number of beneficiaries page" in {
+        navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
+          .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
+      }
+
+      "Number of beneficiaries page" when {
+
+        val page = NumberOfBeneficiariesPage
+
+        "NormalMode" must {
+          "-> Start date page" in {
+            navigator.nextPage(page, NormalMode, baseAnswers)
+              .mustBe(StartDateController.onPageLoad())
+          }
+        }
+
+        "CheckMode" must {
+          "-> Check your answers page" in {
+            val answers = baseAnswers
+              .set(IndexPage, index).success.value
+
+            navigator.nextPage(page, CheckMode, answers)
+              .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
+          }
+        }
+      }
+
+      "Start date page -> Check your answers page" in {
+        navigator.nextPage(StartDatePage, baseAnswers)
+          .mustBe(CheckDetailsController.onPageLoad())
+      }
     }
 
-    "Address yes no page -> No -> Description page" in {
-      val answers = emptyUserAnswers
-        .set(AddressYesNoPage, false).success.value
+    "5mld" when {
 
-      navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(DescriptionController.onPageLoad(NormalMode))
-    }
+      "taxable" must {
 
-    "Address yes no page -> Yes -> Address in the UK yes no page" in {
-      val answers = emptyUserAnswers
-        .set(AddressYesNoPage, true).success.value
+        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
 
-      navigator.nextPage(AddressYesNoPage, answers)
-        .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
-    }
+        "Name page -> Country of residence yes no page" in {
+          navigator.nextPage(NamePage, NormalMode, baseAnswers)
+            .mustBe(CountryOfResidenceYesNoController.onPageLoad(NormalMode))
+        }
 
-    "Address in the UK yes no page -> Yes -> UK address page" in {
-      val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage, true).success.value
+        "Country of residence yes no page" when {
 
-      navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(UkAddressController.onPageLoad(NormalMode))
-    }
+          val page = CountryOfResidenceYesNoPage
 
-    "Address in the UK yes no page -> No -> Non-UK address page" in {
-      val answers = emptyUserAnswers
-        .set(AddressUkYesNoPage, false).success.value
+          "-> Yes -> Country of residence in the UK yes no page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
 
-      navigator.nextPage(AddressUkYesNoPage, answers)
-        .mustBe(NonUkAddressController.onPageLoad(NormalMode))
-    }
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(CountryOfResidenceUkYesNoController.onPageLoad(NormalMode))
+          }
 
-    "UK address page -> Description page" in {
-      navigator.nextPage(UkAddressPage, emptyUserAnswers)
-        .mustBe(DescriptionController.onPageLoad(NormalMode))
-    }
+          "-> No -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
 
-    "Non-UK address page -> Description page" in {
-      navigator.nextPage(NonUkAddressPage, emptyUserAnswers)
-        .mustBe(DescriptionController.onPageLoad(NormalMode))
-    }
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(AddressYesNoController.onPageLoad(NormalMode))
+          }
+        }
 
-    "Description page -> Number of beneficiaries page" in {
-      navigator.nextPage(DescriptionPage, emptyUserAnswers)
-        .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
-    }
+        "Country of residence in the UK yes no page" when {
 
-    "Number of beneficiaries page -> Start date page" in {
-      navigator.nextPage(NumberOfBeneficiariesPage, emptyUserAnswers)
-        .mustBe(StartDateController.onPageLoad())
-    }
+          val page = CountryOfResidenceUkYesNoPage
 
-    "Start date page -> Check your answers page" in {
-      navigator.nextPage(StartDatePage, emptyUserAnswers)
-        .mustBe(CheckDetailsController.onPageLoad())
-    }
+          "-> Yes -> Address yes no page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
 
-    "Number of beneficiaries page -> Check your answers page" in {
-      val answers = emptyUserAnswers
-        .set(IndexPage, 0).success.value
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(AddressYesNoController.onPageLoad(NormalMode))
+          }
 
-      navigator.nextPage(NumberOfBeneficiariesPage, CheckMode, answers)
-        .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(0))
+          "-> No -> Country of residence page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(CountryOfResidenceController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence page -> Address yes no page" in {
+          navigator.nextPage(CountryOfResidencePage, NormalMode, baseAnswers)
+            .mustBe(AddressYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Address yes no page" when {
+
+          val page = AddressYesNoPage
+
+          "-> Yes -> Address in the UK yes no page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Description page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(DescriptionController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Address in the UK yes no page" when {
+
+          val page = AddressUkYesNoPage
+
+          "-> Yes -> UK address page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(UkAddressController.onPageLoad(NormalMode))
+          }
+
+          "-> No => Non-UK address page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(NonUkAddressController.onPageLoad(NormalMode))
+          }
+        }
+
+        "UK address page -> Description page" in {
+          navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
+            .mustBe(DescriptionController.onPageLoad(NormalMode))
+        }
+
+        "Non-UK address page -> Description page" in {
+          navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
+            .mustBe(DescriptionController.onPageLoad(NormalMode))
+        }
+
+        "Description page -> Number of beneficiaries page" in {
+          navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
+            .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
+        }
+
+        "Number of beneficiaries page" when {
+
+          val page = NumberOfBeneficiariesPage
+
+          "NormalMode" must {
+            "-> Start date page" in {
+              navigator.nextPage(page, NormalMode, baseAnswers)
+                .mustBe(StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+
+              navigator.nextPage(page, CheckMode, answers)
+                .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
+
+        "Start date page -> Check your answers page" in {
+          navigator.nextPage(StartDatePage, baseAnswers)
+            .mustBe(CheckDetailsController.onPageLoad())
+        }
+      }
+
+      "non-taxable" must {
+
+        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+        "Name page -> Country of residence yes no page" in {
+          navigator.nextPage(NamePage, NormalMode, baseAnswers)
+            .mustBe(CountryOfResidenceYesNoController.onPageLoad(NormalMode))
+        }
+
+        "Country of residence yes no page" when {
+
+          val page = CountryOfResidenceYesNoPage
+
+          "-> Yes -> Country of residence in the UK yes no page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(CountryOfResidenceUkYesNoController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Description page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(DescriptionController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence in the UK yes no page" when {
+
+          val page = CountryOfResidenceUkYesNoPage
+
+          "-> Yes -> Description page" in {
+            val answers = baseAnswers
+              .set(page, true).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(DescriptionController.onPageLoad(NormalMode))
+          }
+
+          "-> No -> Country of residence page" in {
+            val answers = baseAnswers
+              .set(page, false).success.value
+
+            navigator.nextPage(page, NormalMode, answers)
+              .mustBe(CountryOfResidenceController.onPageLoad(NormalMode))
+          }
+        }
+
+        "Country of residence page -> Description page" in {
+          navigator.nextPage(CountryOfResidencePage, NormalMode, baseAnswers)
+            .mustBe(DescriptionController.onPageLoad(NormalMode))
+        }
+
+        "Description page -> Number of beneficiaries page" in {
+          navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
+            .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
+        }
+
+        "Number of beneficiaries page" when {
+
+          val page = NumberOfBeneficiariesPage
+
+          "NormalMode" must {
+            "-> Start date page" in {
+              navigator.nextPage(page, NormalMode, baseAnswers)
+                .mustBe(StartDateController.onPageLoad())
+            }
+          }
+
+          "CheckMode" must {
+            "-> Check your answers page" in {
+              val answers = baseAnswers
+                .set(IndexPage, index).success.value
+
+              navigator.nextPage(page, CheckMode, answers)
+                .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
+            }
+          }
+        }
+
+        "Start date page -> Check your answers page" in {
+          navigator.nextPage(StartDatePage, baseAnswers)
+            .mustBe(CheckDetailsController.onPageLoad())
+        }
+      }
     }
   }
 }

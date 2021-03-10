@@ -23,11 +23,11 @@ sealed trait HowManyBeneficiaries
 
 object HowManyBeneficiaries extends Enumerable.Implicits {
 
-  case object Over1 extends WithName("1") with HowManyBeneficiaries
-  case object Over101 extends WithName("101") with HowManyBeneficiaries
-  case object Over201 extends WithName("201") with HowManyBeneficiaries
-  case object Over501 extends WithName("501") with HowManyBeneficiaries
-  case object Over1001 extends WithName("1001") with HowManyBeneficiaries
+  case object Over1 extends WithName("over1") with HowManyBeneficiaries
+  case object Over101 extends WithName("over101") with HowManyBeneficiaries
+  case object Over201 extends WithName("over201") with HowManyBeneficiaries
+  case object Over501 extends WithName("over501") with HowManyBeneficiaries
+  case object Over1001 extends WithName("over1001") with HowManyBeneficiaries
 
   val values: List[HowManyBeneficiaries] = List(
     Over1, Over101, Over201, Over501, Over1001
@@ -49,5 +49,13 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
       case x if 501 to 999 contains x => Over501
       case _ => Over1001
     }
+
+  implicit val writes: Writes[HowManyBeneficiaries] = Writes {
+    case Over1 => JsString("1")
+    case Over101 => JsString("101")
+    case Over201 => JsString("201")
+    case Over501 => JsString("501")
+    case Over1001 => JsString("1001")
+  }
   
 }
