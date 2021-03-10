@@ -16,15 +16,14 @@
 
 package navigation
 
+import controllers.companyoremploymentrelated.employment.amend.{routes => amendRts}
 import controllers.companyoremploymentrelated.employment.{routes => rts}
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.companyoremploymentrelated.employment._
 import play.api.mvc.Call
 
-import javax.inject.Inject
-
-class EmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
+class EmploymentRelatedBeneficiaryNavigator extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call =
     nextPage(page, NormalMode, userAnswers)
@@ -32,45 +31,67 @@ class EmploymentRelatedBeneficiaryNavigator @Inject()() extends Navigator {
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     routes(mode)(page)(userAnswers)
 
-  private def simpleNavigation(mode: Mode): PartialFunction[Page, Call] = {
-    case NamePage => rts.AddressYesNoController.onPageLoad(mode)
-    case UkAddressPage => rts.DescriptionController.onPageLoad(mode)
-    case NonUkAddressPage => rts.DescriptionController.onPageLoad(mode)
-    case DescriptionPage => rts.NumberOfBeneficiariesController.onPageLoad(mode)
-    case StartDatePage => rts.CheckDetailsController.onPageLoad()
+  private def simpleNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
+    case NamePage => ua => if (ua.is5mldEnabled) {
+      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
+    } else {
+      rts.AddressYesNoController.onPageLoad(mode)
+    }
+    case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidenceQuestions(ua, mode)
+    case UkAddressPage | NonUkAddressPage => _ => rts.DescriptionController.onPageLoad(mode)
+    case DescriptionPage => _ => rts.NumberOfBeneficiariesController.onPageLoad(mode)
+    case NumberOfBeneficiariesPage => ua => if (mode == NormalMode) {
+      rts.StartDateController.onPageLoad()
+    } else {
+      checkDetailsRoute(ua)
+    }
+    case StartDatePage => _ => rts.CheckDetailsController.onPageLoad()
   }
 
   private def yesNoNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
-    case AddressYesNoPage => ua =>
-      yesNoNav(ua, AddressYesNoPage, rts.AddressUkYesNoController.onPageLoad(mode), rts.DescriptionController.onPageLoad(mode))
-    case AddressUkYesNoPage => ua =>
-      yesNoNav(ua, AddressUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
+    case CountryOfResidenceYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = CountryOfResidenceYesNoPage,
+      yesCall = rts.CountryOfResidenceUkYesNoController.onPageLoad(mode),
+      noCall = navigateAwayFromCountryOfResidenceQuestions(ua, mode)
+    )
+    case CountryOfResidenceUkYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = CountryOfResidenceUkYesNoPage,
+      yesCall = navigateAwayFromCountryOfResidenceQuestions(ua, mode),
+      noCall = rts.CountryOfResidenceController.onPageLoad(mode)
+    )
+    case AddressYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = AddressYesNoPage,
+      yesCall = rts.AddressUkYesNoController.onPageLoad(mode),
+      noCall = rts.DescriptionController.onPageLoad(mode)
+    )
+    case AddressUkYesNoPage => ua => yesNoNav(
+      ua = ua,
+      fromPage = AddressUkYesNoPage,
+      yesCall = rts.UkAddressController.onPageLoad(mode),
+      noCall = rts.NonUkAddressController.onPageLoad(mode)
+    )
   }
 
-  private def navigationWithCheck(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
-    mode match {
-      case NormalMode => {
-        case NumberOfBeneficiariesPage => _ => rts.StartDateController.onPageLoad()
-      }
-      case CheckMode => {
-        case NumberOfBeneficiariesPage => ua =>
-          checkDetailsRoute(ua)
-      }
+  private def checkDetailsRoute(answers: UserAnswers) : Call = {
+    answers.get(IndexPage) match {
+      case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
+      case None => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
 
-  def checkDetailsRoute(answers: UserAnswers) : Call = {
-    answers.get(IndexPage) match {
-      case None =>
-        controllers.routes.SessionExpiredController.onPageLoad()
-      case Some(x) =>
-        controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(x)
+  private def navigateAwayFromCountryOfResidenceQuestions(ua: UserAnswers, mode: Mode): Call = {
+    if (ua.isTaxable) {
+      rts.AddressYesNoController.onPageLoad(mode)
+    } else {
+      rts.DescriptionController.onPageLoad(mode)
     }
   }
 
   def routes(mode: Mode): PartialFunction[Page, UserAnswers => Call] =
-    simpleNavigation(mode) andThen (c => (_:UserAnswers) => c) orElse
-      yesNoNavigation(mode) orElse
-      navigationWithCheck(mode)
+    simpleNavigation(mode) orElse
+      yesNoNavigation(mode)
 
 }
