@@ -29,29 +29,27 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    def answerRows(mode: Mode): Seq[Option[AnswerRow]] = Seq(
-      bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(mode).url),
-      bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
-      bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "charityBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "charityBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "charityBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-      bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-      bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
-      bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-      bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url)
-    )
-
-    lazy val add: Seq[AnswerRow] = (
-      answerRows(NormalMode) :+
-        bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url)
+    def answerRows: Seq[AnswerRow] = {
+      val mode: Mode = if (provisional) NormalMode else CheckMode
+      Seq(
+        bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(mode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
+        if (mode == CheckMode) bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr", "") else None,
+        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "charityBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "charityBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
+        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "charityBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
+        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
+        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url) else None
       ).flatten
-
-    lazy val amend: Seq[AnswerRow] = answerRows(CheckMode).flatten
+    }
 
     AnswerSection(
       headingKey = None,
-      rows = if (provisional) add else amend
+      rows = answerRows
     )
   }
 
