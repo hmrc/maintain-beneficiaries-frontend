@@ -48,7 +48,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     case StartDatePage => _ => rts.CheckDetailsController.onPageLoad()
   }
 
-  private def yesNoNavigation(mode: Mode) : PartialFunction[Page, UserAnswers => Call] = {
+  private def yesNoNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
     case CountryOfResidenceYesNoPage => ua => yesNoNav(
       ua = ua,
       fromPage = CountryOfResidenceYesNoPage,
@@ -75,7 +75,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     )
   }
 
-  private def checkDetailsRoute(answers: UserAnswers) : Call = {
+  private def checkDetailsRoute(answers: UserAnswers): Call = {
     answers.get(IndexPage) match {
       case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
       case None => controllers.routes.SessionExpiredController.onPageLoad()

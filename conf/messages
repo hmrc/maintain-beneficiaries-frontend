@@ -952,11 +952,11 @@ employmentBeneficiary.numberOfBeneficiaries.heading = What is the approximate nu
 employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel = What is the approximate number of beneficiaries held in the trust?
 employmentBeneficiary.numberOfBeneficiaries.error.required = Select the approximate number of beneficiaries held in the trust
 
-numberOfBeneficiaries.1 = 1 to 100
-numberOfBeneficiaries.101 = 101 to 200
-numberOfBeneficiaries.201 = 201 to 500
-numberOfBeneficiaries.501 = 501 to 1,000
-numberOfBeneficiaries.1001 = Over 1,001
+numberOfBeneficiaries.over1 = 1 to 100
+numberOfBeneficiaries.over101 = 101 to 200
+numberOfBeneficiaries.over201 = 201 to 500
+numberOfBeneficiaries.over501 = 501 to 1,000
+numberOfBeneficiaries.over1001 = Over 1,001
 
 employmentBeneficiary.startDate.title = When was the employment related beneficiary added as a beneficiary?
 employmentBeneficiary.startDate.heading = When was {0} added as a beneficiary?
