@@ -29,29 +29,27 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    def answerRows(mode: Mode): Seq[Option[AnswerRow]] = Seq(
-      bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(mode).url),
-      bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
-      bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "trustBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "trustBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "trustBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-      bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-      bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
-      bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-      bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url)
-    )
-
-    lazy val add = (
-      answerRows(NormalMode) :+
-        bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url)
+    def answerRows: Seq[AnswerRow] = {
+      val mode: Mode = if (provisional) NormalMode else CheckMode
+      Seq(
+        bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(mode).url),
+        bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
+        bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
+        if (mode == CheckMode) bound.stringQuestion(UtrPage, "trustBeneficiary.checkDetails.utr", "") else None,
+        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "trustBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "trustBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
+        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "trustBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
+        bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
+        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url) else None
       ).flatten
-
-    lazy val amend = answerRows(CheckMode).flatten
+    }
 
     AnswerSection(
       headingKey = None,
-      rows = if (provisional) add else amend
+      rows = answerRows
     )
   }
 }

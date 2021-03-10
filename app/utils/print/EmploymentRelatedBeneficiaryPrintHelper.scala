@@ -18,10 +18,10 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.companyoremploymentrelated.employment.routes._
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.companyoremploymentrelated.employment._
 import play.api.i18n.Messages
-import viewmodels.AnswerSection
+import viewmodels.{AnswerRow, AnswerSection}
 
 class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
@@ -29,37 +29,27 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    lazy val add = Seq(
-      bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "employmentBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "employmentBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url),
-      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "employmentBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
-      bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
-      bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
-      bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(NormalMode).url),
-      bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad(NormalMode).url),
-      bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad(NormalMode).url),
-      bound.dateQuestion(StartDatePage, "employmentBeneficiary.startDate", StartDateController.onPageLoad().url)
-    ).flatten
-
-    lazy val amend = Seq(
-      bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(CheckMode).url),
-      bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr", ""),
-      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "employmentBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
-      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "employmentBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
-      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "employmentBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(CheckMode).url),
-      bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
-      bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
-      bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
-      bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(CheckMode).url),
-      bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad(CheckMode).url),
-      bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad(CheckMode).url)
-    ).flatten
+    def answerRows: Seq[AnswerRow] = {
+      val mode: Mode = if (provisional) NormalMode else CheckMode
+      Seq(
+        bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(mode).url),
+        if (mode == CheckMode) bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr", "") else None,
+        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "employmentBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "employmentBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
+        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "employmentBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
+        bound.addressQuestion(NonUkAddressPage, "employmentBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
+        bound.descriptionQuestion(DescriptionPage, "employmentBeneficiary.description", DescriptionController.onPageLoad(mode).url),
+        bound.numberOfBeneficiariesQuestion(NumberOfBeneficiariesPage, "employmentBeneficiary.numberOfBeneficiaries", NumberOfBeneficiariesController.onPageLoad(mode).url),
+        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "employmentBeneficiary.startDate", StartDateController.onPageLoad().url) else None
+      ).flatten
+    }
 
     AnswerSection(
       headingKey = None,
-      rows = if (provisional) add else amend
+      rows = answerRows
     )
   }
 }

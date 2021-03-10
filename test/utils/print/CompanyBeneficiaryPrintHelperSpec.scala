@@ -29,6 +29,7 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
 
   val name: String = "Company"
   val share: Int = 50
+  val utr: String = "1234567890"
   val date: LocalDate = LocalDate.parse("2019-02-03")
   val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
   val country: String = "DE"
@@ -44,6 +45,7 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
         .set(NamePage, name).success.value
         .set(DiscretionYesNoPage, false).success.value
         .set(ShareOfIncomePage, share).success.value
+        .set(UtrPage, utr).success.value
         .set(CountryOfResidenceYesNoPage, true).success.value
         .set(CountryOfResidenceUkYesNoPage, false).success.value
         .set(CountryOfResidencePage, country).success.value
@@ -84,6 +86,7 @@ class CompanyBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("companyBeneficiary.name.checkYourAnswersLabel")), answer = Html("Company"), changeUrl = NameController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.discretionYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = DiscretionYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.shareOfIncome.checkYourAnswersLabel", name)), answer = Html("50%"), changeUrl = ShareOfIncomeController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("companyBeneficiary.checkDetails.utr.checkYourAnswersLabel", name)), answer = Html("1234567890"), changeUrl = ""),
             AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("companyBeneficiary.countryOfResidence.checkYourAnswersLabel", name)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(CheckMode).url),
