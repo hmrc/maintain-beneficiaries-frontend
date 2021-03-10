@@ -16,16 +16,20 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import base.SpecBase
-import models.{Description, HowManyBeneficiaries, UkAddress}
+import models.Constant.GB
+import models.beneficiaries.EmploymentRelatedBeneficiary
+import models.{Description, HowManyBeneficiaries, NonUkAddress, UkAddress}
 import pages.companyoremploymentrelated.employment._
+
+import java.time.LocalDate
 
 class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
 
   val name: String = "Large"
   val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
+  val country: String = "FR"
+  val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, country)
   val description: Description = Description("Description", None, None, None, None)
   val numberOfBeneficiaries: HowManyBeneficiaries = HowManyBeneficiaries.Over201
   val date: LocalDate = LocalDate.parse("2019-02-03")
@@ -40,27 +44,240 @@ class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
       result mustBe None
     }
 
-    "generate employment related beneficiary model" in {
+    "generate employment related beneficiary model" when {
 
-      val userAnswers = emptyUserAnswers
-        .set(NamePage, name).success.value
-        .set(AddressYesNoPage, true).success.value
-        .set(AddressUkYesNoPage, true).success.value
-        .set(UkAddressPage, ukAddress).success.value
-        .set(DescriptionPage, description).success.value
-        .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
-        .set(StartDatePage, date).success.value
+      "4mld" when {
 
-      val result = mapper(userAnswers).get
+        "no address" in {
 
-      result.name mustBe name
-      result.address.get mustBe ukAddress
-      result.description mustBe description
-      result.howManyBeneficiaries mustBe "201"
-      result.entityStart mustBe date
-      result.provisional mustBe true
-      result.utr mustNot be(defined)
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(AddressYesNoPage, false).success.value
+            .set(DescriptionPage, description).success.value
+            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+            .set(StartDatePage, date).success.value
 
+          val result = mapper(userAnswers).get
+
+          result mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            description = description,
+            howManyBeneficiaries = numberOfBeneficiaries,
+            entityStart = date,
+            provisional = true
+          )
+        }
+
+        "UK address" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(AddressUkYesNoPage, true).success.value
+            .set(UkAddressPage, ukAddress).success.value
+            .set(DescriptionPage, description).success.value
+            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+            .set(StartDatePage, date).success.value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(ukAddress),
+            description = description,
+            howManyBeneficiaries = numberOfBeneficiaries,
+            entityStart = date,
+            provisional = true
+          )
+        }
+
+        "non-UK address" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name).success.value
+            .set(AddressYesNoPage, true).success.value
+            .set(AddressUkYesNoPage, false).success.value
+            .set(NonUkAddressPage, nonUkAddress).success.value
+            .set(DescriptionPage, description).success.value
+            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+            .set(StartDatePage, date).success.value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe EmploymentRelatedBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(nonUkAddress),
+            description = description,
+            howManyBeneficiaries = numberOfBeneficiaries,
+            entityStart = date,
+            provisional = true
+          )
+        }
+      }
+
+      "5mld" when {
+
+        "taxable" when {
+
+          "no country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(AddressYesNoPage, false).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = None,
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(AddressUkYesNoPage, true).success.value
+              .set(UkAddressPage, ukAddress).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = Some(ukAddress),
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = Some(GB),
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "non-UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+              .set(CountryOfResidencePage, country).success.value
+              .set(AddressYesNoPage, true).success.value
+              .set(AddressUkYesNoPage, false).success.value
+              .set(NonUkAddressPage, nonUkAddress).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = Some(nonUkAddress),
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = Some(country),
+              entityStart = date,
+              provisional = true
+            )
+          }
+        }
+
+        "non-taxable" when {
+
+          "no country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, false).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = None,
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, true).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = Some(GB),
+              entityStart = date,
+              provisional = true
+            )
+          }
+
+          "non-UK country of residence" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(NamePage, name).success.value
+              .set(CountryOfResidenceYesNoPage, true).success.value
+              .set(CountryOfResidenceUkYesNoPage, false).success.value
+              .set(CountryOfResidencePage, country).success.value
+              .set(DescriptionPage, description).success.value
+              .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
+              .set(StartDatePage, date).success.value
+
+            val result = mapper(userAnswers).get
+
+            result mustBe EmploymentRelatedBeneficiary(
+              name = name,
+              utr = None,
+              address = None,
+              description = description,
+              howManyBeneficiaries = numberOfBeneficiaries,
+              countryOfResidence = Some(country),
+              entityStart = date,
+              provisional = true
+            )
+          }
+        }
+      }
     }
   }
 }

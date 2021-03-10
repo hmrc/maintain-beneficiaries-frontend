@@ -16,7 +16,7 @@
 
 package models.beneficiaries
 
-import models.{Address, Description}
+import models.{Address, Description, HowManyBeneficiaries}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -26,7 +26,8 @@ case class EmploymentRelatedBeneficiary(name: String,
                                         utr: Option[String],
                                         address: Option[Address],
                                         description: Description,
-                                        howManyBeneficiaries: String,
+                                        howManyBeneficiaries: HowManyBeneficiaries,
+                                        countryOfResidence: Option[String] = None,
                                         entityStart: LocalDate,
                                         provisional: Boolean) extends Beneficiary
 
@@ -37,19 +38,21 @@ object EmploymentRelatedBeneficiary extends BeneficiaryReads {
       __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
       __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
       __.read[Description] and
-      (__ \ 'numberOfBeneficiary).read[String] and
+      (__ \ 'numberOfBeneficiary).read[HowManyBeneficiaries] and
+      (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ 'entityStart).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    ).apply(EmploymentRelatedBeneficiary.apply _)
+    )(EmploymentRelatedBeneficiary.apply _)
 
   implicit val writes: Writes[EmploymentRelatedBeneficiary] = (
     (__ \ 'organisationName).write[String] and
       (__ \ 'identification \ 'utr).writeNullable[String] and
       (__ \ 'identification \ 'address).writeNullable[Address] and
       __.write[Description] and
-      (__ \ 'numberOfBeneficiary).write[String] and
+      (__ \ 'numberOfBeneficiary).write[HowManyBeneficiaries] and
+      (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(EmploymentRelatedBeneficiary.unapply))
+    )(unlift(EmploymentRelatedBeneficiary.unapply))
 
 }

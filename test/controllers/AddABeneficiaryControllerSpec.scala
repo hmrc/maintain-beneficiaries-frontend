@@ -17,10 +17,10 @@
 package controllers
 
 import java.time.LocalDate
-
 import base.SpecBase
 import connectors.{TrustConnector, TrustsStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
+import models.HowManyBeneficiaries.Over201
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
 import models.{AddABeneficiary, Description, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -102,7 +102,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     utr = Some("0987654321"),
     address = None,
     description = Description("Description", None, None, None, None),
-    howManyBeneficiaries = "201",
+    howManyBeneficiaries = Over201,
     entityStart = LocalDate.parse("2012-03-14"),
     provisional = false
   )

@@ -16,8 +16,9 @@
 
 package utils.mappers
 
+import models.Constant.GB
+import models._
 import models.beneficiaries.EmploymentRelatedBeneficiary
-import models.{Address, Description, HowManyBeneficiaries, NonUkAddress, UkAddress, UserAnswers}
 import pages.companyoremploymentrelated.employment._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsSuccess, Reads}
@@ -27,16 +28,22 @@ import java.time.LocalDate
 class EmploymentRelatedBeneficiaryMapper extends Mapper[EmploymentRelatedBeneficiary] {
 
   def apply(answers: UserAnswers): Option[EmploymentRelatedBeneficiary] = {
-    val readFromUserAnswers: Reads[EmploymentRelatedBeneficiary] =
-      (
-        NamePage.path.read[String] and
+    val readFromUserAnswers: Reads[EmploymentRelatedBeneficiary] = (
+      NamePage.path.read[String] and
         Reads(_ => JsSuccess(None)) and
         readAddress and
         DescriptionPage.path.read[Description] and
-        readNumberOfBeneficiaries and
+        NumberOfBeneficiariesPage.path.read[HowManyBeneficiaries] and
+        CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
+          case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
+            case true => Reads(_ => JsSuccess(Some(GB)))
+            case false => CountryOfResidencePage.path.read[String].map(Some(_))
+          }
+          case _ => Reads(_ => JsSuccess(None))
+        } and
         StartDatePage.path.read[LocalDate] and
         Reads(_ => JsSuccess(true))
-      ) (EmploymentRelatedBeneficiary.apply _ )
+      )(EmploymentRelatedBeneficiary.apply _ )
 
     mapAnswersWithExplicitReads(answers, readFromUserAnswers)
   }
@@ -46,16 +53,6 @@ class EmploymentRelatedBeneficiaryMapper extends Mapper[EmploymentRelatedBenefic
       case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
       case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
       case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
-    }
-  }
-
-  private def readNumberOfBeneficiaries: Reads[String] = {
-    NumberOfBeneficiariesPage.path.read[HowManyBeneficiaries].map {
-      case HowManyBeneficiaries.Over1 => "1"
-      case HowManyBeneficiaries.Over101 => "101"
-      case HowManyBeneficiaries.Over201 => "201"
-      case HowManyBeneficiaries.Over501 => "501"
-      case HowManyBeneficiaries.Over1001 => "1001"
     }
   }
 }

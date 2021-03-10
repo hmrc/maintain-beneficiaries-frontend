@@ -139,4 +139,20 @@ trait ModelGenerators {
       OtherBeneficiary
     )
 
+  implicit lazy val arbitraryHowManyBeneficiaries: Arbitrary[HowManyBeneficiaries] =
+    Arbitrary {
+      Gen.oneOf(HowManyBeneficiaries.values)
+    }
+
+  implicit lazy val arbitraryDescription: Arbitrary[Description] =
+    Arbitrary {
+      for {
+        description <- arbitrary[String]
+        description1 <- arbitrary[Option[String]]
+        description2 <- arbitrary[Option[String]]
+        description3 <- arbitrary[Option[String]]
+        description4 <- arbitrary[Option[String]]
+      } yield Description(description, description1, description2, description3, description4)
+    }
+
 }

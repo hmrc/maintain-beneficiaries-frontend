@@ -17,8 +17,8 @@
 package services
 
 import java.time.LocalDate
-
 import connectors.TrustConnector
+import models.HowManyBeneficiaries.Over101
 import models.beneficiaries._
 import models.{BeneficiaryType, Description, Name, RemoveBeneficiary}
 import org.mockito.Matchers.any
@@ -99,7 +99,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     utr = None,
     address = None,
     description = Description("Other Endeavours Ltd", None, None, None, None),
-    howManyBeneficiaries = "101",
+    howManyBeneficiaries = Over101,
     entityStart = LocalDate.parse("2012-03-14"),
     provisional = false
   )

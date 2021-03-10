@@ -17,11 +17,11 @@
 package controllers.companyoremploymentrelated.employment.remove
 
 import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import connectors.TrustConnector
 import forms.DateRemovedFromTrustFormProvider
 import models.Description
+import models.HowManyBeneficiaries.Over201
 import models.beneficiaries.{Beneficiaries, EmploymentRelatedBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -69,7 +69,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     utr = None,
     address = None,
     description = Description("Description", None, None, None, None),
-    howManyBeneficiaries = "201",
+    howManyBeneficiaries = Over201,
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = false
   )

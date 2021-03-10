@@ -16,17 +16,18 @@
 
 package models
 
+import play.api.libs.json._
 import viewmodels.RadioOption
 
 sealed trait HowManyBeneficiaries
 
 object HowManyBeneficiaries extends Enumerable.Implicits {
 
-  case object Over1 extends WithName("over1") with HowManyBeneficiaries
-  case object Over101 extends WithName("over101") with HowManyBeneficiaries
-  case object Over201 extends WithName("over201") with HowManyBeneficiaries
-  case object Over501 extends WithName("over501") with HowManyBeneficiaries
-  case object Over1001 extends WithName("over1001") with HowManyBeneficiaries
+  case object Over1 extends WithName("1") with HowManyBeneficiaries
+  case object Over101 extends WithName("101") with HowManyBeneficiaries
+  case object Over201 extends WithName("201") with HowManyBeneficiaries
+  case object Over501 extends WithName("501") with HowManyBeneficiaries
+  case object Over1001 extends WithName("1001") with HowManyBeneficiaries
 
   val values: List[HowManyBeneficiaries] = List(
     Over1, Over101, Over201, Over501, Over1001
@@ -39,5 +40,14 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[HowManyBeneficiaries] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
+  implicit val reads: Reads[HowManyBeneficiaries] =
+    __.read[String].map(_.toInt).map {
+      case x if 0 to 100 contains x => Over1
+      case x if 101 to 200 contains x => Over101
+      case x if 201 to 500 contains x => Over201
+      case x if 501 to 999 contains x => Over501
+      case _ => Over1001
+    }
   
 }

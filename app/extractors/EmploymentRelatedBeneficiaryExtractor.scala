@@ -16,50 +16,43 @@
 
 package extractors
 
-import com.google.inject.Inject
-import models.HowManyBeneficiaries.{Over1, Over1001, Over101, Over201, Over501}
+import models.HowManyBeneficiaries._
 import models.beneficiaries.EmploymentRelatedBeneficiary
-import models.{Address, NonUkAddress, UkAddress, UserAnswers}
+import models.{NonUkAddress, UkAddress, UserAnswers}
+import pages.QuestionPage
 import pages.companyoremploymentrelated.employment._
+import play.api.libs.json.JsPath
 
+import java.time.LocalDate
 import scala.util.Try
 
-class EmploymentRelatedBeneficiaryExtractor @Inject()() {
+class EmploymentRelatedBeneficiaryExtractor extends BeneficiaryExtractor[EmploymentRelatedBeneficiary] {
 
-  def apply(answers: UserAnswers, employmentRelatedBeneficiary : EmploymentRelatedBeneficiary, index: Int): Try[UserAnswers] = {
-    answers
-      .deleteAtPath(pages.companyoremploymentrelated.company.basePath)
+  override def apply(answers: UserAnswers,
+                     employmentRelatedBeneficiary: EmploymentRelatedBeneficiary,
+                     index: Int): Try[UserAnswers] = {
+
+    super.apply(answers, employmentRelatedBeneficiary, index)
       .flatMap(_.set(NamePage, employmentRelatedBeneficiary.name))
       .flatMap(_.set(UtrPage, employmentRelatedBeneficiary.utr))
+      .flatMap(answers => extractCountryOfResidence(employmentRelatedBeneficiary.countryOfResidence, answers))
       .flatMap(answers => extractAddress(employmentRelatedBeneficiary.address, answers))
       .flatMap(_.set(DescriptionPage, employmentRelatedBeneficiary.description))
-      .flatMap(answers => extracthowManyBeneficiaries(employmentRelatedBeneficiary.howManyBeneficiaries, answers))
-      .flatMap(_.set(StartDatePage, employmentRelatedBeneficiary.entityStart))
-      .flatMap(_.set(IndexPage, index))
+      .flatMap(_.set(NumberOfBeneficiariesPage, employmentRelatedBeneficiary.howManyBeneficiaries))
   }
 
-  private def extracthowManyBeneficiaries(howManyBeneficiaries: String, answers: UserAnswers) : Try[UserAnswers] = {
-    howManyBeneficiaries match {
-      case "over1"   => answers.set(NumberOfBeneficiariesPage, Over1)
-      case "over101" => answers.set(NumberOfBeneficiariesPage, Over101)
-      case "over201" => answers.set(NumberOfBeneficiariesPage, Over201)
-      case "over501" => answers.set(NumberOfBeneficiariesPage, Over501)
-      case _         => answers.set(NumberOfBeneficiariesPage, Over1001)
-    }
-  }
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
 
-  private def extractAddress(address: Option[Address], answers: UserAnswers) : Try[UserAnswers] = {
-    address match {
-      case Some(uk: UkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, true))
-          .flatMap(_.set(UkAddressPage, uk))
-      case Some(nonUk: NonUkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(AddressUkYesNoPage, false))
-          .flatMap(_.set(NonUkAddressPage, nonUk))
-      case _ =>
-        answers.set(AddressYesNoPage, false)
-    }
-  }
+  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
+
+  override def startDatePage: QuestionPage[LocalDate] = StartDatePage
+
+  override def indexPage: QuestionPage[Int] = IndexPage
+
+  override def basePath: JsPath = pages.companyoremploymentrelated.company.basePath
 }
