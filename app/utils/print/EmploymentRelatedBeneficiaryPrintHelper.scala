@@ -31,6 +31,9 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
     lazy val add = Seq(
       bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "employmentBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(NormalMode).url),
+      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "employmentBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url),
+      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "employmentBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(NormalMode).url),
       bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(NormalMode).url),
       bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(NormalMode).url),
@@ -42,7 +45,10 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
 
     lazy val amend = Seq(
       bound.stringQuestion(NamePage, "employmentBeneficiary.name", NameController.onPageLoad(CheckMode).url),
-      bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr",""),
+      bound.stringQuestion(UtrPage, "employmentBeneficiary.checkDetails.utr", ""),
+      bound.yesNoQuestion(CountryOfResidenceYesNoPage, "employmentBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
+      bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "employmentBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
+      bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "employmentBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(AddressYesNoPage, "employmentBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(CheckMode).url),
       bound.yesNoQuestion(AddressUkYesNoPage, "employmentBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(CheckMode).url),
       bound.addressQuestion(UkAddressPage, "employmentBeneficiary.ukAddress", UkAddressController.onPageLoad(CheckMode).url),
