@@ -18,7 +18,7 @@ package utils.print
 
 import com.google.inject.Inject
 import models.beneficiaries.RoleInCompany
-import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, IdentificationDetailOptions, Name, Passport, UserAnswers}
+import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, Name, Passport, UserAnswers}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.{Html, HtmlFormat}
@@ -96,13 +96,6 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
                                       changeUrl: String)
                                      (implicit reads: Reads[T]): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.formatAddress(x)
-      question(query, labelKey, format, changeUrl)
-    }
-
-    def identificationOptionsQuestion(query: Gettable[IdentificationDetailOptions],
-                                      labelKey: String,
-                                      changeUrl: String): Option[AnswerRow] = {
-      val format = (x: IdentificationDetailOptions) => checkAnswersFormatters.formatIdentificationDetails(x)
       question(query, labelKey, format, changeUrl)
     }
 

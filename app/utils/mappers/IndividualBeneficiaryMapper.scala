@@ -40,11 +40,7 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
       IncomeDiscretionYesNoPage.path.readNullable[Boolean] and
       readCountryOfResidence and
       readCountryOfResidenceOrNationality(CountryOfNationalityYesNoPage, CountryOfNationalityUkYesNoPage, CountryOfNationalityPage) and
-      MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
-        case Some(true) => Reads(_ => JsSuccess(Some(false)))
-        case Some(false) => Reads(_ => JsSuccess(Some(true)))
-        case _ => Reads(_ => JsSuccess(None))
-      } and
+      readMentalCapacity and
       StartDatePage.path.read[LocalDate] and
       Reads(_ => JsSuccess(true))
     )(IndividualBeneficiary.apply _)
@@ -70,6 +66,14 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
       case (false, true, true, false, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
       case (false, true, false, true, false) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
       case (false, true, false, false, true) => PassportOrIdCardDetailsPage.path.read[CombinedPassportOrIdCard].map(Some(_))
+      case _ => Reads(_ => JsSuccess(None))
+    }
+  }
+
+  private def readMentalCapacity: Reads[Option[Boolean]] = {
+    MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
+      case Some(true) => Reads(_ => JsSuccess(Some(false)))
+      case Some(false) => Reads(_ => JsSuccess(Some(true)))
       case _ => Reads(_ => JsSuccess(None))
     }
   }

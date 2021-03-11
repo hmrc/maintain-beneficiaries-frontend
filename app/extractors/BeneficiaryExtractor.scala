@@ -80,22 +80,13 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
   }
 
   def extractCountryOfResidence(countryOfResidence: Option[String], answers: UserAnswers): Try[UserAnswers] = {
-    if (answers.is5mldEnabled && answers.isUnderlyingData5mld) {
-      countryOfResidence match {
-        case Some(GB) => answers
-          .set(countryOfResidenceYesNoPage, true)
-          .flatMap(_.set(ukCountryOfResidenceYesNoPage, true))
-          .flatMap(_.set(countryOfResidencePage, GB))
-        case Some(country) => answers
-          .set(countryOfResidenceYesNoPage, true)
-          .flatMap(_.set(ukCountryOfResidenceYesNoPage, false))
-          .flatMap(_.set(countryOfResidencePage, country))
-        case None => answers
-          .set(countryOfResidenceYesNoPage, false)
-      }
-    } else {
-      Success(answers)
-    }
+    extractCountryOfResidenceOrNationality(
+      country = countryOfResidence,
+      answers = answers,
+      yesNoPage = countryOfResidenceYesNoPage,
+      ukYesNoPage = ukCountryOfResidenceYesNoPage,
+      page = countryOfResidencePage
+    )
   }
 
   def extractCountryOfResidenceOrNationality(country: Option[String],
