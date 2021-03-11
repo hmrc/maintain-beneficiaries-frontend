@@ -16,13 +16,13 @@
 
 package extractors
 
-import models.Constant.GB
+import utils.Constants.GB
 import models.beneficiaries.{Beneficiary, OrgBeneficiary}
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.{EmptyPage, QuestionPage}
 import play.api.libs.json.JsPath
-
 import java.time.LocalDate
+
 import scala.util.{Success, Try}
 
 trait BeneficiaryExtractor[T <: Beneficiary] {
@@ -92,6 +92,29 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
           .flatMap(_.set(countryOfResidencePage, country))
         case None => answers
           .set(countryOfResidenceYesNoPage, false)
+      }
+    } else {
+      Success(answers)
+    }
+  }
+
+  def extractCountryOfResidenceOrNationality(country: Option[String],
+                                             answers: UserAnswers,
+                                             yesNoPage: QuestionPage[Boolean],
+                                             ukYesNoPage: QuestionPage[Boolean],
+                                             page: QuestionPage[String]): Try[UserAnswers] = {
+    if (answers.is5mldEnabled && answers.isUnderlyingData5mld) {
+      country match {
+        case Some(GB) =>
+          answers.set(yesNoPage, true)
+            .flatMap(_.set(ukYesNoPage, true))
+            .flatMap(_.set(page, GB))
+        case Some(country) =>
+          answers.set(yesNoPage, true)
+            .flatMap(_.set(ukYesNoPage, false))
+            .flatMap(_.set(page, country))
+        case None =>
+          answers.set(yesNoPage, false)
       }
     } else {
       Success(answers)

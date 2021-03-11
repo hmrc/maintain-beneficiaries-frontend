@@ -18,7 +18,6 @@ package models.beneficiaries
 
 import models.Address
 import play.api.libs.json.{JsPath, JsSuccess, Reads}
-
 import java.time.LocalDate
 
 trait Beneficiary {

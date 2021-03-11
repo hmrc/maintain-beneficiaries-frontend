@@ -55,7 +55,10 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
       bound.yesNoQuestion(AddressYesNoPage, "individualBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
       bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", LiveInTheUkYesNoController.onPageLoad(mode).url),
       bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-      bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url)
+      bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
+
+      bound.yesNoQuestion(MentalCapacityYesNoPage, "individualBeneficiary.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(mode).url)
+
     )
 
     lazy val additionalAdd: Seq[Option[AnswerRow]] = Seq(

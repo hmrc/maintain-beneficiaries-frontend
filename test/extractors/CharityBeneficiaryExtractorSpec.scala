@@ -17,7 +17,7 @@
 package extractors
 
 import base.SpecBase
-import models.Constant.GB
+import utils.Constants.GB
 import models.{NonUkAddress, UkAddress, UserAnswers}
 import models.beneficiaries.CharityBeneficiary
 import pages.charityortrust.charity._

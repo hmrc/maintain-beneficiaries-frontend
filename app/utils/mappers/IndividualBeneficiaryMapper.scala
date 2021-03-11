@@ -17,7 +17,7 @@
 package utils.mappers
 
 import models._
-import models.Constant.GB
+import utils.Constants.GB
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._

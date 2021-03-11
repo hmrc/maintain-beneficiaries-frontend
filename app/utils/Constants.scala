@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package utils
 
-object Constant {
-
+object Constants {
   final val GB = "GB"
-
+  final val ES = "ES"
+  final val UNITED_KINGDOM = "United Kingdom"
+  final val SPAIN = "Spain"
 }

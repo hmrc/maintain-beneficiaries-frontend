@@ -16,95 +16,102 @@
 
 package extractors
 
-import com.google.inject.Inject
+import java.time.LocalDate
+
+import models._
 import models.beneficiaries.IndividualBeneficiary
-import models.{Address, CombinedPassportOrIdCard, IdCard, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
-import pages.individualbeneficiary.add.StartDatePage
-import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+import pages.QuestionPage
+import pages.individualbeneficiary._
+import pages.individualbeneficiary.add._
+import pages.individualbeneficiary.amend._
+import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
 
-class IndividualBeneficiaryExtractor @Inject()() {
+class IndividualBeneficiaryExtractor extends BeneficiaryExtractor[IndividualBeneficiary] {
 
-  import pages.individualbeneficiary._
+  override def apply(answers: UserAnswers,
+                     individual: IndividualBeneficiary,
+                     index: Int): Try[UserAnswers] = {
 
-  def apply(answers: UserAnswers,
-            individual : IndividualBeneficiary,
-            index: Int): Try[UserAnswers] = {
-
-    answers.deleteAtPath(pages.individualbeneficiary.basePath)
+    super.apply(answers, individual, index)
       .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
       .flatMap(_.set(NamePage, individual.name))
-      .flatMap(answers => extractDateOfBirth(individual, answers))
-      .flatMap(answers => extractShareOfIncome(individual, answers))
+      .flatMap(answers => extractDateOfBirth(individual.dateOfBirth, answers))
+      .flatMap(answers => extractShareOfIncome(individual.income, answers))
+      .flatMap(answers => extractCountryOfNationality(individual.nationality, answers))
+      .flatMap(answers => extractCountryOfResidence(individual.countryOfResidence, answers))
       .flatMap(answers => extractAddress(individual.address, answers))
       .flatMap(answers => extractIdentification(individual, answers))
+      .flatMap(_.set(MentalCapacityYesNoPage, individual.mentalCapacityYesNo))
       .flatMap(_.set(VPE1FormYesNoPage, individual.vulnerableYesNo))
-      .flatMap(_.set(StartDatePage, individual.entityStart))
-      .flatMap(_.set(IndexPage, index))
+  }
+
+  override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = IncomeDiscretionYesNoPage
+  override def shareOfIncomePage: QuestionPage[Int] = IncomePercentagePage
+
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+
+  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = LiveInTheUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
+
+  override def startDatePage: QuestionPage[LocalDate] = StartDatePage
+
+  override def indexPage: QuestionPage[Int] = IndexPage
+
+  override def basePath: JsPath = pages.individualbeneficiary.basePath
+
+  private def extractCountryOfNationality(countryOfNationality: Option[String],
+                                          answers: UserAnswers): Try[UserAnswers] = {
+      extractCountryOfResidenceOrNationality(
+        country = countryOfNationality,
+        answers = answers,
+        yesNoPage = CountryOfNationalityYesNoPage,
+        ukYesNoPage = CountryOfNationalityUkYesNoPage,
+        page = CountryOfNationalityPage
+      )
   }
 
   private def extractIdentification(individualBeneficiary: IndividualBeneficiary,
-                                    answers: UserAnswers) : Try[UserAnswers] = {
-    individualBeneficiary.identification match {
-      case Some(NationalInsuranceNumber(nino)) =>
-        answers.set(NationalInsuranceNumberYesNoPage, true)
+                                    answers: UserAnswers): Try[UserAnswers] = {
+    if (answers.isTaxable) {
+      individualBeneficiary.identification match {
+        case Some(NationalInsuranceNumber(nino)) =>
+          answers.set(NationalInsuranceNumberYesNoPage, true)
           .flatMap(_.set(NationalInsuranceNumberPage, nino))
-      case Some(p: Passport) =>
-        answers.set(NationalInsuranceNumberYesNoPage, false)
+        case Some(p: Passport) =>
+          answers.set(NationalInsuranceNumberYesNoPage, false)
           .flatMap(_.set(PassportOrIdCardDetailsYesNoPage, true))
           .flatMap(_.set(PassportOrIdCardDetailsPage, p.asCombined))
-      case Some(id: IdCard) =>
-        answers.set(NationalInsuranceNumberYesNoPage, false)
+        case Some(id: IdCard) =>
+          answers.set(NationalInsuranceNumberYesNoPage, false)
           .flatMap(_.set(PassportOrIdCardDetailsYesNoPage, true))
           .flatMap(_.set(PassportOrIdCardDetailsPage, id.asCombined))
-      case Some(combined: CombinedPassportOrIdCard) =>
-        answers.set(NationalInsuranceNumberYesNoPage, false)
+        case Some(combined: CombinedPassportOrIdCard) =>
+          answers.set(NationalInsuranceNumberYesNoPage, false)
           .flatMap(_.set(PassportOrIdCardDetailsYesNoPage, true))
           .flatMap(_.set(PassportOrIdCardDetailsPage, combined))
-      case _ =>
-        answers.set(NationalInsuranceNumberYesNoPage, false)
+        case _ =>
+          answers.set(NationalInsuranceNumberYesNoPage, false)
           .flatMap(answers => extractPassportOrIdCardDetailsYesNo(individualBeneficiary.address.isDefined, answers))
+      }
+    } else {
+      Success(answers)
     }
   }
 
-  private def extractDateOfBirth(individualBeneficiary: IndividualBeneficiary,
-                                 answers: UserAnswers) : Try[UserAnswers] = {
-    individualBeneficiary.dateOfBirth match {
+  private def extractDateOfBirth(dateOfBirth: Option[LocalDate],
+                                  answers: UserAnswers): Try[UserAnswers] = {
+    dateOfBirth match {
       case Some(dob) =>
         answers.set(DateOfBirthYesNoPage, true)
-          .flatMap(_.set(DateOfBirthPage, dob))
+        .flatMap(_.set(DateOfBirthPage, dob))
       case None =>
-        // Assumption that user answered no as dob is not provided
         answers.set(DateOfBirthYesNoPage, false)
-    }
-  }
-
-  private def extractShareOfIncome(individualBeneficiary: IndividualBeneficiary,
-                                   answers: UserAnswers) : Try[UserAnswers] = {
-    individualBeneficiary.income match {
-      case Some(income) =>
-        answers.set(IncomeDiscretionYesNoPage, false)
-          .flatMap(_.set(IncomePercentagePage, income.toInt))
-      case None =>
-        // Assumption that user answered yes as the share of income is not provided
-        answers.set(IncomeDiscretionYesNoPage, true)
-    }
-  }
-
-  private def extractAddress(address: Option[Address],
-                             answers: UserAnswers) : Try[UserAnswers] = {
-    address match {
-      case Some(uk: UkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(LiveInTheUkYesNoPage, true))
-          .flatMap(_.set(UkAddressPage, uk))
-      case Some(nonUk: NonUkAddress) =>
-        answers.set(AddressYesNoPage, true)
-          .flatMap(_.set(LiveInTheUkYesNoPage, false))
-          .flatMap(_.set(NonUkAddressPage, nonUk))
-      case _ =>
-        answers.set(AddressYesNoPage, false)
     }
   }
 

@@ -16,7 +16,7 @@
 
 package utils.mappers
 
-import models.Constant.GB
+import utils.Constants.GB
 import models.beneficiaries.CharityBeneficiary
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.charityortrust.charity._
