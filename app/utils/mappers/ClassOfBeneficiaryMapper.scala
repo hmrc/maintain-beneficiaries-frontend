@@ -16,7 +16,6 @@
 
 package utils.mappers
 
-import models.UserAnswers
 import models.beneficiaries.ClassOfBeneficiary
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.libs.functional.syntax._
@@ -26,13 +25,10 @@ import java.time.LocalDate
 
 class ClassOfBeneficiaryMapper extends Mapper[ClassOfBeneficiary] {
 
-  def apply(answers: UserAnswers): Option[ClassOfBeneficiary] = {
-    val readFromUserAnswers: Reads[ClassOfBeneficiary] = (
-      DescriptionPage.path.read[String] and
-        EntityStartPage.path.read[LocalDate] and
-        Reads(_ => JsSuccess(true))
-      )(ClassOfBeneficiary.apply _)
+  override val reads: Reads[ClassOfBeneficiary] = (
+    DescriptionPage.path.read[String] and
+      EntityStartPage.path.read[LocalDate] and
+      Reads(_ => JsSuccess(true))
+    )(ClassOfBeneficiary.apply _)
 
-    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
-  }
 }

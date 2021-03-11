@@ -58,7 +58,7 @@ class CheckDetailsController @Inject()(
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
-      mapper(request.userAnswers, provisional) match {
+      mapper(request.userAnswers) match {
         case None =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error in mapping user answers to IndividualBeneficiary")

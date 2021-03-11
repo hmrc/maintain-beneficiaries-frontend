@@ -16,9 +16,9 @@
 
 package utils.mappers
 
-import utils.Constants.GB
 import models.beneficiaries.TrustBeneficiary
-import models.{Address, NonUkAddress, UkAddress, UserAnswers}
+import models.{NonUkAddress, UkAddress}
+import pages.QuestionPage
 import pages.charityortrust.trust._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsSuccess, Reads}
@@ -27,31 +27,25 @@ import java.time.LocalDate
 
 class TrustBeneficiaryMapper extends Mapper[TrustBeneficiary] {
 
-  def apply(answers: UserAnswers): Option[TrustBeneficiary] = {
-    val readFromUserAnswers: Reads[TrustBeneficiary] = (
-      NamePage.path.read[String] and
-        Reads(_ => JsSuccess(None)) and
-        AddressUkYesNoPage.path.readNullable[Boolean].flatMap {
-          case Some(true) => UkAddressPage.path.readNullable[UkAddress].widen[Option[Address]]
-          case Some(false) => NonUkAddressPage.path.readNullable[NonUkAddress].widen[Option[Address]]
-          case _ => Reads(_ => JsSuccess(None)).widen[Option[Address]]
-        } and
-        ShareOfIncomePage.path.readNullable[Int].flatMap[Option[String]] {
-          case Some(value) => Reads(_ => JsSuccess(Some(value.toString)))
-          case None => Reads(_ => JsSuccess(None))
-        } and
-        DiscretionYesNoPage.path.readNullable[Boolean] and
-        CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
-          case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
-            case true => Reads(_ => JsSuccess(Some(GB)))
-            case false => CountryOfResidencePage.path.read[String].map(Some(_))
-          }
-          case _ => Reads(_ => JsSuccess(None))
-        } and
-        StartDatePage.path.read[LocalDate] and
-        Reads(_ => JsSuccess(true))
-      )(TrustBeneficiary.apply _ )
+  override val reads: Reads[TrustBeneficiary] = (
+    NamePage.path.read[String] and
+      Reads(_ => JsSuccess(None)) and
+      readAddress and
+      readShareOfIncome and
+      DiscretionYesNoPage.path.readNullable[Boolean] and
+      readCountryOfResidence and
+      StartDatePage.path.read[LocalDate] and
+      Reads(_ => JsSuccess(true))
+    )(TrustBeneficiary.apply _)
 
-    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
-  }
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
+
+  override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
+
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+  
 }
