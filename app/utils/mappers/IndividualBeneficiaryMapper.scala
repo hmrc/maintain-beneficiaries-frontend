@@ -17,8 +17,8 @@
 package utils.mappers
 
 import models._
-import utils.Constants.GB
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
+import pages.QuestionPage
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
@@ -29,103 +29,63 @@ import java.time.LocalDate
 
 class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
 
-  def apply(answers: UserAnswers, provisional: Boolean): Option[IndividualBeneficiary] = {
+  override val reads: Reads[IndividualBeneficiary] = (
+    NamePage.path.read[Name] and
+      DateOfBirthPage.path.readNullable[LocalDate] and
+      readIdentification and
+      readAddress and
+      VPE1FormYesNoPage.path.readNullable[Boolean] and
+      RoleInCompanyPage.path.readNullable[RoleInCompany] and
+      readShareOfIncome and
+      IncomeDiscretionYesNoPage.path.readNullable[Boolean] and
+      readCountryOfResidence and
+      readCountryOfResidenceOrNationality(CountryOfNationalityYesNoPage, CountryOfNationalityUkYesNoPage, CountryOfNationalityPage) and
+      readMentalCapacity and
+      StartDatePage.path.read[LocalDate] and
+      Reads(_ => JsSuccess(true))
+    )(IndividualBeneficiary.apply _)
 
-    val readFromUserAnswers: Reads[IndividualBeneficiary] =
-      (
-        NamePage.path.read[Name] and
-        DateOfBirthPage.path.readNullable[LocalDate] and
-        readIdentification(provisional) and
-        readAddress and
-        VPE1FormYesNoPage.path.readNullable[Boolean] and
-        RoleInCompanyPage.path.readNullable[RoleInCompany] and
-        readIncome and
-        IncomeDiscretionYesNoPage.path.readNullable[Boolean] and
-        CountryOfResidenceYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
-          case Some(true) => CountryOfResidenceUkYesNoPage.path.read[Boolean].flatMap {
-            case true => Reads(_ => JsSuccess(Some(GB)))
-            case false => CountryOfResidencePage.path.read[String].map(Some(_))
-          }
-          case _ => Reads(_ => JsSuccess(None))
-        } and
-        CountryOfNationalityYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
-          case Some(true) => CountryOfNationalityUkYesNoPage.path.read[Boolean].flatMap {
-            case true => Reads(_ => JsSuccess(Some(GB)))
-            case false => CountryOfNationalityPage.path.read[String].map(Some(_))
-          }
-          case _ => Reads(_ => JsSuccess(None))
-        } and
-        MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
-          case Some(true) => Reads(_ => JsSuccess(Some(false)))
-          case Some(false) => Reads(_ => JsSuccess(Some(true)))
-          case _ => Reads(_ => JsSuccess(None))
-        } and
-        StartDatePage.path.read[LocalDate] and
-        Reads(_ => JsSuccess(true))
-      ) (IndividualBeneficiary.apply _)
-
-    mapAnswersWithExplicitReads(answers, readFromUserAnswers)
-  }
-
-  private def readIdentification(provisional: Boolean): Reads[Option[IndividualIdentification]] = {
+  private def readIdentification: Reads[Option[IndividualIdentification]] = {
     NationalInsuranceNumberYesNoPage.path.readNullable[Boolean].flatMap[Option[IndividualIdentification]] {
       case Some(true) => NationalInsuranceNumberPage.path.read[String].map(nino => Some(NationalInsuranceNumber(nino)))
-      case Some(false) => if (provisional) readSeparatePassportOrIdCard else readCombinedPassportOrIdCard
+      case Some(false) => readPassportOrIdCard
       case _ => Reads(_ => JsSuccess(None))
     }
   }
 
-  private def readSeparatePassportOrIdCard: Reads[Option[IndividualIdentification]] = {
-    (for {
+  private def readPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
+    val identification = for {
       hasNino <- NationalInsuranceNumberYesNoPage.path.readWithDefault(false)
       hasAddress <- AddressYesNoPage.path.readWithDefault(false)
       hasPassport <- PassportDetailsYesNoPage.path.readWithDefault(false)
       hasIdCard <- IdCardDetailsYesNoPage.path.readWithDefault(false)
-    } yield (hasNino, hasAddress, hasPassport, hasIdCard)).flatMap[Option[IndividualIdentification]] {
-      case (false, true, true, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
-      case (false, true, false, true) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
+      hasPassportOrIdCard <- PassportOrIdCardDetailsYesNoPage.path.readWithDefault(false)
+    } yield (hasNino, hasAddress, hasPassport, hasIdCard, hasPassportOrIdCard)
+
+    identification.flatMap[Option[IndividualIdentification]] {
+      case (false, true, true, false, false) => PassportDetailsPage.path.read[Passport].map(Some(_))
+      case (false, true, false, true, false) => IdCardDetailsPage.path.read[IdCard].map(Some(_))
+      case (false, true, false, false, true) => PassportOrIdCardDetailsPage.path.read[CombinedPassportOrIdCard].map(Some(_))
       case _ => Reads(_ => JsSuccess(None))
     }
   }
 
-  private def readCombinedPassportOrIdCard: Reads[Option[IndividualIdentification]] = {
-    NationalInsuranceNumberYesNoPage.path.read[Boolean].flatMap {
-      case true => Reads(_ => JsSuccess(None))
-      case false => readPassportOrIdIfAddressExists
-    }
-  }
-
-  private def readPassportOrIdIfAddressExists: Reads[Option[IndividualIdentification]] = {
-    AddressYesNoPage.path.read[Boolean].flatMap {
-      case true => PassportOrIdCardDetailsYesNoPage.path.read[Boolean].flatMap[Option[IndividualIdentification]] {
-        case true => PassportOrIdCardDetailsPage.path.read[CombinedPassportOrIdCard].map(Some(_))
-        case false => Reads(_ => JsSuccess(None))
-      }
+  private def readMentalCapacity: Reads[Option[Boolean]] = {
+    MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
+      case Some(true) => Reads(_ => JsSuccess(Some(false)))
+      case Some(false) => Reads(_ => JsSuccess(Some(true)))
       case _ => Reads(_ => JsSuccess(None))
     }
   }
 
-  private def readAddress: Reads[Option[Address]] = {
-    NationalInsuranceNumberYesNoPage.path.readNullable[Boolean].flatMap {
-      case Some(false) => AddressYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
-        case true => readUkOrNonUkAddress
-        case false => Reads(_ => JsSuccess(None))
-      }
-      case _ => Reads(_ => JsSuccess(None))
-    }
-  }
+  override def ukAddressYesNoPage: QuestionPage[Boolean] = LiveInTheUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
 
-  private def readUkOrNonUkAddress: Reads[Option[Address]] = {
-    LiveInTheUkYesNoPage.path.read[Boolean].flatMap[Option[Address]] {
-      case true => UkAddressPage.path.read[UkAddress].map(Some(_))
-      case false => NonUkAddressPage.path.read[NonUkAddress].map(Some(_))
-    }
-  }
+  override def shareOfIncomePage: QuestionPage[Int] = IncomePercentagePage
 
-  private def readIncome: Reads[Option[String]] = {
-    IncomeDiscretionYesNoPage.path.readNullable[Boolean].flatMap[Option[String]] {
-      case Some(false) => IncomePercentagePage.path.read[Int].map(value => Some(value.toString))
-      case _ => Reads(_ => JsSuccess(None))
-    }
-  }
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
+  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+
 }

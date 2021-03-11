@@ -87,13 +87,6 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
   def country(code: String)(implicit messages: Messages): Html =
     escape(countryOptions.options.find(_.value.equals(code)).map(_.label).getOrElse(""))
 
-  def formatIdentificationDetails(identificationDetailOptions: IdentificationDetailOptions): Html = {
-    identificationDetailOptions match {
-      case IdentificationDetailOptions.IdCard => escape("ID card")
-      case IdentificationDetailOptions.Passport => escape("Passport")
-    }
-  }
-
   def formatPassportOrIdCardDetails(id: CombinedPassportOrIdCard)
                                    (implicit messages: Messages): Html = {
     val lines =

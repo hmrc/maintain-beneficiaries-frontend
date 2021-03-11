@@ -43,7 +43,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
         "return None for empty user answers" in {
 
-          val result = mapper(emptyUserAnswers, provisional = true)
+          val result = mapper(emptyUserAnswers)
           result mustBe None
         }
 
@@ -61,7 +61,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -94,7 +94,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -126,7 +126,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -153,7 +153,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -181,7 +181,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe Some(RoleInCompany.Employee)
@@ -216,7 +216,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -250,7 +250,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = true).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -290,7 +290,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(VPE1FormYesNoPage, false).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = true).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None
@@ -325,7 +325,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(VPE1FormYesNoPage, false).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = true).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None
@@ -356,7 +356,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(MentalCapacityYesNoPage, false).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = true).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None
@@ -385,7 +385,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(MentalCapacityYesNoPage, true).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = true).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None
@@ -413,7 +413,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
         "return None for empty user answers" in {
 
-          val result = mapper(emptyUserAnswers, provisional = false)
+          val result = mapper(emptyUserAnswers)
           result mustBe None
         }
 
@@ -437,7 +437,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             .set(VPE1FormYesNoPage, false).success.value
             .set(StartDatePage, startDate).success.value
 
-          val result = mapper(userAnswers, provisional = false).get
+          val result = mapper(userAnswers).get
 
           result.name mustBe name
           result.roleInCompany mustBe None
@@ -482,7 +482,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(VPE1FormYesNoPage, false).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = false).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None
@@ -517,7 +517,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(MentalCapacityYesNoPage, true).success.value
               .set(StartDatePage, startDate).success.value
 
-            val result = mapper(userAnswers, provisional = false).get
+            val result = mapper(userAnswers).get
 
             result.name mustBe name
             result.roleInCompany mustBe None

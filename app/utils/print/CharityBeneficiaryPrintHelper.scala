@@ -47,10 +47,7 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
       ).flatten
     }
 
-    AnswerSection(
-      headingKey = None,
-      rows = answerRows
-    )
+    AnswerSection(headingKey = None, rows = answerRows)
   }
 
 }

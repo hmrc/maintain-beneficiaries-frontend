@@ -47,9 +47,6 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
       ).flatten
     }
 
-    AnswerSection(
-      headingKey = None,
-      rows = answerRows
-    )
+    AnswerSection(headingKey = None, rows = answerRows)
   }
 }

@@ -36,11 +36,6 @@ trait ModelGenerators {
     }
   }
 
-  implicit lazy val arbitraryIdentificationDetailOptions: Arbitrary[IdentificationDetailOptions] =
-    Arbitrary {
-      Gen.oneOf(IdentificationDetailOptions.values.toSeq)
-    }
-
   implicit lazy val arbitraryIdCard: Arbitrary[IdCard] =
     Arbitrary {
       for {

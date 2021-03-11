@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import models.UserAnswers
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.i18n.Messages
-import viewmodels.AnswerSection
+import viewmodels.{AnswerRow, AnswerSection}
 
 class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
@@ -28,12 +28,11 @@ class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description)
 
-    AnswerSection(
-      headingKey = None,
-      rows = Seq(
-        bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
-        bound.dateQuestion(EntityStartPage, "classOfBeneficiary.entityStart", controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
-      ).flatten
-    )
+    def answerRows: Seq[AnswerRow] = Seq(
+      bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
+      bound.dateQuestion(EntityStartPage, "classOfBeneficiary.entityStart", controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
+    ).flatten
+
+    AnswerSection(headingKey = None, answerRows)
   }
 }
