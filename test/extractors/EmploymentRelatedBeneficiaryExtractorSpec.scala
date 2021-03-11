@@ -17,7 +17,7 @@
 package extractors
 
 import base.SpecBase
-import models.Constant.GB
+import utils.Constants.GB
 import models.HowManyBeneficiaries.Over1
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import models.{Description, HowManyBeneficiaries, NonUkAddress, UkAddress, UserAnswers}

@@ -16,7 +16,7 @@
 
 package models.beneficiaries
 
-import models.Constant.GB
+import utils.Constants.GB
 
 import java.time.LocalDate
 import models.HowManyBeneficiaries._

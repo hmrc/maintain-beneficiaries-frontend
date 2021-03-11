@@ -16,7 +16,7 @@
 
 package utils.mappers
 
-import models.Constant.GB
+import utils.Constants.GB
 import models._
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import pages.companyoremploymentrelated.employment._
