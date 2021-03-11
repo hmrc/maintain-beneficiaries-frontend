@@ -47,9 +47,6 @@ class EmploymentRelatedBeneficiaryPrintHelper @Inject()(answerRowConverter: Answ
       ).flatten
     }
 
-    AnswerSection(
-      headingKey = None,
-      rows = answerRows
-    )
+    AnswerSection(headingKey = None, rows = answerRows)
   }
 }

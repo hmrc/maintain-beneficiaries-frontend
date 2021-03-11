@@ -47,5 +47,5 @@ class TrustBeneficiaryMapper extends Mapper[TrustBeneficiary] {
   override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
   override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
   override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
-  
+
 }
