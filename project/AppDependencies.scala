@@ -6,7 +6,7 @@ object AppDependencies {
   private val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"             %% "govuk-template"             % "5.63.0-play-27",
-    "uk.gov.hmrc"             %% "play-ui"                    % "8.21.0-play-27",
+    "uk.gov.hmrc"             %% "play-ui"                    % "9.0.0-play-27",
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-27" % "3.4.0",
     "com.typesafe.play"       %% "play-json-joda"             % "2.9.2",
     "uk.gov.hmrc"             %% "domain"                     % "5.10.0-play-27",
