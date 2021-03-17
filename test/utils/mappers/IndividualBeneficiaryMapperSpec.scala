@@ -299,7 +299,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(false)
             result.identification mustBe Some(NationalInsuranceNumber(nino))
             result.address mustBe None
             result.vulnerableYesNo mustBe Some(false)
@@ -334,7 +334,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(true)
             result.identification mustBe Some(NationalInsuranceNumber(nino))
             result.address mustBe None
             result.vulnerableYesNo mustBe Some(false)
@@ -365,7 +365,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(false)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
@@ -394,7 +394,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(true)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
@@ -491,7 +491,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(false)
             result.identification mustBe Some(passport)
             result.address mustBe Some(nonUkAddress)
             result.vulnerableYesNo mustBe Some(false)
@@ -526,7 +526,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(true)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
