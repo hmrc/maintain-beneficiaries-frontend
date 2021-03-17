@@ -72,8 +72,7 @@ class IndividualBeneficiaryMapper extends Mapper[IndividualBeneficiary]  {
 
   private def readMentalCapacity: Reads[Option[Boolean]] = {
     MentalCapacityYesNoPage.path.readNullable[Boolean].flatMap[Option[Boolean]] {
-      case Some(true) => Reads(_ => JsSuccess(Some(false)))
-      case Some(false) => Reads(_ => JsSuccess(Some(true)))
+      case Some(value) => Reads(_ => JsSuccess(Some(value)))
       case _ => Reads(_ => JsSuccess(None))
     }
   }
