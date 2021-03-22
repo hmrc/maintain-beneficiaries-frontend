@@ -7,7 +7,7 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"             %% "govuk-template"             % "5.63.0-play-27",
     "uk.gov.hmrc"             %% "play-ui"                    % "9.0.0-play-27",
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-27" % "3.4.0",
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-27" % "4.1.0",
     "com.typesafe.play"       %% "play-json-joda"             % "2.9.2",
     "uk.gov.hmrc"             %% "domain"                     % "5.10.0-play-27",
     "org.reactivemongo"       %% "play2-reactivemongo"        % "0.20.3-play27",
