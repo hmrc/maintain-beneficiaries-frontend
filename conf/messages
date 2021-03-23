@@ -908,10 +908,10 @@ employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel = Do you kno
 employmentBeneficiary.countryOfResidenceYesNo.error.required = Select yes if you know this beneficiary’s country of residence
 employmentBeneficiary.countryOfResidenceYesNo.hint = The country of residence is usually where the business group is registered. The business group has UK residency if it is registered with Companies House.
 
-employmentBeneficiary.countryOfResidenceInTheUkYesNo.title = Does this beneficiary have UK residency?
-employmentBeneficiary.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
-employmentBeneficiary.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
-employmentBeneficiary.countryOfResidenceInTheUkYesNo.error.required = Select yes if the beneficiary has UK residency
+employmentBeneficiary.countryOfResidenceUkYesNo.title = Does this beneficiary have UK residency?
+employmentBeneficiary.countryOfResidenceUkYesNo.heading = Does {0} have UK residency?
+employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+employmentBeneficiary.countryOfResidenceUkYesNo.error.required = Select yes if the beneficiary has UK residency
 
 employmentBeneficiary.countryOfResidence.title = What is this beneficiary’s country of residence?
 employmentBeneficiary.countryOfResidence.heading = What is {0}’s country of residence?
