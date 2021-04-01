@@ -18,7 +18,12 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class TrustDetails(startDate: String, typeOfTrust: Option[TypeOfTrust], trustTaxable: Option[Boolean])
+import java.time.LocalDate
+
+case class TrustDetails(startDate: LocalDate, typeOfTrust: Option[TypeOfTrust], trustTaxable: Option[Boolean]) {
+
+  def isTaxable: Boolean = trustTaxable.getOrElse(true)
+}
 
 object TrustDetails {
 

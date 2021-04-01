@@ -190,7 +190,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
 
       whenReady(processed) {
         r =>
-          r mustBe TrustDetails(startDate = "1920-03-28", typeOfTrust = Some(TypeOfTrust.WillTrustOrIntestacyTrust), trustTaxable = None)
+          r mustBe TrustDetails(startDate = LocalDate.parse("1920-03-28"), typeOfTrust = Some(TypeOfTrust.WillTrustOrIntestacyTrust), trustTaxable = None)
       }
 
     }

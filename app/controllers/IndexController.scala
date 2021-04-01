@@ -16,11 +16,8 @@
 
 package controllers
 
-import java.time.LocalDate
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
-
-import javax.inject.Inject
 import models.UserAnswers
 import play.api.Logging
 import play.api.i18n.I18nSupport
@@ -29,6 +26,7 @@ import repositories.PlaybackRepository
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
@@ -40,29 +38,35 @@ class IndexController @Inject()(
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(identifier: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(identifier) andThen actions.getData).async {
-      implicit request =>
+    implicit request =>
 
-        for {
-          details <- connector.getTrustDetails(identifier)
-          is5mldEnabled <- featureFlagService.is5mldEnabled()
-          isUnderlyingData5mld <- connector.isTrust5mld(identifier)
-          ua <- Future.successful {
-            request.userAnswers.getOrElse {
-              UserAnswers(
-                internalId = request.user.internalId,
-                identifier = identifier,
-                whenTrustSetup = LocalDate.parse(details.startDate),
-                trustType = details.typeOfTrust,
-                is5mldEnabled = is5mldEnabled,
-                isTaxable = details.trustTaxable.getOrElse(true),
-                isUnderlyingData5mld = isUnderlyingData5mld
-              )
-            }
+      for {
+        details <- connector.getTrustDetails(identifier)
+        is5mldEnabled <- featureFlagService.is5mldEnabled()
+        isUnderlyingData5mld <- connector.isTrust5mld(identifier)
+        ua <- Future.successful {
+          request.userAnswers match {
+            case Some(userAnswers) => userAnswers.copy(
+              trustType = details.typeOfTrust,
+              is5mldEnabled = is5mldEnabled,
+              isTaxable = details.isTaxable,
+              isUnderlyingData5mld = isUnderlyingData5mld
+            )
+            case None => UserAnswers(
+              internalId = request.user.internalId,
+              identifier = identifier,
+              whenTrustSetup = details.startDate,
+              trustType = details.typeOfTrust,
+              is5mldEnabled = is5mldEnabled,
+              isTaxable = details.isTaxable,
+              isUnderlyingData5mld = isUnderlyingData5mld
+            )
           }
-          _ <- cacheRepository.set(ua)
-        } yield {
-          logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $identifier] user has started maintaining beneficiaries")
-          Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
         }
-    }
+        _ <- cacheRepository.set(ua)
+      } yield {
+        logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $identifier] user has started maintaining beneficiaries")
+        Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+      }
+  }
 }

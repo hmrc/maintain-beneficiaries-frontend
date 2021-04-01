@@ -35,7 +35,7 @@ class IndexControllerSpec extends SpecBase {
   "Index Controller" must {
 
     val identifier = "1234567890"
-    val startDate = "2019-06-01"
+    val startDate = LocalDate.parse("2019-06-01")
     val trustType = TypeOfTrust.WillTrustOrIntestacyTrust
     val is5mldEnabled = false
     val isTaxable = false
@@ -79,7 +79,7 @@ class IndexControllerSpec extends SpecBase {
 
       uaCaptor.getValue.internalId mustBe "id"
       uaCaptor.getValue.identifier mustBe identifier
-      uaCaptor.getValue.whenTrustSetup mustBe LocalDate.parse(startDate)
+      uaCaptor.getValue.whenTrustSetup mustBe startDate
       uaCaptor.getValue.trustType.get mustBe trustType
       uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
       uaCaptor.getValue.isTaxable mustBe isTaxable
