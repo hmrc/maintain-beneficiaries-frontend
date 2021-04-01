@@ -44,7 +44,7 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         bound.percentageQuestion(IncomePercentagePage, "individualBeneficiary.shareOfIncome", IncomePercentageController.onPageLoad(mode).url),
         bound.yesNoQuestion(CountryOfNationalityYesNoPage, "individualBeneficiary.countryOfNationalityYesNo", CountryOfNationalityYesNoController.onPageLoad(mode).url),
         bound.yesNoQuestion(CountryOfNationalityUkYesNoPage, "individualBeneficiary.countryOfNationalityUkYesNo", CountryOfNationalityUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfNationalityUkYesNoPage, CountryOfResidencePage, "individualBeneficiary.countryOfNationality", CountryOfNationalityController.onPageLoad(mode).url),
+        bound.countryQuestion(CountryOfNationalityUkYesNoPage, CountryOfNationalityPage, "individualBeneficiary.countryOfNationality", CountryOfNationalityController.onPageLoad(mode).url),
         bound.yesNoQuestion(NationalInsuranceNumberYesNoPage, "individualBeneficiary.nationalInsuranceNumberYesNo", NationalInsuranceNumberYesNoController.onPageLoad(mode).url),
         bound.ninoQuestion(NationalInsuranceNumberPage, "individualBeneficiary.nationalInsuranceNumber", NationalInsuranceNumberController.onPageLoad(mode).url),
         bound.yesNoQuestion(CountryOfResidenceYesNoPage, "individualBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),

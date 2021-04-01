@@ -34,7 +34,8 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
   val name: Name = Name("First", Some("Middle"), "Last")
   val ukAddress = UkAddress("value 1", "value 2", None, None, "AB1 1AB")
   val nonUkAddress = NonUkAddress("value 1", "value 2", None, "DE")
-  val country: String = "DE"
+  val nationality: String = "DE"
+  val residence: String = "FR"
 
   "IndividualBeneficiaryPrintHelper" must {
 
@@ -49,12 +50,12 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
       .set(IncomePercentagePage, 50).success.value
       .set(CountryOfNationalityYesNoPage, true).success.value
       .set(CountryOfNationalityUkYesNoPage, false).success.value
-      .set(CountryOfNationalityPage, country).success.value
+      .set(CountryOfNationalityPage, nationality).success.value
       .set(NationalInsuranceNumberYesNoPage, true).success.value
       .set(NationalInsuranceNumberPage, "AA000000A").success.value
       .set(CountryOfResidenceYesNoPage, true).success.value
       .set(CountryOfResidenceUkYesNoPage, false).success.value
-      .set(CountryOfResidencePage, country).success.value
+      .set(CountryOfResidencePage, residence).success.value
       .set(AddressYesNoPage, true).success.value
       .set(LiveInTheUkYesNoPage, true).success.value
       .set(UkAddressPage, ukAddress).success.value
@@ -90,7 +91,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("individualBeneficiary.nationalInsuranceNumber.checkYourAnswersLabel", name.displayName)), answer = Html("AA 00 00 00 A"), changeUrl = NationalInsuranceNumberController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidence.checkYourAnswersLabel", name.displayName)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(NormalMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidence.checkYourAnswersLabel", name.displayName)), answer = Html("France"), changeUrl = CountryOfResidenceController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.addressYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = LiveInTheUkYesNoController.onPageLoad(NormalMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = UkAddressController.onPageLoad(NormalMode).url),
@@ -130,7 +131,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = Html(messages("individualBeneficiary.nationalInsuranceNumber.checkYourAnswersLabel", name.displayName)), answer = Html("AA 00 00 00 A"), changeUrl = controllers.individualbeneficiary.routes.NationalInsuranceNumberController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidence.checkYourAnswersLabel", name.displayName)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(CheckMode).url),
+            AnswerRow(label = Html(messages("individualBeneficiary.countryOfResidence.checkYourAnswersLabel", name.displayName)), answer = Html("France"), changeUrl = CountryOfResidenceController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.addressYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.AddressYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName)), answer = Html("Yes"), changeUrl = controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(CheckMode).url),
             AnswerRow(label = Html(messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName)), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(CheckMode).url),
