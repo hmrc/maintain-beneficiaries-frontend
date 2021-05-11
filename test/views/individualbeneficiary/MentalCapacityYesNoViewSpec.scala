@@ -38,13 +38,11 @@ class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, name.displayName)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName,"p1", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4")
 
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.MentalCapacityYesNoController.onSubmit(NormalMode).url)
-
-    behave like pageWithHint(form, applyView, s"$messageKeyPrefix.hint")
 
     behave like pageWithASubmitButton(applyView(form))
   }

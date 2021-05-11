@@ -18,7 +18,8 @@
     legend: String,
     hint: Option[String] = None,
     legendClass: Option[String] = None,
-    headingIsLegend: Boolean = true
+    headingIsLegend: Boolean = true,
+    additionalContent: Option[Html] = None
 )(implicit messages: Messages)
 
 
@@ -34,6 +35,10 @@
             @legend
             @if(headingIsLegend){</h1>}
         </legend>
+
+        @if(additionalContent.isDefined){
+            @additionalContent
+        }
 
         @if(hint.nonEmpty){
             <div class="form-hint" id="hint-@{field.id}">@hint</div>
