@@ -23,6 +23,17 @@
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
+@content = {
+<p>@messages("individualBeneficiary.mentalCapacityYesNo.p1")</p>
+
+<ul class="govuk-list trust-list--bullet">
+    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint1")</li>
+    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint2")</li>
+    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint3")</li>
+    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint4")</li>
+</ul>
+}
+
 @main_template(
     title = s"${errorPrefix(form)}${messages("individualBeneficiary.mentalCapacityYesNo.title")}"
 ) {
@@ -37,7 +48,7 @@
             field = form("value"),
             legend = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
             headingIsLegend = true,
-            hint = Some(messages("individualBeneficiary.mentalCapacityYesNo.hint"))
+            additionalContent = Some(content)
         )
 
         @components.submit_button()
