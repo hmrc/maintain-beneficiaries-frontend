@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.TrustConnector
-import models.{TrustDetails, TypeOfTrust, UserAnswers}
+import models.{TaxableMigrationFlag, TrustDetails, TypeOfTrust, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -40,6 +40,7 @@ class IndexControllerSpec extends SpecBase {
     val is5mldEnabled = false
     val isTaxable = false
     val isUnderlyingData5mld = false
+    val migratingFromNonTaxableToTaxable = false
 
     "populate user answers and redirect" in {
 
@@ -59,6 +60,9 @@ class IndexControllerSpec extends SpecBase {
 
       when(mockTrustConnector.isTrust5mld(any())(any(), any()))
         .thenReturn(Future.successful(isUnderlyingData5mld))
+
+      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+        .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
@@ -84,6 +88,7 @@ class IndexControllerSpec extends SpecBase {
       uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
       uaCaptor.getValue.isTaxable mustBe isTaxable
       uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
+      uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
 
       application.stop()
     }
@@ -106,6 +111,9 @@ class IndexControllerSpec extends SpecBase {
 
       when(mockTrustConnector.isTrust5mld(any())(any(), any()))
         .thenReturn(Future.successful(isUnderlyingData5mld))
+
+      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+        .thenReturn(Future.successful(TaxableMigrationFlag(None)))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
