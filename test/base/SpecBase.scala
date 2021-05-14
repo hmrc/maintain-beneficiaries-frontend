@@ -16,10 +16,8 @@
 
 package base
 
-import java.time.LocalDate
-
 import controllers.actions._
-import models.TypeOfTrust
+import models.{TypeOfTrust, UserAnswers}
 import navigation.FakeNavigator
 import org.scalatest.{BeforeAndAfter, TestSuite, TryValues}
 import org.scalatestplus.play.PlaySpec
@@ -30,6 +28,8 @@ import play.api.mvc.BodyParsers
 import repositories.{ActiveSessionRepository, PlaybackRepository}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 
+import java.time.LocalDate
+
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
   this: TestSuite =>
 
@@ -38,16 +38,24 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
 
   lazy val userInternalId = "internalId"
 
-  def emptyUserAnswers = models.UserAnswers(userInternalId, "UTRUTRUTR", LocalDate.now(), Some(TypeOfTrust.WillTrustOrIntestacyTrust))
+  def emptyUserAnswers: UserAnswers = UserAnswers(
+    internalId = userInternalId,
+    identifier = "UTRUTRUTR",
+    whenTrustSetup = LocalDate.now(),
+    trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
+    is5mldEnabled = false,
+    isTaxable = true,
+    isUnderlyingData5mld = false,
+    migratingFromNonTaxableToTaxable = false
+  )
 
-  val bodyParsers = injector.instanceOf[BodyParsers.Default]
+  val bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
 
   val fakeNavigator = new FakeNavigator()
 
   protected def applicationBuilder(userAnswers: Option[models.UserAnswers] = None,
                                    affinityGroup: AffinityGroup = AffinityGroup.Organisation,
-                                   enrolments: Enrolments = Enrolments(Set.empty[Enrolment])
-                                  ): GuiceApplicationBuilder =
+                                   enrolments: Enrolments = Enrolments(Set.empty[Enrolment])): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].toInstance(new FakeIdentifierAction(bodyParsers, affinityGroup)),

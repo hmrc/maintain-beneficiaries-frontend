@@ -44,13 +44,15 @@ class IndexController @Inject()(
         details <- connector.getTrustDetails(identifier)
         is5mldEnabled <- featureFlagService.is5mldEnabled()
         isUnderlyingData5mld <- connector.isTrust5mld(identifier)
+        taxableMigrationFlag <- connector.getTrustMigrationFlag(identifier)
         ua <- Future.successful {
           request.userAnswers match {
             case Some(userAnswers) => userAnswers.copy(
               trustType = details.typeOfTrust,
               is5mldEnabled = is5mldEnabled,
               isTaxable = details.isTaxable,
-              isUnderlyingData5mld = isUnderlyingData5mld
+              isUnderlyingData5mld = isUnderlyingData5mld,
+              migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
             )
             case None => UserAnswers(
               internalId = request.user.internalId,
@@ -59,13 +61,14 @@ class IndexController @Inject()(
               trustType = details.typeOfTrust,
               is5mldEnabled = is5mldEnabled,
               isTaxable = details.isTaxable,
-              isUnderlyingData5mld = isUnderlyingData5mld
+              isUnderlyingData5mld = isUnderlyingData5mld,
+              migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
             )
           }
         }
         _ <- cacheRepository.set(ua)
       } yield {
-        logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: $identifier] user has started maintaining beneficiaries")
+        logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] user has started maintaining beneficiaries")
         Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
       }
   }

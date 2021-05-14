@@ -35,11 +35,15 @@ class UserAnswersSpec extends SpecBase {
       )
 
       val ua = new UserAnswers(
-        "ID",
-        "UTRUTRUTR",
-        LocalDate.of(1999, 10, 20),
-        Some(TypeOfTrust.WillTrustOrIntestacyTrust),
-        json
+        internalId = "ID",
+        identifier = "UTRUTRUTR",
+        whenTrustSetup = LocalDate.of(1999, 10, 20),
+        trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
+        data = json,
+        is5mldEnabled = false,
+        isTaxable = true,
+        isUnderlyingData5mld = false,
+        migratingFromNonTaxableToTaxable = false
       )
 
       ua.deleteAtPath(JsPath \ "field" \ "innerfield") mustBe Success(ua.copy(data = Json.obj(
@@ -78,7 +82,11 @@ class UserAnswersSpec extends SpecBase {
           whenTrustSetup = LocalDate.parse(date),
           trustType = Some(trustType),
           data = Json.obj(),
-          updatedAt = LocalDateTime.parse(dateTime)
+          updatedAt = LocalDateTime.parse(dateTime),
+          is5mldEnabled = false,
+          isTaxable = true,
+          isUnderlyingData5mld = false,
+          migratingFromNonTaxableToTaxable = false
         )
       }
 
@@ -105,7 +113,11 @@ class UserAnswersSpec extends SpecBase {
           whenTrustSetup = LocalDate.parse(date),
           trustType = Some(trustType),
           data = Json.obj(),
-          updatedAt = LocalDateTime.parse(dateTime)
+          updatedAt = LocalDateTime.parse(dateTime),
+          is5mldEnabled = false,
+          isTaxable = true,
+          isUnderlyingData5mld = false,
+          migratingFromNonTaxableToTaxable = false
         )
       }
     }

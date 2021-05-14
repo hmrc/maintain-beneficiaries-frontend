@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.beneficiaries._
-import models.{RemoveBeneficiary, TrustDetails}
+import models.{RemoveBeneficiary, TaxableMigrationFlag, TrustDetails}
 import play.api.libs.json.{JsString, JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
@@ -135,6 +135,11 @@ class TrustConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
     val url: String = s"$trustsUrl/$identifier/is-trust-5mld"
     http.GET[Boolean](url)
+  }
+
+  def getTrustMigrationFlag(identifier: String)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TaxableMigrationFlag] = {
+    val url = s"$trustsUrl/$identifier/taxable-migration/migrating-to-taxable"
+    http.GET[TaxableMigrationFlag](url)
   }
 
 }
