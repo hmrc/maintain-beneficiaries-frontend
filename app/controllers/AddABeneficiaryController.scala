@@ -21,7 +21,6 @@ import connectors.TrustsStoreConnector
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import handlers.ErrorHandler
-import javax.inject.Inject
 import models.beneficiaries.Beneficiaries
 import models.{AddABeneficiary, Enumerable}
 import play.api.Logging
@@ -34,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddABeneficiaryViewHelper
 import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBeneficiariesView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddABeneficiaryController @Inject()(
@@ -49,8 +49,9 @@ class AddABeneficiaryController @Inject()(
                                            completeView: MaxedOutBeneficiariesView,
                                            val appConfig: FrontendAppConfig,
                                            trustStoreConnector: TrustsStoreConnector,
-                                           errorHandler: ErrorHandler
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
+                                           errorHandler: ErrorHandler,
+                                           viewHelper: AddABeneficiaryViewHelper
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
 
@@ -70,9 +71,13 @@ class AddABeneficiaryController @Inject()(
               s" asking user if they want to add a beneficiary, no beneficiaries in trust")
 
             Ok(yesNoView(yesNoForm))
-          case all: Beneficiaries =>
+          case _ =>
 
-            val beneficiaryRows = new AddABeneficiaryViewHelper(all).rows
+            val beneficiaryRows = viewHelper.rows(
+              beneficiaries = beneficiaries,
+              migratingFromNonTaxableToTaxable = updatedAnswers.migratingFromNonTaxableToTaxable,
+              trustType = updatedAnswers.trustType
+            )
 
             if (beneficiaries.nonMaxedOutOptions.isEmpty) {
               logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
@@ -81,7 +86,7 @@ class AddABeneficiaryController @Inject()(
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
-                heading = all.addToHeading
+                heading = beneficiaries.addToHeading
               ))
             } else {
               logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
@@ -91,7 +96,7 @@ class AddABeneficiaryController @Inject()(
                 form = addAnotherForm,
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
-                heading = all.addToHeading,
+                heading = beneficiaries.addToHeading,
                 maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
               ))
             }
@@ -116,9 +121,9 @@ class AddABeneficiaryController @Inject()(
           if (addNow) {
 
             for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
-                _ <- repository.set(updatedAnswers)
-              } yield Redirect(controllers.routes.AddNowController.onPageLoad())
+              updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
+              _ <- repository.set(updatedAnswers)
+            } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
             for {
               _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
@@ -137,7 +142,11 @@ class AddABeneficiaryController @Inject()(
         addAnotherForm.bindFromRequest().fold(
           (formWithErrors: Form[_]) => {
 
-            val rows = new AddABeneficiaryViewHelper(beneficiaries).rows
+            val rows = viewHelper.rows(
+              beneficiaries = beneficiaries,
+              migratingFromNonTaxableToTaxable = request.userAnswers.migratingFromNonTaxableToTaxable,
+              trustType = request.userAnswers.trustType
+            )
 
             Future.successful(BadRequest(
               addAnotherView(

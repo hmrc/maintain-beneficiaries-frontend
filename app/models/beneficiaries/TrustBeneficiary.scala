@@ -17,8 +17,7 @@
 package models.beneficiaries
 
 import java.time.LocalDate
-
-import models.Address
+import models.{Address, TypeOfTrust}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -29,7 +28,19 @@ final case class TrustBeneficiary(name: String,
                                   incomeDiscretionYesNo: Option[Boolean],
                                   countryOfResidence: Option[String] = None,
                                   entityStart: LocalDate,
-                                  provisional: Boolean) extends OrgBeneficiary
+                                  provisional: Boolean) extends OrgBeneficiary {
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+    if (migratingFromNonTaxableToTaxable) {
+      (incomeDiscretionYesNo, income) match {
+        case (None, None) => false
+        case _ => true
+      }
+    } else {
+      true
+    }
+  }
+}
 
 object TrustBeneficiary extends BeneficiaryReads {
 

@@ -16,13 +16,14 @@
 
 package models.beneficiaries
 
-import models.Address
+import models.{Address, TypeOfTrust}
 import play.api.libs.json.{JsPath, JsSuccess, Reads}
 
 import java.time.LocalDate
 
 trait Beneficiary {
   val entityStart: LocalDate
+  def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean
 }
 
 trait IncomeBeneficiary extends Beneficiary {

@@ -24,15 +24,17 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_],
+@(
+    form: Form[_],
     inProgressBeneficiaries: Seq[AddRow],
     completeBeneficiaries: Seq[AddRow],
     heading: String,
-    maxedOut: List[String])(implicit request: Request[_], messages: Messages)
+    maxedOut: List[String]
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}$heading"
-    ) {
+) {
 
     @formHelper(action = AddABeneficiaryController.submitAnother(), 'autoComplete -> "off") {
 

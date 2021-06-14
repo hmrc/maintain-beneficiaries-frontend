@@ -16,28 +16,44 @@
 
 package models.beneficiaries
 
+import models.TypeOfTrust
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 import viewmodels.RadioOption
 
-case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
-                         unidentified: List[ClassOfBeneficiary],
-                         company: List[CompanyBeneficiary],
-                         employmentRelated: List[EmploymentRelatedBeneficiary],
-                         trust: List[TrustBeneficiary],
-                         charity: List[CharityBeneficiary],
-                         other: List[OtherBeneficiary]) {
+case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
+                         unidentified: List[ClassOfBeneficiary] = Nil,
+                         company: List[CompanyBeneficiary] = Nil,
+                         employmentRelated: List[EmploymentRelatedBeneficiary] = Nil,
+                         trust: List[TrustBeneficiary] = Nil,
+                         charity: List[CharityBeneficiary] = Nil,
+                         other: List[OtherBeneficiary] = Nil) {
+
+  private def filter(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust], isCompleted: Boolean): Beneficiaries = this.copy(
+    individualDetails = individualDetails.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    unidentified = unidentified.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    company = company.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    employmentRelated = employmentRelated.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    trust = trust.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    charity = charity.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted),
+    other = other.filter(_.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) == isCompleted)
+  )
+
+  def inProgress(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Beneficiaries =
+    filter(migratingFromNonTaxableToTaxable, trustType, isCompleted = false)
+
+  def completed(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Beneficiaries =
+    filter(migratingFromNonTaxableToTaxable, trustType, isCompleted = true)
 
   type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
   def addToHeading()(implicit mp: MessagesProvider): String =
     (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
-      case 0 => Messages("addABeneficiary.heading")
-      case 1 => Messages("addABeneficiary.singular.heading")
-      case l => Messages("addABeneficiary.count.heading", l)
+      case c if c > 1 => Messages("addABeneficiary.count.heading", c)
+      case _ => Messages("addABeneficiary.heading")
     }
 
   private val options: BeneficiaryOptions = {
