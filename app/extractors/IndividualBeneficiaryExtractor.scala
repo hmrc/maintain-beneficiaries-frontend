@@ -31,20 +31,18 @@ import scala.util.{Success, Try}
 class IndividualBeneficiaryExtractor extends BeneficiaryExtractor[IndividualBeneficiary] {
 
   override def apply(answers: UserAnswers,
-                     individual: IndividualBeneficiary,
+                     individualBeneficiary: IndividualBeneficiary,
                      index: Int): Try[UserAnswers] = {
 
-    super.apply(answers, individual, index)
-      .flatMap(_.set(RoleInCompanyPage, individual.roleInCompany))
-      .flatMap(_.set(NamePage, individual.name))
-      .flatMap(answers => extractDateOfBirth(individual.dateOfBirth, answers))
-      .flatMap(answers => extractShareOfIncome(individual.income, answers))
-      .flatMap(answers => extractCountryOfNationality(individual.nationality, answers))
-      .flatMap(answers => extractCountryOfResidence(individual.countryOfResidence, answers))
-      .flatMap(answers => extractAddress(individual.address, answers))
-      .flatMap(answers => extractIdentification(individual, answers))
-      .flatMap(_.set(MentalCapacityYesNoPage, individual.mentalCapacityYesNo))
-      .flatMap(_.set(VPE1FormYesNoPage, individual.vulnerableYesNo))
+    super.apply(answers, individualBeneficiary, index)
+      .flatMap(_.set(RoleInCompanyPage, individualBeneficiary.roleInCompany))
+      .flatMap(_.set(NamePage, individualBeneficiary.name))
+      .flatMap(answers => extractDateOfBirth(individualBeneficiary.dateOfBirth, answers))
+      .flatMap(answers => extractUserAnswersForIncomeBeneficiary(answers, individualBeneficiary))
+      .flatMap(answers => extractCountryOfNationality(individualBeneficiary.nationality, answers))
+      .flatMap(answers => extractIdentification(individualBeneficiary, answers))
+      .flatMap(_.set(MentalCapacityYesNoPage, individualBeneficiary.mentalCapacityYesNo))
+      .flatMap(_.set(VPE1FormYesNoPage, individualBeneficiary.vulnerableYesNo))
   }
 
   override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = IncomeDiscretionYesNoPage

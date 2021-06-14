@@ -28,7 +28,7 @@ final case class OtherBeneficiary(description: String,
                                   incomeDiscretionYesNo: Option[Boolean],
                                   countryOfResidence: Option[String] = None,
                                   entityStart: LocalDate,
-                                  provisional: Boolean) extends Beneficiary
+                                  provisional: Boolean) extends IncomeBeneficiary
 
 object OtherBeneficiary {
 

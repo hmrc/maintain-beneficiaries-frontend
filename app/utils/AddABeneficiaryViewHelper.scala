@@ -22,7 +22,7 @@ import viewmodels.addAnother.{AddRow, AddToRows}
 
 class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages: Messages) {
 
-  private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int) : AddRow = {
+  private def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int): AddRow = {
     AddRow(
       name = beneficiary.name.displayName,
       typeLabel = messages("entities.beneficiaries.individual"),
@@ -33,7 +33,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
     )
   }
 
-  private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int) : AddRow = {
+  private def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int): AddRow = {
     AddRow(
       name = beneficiary.description,
       typeLabel = messages("entities.beneficiaries.unidentified"),
@@ -44,7 +44,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
     )
   }
 
-  private def renderTrustBeneficiary(beneficiary: TrustBeneficiary, index: Int) : AddRow =
+  private def renderTrustBeneficiary(beneficiary: TrustBeneficiary, index: Int): AddRow =
     AddRow(
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.trust"),
@@ -54,7 +54,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
     )
 
-  private def renderCharityBeneficiary(beneficiary: CharityBeneficiary, index: Int) : AddRow =
+  private def renderCharityBeneficiary(beneficiary: CharityBeneficiary, index: Int): AddRow =
     AddRow(
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.charity"),
@@ -64,7 +64,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
     )
 
-  private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int) : AddRow =
+  private def renderCompanyBeneficiary(beneficiary: CompanyBeneficiary, index: Int): AddRow =
     AddRow(
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.company"),
@@ -74,7 +74,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
     )
 
-  private def renderEmploymentRelatedBeneficiary(beneficiary: EmploymentRelatedBeneficiary, index: Int) : AddRow =
+  private def renderEmploymentRelatedBeneficiary(beneficiary: EmploymentRelatedBeneficiary, index: Int): AddRow =
     AddRow(
       name = beneficiary.name,
       typeLabel = messages("entities.beneficiaries.employmentRelated"),
@@ -84,7 +84,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = Some(controllers.companyoremploymentrelated.employment.remove.routes.RemoveEmploymentBeneficiaryController.onPageLoad(index).url)
     )
 
-  private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int) : AddRow =
+  private def renderOtherBeneficiary(beneficiary: OtherBeneficiary, index: Int): AddRow =
     AddRow(
       name = beneficiary.description,
       typeLabel = messages("entities.beneficiaries.other"),
@@ -94,7 +94,7 @@ class AddABeneficiaryViewHelper(beneficiaries: Beneficiaries)(implicit messages:
       removeUrl = Some(controllers.other.remove.routes.RemoveOtherBeneficiaryController.onPageLoad(index).url)
     )
 
-  def rows : AddToRows = {
+  def rows: AddToRows = {
     val complete =
       beneficiaries.individualDetails.zipWithIndex.map(x => individualBeneficiaryRow(x._1, x._2)) ++
         beneficiaries.unidentified.zipWithIndex.map(x => classOfBeneficiaryRow(x._1, x._2)) ++
