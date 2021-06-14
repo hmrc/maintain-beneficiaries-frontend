@@ -16,13 +16,13 @@
 
 package extractors
 
-import utils.Constants.GB
-import models.beneficiaries.{Beneficiary, OrgBeneficiary}
+import models.beneficiaries.{Beneficiary, IncomeBeneficiary, OrgBeneficiary}
 import models.{Address, NonUkAddress, UkAddress, UserAnswers}
 import pages.{EmptyPage, QuestionPage}
 import play.api.libs.json.JsPath
-import java.time.LocalDate
+import utils.Constants.GB
 
+import java.time.LocalDate
 import scala.util.{Success, Try}
 
 trait BeneficiaryExtractor[T <: Beneficiary] {
@@ -60,13 +60,27 @@ trait BeneficiaryExtractor[T <: Beneficiary] {
     answers
       .set(namePage, entity.name)
       .flatMap(_.set(utrPage, entity.utr))
-      .flatMap(answers => extractShareOfIncome(entity.income, answers))
+      .flatMap(answers => extractUserAnswersForIncomeBeneficiary(answers, entity))
+  }
+
+  def extractUserAnswersForIncomeBeneficiary(answers: UserAnswers,
+                                             entity: IncomeBeneficiary): Try[UserAnswers] = {
+    extractShareOfIncome(entity.incomeDiscretionYesNo, entity.income, answers)
       .flatMap(answers => extractCountryOfResidence(entity.countryOfResidence, answers))
       .flatMap(answers => extractAddress(entity.address, answers))
   }
 
-  def extractShareOfIncome(shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
-    if (answers.isTaxable) {
+  def extractShareOfIncome(hasDiscretion: Option[Boolean], shareOfIncome: Option[String], answers: UserAnswers): Try[UserAnswers] = {
+    if (answers.migratingFromNonTaxableToTaxable) {
+      (hasDiscretion, shareOfIncome) match {
+        case (Some(true), None) => answers
+          .set(shareOfIncomeYesNoPage, true)
+        case (_, Some(income)) => answers
+          .set(shareOfIncomeYesNoPage, false)
+          .flatMap(_.set(shareOfIncomePage, income.toInt))
+        case _ => Success(answers)
+      }
+    } else if (answers.isTaxable) {
       shareOfIncome match {
         case Some(income) => answers
           .set(shareOfIncomeYesNoPage, false)

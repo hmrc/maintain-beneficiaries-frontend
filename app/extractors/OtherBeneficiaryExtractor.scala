@@ -35,9 +35,7 @@ class OtherBeneficiaryExtractor extends BeneficiaryExtractor[OtherBeneficiary] {
 
     super.apply(answers, otherBeneficiary, index)
       .flatMap(_.set(DescriptionPage, otherBeneficiary.description))
-      .flatMap(answers => extractShareOfIncome(otherBeneficiary.income, answers))
-      .flatMap(answers => extractCountryOfResidence(otherBeneficiary.countryOfResidence, answers))
-      .flatMap(answers => extractAddress(otherBeneficiary.address, answers))
+      .flatMap(answers => extractUserAnswersForIncomeBeneficiary(answers, otherBeneficiary))
   }
 
   override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = DiscretionYesNoPage

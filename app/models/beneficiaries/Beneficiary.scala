@@ -18,18 +18,23 @@ package models.beneficiaries
 
 import models.Address
 import play.api.libs.json.{JsPath, JsSuccess, Reads}
+
 import java.time.LocalDate
 
 trait Beneficiary {
   val entityStart: LocalDate
 }
 
-trait OrgBeneficiary extends Beneficiary {
-  val name: String
-  val utr: Option[String]
+trait IncomeBeneficiary extends Beneficiary {
   val income: Option[String]
+  val incomeDiscretionYesNo: Option[Boolean]
   val countryOfResidence: Option[String]
   val address: Option[Address]
+}
+
+trait OrgBeneficiary extends IncomeBeneficiary {
+  val name: String
+  val utr: Option[String]
 }
 
 trait BeneficiaryReads {

@@ -34,7 +34,7 @@ final case class IndividualBeneficiary(name: Name,
                                        nationality: Option[String] = None,
                                        mentalCapacityYesNo: Option[Boolean] = None,
                                        entityStart: LocalDate,
-                                       provisional: Boolean) extends Beneficiary
+                                       provisional: Boolean) extends IncomeBeneficiary
 
 object IndividualBeneficiary extends BeneficiaryReads {
 

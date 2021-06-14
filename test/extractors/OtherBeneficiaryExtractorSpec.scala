@@ -17,12 +17,12 @@
 package extractors
 
 import base.SpecBase
-import utils.Constants.GB
 import models.beneficiaries.OtherBeneficiary
 import models.{NonUkAddress, UkAddress, UserAnswers}
 import pages.other._
 import pages.other.add.StartDatePage
 import pages.other.amend.IndexPage
+import utils.Constants.GB
 
 import java.time.LocalDate
 
@@ -313,6 +313,95 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
           result.get(CountryOfResidenceUkYesNoPage).get mustBe false
           result.get(CountryOfResidencePage).get mustBe country
           result.get(AddressYesNoPage) mustBe None
+          result.get(AddressUkYesNoPage) mustBe None
+          result.get(UkAddressPage) mustBe None
+          result.get(NonUkAddressPage) mustBe None
+          result.get(StartDatePage).get mustBe date
+          result.get(IndexPage).get mustBe index
+        }
+      }
+
+      "migrating from non-taxable to taxable" when {
+
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isUnderlyingData5mld = true, migratingFromNonTaxableToTaxable = true)
+
+        "discretion and income undefined" in {
+
+          val beneficiary = OtherBeneficiary(
+            description = description,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = Some(country),
+            entityStart = date,
+            provisional = false
+          )
+
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+          result.get(DescriptionPage).get mustBe description
+          result.get(DiscretionYesNoPage) mustBe None
+          result.get(ShareOfIncomePage) mustBe None
+          result.get(CountryOfResidenceYesNoPage).get mustBe true
+          result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+          result.get(CountryOfResidencePage).get mustBe country
+          result.get(AddressYesNoPage).get mustBe false
+          result.get(AddressUkYesNoPage) mustBe None
+          result.get(UkAddressPage) mustBe None
+          result.get(NonUkAddressPage) mustBe None
+          result.get(StartDatePage).get mustBe date
+          result.get(IndexPage).get mustBe index
+        }
+
+        "has discretion" in {
+
+          val beneficiary = OtherBeneficiary(
+            description = description,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = Some(country),
+            entityStart = date,
+            provisional = false
+          )
+
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+          result.get(DescriptionPage).get mustBe description
+          result.get(DiscretionYesNoPage).get mustBe true
+          result.get(ShareOfIncomePage) mustBe None
+          result.get(CountryOfResidenceYesNoPage).get mustBe true
+          result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+          result.get(CountryOfResidencePage).get mustBe country
+          result.get(AddressYesNoPage).get mustBe false
+          result.get(AddressUkYesNoPage) mustBe None
+          result.get(UkAddressPage) mustBe None
+          result.get(NonUkAddressPage) mustBe None
+          result.get(StartDatePage).get mustBe date
+          result.get(IndexPage).get mustBe index
+        }
+
+        "has income" in {
+
+          val beneficiary = OtherBeneficiary(
+            description = description,
+            address = None,
+            income = Some(income.toString),
+            incomeDiscretionYesNo = Some(false),
+            countryOfResidence = Some(country),
+            entityStart = date,
+            provisional = false
+          )
+
+          val result = extractor.apply(baseAnswers, beneficiary, index).get
+
+          result.get(DescriptionPage).get mustBe description
+          result.get(DiscretionYesNoPage).get mustBe false
+          result.get(ShareOfIncomePage).get mustBe income
+          result.get(CountryOfResidenceYesNoPage).get mustBe true
+          result.get(CountryOfResidenceUkYesNoPage).get mustBe false
+          result.get(CountryOfResidencePage).get mustBe country
+          result.get(AddressYesNoPage).get mustBe false
           result.get(AddressUkYesNoPage) mustBe None
           result.get(UkAddressPage) mustBe None
           result.get(NonUkAddressPage) mustBe None
