@@ -16,98 +16,146 @@
 
 package controllers.companyoremploymentrelated.company.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
-import models.UkAddress
+import extractors.CompanyBeneficiaryExtractor
+import handlers.ErrorHandler
+import models.CheckMode
 import models.beneficiaries.CompanyBeneficiary
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.companyoremploymentrelated.company._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
+import utils.mappers.CompanyBeneficiaryMapper
 import utils.print.CompanyBeneficiaryPrintHelper
+import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
+import scala.util.Success
 
-class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
   private val index = 0
 
   private lazy val checkDetailsRoute = routes.CheckDetailsController.extractAndRender(index).url
+  private lazy val checkCachedDetailsRoute = routes.CheckDetailsController.renderFromUserAnswers(index).url
+  private lazy val updateDetailsRoute = routes.CheckDetailsController.extractAndRedirect(index).url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit(index).url
 
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
-  private val name = "Company Name"
-  private val startDate = LocalDate.parse("2019-03-09")
-  private val address = UkAddress("Line 1", "Line 2", None, None, "NE98 1ZZ")
+  private val mockService: TrustService = mock[TrustService]
+  private val mockExtractor: CompanyBeneficiaryExtractor = mock[CompanyBeneficiaryExtractor]
+  private val mockPrintHelper: CompanyBeneficiaryPrintHelper = mock[CompanyBeneficiaryPrintHelper]
+  private val mockMapper: CompanyBeneficiaryMapper = mock[CompanyBeneficiaryMapper]
+  private val mockTrustConnector: TrustConnector = mock[TrustConnector]
+
+  private val errorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
   private val companyBeneficiary = CompanyBeneficiary(
     name = "Company Name",
     utr = None,
-    address = Some(UkAddress("Line 1", "Line 2", None, None, "NE98 1ZZ")),
+    address = None,
     income = None,
-    incomeDiscretionYesNo = Some(true),
+    incomeDiscretionYesNo = None,
     entityStart = LocalDate.parse("2019-03-09"),
     provisional = false
   )
 
-  private val userAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(AddressYesNoPage, true).success.value
-    .set(AddressUkYesNoPage, true).success.value
-    .set(UkAddressPage, address).success.value
-    .set(DiscretionYesNoPage, true).success.value
-    .set(StartDatePage, startDate).success.value
+  private val fakeAnswerSection = AnswerSection(Some("Heading"), Nil)
+
+  override def beforeEach(): Unit = {
+    reset(mockService, mockExtractor, mockPrintHelper, mockMapper, mockTrustConnector)
+
+    when(mockExtractor.apply(any(), any(), any())).thenReturn(Success(emptyUserAnswers))
+
+    when(mockPrintHelper.apply(any(), any(), any())(any())).thenReturn(fakeAnswerSection)
+
+    when(mockMapper.apply(any())).thenReturn(Some(companyBeneficiary))
+
+    when(mockService.getCompanyBeneficiary(any(), any())(any(), any()))
+      .thenReturn(Future.successful(companyBeneficiary))
+
+    when(mockTrustConnector.amendCompanyBeneficiary(any(), any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+  }
 
   "CheckDetails Controller" must {
 
-    "return OK and the correct view for a GET for a given index" in {
+    "return OK and the correct view for a GET (check) for a given index" in {
 
-      val mockService : TrustService = mock[TrustService]
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[TrustService].toInstance(mockService)
-        )
-        .build()
-
-      when(mockService.getCompanyBeneficiary(any(), any())(any(), any()))
-        .thenReturn(Future.successful(companyBeneficiary))
+          bind[TrustService].toInstance(mockService),
+          bind[CompanyBeneficiaryExtractor].toInstance(mockExtractor),
+          bind[CompanyBeneficiaryPrintHelper].toInstance(mockPrintHelper)
+        ).build()
 
       val request = FakeRequest(GET, checkDetailsRoute)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[CompanyBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, false, name)
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, index)(request, messages).toString
+        view(fakeAnswerSection, index)(request, messages).toString
+    }
+
+    "return OK and the correct view for a GET (saved) for a given index" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[CompanyBeneficiaryPrintHelper].toInstance(mockPrintHelper)
+        ).build()
+
+      val request = FakeRequest(GET, checkCachedDetailsRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[CheckDetailsView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeAnswerSection, index)(request, messages).toString
+    }
+
+    "return OK and redirect for a GET (update) for a given index" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockService),
+          bind[CompanyBeneficiaryExtractor].toInstance(mockExtractor)
+        ).build()
+
+      val request = FakeRequest(GET, updateDetailsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual
+        controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode).url
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {
 
-      val mockTrustConnector = mock[TrustConnector]
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers), affinityGroup = Agent)
-          .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
-          .build()
-
-      when(mockTrustConnector.amendCompanyBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), affinityGroup = Agent)
+        .overrides(
+          bind[CompanyBeneficiaryMapper].toInstance(mockMapper),
+          bind[TrustConnector].toInstance(mockTrustConnector)
+        ).build()
 
       val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -116,6 +164,26 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute
+
+      application.stop()
+    }
+
+    "return error when mapper fails" in {
+
+      when(mockMapper.apply(any())).thenReturn(None)
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), affinityGroup = Agent)
+        .overrides(
+          bind[CompanyBeneficiaryMapper].toInstance(mockMapper),
+          bind[TrustConnector].toInstance(mockTrustConnector)
+        ).build()
+
+      val request = FakeRequest(POST, submitDetailsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
 
       application.stop()
     }

@@ -22,8 +22,9 @@ import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import extractors.CharityBeneficiaryExtractor
 import handlers.ErrorHandler
+
 import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -61,7 +62,11 @@ class CheckDetailsController @Inject()(
     Ok(view(section, index))
   }
 
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def extractAndRender(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = false)
+
+  def extractAndRedirect(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = true)
+
+  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       service.getCharityBeneficiary(request.userAnswers.identifier, index) flatMap {
@@ -74,19 +79,23 @@ class CheckDetailsController @Inject()(
             if (charity.utr.isDefined) {
               Redirect(controllers.charityortrust.charity.amend.routes.CheckDetailsUtrController.onPageLoad())
             } else {
-              render(extractedF, index, charity.name)
+              if (redirect) {
+                Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(CheckMode).url)
+              } else {
+                render(extractedF, index, charity.name)
+              }
             }
           }
       } recoverWith {
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the check answers for charity beneficiary $index ${e.getMessage}")
+            s" error getting charity beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }

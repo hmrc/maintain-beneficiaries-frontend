@@ -32,7 +32,7 @@ case class CompanyBeneficiary(name: String,
                               provisional: Boolean) extends OrgBeneficiary {
 
   override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
-    if (migratingFromNonTaxableToTaxable) {
+    if (migratingFromNonTaxableToTaxable && utr.isEmpty) {
       (incomeDiscretionYesNo, income) match {
         case (None, None) => false
         case _ => true

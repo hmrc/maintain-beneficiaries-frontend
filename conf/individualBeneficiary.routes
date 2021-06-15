@@ -123,6 +123,7 @@ GET        /check-details                            controllers.individualbenef
 POST       /check-details                            controllers.individualbeneficiary.add.CheckDetailsController.onSubmit()
 
 GET        /:index/check-details                    controllers.individualbeneficiary.amend.CheckDetailsController.extractAndRender(index: Int)
+GET        /:index/update-details                   controllers.individualbeneficiary.amend.CheckDetailsController.extractAndRedirect(index: Int)
 
 GET        /:index/updated-details                  controllers.individualbeneficiary.amend.CheckDetailsController.renderFromUserAnswers(index: Int)
 

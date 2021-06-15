@@ -21,7 +21,7 @@ import models.HowManyBeneficiaries.Over201
 import models.TypeOfTrust.EmployeeRelated
 import models.beneficiaries.RoleInCompany.Director
 import models.beneficiaries._
-import models.{CheckMode, Description, Name}
+import models.{Description, Name}
 import viewmodels.addAnother.{AddRow, AddToRows}
 
 import java.time.LocalDate
@@ -37,6 +37,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
   private val description = "Description"
 
   private val income = "50"
+  private val utr = "utr"
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = name,
@@ -269,7 +270,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = name.displayName,
                 typeLabel = "Named individual",
-                changeUrl = Some(controllers.individualbeneficiary.routes.NameController.onPageLoad(CheckMode).url),
+                changeUrl = Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
                 removeUrl = Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
               )
             ),
@@ -315,7 +316,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named company",
-                changeUrl = Some(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode).url),
+                changeUrl = Some(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
                 removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
               )
             ),
@@ -340,7 +341,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named trust",
-                changeUrl = Some(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode).url),
+                changeUrl = Some(controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
                 removeUrl = Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
               )
             ),
@@ -365,7 +366,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named charity",
-                changeUrl = Some(controllers.charityortrust.charity.routes.NameController.onPageLoad(CheckMode).url),
+                changeUrl = Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
                 removeUrl = Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
               )
             ),
@@ -390,7 +391,7 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = description,
                 typeLabel = "Other beneficiary",
-                changeUrl = Some(controllers.other.routes.DescriptionController.onPageLoad(CheckMode).url),
+                changeUrl = Some(controllers.other.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
                 removeUrl = Some(controllers.other.remove.routes.RemoveOtherBeneficiaryController.onPageLoad(index).url)
               )
             ),
@@ -507,6 +508,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             result mustBe expectedResult
           }
+
+          "has UTR" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(company = List(companyBeneficiary.copy(utr = Some(utr)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
         }
 
         "trust" when {
@@ -542,6 +553,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             result mustBe expectedResult
           }
+
+          "has UTR" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(trust = List(trustBeneficiary.copy(utr = Some(utr)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
         }
 
         "charity" when {
@@ -572,6 +593,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             val result = viewHelper.rows(
               beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
+
+          "has UTR" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(utr = Some(utr)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
