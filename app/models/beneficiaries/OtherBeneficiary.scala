@@ -16,7 +16,7 @@
 
 package models.beneficiaries
 
-import models.{Address, TypeOfTrust}
+import models.Address
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -28,19 +28,7 @@ final case class OtherBeneficiary(description: String,
                                   incomeDiscretionYesNo: Option[Boolean],
                                   countryOfResidence: Option[String] = None,
                                   entityStart: LocalDate,
-                                  provisional: Boolean) extends IncomeBeneficiary {
-
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
-    if (migratingFromNonTaxableToTaxable) {
-      (incomeDiscretionYesNo, income) match {
-        case (None, None) => false
-        case _ => true
-      }
-    } else {
-      true
-    }
-  }
-}
+                                  provisional: Boolean) extends IncomeBeneficiary
 
 object OtherBeneficiary {
 
