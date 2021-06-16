@@ -39,12 +39,12 @@ final case class IndividualBeneficiary(name: Name,
 
   override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
     if (migratingFromNonTaxableToTaxable) {
-      (trustType, incomeDiscretionYesNo, income, vulnerableYesNo, roleInCompany) match {
-        case (_, _, _, None, _) => false
-        case (_, None, None, _, _) => false
-        case (Some(EmployeeRelated), _, _, _, None) => false
-        case _ => true
-      }
+      super.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) &&
+        vulnerableYesNo.isDefined &&
+        (trustType match {
+          case Some(EmployeeRelated) => roleInCompany.isDefined
+          case _ => true
+        })
     } else {
       true
     }

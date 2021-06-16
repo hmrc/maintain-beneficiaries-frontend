@@ -36,6 +36,7 @@ trait IncomeBeneficiary extends Beneficiary {
     if (migratingFromNonTaxableToTaxable) {
       (incomeDiscretionYesNo, income) match {
         case (None, None) => false
+        case (Some(false), None) => false
         case _ => true
       }
     } else {

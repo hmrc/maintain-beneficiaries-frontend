@@ -287,6 +287,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             result mustBe expectedResult
           }
 
+          "discretion false and share of income not answered" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
+
           "vulnerable not answered" in {
 
             val result = viewHelper.rows(
@@ -332,6 +342,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             result mustBe expectedResult
           }
+
+          "discretion false and share of income not answered" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
         }
 
         "trust" when {
@@ -352,6 +372,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             val result = viewHelper.rows(
               beneficiaries = Beneficiaries(trust = List(trustBeneficiary)),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
+
+          "discretion false and share of income not answered" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(trust = List(trustBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -382,6 +412,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             result mustBe expectedResult
           }
+
+          "discretion false and share of income not answered" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
         }
 
         "other" when {
@@ -402,6 +442,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
             val result = viewHelper.rows(
               beneficiaries = Beneficiaries(other = List(otherBeneficiary)),
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
+            )
+
+            result mustBe expectedResult
+          }
+
+          "discretion false and share of income not answered" in {
+
+            val result = viewHelper.rows(
+              beneficiaries = Beneficiaries(other = List(otherBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
