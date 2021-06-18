@@ -40,6 +40,8 @@ GET        /timeout                                                         cont
 
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
+GET        /beneficiaries-more-information                                  controllers.transition.BeneficiariesInformationController.onPageLoad()
+
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()
 GET        /add-another                                                     controllers.AddABeneficiaryController.onPageLoad()
