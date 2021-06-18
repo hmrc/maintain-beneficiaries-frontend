@@ -29,6 +29,24 @@ class BeneficiariesInformationViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "beneficiariesMoreInformation")
+    behave like normalPage(applyView, "beneficiariesMoreInformation",
+      "p1",
+      "p2",
+      "subheading",
+      "p3",
+      "b1",
+      "b2",
+      "b3",
+      "subheading2",
+      "p4",
+      "b4",
+      "b5",
+      "b6",
+      "b7",
+      "subheading3",
+      "p5",
+      "b8",
+      "b9",
+      "p6")
   }
 }
