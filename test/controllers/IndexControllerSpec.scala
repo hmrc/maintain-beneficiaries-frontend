@@ -42,56 +42,98 @@ class IndexControllerSpec extends SpecBase {
     val isUnderlyingData5mld = false
     val migratingFromNonTaxableToTaxable = false
 
-    "populate user answers and redirect" in {
+      "populate user answers and redirect" in {
 
-      reset(playbackRepository)
+        reset(playbackRepository)
 
-      val mockTrustConnector = mock[TrustConnector]
-      val mockFeatureFlagService = mock[FeatureFlagService]
+        val mockTrustConnector = mock[TrustConnector]
+        val mockFeatureFlagService = mock[FeatureFlagService]
 
-      when(playbackRepository.set(any()))
-        .thenReturn(Future.successful(true))
+        when(playbackRepository.set(any()))
+          .thenReturn(Future.successful(true))
 
-      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
-        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
+        when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+          .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(is5mldEnabled))
+        when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+          .thenReturn(Future.successful(is5mldEnabled))
 
-      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-        .thenReturn(Future.successful(isUnderlyingData5mld))
+        when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+          .thenReturn(Future.successful(isUnderlyingData5mld))
 
-      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
-        .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
+        when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+          .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
-      val application = applicationBuilder(userAnswers = None)
-        .overrides(
-          bind[TrustConnector].toInstance(mockTrustConnector),
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-        ).build()
+        val application = applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[TrustConnector].toInstance(mockTrustConnector),
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          ).build()
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result) mustBe Some(controllers.routes.AddABeneficiaryController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.AddABeneficiaryController.onPageLoad().url)
 
-      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-      verify(playbackRepository).set(uaCaptor.capture)
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(playbackRepository).set(uaCaptor.capture)
 
-      uaCaptor.getValue.internalId mustBe "id"
-      uaCaptor.getValue.identifier mustBe identifier
-      uaCaptor.getValue.whenTrustSetup mustBe startDate
-      uaCaptor.getValue.trustType.get mustBe trustType
-      uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
-      uaCaptor.getValue.isTaxable mustBe isTaxable
-      uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
-      uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
+        uaCaptor.getValue.internalId mustBe "id"
+        uaCaptor.getValue.identifier mustBe identifier
+        uaCaptor.getValue.whenTrustSetup mustBe startDate
+        uaCaptor.getValue.trustType.get mustBe trustType
+        uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
+        uaCaptor.getValue.isTaxable mustBe isTaxable
+        uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
+        uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
 
-      application.stop()
-    }
+        application.stop()
+      }
+
+      "migrating to TT from NTT redirect to information page" in {
+
+        val migratingFromNonTaxableToTaxable = true
+
+        reset(playbackRepository)
+
+        val mockTrustConnector = mock[TrustConnector]
+        val mockFeatureFlagService = mock[FeatureFlagService]
+
+        when(playbackRepository.set(any()))
+          .thenReturn(Future.successful(true))
+
+        when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+          .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
+
+        when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+          .thenReturn(Future.successful(is5mldEnabled))
+
+        when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+          .thenReturn(Future.successful(isUnderlyingData5mld))
+
+        when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+          .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
+
+        val application = applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[TrustConnector].toInstance(mockTrustConnector),
+            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          ).build()
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result) mustBe Some(controllers.transition.routes.BeneficiariesInformationController.onPageLoad().url)
+
+        application.stop()
+      }
+
 
     "default isTaxable to true if trustTaxable is None i.e. 4mld" in {
 
