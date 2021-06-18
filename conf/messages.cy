@@ -8,7 +8,9 @@ site.no = Na
 site.yes = Iawn
 site.continue = Yn eich blaen
 site.service_name = Cofrestru Ymddiriedolaeth a’i Chynnal
+site.service_section=Buddiolwyr
 site.textarea.char_limit = (Y terfyn yw {0} o gymeriadau)
+site.sign_in=Mewngofnodi
 site.sign_out = Allgofnodi
 site.save.continue = Cadw ac yn eich blaen
 site.date.hint = Er enghraifft, 31 3 1980
@@ -34,9 +36,12 @@ site.address.nonUk.line1 = Cyfeiriad – llinell 1
 site.address.nonUk.line2 = Cyfeiriad – llinell 2
 site.address.nonUk.line3 = Cyfeiriad - llinell 3 (dewisol)
 site.address.nonUk.country = Gwlad
+site.address.country.select=Dewiswch wlad
+
 timeout.title = Bydd eich cais yn dod i ben cyn hir
 timeout.message = Byddwn yn ailosod eich cais os na fyddwch yn ymateb cyn pen
 timeout.keep-alive-button = Mynd yn eich blaen â’r cais
+
 agentNotAuthorised.title = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
 agentNotAuthorised.heading = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
 agentNotAuthorised.subheading = UTR yr ymddiriedolaeth hon: {0}
@@ -48,14 +53,16 @@ agentNotAuthorised.p4 = Os oes angen help arnoch gyda’r gwasanaeth hwn
 agentNotAuthorised.p4.a = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn agor ffenestr neu dab newydd).
 agentNotAuthorised.p5 = Gallwch
 agentNotAuthorised.p5.a = ddychwelyd i gofrestru ymddiriedolaeth a’i chynnal ar gyfer cleient.
-createAgentServicesAccount.title = Creu cyfrif gwasanaethau asiant
-createAgentServicesAccount.heading = Creu cyfrif gwasanaethau asiant
-createAgentServicesAccount.paragraph1 = Cyn i chi allu cofrestru’ch ymddiriedolaeth bydd angen i chi greu cyfrif gwasanaethau asiant. Gallwch wneud hyn nawr.
-createAgentServicesAccount.insetText = Rhaid mai chi yw’r person sy’n gyfrifol am faterion treth neu weinyddol eich cwmni. Mae’r cyfrif yn rhoi rheolaeth weinyddol i chi dros allu eich cwmni i ddefnyddio gwasanaethau ar-lein newydd CThEM.
-createAgentServicesAccount.link = Gwiriwch yr arweiniad
-createAgentServicesAccount.paragraph2 = i gael gwybod beth fydd ei angen arnoch i greu cyfrif gwasanaethau asiant.
-createAgentServicesAccount.paragraph3 = Pan fyddwch wedi creu’ch cyfrif gwasanaethau asiant, gallwch barhau â chofrestru’ch ymddiriedolaeth.
-createAgentServicesAccount.cta = Creu cyfrif gwasanaethau asiant
+
+createAgentServicesAccount.title=Creu cyfrif gwasanaethau asiant
+createAgentServicesAccount.heading=Creu cyfrif gwasanaethau asiant
+createAgentServicesAccount.paragraph1=Cyn i chi allu cofrestru’ch ymddiriedolaeth bydd angen i chi greu cyfrif gwasanaethau asiant. Gallwch wneud hyn nawr.
+createAgentServicesAccount.insetText=Rhaid mai chi yw’r person sy’n gyfrifol am faterion treth neu weinyddol eich cwmni. Mae’r cyfrif yn rhoi rheolaeth weinyddol i chi dros allu eich cwmni i ddefnyddio gwasanaethau ar-lein newydd CThEM.
+createAgentServicesAccount.link=Gwiriwch yr arweiniad
+createAgentServicesAccount.paragraph2=i gael gwybod beth fydd ei angen arnoch i greu cyfrif gwasanaethau asiant.
+createAgentServicesAccount.paragraph3=Pan fyddwch wedi creu’ch cyfrif gwasanaethau asiant, gallwch barhau â chofrestru’ch ymddiriedolaeth.
+createAgentServicesAccount.cta=Creu cyfrif gwasanaethau asiant
+
 trustNotClaimed.title = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
 trustNotClaimed.heading = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
 trustNotClaimed.subheading = UTR yr ymddiriedolaeth hon: {0}
@@ -73,6 +80,7 @@ trustNotClaimed.bullet.2.p3 = Os oes angen help arnoch gyda’r gwasanaeth
 trustNotClaimed.bullet.2.p3.a = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn agor ffenestr neu dab newydd).
 trustNotClaimed.bullet.2.p4 = Gallwch
 trustNotClaimed.bullet.2.p4.a = ddychwelyd i gofrestru ymddiriedolaeth a’i chynnal ar gyfer cleient.
+
 ukAddress.error.line1.required = Nodwch gyfeiriad - llinell 1
 ukAddress.error.line2.required = Nodwch gyfeiriad - llinell 2
 ukAddress.error.postcode.required = Nodwch god post
@@ -85,6 +93,7 @@ ukAddress.error.line2.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 2 
 ukAddress.error.line3.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 3 gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 ukAddress.error.line4.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 4 gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 ukAddress.error.postcode.invalidCharacters = Nodwch god post go iawn
+
 nonUkAddress.error.line1.required = Nodwch gyfeiriad – llinell 1
 nonUkAddress.error.line2.required = Nodwch gyfeiriad – llinell 2
 nonUkAddress.error.country.required = Dewiswch wlad
@@ -94,6 +103,7 @@ nonUkAddress.error.line3.length = Mae’n rhaid i gyfeiriad - llinell 3 fod yn 3
 nonUkAddress.error.line1.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 1 gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 nonUkAddress.error.line2.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 2 gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 nonUkAddress.error.line3.invalidCharacters = Mae’n rhaid i gyfeiriad - llinell 3 gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
 error.browser.title.prefix = Gwall:
 error.boolean = Rhowch ateb
 error.invalid_date = Rhowch ddyddiad cywir
@@ -109,21 +119,28 @@ error.number = Nodwch rif dilys
 error.required = Nodwch ateb
 error.summary.title = Mae problem wedi codi
 error.postcodeInvalid = Nodwch god post go iawn
+
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
+
 date.day = Diwrnod
 date.month = Mis
 date.year = Blwyddyn
+
 session_expired.title = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.guidance = Mae’r manylion a roddwyd gennych wedi’u dileu gan nad ydych wedi mynd yn eich blaen â’r gwasanaeth ers 15 munud.
+session_expired.guidance.2 = Bydd angen i chi fewngofnodi i barhau i gynnal yr ymddiriedolaeth.
+
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
+
 featureNotAvailable.title = Nid yw’r rhan hon o’r gwasanaeth ar-lein ar gael eto
 featureNotAvailable.heading = Nid yw’r rhan hon o’r gwasanaeth ar-lein ar gael eto
 featureNotAvailable.p1 = Os oes angen i chi wneud unrhyw newidiadau i’r ymddiriedolaeth, gallwch
 featureNotAvailable.link = gysylltu â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn agor ffenestr neu dab newydd)
 featureNotAvailable.p2 = Byddwch yn gallu diweddaru’r manylion hyn ar-lein yn y dyfodol.
+
 addABeneficiaryYesNo.title = A ydych am ychwanegu buddiolwr?
 addABeneficiaryYesNo.heading = A ydych am ychwanegu buddiolwr?
 addABeneficiaryYesNo.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu buddiolwr
@@ -200,6 +217,7 @@ classOfBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y ty
 classOfBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd dosbarth y buddiolwyr o’r ymddiriedolaeth
 classOfBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd dosbarth y buddiolwyr o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 classOfBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd dosbarth y buddiolwyr fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
 
 individualBeneficiary.name.default = y buddiolwr unigol
 individualBeneficiary.return.link = Dychwelyd i ychwanegu buddiolwr
@@ -344,6 +362,7 @@ individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel = A oes ffurflen ddewi
 individualBeneficiary.vpe1FormYesNo.title = A oes ffurflen ddewis person sy’n agored i niwed (VPE1) wedi’i chyflwyno i CThEM ar gyfer y buddiolwr unigol?
 individualBeneficiary.vpe1FormYesNo.heading = A oes ffurflen ddewis person sy’n agored i niwed (VPE1) wedi’i chyflwyno i CThEM ar gyfer {0}?
 individualBeneficiary.vpe1FormYesNo.error.required = Dewiswch ‘Iawn’ os yw ffurflen ddewis person sy’n agored i niwed (VPE1) wedi’i chyflwyno i CThEM
+
 individualBeneficiary.roleInCompany.title = Beth yw rôl y buddiolwr unigol yn y cwmni y crëwyd yr ymddiriedolaeth ar ei gyfer?
 individualBeneficiary.roleInCompany.heading = Beth yw rôl {0} yn y cwmni y crëwyd yr ymddiriedolaeth ar ei gyfer?
 individualBeneficiary.roleInCompany.checkYourAnswersLabel = Beth yw rôl {0} yn y cwmni y crëwyd yr ymddiriedolaeth ar ei gyfer?
@@ -352,6 +371,7 @@ individualBeneficiary.roleInCompany.Employee = Cyflogai
 individualBeneficiary.roleInCompany.NA = Dim un o’r rhain
 individualBeneficiary.roleInCompany.checkYourAnswersLabel.na = Nid yn gyfarwyddwr nac yn gyflogai
 individualBeneficiary.roleInCompany.error.required = Dewiswch rôl y buddiolwr unigol yn y cwmni y crëwyd yr ymddiriedolaeth ar ei gyfer
+
 individualBeneficiary.startDate.checkYourAnswersLabel = Pryd ychwanegwyd {0} fel buddiolwr?
 individualBeneficiary.startDate.title = Pryd ychwanegwyd y buddiolwr unigol fel buddiolwr?
 individualBeneficiary.startDate.heading = Pryd ychwanegwyd {0} fel buddiolwr?
@@ -364,6 +384,50 @@ individualBeneficiary.startDate.error.future = Mae’n rhaid i’r dyddiad yr yc
 individualBeneficiary.startDate.error.past = Ni all y dyddiad yr ychwanegwyd y buddiolwr unigol at yr ymddiriedolaeth fod cyn dyddiad dechrau’r ymddiriedolaeth
 individualBeneficiary.checkDetails.title = Gwiriwch fanylion y buddiolwr unigol
 individualBeneficiary.checkDetails.heading = Gwiriwch fanylion y buddiolwr unigol
+
+individualBeneficiary.countryOfNationalityYesNo.title=A ydych yn gwybod gwlad cenedligrwydd y buddiolwr unigol?
+individualBeneficiary.countryOfNationalityYesNo.heading=A ydych yn gwybod gwlad cenedligrwydd {0}?
+individualBeneficiary.countryOfNationalityYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad cenedligrwydd {0}?
+individualBeneficiary.countryOfNationalityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad cenedligrwydd y buddiolwr unigol
+individualBeneficiary.countryOfNationalityYesNo.hint=Fel arfer, gwlad y cenedligrwydd yw lle cafodd yr unigolyn ei eni a lle mae ei basbort wedi’i gofrestru.
+individualBeneficiary.countryOfNationalityUkYesNo.title=A oes gan y buddiolwr unigol genedligrwydd y DU?
+individualBeneficiary.countryOfNationalityUkYesNo.heading=A oes gan {0} genedligrwydd y DU?
+individualBeneficiary.countryOfNationalityUkYesNo.checkYourAnswersLabel=A oes gan {0} genedligrwydd y DU?
+individualBeneficiary.countryOfNationalityUkYesNo.error.required=Dewiswch ‘Iawn’ os oes gan y buddiolwr unigol genedligrwydd y DU
+individualBeneficiary.countryOfNationality.title=Beth yw gwlad cenedligrwydd y buddiolwr unigol?
+individualBeneficiary.countryOfNationality.heading=Beth yw gwlad cenedligrwydd {0}?
+individualBeneficiary.countryOfNationality.checkYourAnswersLabel=Beth yw gwlad cenedligrwydd {0}?
+individualBeneficiary.countryOfNationality.error.required=Nodwch wlad
+individualBeneficiary.countryOfNationality.error.length=Mae’n rhaid i wlad y cenedligrwydd fod yn 100 o gymeriadau neu lai
+individualBeneficiary.countryOfNationality.error.invalidCharacters=Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
+individualBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr unigol?
+individualBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+individualBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+individualBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr unigol
+individualBeneficiary.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r unigolyn yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
+individualBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr unigol yn breswyl yn y DU?
+individualBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswyl yn y DU?
+individualBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswyl yn y DU?
+individualBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr unigol yn breswyl yn y DU
+
+individualBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr unigol?
+individualBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+individualBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+individualBeneficiary.countryOfResidence.error.required=Nodwch wlad
+individualBeneficiary.countryOfResidence.error.length=Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+individualBeneficiary.countryOfResidence.error.invalidCharacters=Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
+individualBeneficiary.mentalCapacityYesNo.title=A oes gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru?
+individualBeneficiary.mentalCapacityYesNo.heading=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
+individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel=A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
+individualBeneficiary.mentalCapacityYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod bod gan y buddiolwr unigol alluedd meddyliol ar adeg y cofrestru
+individualBeneficiary.mentalCapacityYesNo.p1=Nid oes gan fuddiolwr unigol alluedd meddyliol os nad yw’n gallu deall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
+individualBeneficiary.mentalCapacityYesNo.bulletpoint1=salwch meddwl
+individualBeneficiary.mentalCapacityYesNo.bulletpoint2=anabledd dysgu
+individualBeneficiary.mentalCapacityYesNo.bulletpoint3=dementia neu gyflwr cysylltiedig
+individualBeneficiary.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
+
 removeIndividualBeneficiary.title = A ydych yn siŵr eich bod am dynnu’r buddiolwr unigol?
 removeIndividualBeneficiary.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeIndividualBeneficiary.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r buddiolwr unigol
@@ -441,6 +505,23 @@ charityBeneficiary.checkDetails.utr.checkYourAnswersLabel = Beth yw Cyfeirnod Un
 charityBeneficiary.checkDetails.utr.p1 = Mae rhywfaint o’r wybodaeth a ofynnwn am fuddiolwyr yr elusen wedi newid.
 charityBeneficiary.checkDetails.utr.p2 = Os oes angen i chi ddiweddaru manylion {0} bydd angen i chi ei ddileu ac yna ei ychwanegu fel buddiolwr newydd.
 charityBeneficiary.checkDetails.utr.p3 = Pan ofynnwyd am y dyddiad yr ychwanegwyd neu y tynnwyd {0} o’r ymddiriedolaeth, defnyddiwch ddyddiad heddiw.
+
+charityBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr elusennol?
+charityBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+charityBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+charityBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr elusennol
+charityBeneficiary.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r elusen wedi’i chofrestru.
+charityBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr elusennol yn breswyl yn y DU?
+charityBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswyl yn y DU?
+charityBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswyl yn y DU?
+charityBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr elusennol yn breswyl yn y DU
+charityBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr elusennol?
+charityBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+charityBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+charityBeneficiary.countryOfResidence.error.required=Nodwch wlad
+charityBeneficiary.countryOfResidence.error.length=Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+charityBeneficiary.countryOfResidence.error.invalidCharacters=Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
 removeCharityBeneficiary.title = A ydych yn siŵr eich bod am dynnu buddiolwr yr elusen?
 removeCharityBeneficiary.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeCharityBeneficiary.error.required = Dewiswch ‘Iawn’ os ydych am dynnu buddiolwr yr elusen
@@ -505,6 +586,22 @@ trustBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y tynn
 trustBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd buddiolwr yr ymddiriedolaeth o’r ymddiriedolaeth
 trustBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr yr ymddiriedolaeth o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 trustBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr yr ymddiriedolaeth fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
+trustBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr sy’n ymddiriedolaeth?
+trustBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+trustBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+trustBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr sy’n ymddiriedolaeth
+trustBeneficiary.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r ymddiriedolaeth wedi’i gofrestru.
+trustBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr sy’n ymddiriedolaeth yn breswyl yn y DU?
+trustBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswyl yn y DU?
+trustBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswyl yn y DU?
+trustBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr sy’n ymddiriedolaeth yn breswyl yn y DU
+trustBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr sy’n ymddiriedolaeth?
+trustBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+trustBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+trustBeneficiary.countryOfResidence.error.required=Nodwch wlad
+trustBeneficiary.countryOfResidence.error.length=Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+trustBeneficiary.countryOfResidence.error.invalidCharacters=Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
 
 otherBeneficiary.description.default = y buddiolwr arall
 otherBeneficiary.description.title = Beth yw’r disgrifiad o’r buddiolwr arall?
@@ -572,6 +669,19 @@ otherBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd
 otherBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd y buddiolwr arall o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 otherBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd y buddiolwr arall fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
 
+otherBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr arall?
+otherBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+otherBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+otherBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr arall
+otherBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr hwn yn breswylydd yn y DU?
+otherBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswylydd yn y DU?
+otherBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswylydd yn y DU?
+otherBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr hwn yn breswylydd yn y DU
+otherBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr arall?
+otherBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+otherBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+otherBeneficiary.countryOfResidence.error.required=Nodwch wlad
+
 companyOrEmploymentRelated.title = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
 companyOrEmploymentRelated.heading = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
 companyOrEmploymentRelated.checkYourAnswersLabel = A yw’r buddiolwr yn gwmni neu a yw’n gyflogeion a/neu eu teuluoedd?
@@ -626,9 +736,27 @@ companyBeneficiary.checkDetails.utr.checkYourAnswersLabel = Beth yw Cyfeirnod Un
 companyBeneficiary.checkDetails.utr.p1 = Mae rhywfaint o’r wybodaeth a ofynnwn am fuddiolwyr y cwmni wedi newid.
 companyBeneficiary.checkDetails.utr.p2 = Os oes angen i chi ddiweddaru manylion {0} bydd angen i chi ei ddileu ac yna ei ychwanegu fel buddiolwr newydd.
 companyBeneficiary.checkDetails.utr.p3 = Pan ofynnwyd am y dyddiad yr ychwanegwyd neu y tynnwyd {0} o’r ymddiriedolaeth, defnyddiwch ddyddiad heddiw.
+
+companyBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr sy’n gwmni?
+companyBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+companyBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+companyBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr sy’n gwmni
+companyBeneficiary.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r cwmni wedi’i gofrestru.
+companyBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr sy’n gwmni yn breswyl yn y DU?
+companyBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswyl yn y DU?
+companyBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswyl yn y DU?
+companyBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr sy’n gwmni yn breswyl yn y DU
+companyBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr sy’n gwmni?
+companyBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+companyBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+companyBeneficiary.countryOfResidence.error.required=Nodwch wlad
+companyBeneficiary.countryOfResidence.error.length=Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+companyBeneficiary.countryOfResidence.error.invalidCharacters=Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
 removeCompanyBeneficiary.title = A ydych yn siŵr eich bod am dynnu buddiolwr y cwmni?
 removeCompanyBeneficiary.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeCompanyBeneficiary.error.required = Dewiswch ‘Iawn’ os ydych am dynnu buddiolwr y cwmni
+
 companyBeneficiary.whenRemoved.title = Pryd y tynnwyd buddiolwr y cwmni fel buddiolwr?
 companyBeneficiary.whenRemoved.heading = Pryd y tynnwyd {0} fel buddiolwr?
 companyBeneficiary.whenRemoved.hint = Er enghraifft, 31 3 1980
@@ -638,6 +766,7 @@ companyBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y ty
 companyBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd buddiolwr y cwmni o’r ymddiriedolaeth
 companyBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr y cwmni o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 companyBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr y cwmni fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+
 employmentBeneficiary.name.default = y buddiolwr sy’n gysylltiedig â chyflogaeth
 employmentBeneficiary.name.title = Beth yw enw’r busnes?
 employmentBeneficiary.name.heading = Beth yw enw’r busnes?
@@ -671,11 +800,13 @@ employmentBeneficiary.numberOfBeneficiaries.title = Beth yw amcangyfrif o nifer 
 employmentBeneficiary.numberOfBeneficiaries.heading = Beth yw amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth?
 employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel = Beth yw amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth?
 employmentBeneficiary.numberOfBeneficiaries.error.required = Dewiswch amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth
+
 numberOfBeneficiaries.over1 = 1 i 100
 numberOfBeneficiaries.over101 = 101 i 200
 numberOfBeneficiaries.over201 = 201 i 500
 numberOfBeneficiaries.over501 = 501 i 1,000
 numberOfBeneficiaries.over1001 = Dros 1,001
+
 employmentBeneficiary.startDate.title = Pryd y cafodd y buddiolwr sy’n gysylltiedig â chyflogaeth ei ychwanegu fel buddiolwr?
 employmentBeneficiary.startDate.heading = Pryd ychwanegwyd {0} fel buddiolwr?
 employmentBeneficiary.startDate.checkYourAnswersLabel = Pryd ychwanegwyd {0} fel buddiolwr?
@@ -705,3 +836,21 @@ employmentBeneficiary.whenRemoved.error.required = Mae’n rhaid i’r dyddiad y
 employmentBeneficiary.whenRemoved.error.invalid = Nodwch ddyddiad go iawn pan dynnwyd y buddiolwr sy’n gysylltiedig â chyflogaeth o’r ymddiriedolaeth
 employmentBeneficiary.whenRemoved.error.future = Mae’n rhaid i’r dyddiad y tynnwyd y buddiolwr sy’n gysylltiedig â chyflogaeth o’r ymddiriedolaeth fod heddiw neu yn y gorffennol
 employmentBeneficiary.whenRemoved.error.past = Mae’n rhaid i’r dyddiad y tynnwyd buddiolwr sy’n gysylltiedig â chyflogaeth fod ar y dyddiad y cafodd ei ychwanegu, neu ar ôl hynny
+employmentBeneficiary.countryOfResidenceYesNo.title=A ydych yn gwybod gwlad breswyl y buddiolwr hwn?
+employmentBeneficiary.countryOfResidenceYesNo.heading=A ydych yn gwybod gwlad breswyl {0}?
+employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel=A ydych yn gwybod gwlad breswyl {0}?
+employmentBeneficiary.countryOfResidenceYesNo.error.required=Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y buddiolwr hwn
+employmentBeneficiary.countryOfResidenceYesNo.hint=Fel arfer, y wlad breswyl yw lle mae’r grŵp busnes wedi’i gofrestru. Mae’r grŵp busnes yn breswyl yn y DU os ydyw wedi’i gofrestru gyda Thŷ’r Cwmnïau.
+employmentBeneficiary.countryOfResidenceUkYesNo.title=A yw’r buddiolwr hwn yn breswyl yn y DU?
+employmentBeneficiary.countryOfResidenceUkYesNo.heading=A yw {0} yn breswyl yn y DU?
+employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel=A yw {0} yn breswyl yn y DU?
+employmentBeneficiary.countryOfResidenceUkYesNo.error.required=Dewiswch ‘Iawn’ os yw’r buddiolwr yn breswyl yn y DU
+employmentBeneficiary.countryOfResidence.title=Beth yw gwlad breswyl y buddiolwr hwn?
+employmentBeneficiary.countryOfResidence.heading=Beth yw gwlad breswyl {0}?
+employmentBeneficiary.countryOfResidence.checkYourAnswersLabel=Beth yw gwlad breswyl {0}?
+employmentBeneficiary.countryOfResidence.error.required=Nodwch wlad
+employmentBeneficiary.countryOfResidence.error.length=Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+employmentBeneficiary.countryOfResidence.error.invalidCharacters=Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z, collnodau, comas, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+
+
+
