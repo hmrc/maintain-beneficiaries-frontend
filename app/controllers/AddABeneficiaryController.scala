@@ -23,6 +23,7 @@ import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import handlers.ErrorHandler
 import models.beneficiaries.Beneficiaries
 import models.{AddABeneficiary, Enumerable}
+import navigation.BeneficiaryNavigator
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -50,7 +51,8 @@ class AddABeneficiaryController @Inject()(
                                            val appConfig: FrontendAppConfig,
                                            trustStoreConnector: TrustsStoreConnector,
                                            errorHandler: ErrorHandler,
-                                           viewHelper: AddABeneficiaryViewHelper
+                                           viewHelper: AddABeneficiaryViewHelper,
+                                           navigator: BeneficiaryNavigator
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
@@ -163,7 +165,7 @@ class AddABeneficiaryController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
                 _ <- repository.set(updatedAnswers)
-              } yield Redirect(controllers.routes.AddNowController.onPageLoad())
+              } yield Redirect(navigator.addBeneficiaryRoute(beneficiaries))
 
             case AddABeneficiary.YesLater =>
               Future.successful(Redirect(appConfig.maintainATrustOverview))

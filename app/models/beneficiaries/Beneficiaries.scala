@@ -20,6 +20,7 @@ import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
+import utils.Constants.MAX
 import viewmodels.RadioOption
 
 case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
@@ -70,14 +71,14 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
       recurse(uncombinedOptions, Nil)
     }
 
-    combineOptions(options.filter(x => x._1 < 25)).map {
+    combineOptions(options.filter(x => x._1 < MAX)).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
 
   val maxedOutOptions: List[RadioOption] = {
 
-    options.filter(x => x._1 >= 25).map {
+    options.filter(x => x._1 >= MAX).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
