@@ -34,8 +34,7 @@ class AddABeneficiaryViewHelper {
         .map(x => row(x._1, x._2))
     }
 
-    def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int)
-                                (implicit messages: Messages): AddRow = {
+    def individualBeneficiaryRow(beneficiary: IndividualBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.name.displayName,
         typeLabel = messages("entities.beneficiaries.individual"),
@@ -48,8 +47,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int)
-                             (implicit messages: Messages): AddRow = {
+    def classOfBeneficiaryRow(beneficiary: ClassOfBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.description,
         typeLabel = messages("entities.beneficiaries.unidentified"),
@@ -58,8 +56,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def trustBeneficiaryRow(beneficiary: TrustBeneficiary, index: Int)
-                           (implicit messages: Messages): AddRow = {
+    def trustBeneficiaryRow(beneficiary: TrustBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.name,
         typeLabel = messages("entities.beneficiaries.trust"),
@@ -72,8 +69,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def charityBeneficiaryRow(beneficiary: CharityBeneficiary, index: Int)
-                             (implicit messages: Messages): AddRow = {
+    def charityBeneficiaryRow(beneficiary: CharityBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.name,
         typeLabel = messages("entities.beneficiaries.charity"),
@@ -86,8 +82,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def companyBeneficiaryRow(beneficiary: CompanyBeneficiary, index: Int)
-                             (implicit messages: Messages): AddRow = {
+    def companyBeneficiaryRow(beneficiary: CompanyBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.name,
         typeLabel = messages("entities.beneficiaries.company"),
@@ -100,8 +95,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def employmentRelatedBeneficiaryRow(beneficiary: EmploymentRelatedBeneficiary, index: Int)
-                                       (implicit messages: Messages): AddRow = {
+    def employmentRelatedBeneficiaryRow(beneficiary: EmploymentRelatedBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.name,
         typeLabel = messages("entities.beneficiaries.employmentRelated"),
@@ -110,8 +104,7 @@ class AddABeneficiaryViewHelper {
       )
     }
 
-    def otherBeneficiaryRow(beneficiary: OtherBeneficiary, index: Int)
-                           (implicit messages: Messages): AddRow = {
+    def otherBeneficiaryRow(beneficiary: OtherBeneficiary, index: Int): AddRow = {
       AddRow(
         name = beneficiary.description,
         typeLabel = messages("entities.beneficiaries.other"),
