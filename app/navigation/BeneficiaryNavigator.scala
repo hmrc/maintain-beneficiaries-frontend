@@ -35,11 +35,11 @@ class BeneficiaryNavigator {
     )
 
     routes.filter(_._1.size < MAX) match {
-      case ::(head, Nil) =>
-        head._2
-      case ::((x, _), ::((y, _), Nil)) if x == beneficiaries.company && y == beneficiaries.employmentRelated =>
+      case (_, x) :: Nil =>
+        x
+      case (x, _) :: (y, _) :: Nil if x == beneficiaries.company && y == beneficiaries.employmentRelated =>
         controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad()
-      case ::((x, _), ::((y, _), Nil)) if x == beneficiaries.trust && y == beneficiaries.charity =>
+      case (x, _) :: (y, _) :: Nil if x == beneficiaries.trust && y == beneficiaries.charity =>
         controllers.charityortrust.routes.CharityOrTrustController.onPageLoad()
       case _ =>
         controllers.routes.AddNowController.onPageLoad()
