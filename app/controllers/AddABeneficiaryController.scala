@@ -53,11 +53,11 @@ class AddABeneficiaryController @Inject()(
                                            errorHandler: ErrorHandler,
                                            viewHelper: AddABeneficiaryViewHelper,
                                            navigator: BeneficiaryNavigator
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
+                                         )(implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
-  val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
-
-  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
+  private val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
+  private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
