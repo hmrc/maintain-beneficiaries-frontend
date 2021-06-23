@@ -16,13 +16,11 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
-import models.NormalMode
 import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
+import navigation.BeneficiaryNavigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,6 +33,7 @@ import services.TrustService
 import viewmodels.RadioOption
 import views.html.AddNowView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class AddNowControllerSpec extends SpecBase with MockitoSugar {
@@ -103,178 +102,25 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the next page when Class of beneficiaries is submitted" in {
+    "redirect to the next page when valid data is submitted" in {
+
+      val mockNavigator = mock[BeneficiaryNavigator]
+      when(mockNavigator.addBeneficiaryNowRoute(any())).thenReturn(fakeNavigator.desiredRoute)
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[TrustService].toInstance(mockTrustService)
+          bind[TrustService].toInstance(mockTrustService),
+          bind[BeneficiaryNavigator].toInstance(mockNavigator)
         ).build()
 
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
+      val request = FakeRequest(POST, addNowRoute)
+        .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Individual beneficiary is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Individual.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Charity or trust is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.CharityOrTrust.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.charityortrust.routes.CharityOrTrustController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Charity is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Charity.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Trust is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Trust.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Other beneficiary is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Other.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.other.routes.DescriptionController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Company or employment related is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.CompanyOrEmploymentRelated.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Company is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.Company.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode).url
-
-      application.stop()
-    }
-
-    "redirect to the next page when Employment related is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[TrustService].toInstance(mockTrustService)
-        ).build()
-
-      val request =
-        FakeRequest(POST, addNowRoute)
-          .withFormUrlEncodedBody(("value", TypeOfBeneficiaryToAdd.EmploymentRelated.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }

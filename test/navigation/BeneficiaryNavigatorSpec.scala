@@ -72,7 +72,7 @@ class BeneficiaryNavigatorSpec extends SpecBase {
   )
 
   private val large = EmploymentRelatedBeneficiary(
-    name = "Employment Related Endeavours",
+    name = "employment-related Endeavours",
     utr = None,
     address = None,
     description = Description("Description", None, None, None, None),
@@ -311,6 +311,80 @@ class BeneficiaryNavigatorSpec extends SpecBase {
         }
       }
     }
-  }
+    
+    ".addBeneficiaryNowRoute" when {
+      
+      "individual" must {
+        "redirect to individual name page" in {
+          
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Individual).url mustBe
+            controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode).url
+        }
+      }
 
+      "unidentified" must {
+        "redirect to unidentified description page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.ClassOfBeneficiaries).url mustBe
+            controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url
+        }
+      }
+
+      "company or employment-related" must {
+        "redirect to company or employment-related page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.CompanyOrEmploymentRelated).url mustBe
+            controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad().url
+        }
+      }
+
+      "company" must {
+        "redirect to company name page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Company).url mustBe
+            controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "employment-related" must {
+        "redirect to employment-related name page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.EmploymentRelated).url mustBe
+            controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "charity or trust" must {
+        "redirect to charity or trust page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.CharityOrTrust).url mustBe
+            controllers.charityortrust.routes.CharityOrTrustController.onPageLoad().url
+        }
+      }
+
+      "trust" must {
+        "redirect to trust name page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Trust).url mustBe
+            controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "charity" must {
+        "redirect to charity name page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Charity).url mustBe
+            controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "other" must {
+        "redirect to other description page" in {
+
+          navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Other).url mustBe
+            controllers.other.routes.DescriptionController.onPageLoad(NormalMode).url
+        }
+      }
+    }
+  }
 }

@@ -19,10 +19,9 @@ package controllers
 import controllers.actions._
 import forms.AddBeneficiaryTypeFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
-import models.NormalMode
 import models.beneficiaries.TypeOfBeneficiaryToAdd
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
+import navigation.BeneficiaryNavigator
 import pages.AddNowPage
 import play.api.Logging
 import play.api.data.Form
@@ -33,6 +32,7 @@ import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AddNowView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddNowController @Inject()(
@@ -43,8 +43,9 @@ class AddNowController @Inject()(
                                   formProvider: AddBeneficiaryTypeFormProvider,
                                   repository: PlaybackRepository,
                                   trustService: TrustService,
-                                  errorHandler: ErrorHandler
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+                                  errorHandler: ErrorHandler,
+                                  navigator: BeneficiaryNavigator
+                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[TypeOfBeneficiaryToAdd] = formProvider()
 
@@ -83,19 +84,7 @@ class AddNowController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddNowPage, value))
                 _ <- repository.set(updatedAnswers)
-              } yield {
-                value match {
-                  case ClassOfBeneficiaries => Redirect(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad())
-                  case Individual => Redirect(controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode))
-                  case CharityOrTrust => Redirect(controllers.charityortrust.routes.CharityOrTrustController.onPageLoad())
-                  case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
-                  case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
-                  case CompanyOrEmploymentRelated => Redirect(controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad())
-                  case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
-                  case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode))
-                  case Other => Redirect(controllers.other.routes.DescriptionController.onPageLoad(NormalMode))
-                }
-              }
+              } yield Redirect(navigator.addBeneficiaryNowRoute(value))
           )
       } recoverWith {
         case e =>

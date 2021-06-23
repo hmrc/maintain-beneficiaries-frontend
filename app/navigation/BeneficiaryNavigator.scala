@@ -17,6 +17,7 @@
 package navigation
 
 import models.NormalMode
+import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import models.beneficiaries._
 import play.api.mvc.Call
 import utils.Constants.MAX
@@ -25,24 +26,38 @@ class BeneficiaryNavigator {
 
   def addBeneficiaryRoute(beneficiaries: Beneficiaries): Call = {
     val routes: List[(List[Beneficiary], Call)] = List(
-      (beneficiaries.individualDetails, controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode)),
-      (beneficiaries.unidentified, controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad()),
-      (beneficiaries.company, controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode)),
-      (beneficiaries.employmentRelated, controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode)),
-      (beneficiaries.trust, controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode)),
-      (beneficiaries.charity, controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode)),
-      (beneficiaries.other, controllers.other.routes.DescriptionController.onPageLoad(NormalMode))
+      (beneficiaries.individualDetails, addBeneficiaryNowRoute(Individual)),
+      (beneficiaries.unidentified, addBeneficiaryNowRoute(ClassOfBeneficiaries)),
+      (beneficiaries.company, addBeneficiaryNowRoute(Company)),
+      (beneficiaries.employmentRelated, addBeneficiaryNowRoute(EmploymentRelated)),
+      (beneficiaries.trust, addBeneficiaryNowRoute(Trust)),
+      (beneficiaries.charity, addBeneficiaryNowRoute(Charity)),
+      (beneficiaries.other, addBeneficiaryNowRoute(Other))
     )
 
     routes.filter(_._1.size < MAX) match {
       case (_, x) :: Nil =>
         x
       case (x, _) :: (y, _) :: Nil if x == beneficiaries.company && y == beneficiaries.employmentRelated =>
-        controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad()
+        addBeneficiaryNowRoute(CompanyOrEmploymentRelated)
       case (x, _) :: (y, _) :: Nil if x == beneficiaries.trust && y == beneficiaries.charity =>
-        controllers.charityortrust.routes.CharityOrTrustController.onPageLoad()
+        addBeneficiaryNowRoute(CharityOrTrust)
       case _ =>
         controllers.routes.AddNowController.onPageLoad()
+    }
+  }
+
+  def addBeneficiaryNowRoute(`type`: TypeOfBeneficiaryToAdd): Call = {
+    `type` match {
+      case Individual => controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode)
+      case ClassOfBeneficiaries => controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad()
+      case CompanyOrEmploymentRelated => controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad()
+      case Company => controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode)
+      case EmploymentRelated => controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode)
+      case CharityOrTrust => controllers.charityortrust.routes.CharityOrTrustController.onPageLoad()
+      case Trust => controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode)
+      case Charity => controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode)
+      case Other => controllers.other.routes.DescriptionController.onPageLoad(NormalMode)
     }
   }
 }
