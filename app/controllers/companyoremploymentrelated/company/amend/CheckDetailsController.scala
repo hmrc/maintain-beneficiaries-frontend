@@ -22,8 +22,7 @@ import controllers.actions._
 import controllers.actions.company.NameRequiredAction
 import extractors.CompanyBeneficiaryExtractor
 import handlers.ErrorHandler
-import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -35,6 +34,7 @@ import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
@@ -63,7 +63,11 @@ class CheckDetailsController @Inject()(
     Ok(view(section, index))
   }
 
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def extractAndRender(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = false)
+
+  def extractAndRedirect(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = true)
+
+  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap {
@@ -75,19 +79,23 @@ class CheckDetailsController @Inject()(
             if (company.utr.isDefined) {
               Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
             } else {
-              render(extractedAnswers, index, company.name)
+              if (redirect) {
+                Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode))
+              } else {
+                render(extractedAnswers, index, company.name)
+              }
             }
           }
       } recoverWith {
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the check answers for company beneficiary $index ${e.getMessage}")
+            s" error getting company beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }

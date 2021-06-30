@@ -16,42 +16,50 @@
 
 package controllers.individualbeneficiary.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
+import extractors.IndividualBeneficiaryExtractor
+import handlers.ErrorHandler
 import models.beneficiaries.IndividualBeneficiary
-import models.{Name, NationalInsuranceNumber}
+import models.{CheckMode, Name}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.StartDatePage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
+import utils.mappers.IndividualBeneficiaryMapper
 import utils.print.IndividualBeneficiaryPrintHelper
+import viewmodels.AnswerSection
 import views.html.individualbeneficiary.amend.CheckDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
+import scala.util.Success
 
-class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
   private val index = 0
 
   private lazy val checkDetailsRoute = routes.CheckDetailsController.extractAndRender(index).url
+  private lazy val checkCachedDetailsRoute = routes.CheckDetailsController.renderFromUserAnswers(index).url
+  private lazy val updateDetailsRoute = routes.CheckDetailsController.extractAndRedirect(index).url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit(index).url
 
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
-  private val name = Name("First", None, "Last")
-  private val dateOfBirth = LocalDate.parse("2010-02-03")
-  private val nino = "AA123456A"
-  private val startDate = LocalDate.parse("2019-03-09")
+  private val mockService: TrustService = mock[TrustService]
+  private val mockExtractor: IndividualBeneficiaryExtractor = mock[IndividualBeneficiaryExtractor]
+  private val mockPrintHelper: IndividualBeneficiaryPrintHelper = mock[IndividualBeneficiaryPrintHelper]
+  private val mockMapper: IndividualBeneficiaryMapper = mock[IndividualBeneficiaryMapper]
+  private val mockTrustConnector: TrustConnector = mock[TrustConnector]
+
+  private val errorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name(
@@ -59,66 +67,102 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       middleName = None,
       lastName = "Last"
     ),
-    dateOfBirth = Some(LocalDate.parse("2010-02-03")),
-    identification = Some(NationalInsuranceNumber("AA123456A")),
+    dateOfBirth = None,
+    identification = None,
     address = None,
-    vulnerableYesNo = Some(false),
+    vulnerableYesNo = None,
     roleInCompany = None,
     income = None,
-    incomeDiscretionYesNo = Some(true),
+    incomeDiscretionYesNo = None,
     entityStart = LocalDate.parse("2019-03-09"),
     provisional = false
   )
 
-  private val userAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(DateOfBirthYesNoPage, true).success.value
-    .set(DateOfBirthPage, dateOfBirth).success.value
-    .set(NationalInsuranceNumberYesNoPage, true).success.value
-    .set(NationalInsuranceNumberPage, nino).success.value
-    .set(VPE1FormYesNoPage, false).success.value
-    .set(IncomeDiscretionYesNoPage, true).success.value
-    .set(StartDatePage, startDate).success.value
+  private val fakeAnswerSection = AnswerSection(Some("Heading"), Nil)
+
+  override def beforeEach(): Unit = {
+    reset(mockService, mockExtractor, mockPrintHelper, mockMapper, mockTrustConnector)
+
+    when(mockExtractor.apply(any(), any(), any())).thenReturn(Success(emptyUserAnswers))
+
+    when(mockPrintHelper.apply(any(), any(), any())(any())).thenReturn(fakeAnswerSection)
+
+    when(mockMapper.apply(any())).thenReturn(Some(individualBeneficiary))
+
+    when(mockService.getIndividualBeneficiary(any(), any())(any(), any()))
+      .thenReturn(Future.successful(individualBeneficiary))
+
+    when(mockTrustConnector.amendIndividualBeneficiary(any(), any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+  }
 
   "CheckDetails Controller" must {
 
-    "return OK and the correct view for a GET for a given index" in {
+    "return OK and the correct view for a GET (check) for a given index" in {
 
-      val mockService : TrustService = mock[TrustService]
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[TrustService].toInstance(mockService)
-        )
-        .build()
-
-      when(mockService.getIndividualBeneficiary(any(), any())(any(), any()))
-        .thenReturn(Future.successful(individualBeneficiary))
+          bind[TrustService].toInstance(mockService),
+          bind[IndividualBeneficiaryExtractor].toInstance(mockExtractor),
+          bind[IndividualBeneficiaryPrintHelper].toInstance(mockPrintHelper)
+        ).build()
 
       val request = FakeRequest(GET, checkDetailsRoute)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, provisional = false, name.displayName)
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(answerSection, index)(request, messages).toString
+        view(fakeAnswerSection, index)(request, messages).toString
+    }
+
+    "return OK and the correct view for a GET (saved) for a given index" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[IndividualBeneficiaryPrintHelper].toInstance(mockPrintHelper)
+        ).build()
+
+      val request = FakeRequest(GET, checkCachedDetailsRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[CheckDetailsView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(fakeAnswerSection, index)(request, messages).toString
+    }
+
+    "return OK and redirect for a GET (update) for a given index" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockService),
+          bind[IndividualBeneficiaryExtractor].toInstance(mockExtractor)
+        ).build()
+
+      val request = FakeRequest(GET, updateDetailsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual
+        controllers.individualbeneficiary.routes.NameController.onPageLoad(CheckMode).url
     }
 
     "redirect to the 'add a beneficiary' page when submitted" in {
 
-      val mockTrustConnector = mock[TrustConnector]
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers), affinityGroup = Agent)
-          .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
-          .build()
-
-      when(mockTrustConnector.amendIndividualBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), affinityGroup = Agent)
+        .overrides(
+          bind[IndividualBeneficiaryMapper].toInstance(mockMapper),
+          bind[TrustConnector].toInstance(mockTrustConnector)
+        ).build()
 
       val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -127,6 +171,26 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute
+
+      application.stop()
+    }
+
+    "return error when mapper fails" in {
+
+      when(mockMapper.apply(any())).thenReturn(None)
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), affinityGroup = Agent)
+        .overrides(
+          bind[IndividualBeneficiaryMapper].toInstance(mockMapper),
+          bind[TrustConnector].toInstance(mockTrustConnector)
+        ).build()
+
+      val request = FakeRequest(POST, submitDetailsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
 
       application.stop()
     }

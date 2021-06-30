@@ -16,9 +16,10 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
+import models.TypeOfTrust.EmployeeRelated
 
-import models.{Address, IndividualIdentification, Name}
+import java.time.LocalDate
+import models.{Address, IndividualIdentification, Name, TypeOfTrust}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -34,7 +35,21 @@ final case class IndividualBeneficiary(name: Name,
                                        nationality: Option[String] = None,
                                        mentalCapacityYesNo: Option[Boolean] = None,
                                        entityStart: LocalDate,
-                                       provisional: Boolean) extends IncomeBeneficiary
+                                       provisional: Boolean) extends IncomeBeneficiary {
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+    if (migratingFromNonTaxableToTaxable) {
+      super.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) &&
+        vulnerableYesNo.isDefined &&
+        (trustType match {
+          case Some(EmployeeRelated) => roleInCompany.isDefined
+          case _ => true
+        })
+    } else {
+      true
+    }
+  }
+}
 
 object IndividualBeneficiary extends BeneficiaryReads {
 

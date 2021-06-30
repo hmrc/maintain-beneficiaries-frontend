@@ -22,8 +22,7 @@ import controllers.actions._
 import controllers.actions.trust.NameRequiredAction
 import extractors.TrustBeneficiaryExtractor
 import handlers.ErrorHandler
-import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -35,6 +34,7 @@ import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.trust.amend.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject()(
@@ -58,13 +58,16 @@ class CheckDetailsController @Inject()(
   private def render(userAnswers: UserAnswers,
                      index: Int,
                      name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
+                    (implicit request: Request[AnyContent]): Result = {
     val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(section, index))
   }
 
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
+  def extractAndRender(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = false)
+
+  def extractAndRedirect(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = true)
+
+  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
     implicit request =>
 
       service.getTrustBeneficiary(request.userAnswers.identifier, index) flatMap {
@@ -77,19 +80,23 @@ class CheckDetailsController @Inject()(
             if (trust.utr.isDefined) {
               Redirect(controllers.charityortrust.trust.amend.routes.CheckDetailsUtrController.onPageLoad())
             } else {
-              render(extractedF, index, trust.name)
+              if (redirect) {
+                Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode))
+              } else {
+                render(extractedF, index, trust.name)
+              }
             }
           }
       } recoverWith {
         case e =>
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the check answers for trust beneficiary $index ${e.getMessage}")
+            s" error getting trust beneficiary $index ${e.getMessage}")
 
           Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
       }
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }

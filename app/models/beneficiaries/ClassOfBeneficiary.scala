@@ -16,14 +16,18 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
+import models.TypeOfTrust
 
+import java.time.LocalDate
 import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json.{Reads, Writes, __}
 
 final case class ClassOfBeneficiary(description: String,
                                     entityStart: LocalDate,
-                                    provisional: Boolean) extends Beneficiary
+                                    provisional: Boolean) extends Beneficiary {
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = true
+}
 
 object ClassOfBeneficiary {
 

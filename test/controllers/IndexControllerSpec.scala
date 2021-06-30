@@ -40,99 +40,100 @@ class IndexControllerSpec extends SpecBase {
     val is5mldEnabled = false
     val isTaxable = false
     val isUnderlyingData5mld = false
-    val migratingFromNonTaxableToTaxable = false
 
-      "populate user answers and redirect" in {
+    "populate user answers and redirect to AddABeneficiaryController when not migrating from NTT to TT" in {
 
-        reset(playbackRepository)
+      val migratingFromNonTaxableToTaxable = false
 
-        val mockTrustConnector = mock[TrustConnector]
-        val mockFeatureFlagService = mock[FeatureFlagService]
+      reset(playbackRepository)
 
-        when(playbackRepository.set(any()))
-          .thenReturn(Future.successful(true))
+      val mockTrustConnector = mock[TrustConnector]
+      val mockFeatureFlagService = mock[FeatureFlagService]
 
-        when(mockTrustConnector.getTrustDetails(any())(any(), any()))
-          .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
+      when(playbackRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
-        when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-          .thenReturn(Future.successful(is5mldEnabled))
+      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
-        when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-          .thenReturn(Future.successful(isUnderlyingData5mld))
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(is5mldEnabled))
 
-        when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
-          .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
+      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+        .thenReturn(Future.successful(isUnderlyingData5mld))
 
-        val application = applicationBuilder(userAnswers = None)
-          .overrides(
-            bind[TrustConnector].toInstance(mockTrustConnector),
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-          ).build()
+      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+        .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustConnector].toInstance(mockTrustConnector),
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
 
-        val result = route(application, request).value
+      val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
 
-        status(result) mustEqual SEE_OTHER
+      val result = route(application, request).value
 
-        redirectLocation(result) mustBe Some(controllers.routes.AddABeneficiaryController.onPageLoad().url)
+      status(result) mustEqual SEE_OTHER
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(playbackRepository).set(uaCaptor.capture)
+      redirectLocation(result) mustBe Some(controllers.routes.AddABeneficiaryController.onPageLoad().url)
 
-        uaCaptor.getValue.internalId mustBe "id"
-        uaCaptor.getValue.identifier mustBe identifier
-        uaCaptor.getValue.whenTrustSetup mustBe startDate
-        uaCaptor.getValue.trustType.get mustBe trustType
-        uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
-        uaCaptor.getValue.isTaxable mustBe isTaxable
-        uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
-        uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
+      val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(playbackRepository).set(uaCaptor.capture)
 
-        application.stop()
-      }
+      uaCaptor.getValue.internalId mustBe "id"
+      uaCaptor.getValue.identifier mustBe identifier
+      uaCaptor.getValue.whenTrustSetup mustBe startDate
+      uaCaptor.getValue.trustType.get mustBe trustType
+      uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
+      uaCaptor.getValue.isTaxable mustBe isTaxable
+      uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
+      uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
 
-      "migrating to TT from NTT redirect to information page" in {
+      application.stop()
+    }
 
-        val migratingFromNonTaxableToTaxable = true
+    "redirect to BeneficiariesInformationController when migrating from NTT to TT" in {
 
-        reset(playbackRepository)
+      val migratingFromNonTaxableToTaxable = true
 
-        val mockTrustConnector = mock[TrustConnector]
-        val mockFeatureFlagService = mock[FeatureFlagService]
+      reset(playbackRepository)
 
-        when(playbackRepository.set(any()))
-          .thenReturn(Future.successful(true))
+      val mockTrustConnector = mock[TrustConnector]
+      val mockFeatureFlagService = mock[FeatureFlagService]
 
-        when(mockTrustConnector.getTrustDetails(any())(any(), any()))
-          .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
+      when(playbackRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
-        when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-          .thenReturn(Future.successful(is5mldEnabled))
+      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+        .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
-        when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-          .thenReturn(Future.successful(isUnderlyingData5mld))
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
+        .thenReturn(Future.successful(is5mldEnabled))
 
-        when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
-          .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
+      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
+        .thenReturn(Future.successful(isUnderlyingData5mld))
 
-        val application = applicationBuilder(userAnswers = None)
-          .overrides(
-            bind[TrustConnector].toInstance(mockTrustConnector),
-            bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-          ).build()
+      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+        .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[TrustConnector].toInstance(mockTrustConnector),
+          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+        ).build()
 
-        val result = route(application, request).value
+      val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
 
-        status(result) mustEqual SEE_OTHER
+      val result = route(application, request).value
 
-        redirectLocation(result) mustBe Some(controllers.transition.routes.BeneficiariesInformationController.onPageLoad().url)
+      status(result) mustEqual SEE_OTHER
 
-        application.stop()
-      }
+      redirectLocation(result) mustBe Some(controllers.transition.routes.BeneficiariesInformationController.onPageLoad().url)
+
+      application.stop()
+    }
 
 
     "default isTaxable to true if trustTaxable is None i.e. 4mld" in {

@@ -154,7 +154,6 @@ addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiar
 
 addABeneficiary.title = Add a beneficiary
 addABeneficiary.heading = Add a beneficiary
-addABeneficiary.singular.heading = Add a beneficiary
 addABeneficiary.count.heading = The trust has {0} beneficiaries
 addABeneficiary.additional-content = Do you want to add a new beneficiary?
 addABeneficiary.add-them-now = Yes, I want to add them now

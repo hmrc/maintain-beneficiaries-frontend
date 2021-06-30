@@ -16,11 +16,11 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
-
 import models.Address
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 final case class TrustBeneficiary(name: String,
                                   utr: Option[String],

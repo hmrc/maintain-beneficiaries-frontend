@@ -21,4 +21,5 @@ object Constants {
   final val ES = "ES"
   final val UNITED_KINGDOM = "United Kingdom"
   final val SPAIN = "Spain"
+  final val MAX = 25
 }

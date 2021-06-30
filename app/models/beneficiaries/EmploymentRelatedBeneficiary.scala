@@ -16,7 +16,7 @@
 
 package models.beneficiaries
 
-import models.{Address, Description, HowManyBeneficiaries}
+import models.{Address, Description, HowManyBeneficiaries, TypeOfTrust}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -29,7 +29,10 @@ case class EmploymentRelatedBeneficiary(name: String,
                                         howManyBeneficiaries: HowManyBeneficiaries,
                                         countryOfResidence: Option[String] = None,
                                         entityStart: LocalDate,
-                                        provisional: Boolean) extends Beneficiary
+                                        provisional: Boolean) extends Beneficiary {
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = true
+}
 
 object EmploymentRelatedBeneficiary extends BeneficiaryReads {
 

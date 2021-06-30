@@ -1,4 +1,5 @@
 GET        /:index/check-details                    controllers.companyoremploymentrelated.company.amend.CheckDetailsController.extractAndRender(index: Int)
+GET        /:index/update-details                   controllers.companyoremploymentrelated.company.amend.CheckDetailsController.extractAndRedirect(index: Int)
 
 GET        /check-details-without-amend             controllers.companyoremploymentrelated.company.amend.CheckDetailsUtrController.onPageLoad()
 POST       /check-details-without-amend             controllers.companyoremploymentrelated.company.amend.CheckDetailsUtrController.onSubmit()

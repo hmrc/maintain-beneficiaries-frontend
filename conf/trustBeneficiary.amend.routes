@@ -1,5 +1,6 @@
 
 GET        /:index/check-details                    controllers.charityortrust.trust.amend.CheckDetailsController.extractAndRender(index: Int)
+GET        /:index/update-details                   controllers.charityortrust.trust.amend.CheckDetailsController.extractAndRedirect(index: Int)
 
 GET        /check-details-without-amend             controllers.charityortrust.trust.amend.CheckDetailsUtrController.onPageLoad()
 POST       /check-details-without-amend             controllers.charityortrust.trust.amend.CheckDetailsUtrController.onSubmit()

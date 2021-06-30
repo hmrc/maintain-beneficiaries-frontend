@@ -20,24 +20,24 @@ import models.beneficiaries.TypeOfBeneficiaryToAdd._
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
+import utils.Constants.MAX
 import viewmodels.RadioOption
 
-case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
-                         unidentified: List[ClassOfBeneficiary],
-                         company: List[CompanyBeneficiary],
-                         employmentRelated: List[EmploymentRelatedBeneficiary],
-                         trust: List[TrustBeneficiary],
-                         charity: List[CharityBeneficiary],
-                         other: List[OtherBeneficiary]) {
+case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
+                         unidentified: List[ClassOfBeneficiary] = Nil,
+                         company: List[CompanyBeneficiary] = Nil,
+                         employmentRelated: List[EmploymentRelatedBeneficiary] = Nil,
+                         trust: List[TrustBeneficiary] = Nil,
+                         charity: List[CharityBeneficiary] = Nil,
+                         other: List[OtherBeneficiary] = Nil) {
 
   type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
   def addToHeading()(implicit mp: MessagesProvider): String =
     (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
-      case 0 => Messages("addABeneficiary.heading")
-      case 1 => Messages("addABeneficiary.singular.heading")
-      case l => Messages("addABeneficiary.count.heading", l)
+      case c if c > 1 => Messages("addABeneficiary.count.heading", c)
+      case _ => Messages("addABeneficiary.heading")
     }
 
   private val options: BeneficiaryOptions = {
@@ -71,14 +71,14 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary],
       recurse(uncombinedOptions, Nil)
     }
 
-    combineOptions(options.filter(x => x._1 < 25)).map {
+    combineOptions(options.filter(x => x._1 < MAX)).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
 
   val maxedOutOptions: List[RadioOption] = {
 
-    options.filter(x => x._1 >= 25).map {
+    options.filter(x => x._1 >= MAX).map {
       x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }

@@ -24,9 +24,9 @@ import views.html.transition.BeneficiariesInformationView
 
 @Singleton
 class BeneficiariesInformationController @Inject()(
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: BeneficiariesInformationView
-                                             ) extends FrontendBaseController with I18nSupport {
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    view: BeneficiariesInformationView
+                                                  ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())

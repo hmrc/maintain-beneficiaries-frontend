@@ -16,13 +16,14 @@
 
 package models.beneficiaries
 
-import models.Address
+import models.{Address, TypeOfTrust}
 import play.api.libs.json.{JsPath, JsSuccess, Reads}
 
 import java.time.LocalDate
 
 trait Beneficiary {
   val entityStart: LocalDate
+  def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean
 }
 
 trait IncomeBeneficiary extends Beneficiary {
@@ -30,11 +31,31 @@ trait IncomeBeneficiary extends Beneficiary {
   val incomeDiscretionYesNo: Option[Boolean]
   val countryOfResidence: Option[String]
   val address: Option[Address]
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+    if (migratingFromNonTaxableToTaxable) {
+      (incomeDiscretionYesNo, income) match {
+        case (None, None) => false
+        case (Some(false), None) => false
+        case _ => true
+      }
+    } else {
+      true
+    }
+  }
 }
 
 trait OrgBeneficiary extends IncomeBeneficiary {
   val name: String
   val utr: Option[String]
+
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+    if (utr.isEmpty) {
+      super.hasRequiredData(migratingFromNonTaxableToTaxable, trustType)
+    } else {
+      true
+    }
+  }
 }
 
 trait BeneficiaryReads {

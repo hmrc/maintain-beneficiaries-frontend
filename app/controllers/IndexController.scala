@@ -69,10 +69,10 @@ class IndexController @Inject()(
         _ <- cacheRepository.set(ua)
       } yield {
         logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] user has started maintaining beneficiaries")
-        if (!taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
-          Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-        } else {
+        if (taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
           Redirect(controllers.transition.routes.BeneficiariesInformationController.onPageLoad())
+        } else {
+          Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
         }
       }
   }
