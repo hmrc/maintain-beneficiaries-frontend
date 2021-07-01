@@ -127,11 +127,7 @@ class AddABeneficiaryController @Inject()(
               _ <- repository.set(updatedAnswers)
             } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
-            for {
-              _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
-            } yield {
-              Redirect(appConfig.maintainATrustOverview)
-            }
+            submitComplete()(request)
           }
         }
       )
@@ -171,11 +167,7 @@ class AddABeneficiaryController @Inject()(
               Future.successful(Redirect(appConfig.maintainATrustOverview))
 
             case AddABeneficiary.NoComplete =>
-              for {
-                _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
-              } yield {
-                Redirect(appConfig.maintainATrustOverview)
-              }
+              submitComplete()(request)
           }
         )
       } recoverWith {
@@ -191,7 +183,12 @@ class AddABeneficiaryController @Inject()(
     implicit request =>
 
       for {
-        _ <- trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
+        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.identifier)
+        _ <- if (beneficiaries.isEmpty) {
+          Future.successful(())
+        } else {
+          trustStoreConnector.setTaskComplete(request.userAnswers.identifier).map(_ => ())
+        }
       } yield {
         Redirect(appConfig.maintainATrustOverview)
       }

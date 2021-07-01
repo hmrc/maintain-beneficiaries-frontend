@@ -31,6 +31,11 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
                          charity: List[CharityBeneficiary] = Nil,
                          other: List[OtherBeneficiary] = Nil) {
 
+  def isEmpty: Boolean = this match {
+    case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) => true
+    case _ => false
+  }
+
   type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
