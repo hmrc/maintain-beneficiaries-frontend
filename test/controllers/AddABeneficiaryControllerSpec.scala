@@ -24,7 +24,8 @@ import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBenefi
 import models.{AddABeneficiary, Description, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.Mockito.{never, reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import pages.AddNowPage
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
@@ -43,7 +44,7 @@ import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBenefi
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
+class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with BeforeAndAfterEach {
 
   lazy val getRoute: String = controllers.routes.AddABeneficiaryController.onPageLoad().url
   lazy val submitAnotherRoute: String = controllers.routes.AddABeneficiaryController.submitAnother().url
@@ -52,7 +53,6 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
   val mockStoreConnector: TrustsStoreConnector = mock[TrustsStoreConnector]
   val mockViewHelper: AddABeneficiaryViewHelper = mock[AddABeneficiaryViewHelper]
-  when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, Nil))
 
   val addTrusteeForm: Form[AddABeneficiary] = new AddABeneficiaryFormProvider()()
   val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
@@ -165,7 +165,12 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
     override def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] = ???
   }
 
-  " AddABeneficiary Controller" when {
+  override def beforeEach(): Unit = {
+    reset(mockStoreConnector, mockViewHelper)
+    when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, Nil))
+  }
+
+  "AddABeneficiary Controller" when {
 
     "no data" must {
 
@@ -230,7 +235,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         application.stop()
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "redirect to the next page when yes is submitted" in {
 
         val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil))
 
@@ -247,6 +252,30 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
+
+        application.stop()
+      }
+
+      "redirect to the next page when no is submitted" in {
+
+        val fakeService = new FakeService(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+          .overrides(bind(classOf[TrustsStoreConnector]).toInstance(mockStoreConnector))
+          .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+          .build()
+
+        val request = FakeRequest(POST, submitYesNoRoute)
+          .withFormUrlEncodedBody(("value", "false"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
+
+        verify(mockStoreConnector, never()).setTaskComplete(any())(any(), any())
 
         application.stop()
       }
@@ -324,6 +353,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
 
+        verify(mockStoreConnector).setTaskComplete(any())(any(), any())
+
         application.stop()
       }
 
@@ -373,7 +404,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
         application.stop()
       }
 
-      "Clear out the user answers when starting the add class of beneficiary journey and redirect to what type of beneficiary page" in {
+      "clear out the user answers when starting a new journey and redirect to what type of beneficiary page" in {
 
         val mockTrustConnector = mock[TrustConnector]
 
@@ -532,10 +563,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures {
 
         redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
 
+        verify(mockStoreConnector).setTaskComplete(any())(any(), any())
+
         application.stop()
 
       }
-
     }
   }
 }
