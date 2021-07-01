@@ -187,7 +187,7 @@ class AddABeneficiaryController @Inject()(
         _ <- if (beneficiaries.isEmpty) {
           Future.successful(())
         } else {
-          trustStoreConnector.setTaskComplete(request.userAnswers.identifier)
+          trustStoreConnector.setTaskComplete(request.userAnswers.identifier).map(_ => ())
         }
       } yield {
         Redirect(appConfig.maintainATrustOverview)
