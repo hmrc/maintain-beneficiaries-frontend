@@ -1,74 +1,94 @@
 @*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @import config.FrontendAppConfig
-@import controllers.routes.SessionTimeoutController
+@import controllers.routes.{SessionTimeoutController => sessionTimeoutController}
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import resources._
 
 @this(
     appConfig: FrontendAppConfig,
-    govuk_wrapper: GovukWrapper,
-    article: Article,
-    sidebar: Sidebar
-)
+    govukLayout: GovukLayout,
+    hmrcHead: HmrcHead,
+    hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+    hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+    hmrcStandardFooter: HmrcStandardFooter,
+    hmrcStandardHeader: HmrcStandardHeader,
+    standardBetaBanner: StandardBetaBanner,
+    hmrcScripts: HmrcScripts,
+    stylesheets: Stylesheets,
+    govukBackLink: GovukBackLink,
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+    )
 
 @(title: String,
-  sidebarLinks: Option[Html] = None,
-  contentHeader: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  mainClass: Option[String] = None,
-  scriptElem: Option[Html] = None,
-  timeoutEnabled: Boolean = true,
-  canSignOut: Boolean = true
-)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+    sidebarLinks: Option[Html] = None,
+    contentHeader: Option[Html] = None,
+    bodyClasses: Option[String] = None,
+    mainClass: Option[String] = None,
+    scriptElem: Option[Html] = None,
+    timeoutEnabled: Boolean = true,
+    canSignOut: Boolean = true,
+    showBackLink: Boolean = false
+    )(mainContent: Html)(implicit request: Request[_], messages: Messages)
 
-@import uk.gov.hmrc.play.views.html.layouts
-
-@serviceInfoContent = {}
-
-@defaultScriptElem = {
+@headScripts = {
 @if(timeoutEnabled) {
-    <script>
-            window.GOVUK.timeoutDialog({
-                timeout: @appConfig.timeoutLength,
-                countdown: @appConfig.countdownLength,
-                title: '@messages("timeout.title")',
-                message: '@messages("timeout.message")',
-                keepAliveUrl: '@SessionTimeoutController.keepAlive.url',
-                signOutUrl: '@SessionTimeoutController.timeout.url',
-                keepAliveButtonText: '@messages("timeout.keep-alive-button")'
-            });
-    </script>
-}
-@scriptElem.getOrElse(HtmlFormat.empty)
+@hmrcTimeoutDialogHelper(
+    signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+    keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+    timeout = Some(appConfig.timeoutLength),
+    countdown = Some(appConfig.countdownLength),
+    title = Some(messages("timeout.title")),
+    message = Some(messages("timeout.message")),
+    keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+)}
+
+@stylesheets()
 }
 
-@sidebarContent = {
-    @if(sidebarLinks.isDefined) {
-        @sidebar(sidebarLinks.get, Some("sidebar"))
+@beforeContentBlock = {
+    @hmrcLanguageSelectHelper()
+    @if(showBackLink) {
+    @govukBackLink(BackLink(
+    attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
+))
     }
 }
 
-@govuk_wrapper(appConfig = appConfig,
-               title = breadcrumbTitle(title),
-               mainClass = mainClass,
-               bodyClasses = bodyClasses,
-               sidebar = sidebarContent,
-               contentHeader = contentHeader,
-               mainContent = article(mainContent),
-               serviceInfoContent = serviceInfoContent,
-               scriptElem = Some(defaultScriptElem),
-               canSignOut = canSignOut
-)
+@mainContentWithGetHelp = {
+@mainContent
+@hmrcReportTechnicalIssueHelper()
+
+}
+
+@govukLayout(
+    pageTitle = Some(breadcrumbTitle(title)),
+    headBlock = Some(hmrcHead(
+    headBlock = Some(headScripts)
+)),
+    headerBlock = Some(hmrcStandardHeader(
+    serviceUrl = Some(appConfig.trustsUrl),
+    signOutUrl = if(canSignOut) Some(controllers.register.routes.LogoutController.logout().url) else None,
+    phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
+)),
+    beforeContentBlock = Some(beforeContentBlock),
+    scriptsBlock = Some(hmrcScripts()),
+    footerBlock = Some(hmrcStandardFooter(
+    accessibilityStatementUrl = Some(appConfig.accessibilityLinkUrl)
+))
+)(mainContentWithGetHelp)
