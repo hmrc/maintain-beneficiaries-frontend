@@ -14,6 +14,10 @@
  * limitations under the License.
  *@
 
-@(headingKey: String, msgParam: Option[String] = None, headingSize: String = "heading-large")(implicit messages: Messages)
+@this()
 
-<h1 class="@headingSize">@messages(headingKey, msgParam.getOrElse(""))</h1>
+@(headingKey: String, optionalParam: Option[String] = None, headingSize: String = "govuk-heading-l")(implicit messages: Messages)
+
+<header>
+ <h1 class="@headingSize">@messages(headingKey, if(optionalParam.isDefined) {optionalParam.get} else "")</h1>
+</header>

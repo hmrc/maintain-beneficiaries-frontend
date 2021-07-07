@@ -14,18 +14,16 @@
  * limitations under the License.
  *@
 
-@import viewmodels.addAnother.AddRow
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
+@this(govukButton : GovukButton)
 
-@if(data.nonEmpty){
+@(
+messageKey: String = "site.continue",
+isStartButton:Boolean = false,
+)(implicit messages: Messages)
 
-<div class="form-group">
- <h2 id="data-list-heading--@id">@messages(s"site.$id")</h2>
- <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
-  @for(item <- data) {
-  @components.data_list_row(item)
-  }
- </dl>
-</div>
-}
+@govukButton(Button(
+isStartButton = isStartButton,
+content = Text(messages(messageKey))
+))

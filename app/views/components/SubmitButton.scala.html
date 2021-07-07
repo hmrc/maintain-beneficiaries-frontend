@@ -14,17 +14,19 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
-@import views.html._
+@this(
+  button: GovukButton,
+)
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+@(overrideMessage: Option[String] = None, submitClass: Option[String] = None)(implicit messages: Messages)
 
-@if(answerSection.headingKey.isDefined){
-    <h2 class="heading-large">@messages(answerSection.headingKey.get)</h2>
-}
-
-<ul role="list" class="govuk-check-your-answers cya-questions-long section">
-    @for(row <- answerSection.rows){
-        @components.answer_row_no_change(row)
-    }
-</ul>
+@button(Button(
+  attributes = Map("id"-> "submit"),
+  classes = s"button ${submitClass.getOrElse("")}",
+  content = if(overrideMessage.isEmpty) {
+    Text(messages("site.save.continue"))
+  } else {
+    Text(messages(overrideMessage.get))
+  }
+  )
+)

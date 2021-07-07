@@ -14,14 +14,15 @@
  * limitations under the License.
  *@
 
-@(overrideMessage : Option[String] = None, submitClass: Option[String] = None)(implicit messages: Messages)
+@this()
 
-<div class="section">
- <button id="submit" formnovalidate class="button @if(submitClass.nonEmpty){@{submitClass.get}}">
-  @if(overrideMessage.isEmpty) {
-  @messages("site.continue")
-  } else {
-  @messages(overrideMessage.get)
-  }
- </button>
-</div>
+@(
+prefix : String,
+keys : Seq[String]
+)(implicit messages: Messages)
+
+<ul class="govuk-list govuk-list--bullet">
+ @keys.map { key =>
+ <li>@messages(s"$prefix.$key")</li>
+ }
+</ul>

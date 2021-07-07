@@ -14,13 +14,14 @@
  * limitations under the License.
  *@
 
-@(
-  prefix : String,
-  keys : Seq[String]
-)(implicit messages: Messages)
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-<ul class="list list-bullet">
- @keys.map { key =>
- <li>@messages(s"$prefix.$key")</li>
- }
-</ul>
+@this(govukInsetText : GovukInsetText)
+
+@(messageKey: String, id: String)(implicit messages: Messages)
+
+@govukInsetText(InsetText(
+ id = Some(s"inset-text--$id"),
+ content = Text(messages(messageKey))
+ )
+)

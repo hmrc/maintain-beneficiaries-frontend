@@ -1,0 +1,5 @@
+@this()
+
+@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false, cssClasses: Option[String] = None)(implicit messages: Messages)
+
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"} class="govuk-link @cssClasses.getOrElse("")">@messages(key)</a>

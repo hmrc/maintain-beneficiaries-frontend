@@ -14,8 +14,23 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
+@import viewmodels.AddRow
+@import views.html.components.AddToRow
 
-<div class="js-visible">
-  <p><a id="back-link" class="link-back" href="#">@messages("site.back")</a></p>
-</div>
+@this(
+addToRow: AddToRow
+)
+
+@(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
+
+@if(data.nonEmpty){
+ <h2 class="govuk-heading-m" id="data-list-heading--@id">@messages(s"site.$id")</h2>
+
+ <div class="govuk-form-group">
+  <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
+   @for(item <- data) {
+   @addToRow(item)
+   }
+  </dl>
+ </div>
+}
