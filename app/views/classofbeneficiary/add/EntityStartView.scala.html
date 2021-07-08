@@ -24,23 +24,22 @@
 @(form: Form[_], description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("classOfBeneficiary.entityStart.title")}"
+    title = s"${errorPrefix(form)}${messages("classOfBeneficiary.entityStart.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = EntityStartController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("classOfBeneficiary.entityStart.heading", description),
-            legendClass = "heading-large",
-            headingIsLegend = true,
+            legendClass = "govuk-heading-l",
+            legendAsHeading = true,
             hint = Some(messages("classOfBeneficiary.entityStart.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
