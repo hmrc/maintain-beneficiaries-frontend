@@ -15,31 +15,34 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("employmentBeneficiary.countryOfResidenceYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("employmentBeneficiary.countryOfResidenceYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfResidenceYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             legend = messages("employmentBeneficiary.countryOfResidenceYesNo.heading", name),
             headingIsLegend = true,
             hint = Some(messages("employmentBeneficiary.countryOfResidenceYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

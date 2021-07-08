@@ -15,24 +15,28 @@
  *@
 
 @import viewmodels.AnswerSection
+@import viewmodels.Section
+@import utils.SectionFormatter.formatSections
 @import controllers.companyoremploymentrelated.employment.amend.routes._
+@import views.html.components.{Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    submitButton: SubmitButton
 )
 
-@(answerSection: AnswerSection, name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[Section], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("employmentBeneficiary.checkDetails.title")
+    title = messages("employmentBeneficiary.checkDetails.title"),
+    showBackLink = true
     ) {
 
     @formHelper(action = CheckDetailsUtrController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
-
-        @components.heading("employmentBeneficiary.checkDetails.heading")
+        @heading("employmentBeneficiary.checkDetails.heading")
 
         @components.answer_section_no_change(answerSection)
 
@@ -40,6 +44,6 @@
         <p>@messages("employmentBeneficiary.checkDetails.utr.p2", name)</p>
         <p>@messages("employmentBeneficiary.checkDetails.utr.p3", name)</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

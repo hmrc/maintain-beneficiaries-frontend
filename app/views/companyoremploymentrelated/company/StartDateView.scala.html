@@ -15,33 +15,37 @@
  *@
 
 @import controllers.companyoremploymentrelated.company.routes._
+@import views.html.components.{InputDate, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    inputDate: InputDate,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("companyBeneficiary.startDate.title")}"
+    title = s"${errorPrefix(form)}${messages("companyBeneficiary.startDate.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = StartDateController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.heading("companyBeneficiary.startDate.heading", Some(name))
+        @inputDate(
+            field = form("value"),
+            legend = messages("companyBeneficiary.startDate.heading", name),
+            legendClass = "govuk-heading-l",
+            legendAsHeading = true,
+            hint = Some(messages("trustBeneficiary.startDate.hint"))
+        )
 
         <p>@messages("companyBeneficiary.startDate.paragraph")</p>
 
-        @components.input_date(
-            field = form("value"),
-            hint = Some(messages("companyBeneficiary.startDate.hint"))
-        )
-
-        @components.submit_button()
+        @submitButton()
     }
 }
