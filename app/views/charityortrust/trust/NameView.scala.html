@@ -15,33 +15,36 @@
  *@
 
 @import controllers.charityortrust.trust.routes._
+@import views.html.components.{ErrorSummary, InputText, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustBeneficiary.name.title")}"
+    title = s"${errorPrefix(form)}${messages("trustBeneficiary.name.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("trustBeneficiary.name.heading"),
-            headingIsLabel = true,
-            labelClass = Some("heading-large"),
-            inputClass = Some("form-control-3-4"),
+            headingAsLabel = true,
+            labelClass = Some("govuk-label--l"),
+            inputClass = Some("trustee-business-name"),
             autocomplete = Some("name")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

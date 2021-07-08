@@ -16,23 +16,25 @@
 
 @import viewmodels.AnswerSection
 @import controllers.charityortrust.trust.amend.routes._
+@import views.html.components.{Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    submitButton: SubmitButton
 )
 
 @(answerSection: AnswerSection, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trustBeneficiary.checkDetails.title")
+    title = messages("trustBeneficiary.checkDetails.title"),
+    showBackLink = true
     ) {
 
     @formHelper(action = CheckDetailsUtrController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
-
-        @components.heading("trustBeneficiary.checkDetails.heading")
+        @heading("trustBeneficiary.checkDetails.heading")
 
         @components.answer_section_no_change(answerSection)
 
@@ -40,6 +42,6 @@
         <p>@messages("trustBeneficiary.checkDetails.utr.p2", name)</p>
         <p>@messages("trustBeneficiary.checkDetails.utr.p3", name)</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }
