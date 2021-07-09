@@ -15,22 +15,24 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.{HeadingWithCaption, BulletList, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    headingWithCaption: HeadingWithCaption,
+    bulletList: BulletList,
+    button: SubmitButton,
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("beneficiariesMoreInformation.title")
+    title = messages("beneficiariesMoreInformation.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    <span class="govuk-caption-xl">@messages("beneficiariesMoreInformation.caption")</span>
-    @components.heading("beneficiariesMoreInformation.heading")
+    @headingWithCaption("beneficiariesMoreInformation.heading")
 
     <p>@messages("beneficiariesMoreInformation.p1")</p>
     <p>@messages("beneficiariesMoreInformation.p2")</p>
@@ -38,21 +40,22 @@
     <h2>@messages("beneficiariesMoreInformation.subheading")</h2>
     <p>@messages("beneficiariesMoreInformation.p3")</p>
 
-    @components.bullet_list("beneficiariesMoreInformation", Seq("b1", "b2", "b3"))
+    @bulletList("beneficiariesMoreInformation", List("b1", "b2", "b3"))
 
     <h2>@messages("beneficiariesMoreInformation.subheading2")</h2>
     <p>@messages("beneficiariesMoreInformation.p4")</p>
 
-    @components.bullet_list("beneficiariesMoreInformation", Seq("b4", "b5", "b6", "b7"))
+    @bulletList("beneficiariesMoreInformation", List("b4", "b5", "b6", "b7"))
 
     <h2>@messages("beneficiariesMoreInformation.subheading3")</h2>
     <p>@messages("beneficiariesMoreInformation.p5")</p>
 
-    @components.bullet_list("beneficiariesMoreInformation", Seq("b8", "b9"))
-
+    @bulletList("beneficiariesMoreInformation", List("b8", "b9"))
 
     <p>@messages("beneficiariesMoreInformation.p6")</p>
 
-    @components.button_link(messages("site.continue"), controllers.routes.AddABeneficiaryController.onPageLoad().url)
+     @formHelper(action = BeneficiariesInformationController.onSubmit(), 'autoComplete -> "off") {
+        @button(Some(messages("site.continue")))
+    }
 
 }

@@ -16,32 +16,36 @@
 
 @import controllers.individualbeneficiary.routes._
 @import models.beneficiaries.RoleInCompany
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.roleInCompany.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.roleInCompany.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = RoleInCompanyController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("individualBeneficiary.roleInCompany.heading", name),
-            legendClass = Some("heading-large"),
-            headingIsLegend = true,
+            legendClass = Some("govuk-heading-l"),
+            inline = true,
+            legendAsHeading = true,
             inputs = RoleInCompany.options
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

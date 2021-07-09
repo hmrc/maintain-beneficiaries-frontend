@@ -15,32 +15,35 @@
  *@
 
 @import controllers.individualbeneficiary.add.routes._
+@import views.html.components.{InputDate, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    inputDate: InputDate,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.startDate.title", name)}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.startDate.title", name)}",
+    showBackLink = true
 ) {
 
     @formHelper(action = StartDateController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("individualBeneficiary.startDate.heading", name),
-            headingIsLegend = true,
-            legendClass = "form-field",
+            legendAsHeading = true,
+            legendClass = "govuk-heading-l",
             hint = Some(messages("individualBeneficiary.startDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

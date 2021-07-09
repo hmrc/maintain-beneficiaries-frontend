@@ -16,28 +16,34 @@
 
 @import controllers.individualbeneficiary.routes._
 @import utils.InputOption
+@import views.html.components.{ErrorSummary, InternationalAddress, SubmitButton}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    internationalAddress: InternationalAddress,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.nonUkAddress.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.nonUkAddress.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NonUkAddressController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @internationalAddress(
+            form = form,
+            legend = messages("individualBeneficiary.nonUkAddress.heading", name),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+            )
 
-        @components.heading("individualBeneficiary.nonUkAddress.heading", Some(name))
-
-        @components.non_uk_address(form, countryOptions)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

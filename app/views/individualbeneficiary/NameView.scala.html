@@ -15,45 +15,49 @@
  *@
 
 @import controllers.individualbeneficiary.routes._
+@import views.html.components.{ErrorSummary, InputText, SubmitButton, Heading}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    submitButton: SubmitButton,
+    heading: Heading
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.name.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.name.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NameController.onSubmit(mode), 'autoComplete -> "on") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("individualBeneficiary.name.heading")
 
-        @components.heading("individualBeneficiary.name.heading")
-
-        @components.input_text(
+        @inputText(
             field = form("firstName"),
             label = messages("individualBeneficiary.name.firstName"),
             autocomplete = Some("given-name")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("middleName"),
             label = messages("individualBeneficiary.name.middleName"),
             autocomplete = Some("additional-name")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("lastName"),
             label = messages("individualBeneficiary.name.lastName"),
             autocomplete = Some("family-name")
         )
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

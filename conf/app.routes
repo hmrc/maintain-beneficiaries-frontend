@@ -44,6 +44,7 @@ GET        /timeout                                                         cont
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /beneficiaries-more-information                                  controllers.transition.BeneficiariesInformationController.onPageLoad()
+POST       /beneficiaries-more-information                                  controllers.transition.BeneficiariesInformationController.onSubmit()
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()

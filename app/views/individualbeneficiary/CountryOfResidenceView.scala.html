@@ -16,34 +16,37 @@
 
 @import controllers.individualbeneficiary.routes._
 @import utils.InputOption
+@import views.html.components.{InputSelect, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    select: InputSelect,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode, name: String, countryOptions: Seq[InputOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.countryOfResidence.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.countryOfResidence.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfResidenceController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.select(field = form("value"),
+        @select(field = form("value"),
             label = messages("individualBeneficiary.countryOfResidence.heading", name),
-            labelClasses = Set("heading-large"),
+            labelClasses = Set("govuk-heading-l"),
             labelAsHeading = true,
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
-            formGroupClasses = Set("autocomplete-wrapper form-control-3-4"),
-            selectAttribute = Set("data-non-uk-countries")
+            formGroupClasses = Set("autocomplete-wrapper"),
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

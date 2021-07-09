@@ -16,48 +16,54 @@
 
 @import controllers.individualbeneficiary.add.routes._
 @import utils.InputOption
+@import views.html.components.{Heading, ErrorSummary, InputDate, InputText, SubmitButton, InputSelect}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    errorSummary: ErrorSummary,
+    inputText: InputText,
+    select: InputSelect,
+    inputDate: InputDate,
+    heading: Heading,
+    submitButton: SubmitButton,
+    formHelper: FormWithCSRF
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.idCardDetails.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.idCardDetails.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = IdCardDetailsController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("individualBeneficiary.idCardDetails.heading", Some(name))
 
-        @components.heading("individualBeneficiary.idCardDetails.heading", Some(name))
-
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("individualBeneficiary.idCardDetails.country"),
             labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some(messages("address.country.select")),
-            formGroupClasses = Set("autocomplete-wrapper form-control-3-4"),
-            selectAttribute = Set("data-non-uk-countries")
+            formGroupClasses = Set("autocomplete-wrapper"),
+            selectAttribute = Map("data-non-uk-countries" -> "")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("number"),
             label = messages("individualBeneficiary.idCardDetails.number")
         )
 
-        @components.input_date(
+        @inputDate(
             field = form("expiryDate"),
             legend = messages("individualBeneficiary.idCardDetails.expiryDate"),
             legendClass = "bold",
             hint = Some(messages("individualBeneficiary.idCardDetails.expiryDate.hint")),
-            headingIsLegend = false
+            legendAsHeading = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
