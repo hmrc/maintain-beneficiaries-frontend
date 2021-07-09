@@ -15,32 +15,35 @@
  *@
 
 @import controllers.other.remove.routes._
+@import views.html.components.{InputDate, SubmitButton, ErrorSummary}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputDate: InputDate,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], index: Int, description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.whenRemoved.title", description)}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.whenRemoved.title", description)}",
+    showBackLink = true
 ) {
 
     @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("otherBeneficiary.whenRemoved.heading", description),
-            legendClass = "heading-large",
-            headingIsLegend = true,
+            legendClass = "govuk-heading-l",
+            headingAsLegend = true,
             hint = Some(messages("otherBeneficiary.whenRemoved.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
