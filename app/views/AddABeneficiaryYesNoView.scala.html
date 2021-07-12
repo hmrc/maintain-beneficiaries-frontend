@@ -15,29 +15,33 @@
  *@
 
 @import controllers.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
-  main_template: MainTemplate,
-  formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-  title = s"${errorPrefix(form)}${messages("addABeneficiaryYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("addABeneficiaryYesNo.title")}",
+    showBackLink = true
 ) {
 
 @formHelper(action = AddABeneficiaryController.submitOne(), 'autoComplete -> "off") {
 
-    @components.back_link()
+    @errorSummary(form.errors)
 
-    @components.error_summary(form.errors)
-
-    @components.input_yes_no(
+    @inputYesNo(
       field = form("value"),
-      legend = messages("addABeneficiaryYesNo.heading")
+      legend = messages("addABeneficiaryYesNo.heading"),
+      headingAsLegend = true
     )
 
-    @components.submit_button()
+    @submitButton()
   }
 }

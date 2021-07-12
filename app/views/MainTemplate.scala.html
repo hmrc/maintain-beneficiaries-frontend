@@ -15,7 +15,6 @@
 *@
 
 @import config.FrontendAppConfig
-@import controllers.routes.{SessionTimeoutController => sessionTimeoutController}
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import resources._
@@ -32,8 +31,8 @@
     hmrcScripts: HmrcScripts,
     stylesheets: Stylesheets,
     govukBackLink: GovukBackLink,
-    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-    )
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
+)
 
 @(title: String,
     sidebarLinks: Option[Html] = None,
@@ -44,36 +43,35 @@
     timeoutEnabled: Boolean = true,
     canSignOut: Boolean = true,
     showBackLink: Boolean = false
-    )(mainContent: Html)(implicit request: Request[_], messages: Messages)
+)(mainContent: Html)(implicit request: Request[_], messages: Messages)
 
 @headScripts = {
-@if(timeoutEnabled) {
-@hmrcTimeoutDialogHelper(
-    signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
-    keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
-    timeout = Some(appConfig.timeoutLength),
-    countdown = Some(appConfig.countdownLength),
-    title = Some(messages("timeout.title")),
-    message = Some(messages("timeout.message")),
-    keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+            keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+            timeout = Some(appConfig.timeoutLength),
+            countdown = Some(appConfig.countdownLength),
+            title = Some(messages("timeout.title")),
+            message = Some(messages("timeout.message")),
+            keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
 )}
 
 @stylesheets()
 }
 
 @beforeContentBlock = {
-    @hmrcLanguageSelectHelper()
-    @if(showBackLink) {
-    @govukBackLink(BackLink(
-    attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
-))
+        @hmrcLanguageSelectHelper()
+            @if(showBackLink) {
+                @govukBackLink(BackLink(
+                attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
+                ))
     }
 }
 
 @mainContentWithGetHelp = {
-@mainContent
-@hmrcReportTechnicalIssueHelper()
-
+    @mainContent
+    @hmrcReportTechnicalIssueHelper()
 }
 
 @govukLayout(
@@ -82,13 +80,11 @@
     headBlock = Some(headScripts)
 )),
     headerBlock = Some(hmrcStandardHeader(
-    serviceUrl = Some(appConfig.trustsUrl),
-    signOutUrl = if(canSignOut) Some(controllers.register.routes.LogoutController.logout().url) else None,
+    serviceUrl = Some(appConfig.loginContinueUrl),
+    signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
     phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
 )),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts()),
-    footerBlock = Some(hmrcStandardFooter(
-    accessibilityStatementUrl = Some(appConfig.accessibilityLinkUrl)
-))
+    footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)

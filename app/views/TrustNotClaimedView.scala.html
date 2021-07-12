@@ -15,22 +15,23 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.Heading
 
 @this(
     main_template: MainTemplate,
-    config: FrontendAppConfig
+    config: FrontendAppConfig,
+    heading: Heading
 )
 
 @(utr: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trustNotClaimed.title")
+    title = messages("trustNotClaimed.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
     <span class="govuk-caption-xl">@messages("trustNotClaimed.subheading", utr)</span>
-    @components.heading("trustNotClaimed.heading")
+    @heading("trustNotClaimed.heading")
 
     <p>@messages("trustNotClaimed.p1")</p>
 

@@ -34,6 +34,7 @@ GET        /logout                                                          cont
 GET        /language/:lang                                                  controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
 GET        /this-service-has-been-reset                                     controllers.SessionExpiredController.onPageLoad
+POST       /this-service-has-been-reset                                     controllers.SessionExpiredController.onSubmit
 
 GET        /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
 

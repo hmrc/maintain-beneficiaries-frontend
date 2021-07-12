@@ -18,17 +18,18 @@
 
 @this(
     mainTemplate: MainTemplate,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    headingI: Heading
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
-  <h1>@heading</h1>
+    @headingI(heading)
 }
 
 @mainContent = {
-  <p>@message</p>
+    <p class="govuk-body">@message</p>
 }
 
-@mainTemplate(appConfig = appConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+@mainTemplate(title = pageTitle, contentHeader = Some(contentHeader))(mainContent = mainContent)
