@@ -46,26 +46,26 @@
 )(mainContent: Html)(implicit request: Request[_], messages: Messages)
 
 @headScripts = {
-    @if(timeoutEnabled) {
-        @hmrcTimeoutDialogHelper(
-            signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
-            keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
-            timeout = Some(appConfig.timeoutLength),
-            countdown = Some(appConfig.countdownLength),
-            title = Some(messages("timeout.title")),
-            message = Some(messages("timeout.message")),
-            keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+@if(timeoutEnabled) {
+    @hmrcTimeoutDialogHelper(
+        signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+        keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+        timeout = Some(appConfig.timeoutLength),
+        countdown = Some(appConfig.countdownLength),
+        title = Some(messages("timeout.title")),
+        message = Some(messages("timeout.message")),
+        keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
 )}
 
 @stylesheets()
 }
 
 @beforeContentBlock = {
-        @hmrcLanguageSelectHelper()
-            @if(showBackLink) {
-                @govukBackLink(BackLink(
-                attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
-                ))
+    @hmrcLanguageSelectHelper()
+    @if(showBackLink) {
+        @govukBackLink(BackLink(
+        attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
+        ))
     }
 }
 

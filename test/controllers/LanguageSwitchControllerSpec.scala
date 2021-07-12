@@ -24,6 +24,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 class LanguageSwitchControllerSpec extends SpecBase {
 
@@ -33,10 +34,11 @@ class LanguageSwitchControllerSpec extends SpecBase {
   private val welsh = "cymraeg"
   private val fakeUrl: String = "fakeUrl"
 
-  private lazy val config: Configuration = injector.instanceOf[FrontendAppConfig].configuration
+  private lazy val config: Configuration = injector.instanceOf[Configuration]
+  private lazy val contactConfig = injector.instanceOf[ContactFrontendConfig]
 
   def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig = {
-    new FrontendAppConfig(config) {
+    new FrontendAppConfig(config, contactConfig) {
       override lazy val languageTranslationEnabled: Boolean = languageToggleEnabled
     }
   }

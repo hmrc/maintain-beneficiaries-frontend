@@ -61,7 +61,7 @@ class CheckDetailsController @Inject()(
                     (implicit request: Request[AnyContent]): Result=
   {
     val section: AnswerSection = printHelper(userAnswers, provisional, name)
-    Ok(view(section, index))
+    Ok(view(Seq(section), index))
   }
 
   def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {

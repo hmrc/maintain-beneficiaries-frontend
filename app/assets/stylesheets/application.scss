@@ -1,0 +1,40 @@
+@import "lib/govuk-frontend/govuk/base";
+@import "lib/govuk-frontend/govuk/core/typography";
+@import "location-autocomplete.min";
+@import "patterns/link-list";
+
+$govuk-global-styles: true;
+
+// ----------------
+// Hide the back link when body does not have .js-enabled
+//
+// ----------------
+
+body:not(.js-enabled) {
+    .govuk-back-link {
+        display: none;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+}
+
+// ----------------
+// Trusts Add-to-list pattern as a 4th column
+// this ensures the second column moves down correctly underneath on mobile devices
+// ----------------
+@include govuk-media-query($until: desktop) {
+  .hmrc-add-to-a-list__identifier__second {
+    position: absolute;
+    top: inherit;
+    left: 0;
+  }
+}
+
+p {
+  @extend .govuk-body;
+}
+
+h2 {
+ @extend .govuk-heading-m
+}
