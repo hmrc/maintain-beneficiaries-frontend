@@ -38,8 +38,9 @@
 
         @inputYesNo(
             field = form("value"),
-            legend = messages("employmentBeneficiary.countryOfResidenceYesNo.heading", name),
-            headingIsLegend = true,
+            label = messages("employmentBeneficiary.countryOfResidenceYesNo.heading", name),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true,
             hint = Some(messages("employmentBeneficiary.countryOfResidenceYesNo.hint"))
         )
 

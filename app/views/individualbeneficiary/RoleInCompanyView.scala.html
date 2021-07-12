@@ -42,8 +42,8 @@
             legend = messages("individualBeneficiary.roleInCompany.heading", name),
             legendClass = Some("govuk-heading-l"),
             inline = true,
-            legendAsHeading = true,
-            inputs = RoleInCompany.options
+            headingIsLegend = true,
+            inputs = mapRadioOptionsToRadioItems(RoleInCompany.options.toSeq)
         )
 
         @submitButton()

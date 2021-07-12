@@ -38,8 +38,9 @@
 
         @inputYesNo(
             field = form("value"),
-            legend = messages("removeTrustBeneficiary.heading", name),
-            headingAsLegend = true
+            label = messages("removeTrustBeneficiary.heading", name),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
         @submitButton()

@@ -30,7 +30,7 @@ $(document).ready(function() {
     // Takes the aria-described by value from the select element and
     // allocates this to the created text input
     //======================================================
-    if (document.querySelectorAll('select[data-all-countries]').length) {
+  if (document.querySelectorAll('select[data-all-countries]').length) {
         var selectDescribedByValues = $('select[data-all-countries]').attr('aria-describedby');
         $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
@@ -38,6 +38,10 @@ $(document).ready(function() {
     if (document.querySelectorAll('select[data-non-uk-countries]').length) {
         var selectDescribedByValues = $('select[data-non-uk-countries]').attr('aria-describedby');
         $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
+    }
+
+    if (document.querySelectorAll('.autocomplete__dropdown-arrow-down').length) {
+        $('.autocomplete__dropdown-arrow-down').attr('aria-hidden', true);
     }
 
 
@@ -69,7 +73,7 @@ $(document).ready(function() {
     $('input[role="combobox"]').on('keydown', function(e){
         if (e.which != 13 && e.which != 9) {
             var sel = document.querySelector('.autocomplete-wrapper select');
-            sel.value = "";
+                        sel.value = "";
         }
     })
 

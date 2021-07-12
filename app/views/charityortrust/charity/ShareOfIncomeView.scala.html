@@ -21,7 +21,7 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     errorSummary: ErrorSummary,
-    inputText: InputText,
+    inputPercent: InputText,
     submitButton: SubmitButton
 )
 
@@ -36,13 +36,15 @@
 
         @errorSummary(form.errors)
 
-        @inputText(
+        @inputPercent(
             field = form("value"),
             label = messages("charityBeneficiary.shareOfIncome.heading", name),
-            labelAsHeading = true,
-            labelClass = Some("govuk-label--l"),
             hint = Some(messages("charityBeneficiary.shareOfIncome.hint")),
-            symbol = Some("percentage")
+            labelClass = Some("govuk-heading-l"),
+            suffix = Some("%"),
+            inputMode = Some("numeric"),
+            pattern = Some("[0-9]*"),
+            inputClass = Some("govuk-input--width-5")
         )
 
         @submitButton()

@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import views.html.components.{HeadingWithCaption, BulletList, SubmitButton}
+@import controllers.transition.routes._
 
 @this(
     main_template: MainTemplate,
@@ -23,6 +24,7 @@
     headingWithCaption: HeadingWithCaption,
     bulletList: BulletList,
     button: SubmitButton,
+    formHelper: FormWithCSRF
 )
 
 @()(implicit request: Request[_], messages: Messages)

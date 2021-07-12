@@ -38,8 +38,9 @@
 
         @inputYesNo(
             field = form("value"),
-            legend = messages("individualBeneficiary.countryOfNationalityUkYesNo.heading", name),
-            headingAsLegend = true
+            label = messages("individualBeneficiary.countryOfNationalityUkYesNo.heading", name),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
         @submitButton()

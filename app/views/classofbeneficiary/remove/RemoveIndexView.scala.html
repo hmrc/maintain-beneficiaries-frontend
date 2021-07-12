@@ -38,8 +38,9 @@
 
         @inputYesNo(
             field = form("value"),
-            legend = messages(s"$prefix.heading", nameOrDescription),
-            headingAsLegend = true
+            label = messages(s"$prefix.heading", nameOrDescription),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
         @submitButton()

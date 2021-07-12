@@ -38,12 +38,11 @@
 
         <p>@messages("otherBeneficiary.startDate.paragraph")</p>
 
-        @components.input_date(
+        @inputDate(
             field = form("value"),
             legend = messages("otherBeneficiary.startDate.heading", name),
-            hint = Some(messages("otherBeneficiary.startDate.hint"))
-            legendAsHeading = true,
-            legendClass = "govuk-heading-l"
+            hint = Some(messages("otherBeneficiary.startDate.hint")),
+            legendAsHeading = true
         )
 
         @submitButton()

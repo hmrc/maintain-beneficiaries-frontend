@@ -18,11 +18,11 @@
 @import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF,
-        inputText: InputText,
-        submitButton: SubmitButton,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputText: InputText,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, trusteeName: String)(implicit request: Request[_], messages: Messages)
