@@ -37,7 +37,7 @@
 
     @formHelper(action = CheckDetailsController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.heading("employmentBeneficiary.checkDetails.heading")
+        @heading("employmentBeneficiary.checkDetails.heading")
 
         @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 

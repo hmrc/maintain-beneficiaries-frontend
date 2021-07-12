@@ -35,7 +35,7 @@
 
     @formHelper(action = RoleInCompanyController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, RoleInCompany.options.toSeq)
 
         @inputRadio(
             field = form("value"),
@@ -43,7 +43,7 @@
             legendClass = Some("govuk-heading-l"),
             inline = true,
             headingIsLegend = true,
-            inputs = mapRadioOptionsToRadioItems(RoleInCompany.options.toSeq)
+            inputs = mapRadioOptionsToRadioItems(form("value"), RoleInCompany.options.toSeq)
         )
 
         @submitButton()

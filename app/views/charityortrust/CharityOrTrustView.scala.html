@@ -35,14 +35,14 @@
 
     @formHelper(action = CharityOrTrustController.onSubmit(), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, CharityOrTrustToAdd.options.toSeq)
 
         @inputRadio(
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
             legendClass = Some("govuk-heading-l"),
             inline = true,
-            inputs = CharityOrTrustToAdd.options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), CharityOrTrustToAdd.options.toSeq),
             headingIsLegend = true,
             hint = Some(messages("charityOrTrust.hint"))
         )

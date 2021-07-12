@@ -15,13 +15,14 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputText, Hint}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, Hint, Heading}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
+    heading: Heading,
     inputText: InputText,
     hint: Hint
 )
@@ -58,7 +59,7 @@
             label = messages("employmentBeneficiary.description.description3")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("description3"),
             label = messages("employmentBeneficiary.description.description4")
         )
