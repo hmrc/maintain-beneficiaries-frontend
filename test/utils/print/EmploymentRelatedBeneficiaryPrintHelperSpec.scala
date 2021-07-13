@@ -61,17 +61,17 @@ class EmploymentRelatedBeneficiaryPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(
-            AnswerRow(label = Html(messages("employmentBeneficiary.name.checkYourAnswersLabel")), answer = Html("Large"), changeUrl = NameController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidence.checkYourAnswersLabel", name)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.nonUkAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = NonUkAddressController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.description.checkYourAnswersLabel", name)), answer = Html("Description<br />Another description"), changeUrl = DescriptionController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", name)), answer = Html("201 to 500"), changeUrl = NumberOfBeneficiariesController.onPageLoad(NormalMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.startDate.checkYourAnswersLabel", name)), answer = Html("3 February 2019"), changeUrl = StartDateController.onPageLoad().url)
+            AnswerRow(label = messages("employmentBeneficiary.name.checkYourAnswersLabel"), answer = Html("Large"), changeUrl = Some(NameController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name), answer = Html("No"), changeUrl = Some(CountryOfResidenceUkYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidence.checkYourAnswersLabel", name), answer = Html("Germany"), changeUrl = Some(CountryOfResidenceController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.addressYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(AddressYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.addressUkYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.ukAddress.checkYourAnswersLabel", name), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = Some(UkAddressController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.nonUkAddress.checkYourAnswersLabel", name), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = Some(NonUkAddressController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.description.checkYourAnswersLabel", name), answer = Html("Description<br />Another description"), changeUrl = Some(DescriptionController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", name), answer = Html("201 to 500"), changeUrl = Some(NumberOfBeneficiariesController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.startDate.checkYourAnswersLabel", name), answer = Html("3 February 2019"), changeUrl = Some(StartDateController.onPageLoad().url))
           )
         )
       }
@@ -82,17 +82,17 @@ class EmploymentRelatedBeneficiaryPrintHelperSpec extends SpecBase {
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(
-            AnswerRow(label = Html(messages("employmentBeneficiary.name.checkYourAnswersLabel")), answer = Html("Large"), changeUrl = NameController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.checkDetails.utr.checkYourAnswersLabel", name)), answer = Html("1234567890"), changeUrl = ""),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = CountryOfResidenceYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name)), answer = Html("No"), changeUrl = CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.countryOfResidence.checkYourAnswersLabel", name)), answer = Html("Germany"), changeUrl = CountryOfResidenceController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.addressYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.addressUkYesNo.checkYourAnswersLabel", name)), answer = Html("Yes"), changeUrl = AddressUkYesNoController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.ukAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = UkAddressController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.nonUkAddress.checkYourAnswersLabel", name)), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = NonUkAddressController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.description.checkYourAnswersLabel", name)), answer = Html("Description<br />Another description"), changeUrl = DescriptionController.onPageLoad(CheckMode).url),
-            AnswerRow(label = Html(messages("employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", name)), answer = Html("201 to 500"), changeUrl = NumberOfBeneficiariesController.onPageLoad(CheckMode).url)
+            AnswerRow(label = messages("employmentBeneficiary.name.checkYourAnswersLabel"), answer = Html("Large"), changeUrl = Some(NameController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.checkDetails.utr.checkYourAnswersLabel", name), answer = Html("1234567890"), changeUrl = Some("")),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidenceYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidenceUkYesNo.checkYourAnswersLabel", name), answer = Html("No"), changeUrl = Some(CountryOfResidenceUkYesNoController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.countryOfResidence.checkYourAnswersLabel", name), answer = Html("Germany"), changeUrl = Some(CountryOfResidenceController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.addressYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(AddressYesNoController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.addressUkYesNo.checkYourAnswersLabel", name), answer = Html("Yes"), changeUrl = Some(AddressUkYesNoController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.ukAddress.checkYourAnswersLabel", name), answer = Html("Line 1<br />Line 2<br />postcode"), changeUrl = Some(UkAddressController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.nonUkAddress.checkYourAnswersLabel", name), answer = Html("Line 1<br />Line 2<br />Germany"), changeUrl = Some(NonUkAddressController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.description.checkYourAnswersLabel", name), answer = Html("Description<br />Another description"), changeUrl = Some(DescriptionController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel", name), answer = Html("201 to 500"), changeUrl = Some(NumberOfBeneficiariesController.onPageLoad(CheckMode).url))
           )
         )
       }
