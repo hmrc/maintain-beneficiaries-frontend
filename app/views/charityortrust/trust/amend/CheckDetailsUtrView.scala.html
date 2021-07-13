@@ -18,13 +18,14 @@
 @import viewmodels.Section
 @import utils.SectionFormatter.formatSections
 @import controllers.charityortrust.trust.amend.routes._
-@import views.html.components.{Heading, SubmitButton}
+@import views.html.components.{Heading, SubmitButton, AnswerSectionNoChange}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     heading: Heading,
-    submitButton: SubmitButton
+    submitButton: SubmitButton,
+    answerSection: AnswerSectionNoChange
 )
 
 @(answerSection: Seq[Section], name: String)(implicit request: Request[_], messages: Messages)
@@ -38,7 +39,7 @@
 
         @heading("trustBeneficiary.checkDetails.heading")
 
-        @components.answer_section_no_change(answerSection)
+        @answerSection(answerSection)
 
         <p>@messages("trustBeneficiary.checkDetails.utr.p1")</p>
         <p>@messages("trustBeneficiary.checkDetails.utr.p2", name)</p>

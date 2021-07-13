@@ -34,12 +34,12 @@
 
     @formHelper(action = RemoveTrustBeneficiaryController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             label = messages("removeTrustBeneficiary.heading", name),
-legendClass = Some("govuk-heading-l"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true
         )
 

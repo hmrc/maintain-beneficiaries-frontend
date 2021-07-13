@@ -23,7 +23,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
-    heading: Heading,
+    iHeading: Heading,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF,
     addToList: AddToList
@@ -40,7 +40,7 @@
 
     @formHelper(action = AddABeneficiaryController.submitComplete(), 'autoComplete -> "off") {
 
-        @heading(heading)
+        @iHeading(heading)
 
         @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 

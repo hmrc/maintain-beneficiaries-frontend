@@ -35,7 +35,7 @@
 
     @formHelper(action = NonUkAddressController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors)
 
         @internationalAddress(form = form,
                 legend = messages("site.address.nonUk.heading", name),

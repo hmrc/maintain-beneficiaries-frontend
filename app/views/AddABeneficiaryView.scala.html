@@ -23,7 +23,7 @@
 @this(
     main_template: MainTemplate,
     submitButton: SubmitButton,
-    heading: Heading,
+    iHeading: Heading,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF,
     inputRadio: InputRadio,
@@ -45,9 +45,9 @@
 
     @formHelper(action = AddABeneficiaryController.submitAnother(), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, AddABeneficiary.options.toSeq)
 
-        @heading(heading)
+        @iHeading(heading)
 
         @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
@@ -76,7 +76,7 @@
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
             headingIsLegend = false,
-            inputs = AddABeneficiary.options,
+            inputs = mapRadioOptionsToRadioItems(form("value"), AddABeneficiary.options.toSeq),
             legendClass = Some("govuk-fieldset__legend--m"),
             inline = false
         )

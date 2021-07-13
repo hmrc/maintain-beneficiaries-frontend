@@ -35,13 +35,13 @@
 
     @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
 
-        @errorSummary(form.errors)
+        @errorSummary(form.errors, options.toSeq)
 
         @inputRadio(
             field = form("value"),
             legend = messages("addNow.heading"),
             legendClass = Some("govuk-heading-l"),
-            inputs = options.toSeq,
+            inputs = mapRadioOptionsToRadioItems(form("value"), options.toSeq),
             headingIsLegend = true,
             hint = Some(messages("addNow.hint"))
         )
