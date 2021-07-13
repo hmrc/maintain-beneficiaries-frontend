@@ -43,7 +43,7 @@ class CheckDetailsUtrController @Inject()(
     implicit request =>
 
       val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
-      Ok(view(Seq(section), request.beneficiaryName))
+      Ok(view(section, request.beneficiaryName))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
