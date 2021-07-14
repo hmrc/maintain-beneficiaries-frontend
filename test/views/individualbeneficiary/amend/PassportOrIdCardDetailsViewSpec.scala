@@ -52,7 +52,6 @@ class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPas
         form,
         applyView,
         messageKeyPrefix,
-        routes.PassportOrIdCardDetailsController.onSubmit().url,
         Seq(("country", None), ("number", None)),
         "expiryDate",
         name.displayName

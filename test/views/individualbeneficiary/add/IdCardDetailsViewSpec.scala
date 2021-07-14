@@ -51,7 +51,6 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
         form,
         applyView,
         messageKeyPrefix,
-        routes.IdCardDetailsController.onSubmit().url,
         Seq(("country", None), ("number", None)),
         "expiryDate",
         name.displayName

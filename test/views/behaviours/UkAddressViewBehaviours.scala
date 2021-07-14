@@ -33,7 +33,6 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
 
   def ukAddressPage(createView: Form[UkAddress] => HtmlFormat.Appendable,
                     messageKeyPrefix: Option[String],
-                    expectedFormAction: String,
                     args : String*) = {
 
     val prefix = messageKeyPrefix.getOrElse("site.address.uk")
@@ -59,7 +58,7 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
         "not render an error summary" in {
 
           val doc = asDocument(createView(form))
-          assertNotRenderedById(doc, "error-summary-heading")
+          assertNotRenderedById(doc, "error-summary-title")
         }
       }
 
@@ -79,14 +78,14 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
           "show an error summary" in {
 
             val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
-            assertRenderedById(doc, "error-summary-heading")
+            assertRenderedById(doc, "error-summary-title")
           }
 
           s"show an error in the label for field '$field'" in {
 
             val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
-            val errorSpan = doc.getElementsByClass("error-message").first
-            errorSpan.parent.getElementsByClass("form-label").attr("for") mustBe field._1
+            val errorSpan = doc.getElementsByClass("govuk-error-message").first
+            errorSpan.parent.getElementsByClass("govuk-label").attr("for") mustBe field._1
           }
         }
       }

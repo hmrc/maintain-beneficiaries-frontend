@@ -95,7 +95,7 @@ trait ViewSpecBase extends SpecBase {
 
   def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]) = {
     if (expectedHintText.isDefined) {
-      assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
+      assert(doc.getElementsByClass("govuk-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
     }
   }
@@ -103,6 +103,9 @@ trait ViewSpecBase extends SpecBase {
   def assertElementHasClass(doc: Document, id: String, expectedClass: String) = {
     assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
   }
+
+  def assertRenderedByClass(doc: Document, cssClass: String) =
+    assert(doc.getElementsByClass(cssClass) != null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
 
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {
     assert(doc.getElementsByClass(className).isEmpty, "\n\nElement " + className + " was rendered on the page.\n")

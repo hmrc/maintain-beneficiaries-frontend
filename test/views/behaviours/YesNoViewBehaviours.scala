@@ -76,13 +76,13 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         "show an error summary" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-heading")
+          assertRenderedByClass(doc, "govuk-error-summary")
         }
 
         "show an error associated with the value field" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          val errorSpan = doc.getElementsByClass("error-message").first
+          val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text mustBe s"""${messages("site.error")} ${messages(errorMessage)}"""
           doc.getElementsByTag("fieldset").first.attr("aria-describedby") contains errorSpan.attr("id")
         }

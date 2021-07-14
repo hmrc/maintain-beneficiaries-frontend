@@ -19,16 +19,15 @@ package views.behaviours
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import views.ViewUtils
+import utils.Constants._
 
 trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
-
-  val errorPrefix = "site.error"
 
   def selectCountryPage(form: Form[String],
                         createView: Form[String] => HtmlFormat.Appendable,
                         messageKeyPrefix: String,
                         messageKeyParam: String,
-                        expectedHintKey: Option[String] = None): Unit = {
+                        expectedHintKey: Option[String] = None) = {
 
     "behave like a page with a string value field" when {
 
@@ -52,8 +51,8 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
         "have the correct selection option value 'selected' for the form country input value" in {
 
-          val doc = asDocument(createView(form.fill("ES")))
-          doc.getElementsByAttribute("selected").attr("value") mustBe "ES"
+          val doc = asDocument(createView(form.fill(ES)))
+          doc.getElementsByAttribute("selected").attr("value") mustBe ES
         }
       }
 
@@ -62,7 +61,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error summary" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-heading")
+          assertRenderedById(doc, "error-summary-title")
         }
 
         "show an error in the value field's label" in {
@@ -72,7 +71,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
           val error = FormError(errorKey, errorMessage)
 
           val doc = asDocument(createView(form.withError(error)))
-          val errorSpan = doc.getElementsByClass("error-message").first
+          val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text mustBe s"""${messages(errorPrefix)} ${messages(errorMessage)}"""
         }
 
