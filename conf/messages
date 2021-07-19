@@ -999,6 +999,7 @@ employmentBeneficiary.whenRemoved.error.past = The date the employment related b
 beneficiariesMoreInformation.title = Provide more information about the beneficiaries
 beneficiariesMoreInformation.heading = Provide more information about the beneficiaries
 beneficiariesMoreInformation.caption = Beneficiaries
+beneficiariesMoreInformation.caption.hidden = This section is
 beneficiariesMoreInformation.p1 = As the trust now needs to pay tax, you need to give HMRC more information about the beneficiaries that you registered.
 beneficiariesMoreInformation.p2 = You need to give different information for each type of beneficiary.
 beneficiariesMoreInformation.subheading = Individual Beneficiaries
