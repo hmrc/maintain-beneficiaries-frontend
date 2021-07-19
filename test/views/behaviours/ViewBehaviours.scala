@@ -177,4 +177,20 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithGuidance(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit = {
+    "display the correct guidance" in {
+
+      val doc = asDocument(view)
+      for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+    }
+  }
+
+  def pageWithTitleAndSectionSubheading(view: HtmlFormat.Appendable, messageKeyPrefix: String) : Unit = {
+    "display the correct page title with section" in {
+
+      val doc = asDocument(view)
+      assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
+    }
+  }
 }

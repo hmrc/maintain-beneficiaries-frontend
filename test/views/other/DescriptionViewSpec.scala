@@ -40,7 +40,7 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
+    behave like pageWithHint(form, applyView, s"$messageKeyPrefix.hint")
 
     behave like stringPage(
       form,

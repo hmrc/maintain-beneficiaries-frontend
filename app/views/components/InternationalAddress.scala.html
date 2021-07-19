@@ -44,23 +44,23 @@ countryOptions: Seq[InputOption]
 @html = {
 @input_text(
  field = form("line1"),
- label = messages("site.address.international.line1")
+ label = messages("site.address.nonUk.line1")
 )
 
 @input_text(
  field = form("line2"),
- label = messages("site.address.international.line2")
+ label = messages("site.address.nonUk.line2")
 )
 
 @input_text(
  field = form("line3"),
- label = messages("site.address.international.line3"),
+ label = messages("site.address.nonUk.line3"),
  inputClass = Some("govuk-!-width-two-thirds")
 )
 
 @select(
  field = form("country"),
- label = messages("site.address.international.country"),
+ label = messages("site.address.nonUk.country"),
  labelClasses = Set("bold"),
  options = countryOptions,
  placeholder = Some(messages("site.address.country.select")),

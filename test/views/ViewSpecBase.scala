@@ -121,4 +121,26 @@ trait ViewSpecBase extends SpecBase {
       case _ => assert(!radio.hasAttr("checked"), s"\n\nElement $id is checked")
     }
   }
+
+  def assertPageTitleWithSectionSubheading(doc: Document,
+                                           expectedMessageKey: String,
+                                           captionParam: String,
+                                           args: Any*): Assertion = {
+    val headers = doc.getElementsByTag("h1")
+    headers.size mustBe 1
+
+    val expectedCaption = s"${messages(s"$expectedMessageKey.caption.hidden")} ${messages(s"$expectedMessageKey.caption", captionParam)}"
+
+    val expectedHeading = messages(s"$expectedMessageKey.heading", args:_*)
+
+    val expected = s"$expectedCaption $expectedHeading"
+      .replaceAll("&nbsp;", " ")
+
+    val actual = headers
+      .first
+      .text
+      .replaceAll("\u00a0", " ")
+
+    actual mustBe expected
+  }
 }
