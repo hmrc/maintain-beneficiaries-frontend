@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("employmentBeneficiary.numberOfBeneficiaries.heading"),
             legendClass = Some("govuk-heading-l"),
-            inline = true,
+            inline = false,
             inputs = mapRadioOptionsToRadioItems(form("value"), HowManyBeneficiaries.options.toSeq),
             headingIsLegend = true
         )

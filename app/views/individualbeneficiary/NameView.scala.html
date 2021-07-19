@@ -42,18 +42,21 @@
         @inputText(
             field = form("firstName"),
             label = messages("individualBeneficiary.name.firstName"),
+            inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("given-name")
         )
 
         @inputText(
             field = form("middleName"),
             label = messages("individualBeneficiary.name.middleName"),
+            inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("additional-name")
         )
 
         @inputText(
             field = form("lastName"),
             label = messages("individualBeneficiary.name.lastName"),
+            inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("family-name")
         )
 

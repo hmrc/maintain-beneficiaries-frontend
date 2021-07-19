@@ -52,12 +52,15 @@
 
         @errorSummary(form.errors)
 
+        @heading(messages("individualBeneficiary.mentalCapacityYesNo.heading", name))
+
         @content
 
         @inputYesNo(
             field = form("value"),
             label = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
-            legendClass = Some("govuk-visually-hidden")
+            legendClass = Some("govuk-visually-hidden"),
+            legendAsHeading = false
         )
 
         @submitButton()
