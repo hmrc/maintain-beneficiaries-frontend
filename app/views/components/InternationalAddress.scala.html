@@ -44,18 +44,21 @@ countryOptions: Seq[InputOption]
 @html = {
 @input_text(
  field = form("line1"),
- label = messages("site.address.nonUk.line1")
+ label = messages("site.address.nonUk.line1"),
+ autocomplete = Some("address-line1")
 )
 
 @input_text(
  field = form("line2"),
- label = messages("site.address.nonUk.line2")
+ label = messages("site.address.nonUk.line2"),
+ autocomplete = Some("address-line2")
 )
 
 @input_text(
  field = form("line3"),
  label = messages("site.address.nonUk.line3"),
- inputClass = Some("govuk-!-width-two-thirds")
+ inputClass = Some("govuk-!-width-two-thirds"),
+ autocomplete = Some("address-line3")
 )
 
 @select(
