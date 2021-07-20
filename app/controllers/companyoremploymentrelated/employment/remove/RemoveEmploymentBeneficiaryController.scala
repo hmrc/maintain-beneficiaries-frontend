@@ -44,7 +44,7 @@ class RemoveEmploymentBeneficiaryController @Inject()(
                                                        errorHandler: ErrorHandler
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val messagesPrefix: String = "removeEmploymentBeneficiary"
+  private val messagesPrefix: String = "removeEmploymentBeneficiaryYesNo"
 
   private val form = formProvider.apply(messagesPrefix)
 

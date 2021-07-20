@@ -28,7 +28,7 @@
 @(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("removeTrustBeneficiary.title")}",
+    title = s"${errorPrefix(form)}${messages("removeTrustBeneficiaryYesNo.title")}",
     showBackLink = true
 ) {
 
@@ -38,7 +38,7 @@
 
         @inputYesNo(
             field = form("value"),
-            label = messages("removeTrustBeneficiary.heading", name),
+            label = messages("removeTrustBeneficiaryYesNo.heading", name),
             legendClass = Some("govuk-heading-l"),
             legendAsHeading = true
         )

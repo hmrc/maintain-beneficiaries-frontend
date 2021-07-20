@@ -25,7 +25,7 @@ import views.html.other.remove.RemoveIndexView
 
 class RemoveOtherBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeOtherBeneficiary"
+  val messageKeyPrefix = "removeOtherBeneficiaryYesNo"
   val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val description = "Description"
   val index = 0

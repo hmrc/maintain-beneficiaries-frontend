@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
 
-  val messagesPrefix = "removeIndividualBeneficiary"
+  val messagesPrefix = "removeIndividualBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
   lazy val form = formProvider(messagesPrefix)

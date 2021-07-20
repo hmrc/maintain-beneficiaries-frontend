@@ -225,9 +225,9 @@ classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
 
 # Remove
 
-removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
-removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
-removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
+removeClassOfBeneficiaryYesNo.title = Are you sure you want to remove the class of beneficiaries?
+removeClassOfBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiaryYesNo.error.required = Select yes if you want to remove the class of beneficiaries
 
 classOfBeneficiary.whenRemoved.title = When was the class of beneficiaries removed as a beneficiary?
 classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -477,9 +477,9 @@ individualBeneficiary.checkDetails.heading = Check individual beneficiary detail
 
 # Remove
 
-removeIndividualBeneficiary.title = Are you sure you want to remove the individual beneficiary?
-removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
-removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+removeIndividualBeneficiaryYesNo.title = Are you sure you want to remove the individual beneficiary?
+removeIndividualBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeIndividualBeneficiaryYesNo.error.required = Select yes if you want to remove the individual beneficiary
 
 individualBeneficiary.whenRemoved.title = When was the individual removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -595,9 +595,9 @@ charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added o
 
 # Remove
 
-removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
-removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
-removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+removeCharityBeneficiaryYesNo.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiaryYesNo.error.required = Select yes if you want to remove the charity beneficiary
 
 # TRUST
 
@@ -680,9 +680,9 @@ trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or 
 
 # Remove
 
-removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
-removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
-removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
+removeTrustBeneficiaryYesNo.title = Are you sure you want to remove the trust beneficiary?
+removeTrustBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeTrustBeneficiaryYesNo.error.required = Select yes if you want to remove the trust beneficiary
 
 trustBeneficiary.whenRemoved.title = When was the trust beneficiary removed as a beneficiary?
 trustBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -770,9 +770,9 @@ otherBeneficiary.checkDetails.heading = Check other beneficiary details
 
 # Remove
 
-removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
-removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
-removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
+removeOtherBeneficiaryYesNo.title = Are you sure you want to remove the other beneficiary?
+removeOtherBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeOtherBeneficiaryYesNo.error.required = Select yes if you want to remove the other beneficiary
 
 otherBeneficiary.whenRemoved.title = When was the other beneficiary removed as a beneficiary?
 otherBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -878,9 +878,9 @@ companyBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added o
 
 # Remove
 
-removeCompanyBeneficiary.title = Are you sure you want to remove the company beneficiary?
-removeCompanyBeneficiary.heading = Are you sure you want to remove {0}?
-removeCompanyBeneficiary.error.required = Select yes if you want to remove the company beneficiary
+removeCompanyBeneficiaryYesNo.title = Are you sure you want to remove the company beneficiary?
+removeCompanyBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeCompanyBeneficiaryYesNo.error.required = Select yes if you want to remove the company beneficiary
 
 companyBeneficiary.whenRemoved.title = When was the company beneficiary removed as a beneficiary?
 companyBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -982,9 +982,9 @@ employmentBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s detail
 employmentBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 # Remove
 
-removeEmploymentBeneficiary.title = Are you sure you want to remove the employment related beneficiary?
-removeEmploymentBeneficiary.heading = Are you sure you want to remove {0}?
-removeEmploymentBeneficiary.error.required = Select yes if you want to remove the employment related beneficiary
+removeEmploymentBeneficiaryYesNo.title = Are you sure you want to remove the employment related beneficiary?
+removeEmploymentBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeEmploymentBeneficiaryYesNo.error.required = Select yes if you want to remove the employment related beneficiary
 
 employmentBeneficiary.whenRemoved.title = When was the employment related beneficiary removed as a beneficiary?
 employmentBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
