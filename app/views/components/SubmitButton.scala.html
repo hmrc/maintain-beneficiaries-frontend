@@ -24,7 +24,7 @@
   attributes = Map("id"-> "submit"),
   classes = s"button ${submitClass.getOrElse("")}",
   content = if(overrideMessage.isEmpty) {
-    Text(messages("site.save.continue"))
+    Text(messages("site.continue"))
   } else {
     Text(messages(overrideMessage.get))
   }
