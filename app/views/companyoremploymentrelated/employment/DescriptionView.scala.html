@@ -15,7 +15,7 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputText, FormHint, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, InputText, Heading}
 
 @this(
     main_template: MainTemplate,
@@ -23,8 +23,7 @@
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
     heading: Heading,
-    inputText: InputText,
-    hint: FormHint
+    inputText: InputText
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
