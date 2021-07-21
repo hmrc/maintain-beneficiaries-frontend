@@ -18,12 +18,11 @@ package services
 
 import com.google.inject.ImplementedBy
 import connectors.TrustConnector
-
-import javax.inject.Inject
-import models.{NationalInsuranceNumber, RemoveBeneficiary}
 import models.beneficiaries._
+import models.{NationalInsuranceNumber, RemoveBeneficiary}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
@@ -60,8 +59,9 @@ class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService
     getBeneficiaries(identifier).map(_.individualDetails
       .zipWithIndex
       .filterNot(x => index.contains(x._2))
+      .map(_._1.identification)
       .collect {
-        case (IndividualBeneficiary(_, _, Some(NationalInsuranceNumber(nino)), _, _, _, _, _, _, _, _, _, _), _) => nino
+        case Some(NationalInsuranceNumber(nino)) => nino
       }
     )
   }
