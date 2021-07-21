@@ -15,14 +15,15 @@
  *@
 
 @import controllers.individualbeneficiary.add.routes._
-@import views.html.components.{InputDate, SubmitButton, ErrorSummary}
+@import views.html.components.{InputDate, SubmitButton, ErrorSummary, Heading}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     inputDate: InputDate,
-    errorSummary: ErrorSummary
+    errorSummary: ErrorSummary,
+    heading: Heading
 )
 
 @(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
@@ -36,13 +37,20 @@
 
         @errorSummary(form.errors)
 
-        @inputDate(
+    <fieldset class="govuk-fieldset" aria-describedby="form-hint">
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            @heading("individualBeneficiary.startDate.heading", Some(name))
+        </legend>
+
+        <span id="form-hint" class="govuk-hint">@messages("individualBeneficiary.startDate.hint")</span>
+
+    @inputDate(
             field = form("value"),
-            legend = messages("individualBeneficiary.startDate.heading", name),
-            legendAsHeading = true,
-            hint = Some(messages("individualBeneficiary.startDate.hint"))
+            legend = messages("individualBeneficiary.startDate.heading", name)
         )
 
+    </fieldset>
         @submitButton()
     }
 }
