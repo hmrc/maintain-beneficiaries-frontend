@@ -17,15 +17,18 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class NationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "individualBeneficiary.nationalInsuranceNumber.error.required"
-  val invalidFormatKey = "individualBeneficiary.nationalInsuranceNumber.error.invalidFormat"
+  val prefix = "individualBeneficiary.nationalInsuranceNumber"
 
-  val form = new NationalInsuranceNumberFormProvider().withPrefix("individualBeneficiary.nationalInsuranceNumber")
+  val requiredKey = s"$prefix.error.required"
+  val invalidFormatKey = s"$prefix.error.invalidFormat"
+  val notUniqueKey = s"$prefix.error.notUnique"
+
+  val form: Form[String] = new NationalInsuranceNumberFormProvider().apply(prefix, Nil)
 
   ".value" must {
 
@@ -50,9 +53,11 @@ class NationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
     )
 
     behave like ninoField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, invalidFormatKey, Seq(fieldName))
+      form = new NationalInsuranceNumberFormProvider(),
+      prefix = prefix,
+      fieldName = fieldName,
+      requiredError = FormError(fieldName, invalidFormatKey, Seq(fieldName)),
+      notUniqueError = FormError(fieldName, notUniqueKey)
     )
   }
 }
