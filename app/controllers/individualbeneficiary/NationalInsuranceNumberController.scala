@@ -47,7 +47,7 @@ class NationalInsuranceNumberController @Inject()(
                                                    trustsService: TrustService
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def form(ninos: List[String]): Form[String] = formProvider.apply("individualBeneficiary.nationalInsuranceNumber", ninos)
+  private def form(ninos: List[String]): Form[String] = formProvider.apply("individualBeneficiary.nationalInsuranceNumber", ninos)
 
   private def index(implicit request: BeneficiaryNameRequest[AnyContent]): Option[Int] = request.userAnswers.get(IndexPage)
 
