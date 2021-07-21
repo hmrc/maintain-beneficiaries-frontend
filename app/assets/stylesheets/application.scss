@@ -1,5 +1,6 @@
 @import "lib/govuk-frontend/govuk/base";
 @import "lib/govuk-frontend/govuk/core/typography";
+@import "lib/govuk-frontend/govuk/core/links";
 @import "location-autocomplete.min";
 
 $govuk-global-styles: true;
@@ -32,6 +33,10 @@ body:not(.js-enabled) {
 
 p {
   @extend .govuk-body;
+}
+
+a {
+    @extend .govuk-link;
 }
 
 h2 {
