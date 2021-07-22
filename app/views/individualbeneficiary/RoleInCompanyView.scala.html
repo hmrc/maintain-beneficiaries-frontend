@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("individualBeneficiary.roleInCompany.heading", name),
             legendClass = Some("govuk-heading-l"),
-            inline = true,
+            inline = false,
             headingIsLegend = true,
             inputs = mapRadioOptionsToRadioItems(form("value"), RoleInCompany.options.toSeq)
         )
