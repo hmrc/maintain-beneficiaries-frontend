@@ -46,10 +46,10 @@
 
         @addToList(completeBeneficiaries, "complete", "beneficiary")
 
-        <ul>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
-        </ul>
+        <div class="govuk-inset-text">
+            <p>@messages("addABeneficiary.maxedOut.all")</p>
+            <p>@messages("addABeneficiary.maxedOut.all.paragraph")</p>
+        </div>
 
         @submitButton()
     }

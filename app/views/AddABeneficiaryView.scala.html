@@ -54,22 +54,20 @@
         @addToList(completeBeneficiaries, "complete", "beneficiary")
 
         @if(maxedOut.size == 1) {
-            <ul>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
-            </ul>
+            <div class="govuk-inset-text">
+                <p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p>
+                <p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p>
+            </div>
         } else if(maxedOut.size > 1) {
-            <ul>
-                <li class="panel-indent">
-                    <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
-                    <ul class="govuk-list">
-                        @for(option <- maxedOut) {
-                            <li>@messages(option)</li>
-                        }
-                    </ul>
-                </li>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
-            </ul>
+            <div class="govuk-inset-text">
+                <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    @for(option <- maxedOut) {
+                    <li>@messages(option)</li>
+                    }
+                </ul>
+                <p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p>
+            </div>
         }
 
         @inputRadio(
