@@ -17,6 +17,7 @@
 package forms.mappings
 
 import forms.Validation
+import forms.mappings.Formatters.formatNino
 import models.Enumerable
 import play.api.data.FormError
 import play.api.data.format.Formatter
@@ -30,7 +31,7 @@ trait Formatters {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
         case None | Some("") => Left(Seq(FormError(key, errorKey)))
-        case Some(s) => Right(s.trim().replace(" ","").toUpperCase())
+        case Some(s) => Right(formatNino(s))
       }
 
     override def unbind(key: String, value: String): Map[String, String] =
@@ -44,9 +45,10 @@ trait Formatters {
         case None | Some("") => Left(Seq(FormError(key, requiredKey)))
         case Some(s) =>
           val trimmed = s.trim.toUpperCase
-          trimmed.matches(Validation.postcodeRegex) match {
-            case true => Right(trimmed)
-            case false => Left(Seq(FormError(key, invalidKey)))
+          if (trimmed.matches(Validation.postcodeRegex)) {
+            Right(trimmed)
+          } else {
+            Left(Seq(FormError(key, invalidKey)))
           }
       }
 
@@ -71,7 +73,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
           .right.flatMap {
@@ -90,7 +92,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
           .right.map(_.replace(",", ""))
@@ -104,7 +106,7 @@ trait Formatters {
               .left.map(_ => Seq(FormError(key, nonNumericKey, args)))
         }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 
@@ -138,4 +140,9 @@ trait Formatters {
       override def unbind(key: String, value: A): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
+}
+
+object Formatters {
+
+  def formatNino(str: String): String = str.trim().replace(" ","").toUpperCase()
 }

@@ -18,11 +18,11 @@ package services
 
 import com.google.inject.ImplementedBy
 import connectors.TrustConnector
-import javax.inject.Inject
-import models.RemoveBeneficiary
 import models.beneficiaries._
+import models.{NationalInsuranceNumber, RemoveBeneficiary}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
@@ -54,6 +54,18 @@ class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService
   override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     connector.removeBeneficiary(utr, beneficiary)
 
+  override def getIndividualNinos(identifier: String, index: Option[Int])
+                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]] = {
+    getBeneficiaries(identifier).map(_.individualDetails
+      .zipWithIndex
+      .filterNot(x => index.contains(x._2))
+      .flatMap(_._1.identification)
+      .collect {
+        case NationalInsuranceNumber(nino) => nino
+      }
+    )
+  }
+
 }
 
 @ImplementedBy(classOf[TrustServiceImpl])
@@ -76,4 +88,7 @@ trait TrustService {
   def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary]
 
   def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[HttpResponse]
+
+  def getIndividualNinos(identifier: String, index: Option[Int])
+                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]]
 }

@@ -16,11 +16,10 @@
 
 package services
 
-import java.time.LocalDate
 import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over101
 import models.beneficiaries._
-import models.{BeneficiaryType, Description, Name, RemoveBeneficiary}
+import models.{BeneficiaryType, Description, Name, NationalInsuranceNumber, RemoveBeneficiary}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -29,14 +28,19 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits._
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers with ScalaFutures {
+class TrustServiceSpec extends FreeSpec with MockitoSugar with MustMatchers with ScalaFutures {
 
+  private val identifier: String = "1234567890"
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockConnector: TrustConnector = mock[TrustConnector]
+  val service = new TrustServiceImpl(mockConnector)
 
-  val individual = IndividualBeneficiary(
+  val individual: IndividualBeneficiary = IndividualBeneficiary(
     name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
     identification = None,
@@ -49,13 +53,13 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     provisional = false
   )
 
-  val classOf = ClassOfBeneficiary(
+  val classOf: ClassOfBeneficiary = ClassOfBeneficiary(
     "Test Beneficiary",
     LocalDate.of(2019, 9, 23),
     provisional = false
   )
 
-  val companyBeneficiary = CompanyBeneficiary(
+  val companyBeneficiary: CompanyBeneficiary = CompanyBeneficiary(
     name = "Company Beneficiary Name",
     utr = None,
     address = None,
@@ -65,7 +69,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     provisional = false
   )
 
-  val trustBeneficiary = TrustBeneficiary(
+  val trustBeneficiary: TrustBeneficiary = TrustBeneficiary(
     name = "Trust Beneficiary Name",
     utr = None,
     address = None,
@@ -75,7 +79,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     provisional = false
   )
 
-  val charityBeneficiary = CharityBeneficiary(
+  val charityBeneficiary: CharityBeneficiary = CharityBeneficiary(
     name = "Humanitarian Endeavours Ltd",
     utr = None,
     address = None,
@@ -85,7 +89,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     provisional = false
   )
 
-  val otherBeneficiary = OtherBeneficiary(
+  val otherBeneficiary: OtherBeneficiary = OtherBeneficiary(
     description = "Other Endeavours Ltd",
     address = None,
     income = None,
@@ -94,7 +98,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
     provisional = false
   )
 
-  val employmentRelatedBeneficiary = EmploymentRelatedBeneficiary(
+  val employmentRelatedBeneficiary: EmploymentRelatedBeneficiary = EmploymentRelatedBeneficiary(
     name = "Employment Related Endeavors Ltd",
     utr = None,
     address = None,
@@ -121,11 +125,7 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
           )
         ))
 
-      val service = new TrustServiceImpl(mockConnector)
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
-
-      val result = service.getBeneficiaries("1234567890")
+      val result = service.getBeneficiaries(identifier)
 
       whenReady(result) {
         _ mustBe Beneficiaries(
@@ -147,48 +147,117 @@ class TrustServiceSpec() extends FreeSpec with MockitoSugar with MustMatchers wi
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), Nil, Nil, List(trustBeneficiary), Nil, List(otherBeneficiary))))
 
-      val service = new TrustServiceImpl(mockConnector)
-
-      implicit val hc : HeaderCarrier = HeaderCarrier()
-
-      whenReady(service.getUnidentifiedBeneficiary("1234567890", index)) {
+      whenReady(service.getUnidentifiedBeneficiary(identifier, index)) {
         _ mustBe classOf
       }
 
-      whenReady(service.getIndividualBeneficiary("1234567890", index)) {
+      whenReady(service.getIndividualBeneficiary(identifier, index)) {
         _ mustBe individual
       }
 
-      whenReady(service.getOtherBeneficiary("1234567890", index)) {
+      whenReady(service.getOtherBeneficiary(identifier, index)) {
         _ mustBe otherBeneficiary
       }
 
-      whenReady(service.getTrustBeneficiary("1234567890", index)) {
+      whenReady(service.getTrustBeneficiary(identifier, index)) {
         _ mustBe trustBeneficiary
       }
 
     }
 
-  }
+    "remove a ClassOfBeneficiary" in {
 
-  "remove a ClassOfBeneficiary" in {
+      when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
-    when(mockConnector.removeBeneficiary(any(),any())(any(), any()))
-      .thenReturn(Future.successful(HttpResponse(OK, "")))
+      val trustee: RemoveBeneficiary = RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary,
+        index = 0,
+        endDate = LocalDate.now()
+      )
 
-    val service = new TrustServiceImpl(mockConnector)
+      val result = service.removeBeneficiary(identifier, trustee)
 
-    val trustee : RemoveBeneficiary =  RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary,
-      index = 0,
-      endDate = LocalDate.now()
-    )
+      whenReady(result) { r =>
+        r.status mustBe 200
+      }
 
-    implicit val hc : HeaderCarrier = HeaderCarrier()
+    }
 
-    val result = service.removeBeneficiary("1234567890", trustee)
+    ".getIndividualNinos" - {
 
-    whenReady(result) { r =>
-      r.status mustBe 200
+      "return empty list" - {
+
+        "no individuals" in {
+
+          when(mockConnector.getBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(Beneficiaries()))
+
+          val result = Await.result(service.getIndividualNinos(identifier, None), Duration.Inf)
+
+          result mustBe Nil
+        }
+
+        "there are individuals but they don't have a NINo" in {
+
+          val individuals = List(
+            individual.copy(identification = None)
+          )
+
+          when(mockConnector.getBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(Beneficiaries(individualDetails = individuals)))
+
+          val result = Await.result(service.getIndividualNinos(identifier, None), Duration.Inf)
+
+          result mustBe Nil
+        }
+
+        "there is an individual with a NINo but it's the same index as the one we're amending" in {
+
+          val individuals = List(
+            individual.copy(identification = Some(NationalInsuranceNumber("nino")))
+          )
+
+          when(mockConnector.getBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(Beneficiaries(individualDetails = individuals)))
+
+          val result = Await.result(service.getIndividualNinos(identifier, Some(0)), Duration.Inf)
+
+          result mustBe Nil
+        }
+      }
+
+      "return NINos" - {
+
+        "individuals have NINos and we're adding (i.e. no index)" in {
+
+          val individuals = List(
+            individual.copy(identification = Some(NationalInsuranceNumber("nino1"))),
+            individual.copy(identification = Some(NationalInsuranceNumber("nino2")))
+          )
+
+          when(mockConnector.getBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(Beneficiaries(individualDetails = individuals)))
+
+          val result = Await.result(service.getIndividualNinos(identifier, None), Duration.Inf)
+
+          result mustBe List("nino1", "nino2")
+        }
+
+        "individuals have NINos and we're amending" in {
+
+          val individuals = List(
+            individual.copy(identification = Some(NationalInsuranceNumber("nino1"))),
+            individual.copy(identification = Some(NationalInsuranceNumber("nino2")))
+          )
+
+          when(mockConnector.getBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(Beneficiaries(individualDetails = individuals)))
+
+          val result = Await.result(service.getIndividualNinos(identifier, Some(0)), Duration.Inf)
+
+          result mustBe List("nino2")
+        }
+      }
     }
 
   }

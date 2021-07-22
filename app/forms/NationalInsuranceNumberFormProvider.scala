@@ -16,21 +16,23 @@
 
 package forms
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
 
+import javax.inject.Inject
+
 class NationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def withPrefix(messagePrefix: String): Form[String] =
+  def apply(messagePrefix: String, ninos: List[String]): Form[String] =
     Form(
       "value" -> nino(s"$messagePrefix.error.required")
         .verifying(
           firstError(
             nonEmptyString("value", s"$messagePrefix.error.required"),
-            isNinoValid("value", s"$messagePrefix.error.invalidFormat")
-          ))
+            isNinoValid("value", s"$messagePrefix.error.invalidFormat"),
+            uniqueNino(ninos, s"$messagePrefix.error.notUnique")
+          )
+        )
     )
 }
 

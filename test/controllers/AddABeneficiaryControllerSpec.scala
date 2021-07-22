@@ -144,7 +144,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
   class FakeService(data: Beneficiaries) extends TrustService {
 
-    override def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
+    override def getBeneficiaries(utr: String)
+                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
 
     override def getUnidentifiedBeneficiary(utr: String, index: Int)
                                            (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] = ???
@@ -152,17 +153,26 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
     override def getIndividualBeneficiary(utr: String, index: Int)
                                          (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary] = ???
 
-    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = ???
+    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)
+                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = ???
 
-    override def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] = ???
+    override def getCharityBeneficiary(utr: String, index: Int)
+                                      (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] = ???
 
-    override def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] = ???
+    override def getOtherBeneficiary(utr: String, index: Int)
+                                    (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] = ???
 
-    override def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] = ???
+    override def getTrustBeneficiary(utr: String, index: Int)
+                                    (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] = ???
 
-    override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] = ???
+    override def getCompanyBeneficiary(utr: String, index: Int)
+                                      (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] = ???
 
-    override def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] = ???
+    override def getEmploymentBeneficiary(utr: String, index: Int)
+                                         (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] = ???
+
+    override def getIndividualNinos(identifier: String, index: Option[Int])
+                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]] = ???
   }
 
   override def beforeEach(): Unit = {

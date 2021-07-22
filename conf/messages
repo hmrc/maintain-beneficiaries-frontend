@@ -321,6 +321,7 @@ individualBeneficiary.nationalInsuranceNumber.heading = What is {0}’s National
 individualBeneficiary.nationalInsuranceNumber.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 individualBeneficiary.nationalInsuranceNumber.error.required = Enter the individual beneficiary’s National Insurance number
 individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Enter the individual beneficiary’s National Insurance number in the correct format
+individualBeneficiary.nationalInsuranceNumber.error.notUnique = Enter a National Insurance number that has not already been used to add a beneficiary
 
 individualBeneficiary.countryOfResidenceYesNo.title = Do you know the individual beneficiary’s country of residence?
 individualBeneficiary.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
