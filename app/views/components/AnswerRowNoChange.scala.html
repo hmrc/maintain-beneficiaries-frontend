@@ -20,7 +20,7 @@
 
 @(row: AnswerRow)(implicit messages: Messages)
 
-<li>
- <div class="cya-question">@row.label</div>
- <div class="cya-answer">@row.answer</div>
-</li>
+<div class="govuk-summary-list__row">
+ <dt class="govuk-summary-list__key govuk-!-width-two-thirds">@row.label</dt>
+ <dd class="govuk-summary-list__value">@row.answer</dd>
+</div>

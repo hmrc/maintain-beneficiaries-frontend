@@ -26,8 +26,8 @@
 <h2>@messages(answerSection.headingKey.get)</h2>
 }
 
-<ul role="list" class="govuk-check-your-answers cya-questions-long section">
+<dl class="govuk-summary-list">
  @for(row <- answerSection.rows){
  @answerRowNoChange(row)
  }
-</ul>
+</dl>
