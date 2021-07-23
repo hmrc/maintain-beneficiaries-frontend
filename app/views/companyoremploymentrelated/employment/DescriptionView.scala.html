@@ -37,41 +37,45 @@
 
         @errorSummary(form.errors)
 
-     <fieldset class="govuk-fieldset" aria-describedby="form-hint">
+         <fieldset class="govuk-fieldset" aria-describedby="form-hint">
 
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            @heading("employmentBeneficiary.description.heading")
-        </legend>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                @heading("employmentBeneficiary.description.heading")
+            </legend>
 
-     <span id="form-hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</span>
-
+         <span id="form-hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</span>
 
         @inputText(
             field = form("description"),
-            label = messages("employmentBeneficiary.description.description1")
+            label = messages("employmentBeneficiary.description.description1"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
         @inputText(
             field = form("description1"),
-            label = messages("employmentBeneficiary.description.description2")
+            label = messages("employmentBeneficiary.description.description2"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
         @inputText(
             field = form("description2"),
-            label = messages("employmentBeneficiary.description.description3")
+            label = messages("employmentBeneficiary.description.description3"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
         @inputText(
             field = form("description3"),
-            label = messages("employmentBeneficiary.description.description4")
+            label = messages("employmentBeneficiary.description.description4"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
         @inputText(
             field = form("description4"),
-            label = messages("employmentBeneficiary.description.description5")
+            label = messages("employmentBeneficiary.description.description5"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
-     </fieldset>
+        </fieldset>
 
         @submitButton()
     }

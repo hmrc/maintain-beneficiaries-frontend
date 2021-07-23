@@ -9,7 +9,7 @@ $(document).ready(function() {
     // need to invoke new enhanceSelectElement()
     //======================================================
 
-    if(document.querySelectorAll('select[data-non-uk-countries]').length) {
+    if(document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
         accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-non-uk-countries]"),
             showAllValues: true,
@@ -17,7 +17,7 @@ $(document).ready(function() {
         });
     }
 
-    if(document.querySelectorAll('select[data-all-countries]').length) {
+    if(document.querySelectorAll('select[data-all-countries]').length > 0) {
         accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-all-countries]"),
             showAllValues: true,
@@ -30,17 +30,17 @@ $(document).ready(function() {
     // Takes the aria-described by value from the select element and
     // allocates this to the created text input
     //======================================================
-  if (document.querySelectorAll('select[data-all-countries]').length) {
+  if (document.querySelectorAll('select[data-all-countries]').length > 0) {
         var selectDescribedByValues = $('select[data-all-countries]').attr('aria-describedby');
         $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
 
-    if (document.querySelectorAll('select[data-non-uk-countries]').length) {
+    if (document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
         var selectDescribedByValues = $('select[data-non-uk-countries]').attr('aria-describedby');
         $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
 
-    if (document.querySelectorAll('.autocomplete__dropdown-arrow-down').length) {
+    if (document.querySelectorAll('.autocomplete__dropdown-arrow-down').length > 0) {
         $('.autocomplete__dropdown-arrow-down').attr('aria-hidden', true);
     }
 
