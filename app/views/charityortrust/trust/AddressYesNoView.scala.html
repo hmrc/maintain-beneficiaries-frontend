@@ -15,30 +15,34 @@
  *@
 
 @import controllers.charityortrust.trust.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
         main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        formHelper: FormWithCSRF,
+        inputYesNo: InputYesNo,
+        submitButton: SubmitButton,
+        errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("trustBeneficiary.addressYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("trustBeneficiary.addressYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = AddressYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("trustBeneficiary.addressYesNo.heading", name),
-            headingIsLegend = true
+            label = messages("trustBeneficiary.addressYesNo.heading", name),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

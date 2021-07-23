@@ -42,8 +42,8 @@ class ClassOfBeneficiaryPrintHelperSpec extends SpecBase {
       result mustBe AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow(label = Html(messages("classOfBeneficiary.description.checkYourAnswersLabel")), answer = Html("Description"), changeUrl = controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
-          AnswerRow(label = Html(messages("classOfBeneficiary.entityStart.checkYourAnswersLabel", description)), answer = Html("3 February 2019"), changeUrl = controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
+          AnswerRow(label = messages("classOfBeneficiary.description.checkYourAnswersLabel"), answer = Html("Description"), changeUrl = Some(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url)),
+          AnswerRow(label = messages("classOfBeneficiary.entityStart.checkYourAnswersLabel", description), answer = Html("3 February 2019"), changeUrl = Some(controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url))
         )
       )
     }

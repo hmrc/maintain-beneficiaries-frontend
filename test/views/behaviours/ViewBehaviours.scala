@@ -33,9 +33,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -59,12 +58,46 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
       }
     }
   }
 
+  def normalPageTitleWithSectionSubheading(view: HtmlFormat.Appendable,
+                                           messageKeyPrefix: String): Unit = {
+
+    "behave like a normal page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
+        }
+
+        "display the correct page title with section" in {
+
+          val doc = asDocument(view)
+          assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
+        }
+      }
+    }
+  }
 
   def dynamicTitlePage(view: HtmlFormat.Appendable,
                        messageKeyPrefix: String,
@@ -78,9 +111,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          val bannerTitle = doc.getElementsByClass("govuk-header__link govuk-header__link--service-name")
+          bannerTitle.html() mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -104,7 +136,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
       }
     }
@@ -177,6 +209,22 @@ trait ViewBehaviours extends ViewSpecBase {
           url
         )
       }
+    }
+  }
+
+  def pageWithGuidance(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit = {
+    "display the correct guidance" in {
+
+      val doc = asDocument(view)
+      for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+    }
+  }
+
+  def pageWithTitleAndSectionSubheading(view: HtmlFormat.Appendable, messageKeyPrefix: String) : Unit = {
+    "display the correct page title with section" in {
+
+      val doc = asDocument(view)
+      assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
     }
   }
 }

@@ -15,27 +15,32 @@
  *@
 
 @import viewmodels.AnswerSection
+@import viewmodels.Section
+@import utils.SectionFormatter.formatSections
 @import controllers.charityortrust.trust.amend.routes._
+@import views.html.components.{Heading, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    submitButton: SubmitButton,
+    govukSummaryList: GovukSummaryList
 )
 
-@(answerSection: AnswerSection, index: Int)(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[Section], index: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("trustBeneficiary.checkDetails.title")
+    title = messages("trustBeneficiary.checkDetails.title"),
+    showBackLink = true
     ) {
 
     @formHelper(action = CheckDetailsController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("trustBeneficiary.checkDetails.heading")
 
-        @components.heading("trustBeneficiary.checkDetails.heading")
+        @govukSummaryList(SummaryList(rows = formatSections(answerSection)))
 
-        @components.answer_section(answerSection)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

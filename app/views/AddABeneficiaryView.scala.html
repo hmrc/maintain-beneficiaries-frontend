@@ -18,10 +18,16 @@
 @import models.AddABeneficiary
 @import viewmodels.addAnother.AddRow
 @import viewmodels.RadioOption
+@import views.html.components.{ErrorSummary, Heading, InputRadio, SubmitButton, AddToList}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    submitButton: SubmitButton,
+    iHeading: Heading,
+    errorSummary: ErrorSummary,
+    formHelper: FormWithCSRF,
+    inputRadio: InputRadio,
+    addToList: AddToList
 )
 
 @(
@@ -33,45 +39,46 @@
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}$heading"
+    title = s"${errorPrefix(form)}$heading",
+    showBackLink = true
 ) {
 
     @formHelper(action = AddABeneficiaryController.submitAnother(), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @errorSummary(form.errors, AddABeneficiary.options.toSeq)
 
-        @components.heading(heading)
+        @iHeading(heading)
 
-        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(completeBeneficiaries, "complete", "beneficiary")
+        @addToList(completeBeneficiaries, "complete", "beneficiary")
 
         @if(maxedOut.size == 1) {
-            <ul>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p></li>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p></li>
-            </ul>
+            <div class="govuk-inset-text">
+                <p>@messages("addABeneficiary.maxedOut.just1", messages(maxedOut.head).toLowerCase)</p>
+                <p>@messages("addABeneficiary.maxedOut.just1.paragraph")</p>
+            </div>
         } else if(maxedOut.size > 1) {
-            <ul>
-                <li class="panel-indent">
-                    <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
-                    <ul class="govuk-list">
-                        @for(option <- maxedOut) {
-                            <li>@messages(option)</li>
-                        }
-                    </ul>
-                </li>
-                <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p></li>
-            </ul>
+            <div class="govuk-inset-text">
+                <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    @for(option <- maxedOut) {
+                    <li>@messages(option)</li>
+                    }
+                </ul>
+                <p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p>
+            </div>
         }
 
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("addABeneficiary.additional-content"),
-            legendClass = Some("heading-medium"),
-            inputs = AddABeneficiary.options
+            headingIsLegend = false,
+            inputs = mapRadioOptionsToRadioItems(form("value"), AddABeneficiary.options.toSeq),
+            legendClass = Some("govuk-fieldset__legend--m"),
+            inline = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

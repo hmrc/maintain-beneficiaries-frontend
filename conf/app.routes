@@ -1,5 +1,8 @@
 # microservice specific routes
 
+->         /govuk-frontend                                                  govuk.Routes
+->         /hmrc-frontend                                                   hmrcfrontend.Routes
+
 ->         /class-of-beneficiaries                                          classofbeneficiary.Routes
 
 ->         /individual                                                      individualBeneficiary.Routes
@@ -31,6 +34,7 @@ GET        /logout                                                          cont
 GET        /language/:lang                                                  controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
 GET        /this-service-has-been-reset                                     controllers.SessionExpiredController.onPageLoad
+POST       /this-service-has-been-reset                                     controllers.SessionExpiredController.onSubmit
 
 GET        /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
 
@@ -41,6 +45,7 @@ GET        /timeout                                                         cont
 GET        /feature-not-available                                           controllers.FeatureNotAvailableController.onPageLoad()
 
 GET        /beneficiaries-more-information                                  controllers.transition.BeneficiariesInformationController.onPageLoad()
+POST       /beneficiaries-more-information                                  controllers.transition.BeneficiariesInformationController.onSubmit()
 
 GET        /add                                                             controllers.AddABeneficiaryController.onPageLoad()
 POST       /add                                                             controllers.AddABeneficiaryController.submitOne()

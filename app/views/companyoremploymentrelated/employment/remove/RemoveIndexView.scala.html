@@ -15,30 +15,34 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.remove.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
         main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        formHelper: FormWithCSRF,
+        inputYesNo: InputYesNo,
+        submitButton: SubmitButton,
+        errorSummary: ErrorSummary
 )
 
 @(form: Form[_], index: Int, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("removeEmploymentBeneficiary.title")}"
+    title = s"${errorPrefix(form)}${messages("removeEmploymentBeneficiaryYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = RemoveEmploymentBeneficiaryController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("removeEmploymentBeneficiary.heading", name),
-            headingIsLegend = true
+            label = messages("removeEmploymentBeneficiaryYesNo.heading", name),
+legendClass = Some("govuk-heading-l"),
+legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

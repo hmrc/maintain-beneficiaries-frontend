@@ -15,10 +15,16 @@
  *@
 
 @import controllers.individualbeneficiary.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo, BulletList, Heading}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    errorSummary: ErrorSummary,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    bulletList: BulletList,
+    formHelper: FormWithCSRF,
+    heading: Heading
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
@@ -26,31 +32,37 @@
 @content = {
 <p>@messages("individualBeneficiary.mentalCapacityYesNo.p1")</p>
 
-<ul class="govuk-list trust-list--bullet">
-    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint1")</li>
-    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint2")</li>
-    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint3")</li>
-    <li class="inside">@messages("individualBeneficiary.mentalCapacityYesNo.bulletpoint4")</li>
-</ul>
+@bulletList(
+"individualBeneficiary.mentalCapacityYesNo",
+    List(
+        "bulletpoint1",
+        "bulletpoint2",
+        "bulletpoint3",
+        "bulletpoint4"
+        )
+    )
 }
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.mentalCapacityYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.mentalCapacityYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = MentalCapacityYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading(messages("individualBeneficiary.mentalCapacityYesNo.heading", name))
 
-        @components.input_yes_no(
+        @content
+
+        @inputYesNo(
             field = form("value"),
-            legend = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
-            headingIsLegend = true,
-            additionalContent = Some(content)
+            label = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
+            legendClass = Some("govuk-visually-hidden"),
+            legendAsHeading = false
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

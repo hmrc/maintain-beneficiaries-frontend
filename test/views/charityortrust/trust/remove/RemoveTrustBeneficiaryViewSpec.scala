@@ -25,7 +25,7 @@ import controllers.charityortrust.trust.remove.routes
 
 class RemoveTrustBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeTrustBeneficiary"
+  val messageKeyPrefix = "removeTrustBeneficiaryYesNo"
   val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Name"
   val index = 0

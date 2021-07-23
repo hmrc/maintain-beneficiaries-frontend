@@ -15,31 +15,39 @@
  *@
 
 @import controllers.other.routes._
+@import views.html.components.{ErrorSummary, InputText, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputPercent: InputText,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.shareOfIncome.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.shareOfIncome.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = ShareOfIncomeController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_number(
+        @inputPercent(
             field = form("value"),
             label = messages("otherBeneficiary.shareOfIncome.heading", name),
             hint = Some(messages("otherBeneficiary.shareOfIncome.hint")),
-            symbol = Some("percentage")
+            labelAsHeading = true,
+            labelClass = Some("govuk-heading-l"),
+            suffix = Some("%"),
+            inputMode = Some("numeric"),
+            pattern = Some("[0-9]*"),
+            inputClass = Some("govuk-input--width-5")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

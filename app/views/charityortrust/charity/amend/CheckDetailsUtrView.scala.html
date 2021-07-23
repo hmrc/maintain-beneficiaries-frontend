@@ -15,31 +15,36 @@
  *@
 
 @import viewmodels.AnswerSection
+@import viewmodels.Section
+@import utils.SectionFormatter.formatSections
 @import controllers.charityortrust.charity.amend.routes._
+@import views.html.components.{Heading, SubmitButton, AnswerSectionNoChange}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    heading: Heading,
+    submitButton: SubmitButton,
+    answerSectionNoChange: AnswerSectionNoChange
 )
 
 @(answerSection: AnswerSection, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("charityBeneficiary.checkDetails.title")
+    title = messages("charityBeneficiary.checkDetails.title"),
+    showBackLink = true
 ) {
 
     @formHelper(action = CheckDetailsUtrController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @heading("charityBeneficiary.checkDetails.heading")
 
-        @components.heading("charityBeneficiary.checkDetails.heading")
-
-        @components.answer_section_no_change(answerSection)
+        @answerSectionNoChange(answerSection)
 
         <p>@messages("charityBeneficiary.checkDetails.utr.p1")</p>
         <p>@messages("charityBeneficiary.checkDetails.utr.p2", name)</p>
         <p>@messages("charityBeneficiary.checkDetails.utr.p3", name)</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }

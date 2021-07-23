@@ -15,31 +15,35 @@
  *@
 
 @import controllers.individualbeneficiary.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.countryOfNationalityYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.countryOfNationalityYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = CountryOfNationalityYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("individualBeneficiary.countryOfNationalityYesNo.heading", name),
-            headingIsLegend = true,
+            label = messages("individualBeneficiary.countryOfNationalityYesNo.heading", name),
+            legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true,
             hint = Some(messages("individualBeneficiary.countryOfNationalityYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

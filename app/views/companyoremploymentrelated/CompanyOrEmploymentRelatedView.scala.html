@@ -16,34 +16,37 @@
 
 @import controllers.companyoremploymentrelated.routes._
 @import models.beneficiaries.CompanyOrEmploymentRelatedToAdd
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("companyOrEmploymentRelated.title")}"
+    title = s"${errorPrefix(form)}${messages("companyOrEmploymentRelated.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = CompanyOrEmploymentRelatedController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, CompanyOrEmploymentRelatedToAdd.options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("companyOrEmploymentRelated.heading"),
-            legendClass = Some("heading-large"),
-            inputs = CompanyOrEmploymentRelatedToAdd.options.toSeq,
+            legendClass = Some("govuk-heading-l"),
+            inputs = mapRadioOptionsToRadioItems(form("value"), CompanyOrEmploymentRelatedToAdd.options.toSeq),
+            inline = true,
             headingIsLegend = true,
-            hint = Some(messages("companyOrEmploymentRelated.hint")),
-            fieldSetClass = Some("inline")
+            hint = Some(messages("companyOrEmploymentRelated.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

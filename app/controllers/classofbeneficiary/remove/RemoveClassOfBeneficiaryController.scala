@@ -47,7 +47,7 @@ class RemoveClassOfBeneficiaryController @Inject()(
   private def formRoute(index: Int): Call =
     controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
 
-  private val messagesPrefix: String = "removeClassOfBeneficiary"
+  private val messagesPrefix: String = "removeClassOfBeneficiaryYesNo"
 
   private val form = formProvider.apply(messagesPrefix)
 

@@ -15,21 +15,22 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components.Heading
 
 @this(
     main_template: MainTemplate,
+    heading: Heading,
     config: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("featureNotAvailable.title")
+    title = messages("featureNotAvailable.title"),
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading("featureNotAvailable.heading")
+    @heading("featureNotAvailable.heading")
 
     <p>@messages("featureNotAvailable.p1") <a href="@config.helplineUrl" target="_blank">@messages("featureNotAvailable.link")</a></p>
 

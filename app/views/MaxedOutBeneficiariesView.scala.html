@@ -18,10 +18,15 @@
 @import models.AddABeneficiary
 @import viewmodels.addAnother.AddRow
 @import viewmodels.RadioOption
+@import views.html.components.{ErrorSummary, Heading, SubmitButton, AddToList}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    submitButton: SubmitButton,
+    iHeading: Heading,
+    errorSummary: ErrorSummary,
+    formHelper: FormWithCSRF,
+    addToList: AddToList
 )
 
 @(inProgressBeneficiaries: Seq[AddRow],
@@ -29,24 +34,23 @@
     heading: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = heading
+    title = heading,
+    showBackLink = true
     ) {
 
     @formHelper(action = AddABeneficiaryController.submitComplete(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @iHeading(heading)
 
-        @components.heading(heading)
+        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
 
-        @components.data_list(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @addToList(completeBeneficiaries, "complete", "beneficiary")
 
-        @components.data_list(completeBeneficiaries, "complete", "beneficiary")
+        <div class="govuk-inset-text">
+            <p>@messages("addABeneficiary.maxedOut.all")</p>
+            <p>@messages("addABeneficiary.maxedOut.all.paragraph")</p>
+        </div>
 
-        <ul>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all")</p></li>
-            <li class="panel-indent"><p>@messages("addABeneficiary.maxedOut.all.paragraph")</p></li>
-        </ul>
-
-        @components.submit_button()
+        @submitButton()
     }
 }

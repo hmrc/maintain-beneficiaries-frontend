@@ -42,15 +42,9 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like stringPage(
-      form,
-      applyView,
-      messageKeyPrefix,
-      None,
-      routes.DescriptionController.onSubmit(mode).url
-    )
+    behave like stringPage(form, applyView, messageKeyPrefix, None,
+      routes.DescriptionController.onSubmit(mode).url)
 
     behave like pageWithASubmitButton(applyView(form))
   }
-
 }

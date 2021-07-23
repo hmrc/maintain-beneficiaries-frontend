@@ -15,32 +15,36 @@
  *@
 
 @import controllers.classofbeneficiary.add.routes._
+@import views.html.components.{ErrorSummary, SubmitButton, InputText}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    submitButton: SubmitButton,
+    inputText: InputText
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("classOfBeneficiary.description.title")}"
+    title = s"${errorPrefix(form)}${messages("classOfBeneficiary.description.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = DescriptionController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("classOfBeneficiary.description.heading"),
-            headingIsLabel = true,
+            labelAsHeading = true,
             hint = Some(messages("classOfBeneficiary.description.hint")),
-            labelClass=Some("heading-large")
+            labelClass = Some("govuk-label--l"),
+            inputClass = Some("govuk-!-width-two-thirds")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

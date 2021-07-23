@@ -8,7 +8,7 @@ site.change.details = Change details
 site.no = No
 site.yes = Yes
 site.continue = Continue
-site.service_name = Register and Maintain a Trust
+service.name = Register and Maintain a Trust
 site.service_section = Beneficiaries
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
@@ -68,24 +68,6 @@ createAgentServicesAccount.link = Check the guidance
 createAgentServicesAccount.paragraph2 = to find out what you will need to create an agent services account.
 createAgentServicesAccount.paragraph3 = Once you have created your agent services account, you can carry on with your trust registration.
 createAgentServicesAccount.cta = Create an agent services account
-
-trustNotClaimed.title = Sorry, you cannot access this trust
-trustNotClaimed.heading = Sorry, you cannot access this trust
-trustNotClaimed.subheading = This trust’s UTR: {0}
-trustNotClaimed.p1 = One of the trustees will need to complete the next two steps so you can maintain the trust online on their behalf.
-trustNotClaimed.bullet.1.title = Trustee needs to claim the trust
-trustNotClaimed.bullet.1.p1 = A trustee needs to log onto the Trust Registration Service using their Government Gateway account. The account they use must be an organisation account, not an individual account.
-trustNotClaimed.bullet.1.p2 = If they do not have an account, they can
-trustNotClaimed.bullet.1.p2.a = register for one here (opens in a new tab).
-trustNotClaimed.bullet.1.p3 = The trustee needs to correctly answer questions about the trust so HMRC can prove the connection between the trustee and the trust.
-trustNotClaimed.bullet.1.p4 = The trustee must complete this step before you can request authorisation from them to maintain the trust.
-trustNotClaimed.bullet.2.title = Trustee needs to authorise your online access the trust
-trustNotClaimed.bullet.2.p1 = Through Agent Services you can create an authorisation link to send to the trustee.
-trustNotClaimed.bullet.2.p2 = The trustee needs to use the same Government Gateway organisation account used to claim the trust to approve your request.
-trustNotClaimed.bullet.2.p3 = If you need help with the service
-trustNotClaimed.bullet.2.p3.a = contact the trusts helpline (opens in a new window or tab).
-trustNotClaimed.bullet.2.p4 = You can
-trustNotClaimed.bullet.2.p4.a = return to register and maintain a trust for a client.
 
 ukAddress.error.line1.required = Enter address line 1
 ukAddress.error.line2.required = Enter address line 2
@@ -225,9 +207,9 @@ classOfBeneficiary.checkDetails.heading = Check class of beneficiary details
 
 # Remove
 
-removeClassOfBeneficiary.title = Are you sure you want to remove the class of beneficiaries?
-removeClassOfBeneficiary.heading = Are you sure you want to remove {0}?
-removeClassOfBeneficiary.error.required = Select yes if you want to remove the class of beneficiaries
+removeClassOfBeneficiaryYesNo.title = Are you sure you want to remove the class of beneficiaries?
+removeClassOfBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeClassOfBeneficiaryYesNo.error.required = Select yes if you want to remove the class of beneficiaries
 
 classOfBeneficiary.whenRemoved.title = When was the class of beneficiaries removed as a beneficiary?
 classOfBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -478,9 +460,9 @@ individualBeneficiary.checkDetails.heading = Check individual beneficiary detail
 
 # Remove
 
-removeIndividualBeneficiary.title = Are you sure you want to remove the individual beneficiary?
-removeIndividualBeneficiary.heading = Are you sure you want to remove {0}?
-removeIndividualBeneficiary.error.required = Select yes if you want to remove the individual beneficiary
+removeIndividualBeneficiaryYesNo.title = Are you sure you want to remove the individual beneficiary?
+removeIndividualBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeIndividualBeneficiaryYesNo.error.required = Select yes if you want to remove the individual beneficiary
 
 individualBeneficiary.whenRemoved.title = When was the individual removed as a beneficiary?
 individualBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -567,8 +549,7 @@ charityBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 charityBeneficiary.startDate.title = When was the charity beneficiary added as a beneficiary?
 charityBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 charityBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
-charityBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
-charityBeneficiary.startDate.hint = For example, 31 3 1980.
+charityBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980.
 charityBeneficiary.startDate.error.required.all = Enter the date the charity beneficiary was added to the trust
 charityBeneficiary.startDate.error.required.two = The date the charity beneficiary was added to the trust must include a {0} and a {1}
 charityBeneficiary.startDate.error.required = The date the charity beneficiary was added to the trust must include a {0}
@@ -596,9 +577,9 @@ charityBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added o
 
 # Remove
 
-removeCharityBeneficiary.title = Are you sure you want to remove the charity beneficiary?
-removeCharityBeneficiary.heading = Are you sure you want to remove {0}?
-removeCharityBeneficiary.error.required = Select yes if you want to remove the charity beneficiary
+removeCharityBeneficiaryYesNo.title = Are you sure you want to remove the charity beneficiary?
+removeCharityBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeCharityBeneficiaryYesNo.error.required = Select yes if you want to remove the charity beneficiary
 
 # TRUST
 
@@ -662,8 +643,7 @@ trustBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 trustBeneficiary.startDate.title = When was the trust beneficiary added as a beneficiary?
 trustBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 trustBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
-trustBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
-trustBeneficiary.startDate.hint = For example, 31 3 1980.
+trustBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980.
 trustBeneficiary.startDate.error.required.all = Enter the date the trust beneficiary was added to the trust
 trustBeneficiary.startDate.error.required.two = The date the trust beneficiary was added to the trust must include a {0} and a {1}
 trustBeneficiary.startDate.error.required = The date the trust beneficiary was added to the trust must include a {0}
@@ -681,9 +661,9 @@ trustBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or 
 
 # Remove
 
-removeTrustBeneficiary.title = Are you sure you want to remove the trust beneficiary?
-removeTrustBeneficiary.heading = Are you sure you want to remove {0}?
-removeTrustBeneficiary.error.required = Select yes if you want to remove the trust beneficiary
+removeTrustBeneficiaryYesNo.title = Are you sure you want to remove the trust beneficiary?
+removeTrustBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeTrustBeneficiaryYesNo.error.required = Select yes if you want to remove the trust beneficiary
 
 trustBeneficiary.whenRemoved.title = When was the trust beneficiary removed as a beneficiary?
 trustBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -757,8 +737,7 @@ otherBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 otherBeneficiary.startDate.title = When was the other beneficiary added as a beneficiary?
 otherBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 otherBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
-otherBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
-otherBeneficiary.startDate.hint = For example, 31 3 1980.
+otherBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980.
 otherBeneficiary.startDate.error.required.all = Enter the date the other beneficiary was added to the trust
 otherBeneficiary.startDate.error.required.two = The date the other beneficiary was added to the trust must include a {0} and a {1}
 otherBeneficiary.startDate.error.required = The date the other beneficiary was added to the trust must include a {0}
@@ -771,9 +750,9 @@ otherBeneficiary.checkDetails.heading = Check other beneficiary details
 
 # Remove
 
-removeOtherBeneficiary.title = Are you sure you want to remove the other beneficiary?
-removeOtherBeneficiary.heading = Are you sure you want to remove {0}?
-removeOtherBeneficiary.error.required = Select yes if you want to remove the other beneficiary
+removeOtherBeneficiaryYesNo.title = Are you sure you want to remove the other beneficiary?
+removeOtherBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeOtherBeneficiaryYesNo.error.required = Select yes if you want to remove the other beneficiary
 
 otherBeneficiary.whenRemoved.title = When was the other beneficiary removed as a beneficiary?
 otherBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -860,8 +839,7 @@ companyBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 companyBeneficiary.startDate.title = When was the company beneficiary added as a beneficiary?
 companyBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 companyBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
-companyBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
-companyBeneficiary.startDate.hint = For example, 31 3 1980.
+companyBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980.
 companyBeneficiary.startDate.error.required.all = Enter the date the company beneficiary was added to the trust
 companyBeneficiary.startDate.error.required.two = The date the company beneficiary was added to the trust must include a {0} and a {1}
 companyBeneficiary.startDate.error.required = The date the company beneficiary was added to the trust must include a {0}
@@ -879,9 +857,9 @@ companyBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added o
 
 # Remove
 
-removeCompanyBeneficiary.title = Are you sure you want to remove the company beneficiary?
-removeCompanyBeneficiary.heading = Are you sure you want to remove {0}?
-removeCompanyBeneficiary.error.required = Select yes if you want to remove the company beneficiary
+removeCompanyBeneficiaryYesNo.title = Are you sure you want to remove the company beneficiary?
+removeCompanyBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeCompanyBeneficiaryYesNo.error.required = Select yes if you want to remove the company beneficiary
 
 companyBeneficiary.whenRemoved.title = When was the company beneficiary removed as a beneficiary?
 companyBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -965,8 +943,7 @@ numberOfBeneficiaries.over1001 = Over 1,001
 employmentBeneficiary.startDate.title = When was the employment related beneficiary added as a beneficiary?
 employmentBeneficiary.startDate.heading = When was {0} added as a beneficiary?
 employmentBeneficiary.startDate.checkYourAnswersLabel = When was {0} added as a beneficiary?
-employmentBeneficiary.startDate.paragraph = Check the trust deed or the power of appointment document.
-employmentBeneficiary.startDate.hint = For example, 31 3 1980.
+employmentBeneficiary.startDate.hint = Check the trust deed or the power of appointment document. For example, 31 3 1980.
 employmentBeneficiary.startDate.error.required.all = Enter the date the employment related beneficiary was added to the trust
 employmentBeneficiary.startDate.error.required.two = The date the employment related beneficiary was added to the trust must include a {0} and a {1}
 employmentBeneficiary.startDate.error.required = The date the employment related beneficiary was added to the trust must include a {0}
@@ -983,9 +960,9 @@ employmentBeneficiary.checkDetails.utr.p2 = If you need to update {0}’s detail
 employmentBeneficiary.checkDetails.utr.p3 = When asked for the date {0} was added or removed from the trust use today’s date.
 # Remove
 
-removeEmploymentBeneficiary.title = Are you sure you want to remove the employment related beneficiary?
-removeEmploymentBeneficiary.heading = Are you sure you want to remove {0}?
-removeEmploymentBeneficiary.error.required = Select yes if you want to remove the employment related beneficiary
+removeEmploymentBeneficiaryYesNo.title = Are you sure you want to remove the employment related beneficiary?
+removeEmploymentBeneficiaryYesNo.heading = Are you sure you want to remove {0}?
+removeEmploymentBeneficiaryYesNo.error.required = Select yes if you want to remove the employment related beneficiary
 
 employmentBeneficiary.whenRemoved.title = When was the employment related beneficiary removed as a beneficiary?
 employmentBeneficiary.whenRemoved.heading = When was {0} removed as a beneficiary?
@@ -1000,6 +977,7 @@ employmentBeneficiary.whenRemoved.error.past = The date the employment related b
 beneficiariesMoreInformation.title = Provide more information about the beneficiaries
 beneficiariesMoreInformation.heading = Provide more information about the beneficiaries
 beneficiariesMoreInformation.caption = Beneficiaries
+beneficiariesMoreInformation.caption.hidden = This section is
 beneficiariesMoreInformation.p1 = As the trust now needs to pay tax, you need to give HMRC more information about the beneficiaries that you registered.
 beneficiariesMoreInformation.p2 = You need to give different information for each type of beneficiary.
 beneficiariesMoreInformation.subheading = Individual Beneficiaries

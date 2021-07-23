@@ -108,7 +108,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeAnswerSection, index)(request, messages).toString
+        view(Seq(fakeAnswerSection), index)(request, messages).toString
     }
 
     "return OK and the correct view for a GET (saved) for a given index" in {
@@ -127,7 +127,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeAnswerSection, index)(request, messages).toString
+        view(Seq(fakeAnswerSection), index)(request, messages).toString
     }
 
     "return OK and redirect for a GET (update) for a given index" in {

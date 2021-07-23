@@ -44,7 +44,7 @@ class RemoveTrustBeneficiaryController @Inject()(
                                                   errorHandler: ErrorHandler
                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val messagesPrefix: String = "removeTrustBeneficiary"
+  private val messagesPrefix: String = "removeTrustBeneficiaryYesNo"
 
   private val form = formProvider.apply(messagesPrefix)
 

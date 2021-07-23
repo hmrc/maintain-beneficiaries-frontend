@@ -15,32 +15,36 @@
  *@
 
 @import controllers.other.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("otherBeneficiary.discretionYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("otherBeneficiary.discretionYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = DiscretionYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("otherBeneficiary.discretionYesNo.heading", name),
-            headingIsLegend = true,
+            label = messages("otherBeneficiary.discretionYesNo.heading", name),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true,
             hint = Some(messages("otherBeneficiary.discretionYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
 
     }
 }

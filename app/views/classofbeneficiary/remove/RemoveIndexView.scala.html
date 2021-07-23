@@ -15,29 +15,34 @@
  *@
 
 @import play.api.mvc.Call
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
         main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        formHelper: FormWithCSRF,
+        inputYesNo: InputYesNo,
+        submitButton: SubmitButton,
+        errorSummary: ErrorSummary
 )
 
 @(prefix : String, form: Form[_], index: Int, nameOrDescription : String, route : Call)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages(s"$prefix.title")}"
+    title = s"${errorPrefix(form)}${messages(s"$prefix.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = route, 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages(s"$prefix.heading", nameOrDescription)
+            label = messages(s"$prefix.heading", nameOrDescription),
+            legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -31,4 +31,8 @@ class BeneficiariesInformationController @Inject()(
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
+
+  def onSubmit: Action[AnyContent] = Action { _ =>
+    Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+  }
 }

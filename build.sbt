@@ -8,7 +8,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "maintain-beneficiaries-frontend"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin, SbtSassify)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     DefaultBuildSettings.scalaSettings,
@@ -23,8 +23,10 @@ lazy val root = (project in file("."))
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
       "play.twirl.api.HtmlFormat._",
-      "uk.gov.hmrc.play.views.html.helpers._",
-      "uk.gov.hmrc.play.views.html.layouts._",
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
       "views.ViewUtils._",
       "models.{Mode, NormalMode, CheckMode}",
       "controllers.routes._"
@@ -49,7 +51,8 @@ lazy val root = (project in file("."))
     Concat.groups := Seq(
       "javascripts/maintainbeneficiariesfrontend-app.js" ->
         group(Seq(
-          "javascripts/show-hide-content.js",
+          "javascripts/iebacklink.js",
+          "javascripts/print.js",
           "javascripts/maintainbeneficiariesfrontend.js",
           "javascripts/autocomplete.js",
           "javascripts/libraries/location-autocomplete.min.js"

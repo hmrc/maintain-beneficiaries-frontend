@@ -16,33 +16,37 @@
 
 @import controllers.routes._
 @import viewmodels.RadioOption
+@import views.html.components.{InputRadio, SubmitButton, ErrorSummary}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("addNow.title")}"
+    title = s"${errorPrefix(form)}${messages("addNow.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = AddNowController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("addNow.heading"),
-            legendClass = Some("heading-large"),
-            inputs = options.toSeq,
+            legendClass = Some("govuk-heading-l"),
+            inputs = mapRadioOptionsToRadioItems(form("value"), options.toSeq),
             headingIsLegend = true,
+            inline = false,
             hint = Some(messages("addNow.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

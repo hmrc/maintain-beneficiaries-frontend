@@ -15,30 +15,34 @@
  *@
 
 @import controllers.other.remove.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF,
+    inputYesNo: InputYesNo,
+    submitButton: SubmitButton,
+    errorSummary: ErrorSummary
 )
 
 @(form: Form[_], index: Int, description: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("removeOtherBeneficiary.title")}"
+    title = s"${errorPrefix(form)}${messages("removeOtherBeneficiaryYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = RemoveOtherBeneficiaryController.onSubmit(index), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("removeOtherBeneficiary.heading", description),
-            headingIsLegend = true
+            label = messages("removeOtherBeneficiaryYesNo.heading", description),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

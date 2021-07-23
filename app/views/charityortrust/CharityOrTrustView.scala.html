@@ -16,34 +16,37 @@
 
 @import controllers.charityortrust.routes._
 @import models.beneficiaries.CharityOrTrustToAdd
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("charityOrTrust.title")}"
+    title = s"${errorPrefix(form)}${messages("charityOrTrust.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = CharityOrTrustController.onSubmit(), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, CharityOrTrustToAdd.options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("charityOrTrust.heading"),
-            legendClass = Some("heading-large"),
-            inputs = CharityOrTrustToAdd.options.toSeq,
+            legendClass = Some("govuk-heading-l"),
+            inline = true,
+            inputs = mapRadioOptionsToRadioItems(form("value"), CharityOrTrustToAdd.options.toSeq),
             headingIsLegend = true,
-            hint = Some(messages("charityOrTrust.hint")),
-            fieldSetClass = Some("inline")
+            hint = Some(messages("charityOrTrust.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

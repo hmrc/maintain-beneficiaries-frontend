@@ -15,30 +15,34 @@
  *@
 
 @import controllers.individualbeneficiary.routes._
+@import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
         main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        formHelper: FormWithCSRF,
+        inputYesNo: InputYesNo,
+        submitButton: SubmitButton,
+        errorSummary: ErrorSummary
 )
 
 @(form: Form[_], mode: Mode, trusteeName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.nationalInsuranceNumberYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.nationalInsuranceNumberYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = NationalInsuranceNumberYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            legend = messages("individualBeneficiary.nationalInsuranceNumberYesNo.heading", trusteeName),
-            headingIsLegend = true
+            label = messages("individualBeneficiary.nationalInsuranceNumberYesNo.heading", trusteeName),
+legendClass = Some("govuk-heading-l"),
+            legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

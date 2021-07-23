@@ -16,32 +16,36 @@
 
 @import controllers.companyoremploymentrelated.employment.routes._
 @import models.HowManyBeneficiaries
+@import views.html.components.{ErrorSummary, InputRadio, SubmitButton}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    errorSummary: ErrorSummary,
+    inputRadio: InputRadio,
+    submitButton: SubmitButton
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("employmentBeneficiary.numberOfBeneficiaries.title")}"
+    title = s"${errorPrefix(form)}${messages("employmentBeneficiary.numberOfBeneficiaries.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = NumberOfBeneficiariesController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors, HowManyBeneficiaries.options.toSeq)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
             legend = messages("employmentBeneficiary.numberOfBeneficiaries.heading"),
-            legendClass = Some("heading-large"),
-            inputs = HowManyBeneficiaries.options.toSeq,
+            legendClass = Some("govuk-heading-l"),
+            inline = false,
+            inputs = mapRadioOptionsToRadioItems(form("value"), HowManyBeneficiaries.options.toSeq),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
