@@ -36,11 +36,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
 
   val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
-  private val assetsUrl: String = configuration.get[String]("assets.url")
-
   lazy val maintainATrustOverview: String = configuration.get[String]("urls.maintainATrustOverview")
-
-  val assetsPrefix: String   = assetsUrl + configuration.get[String]("assets.version")
 
   lazy val loginUrl: String = configuration.get[String]("urls.login")
 
