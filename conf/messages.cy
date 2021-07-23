@@ -63,24 +63,6 @@ createAgentServicesAccount.paragraph2=i gael gwybod beth fydd ei angen arnoch i 
 createAgentServicesAccount.paragraph3=Pan fyddwch wedi creu’ch cyfrif gwasanaethau asiant, gallwch barhau â chofrestru’ch ymddiriedolaeth.
 createAgentServicesAccount.cta=Creu cyfrif gwasanaethau asiant
 
-trustNotClaimed.title = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
-trustNotClaimed.heading = Mae’n ddrwg gennym, ni allwch gael at yr ymddiriedolaeth hon
-trustNotClaimed.subheading = UTR yr ymddiriedolaeth hon: {0}
-trustNotClaimed.p1 = Bydd angen i un o’r ymddiriedolwyr gwblhau’r ddau gam nesaf er mwyn i chi allu cynnal yr ymddiriedolaeth ar-lein ar eu rhan.
-trustNotClaimed.bullet.1.title = Mae’n rhaid i’r ymddiriedolwr hawlio’r ymddiriedolaeth
-trustNotClaimed.bullet.1.p1 = Mae’n rhaid i ymddiriedolwr fewngofnodi i Wasanaeth Cofrestru Ymddiriedolaethau gan ddefnyddio’i gyfrif Porth y Llywodraeth. Mae’n rhaid i’r cyfrif mae’n ei ddefnyddio fod yn gyfrif sefydliad ac nid yn gyfrif unigolyn.
-trustNotClaimed.bullet.1.p2 = Os nad oes ganddo gyfrif gall
-trustNotClaimed.bullet.1.p2.a = gofrestru ar gyfer un yma (yn agor tab newydd).
-trustNotClaimed.bullet.1.p3 = Mae’n rhaid i’r ymddiriedolwr ateb cwestiynau am yr ymddiriedolaeth yn gywir felly gall CThEM brofi’r cysylltiad rhwng yr ymddiriedolwr a’r ymddiriedolaeth.
-trustNotClaimed.bullet.1.p4 = Mae’n rhaid i’r ymddiriedolwr gwblhau’r cam hwn cyn y gallwch ofyn am awdurdod ganddo i gynnal yr ymddiriedolaeth.
-trustNotClaimed.bullet.2.title = Mae’n rhaid i’r ymddiriedolwr awdurdodi’ch mynediad ar-lein i’r ymddiriedolaeth
-trustNotClaimed.bullet.2.p1 = Drwy Wasanaethau Asiant, gallwch greu cysylltiad awdurdodi i’w anfon at yr ymddiriedolwr.
-trustNotClaimed.bullet.2.p2 = Mae’n rhaid i’r ymddiriedolwr ddefnyddio’r un cyfrif sefydliad Porth y Llywodraeth a ddefnyddir i hawlio’r ymddiriedolaeth i gymeradwyo’ch cais.
-trustNotClaimed.bullet.2.p3 = Os oes angen help arnoch gyda’r gwasanaeth
-trustNotClaimed.bullet.2.p3.a = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM (yn agor ffenestr neu dab newydd).
-trustNotClaimed.bullet.2.p4 = Gallwch
-trustNotClaimed.bullet.2.p4.a = ddychwelyd i gofrestru ymddiriedolaeth a’i chynnal ar gyfer cleient.
-
 ukAddress.error.line1.required = Nodwch gyfeiriad - llinell 1
 ukAddress.error.line2.required = Nodwch gyfeiriad - llinell 2
 ukAddress.error.postcode.required = Nodwch god post
