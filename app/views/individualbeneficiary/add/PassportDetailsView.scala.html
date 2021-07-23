@@ -44,7 +44,6 @@
 
         @select(field = form("country"),
             label = messages("individualBeneficiary.passportDetails.country"),
-            labelClasses = Set("form-control-1-2 bold"),
             options = countryOptions,
             placeholder = Some(messages("address.country.select")),
             formGroupClasses = Set("autocomplete-wrapper"),
@@ -54,13 +53,13 @@
         @inputText(
             field = form("number"),
             label = messages("individualBeneficiary.passportDetails.number"),
+            inputClass = Some("govuk-input--width-10"),
             hint = Some(messages("individualBeneficiary.passportDetails.number.hint"))
         )
 
         @inputDate(
             field = form("expiryDate"),
             legend = messages("individualBeneficiary.passportDetails.expiryDate"),
-            legendClass = "bold",
             hint = Some(messages("individualBeneficiary.passportDetails.expiryDate.hint")),
             legendAsHeading = false
         )
