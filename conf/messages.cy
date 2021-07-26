@@ -1,7 +1,7 @@
 site.back = Yn ôl
 site.delete = Tynnu
 site.edit = Newid
-site.hidden-delete = Dileu {0}
+site.hidden-delete = Tynnu {0}
 site.hidden-edit = Newid {0}
 site.change.details = Newid manylion
 site.no = Na
