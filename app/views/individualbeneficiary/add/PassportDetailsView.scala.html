@@ -53,15 +53,16 @@
         @inputText(
             field = form("number"),
             label = messages("individualBeneficiary.passportDetails.number"),
-            inputClass = Some("govuk-input--width-10"),
-            hint = Some(messages("individualBeneficiary.passportDetails.number.hint"))
+            hint = Some(messages("individualBeneficiary.passportDetails.number.hint")),
+            inputClass = Some("govuk-input--width-20"),
         )
 
         @inputDate(
             field = form("expiryDate"),
             legend = messages("individualBeneficiary.passportDetails.expiryDate"),
             hint = Some(messages("individualBeneficiary.passportDetails.expiryDate.hint")),
-            legendAsHeading = false
+            legendAsHeading = false,
+            legendClass = "govuk-label"
         )
 
         @submitButton()

@@ -52,14 +52,16 @@
 
         @inputText(
             field = form("number"),
-            label = messages("individualBeneficiary.idCardDetails.number")
+            label = messages("individualBeneficiary.idCardDetails.number"),
+            inputClass = Some("govuk-input--width-20"),
         )
 
         @inputDate(
             field = form("expiryDate"),
             legend = messages("individualBeneficiary.idCardDetails.expiryDate"),
             hint = Some(messages("individualBeneficiary.idCardDetails.expiryDate.hint")),
-            legendAsHeading = false
+            legendAsHeading = false,
+            legendClass = "govuk-label"
         )
 
         @submitButton()
