@@ -18,6 +18,4 @@
 
 @(headingKey: String, optionalParam: Option[String] = None, headingSize: String = "govuk-heading-l")(implicit messages: Messages)
 
-<header>
  <h1 class="@headingSize">@messages(headingKey, if(optionalParam.isDefined) {optionalParam.get} else "")</h1>
-</header>
