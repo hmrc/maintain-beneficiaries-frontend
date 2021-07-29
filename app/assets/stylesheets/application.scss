@@ -23,10 +23,6 @@ body:not(.js-enabled) {
 // Trusts Add-to-list pattern as a 4th column
 // this ensures the second column moves down correctly underneath on mobile devices
 // ----------------
-.hmrc-add-to-a-list__contents {
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
 
 @include govuk-media-query($until: desktop) {
   .hmrc-add-to-a-list__identifier__second {
@@ -34,6 +30,22 @@ body:not(.js-enabled) {
     top: inherit;
     left: 0;
   }
+}
+
+// Fallback break for long names and provides padding between the name and type label (change link on mobiles)
+.hmrc-add-to-a-list__identifier__first {
+    word-break: break-all;
+    padding-right: govuk-spacing(4)
+}
+
+// ----------------
+// HMRC Add-to-list pattern - wrapping for unbreakable text
+// taken from govuk-frontend summary list
+// https://github.com/alphagov/govuk-frontend/blob/main/src/govuk/components/summary-list/_index.scss#L47
+// ----------------
+.hmrc-add-to-a-list__identifier {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 p {
