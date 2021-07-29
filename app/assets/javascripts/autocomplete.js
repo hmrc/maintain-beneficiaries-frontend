@@ -60,6 +60,11 @@ $(document).ready(function() {
         if ($(".govuk-form-group--error .autocomplete__wrapper").length > 0) $(".autocomplete__wrapper input").css("border", "2px solid #d4351c");
     })
 
+    //======================================================
+    // Default width of country input dropdown to two thirds
+    //======================================================
+    $('.autocomplete__wrapper').addClass("govuk-!-width-two-thirds");
+
 
     //======================================================
     // Fix IE country lookup where clicks are not registered when clicking list items
