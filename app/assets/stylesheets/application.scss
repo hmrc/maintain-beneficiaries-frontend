@@ -32,10 +32,16 @@ body:not(.js-enabled) {
   }
 }
 
-// Fallback break for long names and provides padding between the name and type label (change link on mobiles)
+// provides padding between the 1st and 2nd column unless on mobile
+@include govuk-media-query($from: tablet) {
+    .hmrc-add-to-a-list__identifier__first {
+        padding-right: govuk-spacing(4)
+    }
+}
+
+// Fallback break for long names
 .hmrc-add-to-a-list__identifier__first {
     word-break: break-all;
-    padding-right: govuk-spacing(4)
 }
 
 // ----------------
