@@ -38,37 +38,36 @@ govukFieldset: GovukFieldset
 
 @html = {
     @input_text(
-    field = form("line1"),
-    label = messages("site.address.uk.line1"),
-    autocomplete = Some("address-line1")
-)
+        field = form("line1"),
+        label = messages("site.address.uk.line1"),
+        autocomplete = Some("address-line1")
+    )
 
-@input_text(
-    field = form("line2"),
-    label = messages("site.address.uk.line2"),
-    autocomplete = Some("address-line2")
-)
+    @input_text(
+        field = form("line2"),
+        label = messages("site.address.uk.line2"),
+        autocomplete = Some("address-line2")
+    )
 
-@input_text(
-    field = form("line3"),
-    label = messages("site.address.uk.line3"),
-    inputClass = Some("govuk-!-width-two-thirds"),
-    autocomplete = Some("address-line3")
+    @input_text(
+        field = form("line3"),
+        label = messages("site.address.uk.line3"),
+        autocomplete = Some("address-line3"),
+        inputClass = Some("govuk-!-width-two-thirds")
+    )
 
-)
+    @input_text(
+        field = form("line4"),
+        label = messages("site.address.uk.line4"),
+        autocomplete = Some("address-level2"),
+        inputClass = Some("govuk-!-width-two-thirds")
+    )
 
-@input_text(
-    field = form("line4"),
-    label = messages("site.address.uk.line4"),
-    inputClass = Some("govuk-!-width-two-thirds"),
-    autocomplete = Some("address-level4")
-)
-
-@input_text(
-    field = form("postcode"),
-    label = messages("site.address.uk.postcode"),
-    hint = Some(messages(s"site.address.uk.postcode.hint")),
-    inputClass = Some("govuk-input--width-10"),
-    autocomplete = Some("postal-code")
-)
+    @input_text(
+        field = form("postcode"),
+        label = messages("site.address.uk.postcode"),
+        autocomplete = Some("postal-code"),
+        hint = Some(messages(s"site.address.uk.postcode.hint")),
+        inputClass = Some("govuk-input--width-10")
+    )
 }
