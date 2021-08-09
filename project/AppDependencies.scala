@@ -5,21 +5,20 @@ object AppDependencies {
 
   private val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-27" % "5.8.0",
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % "5.9.0",
     "com.typesafe.play"       %% "play-json-joda"             % "2.9.2",
-    "uk.gov.hmrc"             %% "domain"                     % "5.10.0-play-27",
-    "org.reactivemongo"       %% "play2-reactivemongo"        % "0.20.13-play27",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"         % "0.84.0-play-27",
-    "uk.gov.hmrc"             %% "play-language"              % "5.1.0-play-27"
+    "uk.gov.hmrc"             %% "domain"                     % "6.2.0-play-28",
+    "org.reactivemongo"       %% "play2-reactivemongo"        % "0.20.13-play28",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"         % "0.90.0-play-28"
   )
 
   private val test: Seq[ModuleID] = Seq(
-    "org.scalatest"           %% "scalatest"                % "3.0.8",
+    "org.scalatest"           %% "scalatest"                % "3.0.9",
     "org.jsoup"               %  "jsoup"                    % "1.12.1",
     "com.typesafe.play"       %% "play-test"                % PlayVersion.current,
     "org.mockito"             %  "mockito-all"              % "1.10.19",
     "org.pegdown"             %  "pegdown"                  % "1.6.0",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "4.0.3",
+    "org.scalatestplus.play"  %% "scalatestplus-play"       % "5.0.0",
     "org.scalacheck"          %% "scalacheck"               % "1.14.3",
     "wolfendale"              %% "scalacheck-gen-regexp"    % "0.1.2",
     "com.github.tomakehurst"  %  "wiremock-standalone"      % "2.27.2"
