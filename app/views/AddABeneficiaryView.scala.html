@@ -18,7 +18,7 @@
 @import models.AddABeneficiary
 @import viewmodels.addAnother.AddRow
 @import viewmodels.RadioOption
-@import views.html.components.{ErrorSummary, Heading, InputRadio, SubmitButton, AddToList}
+@import views.html.components.{AddToList, ErrorSummary, Heading, InputRadio, SubmitButton, Warning}
 
 @this(
     main_template: MainTemplate,
@@ -27,7 +27,8 @@
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF,
     inputRadio: InputRadio,
-    addToList: AddToList
+    addToList: AddToList,
+    warning: Warning
 )
 
 @(
@@ -50,9 +51,15 @@
 
         @iHeading(heading)
 
-        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @if(migrating){
+            <h2>@messages("addABeneficiary.transition.subheading")</h2>
+            @warning("addABeneficiary.transition")
+            <p>@messages("addABeneficiary.transition.p1")</p>
+        }
 
-        @addToList(completeBeneficiaries, "complete", "beneficiary")
+        @addToList(inProgressBeneficiaries, if (migrating) "moreinfoneeded" else "inprogress", "beneficiary", migrating)
+
+        @addToList(completeBeneficiaries, if (migrating) "nomoreinfoneeded" else "complete", "beneficiary")
 
         @if(maxedOut.size == 1) {
             <div class="govuk-inset-text">

@@ -31,27 +31,66 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
 
   val rows = List(AddRow("Charity", "", featureUnavailable, featureUnavailable), AddRow("Trust", "", None, None))
 
-  def applyView(): HtmlFormat.Appendable =
-    view.apply(rows, rows, "Add a beneficiary", migrating = false)(fakeRequest, messages)
+  def applyView(migrating: Boolean): HtmlFormat.Appendable =
+    view.apply(rows, rows, "Add a beneficiary", migrating)(fakeRequest, messages)
 
   "MaxedOutBeneficiaryView" when {
 
-    "there are many maxed out beneficiaries" must {
-      val view = applyView()
+    "migrating from non-taxable to taxable" when {
 
-      behave like normalPage(view, messageKeyPrefix)
+      val migrating: Boolean = true
 
-      behave like pageWithBackLink(view)
+      "there are many maxed out beneficiaries" must {
+        val view = applyView(migrating)
 
-      behave like pageWithTabularData(view, rows, rows)
+        behave like normalPage(view, messageKeyPrefix)
 
-      behave like pageWithASubmitButton(view)
+        behave like pageWithBackLink(view)
 
-      "content shows maxed beneficiaries" in {
-        val doc = asDocument(view)
+        behave like pageWithTabularData(view, rows, rows, migrating)
 
-        assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
-        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+        behave like pageWithASubmitButton(view)
+
+        "content shows maxed beneficiaries" in {
+          val doc = asDocument(view)
+
+          assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+        }
+
+        behave like pageWithWarning(applyView(migrating))
+
+        "render additional content" in {
+
+          val doc = asDocument(applyView(migrating))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
+    }
+
+    "not migrating from non-taxable to taxable" when {
+
+      val migrating: Boolean = false
+
+      "there are many maxed out beneficiaries" must {
+        val view = applyView(migrating)
+
+        behave like normalPage(view, messageKeyPrefix)
+
+        behave like pageWithBackLink(view)
+
+        behave like pageWithTabularData(view, rows, rows, migrating)
+
+        behave like pageWithASubmitButton(view)
+
+        "content shows maxed beneficiaries" in {
+          val doc = asDocument(view)
+
+          assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+        }
       }
     }
   }

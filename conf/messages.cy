@@ -19,6 +19,7 @@ site.complete = Wedi’i chwblhau
 site.error = Gwall:
 site.cannotRemove=Peidiwch â thynnu
 site.cannotRemove-hidden=Peidiwch â thynnu {0}
+site.warning=Rhybudd
 site.return.link = Dychwelyd i ychwanegu buddiolwr
 site.beneficiary.defaultText = y buddiolwr
 site.address.uk.title = Beth yw’r cyfeiriad?

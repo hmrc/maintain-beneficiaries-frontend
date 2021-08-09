@@ -319,28 +319,37 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
     "there are beneficiaries" must {
 
-      "return OK and the correct view for a GET" in {
+      "return OK and the correct view for a GET" when {
 
-        val fakeService = new FakeService(beneficiaries)
+        def runTest(migrating: Boolean) = {
+          val fakeService = new FakeService(beneficiaries)
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-          .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-          .build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+            .build()
 
-        val request = FakeRequest(GET, getRoute)
+          val request = FakeRequest(GET, getRoute)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddABeneficiaryView]
+          val view = application.injector.instanceOf[AddABeneficiaryView]
 
-        status(result) mustEqual OK
+          status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating = false)(request, messages).toString
+          contentAsString(result) mustEqual view(addTrusteeForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating)(request, messages).toString
 
-        application.stop()
+          application.stop()
+        }
+
+        "migrating" in {
+          runTest(true)
+        }
+
+        "not migrating" in {
+          runTest(false)
+        }
       }
-
 
       "redirect to the maintain task list when the user says they are done" in {
 
@@ -389,29 +398,39 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         application.stop()
       }
 
-      "return a Bad Request and errors when invalid data is submitted" in {
+      "return a Bad Request and errors when invalid data is submitted" when {
 
-        val fakeService = new FakeService(beneficiaries)
+        def runTest(migrating: Boolean) = {
+          val fakeService = new FakeService(beneficiaries)
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-          .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-          .build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+            .build()
 
-        val request = FakeRequest(POST, submitAnotherRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+          val request = FakeRequest(POST, submitAnotherRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = addTrusteeForm.bind(Map("value" -> "invalid value"))
+          val boundForm = addTrusteeForm.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[AddABeneficiaryView]
+          val view = application.injector.instanceOf[AddABeneficiaryView]
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual BAD_REQUEST
+          status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating = false)(request, messages).toString
+          contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating)(request, messages).toString
 
-        application.stop()
+          application.stop()
+        }
+
+        "migrating" in {
+          runTest(true)
+        }
+
+        "not migrating" in {
+          runTest(false)
+        }
       }
 
       "clear out the user answers when starting a new journey and redirect to what type of beneficiary page" in {
@@ -452,45 +471,54 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
     "maxed out beneficiaries" must {
 
-      "return OK and the correct view for a GET" in {
+      "return OK and the correct view for a GET" when {
 
-        val beneficiaries = Beneficiaries(
-          individualDetails = List.fill(25)(individualBeneficiary),
-          unidentified = List.fill(25)(unidentifiedBeneficiary),
-          company = List.fill(25)(companyBeneficiary),
-          employmentRelated = List.fill(25)(employmentRelatedBeneficiary),
-          trust = List.fill(25)(trustBeneficiary),
-          charity = List.fill(25)(charityBeneficiary),
-          other = List.fill(25)(otherBeneficiary)
-        )
+        def runTest(migrating: Boolean) = {
+          val beneficiaries = Beneficiaries(
+            individualDetails = List.fill(25)(individualBeneficiary),
+            unidentified = List.fill(25)(unidentifiedBeneficiary),
+            company = List.fill(25)(companyBeneficiary),
+            employmentRelated = List.fill(25)(employmentRelatedBeneficiary),
+            trust = List.fill(25)(trustBeneficiary),
+            charity = List.fill(25)(charityBeneficiary),
+            other = List.fill(25)(otherBeneficiary)
+          )
 
-        val fakeService = new FakeService(beneficiaries)
+          val fakeService = new FakeService(beneficiaries)
 
-        val completedRows = List.fill(175)(fakeAddRow)
+          val completedRows = List.fill(175)(fakeAddRow)
 
-        when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, completedRows))
+          when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, completedRows))
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-          .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-          .build()
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+            .build()
 
-        val request = FakeRequest(GET, getRoute)
+          val request = FakeRequest(GET, getRoute)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[MaxedOutBeneficiariesView]
+          val view = application.injector.instanceOf[MaxedOutBeneficiariesView]
 
-        status(result) mustEqual OK
+          status(result) mustEqual OK
 
-        val content = contentAsString(result)
+          val content = contentAsString(result)
 
-        content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries", migrating = false)(request, messages).toString
-        content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
-        content must include("If you have further beneficiaries to add, write to HMRC with their details.")
+          content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries", migrating)(request, messages).toString
+          content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
+          content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 
-        application.stop()
+          application.stop()
+        }
 
+        "migrating" in {
+          runTest(true)
+        }
+
+        "not migrating" in {
+          runTest(false)
+        }
       }
 
       "return correct view when one type of beneficiary is maxed out" in {

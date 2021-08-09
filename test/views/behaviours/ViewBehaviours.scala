@@ -187,7 +187,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithASubmitButton(view: HtmlFormat.Appendable) = {
+  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a page with a submit button" must {
       "have a submit button" in {
@@ -197,7 +197,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithContinueButton(view: HtmlFormat.Appendable, url: String) = {
+  def pageWithContinueButton(view: HtmlFormat.Appendable, url: String): Unit = {
 
     "behave like a page with a Continue button" must {
       "have a continue button" in {
@@ -225,6 +225,19 @@ trait ViewBehaviours extends ViewSpecBase {
 
       val doc = asDocument(view)
       assertPageTitleWithSectionSubheading(doc, s"$messageKeyPrefix", captionParam = "")
+    }
+  }
+
+  def pageWithWarning(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with warning text" in {
+
+      val doc = asDocument(view)
+
+      assertRenderedByClass(doc, "govuk-warning-text")
+      assertRenderedByClass(doc, "govuk-warning-text__icon")
+      assertRenderedByClass(doc, "govuk-warning-text__text")
+      assertRenderedByClass(doc, "govuk-warning-text__assistive")
     }
   }
 }

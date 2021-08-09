@@ -18,25 +18,25 @@
 
 @this()
 
-@(data: AddRow)(implicit messages: Messages)
+@(data: AddRow, migratingAndMoreInfoNeeded: Boolean)(implicit messages: Messages)
 
 <div class="hmrc-add-to-a-list__contents">
- <dt class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier__first hmrc-add-to-a-list__identifier--light">
-  @data.name
- </dt>
- <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier__second hmrc-add-to-a-list__identifier--light">
-  @data.typeLabel
- </dd>
- <dd class="hmrc-add-to-a-list__change">
-  <a class="govuk-link" href="@data.changeUrl">
-   <span aria-hidden="true">@messages("site.edit")</span>
-   <span class="govuk-visually-hidden">@messages("site.hidden-edit", data.name)</span>
-  </a>
- </dd>
- <dd class="hmrc-add-to-a-list__remove">
-  <a class="govuk-link" href="@data.removeUrl">
-   <span aria-hidden="true">@messages("site.delete")</span>
-   <span class="govuk-visually-hidden">@messages("site.hidden-delete", data.name)</span>
-  </a>
- </dd>
+    <dt class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier__first hmrc-add-to-a-list__identifier--light">
+        @data.name
+    </dt>
+    <dd class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier__second hmrc-add-to-a-list__identifier--light">
+        @data.typeLabel
+    </dd>
+    <dd class="hmrc-add-to-a-list__change">
+        <a class="govuk-link" href="@data.changeUrl">
+            <span aria-hidden="true">@messages(if (migratingAndMoreInfoNeeded) "site.update" else "site.edit")</span>
+            <span class="govuk-visually-hidden">@messages(if (migratingAndMoreInfoNeeded) "site.hidden-update" else "site.hidden-edit", data.name)</span>
+        </a>
+    </dd>
+    <dd class="hmrc-add-to-a-list__remove">
+        <a class="govuk-link" href="@data.removeUrl">
+            <span aria-hidden="true">@messages("site.delete")</span>
+            <span class="govuk-visually-hidden">@messages("site.hidden-delete", data.name)</span>
+        </a>
+    </dd>
 </div>

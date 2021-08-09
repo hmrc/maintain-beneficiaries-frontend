@@ -23,8 +23,11 @@ import viewmodels.addAnother.AddRow
 import views.ViewSpecBase
 
 trait TabularDataViewBehaviours extends ViewSpecBase {
+  
+  private def complete(migrating: Boolean): String = if (migrating) "nomoreinfoneeded" else "complete"
+  private def inProgress(migrating: Boolean): String = if (migrating) "moreinfoneeded" else "inprogress"
 
-  private def assertDataList(doc: Document, parentElementId: String, data: Seq[AddRow]): Unit = {
+  private def assertDataList(doc: Document, parentElementId: String, data: Seq[AddRow], migratingAndMoreInfoNeeded: Boolean = false): Unit = {
 
     val container = doc.getElementById(parentElementId)
 
@@ -42,7 +45,11 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
       val changeLink = element.getElementsByClass("hmrc-add-to-a-list__change").first()
 
       item.changeUrl.map(url => changeLink.getElementsByTag("a").attr("href") must include(url))
-      changeLink.text must include(s"Change ${item.name}")
+      if (migratingAndMoreInfoNeeded) {
+        changeLink.text must include(s"Update ${item.name}")
+      } else {
+        changeLink.text must include(s"Change ${item.name}")
+      }
 
       val removeLink = element.getElementsByClass("hmrc-add-to-a-list__remove").first()
 
@@ -51,14 +58,14 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithNoTabularData(view: HtmlFormat.Appendable): Unit = {
+  def pageWithNoTabularData(view: HtmlFormat.Appendable, migrating: Boolean): Unit = {
 
     "behave like a page with no tabular data" when {
 
       "render with no data list headings" in {
         val doc = asDocument(view)
-        assertNotRenderedById(doc, "data-list-heading--complete")
-        assertNotRenderedById(doc, "data-list-heading--inprogress")
+        assertNotRenderedById(doc, s"data-list-heading--${complete(migrating)}")
+        assertNotRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
       }
 
       "rendered with no data" in {
@@ -68,74 +75,75 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]): Unit = {
+  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit = {
 
     "behave like a page with incomplete tabular data" should {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--inprogress")
+        assertRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list--inprogress")
-        assertNotRenderedById(doc, "data-list--complete")
-        assertNotRenderedById(doc, "data-list-heading--complete")
+        assertRenderedById(doc, s"data-list--${inProgress(migrating)}")
+        assertNotRenderedById(doc, s"data-list--${complete(migrating)}")
+        assertNotRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
 
       "render a row for each data item" in {
         val doc = asDocument(view)
-        assertDataList(doc, "data-list--inprogress", data)
+        assertDataList(doc, s"data-list--${inProgress(migrating)}", data, migrating)
       }
     }
   }
 
-  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow]): Unit = {
+  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit = {
 
     "behave like a page with complete tabular data" should {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--complete")
+        assertRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list--complete")
-        assertNotRenderedById(doc, "data-list--inprogress")
-        assertNotRenderedById(doc, "data-list-heading--inprogress")
+        assertRenderedById(doc, s"data-list--${complete(migrating)}")
+        assertNotRenderedById(doc, s"data-list--${inProgress(migrating)}")
+        assertNotRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
       }
 
       "render a row for each data item" in {
         val doc = asDocument(view)
-        assertDataList(doc, "data-list--complete", data)
+        assertDataList(doc, s"data-list--${complete(migrating)}", data)
       }
     }
   }
 
   def pageWithTabularData(view: HtmlFormat.Appendable,
                           inProgressData: Seq[AddRow],
-                          completeData: Seq[AddRow]): Unit = {
+                          completeData: Seq[AddRow],
+                          migrating: Boolean): Unit = {
 
     "behave like a page with complete and incomplete tabular data" should {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list-heading--inprogress")
-        assertRenderedById(doc, "data-list-heading--complete")
+        assertRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedById(doc, "data-list--inprogress")
-        assertRenderedById(doc, "data-list--complete")
+        assertRenderedById(doc, s"data-list--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list--${complete(migrating)}")
       }
 
       "render a row for each data item" in {
         val doc = asDocument(view)
-        assertDataList(doc, "data-list--inprogress", inProgressData)
-        assertDataList(doc, "data-list--complete", completeData)
+        assertDataList(doc, s"data-list--${inProgress(migrating)}", inProgressData, migrating)
+        assertDataList(doc, s"data-list--${complete(migrating)}", completeData)
       }
     }
   }

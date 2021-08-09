@@ -48,103 +48,271 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
   val view: AddABeneficiaryView = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, Nil, Nil, "Add a beneficiary", Nil, migrating = false)(fakeRequest, messages)
-
-  def applyView(form: Form[_], inProgressBeneficiaries: Seq[AddRow], completeBeneficiaries: Seq[AddRow], count: Int, maxedOut: List[String]): HtmlFormat.Appendable = {
+  def applyConfiguredView(form: Form[_],
+                          inProgressBeneficiaries: Seq[AddRow],
+                          completeBeneficiaries: Seq[AddRow],
+                          count: Int,
+                          maxedOut: List[String],
+                          migrating: Boolean): HtmlFormat.Appendable = {
     val title = if (count > 1) s"The trust has $count beneficiaries" else "Add a beneficiary"
-    view.apply(form, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut, migrating = false)(fakeRequest, messages)
+    view.apply(form, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut, migrating)(fakeRequest, messages)
   }
 
   "AddABeneficiaryView" when {
 
-    "there is no beneficiary data" must {
+    "migrating from non-taxable to taxable" when {
 
-      behave like normalPage(applyView(form), messageKeyPrefix)
+      val migrating: Boolean = true
 
-      behave like pageWithBackLink(applyView(form))
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, Nil, Nil, "Add a beneficiary", Nil, migrating)(fakeRequest, messages)
 
-      behave like pageWithNoTabularData(applyView(form))
+      "there is no beneficiary data" must {
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
-    }
+        behave like normalPage(applyView(form), messageKeyPrefix)
 
-    "there is data in progress" must {
+        behave like pageWithBackLink(applyView(form))
 
-      val viewWithData = applyView(form, inProgressBeneficiaries, Nil, 4, Nil)
+        behave like pageWithNoTabularData(applyView(form), migrating)
 
-      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
 
-      behave like pageWithBackLink(viewWithData)
+        behave like pageWithWarning(applyView(form))
 
-      behave like pageWithInProgressTabularData(viewWithData, inProgressBeneficiaries)
+        "render additional content" in {
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
-    }
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
 
-    "there is complete data" must {
+      "there is data in progress" must {
 
-      val viewWithData = applyView(form, Nil, completeBeneficiaries, 4, Nil)
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, Nil, 4, Nil, migrating)
 
-      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
 
-      behave like pageWithBackLink(viewWithData)
+        behave like pageWithBackLink(viewWithData)
 
-      behave like pageWithCompleteTabularData(viewWithData, completeBeneficiaries)
+        behave like pageWithInProgressTabularData(viewWithData, inProgressBeneficiaries, migrating)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
-    }
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
 
-    "there is both in progress and complete data" must {
+        behave like pageWithWarning(applyView(form))
 
-      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, Nil)
+        "render additional content" in {
 
-      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
 
-      behave like pageWithBackLink(viewWithData)
+      "there is complete data" must {
 
-      behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
+        val viewWithData = applyConfiguredView(form, Nil, completeBeneficiaries, 4, Nil, migrating)
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
-    }
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
 
-    "there is one maxed out beneficiary" must {
-      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"))
+        behave like pageWithBackLink(viewWithData)
 
-      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+        behave like pageWithCompleteTabularData(viewWithData, completeBeneficiaries, migrating)
 
-      behave like pageWithBackLink(viewWithData)
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
 
-      behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
+        behave like pageWithWarning(applyView(form))
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+        "render additional content" in {
 
-      "content shows maxed beneficiary" in {
-        val doc = asDocument(viewWithData)
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
 
-        assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
-        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+      "there is both in progress and complete data" must {
+
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, Nil, migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+
+        behave like pageWithWarning(applyView(form))
+
+        "render additional content" in {
+
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
+
+      "there is one maxed out beneficiary" must {
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+
+        "content shows maxed beneficiary" in {
+          val doc = asDocument(viewWithData)
+
+          assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+        }
+
+        behave like pageWithWarning(applyView(form))
+
+        "render additional content" in {
+
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
+      }
+
+      "there are many maxed out beneficiaries" must {
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"), migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+
+        "content shows maxed beneficiaries" in {
+          val doc = asDocument(viewWithData)
+
+          assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
+          assertContainsText(doc, "Charity")
+          assertContainsText(doc, "Individual")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        }
+
+        behave like pageWithWarning(applyView(form))
+
+        "render additional content" in {
+
+          val doc = asDocument(applyView(form))
+          assertContainsText(doc, messages("addABeneficiary.transition.subheading"))
+          assertContainsText(doc, messages("addABeneficiary.transition.warning"))
+          assertContainsText(doc, messages("addABeneficiary.transition.p1"))
+        }
       }
     }
 
-    "there are many maxed out beneficiaries" must {
-      val viewWithData = applyView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"))
+    "not migrating from non-taxable to taxable" when {
 
-      behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+      val migrating: Boolean = false
 
-      behave like pageWithBackLink(viewWithData)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, Nil, Nil, "Add a beneficiary", Nil, migrating)(fakeRequest, messages)
 
-      behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries)
+      "there is no beneficiary data" must {
 
-      behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+        behave like normalPage(applyView(form), messageKeyPrefix)
 
-      "content shows maxed beneficiaries" in {
-        val doc = asDocument(viewWithData)
+        behave like pageWithBackLink(applyView(form))
 
-        assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
-        assertContainsText(doc, "Charity")
-        assertContainsText(doc, "Individual")
-        assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        behave like pageWithNoTabularData(applyView(form), migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+      }
+
+      "there is data in progress" must {
+
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, Nil, 4, Nil, migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithInProgressTabularData(viewWithData, inProgressBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+      }
+
+      "there is complete data" must {
+
+        val viewWithData = applyConfiguredView(form, Nil, completeBeneficiaries, 4, Nil, migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "4")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithCompleteTabularData(viewWithData, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+      }
+
+      "there is both in progress and complete data" must {
+
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, Nil, migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+      }
+
+      "there is one maxed out beneficiary" must {
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+
+        "content shows maxed beneficiary" in {
+          val doc = asDocument(viewWithData)
+
+          assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+        }
+      }
+
+      "there are many maxed out beneficiaries" must {
+        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"), migrating)
+
+        behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
+
+        behave like pageWithBackLink(viewWithData)
+
+        behave like pageWithTabularData(viewWithData, inProgressBeneficiaries, completeBeneficiaries, migrating)
+
+        behave like pageWithOptions(form, applyView, AddABeneficiary.options)
+
+        "content shows maxed beneficiaries" in {
+          val doc = asDocument(viewWithData)
+
+          assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
+          assertContainsText(doc, "Charity")
+          assertContainsText(doc, "Individual")
+          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        }
       }
     }
   }

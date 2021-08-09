@@ -18,12 +18,13 @@ site.sign_in = Sign in
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980.
 site.inprogress = In Progress
-site.moreInformationNeeded = More information needed
-site.noMoreInformationNeeded = No more information needed
+site.moreinfoneeded = More information needed
+site.nomoreinfoneeded = No more information needed
 site.complete = Completed
 site.error = Error:
 site.cannotRemove = Cannot remove
 site.cannotRemove-hidden = Cannot remove {0}
+site.warning = Warning
 
 site.return.link = Return to add a beneficiary
 site.beneficiary.defaultText = the beneficiary
@@ -155,6 +156,7 @@ addABeneficiary.maxedOut.moreThan1.paragraph = Check the beneficiaries you have 
 addABeneficiary.maxedOut.all = You cannot enter another beneficiary as you have entered a maximum of 175.
 addABeneficiary.maxedOut.all.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.
 
+addABeneficiary.transition.subheading = Updating the beneficiaries
 addABeneficiary.transition.warning = You need to update the information HMRC holds about the trust’s beneficiaries.
 addABeneficiary.transition.p1 = The questions asked will be populated with the most recent information HMRC holds about the beneficiaries.
 
