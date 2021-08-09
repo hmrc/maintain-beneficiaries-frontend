@@ -31,15 +31,15 @@
 )(implicit messages: Messages)
 
 @labelClasses = @{
-   if(isPageHeading) "govuk-label--l"
+   if (isPageHeading) "govuk-label--l"
    else if (hint.isDefined) "govuk-!-font-weight-bold"
    else if (isLabelHidden) "govuk-visually-hidden"
    else ""
 }
 
 @govukCharacterCount(CharacterCount(
-   id,
-   name,
+   id = id,
+   name = name,
    maxLength = maxLength,
    threshold = threshold,
    label = Label(
@@ -51,8 +51,7 @@
       content = Text(text)
    )),
    value = field.value,
-   errorMessage = field.error match {
-      case Some(e) => Some(ErrorMessage(content = Text(messages(e.message, e.args: _*))))
-      case None => None
+   errorMessage = field.error map { e =>
+      ErrorMessage(content = Text(messages(e.message, e.args: _*)))
    }
 ))
