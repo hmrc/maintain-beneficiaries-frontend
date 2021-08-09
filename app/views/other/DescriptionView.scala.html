@@ -15,13 +15,13 @@
  *@
 
 @import controllers.other.routes._
-@import views.html.components.{ErrorSummary, InputText, SubmitButton}
+@import views.html.components.{ErrorSummary, SubmitButton, InputCharacterCount}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     errorSummary: ErrorSummary,
-    inputText: InputText,
+    characterCount : InputCharacterCount,
     submitButton: SubmitButton
 )
 
@@ -36,13 +36,14 @@
 
         @errorSummary(form.errors)
 
-        @inputText(
+        @characterCount(
             field = form("value"),
+            id = "value",
+            name = "value",
             label = messages("otherBeneficiary.description.heading"),
-            labelAsHeading = true,
+            isPageHeading = true,
             hint = Some(messages("otherBeneficiary.description.hint")),
-            labelClass = Some("govuk-label--l"),
-            inputClass = Some("govuk-!-width-three-quarters")
+            maxLength = Some(70)
         )
 
         @submitButton()

@@ -15,7 +15,7 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputText, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, Heading, InputCharacterCount}
 
 @this(
     main_template: MainTemplate,
@@ -23,7 +23,7 @@
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
     heading: Heading,
-    inputText: InputText
+    characterCount : InputCharacterCount
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -45,34 +45,49 @@
 
          <span id="form-hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</span>
 
-        @inputText(
+        @characterCount(
             field = form("description"),
+            id = "description",
+            name = "description",
             label = messages("employmentBeneficiary.description.description1"),
-            inputClass = Some("govuk-!-width-two-thirds")
+            isPageHeading = false,
+            maxLength = Some(70)
         )
 
-        @inputText(
+        @characterCount(
             field = form("description1"),
+            id = "description1",
+            name = "description1",
             label = messages("employmentBeneficiary.description.description2"),
-            inputClass = Some("govuk-!-width-two-thirds")
+            isPageHeading = false,
+            maxLength = Some(70)
         )
 
-        @inputText(
+        @characterCount(
             field = form("description2"),
+            id = "description2",
+            name = "description2",
             label = messages("employmentBeneficiary.description.description3"),
-            inputClass = Some("govuk-!-width-two-thirds")
+            isPageHeading = false,
+            maxLength = Some(70)
         )
 
-        @inputText(
+        @characterCount(
             field = form("description3"),
+            id = "description3",
+            name = "description3",
             label = messages("employmentBeneficiary.description.description4"),
-            inputClass = Some("govuk-!-width-two-thirds")
+            isPageHeading = false,
+            maxLength = Some(70)
         )
 
-        @inputText(
+        @characterCount(
             field = form("description4"),
+            id = "description4",
+            name = "description4",
             label = messages("employmentBeneficiary.description.description5"),
-            inputClass = Some("govuk-!-width-two-thirds")
+            isPageHeading = false,
+            maxLength = Some(70)
         )
 
         </fieldset>
