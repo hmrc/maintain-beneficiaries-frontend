@@ -20,9 +20,7 @@ subHeading: SubHeading
 
 @(messagePrefix: String, optionalParam: Option[String] = None, captionParam: Option[String] = None, hiddenText: Boolean = true)(implicit messages: Messages)
 
-<header>
- <h1 class="govuk-heading-l">
+<h1 class="govuk-heading-l">
   @subHeading(s"$messagePrefix.caption", captionParam.getOrElse(""), hiddenText)
   @messages(s"$messagePrefix.heading", optionalParam.getOrElse(""))
- </h1>
-</header>
+</h1>
