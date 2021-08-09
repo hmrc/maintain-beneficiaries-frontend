@@ -16,12 +16,11 @@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(govukWarningText : GovukWarningText)
+@this(govukWarningText: GovukWarningText)
 
 @(messageKeyPrefix: String)(implicit messages: Messages)
 
 @govukWarningText(WarningText(
     iconFallbackText = messages("site.warning"),
     content = Text(messages(s"$messageKeyPrefix.warning"))
-    )
-)
+))

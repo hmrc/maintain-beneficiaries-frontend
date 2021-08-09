@@ -18,7 +18,7 @@
 @import models.AddABeneficiary
 @import viewmodels.addAnother.AddRow
 @import viewmodels.RadioOption
-@import views.html.components.{ErrorSummary, Heading, SubmitButton, AddToList}
+@import views.html.components.{AddToList, ErrorSummary, Heading, SubmitButton, Warning}
 
 @this(
     main_template: MainTemplate,
@@ -26,25 +26,35 @@
     iHeading: Heading,
     errorSummary: ErrorSummary,
     formHelper: FormWithCSRF,
-    addToList: AddToList
+    addToList: AddToList,
+    warning: Warning
 )
 
-@(inProgressBeneficiaries: Seq[AddRow],
+@(
+    inProgressBeneficiaries: Seq[AddRow],
     completeBeneficiaries: Seq[AddRow],
-    heading: String)(implicit request: Request[_], messages: Messages)
+    heading: String,
+    migrating: Boolean
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = heading,
     showBackLink = true
-    ) {
+) {
 
     @formHelper(action = AddABeneficiaryController.submitComplete(), 'autoComplete -> "off") {
 
         @iHeading(heading)
 
-        @addToList(inProgressBeneficiaries, "inprogress", "beneficiary")
+        @if(migrating){
+            <h2>@messages("addABeneficiary.transition.subheading")</h2>
+            @warning("addABeneficiary.transition")
+            <p>@messages("addABeneficiary.transition.p1")</p>
+        }
 
-        @addToList(completeBeneficiaries, "complete", "beneficiary")
+        @addToList(inProgressBeneficiaries, if (migrating) "moreinfoneeded" else "inprogress", "beneficiary", migrating)
+
+        @addToList(completeBeneficiaries, if (migrating) "nomoreinfoneeded" else "complete", "beneficiary")
 
         <div class="govuk-inset-text">
             <p>@messages("addABeneficiary.maxedOut.all")</p>
