@@ -16,7 +16,6 @@
 
 package views.individualbeneficiary.add
 
-import controllers.individualbeneficiary.add.routes
 import forms.IdCardDetailsFormProvider
 import models.{IdCard, Name}
 import play.api.data.Form

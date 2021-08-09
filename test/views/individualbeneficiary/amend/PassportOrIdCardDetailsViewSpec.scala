@@ -24,7 +24,6 @@ import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.behaviours.QuestionViewBehaviours
 import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
-import controllers.individualbeneficiary.amend.routes
 
 class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPassportOrIdCard] {
 

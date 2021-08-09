@@ -29,14 +29,17 @@
     addToList: AddToList
 )
 
-@(inProgressBeneficiaries: Seq[AddRow],
+@(
+    inProgressBeneficiaries: Seq[AddRow],
     completeBeneficiaries: Seq[AddRow],
-    heading: String)(implicit request: Request[_], messages: Messages)
+    heading: String,
+    migrating: Boolean
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = heading,
     showBackLink = true
-    ) {
+) {
 
     @formHelper(action = AddABeneficiaryController.submitComplete(), 'autoComplete -> "off") {
 

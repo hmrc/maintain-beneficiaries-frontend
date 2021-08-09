@@ -16,7 +16,6 @@
 
 package views.individualbeneficiary.add
 
-import controllers.individualbeneficiary.add.routes
 import forms.PassportDetailsFormProvider
 import models.{Name, Passport}
 import play.api.data.Form

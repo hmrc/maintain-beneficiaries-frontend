@@ -22,6 +22,7 @@ import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import handlers.ErrorHandler
 import models.beneficiaries.Beneficiaries
+import models.requests.DataRequest
 import models.{AddABeneficiary, Enumerable}
 import navigation.BeneficiaryNavigator
 import play.api.Logging
@@ -77,7 +78,7 @@ class AddABeneficiaryController @Inject()(
 
             val beneficiaryRows = viewHelper.rows(
               beneficiaries = beneficiaries,
-              migratingFromNonTaxableToTaxable = updatedAnswers.migratingFromNonTaxableToTaxable,
+              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
               trustType = updatedAnswers.trustType
             )
 
@@ -88,7 +89,8 @@ class AddABeneficiaryController @Inject()(
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
-                heading = beneficiaries.addToHeading
+                heading = beneficiaries.addToHeading,
+                migrating = migratingFromNonTaxableToTaxable
               ))
             } else {
               logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
@@ -99,7 +101,8 @@ class AddABeneficiaryController @Inject()(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
                 heading = beneficiaries.addToHeading,
-                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
+                maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
+                migrating = migratingFromNonTaxableToTaxable
               ))
             }
         }
@@ -152,7 +155,8 @@ class AddABeneficiaryController @Inject()(
                 rows.inProgress,
                 rows.complete,
                 beneficiaries.addToHeading,
-                maxedOut = beneficiaries.maxedOutOptions.map(x => x.messageKey)
+                maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
+                migrating = migratingFromNonTaxableToTaxable
               )
             ))
           },
@@ -192,5 +196,9 @@ class AddABeneficiaryController @Inject()(
       } yield {
         Redirect(appConfig.maintainATrustOverview)
       }
+  }
+
+  private def migratingFromNonTaxableToTaxable(implicit request: DataRequest[AnyContent]): Boolean = {
+    request.userAnswers.migratingFromNonTaxableToTaxable
   }
 }

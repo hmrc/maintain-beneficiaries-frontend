@@ -336,7 +336,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(addTrusteeForm, Nil, Nil, "The trust has 7 beneficiaries", Nil)(request, messages).toString
+        contentAsString(result) mustEqual view(addTrusteeForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating = false)(request, messages).toString
 
         application.stop()
       }
@@ -409,7 +409,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
         status(result) mustEqual BAD_REQUEST
 
-        contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil)(request, messages).toString
+        contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating = false)(request, messages).toString
 
         application.stop()
       }
@@ -485,7 +485,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
         val content = contentAsString(result)
 
-        content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries")(request, messages).toString
+        content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries", migrating = false)(request, messages).toString
         content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
         content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 

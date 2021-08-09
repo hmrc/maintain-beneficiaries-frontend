@@ -35,7 +35,8 @@
     inProgressBeneficiaries: Seq[AddRow],
     completeBeneficiaries: Seq[AddRow],
     heading: String,
-    maxedOut: List[String]
+    maxedOut: List[String],
+    migrating: Boolean
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -63,7 +64,7 @@
                 <p>@messages("addABeneficiary.maxedOut.moreThan1")</p>
                 <ul class="govuk-list govuk-list--bullet">
                     @for(option <- maxedOut) {
-                    <li>@messages(option)</li>
+                        <li>@messages(option)</li>
                     }
                 </ul>
                 <p>@messages("addABeneficiary.maxedOut.moreThan1.paragraph")</p>

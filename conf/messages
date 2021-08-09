@@ -2,8 +2,10 @@
 site.back = Back
 site.delete = Remove
 site.edit = Change
+site.update = Update
 site.hidden-delete = Remove {0}
 site.hidden-edit = Change {0}
+site.hidden-update = Update {0}
 site.change.details = Change details
 site.no = No
 site.yes = Yes
@@ -16,6 +18,8 @@ site.sign_in = Sign in
 site.save.continue = Save and continue
 site.date.hint = For example, 31 3 1980.
 site.inprogress = In Progress
+site.moreInformationNeeded = More information needed
+site.noMoreInformationNeeded = No more information needed
 site.complete = Completed
 site.error = Error:
 site.cannotRemove = Cannot remove
@@ -136,6 +140,7 @@ addABeneficiaryYesNo.error.required = Select yes if you want to add a beneficiar
 
 addABeneficiary.title = Add a beneficiary
 addABeneficiary.heading = Add a beneficiary
+addABeneficiary.count.title = The trust has {0} beneficiaries
 addABeneficiary.count.heading = The trust has {0} beneficiaries
 addABeneficiary.additional-content = Do you want to add a new beneficiary?
 addABeneficiary.add-them-now = Yes, I want to add them now
@@ -149,6 +154,9 @@ addABeneficiary.maxedOut.moreThan1 = You have entered the maximum number of bene
 addABeneficiary.maxedOut.moreThan1.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.
 addABeneficiary.maxedOut.all = You cannot enter another beneficiary as you have entered a maximum of 175.
 addABeneficiary.maxedOut.all.paragraph = Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.
+
+addABeneficiary.transition.warning = You need to update the information HMRC holds about the trust’s beneficiaries.
+addABeneficiary.transition.p1 = The questions asked will be populated with the most recent information HMRC holds about the beneficiaries.
 
 addNow.heading = What kind of beneficiary do you need to add next?
 addNow.title = What kind of beneficiary do you need to add next?

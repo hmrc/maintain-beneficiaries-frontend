@@ -128,6 +128,7 @@ addABeneficiaryYesNo.heading = A ydych am ychwanegu buddiolwr?
 addABeneficiaryYesNo.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu buddiolwr
 addABeneficiary.title = Ychwanegu buddiolwr
 addABeneficiary.heading = Ychwanegu buddiolwr
+addABeneficiary.count.title = Mae gan yr ymddiriedolaeth {0} o fuddiolwyr
 addABeneficiary.count.heading = Mae gan yr ymddiriedolaeth {0} o fuddiolwyr
 addABeneficiary.additional-content = A ydych am ychwanegu buddiolwr newydd?
 addABeneficiary.add-them-now = Iawn, rwyf am ei ychwanegu nawr
