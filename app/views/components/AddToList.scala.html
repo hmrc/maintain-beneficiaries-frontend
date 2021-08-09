@@ -21,7 +21,7 @@
     addToRow: AddToRow
 )
 
-@(data: Seq[AddRow], id: String, entity: String, migratingAndMoreInfoNeeded: Boolean = false)(implicit messages: Messages)
+@(data: Seq[AddRow], id: String, migratingAndMoreInfoNeeded: Boolean = false)(implicit messages: Messages)
 
 @if(data.nonEmpty){
     <h2 class="govuk-heading-m" id="data-list-heading--@id">@messages(s"site.$id")</h2>

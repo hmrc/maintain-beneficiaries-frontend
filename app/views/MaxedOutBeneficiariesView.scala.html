@@ -52,9 +52,9 @@
             <p>@messages("addABeneficiary.transition.p1")</p>
         }
 
-        @addToList(inProgressBeneficiaries, if (migrating) "moreinfoneeded" else "inprogress", "beneficiary", migrating)
+        @addToList(inProgressBeneficiaries, if (migrating) "moreinfoneeded" else "inprogress", migrating)
 
-        @addToList(completeBeneficiaries, if (migrating) "nomoreinfoneeded" else "complete", "beneficiary")
+        @addToList(completeBeneficiaries, if (migrating) "nomoreinfoneeded" else "complete")
 
         <div class="govuk-inset-text">
             <p>@messages("addABeneficiary.maxedOut.all")</p>
