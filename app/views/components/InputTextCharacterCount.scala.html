@@ -1,0 +1,100 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+
+@this(
+    govukInput: GovukInput,
+    govukHint: GovukHint
+)
+
+@(
+    field: Field,
+    id: String,
+    name: String,
+    label: String,
+    isLabelHidden: Boolean = false,
+    isPageHeading: Boolean = false,
+    labelClass: Option[String] = None,
+    inputClass: Option[String] = None,
+    hint: Option[String] = None,
+    prefix: Option[String] = None,
+    suffix: Option[String] = None,
+    autocomplete: Option[String] = None,
+    inputMode: Option[String] = None,
+    maxLength: Option[Int],
+    threshold: Option[Int] = Some(0),
+    maxWords: Option[Int] = None,
+    countMessageClasses: String = ""
+)(implicit messages: Messages)
+
+@attrs = {
+    @maxLength.filter(_ > 0).map {value => data-maxlength="@value"}
+    @threshold.filter(_ > 0).map {value => data-threshold="@value"}
+    @maxWords.filter(_ > 0).map {value => data-maxwords="@value"}
+}
+
+@labelClasses = @{
+    if (isPageHeading) "govuk-label--l"
+    else if (isLabelHidden) "govuk-visually-hidden"
+    else if (hint.isDefined) "govuk-!-font-weight-bold"
+    else ""
+}
+
+@defining(if(messages.lang.code == "cy") Cy else En) { messagesLanguage =>
+    <div class="hmrc-character-count" data-module="hmrc-character-count" data-language="@{messagesLanguage.code}" @attrs>
+        @govukInput(
+            Input(
+                id = id,
+                name = name,
+                describedBy = Some(s"${id}-info"),
+                label = Label(
+                    isPageHeading = isPageHeading,
+                    classes = labelClasses,
+                    content = Text(label)
+                ),
+                autocomplete = autocomplete,
+                hint = hint.map(hint => Hint(content = Text(hint))),
+                errorMessage = field.error map { e =>
+                    ErrorMessage(content = Text(messages(e.message, e.args: _*)))
+                },
+                spellcheck = Some(false),
+                inputmode = inputMode,
+                prefix = prefix.map(prefix => PrefixOrSuffix(content = Text(prefix))),
+                suffix = suffix.map(suffix => PrefixOrSuffix(content = Text(suffix))),
+                classes = "hmrc-js-character-count " + inputClass.getOrElse("")
+            ).withFormField(field)
+        )
+        @if(messagesLanguage == Cy) {
+            @govukHint(Hint(
+                content = Text("Gallwch nodi hyd at " + maxLength.getOrElse(maxWords.getOrElse(0)) + {if(maxWords.isDefined) " o eiriau" else " o gymeriadau"}),
+                id = Some(id + "-info"),
+                classes = "hmrc-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
+                attributes = Map("aria-live" -> "polite")
+            ))
+        } else {
+            @govukHint(Hint(
+                content = Text("You can enter up to " + maxLength.getOrElse(maxWords.getOrElse(0)) + {if(maxWords.isDefined) " words" else " characters"}),
+                id = Some(id + "-info"),
+                classes = "hmrc-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
+                attributes = Map("aria-live" -> "polite")
+            ))
+        }
+    </div>
+}
+
+
