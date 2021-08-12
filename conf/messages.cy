@@ -254,6 +254,7 @@ individualBeneficiary.nationalInsuranceNumber.heading = Beth yw rhif Yswiriant G
 individualBeneficiary.nationalInsuranceNumber.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
 individualBeneficiary.nationalInsuranceNumber.error.required = Nodwch rif Yswiriant Gwladol y buddiolwr unigol
 individualBeneficiary.nationalInsuranceNumber.error.invalidFormat = Nodwch rif Yswiriant Gwladol y buddiolwr unigol yn y fformat cywir
+individualBeneficiary.nationalInsuranceNumber.error.notUnique = Nodwch rif Yswiriant Gwladol nad yw wedi’i ddefnyddio eisoes i ychwanegu buddiolwr
 individualBeneficiary.addressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad {0}?
 individualBeneficiary.addressYesNo.title = A ydych yn gwybod cyfeiriad y buddiolwr unigol?
 individualBeneficiary.addressYesNo.heading = A ydych yn gwybod cyfeiriad {0}?
