@@ -20,10 +20,11 @@ import base.SpecBase
 import connectors.{TrustConnector, TrustsStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
+import models.TaskStatus.Completed
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
 import models.{AddABeneficiary, Description, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{never, reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
@@ -178,6 +179,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
   override def beforeEach(): Unit = {
     reset(mockStoreConnector, mockViewHelper)
     when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, Nil))
+
+    when(mockStoreConnector.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
   }
 
   "AddABeneficiary Controller" when {
@@ -285,7 +289,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
         redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
 
-        verify(mockStoreConnector, never()).setTaskComplete(any())(any(), any())
+        verify(mockStoreConnector, never()).updateTaskStatus(any(), any())(any(), any())
 
         application.stop()
       }
@@ -364,15 +368,13 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         val request = FakeRequest(POST, submitAnotherRoute)
           .withFormUrlEncodedBody(("value", AddABeneficiary.NoComplete.toString))
 
-        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse(200, "")))
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
 
-        verify(mockStoreConnector).setTaskComplete(any())(any(), any())
+        verify(mockStoreConnector).updateTaskStatus(any(), eqTo(Completed))(any(), any())
 
         application.stop()
       }
@@ -593,15 +595,13 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
         val request = FakeRequest(POST, submitCompleteRoute)
 
-        when(mockStoreConnector.setTaskComplete(any())(any(), any())).thenReturn(Future.successful(HttpResponse(200, "")))
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual "http://localhost:9788/maintain-a-trust/overview"
 
-        verify(mockStoreConnector).setTaskComplete(any())(any(), any())
+        verify(mockStoreConnector).updateTaskStatus(any(), eqTo(Completed))(any(), any())
 
         application.stop()
 

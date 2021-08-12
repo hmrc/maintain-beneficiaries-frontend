@@ -21,6 +21,7 @@ import connectors.TrustsStoreConnector
 import controllers.actions.StandardActionSets
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import handlers.ErrorHandler
+import models.TaskStatus.Completed
 import models.beneficiaries.Beneficiaries
 import models.requests.DataRequest
 import models.{AddABeneficiary, Enumerable}
@@ -191,7 +192,7 @@ class AddABeneficiaryController @Inject()(
         _ <- if (beneficiaries.isEmpty) {
           Future.successful(())
         } else {
-          trustStoreConnector.setTaskComplete(request.userAnswers.identifier).map(_ => ())
+          trustStoreConnector.updateTaskStatus(request.userAnswers.identifier, Completed).map(_ => ())
         }
       } yield {
         Redirect(appConfig.maintainATrustOverview)

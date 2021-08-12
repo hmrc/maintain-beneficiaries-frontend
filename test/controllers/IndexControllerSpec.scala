@@ -18,57 +18,65 @@ package controllers
 
 import base.SpecBase
 import connectors.TrustConnector
+import models.TaskStatus.InProgress
 import models.{TaxableMigrationFlag, TrustDetails, TypeOfTrust, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpResponse
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class IndexControllerSpec extends SpecBase {
+class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
+
+  val mockTrustsConnector: TrustConnector = mock[TrustConnector]
+  val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+
+  val identifier = "1234567890"
+  val startDate: LocalDate = LocalDate.parse("2019-06-01")
+  val trustType: TypeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust
+  val is5mldEnabled = false
+  val isTaxable = false
+  val isUnderlyingData5mld = false
+
+  override def beforeEach(): Unit = {
+    reset(playbackRepository, mockTrustsStoreService)
+
+    when(playbackRepository.set(any()))
+      .thenReturn(Future.successful(true))
+
+    when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+
+    when(mockTrustsStoreService.is5mldEnabled()(any(), any()))
+      .thenReturn(Future.successful(is5mldEnabled))
+
+    when(mockTrustsConnector.isTrust5mld(any())(any(), any()))
+      .thenReturn(Future.successful(isUnderlyingData5mld))
+  }
 
   "Index Controller" must {
-
-    val identifier = "1234567890"
-    val startDate = LocalDate.parse("2019-06-01")
-    val trustType = TypeOfTrust.WillTrustOrIntestacyTrust
-    val is5mldEnabled = false
-    val isTaxable = false
-    val isUnderlyingData5mld = false
 
     "populate user answers and redirect to AddABeneficiaryController when not migrating from NTT to TT" in {
 
       val migratingFromNonTaxableToTaxable = false
 
-      reset(playbackRepository)
-
-      val mockTrustConnector = mock[TrustConnector]
-      val mockFeatureFlagService = mock[FeatureFlagService]
-
-      when(playbackRepository.set(any()))
-        .thenReturn(Future.successful(true))
-
-      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+      when(mockTrustsConnector.getTrustDetails(any())(any(), any()))
         .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(is5mldEnabled))
-
-      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-        .thenReturn(Future.successful(isUnderlyingData5mld))
-
-      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+      when(mockTrustsConnector.getTrustMigrationFlag(any())(any(), any()))
         .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
-          bind[TrustConnector].toInstance(mockTrustConnector),
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          bind[TrustConnector].toInstance(mockTrustsConnector),
+          bind[TrustsStoreService].toInstance(mockTrustsStoreService)
         ).build()
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
@@ -91,6 +99,8 @@ class IndexControllerSpec extends SpecBase {
       uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
       uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
 
+      verify(mockTrustsStoreService).updateTaskStatus(eqTo(identifier), eqTo(InProgress))(any(), any())
+
       application.stop()
     }
 
@@ -98,30 +108,16 @@ class IndexControllerSpec extends SpecBase {
 
       val migratingFromNonTaxableToTaxable = true
 
-      reset(playbackRepository)
-
-      val mockTrustConnector = mock[TrustConnector]
-      val mockFeatureFlagService = mock[FeatureFlagService]
-
-      when(playbackRepository.set(any()))
-        .thenReturn(Future.successful(true))
-
-      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+      when(mockTrustsConnector.getTrustDetails(any())(any(), any()))
         .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = Some(isTaxable))))
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(is5mldEnabled))
-
-      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-        .thenReturn(Future.successful(isUnderlyingData5mld))
-
-      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+      when(mockTrustsConnector.getTrustMigrationFlag(any())(any(), any()))
         .thenReturn(Future.successful(TaxableMigrationFlag(Some(migratingFromNonTaxableToTaxable))))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
-          bind[TrustConnector].toInstance(mockTrustConnector),
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          bind[TrustConnector].toInstance(mockTrustsConnector),
+          bind[TrustsStoreService].toInstance(mockTrustsStoreService)
         ).build()
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
@@ -132,36 +128,23 @@ class IndexControllerSpec extends SpecBase {
 
       redirectLocation(result) mustBe Some(controllers.transition.routes.BeneficiariesInformationController.onPageLoad().url)
 
+      verify(mockTrustsStoreService).updateTaskStatus(eqTo(identifier), eqTo(InProgress))(any(), any())
+
       application.stop()
     }
 
-
     "default isTaxable to true if trustTaxable is None i.e. 4mld" in {
 
-      reset(playbackRepository)
-
-      val mockTrustConnector = mock[TrustConnector]
-      val mockFeatureFlagService = mock[FeatureFlagService]
-
-      when(playbackRepository.set(any()))
-        .thenReturn(Future.successful(true))
-
-      when(mockTrustConnector.getTrustDetails(any())(any(), any()))
+      when(mockTrustsConnector.getTrustDetails(any())(any(), any()))
         .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = None)))
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(is5mldEnabled))
-
-      when(mockTrustConnector.isTrust5mld(any())(any(), any()))
-        .thenReturn(Future.successful(isUnderlyingData5mld))
-
-      when(mockTrustConnector.getTrustMigrationFlag(any())(any(), any()))
+      when(mockTrustsConnector.getTrustMigrationFlag(any())(any(), any()))
         .thenReturn(Future.successful(TaxableMigrationFlag(None)))
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
-          bind[TrustConnector].toInstance(mockTrustConnector),
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
+          bind[TrustConnector].toInstance(mockTrustsConnector),
+          bind[TrustsStoreService].toInstance(mockTrustsStoreService)
         ).build()
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(identifier).url)
@@ -176,6 +159,8 @@ class IndexControllerSpec extends SpecBase {
       verify(playbackRepository).set(uaCaptor.capture)
 
       uaCaptor.getValue.isTaxable mustBe true
+
+      verify(mockTrustsStoreService).updateTaskStatus(eqTo(identifier), eqTo(InProgress))(any(), any())
 
       application.stop()
     }
