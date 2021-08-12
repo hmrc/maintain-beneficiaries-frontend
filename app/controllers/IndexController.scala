@@ -18,12 +18,13 @@ package controllers
 
 import connectors.TrustConnector
 import controllers.actions.StandardActionSets
+import models.TaskStatus.InProgress
 import models.UserAnswers
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
@@ -33,18 +34,18 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  actions: StandardActionSets,
                                  cacheRepository: PlaybackRepository,
-                                 connector: TrustConnector,
-                                 featureFlagService: FeatureFlagService
+                                 trustsConnector: TrustConnector,
+                                 trustsStoreService: TrustsStoreService
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(identifier: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(identifier) andThen actions.getData).async {
     implicit request =>
 
       for {
-        details <- connector.getTrustDetails(identifier)
-        is5mldEnabled <- featureFlagService.is5mldEnabled()
-        isUnderlyingData5mld <- connector.isTrust5mld(identifier)
-        taxableMigrationFlag <- connector.getTrustMigrationFlag(identifier)
+        details <- trustsConnector.getTrustDetails(identifier)
+        is5mldEnabled <- trustsStoreService.is5mldEnabled()
+        isUnderlyingData5mld <- trustsConnector.isTrust5mld(identifier)
+        taxableMigrationFlag <- trustsConnector.getTrustMigrationFlag(identifier)
         ua <- Future.successful {
           request.userAnswers match {
             case Some(userAnswers) => userAnswers.copy(
@@ -67,6 +68,7 @@ class IndexController @Inject()(
           }
         }
         _ <- cacheRepository.set(ua)
+        _ <- trustsStoreService.updateTaskStatus(identifier, InProgress)
       } yield {
         logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] user has started maintaining beneficiaries")
         if (taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
