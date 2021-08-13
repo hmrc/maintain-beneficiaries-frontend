@@ -36,12 +36,11 @@ class TrustsStoreConnectorSpec extends SpecBase
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
-  private val identifier = "123456789"
-
   "trusts store connector" when {
 
-    ".setTasksComplete" must {
+    ".updateTaskStatus" must {
 
+      val identifier = "1234567890"
       val url = s"/trusts-store/maintain/tasks/update-beneficiaries/$identifier"
 
       "return OK with the current task status" in {
