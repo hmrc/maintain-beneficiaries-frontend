@@ -15,7 +15,7 @@
  *@
 
 @import controllers.companyoremploymentrelated.employment.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, Heading, InputCharacterCount}
+@import views.html.components.{ErrorSummary, SubmitButton, Heading, InputTextCharacterCount}
 
 @this(
     main_template: MainTemplate,
@@ -23,7 +23,7 @@
     errorSummary: ErrorSummary,
     submitButton: SubmitButton,
     heading: Heading,
-    characterCount : InputCharacterCount
+    characterCount: InputTextCharacterCount
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -50,7 +50,9 @@
             id = "description",
             name = "description",
             label = messages("employmentBeneficiary.description.description1"),
+            isLabelHidden = false,
             isPageHeading = false,
+            inputClass = Some("govuk-!-width-two-thirds"),
             maxLength = Some(70)
         )
 
@@ -59,7 +61,9 @@
             id = "description1",
             name = "description1",
             label = messages("employmentBeneficiary.description.description2"),
+            isLabelHidden = false,
             isPageHeading = false,
+            inputClass = Some("govuk-!-width-two-thirds"),
             maxLength = Some(70)
         )
 
@@ -68,7 +72,9 @@
             id = "description2",
             name = "description2",
             label = messages("employmentBeneficiary.description.description3"),
+            isLabelHidden = false,
             isPageHeading = false,
+            inputClass = Some("govuk-!-width-two-thirds"),
             maxLength = Some(70)
         )
 
@@ -77,7 +83,9 @@
             id = "description3",
             name = "description3",
             label = messages("employmentBeneficiary.description.description4"),
+            isLabelHidden = false,
             isPageHeading = false,
+            inputClass = Some("govuk-!-width-two-thirds"),
             maxLength = Some(70)
         )
 
@@ -86,7 +94,9 @@
             id = "description4",
             name = "description4",
             label = messages("employmentBeneficiary.description.description5"),
+            isLabelHidden = false,
             isPageHeading = false,
+            inputClass = Some("govuk-!-width-two-thirds"),
             maxLength = Some(70)
         )
 
