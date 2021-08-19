@@ -1,8 +1,10 @@
 site.back = Yn ôl
 site.delete = Tynnu
 site.edit = Newid
+site.update = Diweddaru
 site.hidden-delete = Tynnu {0}
 site.hidden-edit = Newid {0}
+site.hidden-update = Diweddaru {0}
 site.change.details = Newid manylion
 site.no = Na
 site.yes = Iawn
@@ -15,6 +17,8 @@ site.sign_out = Allgofnodi
 site.save.continue = Cadw ac yn eich blaen
 site.date.hint = Er enghraifft, 31 3 1980.
 site.inprogress = Ar y gweill
+site.moreinfoneeded = Mae angen rhagor o wybodaeth
+site.nomoreinfoneeded = Nid oes angen rhagor o wybodaeth
 site.complete = Wedi’i chwblhau
 site.error = Gwall:
 site.cannotRemove=Peidiwch â thynnu
@@ -127,6 +131,7 @@ featureNotAvailable.p2 = Byddwch yn gallu diweddaru’r manylion hyn ar-lein yn 
 addABeneficiaryYesNo.title = A ydych am ychwanegu buddiolwr?
 addABeneficiaryYesNo.heading = A ydych am ychwanegu buddiolwr?
 addABeneficiaryYesNo.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu buddiolwr
+
 addABeneficiary.title = Ychwanegu buddiolwr
 addABeneficiary.heading = Ychwanegu buddiolwr
 addABeneficiary.count.title = Mae gan yr ymddiriedolaeth {0} o fuddiolwyr
@@ -143,6 +148,11 @@ addABeneficiary.maxedOut.moreThan1 = Rydych wedi nodi uchafswm nifer y buddiolwy
 addABeneficiary.maxedOut.moreThan1.paragraph = Gwiriwch y buddiolwyr yr ydych wedi eu hychwanegu. Os oes gennych fuddiolwyr pellach i’w hychwanegu o fewn y mathau hyn, ysgrifennwch i CThEM gyda’u manylion.
 addABeneficiary.maxedOut.all = Ni allwch nodi buddiolwr arall gan eich bod wedi nodi uchafswm o 175.
 addABeneficiary.maxedOut.all.paragraph = Gwiriwch y buddiolwyr yr ydych wedi eu hychwanegu. Os oes gennych ragor o fuddiolwyr i’w hychwanegu, ysgrifennwch i CThEM gyda’u manylion.
+
+addABeneficiary.transition.subheading = Diweddaru’r buddiolwyr
+addABeneficiary.transition.warning = Mae angen i chi ddiweddaru’r wybodaeth sydd gan CThEM am fuddiolwyr yr ymddiriedolaeth.
+addABeneficiary.transition.p1 = Bydd y cwestiynau a ofynnir yn cynnwys yr wybodaeth ddiweddaraf sydd gan CThEM am y buddiolwyr.
+
 addNow.heading = Pa fath o fuddiolwr y mae angen i chi ei ychwanegu nesaf?
 addNow.title = Pa fath o fuddiolwr y mae angen i chi ei ychwanegu nesaf?
 addNow.hint = Gallwch nodi uchafswm o 25 cofnod ar gyfer pob math o fuddiolwr.
