@@ -23,9 +23,13 @@ import play.api.libs.json.{Format, Json, Reads, Writes, __}
 sealed trait IndividualIdentification
 
 object IndividualIdentification {
-  implicit val reads: Reads[IndividualIdentification] =
-    (__ \ 'passport).read[CombinedPassportOrIdCard].widen[IndividualIdentification] orElse
-    __.read[NationalInsuranceNumber].widen[IndividualIdentification]
+  implicit val reads: Reads[IndividualIdentification] = {
+    (__ \ 'passport \ 'isPassport).readNullable[Boolean].flatMap {
+      case Some(true) => (__ \ 'passport).read[Passport].widen[IndividualIdentification]
+      case Some(false) => (__ \ 'passport).read[IdCard].widen[IndividualIdentification]
+      case None => (__ \ 'passport).read[CombinedPassportOrIdCard].widen[IndividualIdentification]
+    } orElse __.read[NationalInsuranceNumber].widen[IndividualIdentification]
+  }
 
   implicit val writes: Writes[IndividualIdentification] = Writes {
     case ni:NationalInsuranceNumber =>Json.toJson(ni)(NationalInsuranceNumber.format)
@@ -56,7 +60,10 @@ object IdCard {
   implicit val format: Format[IdCard] = Json.format[IdCard]
 }
 
-case class CombinedPassportOrIdCard(countryOfIssue: String, number: String, expirationDate: LocalDate) extends IndividualIdentification
+case class CombinedPassportOrIdCard(countryOfIssue: String,
+                                    number: String,
+                                    expirationDate: LocalDate,
+                                    isPassport: Option[Boolean] = None) extends IndividualIdentification
 object CombinedPassportOrIdCard {
   implicit val format: Format[CombinedPassportOrIdCard] = Json.format[CombinedPassportOrIdCard]
 }
