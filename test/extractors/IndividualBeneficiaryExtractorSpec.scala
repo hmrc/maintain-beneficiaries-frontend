@@ -18,11 +18,11 @@ package extractors
 
 import base.SpecBase
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.amend._
-
 import java.time.LocalDate
+
 import utils.Constants.GB
 import pages.individualbeneficiary.add._
 
@@ -844,6 +844,158 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           }
         }
       }
+
     }
+
+    "id extraction" when {
+      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = true)
+      val combined = CombinedPassportOrIdCard("country", "number", date)
+      val idCard = IdCard("country", "number", date)
+      val passport = Passport("country", "number", date)
+
+      "individual has a passport" in {
+        val individual = IndividualBeneficiary(
+          name = name,
+          dateOfBirth = Some(date),
+          identification = Some(passport),
+          address = None,
+          vulnerableYesNo = None,
+          roleInCompany = None,
+          income = None,
+          incomeDiscretionYesNo = Some(true),
+          countryOfResidence = Some(GB),
+          nationality = Some(GB),
+          mentalCapacityYesNo = Some(true),
+          entityStart = date,
+          provisional = true
+        )
+
+        val result = extractor(baseAnswers, individual, index).get
+
+        result.get(NamePage).get mustBe name
+        result.get(DateOfBirthYesNoPage).get mustBe true
+        result.get(DateOfBirthPage).get mustBe date
+        result.get(IncomeDiscretionYesNoPage).get mustBe true
+        result.get(IncomePercentagePage) mustBe None
+        result.get(CountryOfNationalityYesNoPage).get mustBe true
+        result.get(CountryOfNationalityUkYesNoPage).get mustBe true
+        result.get(CountryOfNationalityPage).get mustBe GB
+        result.get(NationalInsuranceNumberYesNoPage).get mustBe false
+        result.get(NationalInsuranceNumberPage) mustBe None
+        result.get(CountryOfResidenceYesNoPage).get mustBe true
+        result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+        result.get(CountryOfResidencePage).get mustBe GB
+        result.get(AddressYesNoPage).get mustBe false
+        result.get(LiveInTheUkYesNoPage) mustBe None
+        result.get(UkAddressPage) mustBe None
+        result.get(NonUkAddressPage) mustBe None
+        result.get(PassportDetailsYesNoPage) mustBe None
+        result.get(PassportDetailsPage) mustBe None
+        result.get(IdCardDetailsYesNoPage) mustBe None
+        result.get(IdCardDetailsPage) mustBe None
+        result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
+        result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
+        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(StartDatePage).get mustBe date
+        result.get(IndexPage).get mustBe index
+      }
+
+      "individual has an ID Card" in {
+        val individual = IndividualBeneficiary(
+          name = name,
+          dateOfBirth = Some(date),
+          identification = Some(idCard),
+          address = None,
+          vulnerableYesNo = None,
+          roleInCompany = None,
+          income = None,
+          incomeDiscretionYesNo = Some(true),
+          countryOfResidence = Some(GB),
+          nationality = Some(GB),
+          mentalCapacityYesNo = Some(true),
+          entityStart = date,
+          provisional = true
+        )
+
+        val result = extractor(baseAnswers, individual, index).get
+
+        result.get(NamePage).get mustBe name
+        result.get(DateOfBirthYesNoPage).get mustBe true
+        result.get(DateOfBirthPage).get mustBe date
+        result.get(IncomeDiscretionYesNoPage).get mustBe true
+        result.get(IncomePercentagePage) mustBe None
+        result.get(CountryOfNationalityYesNoPage).get mustBe true
+        result.get(CountryOfNationalityUkYesNoPage).get mustBe true
+        result.get(CountryOfNationalityPage).get mustBe GB
+        result.get(NationalInsuranceNumberYesNoPage).get mustBe false
+        result.get(NationalInsuranceNumberPage) mustBe None
+        result.get(CountryOfResidenceYesNoPage).get mustBe true
+        result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+        result.get(CountryOfResidencePage).get mustBe GB
+        result.get(AddressYesNoPage).get mustBe false
+        result.get(LiveInTheUkYesNoPage) mustBe None
+        result.get(UkAddressPage) mustBe None
+        result.get(NonUkAddressPage) mustBe None
+        result.get(PassportDetailsYesNoPage) mustBe None
+        result.get(PassportDetailsPage) mustBe None
+        result.get(IdCardDetailsYesNoPage) mustBe None
+        result.get(IdCardDetailsPage) mustBe None
+        result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
+        result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
+        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(StartDatePage).get mustBe date
+        result.get(IndexPage).get mustBe index
+      }
+
+      "individual has an Combined passport ID Card" in {
+
+
+        val individual = IndividualBeneficiary(
+          name = name,
+          dateOfBirth = Some(date),
+          identification = Some(combined),
+          address = None,
+          vulnerableYesNo = None,
+          roleInCompany = None,
+          income = None,
+          incomeDiscretionYesNo = Some(true),
+          countryOfResidence = Some(GB),
+          nationality = Some(GB),
+          mentalCapacityYesNo = Some(true),
+          entityStart = date,
+          provisional = true
+        )
+
+        val result = extractor(baseAnswers, individual, index).get
+
+        result.get(NamePage).get mustBe name
+        result.get(DateOfBirthYesNoPage).get mustBe true
+        result.get(DateOfBirthPage).get mustBe date
+        result.get(IncomeDiscretionYesNoPage).get mustBe true
+        result.get(IncomePercentagePage) mustBe None
+        result.get(CountryOfNationalityYesNoPage).get mustBe true
+        result.get(CountryOfNationalityUkYesNoPage).get mustBe true
+        result.get(CountryOfNationalityPage).get mustBe GB
+        result.get(NationalInsuranceNumberYesNoPage).get mustBe false
+        result.get(NationalInsuranceNumberPage) mustBe None
+        result.get(CountryOfResidenceYesNoPage).get mustBe true
+        result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+        result.get(CountryOfResidencePage).get mustBe GB
+        result.get(AddressYesNoPage).get mustBe false
+        result.get(LiveInTheUkYesNoPage) mustBe None
+        result.get(UkAddressPage) mustBe None
+        result.get(NonUkAddressPage) mustBe None
+        result.get(PassportDetailsYesNoPage) mustBe None
+        result.get(PassportDetailsPage) mustBe None
+        result.get(IdCardDetailsYesNoPage) mustBe None
+        result.get(IdCardDetailsPage) mustBe None
+        result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
+        result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
+        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(StartDatePage).get mustBe date
+        result.get(IndexPage).get mustBe index
+      }
+    }
+
   }
 }
