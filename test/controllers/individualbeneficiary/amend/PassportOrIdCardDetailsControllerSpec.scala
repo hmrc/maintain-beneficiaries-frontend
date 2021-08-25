@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.amend
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
-import models.{CombinedPassportOrIdCard, Name}
+import models.{CombinedPassportOrIdCard, DetailsType, Name}
 import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -33,8 +33,8 @@ import repositories.PlaybackRepository
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
-
 import java.time.LocalDate
+
 import scala.concurrent.Future
 
 class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
@@ -109,7 +109,8 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
             "number" -> "123456",
             "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
             "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
-            "expiryDate.year"  -> validData.expirationDate.getYear.toString
+            "expiryDate.year"  -> validData.expirationDate.getYear.toString,
+            "detailsType"      -> DetailsType.Combined.toString
           )
 
       val result = route(application, request).value

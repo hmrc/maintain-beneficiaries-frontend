@@ -71,7 +71,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
           .set(PassportDetailsYesNoPage, true).success.value
           .set(PassportDetailsPage, Passport("GB", "1234", LocalDate.of(2030, 10, 10))).success.value
           .set(IdCardDetailsYesNoPage, true).success.value
-          .set(IdCardDetailsPage, IdCard("GB", "7890", LocalDate.of(2030, 10, 10))).success.value
+          .set(IdCardDetailsPage, IdCard("GB", "1234567890", LocalDate.of(2030, 10, 10))).success.value
           .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 
         val result = helper(userAnswers, provisional = true, name.displayName)
@@ -97,9 +97,9 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = Some(UkAddressController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.nonUkAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />Germany"), changeUrl = Some(NonUkAddressController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(PassportDetailsYesNoController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />Number ending 1234<br />10 October 2030"), changeUrl = Some(PassportDetailsController.onPageLoad().url)),
+            AnswerRow(label = messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1234<br />10 October 2030"), changeUrl = Some(PassportDetailsController.onPageLoad().url)),
             AnswerRow(label = messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(IdCardDetailsYesNoController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />Number ending 7890<br />10 October 2030"), changeUrl = Some(IdCardDetailsController.onPageLoad().url)),
+            AnswerRow(label = messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1234567890<br />10 October 2030"), changeUrl = Some(IdCardDetailsController.onPageLoad().url)),
             AnswerRow(label = messages("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(VPE1FormYesNoController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.startDate.checkYourAnswersLabel", name.displayName), answer = Html("1 January 2020"), changeUrl = Some(StartDateController.onPageLoad().url))

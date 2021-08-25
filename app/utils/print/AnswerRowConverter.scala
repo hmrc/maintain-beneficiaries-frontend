@@ -24,8 +24,9 @@ import play.api.libs.json.Reads
 import play.twirl.api.{Html, HtmlFormat}
 import queries.Gettable
 import viewmodels.AnswerRow
-
 import java.time.LocalDate
+
+import pages.QuestionPage
 
 class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatters) {
 
@@ -99,25 +100,25 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def passportOrIdCardDetailsQuestion(query: Gettable[CombinedPassportOrIdCard],
-                                        labelKey: String,
-                                        changeUrl: String): Option[AnswerRow] = {
-      val format = (x: CombinedPassportOrIdCard) => checkAnswersFormatters.formatPassportOrIdCardDetails(x)
-      question(query, labelKey, format, Some(changeUrl))
-    }
-
     def passportDetailsQuestion(query: Gettable[Passport],
                                 labelKey: String,
-                                changeUrl: String): Option[AnswerRow] = {
-      val format = (x: Passport) => checkAnswersFormatters.formatPassportDetails(x)
-      question(query, labelKey, format, Some(changeUrl))
+                                changeUrl: Option[String]): Option[AnswerRow] = {
+      val format = (x: Passport) => checkAnswersFormatters.formatPassportOrIdCardDetails(x.asCombined)
+      question(query, labelKey, format, changeUrl)
     }
 
     def idCardDetailsQuestion(query: Gettable[IdCard],
                               labelKey: String,
-                              changeUrl: String): Option[AnswerRow] = {
-      val format = (x: IdCard) => checkAnswersFormatters.formatIdCardDetails(x)
-      question(query, labelKey, format, Some(changeUrl))
+                              changeUrl: Option[String]): Option[AnswerRow] = {
+      val format = (x: IdCard) => checkAnswersFormatters.formatPassportOrIdCardDetails(x.asCombined)
+      question(query, labelKey, format, changeUrl)
+    }
+
+    def passportOrIdCardDetailsQuestion(query: QuestionPage[CombinedPassportOrIdCard],
+                                        labelKey: String,
+                                        changeUrl: Option[String]): Option[AnswerRow] = {
+      val format = (x: CombinedPassportOrIdCard) => checkAnswersFormatters.formatPassportOrIdCardDetails(x)
+      question(query, labelKey, format, changeUrl)
     }
 
     def descriptionQuestion(query: Gettable[Description],

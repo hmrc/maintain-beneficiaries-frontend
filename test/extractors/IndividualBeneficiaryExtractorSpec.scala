@@ -18,7 +18,7 @@ package extractors
 
 import base.SpecBase
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{CombinedPassportOrIdCard, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, DetailsType, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.amend._
 import java.time.LocalDate
@@ -849,7 +849,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
 
     "id extraction" when {
       val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = true)
-      val combined = CombinedPassportOrIdCard("country", "number", date)
+
       val idCard = IdCard("country", "number", date)
       val passport = Passport("country", "number", date)
 
@@ -894,7 +894,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(IdCardDetailsYesNoPage) mustBe None
         result.get(IdCardDetailsPage) mustBe None
         result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
-        result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
+        result.get(PassportOrIdCardDetailsPage) mustBe Some(CombinedPassportOrIdCard("country", "number", date, DetailsType.Passport))
         result.get(MentalCapacityYesNoPage).get mustBe true
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
@@ -941,14 +941,14 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(IdCardDetailsYesNoPage) mustBe None
         result.get(IdCardDetailsPage) mustBe None
         result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
-        result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
+        result.get(PassportOrIdCardDetailsPage) mustBe Some(CombinedPassportOrIdCard("country", "number", date, DetailsType.IdCard))
         result.get(MentalCapacityYesNoPage).get mustBe true
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
       }
 
       "individual has an Combined passport ID Card" in {
-
+        val combined = CombinedPassportOrIdCard("country", "number", date)
 
         val individual = IndividualBeneficiary(
           name = name,

@@ -16,7 +16,7 @@
 
 @import controllers.individualbeneficiary.amend.routes._
 @import utils.InputOption
-@import views.html.components.{Heading, ErrorSummary, InputText, InputDate, InputSelect, SubmitButton}
+@import views.html.components.{Heading, ErrorSummary, InputText, InputDate, InputSelect, InputHidden, SubmitButton}
 
 @this(
     main_template: MainTemplate,
@@ -26,6 +26,7 @@
     heading: Heading,
     inputDate: InputDate,
     submitButton: SubmitButton,
+    inputHidden: InputHidden,
     formHelper: FormWithCSRF
 )
 
@@ -63,6 +64,11 @@
             legendAsHeading = false,
             hint = Some(messages(s"individualBeneficiary.passportOrIdCardDetails.expiryDate.hint")),
             legendClass = "govuk-label"
+        )
+
+        @inputHidden(
+            field = form("detailsType"),
+            defaultValue = Some(DetailsType.Combined.toString)
         )
 
         @submitButton()

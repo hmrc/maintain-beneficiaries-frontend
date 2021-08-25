@@ -39,7 +39,7 @@ class IdentificationSpec extends SpecBase {
              |    "countryOfIssue": "$country",
              |    "number": "$number",
              |    "expirationDate": "$date",
-             |    "isPassport": true
+             |    "detailsType": "passport"
              |  }
              |}
              |""".stripMargin)
@@ -56,7 +56,7 @@ class IdentificationSpec extends SpecBase {
              |    "countryOfIssue": "$country",
              |    "number": "$number",
              |    "expirationDate": "$date",
-             |    "isPassport": false
+             |    "detailsType": "id-card"
              |  }
              |}
              |""".stripMargin)
@@ -78,7 +78,7 @@ class IdentificationSpec extends SpecBase {
              |""".stripMargin)
 
         val result = json.as[IndividualIdentification]
-        result mustBe CombinedPassportOrIdCard(country, number, LocalDate.parse(date), None)
+        result mustBe CombinedPassportOrIdCard(country, number, LocalDate.parse(date))
       }
 
       "nino" in {

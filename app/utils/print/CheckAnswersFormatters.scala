@@ -88,7 +88,7 @@ class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
   def formatPassportOrIdCardDetails(passportOrIdCard: CombinedPassportOrIdCard)
                                    (implicit messages: Messages): Html = {
 
-    def formatNumber(number: String): String = if (passportOrIdCard.isPassport.isDefined) {
+    def formatNumber(number: String): String = if (passportOrIdCard.detailsType.isProvisional) {
       number
     } else {
       messages("site.number-ending", number.takeRight(4))
