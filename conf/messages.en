@@ -935,9 +935,9 @@ employmentBeneficiary.description.description2 = Description 2 (optional)
 employmentBeneficiary.description.description3 = Description 3 (optional)
 employmentBeneficiary.description.description4 = Description 4 (optional)
 employmentBeneficiary.description.description5 = Description 5 (optional)
-employmentBeneficiary.description.error.required = Enter the description of your beneficiaries
-employmentBeneficiary.description.error.invalid = The description of your beneficiaries must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-employmentBeneficiary.description.error.length = The description of your beneficiaries must be 70 characters or less
+employmentBeneficiary.description.error.required = Enter a description of the beneficiary
+employmentBeneficiary.description.error.invalid = The description must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+employmentBeneficiary.description.error.length = The description must be 70 characters each or less
 
 employmentBeneficiary.numberOfBeneficiaries.title = What is the approximate number of beneficiaries held in the trust?
 employmentBeneficiary.numberOfBeneficiaries.heading = What is the approximate number of beneficiaries held in the trust?
