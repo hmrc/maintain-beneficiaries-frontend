@@ -25,6 +25,7 @@ object DetailsType extends Enumeration {
   val Passport: Value = Value("passport")
   val IdCard: Value = Value("id-card")
   val Combined: Value = Value("combined")
+  val CombinedProvisional: Value = Value("combined-provisional")
 
   implicit val enumerable: Enumerable[DetailsType] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)

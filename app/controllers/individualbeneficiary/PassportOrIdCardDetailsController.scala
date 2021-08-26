@@ -21,6 +21,7 @@ import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.CombinedPassportOrIdCardDetailsFormProvider
 import javax.inject.Inject
+import models.DetailsType.{Combined, CombinedProvisional}
 import models.Mode
 import navigation.Navigator
 import pages.individualbeneficiary.PassportOrIdCardDetailsPage
@@ -65,11 +66,19 @@ class PassportOrIdCardDetailsController @Inject()(
         formWithErrors =>
           Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName, countryOptions.options))),
 
-        value =>
+        newAnswer =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, value))
-            _              <- playbackRepository.set(updatedAnswers)
+            oldAnswer <- Future.successful(request.userAnswers.get(PassportOrIdCardDetailsPage))
+            detailsType = {
+              oldAnswer match {
+                case Some(value) if value == newAnswer && !value.detailsType.isProvisional => Combined
+                case _ => CombinedProvisional
+              }
+            }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, newAnswer.copy(detailsType = detailsType)))
+            _ <- playbackRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, mode, updatedAnswers))
+
       )
   }
 }

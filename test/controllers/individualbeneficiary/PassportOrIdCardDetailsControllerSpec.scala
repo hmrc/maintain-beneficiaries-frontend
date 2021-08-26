@@ -21,10 +21,12 @@ import java.time.LocalDate
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
-import models.{CombinedPassportOrIdCard, DetailsType, Mode, Name, NormalMode}
+import models.{CombinedPassportOrIdCard, DetailsType, Mode, Name, NormalMode, UserAnswers}
 import navigation.Navigator
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.NamePage
 import pages.individualbeneficiary.PassportOrIdCardDetailsPage
@@ -38,7 +40,7 @@ import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 
 import scala.concurrent.Future
 
-class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
+class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {
 
   val formProvider = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig)
   val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetails")
@@ -53,6 +55,11 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
   lazy val passportOrIdCardDetailsRoute = routes.PassportOrIdCardDetailsController.onPageLoad(mode).url
 
   val validData = CombinedPassportOrIdCard("country", "number", LocalDate.parse("2020-02-03"))
+
+  override def beforeEach(): Unit = {
+    reset(playbackRepository)
+    when(playbackRepository.set(any())).thenReturn(Future.successful(true))
+  }
 
   "PassportOrIdCardDetails Controller" must {
 
@@ -94,34 +101,110 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when valid data is submitted" when {
 
-      val mockPlaybackRepository = mock[PlaybackRepository]
+      "answer has changed" in {
 
-      when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
+        val mockPlaybackRepository = mock[PlaybackRepository]
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
-        .build()
+        when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
-      val request =
-        FakeRequest(POST, passportOrIdCardDetailsRoute)
-          .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
-            "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
-            "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
-            "expiryDate.year"  -> validData.expirationDate.getYear.toString,
-            "detailsType"      -> DetailsType.Combined.toString
-          )
+        val application = applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+          .build()
 
-      val result = route(application, request).value
+        val request =
+          FakeRequest(POST, passportOrIdCardDetailsRoute)
+            .withFormUrlEncodedBody(
+              "country" -> "country",
+              "number" -> "123456",
+              "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
+              "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
+              "expiryDate.year"  -> validData.expirationDate.getYear.toString,
+              "detailsType"      -> DetailsType.Combined.toString
+            )
 
-      status(result) mustEqual SEE_OTHER
+        val result = route(application, request).value
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+        status(result) mustEqual SEE_OTHER
 
-      application.stop()
+        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(playbackRepository).set(uaCaptor.capture)
+        uaCaptor.getValue.get(PassportOrIdCardDetailsPage).get.detailsType mustBe DetailsType.CombinedProvisional
+
+        application.stop()
+      }
+
+      "answer has not changed" when {
+
+        "previously Combined" in {
+
+          val vd = validData.copy(detailsType = DetailsType.Combined)
+
+          val userAnswers = emptyUserAnswers.set(PassportOrIdCardDetailsPage, vd).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+            .build()
+
+          val request = FakeRequest(POST, passportOrIdCardDetailsRoute)
+            .withFormUrlEncodedBody(
+              "country" -> vd.countryOfIssue,
+              "number" -> vd.number,
+              "expiryDate.day" -> vd.expirationDate.getDayOfMonth.toString,
+              "expiryDate.month" -> vd.expirationDate.getMonthValue.toString,
+              "expiryDate.year" -> vd.expirationDate.getYear.toString,
+              "detailsType" -> vd.detailsType.toString
+            )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(playbackRepository).set(uaCaptor.capture)
+          uaCaptor.getValue.get(PassportOrIdCardDetailsPage).get.detailsType mustBe DetailsType.Combined
+
+          application.stop()
+        }
+
+        "previously CombinedProvisional" in {
+
+          val vd = validData.copy(detailsType = DetailsType.CombinedProvisional)
+
+          val userAnswers = emptyUserAnswers.set(PassportOrIdCardDetailsPage, vd).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+            .build()
+
+          val request = FakeRequest(POST, passportOrIdCardDetailsRoute)
+            .withFormUrlEncodedBody(
+              "country" -> vd.countryOfIssue,
+              "number" -> vd.number,
+              "expiryDate.day" -> vd.expirationDate.getDayOfMonth.toString,
+              "expiryDate.month" -> vd.expirationDate.getMonthValue.toString,
+              "expiryDate.year" -> vd.expirationDate.getYear.toString,
+              "detailsType" -> vd.detailsType.toString
+            )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(playbackRepository).set(uaCaptor.capture)
+          uaCaptor.getValue.get(PassportOrIdCardDetailsPage).get.detailsType mustBe DetailsType.CombinedProvisional
+
+          application.stop()
+        }
+      }
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
