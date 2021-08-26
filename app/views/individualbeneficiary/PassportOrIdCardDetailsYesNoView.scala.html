@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.amend.routes._
+@import controllers.individualbeneficiary.routes._
 @import views.html.components.{InputYesNo, SubmitButton, ErrorSummary}
 
 @this(
@@ -25,21 +25,21 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[_], name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("individualBeneficiary.passportOrIdCardDetailsYesNo.title", name)}",
     showBackLink = true
 ) {
 
-    @formHelper(action = PassportOrIdCardDetailsYesNoController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = PassportOrIdCardDetailsYesNoController.onSubmit(mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
         @inputYesNo(
             field = form("value"),
             label = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.heading", name),
-legendClass = Some("govuk-heading-l"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true
         )
 

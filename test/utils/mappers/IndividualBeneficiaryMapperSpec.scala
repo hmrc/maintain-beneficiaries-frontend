@@ -22,8 +22,7 @@ import base.SpecBase
 import models.beneficiaries.RoleInCompany
 import models.{CombinedPassportOrIdCard, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress}
 import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
-import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+import pages.individualbeneficiary.add.StartDatePage
 
 class IndividualBeneficiaryMapperSpec extends SpecBase {
 

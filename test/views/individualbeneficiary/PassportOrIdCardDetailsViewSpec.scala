@@ -14,31 +14,32 @@
  * limitations under the License.
  */
 
-package views.individualbeneficiary.add
+package views.individualbeneficiary
 
-import forms.PassportDetailsFormProvider
-import models.{Name, Passport}
+import forms.CombinedPassportOrIdCardDetailsFormProvider
+import models.{CombinedPassportOrIdCard, Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.behaviours.QuestionViewBehaviours
-import views.html.individualbeneficiary.add.PassportDetailsView
+import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 
-class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
+class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPassportOrIdCard] {
 
-  val messageKeyPrefix = "individualBeneficiary.passportDetails"
+  val messageKeyPrefix = "individualBeneficiary.passportOrIdCardDetails"
   val name: Name = Name("First", Some("Middle"), "Last")
-  override val form: Form[Passport] = new PassportDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
-  "PassportDetails view" must {
+  override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
-    val view = viewFor[PassportDetailsView](Some(emptyUserAnswers))
+  "PassportOrIdCardDetails view" must {
+
+    val view = viewFor[PassportOrIdCardDetailsView](Some(emptyUserAnswers))
 
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, name.displayName)(fakeRequest, messages)
+      view.apply(form, NormalMode, name.displayName, countryOptions)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 

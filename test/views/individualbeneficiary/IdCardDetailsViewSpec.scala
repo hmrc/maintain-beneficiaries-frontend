@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package views.individualbeneficiary.add
+package views.individualbeneficiary
 
 import forms.IdCardDetailsFormProvider
-import models.{IdCard, Name}
+import models.{IdCard, Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.behaviours.QuestionViewBehaviours
-import views.html.individualbeneficiary.add.IdCardDetailsView
+import views.html.individualbeneficiary.IdCardDetailsView
 
 class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
 
@@ -38,7 +38,7 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, name.displayName)(fakeRequest, messages)
+      view.apply(form, NormalMode, countryOptions, name.displayName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 

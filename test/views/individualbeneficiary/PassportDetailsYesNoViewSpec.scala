@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
-package views.individualbeneficiary.amend
+package views.individualbeneficiary
 
+import controllers.individualbeneficiary.routes
 import forms.YesNoFormProvider
-import models.Name
+import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsYesNoView
-import controllers.individualbeneficiary.amend.routes
+import views.html.individualbeneficiary.PassportDetailsYesNoView
 
-class PassportOrIdCardDetailsYesNoViewSpec extends YesNoViewBehaviours {
+class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.passportOrIdCardDetailsYesNo"
+  val messageKeyPrefix = "individualBeneficiary.passportDetailsYesNo"
   val name: Name = Name("First", Some("Middle"), "Last")
-
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "PassportOrIdCardDetailsYesNo view" must {
+  "PassportDetailsYesNo view" must {
 
-    val view = viewFor[PassportOrIdCardDetailsYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[PassportDetailsYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, name.displayName)(fakeRequest, messages)
+      view.apply(form, NormalMode, name.displayName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.displayName)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportOrIdCardDetailsYesNoController.onSubmit().url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportDetailsYesNoController.onSubmit(NormalMode).url)
 
     behave like pageWithASubmitButton(applyView(form))
   }

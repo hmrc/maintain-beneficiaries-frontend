@@ -23,7 +23,7 @@ import models.{CheckMode, Mode, NormalMode, TypeOfTrust, UserAnswers}
 import pages.Page
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
-import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+import pages.individualbeneficiary.amend.IndexPage
 import play.api.mvc.Call
 
 import javax.inject.Inject
@@ -102,19 +102,19 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case LiveInTheUkYesNoPage => ua =>
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
     case PassportDetailsYesNoPage => ua =>
-        yesNoNav(ua, PassportDetailsYesNoPage, addRts.PassportDetailsController.onPageLoad(), addRts.IdCardDetailsYesNoController.onPageLoad())
+        yesNoNav(ua, PassportDetailsYesNoPage, rts.PassportDetailsController.onPageLoad(mode), rts.IdCardDetailsYesNoController.onPageLoad(mode))
     case IdCardDetailsYesNoPage => ua =>
       yesNoNav(
         ua = ua,
         fromPage = IdCardDetailsYesNoPage,
-        yesCall = addRts.IdCardDetailsController.onPageLoad(),
+        yesCall = rts.IdCardDetailsController.onPageLoad(mode),
         noCall = navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
       )
     case PassportOrIdCardDetailsYesNoPage => ua =>
       yesNoNav(
         ua = ua,
         fromPage = PassportOrIdCardDetailsYesNoPage,
-        yesCall = amendRts.PassportOrIdCardDetailsController.onPageLoad(),
+        yesCall = rts.PassportOrIdCardDetailsController.onPageLoad(mode),
         noCall = navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
       )
   }
@@ -211,13 +211,13 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         case VPE1FormYesNoPage => _ =>
           addRts.StartDateController.onPageLoad()
         case UkAddressPage | NonUkAddressPage => _ =>
-          addRts.PassportDetailsYesNoController.onPageLoad()
+          rts.PassportDetailsYesNoController.onPageLoad(mode)
       }
       case CheckMode => {
         case VPE1FormYesNoPage => ua =>
           modeNav(ua)
         case UkAddressPage | NonUkAddressPage => _ =>
-          amendRts.PassportOrIdCardDetailsYesNoController.onPageLoad()
+          rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
       }
     }
   }

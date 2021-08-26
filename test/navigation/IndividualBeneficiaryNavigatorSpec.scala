@@ -20,7 +20,7 @@ import base.SpecBase
 import models.{CheckMode, Mode, NormalMode, TypeOfTrust}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.add._
-import pages.individualbeneficiary.amend.{IndexPage, PassportOrIdCardDetailsYesNoPage}
+import pages.individualbeneficiary.amend.IndexPage
 import pages.individualbeneficiary.{NamePage, _}
 import utils.Constants.ES
 
@@ -149,7 +149,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         "UK address page -> Do you know passport details page" in {
           navigator.nextPage(UkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
         }
 
         "Is address in UK page -> No -> Non-UK address page" in {
@@ -162,7 +162,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         "Non-UK address page -> Do you know passport details page" in {
           navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsYesNoController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
         }
 
         "Do you know passport details page -> Yes -> Passport details page" in {
@@ -170,7 +170,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .set(PassportDetailsYesNoPage, true).success.value
 
           navigator.nextPage(PassportDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.add.routes.PassportDetailsController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(mode))
         }
 
         "Passport details page -> VPE1 Yes No page" in {
@@ -183,7 +183,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .set(PassportDetailsYesNoPage, false).success.value
 
           navigator.nextPage(PassportDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.add.routes.IdCardDetailsYesNoController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(mode))
         }
 
         "Do you know ID card details page -> Yes -> ID card details page" in {
@@ -191,7 +191,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .set(IdCardDetailsYesNoPage, true).success.value
 
           navigator.nextPage(IdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.add.routes.IdCardDetailsController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(mode))
         }
 
         "ID card details page -> VPE1 Yes No page" in {
@@ -336,7 +336,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         "UK address page -> Do you know passport or ID card details page" in {
           navigator.nextPage(UkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
         }
 
         "Is address in UK page -> No -> Non-UK address page" in {
@@ -349,7 +349,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         "Non-UK address page -> Do you know passport or ID card details page" in {
           navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
         }
 
         "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
@@ -357,7 +357,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .set(PassportOrIdCardDetailsYesNoPage, true).success.value
 
           navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad())
+            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsController.onPageLoad(mode))
         }
 
         "Passport or ID card details page -> VPE1 Yes No page" in {
@@ -809,7 +809,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
           "UK address page -> Do you know passport or ID card details page" in {
             navigator.nextPage(UkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
           }
 
           "Is address in UK page -> No -> Non-UK address page" in {
@@ -822,7 +822,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
           "Non-UK address page -> Do you know passport or ID card details page" in {
             navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad())
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
           }
 
           "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
@@ -830,7 +830,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
               .set(PassportOrIdCardDetailsYesNoPage, true).success.value
 
             navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, answers)
-              .mustBe(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad())
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsController.onPageLoad(mode))
           }
 
           "Passport or ID card details page -> Mental Capacity Yes No page" in {

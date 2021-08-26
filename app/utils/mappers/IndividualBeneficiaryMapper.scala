@@ -21,7 +21,6 @@ import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
 import pages.QuestionPage
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
-import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsSuccess, Reads}
 

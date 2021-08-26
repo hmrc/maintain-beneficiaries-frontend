@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package controllers.individualbeneficiary.add
+package controllers.individualbeneficiary
 
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.NormalMode
+import models.Mode
 import navigation.Navigator
-import pages.individualbeneficiary.add.PassportDetailsYesNoPage
+import pages.individualbeneficiary.PassportDetailsYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.individualbeneficiary.add.PassportDetailsYesNoView
+import views.html.individualbeneficiary.PassportDetailsYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,7 +45,7 @@ class PassportDetailsYesNoController @Inject()(
 
   val form = formProvider.withPrefix("individualBeneficiary.passportDetailsYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(PassportDetailsYesNoPage) match {
@@ -53,21 +53,21 @@ class PassportDetailsYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.beneficiaryName))
+      Ok(view(preparedForm, mode, request.beneficiaryName))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName))),
+          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
 
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportDetailsYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportDetailsYesNoPage, NormalMode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PassportDetailsYesNoPage, mode, updatedAnswers))
       )
   }
 }

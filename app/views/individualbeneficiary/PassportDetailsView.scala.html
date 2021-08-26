@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.add.routes._
+@import controllers.individualbeneficiary.routes._
 @import views.html.components.{Heading, ErrorSummary, InputText, InputDate, InputSelect, SubmitButton}
 @import utils.InputOption
 
@@ -29,14 +29,14 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("individualBeneficiary.passportDetails.title")}",
     showBackLink = true
 ) {
 
-    @formHelper(action = PassportDetailsController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = PassportDetailsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
