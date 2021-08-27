@@ -1,5 +1,5 @@
 @this()
 
-@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false, cssClasses: Option[String] = None)(implicit messages: Messages)
+@(href: String, id: String = "", key: String, openInNewWindow: Boolean = false, cssClasses: Option[String] = None)(implicit messages: Messages)
 
-<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"} class="govuk-link @cssClasses.getOrElse("")">@messages(key)</a>
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank" rel="noopener noreferrer"} class="govuk-link @cssClasses.getOrElse("")">@messages(key)</a>
