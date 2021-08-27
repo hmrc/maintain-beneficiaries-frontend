@@ -32,7 +32,7 @@ inputs: Seq[CheckboxItem]
  idPrefix = Some(field.id),
  name = field.name,
  errorMessage = field.error match {
- case Some(e) => Some(ErrorMessage(content = Text(messages(e.message, e.args:_*))))
+ case Some(e) => Some(ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args:_*))))
  case None => None
 },
  fieldset = Some(Fieldset(

@@ -50,6 +50,6 @@ selectAttribute: Map[String, String] = Map.empty
 ),
  formGroupClasses = formGroupClasses.mkString(" "),
  attributes = selectAttribute,
- errorMessage = field.error.map(err => ErrorMessage(content = Text(messages(err.message, err.args: _*))))
+ errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
  )
 )

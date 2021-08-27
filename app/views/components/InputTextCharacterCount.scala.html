@@ -70,7 +70,7 @@
                 autocomplete = autocomplete,
                 hint = hint.map(hint => Hint(content = Text(hint))),
                 errorMessage = field.error map { e =>
-                    ErrorMessage(content = Text(messages(e.message, e.args: _*)))
+                    ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(e.message, e.args: _*)))
                 },
                 spellcheck = Some(false),
                 inputmode = inputMode,
