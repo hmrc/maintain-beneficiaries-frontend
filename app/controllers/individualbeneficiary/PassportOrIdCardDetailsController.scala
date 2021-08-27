@@ -68,10 +68,10 @@ class PassportOrIdCardDetailsController @Inject()(
 
         newAnswer =>
           for {
-            oldAnswer <- Future.successful(request.userAnswers.get(PassportOrIdCardDetailsPage))
+            maybeOldAnswer <- Future.successful(request.userAnswers.get(PassportOrIdCardDetailsPage))
             detailsType = {
-              oldAnswer match {
-                case Some(value) if value == newAnswer && !value.detailsType.isProvisional => Combined
+              maybeOldAnswer match {
+                case Some(oldAnswer) if oldAnswer.number == newAnswer.number && !oldAnswer.detailsType.isProvisional => Combined
                 case _ => CombinedProvisional
               }
             }

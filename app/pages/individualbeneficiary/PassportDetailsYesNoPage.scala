@@ -32,12 +32,8 @@ case object PassportDetailsYesNoPage extends QuestionPage[Boolean] {
     case Some(true) =>
       userAnswers.remove(IdCardDetailsYesNoPage)
         .flatMap(_.remove(IdCardDetailsPage))
-//        .flatMap(_.remove(PassportOrIdCardDetailsYesNoPage))
-//        .flatMap(_.remove(PassportOrIdCardDetailsPage))
     case Some(false) =>
       userAnswers.remove(PassportDetailsPage)
-//        .flatMap(_.remove(PassportOrIdCardDetailsYesNoPage))
-//        .flatMap(_.remove(PassportOrIdCardDetailsPage))
     case _ =>
       super.cleanup(value, userAnswers)
   }
