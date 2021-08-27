@@ -22,8 +22,7 @@ import base.SpecBase
 import models.beneficiaries.RoleInCompany.NA
 import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
 import pages.individualbeneficiary._
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage, StartDatePage}
-import pages.individualbeneficiary.amend.{PassportOrIdCardDetailsPage, PassportOrIdCardDetailsYesNoPage}
+import pages.individualbeneficiary.add.StartDatePage
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 import controllers.individualbeneficiary.routes._
@@ -69,12 +68,12 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
         val userAnswers = baseAnswers
           .set(PassportDetailsYesNoPage, true).success.value
-          .set(PassportDetailsPage, Passport("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+          .set(PassportDetailsPage, Passport("GB", "1234", LocalDate.of(2030, 10, 10))).success.value
           .set(IdCardDetailsYesNoPage, true).success.value
-          .set(IdCardDetailsPage, IdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+          .set(IdCardDetailsPage, IdCard("GB", "1234567890", LocalDate.of(2030, 10, 10))).success.value
           .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 
-        val result = helper(userAnswers, provisional = true, name.displayName)
+        val result = helper(userAnswers, adding = true, name.displayName)
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(
@@ -96,10 +95,10 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(LiveInTheUkYesNoController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = Some(UkAddressController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.nonUkAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />Germany"), changeUrl = Some(NonUkAddressController.onPageLoad(NormalMode).url)),
-            AnswerRow(label = messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(PassportDetailsYesNoController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = Some(PassportDetailsController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(IdCardDetailsYesNoController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = Some(IdCardDetailsController.onPageLoad().url)),
+            AnswerRow(label = messages("individualBeneficiary.passportDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(PassportDetailsYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("individualBeneficiary.passportDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1234<br />10 October 2030"), changeUrl = Some(PassportDetailsController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("individualBeneficiary.idCardDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(IdCardDetailsYesNoController.onPageLoad(NormalMode).url)),
+            AnswerRow(label = messages("individualBeneficiary.idCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1234567890<br />10 October 2030"), changeUrl = Some(IdCardDetailsController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(VPE1FormYesNoController.onPageLoad(NormalMode).url)),
             AnswerRow(label = messages("individualBeneficiary.startDate.checkYourAnswersLabel", name.displayName), answer = Html("1 January 2020"), changeUrl = Some(StartDateController.onPageLoad().url))
@@ -112,9 +111,9 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
         val userAnswers = baseAnswers
           .set(PassportOrIdCardDetailsYesNoPage, true).success.value
-          .set(PassportOrIdCardDetailsPage, CombinedPassportOrIdCard("GB", "1", LocalDate.of(2030, 10, 10))).success.value
+          .set(PassportOrIdCardDetailsPage, CombinedPassportOrIdCard("GB", "7890", LocalDate.of(2030, 10, 10))).success.value
 
-        val result = helper(userAnswers, provisional = false, name.displayName)
+        val result = helper(userAnswers, adding = false, name.displayName)
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(
@@ -136,8 +135,8 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
             AnswerRow(label = messages("individualBeneficiary.liveInTheUkYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(CheckMode).url)),
             AnswerRow(label = messages("individualBeneficiary.ukAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />AB1 1AB"), changeUrl = Some(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(CheckMode).url)),
             AnswerRow(label = messages("individualBeneficiary.nonUkAddress.checkYourAnswersLabel", name.displayName), answer = Html("value 1<br />value 2<br />Germany"), changeUrl = Some(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(CheckMode).url)),
-            AnswerRow(label = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsYesNoController.onPageLoad().url)),
-            AnswerRow(label = messages("individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />1<br />10 October 2030"), changeUrl = Some(controllers.individualbeneficiary.amend.routes.PassportOrIdCardDetailsController.onPageLoad().url)),
+            AnswerRow(label = messages("individualBeneficiary.passportOrIdCardDetailsYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(CheckMode).url)),
+            AnswerRow(label = messages("individualBeneficiary.passportOrIdCardDetails.checkYourAnswersLabel", name.displayName), answer = Html("United Kingdom<br />Number ending 7890<br />10 October 2030"), changeUrl = Some(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsController.onPageLoad(CheckMode).url)),
             AnswerRow(label = messages("individualBeneficiary.mentalCapacityYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(CheckMode).url)),
             AnswerRow(label = messages("individualBeneficiary.vpe1FormYesNo.checkYourAnswersLabel", name.displayName), answer = Html("Yes"), changeUrl = Some(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(CheckMode).url))
           )

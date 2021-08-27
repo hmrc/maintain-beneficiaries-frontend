@@ -18,7 +18,6 @@ package pages.individualbeneficiary
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.individualbeneficiary.add.{IdCardDetailsPage, IdCardDetailsYesNoPage, PassportDetailsPage, PassportDetailsYesNoPage}
 import play.api.libs.json.JsPath
 
 import scala.util.Try

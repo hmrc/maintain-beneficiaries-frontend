@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package pages.individualbeneficiary.add
+package pages.individualbeneficiary
 
-import models.UserAnswers
+import models.CombinedPassportOrIdCard
 import pages.QuestionPage
-import pages.individualbeneficiary.basePath
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object IdCardDetailsYesNoPage extends QuestionPage[Boolean] {
-
+case object PassportOrIdCardDetailsPage extends QuestionPage[CombinedPassportOrIdCard] {
   override def path: JsPath = basePath \ toString
 
-  override def toString: String = "idCardDetailsYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = value match {
-    case Some(false) =>
-      userAnswers.remove(IdCardDetailsPage)
-    case _ =>
-      super.cleanup(value, userAnswers)
-  }
-
+  override def toString: String = "passportOrIdCardDetails"
 }

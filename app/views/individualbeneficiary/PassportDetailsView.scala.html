@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import controllers.individualbeneficiary.amend.routes._
-@import utils.InputOption
+@import controllers.individualbeneficiary.routes._
 @import views.html.components.{Heading, ErrorSummary, InputText, InputDate, InputSelect, SubmitButton}
+@import utils.InputOption
 
 @this(
     main_template: MainTemplate,
@@ -29,22 +29,21 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], name: String, countryOptions:Seq[InputOption])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], name: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("individualBeneficiary.passportOrIdCardDetails.title", name)}",
+    title = s"${errorPrefix(form)}${messages("individualBeneficiary.passportDetails.title")}",
     showBackLink = true
 ) {
 
-    @formHelper(action = PassportOrIdCardDetailsController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = PassportDetailsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @errorSummary(form.errors)
 
-        @heading("individualBeneficiary.passportOrIdCardDetails.heading", Some(name))
+        @heading("individualBeneficiary.passportDetails.heading", Some(name))
 
-        @select(
-            field = form("country"),
-            label = messages("individualBeneficiary.passportOrIdCardDetails.country"),
+        @select(field = form("country"),
+            label = messages("individualBeneficiary.passportDetails.country"),
             options = countryOptions,
             placeholder = Some(messages("address.country.select")),
             formGroupClasses = Set("autocomplete-wrapper"),
@@ -53,15 +52,16 @@
 
         @inputText(
             field = form("number"),
+            label = messages("individualBeneficiary.passportDetails.number"),
+            hint = Some(messages("individualBeneficiary.passportDetails.number.hint")),
             inputClass = Some("govuk-input--width-20"),
-            label = messages("individualBeneficiary.passportOrIdCardDetails.number")
         )
 
         @inputDate(
             field = form("expiryDate"),
-            legend = messages("individualBeneficiary.passportOrIdCardDetails.expiryDate.title"),
+            legend = messages("individualBeneficiary.passportDetails.expiryDate"),
+            hint = Some(messages("individualBeneficiary.passportDetails.expiryDate.hint")),
             legendAsHeading = false,
-            hint = Some(messages(s"individualBeneficiary.passportOrIdCardDetails.expiryDate.hint")),
             legendClass = "govuk-label"
         )
 

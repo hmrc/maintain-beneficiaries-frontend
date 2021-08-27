@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.individualbeneficiary.amend
+package controllers.individualbeneficiary
 
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.CombinedPassportOrIdCardDetailsFormProvider
 import javax.inject.Inject
-import models.CheckMode
+import models.DetailsType.{Combined, CombinedProvisional}
+import models.Mode
 import navigation.Navigator
-import pages.individualbeneficiary.amend.PassportOrIdCardDetailsPage
+import pages.individualbeneficiary.PassportOrIdCardDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
-import views.html.individualbeneficiary.amend.PassportOrIdCardDetailsView
+import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,7 +48,7 @@ class PassportOrIdCardDetailsController @Inject()(
 
   val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetails")
 
-  def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(PassportOrIdCardDetailsPage) match {
@@ -55,21 +56,29 @@ class PassportOrIdCardDetailsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, request.beneficiaryName, countryOptions.options))
+      Ok(view(preparedForm, mode, request.beneficiaryName, countryOptions.options))
   }
 
-  def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.beneficiaryName, countryOptions.options))),
+          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName, countryOptions.options))),
 
-        value =>
+        newAnswer =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, value))
-            _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, CheckMode, updatedAnswers))
+            maybeOldAnswer <- Future.successful(request.userAnswers.get(PassportOrIdCardDetailsPage))
+            detailsType = {
+              maybeOldAnswer match {
+                case Some(oldAnswer) if oldAnswer.number == newAnswer.number && !oldAnswer.detailsType.isProvisional => Combined
+                case _ => CombinedProvisional
+              }
+            }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, newAnswer.copy(detailsType = detailsType)))
+            _ <- playbackRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, mode, updatedAnswers))
+
       )
   }
 }

@@ -25,6 +25,7 @@ site.error = Error:
 site.cannotRemove = Cannot remove
 site.cannotRemove-hidden = Cannot remove {0}
 site.warning = Warning
+site.number-ending = Number ending {0}
 
 site.return.link = Return to add a beneficiary
 site.beneficiary.defaultText = the beneficiary
