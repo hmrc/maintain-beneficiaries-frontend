@@ -167,7 +167,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
   }
 
   private def navigateAwayFromAddressQuestions(mode: Mode, ua: UserAnswers): Call = {
-    if (ua.get(PassportOrIdCardDetailsPage).isDefined) {
+    if (ua.get(PassportOrIdCardDetailsPage).isDefined || ua.get(PassportOrIdCardDetailsYesNoPage).isDefined) {
       rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
     } else {
       rts.PassportDetailsYesNoController.onPageLoad(mode)

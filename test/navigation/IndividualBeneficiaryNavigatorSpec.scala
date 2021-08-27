@@ -386,6 +386,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
               .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
           }
+
+          "no combined passport/id present but we do have the combined yes no page (the user has made edits to get to this)" in {
+            val combinedYesNoBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsYesNoPage, false).success.value
+            navigator.nextPage(NonUkAddressPage, mode, combinedYesNoBaseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          }
         }
 
         "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
@@ -873,6 +879,12 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
             "combined passport/id card details present" in {
               navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
+                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+            }
+
+            "no combined passport/id present but we do have the combined yes no page (the user has made edits to get to this)" in {
+              val combinedYesNoBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsYesNoPage, false).success.value
+              navigator.nextPage(NonUkAddressPage, mode, combinedYesNoBaseAnswers)
                 .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
             }
           }

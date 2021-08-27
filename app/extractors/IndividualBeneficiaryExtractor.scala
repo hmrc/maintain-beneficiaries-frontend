@@ -80,7 +80,7 @@ class IndividualBeneficiaryExtractor extends BeneficiaryExtractor[IndividualBene
       individualBeneficiary.identification match {
         case Some(NationalInsuranceNumber(nino)) =>
           answers.set(NationalInsuranceNumberYesNoPage, true)
-          .flatMap(_.set(NationalInsuranceNumberPage, nino))
+            .flatMap(_.set(NationalInsuranceNumberPage, nino))
         case Some(p: Passport) =>
           answers.set(NationalInsuranceNumberYesNoPage, false)
             .flatMap(_.set(PassportDetailsYesNoPage, true))
@@ -116,7 +116,8 @@ class IndividualBeneficiaryExtractor extends BeneficiaryExtractor[IndividualBene
 
   private def extractPassportOrIdCardDetailsYesNo(hasAddress: Boolean, answers: UserAnswers): Try[UserAnswers] = {
     if (hasAddress) {
-      answers.set(PassportOrIdCardDetailsYesNoPage, false)
+      answers.set(PassportDetailsYesNoPage, false)
+        .flatMap(_.set(IdCardDetailsYesNoPage, false))
     } else {
       Success(answers)
     }
