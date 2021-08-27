@@ -25,7 +25,6 @@ import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.IndexPage
 import play.api.mvc.Call
-
 import javax.inject.Inject
 
 class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
@@ -42,6 +41,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case CountryOfNationalityPage => ua => navigateAwayFromCountryOfNationalityQuestions(ua, mode)
     case NationalInsuranceNumberPage => ua => navigateAwayFromNinoQuestion(ua, mode)
     case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidencyQuestions(ua, mode)
+    case UkAddressPage | NonUkAddressPage => navigateAwayFromAddressQuestions(mode, _)
     case PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => ua => navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
     case MentalCapacityYesNoPage => ua => navigateAwayFromMentalCapacityPage(ua, mode)
     case StartDatePage => _ => addRts.CheckDetailsController.onPageLoad()
@@ -166,6 +166,14 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     }
   }
 
+  private def navigateAwayFromAddressQuestions(mode: Mode, ua: UserAnswers): Call = {
+    if (ua.get(PassportOrIdCardDetailsPage).isDefined) {
+      rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
+    } else {
+      rts.PassportDetailsYesNoController.onPageLoad(mode)
+    }
+  }
+
   private def navigateAwayFromMentalCapacityPage(ua: UserAnswers, mode: Mode): Call = {
     if (ua.isTaxable) {
       rts.VPE1FormYesNoController.onPageLoad(mode)
@@ -210,14 +218,10 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
       case NormalMode => {
         case VPE1FormYesNoPage => _ =>
           addRts.StartDateController.onPageLoad()
-        case UkAddressPage | NonUkAddressPage => _ =>
-          rts.PassportDetailsYesNoController.onPageLoad(mode)
       }
       case CheckMode => {
         case VPE1FormYesNoPage => ua =>
           modeNav(ua)
-        case UkAddressPage | NonUkAddressPage => _ =>
-          rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
       }
     }
   }

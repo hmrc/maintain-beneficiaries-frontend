@@ -73,7 +73,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
           .set(IdCardDetailsPage, IdCard("GB", "1234567890", LocalDate.of(2030, 10, 10))).success.value
           .set(StartDatePage, LocalDate.of(2020, 1, 1)).success.value
 
-        val result = helper(userAnswers, provisional = true, name.displayName)
+        val result = helper(userAnswers, adding = true, name.displayName)
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(
@@ -113,7 +113,7 @@ class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
           .set(PassportOrIdCardDetailsYesNoPage, true).success.value
           .set(PassportOrIdCardDetailsPage, CombinedPassportOrIdCard("GB", "7890", LocalDate.of(2030, 10, 10))).success.value
 
-        val result = helper(userAnswers, provisional = false, name.displayName)
+        val result = helper(userAnswers, adding = false, name.displayName)
         result mustBe AnswerSection(
           headingKey = None,
           rows = Seq(

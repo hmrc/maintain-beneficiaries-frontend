@@ -16,8 +16,10 @@
 
 package navigation
 
+import java.time.LocalDate
+
 import base.SpecBase
-import models.{CheckMode, Mode, NormalMode, TypeOfTrust}
+import models.{CheckMode, CombinedPassportOrIdCard, Mode, NormalMode, TypeOfTrust}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.IndexPage
@@ -35,7 +37,10 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
       "add journey" must {
 
         val mode: Mode = NormalMode
+        val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
+
         val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
+        val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
 
         "employment related trust" must {
 
@@ -147,9 +152,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .mustBe(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(mode))
         }
 
-        "UK address page -> Do you know passport details page" in {
-          navigator.nextPage(UkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+        "UK address page -> Do you know passport details page" must {
+          "combined passport/id card details not present" in {
+            navigator.nextPage(UkAddressPage, mode, baseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+          }
+
+          "combined passport/id card details present" in {
+            navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          }
         }
 
         "Is address in UK page -> No -> Non-UK address page" in {
@@ -160,9 +172,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .mustBe(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(mode))
         }
 
-        "Non-UK address page -> Do you know passport details page" in {
-          navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+        "Non-UK address page -> Do you know passport details page" must {
+          "combined passport/id card details not present" in {
+            navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+          }
+
+          "combined passport/id card details present" in {
+            navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          }
         }
 
         "Do you know passport details page -> Yes -> Passport details page" in {
@@ -222,7 +241,10 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
         val mode: Mode = CheckMode
         val index = 0
+        val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
+
         val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true).set(IndexPage, index).success.value
+        val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
 
         "employment related trust" must {
 
@@ -334,9 +356,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .mustBe(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(mode))
         }
 
-        "UK address page -> Do you know passport or ID card details page" in {
-          navigator.nextPage(UkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+        "UK address page -> Do you know passport or ID card details page" must {
+          "combined passport/id card details not present" in {
+            navigator.nextPage(UkAddressPage, mode, baseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+          }
+
+          "combined passport/id card details present" in {
+            navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          }
         }
 
         "Is address in UK page -> No -> Non-UK address page" in {
@@ -347,9 +376,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
             .mustBe(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(mode))
         }
 
-        "Non-UK address page -> Do you know passport or ID card details page" in {
-          navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+        "Non-UK address page -> Do you know passport or ID card details page" must {
+          "combined passport/id card details not present" in {
+            navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+          }
+
+          "combined passport/id card details present" in {
+            navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
+              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          }
         }
 
         "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
@@ -387,7 +423,6 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
       "taxable" must {
 
         "add journey" must {
-
 
           val mode: Mode = NormalMode
           val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
@@ -604,7 +639,10 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
           val mode: Mode = CheckMode
           val index = 0
+          val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
+
           val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true).set(IndexPage, index).success.value
+          val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
 
           "employment related trust" must {
 
@@ -807,9 +845,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
               .mustBe(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(mode))
           }
 
-          "UK address page -> Do you know passport or ID card details page" in {
-            navigator.nextPage(UkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          "UK address page -> Do you know passport or ID card details page" must {
+            "combined passport/id card details not present" in {
+              navigator.nextPage(UkAddressPage, mode, baseAnswers)
+                .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+            }
+
+            "combined passport/id card details present" in {
+              navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
+                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+            }
           }
 
           "Is address in UK page -> No -> Non-UK address page" in {
@@ -820,9 +865,16 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
               .mustBe(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(mode))
           }
 
-          "Non-UK address page -> Do you know passport or ID card details page" in {
-            navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+          "Non-UK address page -> Do you know passport or ID card details page" must {
+            "combined passport/id card details not present" in {
+              navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
+                .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
+            }
+
+            "combined passport/id card details present" in {
+              navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
+                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+            }
           }
 
           "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {

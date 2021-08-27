@@ -18,7 +18,7 @@ package extractors
 
 import base.SpecBase
 import models.beneficiaries.{IndividualBeneficiary, RoleInCompany}
-import models.{CombinedPassportOrIdCard, DetailsType, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, IdCard, Name, NationalInsuranceNumber, NonUkAddress, Passport, UkAddress, UserAnswers}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.amend._
 import java.time.LocalDate
@@ -889,12 +889,12 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(LiveInTheUkYesNoPage) mustBe None
         result.get(UkAddressPage) mustBe None
         result.get(NonUkAddressPage) mustBe None
-        result.get(PassportDetailsYesNoPage) mustBe None
-        result.get(PassportDetailsPage) mustBe None
+        result.get(PassportDetailsYesNoPage) mustBe Some(true)
+        result.get(PassportDetailsPage) mustBe Some(passport)
         result.get(IdCardDetailsYesNoPage) mustBe None
         result.get(IdCardDetailsPage) mustBe None
-        result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
-        result.get(PassportOrIdCardDetailsPage) mustBe Some(CombinedPassportOrIdCard("country", "number", date, DetailsType.Passport))
+        result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
+        result.get(PassportOrIdCardDetailsPage)  mustBe None
         result.get(MentalCapacityYesNoPage).get mustBe true
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
@@ -936,12 +936,12 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(LiveInTheUkYesNoPage) mustBe None
         result.get(UkAddressPage) mustBe None
         result.get(NonUkAddressPage) mustBe None
-        result.get(PassportDetailsYesNoPage) mustBe None
+        result.get(PassportDetailsYesNoPage) mustBe Some(false)
         result.get(PassportDetailsPage) mustBe None
-        result.get(IdCardDetailsYesNoPage) mustBe None
-        result.get(IdCardDetailsPage) mustBe None
-        result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
-        result.get(PassportOrIdCardDetailsPage) mustBe Some(CombinedPassportOrIdCard("country", "number", date, DetailsType.IdCard))
+        result.get(IdCardDetailsYesNoPage) mustBe Some(true)
+        result.get(IdCardDetailsPage) mustBe Some(idCard)
+        result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
+        result.get(PassportOrIdCardDetailsPage) mustBe None
         result.get(MentalCapacityYesNoPage).get mustBe true
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index

@@ -28,12 +28,12 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
+  def apply(userAnswers: UserAnswers, adding: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
     val bound = answerRowConverter.bind(userAnswers, name)
 
     def answerRows: Seq[AnswerRow] = {
-      val mode: Mode = if (provisional) NormalMode else CheckMode
+      val mode: Mode = if (adding) NormalMode else CheckMode
       Seq(
         bound.nameQuestion(NamePage, "individualBeneficiary.name", NameController.onPageLoad(mode).url),
         bound.roleInCompanyQuestion(RoleInCompanyPage, "individualBeneficiary.roleInCompany", RoleInCompanyController.onPageLoad(mode).url),
@@ -53,12 +53,12 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", LiveInTheUkYesNoController.onPageLoad(mode).url),
         bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
         bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
-        if (mode == NormalMode) bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", PassportDetailsYesNoController.onPageLoad(mode).url) else None,
-        if (mode == NormalMode) bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", Some(PassportDetailsController.onPageLoad(mode).url)) else None,
-        if (mode == NormalMode) bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", IdCardDetailsYesNoController.onPageLoad(mode).url) else None,
-        if (mode == NormalMode) bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", Some(IdCardDetailsController.onPageLoad(mode).url)) else None,
-        if (mode == CheckMode) bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url) else None,
-        if (mode == CheckMode) bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", Some(PassportOrIdCardDetailsController.onPageLoad(mode).url)) else None,
+        bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", PassportDetailsYesNoController.onPageLoad(mode).url),
+        bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", Some(PassportDetailsController.onPageLoad(mode).url)),
+        bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", IdCardDetailsYesNoController.onPageLoad(mode).url),
+        bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", Some(IdCardDetailsController.onPageLoad(mode).url)),
+        bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url),
+        bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", Some(PassportOrIdCardDetailsController.onPageLoad(mode).url)),
         bound.yesNoQuestion(MentalCapacityYesNoPage, "individualBeneficiary.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(mode).url),
         bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", VPE1FormYesNoController.onPageLoad(mode).url),
         if (mode == NormalMode) bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", StartDateController.onPageLoad().url) else None
