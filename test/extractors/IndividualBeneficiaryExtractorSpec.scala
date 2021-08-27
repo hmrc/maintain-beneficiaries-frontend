@@ -283,7 +283,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           result.get(PassportDetailsPage) mustBe None
           result.get(IdCardDetailsYesNoPage) mustBe Some(false)
           result.get(IdCardDetailsPage) mustBe None
-          result.get(PassportOrIdCardDetailsYesNoPage).get mustBe None
+          result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
           result.get(PassportOrIdCardDetailsPage) mustBe None
           result.get(MentalCapacityYesNoPage) mustBe None
           result.get(StartDatePage).get mustBe date
