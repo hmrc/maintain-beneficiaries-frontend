@@ -9,7 +9,7 @@ object AppDependencies {
     "com.typesafe.play"       %% "play-json-joda"             % "2.9.2",
     "uk.gov.hmrc"             %% "domain"                     % "6.2.0-play-28",
     "org.reactivemongo"       %% "play2-reactivemongo"        % "0.20.13-play28",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"         % "0.90.0-play-28"
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"         % "1.1.0-play-28"
   )
 
   private val test: Seq[ModuleID] = Seq(
