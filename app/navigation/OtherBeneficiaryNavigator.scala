@@ -42,7 +42,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     } else {
       rts.CountryOfResidenceYesNoController.onPageLoad(mode)
     }
-    case ShareOfIncomePage => ua => navigateAwayFromShareOfIncomeQuestions(ua, mode)
+    case ShareOfIncomePage => ua => rts.CountryOfResidenceYesNoController.onPageLoad(mode)
     case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidenceQuestions(ua, mode)
     case UkAddressPage | NonUkAddressPage => ua => navigateToStartDateOrCheckAnswers(ua, mode)
     case StartDatePage => _ => addRts.CheckDetailsController.onPageLoad()
@@ -52,7 +52,7 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
     case DiscretionYesNoPage => ua => yesNoNav(
       ua = ua,
       fromPage = DiscretionYesNoPage,
-      yesCall = navigateAwayFromShareOfIncomeQuestions(ua, mode),
+      yesCall = rts.CountryOfResidenceYesNoController.onPageLoad(mode),
       noCall = rts.ShareOfIncomeController.onPageLoad(mode)
     )
     case CountryOfResidenceYesNoPage => ua => yesNoNav(
@@ -79,14 +79,6 @@ class OtherBeneficiaryNavigator @Inject()() extends Navigator {
       yesCall = rts.UkAddressController.onPageLoad(mode),
       noCall = rts.NonUkAddressController.onPageLoad(mode)
     )
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(ua: UserAnswers, mode: Mode): Call = {
-    if (ua.is5mldEnabled) {
-      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
-    } else {
-      rts.AddressYesNoController.onPageLoad(mode)
-    }
   }
 
   private def navigateAwayFromCountryOfResidenceQuestions(ua: UserAnswers, mode: Mode): Call = {

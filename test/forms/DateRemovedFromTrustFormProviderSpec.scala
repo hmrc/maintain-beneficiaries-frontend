@@ -16,10 +16,10 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneOffset}
-
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
+
+import java.time.{LocalDate, ZoneOffset}
 
 class DateRemovedFromTrustFormProviderSpec extends DateBehaviours {
 

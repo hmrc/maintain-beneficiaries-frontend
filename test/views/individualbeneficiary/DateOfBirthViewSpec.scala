@@ -16,14 +16,14 @@
 
 package views.individualbeneficiary
 
-import java.time.LocalDate
-
 import forms.DateFormProvider
 import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.individualbeneficiary.DateOfBirthView
+
+import java.time.LocalDate
 
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 

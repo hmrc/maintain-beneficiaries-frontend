@@ -32,9 +32,7 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
 
   private val description: String = "Other"
   private val income: Int = 50
-  private val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "AB1 1AB")
   private val country: String = "FR"
-  private val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, country)
   private val date: LocalDate = LocalDate.parse("1996-02-03")
 
   private val extractor: OtherBeneficiaryExtractor = injector.instanceOf[OtherBeneficiaryExtractor]
@@ -43,102 +41,11 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
 
     "Populate user answers" when {
 
-      "4mld" when {
-
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true, isUnderlyingData5mld = false)
-
-        "has minimal data" in {
-
-          val beneficiary = OtherBeneficiary(
-            description = description,
-            address = None,
-            income = None,
-            incomeDiscretionYesNo = Some(true),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = false
-          )
-
-          val result = extractor.apply(baseAnswers, beneficiary, index).get
-
-          result.get(DescriptionPage).get mustBe description
-          result.get(DiscretionYesNoPage).get mustBe true
-          result.get(ShareOfIncomePage) mustBe None
-          result.get(CountryOfResidenceYesNoPage) mustBe None
-          result.get(CountryOfResidenceUkYesNoPage) mustBe None
-          result.get(CountryOfResidencePage) mustBe None
-          result.get(AddressYesNoPage).get mustBe false
-          result.get(AddressUkYesNoPage) mustBe None
-          result.get(UkAddressPage) mustBe None
-          result.get(NonUkAddressPage) mustBe None
-          result.get(StartDatePage).get mustBe date
-          result.get(IndexPage).get mustBe index
-        }
-
-        "has UK address" in {
-
-          val beneficiary = OtherBeneficiary(
-            description = description,
-            address = Some(ukAddress),
-            income = Some(income.toString),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = false
-          )
-
-          val result = extractor.apply(baseAnswers, beneficiary, index).get
-
-          result.get(DescriptionPage).get mustBe description
-          result.get(DiscretionYesNoPage).get mustBe false
-          result.get(ShareOfIncomePage).get mustBe income
-          result.get(CountryOfResidenceYesNoPage) mustBe None
-          result.get(CountryOfResidenceUkYesNoPage) mustBe None
-          result.get(CountryOfResidencePage) mustBe None
-          result.get(AddressYesNoPage).get mustBe true
-          result.get(AddressUkYesNoPage).get mustBe true
-          result.get(UkAddressPage).get mustBe ukAddress
-          result.get(NonUkAddressPage) mustBe None
-          result.get(StartDatePage).get mustBe date
-          result.get(IndexPage).get mustBe index
-        }
-
-        "has non-UK address" in {
-
-          val beneficiary = OtherBeneficiary(
-            description = description,
-            address = Some(nonUkAddress),
-            income = Some(income.toString),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = false
-          )
-
-          val result = extractor.apply(baseAnswers, beneficiary, index).get
-
-          result.get(DescriptionPage).get mustBe description
-          result.get(DiscretionYesNoPage).get mustBe false
-          result.get(ShareOfIncomePage).get mustBe income
-          result.get(CountryOfResidenceYesNoPage) mustBe None
-          result.get(CountryOfResidenceUkYesNoPage) mustBe None
-          result.get(CountryOfResidencePage) mustBe None
-          result.get(AddressYesNoPage).get mustBe true
-          result.get(AddressUkYesNoPage).get mustBe false
-          result.get(UkAddressPage) mustBe None
-          result.get(NonUkAddressPage).get mustBe nonUkAddress
-          result.get(StartDatePage).get mustBe date
-          result.get(IndexPage).get mustBe index
-        }
-      }
-
-      "5mld" when {
-
         "taxable" when {
 
           "underlying trust data is 4mld" when {
 
-            val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = false)
+            val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true, isUnderlyingData5mld = false)
 
             "has no country of residence" in {
 
@@ -171,7 +78,7 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
 
           "underlying trust data is 5mld" when {
 
-            val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = true)
+            val baseAnswers = emptyUserAnswers.copy(isTaxable = true, isUnderlyingData5mld = true)
 
             "has no country of residence" in {
 
@@ -258,11 +165,10 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
             }
           }
         }
-      }
 
       "non-taxable" when {
 
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false, isUnderlyingData5mld = true)
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = false, isUnderlyingData5mld = true)
 
         "has no country of residence" in {
 
@@ -323,7 +229,7 @@ class OtherBeneficiaryExtractorSpec extends SpecBase {
 
       "migrating from non-taxable to taxable" when {
 
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isUnderlyingData5mld = true, migratingFromNonTaxableToTaxable = true)
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(isUnderlyingData5mld = true, migratingFromNonTaxableToTaxable = true)
 
         "discretion and income undefined" in {
 

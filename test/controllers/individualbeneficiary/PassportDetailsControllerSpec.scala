@@ -16,8 +16,6 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.PassportDetailsFormProvider
@@ -26,8 +24,7 @@ import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.NamePage
-import pages.individualbeneficiary.PassportDetailsPage
+import pages.individualbeneficiary.{NamePage, PassportDetailsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -37,6 +34,7 @@ import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.PassportDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class PassportDetailsControllerSpec extends SpecBase with MockitoSugar {

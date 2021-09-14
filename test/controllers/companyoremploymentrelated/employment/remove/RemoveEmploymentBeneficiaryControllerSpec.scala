@@ -16,7 +16,6 @@
 
 package controllers.companyoremploymentrelated.employment.remove
 
-import java.time.LocalDate
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
@@ -34,6 +33,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.companyoremploymentrelated.employment.remove.RemoveIndexView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class RemoveEmploymentBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {

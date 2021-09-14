@@ -16,13 +16,13 @@
 
 package forms.behaviours
 
-import java.time.LocalDate
-
 import forms.{FormSpec, Validation}
 import generators.Generators
 import models.Passport
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.{Form, FormError}
+
+import java.time.LocalDate
 
 trait PassportOrIDCardBehaviours extends FormSpec
   with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {

@@ -16,12 +16,12 @@
 
 package views.companyoremploymentrelated.company
 
+import controllers.companyoremploymentrelated.company.routes
 import forms.YesNoFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import controllers.companyoremploymentrelated.company.routes
 import views.html.companyoremploymentrelated.company.DiscretionYesNoView
 
 class DiscretionYesNoViewSpec extends YesNoViewBehaviours {

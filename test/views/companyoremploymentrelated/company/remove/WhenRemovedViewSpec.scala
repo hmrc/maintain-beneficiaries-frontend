@@ -16,13 +16,13 @@
 
 package views.companyoremploymentrelated.company.remove
 
-import java.time.LocalDate
-
 import forms.DateRemovedFromTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.companyoremploymentrelated.company.remove.WhenRemovedView
+
+import java.time.LocalDate
 
 class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 

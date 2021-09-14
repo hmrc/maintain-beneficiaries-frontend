@@ -16,12 +16,12 @@
 
 package utils.print
 
-import java.time.LocalDate
-
 import base.SpecBase
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
+
+import java.time.LocalDate
 
 class ClassOfBeneficiaryPrintHelperSpec extends SpecBase {
 

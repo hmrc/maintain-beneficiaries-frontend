@@ -17,11 +17,11 @@
 package utils.print
 
 import base.SpecBase
+import models.{CombinedPassportOrIdCard, DetailsType}
 import play.api.i18n.{Lang, MessagesImpl}
 import play.twirl.api.Html
-import java.time.LocalDate
 
-import models.{CombinedPassportOrIdCard, DetailsType}
+import java.time.LocalDate
 
 class CheckAnswersFormattersSpec extends SpecBase {
 

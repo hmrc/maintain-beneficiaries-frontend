@@ -43,83 +43,6 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
 
     "generate charity beneficiary model" when {
 
-      "4mld" when {
-
-        "no address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, true).success.value
-            .set(AddressYesNoPage, false).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = None,
-            income = None,
-            incomeDiscretionYesNo = Some(true),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, true).success.value
-            .set(UkAddressPage, ukAddress).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(ukAddress),
-            income = Some("50"),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "non-UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, false).success.value
-            .set(NonUkAddressPage, nonUkAddress).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe CharityBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(nonUkAddress),
-            income = Some("50"),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-      }
-
-      "5mld" when {
-
         "taxable" when {
 
           "no country of residence" in {
@@ -271,7 +194,6 @@ class CharityBeneficiaryMapperSpec extends SpecBase {
             )
           }
         }
-      }
     }
   }
 }

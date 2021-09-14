@@ -16,422 +16,28 @@
 
 package navigation
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.{CheckMode, CombinedPassportOrIdCard, Mode, NormalMode, TypeOfTrust}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend.IndexPage
-import pages.individualbeneficiary.{NamePage, _}
+import pages.individualbeneficiary._
 import utils.Constants.ES
+
+import java.time.LocalDate
 
 class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks  {
 
   val navigator = new IndividualBeneficiaryNavigator
 
   "Individual beneficiary navigator" when {
-
-    "4mld" must {
-
-      "add journey" must {
-
-        val mode: Mode = NormalMode
-        val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
-
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
-        val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
-
-        "employment related trust" must {
-
-          "Name page -> Role in company page" in {
-            navigator.nextPage(NamePage, mode, baseAnswers.copy(trustType = Some(TypeOfTrust.EmployeeRelated)))
-              .mustBe(controllers.individualbeneficiary.routes.RoleInCompanyController.onPageLoad(mode))
-          }
-
-        }
-
-        "not an employment related trust" must {
-
-          "Name page -> Do you know date of birth page" in {
-            navigator.nextPage(NamePage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.DateOfBirthYesNoController.onPageLoad(mode))
-          }
-
-        }
-
-        "Role in company page -> Do you know date of birth page" in {
-          navigator.nextPage(RoleInCompanyPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.DateOfBirthYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know date of birth page -> Yes -> Date of birth page" in {
-          val answers = baseAnswers
-            .set(DateOfBirthYesNoPage, true).success.value
-
-          navigator.nextPage(DateOfBirthYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.DateOfBirthController.onPageLoad(mode))
-        }
-
-        "Date of birth page -> Do you know IncomeDiscretion page" in {
-          navigator.nextPage(DateOfBirthPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomeDiscretionYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know date of birth page -> No -> IncomeDiscretion page" in {
-          val answers = baseAnswers
-            .set(DateOfBirthYesNoPage, false).success.value
-
-          navigator.nextPage(DateOfBirthYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomeDiscretionYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know IncomeDiscretion page -> No -> IncomeDiscretion page" in {
-          val answers = baseAnswers
-            .set(IncomeDiscretionYesNoPage, false).success.value
-
-          navigator.nextPage(IncomeDiscretionYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomePercentageController.onPageLoad(mode))
-        }
-
-        "Do you know IncomeDiscretion page -> Yes -> Do you know NINO page" in {
-          val answers = baseAnswers
-            .set(IncomeDiscretionYesNoPage, true).success.value
-
-          navigator.nextPage(IncomeDiscretionYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberYesNoController.onPageLoad(mode))
-        }
-
-        "IncomeDiscretion page -> Do you know NINO page" in {
-          navigator.nextPage(IncomePercentagePage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know NINO page -> Yes -> NINO page" in {
-          val answers = baseAnswers
-            .set(NationalInsuranceNumberYesNoPage, true).success.value
-
-          navigator.nextPage(NationalInsuranceNumberYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberController.onPageLoad(mode))
-        }
-
-        "NINO page -> VPE1 Yes No page" in {
-          navigator.nextPage(NationalInsuranceNumberPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know NINO page -> No -> Do you know address page" in {
-          val answers = baseAnswers
-            .set(NationalInsuranceNumberYesNoPage, false).success.value
-
-          navigator.nextPage(NationalInsuranceNumberYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.AddressYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know address page -> Yes -> Is address in UK page" in {
-          val answers = baseAnswers
-            .set(AddressYesNoPage, true).success.value
-
-          navigator.nextPage(AddressYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know address page -> No -> VPE1 Yes No page" in {
-          val answers = baseAnswers
-            .set(AddressYesNoPage, false).success.value
-
-          navigator.nextPage(AddressYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Is address in UK page -> Yes -> UK address page" in {
-          val answers = baseAnswers
-            .set(LiveInTheUkYesNoPage, true).success.value
-
-          navigator.nextPage(LiveInTheUkYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(mode))
-        }
-
-        "UK address page -> Do you know passport details page" must {
-          "combined passport/id card details not present" in {
-            navigator.nextPage(UkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
-          }
-
-          "combined passport/id card details present" in {
-            navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
-          }
-        }
-
-        "Is address in UK page -> No -> Non-UK address page" in {
-          val answers = baseAnswers
-            .set(LiveInTheUkYesNoPage, false).success.value
-
-          navigator.nextPage(LiveInTheUkYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(mode))
-        }
-
-        "Non-UK address page -> Do you know passport details page" must {
-          "combined passport/id card details not present" in {
-            navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
-          }
-
-          "combined passport/id card details present" in {
-            navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
-          }
-        }
-
-        "Do you know passport details page -> Yes -> Passport details page" in {
-          val answers = baseAnswers
-            .set(PassportDetailsYesNoPage, true).success.value
-
-          navigator.nextPage(PassportDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportDetailsController.onPageLoad(mode))
-        }
-
-        "Passport details page -> VPE1 Yes No page" in {
-          navigator.nextPage(PassportDetailsPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know passport details page -> No -> Do you know ID card details page" in {
-          val answers = baseAnswers
-            .set(PassportDetailsYesNoPage, false).success.value
-
-          navigator.nextPage(PassportDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IdCardDetailsYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know ID card details page -> Yes -> ID card details page" in {
-          val answers = baseAnswers
-            .set(IdCardDetailsYesNoPage, true).success.value
-
-          navigator.nextPage(IdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IdCardDetailsController.onPageLoad(mode))
-        }
-
-        "ID card details page -> VPE1 Yes No page" in {
-          navigator.nextPage(IdCardDetailsPage, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know ID card details page -> No -> VPE1 Yes No page" in {
-          val answers = baseAnswers
-            .set(IdCardDetailsYesNoPage, false).success.value
-
-          navigator.nextPage(IdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "VPE1 Yes No page -> Start date page" in {
-          navigator.nextPage(VPE1FormYesNoPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.add.routes.StartDateController.onPageLoad())
-        }
-
-        "Start date page -> Check details page" in {
-          navigator.nextPage(StartDatePage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.add.routes.CheckDetailsController.onPageLoad())
-        }
-      }
-
-      "amend journey" must {
-
-        val mode: Mode = CheckMode
-        val index = 0
-        val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
-
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true).set(IndexPage, index).success.value
-        val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
-
-        "employment related trust" must {
-
-          "Name page -> Role in company page" in {
-            navigator.nextPage(NamePage, mode, emptyUserAnswers.copy(trustType = Some(TypeOfTrust.EmployeeRelated)))
-              .mustBe(controllers.individualbeneficiary.routes.RoleInCompanyController.onPageLoad(mode))
-          }
-
-        }
-
-        "not an employment related trust" must {
-
-          "Name page -> Do you know date of birth page" in {
-            navigator.nextPage(NamePage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.DateOfBirthYesNoController.onPageLoad(mode))
-          }
-
-        }
-
-        "Role in company page -> Do you know date of birth page" in {
-          navigator.nextPage(RoleInCompanyPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.DateOfBirthYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know date of birth page -> Yes -> Date of birth page" in {
-          val answers = baseAnswers
-            .set(DateOfBirthYesNoPage, true).success.value
-
-          navigator.nextPage(DateOfBirthYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.DateOfBirthController.onPageLoad(mode))
-        }
-
-        "Date of birth page -> Do you know IncomeDiscretion page" in {
-          navigator.nextPage(DateOfBirthPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomeDiscretionYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know date of birth page -> No -> IncomeDiscretion page" in {
-          val answers = baseAnswers
-            .set(DateOfBirthYesNoPage, false).success.value
-
-          navigator.nextPage(DateOfBirthYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomeDiscretionYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know IncomeDiscretion page -> No -> IncomeDiscretion page" in {
-          val answers = baseAnswers
-            .set(IncomeDiscretionYesNoPage, false).success.value
-
-          navigator.nextPage(IncomeDiscretionYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.IncomePercentageController.onPageLoad(mode))
-        }
-
-        "Do you know IncomeDiscretion page -> Yes -> Do you know NINO page" in {
-          val answers = baseAnswers
-            .set(IncomeDiscretionYesNoPage, true).success.value
-
-          navigator.nextPage(IncomeDiscretionYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberYesNoController.onPageLoad(mode))
-        }
-
-        "IncomeDiscretion page -> Do you know NINO page" in {
-          navigator.nextPage(IncomePercentagePage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know NINO page -> Yes -> NINO page" in {
-          val answers = baseAnswers
-            .set(NationalInsuranceNumberYesNoPage, true).success.value
-
-          navigator.nextPage(NationalInsuranceNumberYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NationalInsuranceNumberController.onPageLoad(mode))
-        }
-
-        "NINO page -> VPE1 Yes No page" in {
-          navigator.nextPage(NationalInsuranceNumberPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know NINO page -> No -> Do you know address page" in {
-          val answers = baseAnswers
-            .set(NationalInsuranceNumberYesNoPage, false).success.value
-
-          navigator.nextPage(NationalInsuranceNumberYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.AddressYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know address page -> Yes -> Is address in UK page" in {
-          val answers = baseAnswers
-            .set(AddressYesNoPage, true).success.value
-
-          navigator.nextPage(AddressYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.LiveInTheUkYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know address page -> No -> VPE1 Yes No page" in {
-          val answers = baseAnswers
-            .set(AddressYesNoPage, false).success.value
-
-          navigator.nextPage(AddressYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Is address in UK page -> Yes -> UK address page" in {
-          val answers = baseAnswers
-            .set(LiveInTheUkYesNoPage, true).success.value
-
-          navigator.nextPage(LiveInTheUkYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.UkAddressController.onPageLoad(mode))
-        }
-
-        "UK address page -> Do you know passport or ID card details page" must {
-          "combined passport/id card details not present" in {
-            navigator.nextPage(UkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
-          }
-
-          "combined passport/id card details present" in {
-            navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
-          }
-        }
-
-        "Is address in UK page -> No -> Non-UK address page" in {
-          val answers = baseAnswers
-            .set(LiveInTheUkYesNoPage, false).success.value
-
-          navigator.nextPage(LiveInTheUkYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.NonUkAddressController.onPageLoad(mode))
-        }
-
-        "Non-UK address page -> Do you know passport or ID card details page" must {
-          "combined passport/id card details not present" in {
-            navigator.nextPage(NonUkAddressPage, mode, baseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportDetailsYesNoController.onPageLoad(mode))
-          }
-
-          "combined passport/id card details present" in {
-            navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
-          }
-
-          "no combined passport/id present but we do have the combined yes no page (the user has made edits to get to this)" in {
-            val combinedYesNoBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsYesNoPage, false).success.value
-            navigator.nextPage(NonUkAddressPage, mode, combinedYesNoBaseAnswers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
-          }
-        }
-
-        "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
-          val answers = baseAnswers
-            .set(PassportOrIdCardDetailsYesNoPage, true).success.value
-
-          navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsController.onPageLoad(mode))
-        }
-
-        "Passport or ID card details page -> VPE1 Yes No page" in {
-          navigator.nextPage(PassportDetailsPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "Do you know passport or ID card details page -> No -> VPE1 Yes No page" in {
-          val answers = baseAnswers
-            .set(PassportOrIdCardDetailsYesNoPage, false).success.value
-
-          navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, answers)
-            .mustBe(controllers.individualbeneficiary.routes.VPE1FormYesNoController.onPageLoad(mode))
-        }
-
-        "VPE1 Yes No page -> Check details page" in {
-          navigator.nextPage(VPE1FormYesNoPage, mode, baseAnswers)
-            .mustBe(controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-        }
-      }
-
-    }
-
-
-    "5mld" when {
-
+    
       "taxable" must {
 
         "add journey" must {
 
           val mode: Mode = NormalMode
-          val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+          val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
           "employment related trust" must {
 
@@ -647,7 +253,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
           val index = 0
           val passportOrId = CombinedPassportOrIdCard("FR", "num", LocalDate.parse("2020-01-01"))
 
-          val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true).set(IndexPage, index).success.value
+          val baseAnswers = emptyUserAnswers.copy(isTaxable = true).set(IndexPage, index).success.value
           val combinedBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsPage, passportOrId).success.value
 
           "employment related trust" must {
@@ -932,7 +538,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
 
           val mode: Mode = NormalMode
-          val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+          val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
           "employment related trust" must {
 
@@ -1075,7 +681,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
           val mode: Mode = CheckMode
           val index = 0
-          val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false).set(IndexPage, index).success.value
+          val baseAnswers = emptyUserAnswers.copy(isTaxable = false).set(IndexPage, index).success.value
 
           "employment related trust" must {
 
@@ -1206,12 +812,9 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
               .mustBe(controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
           }
 
-
         }
 
       }
-
-    }
 
   }
 }

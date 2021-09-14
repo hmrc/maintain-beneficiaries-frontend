@@ -16,8 +16,6 @@
 
 package controllers.individualbeneficiary.remove
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
@@ -34,6 +32,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.individualbeneficiary.remove.RemoveIndexView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {

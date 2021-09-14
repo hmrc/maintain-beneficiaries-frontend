@@ -16,17 +16,17 @@
 
 package utils.print
 
-import java.time.LocalDate
-
 import base.SpecBase
+import controllers.individualbeneficiary.add.routes._
+import controllers.individualbeneficiary.routes._
 import models.beneficiaries.RoleInCompany.NA
 import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add.StartDatePage
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
-import controllers.individualbeneficiary.routes._
-import controllers.individualbeneficiary.add.routes._
+
+import java.time.LocalDate
 
 class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
 

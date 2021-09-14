@@ -30,138 +30,9 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
   "Charity beneficiary navigator" when {
 
-    "4mld" must {
-
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
-
-      "Name page -> Discretion yes no page" in {
-        navigator.nextPage(NamePage, baseAnswers)
-          .mustBe(rts.DiscretionYesNoController.onPageLoad(NormalMode))
-      }
-
-      "Discretion yes no page" when {
-        "-> Yes -> Address yes no page" in {
-          val answers = baseAnswers
-            .set(DiscretionYesNoPage, true).success.value
-
-          navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
-            .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
-        }
-
-        "-> No -> Share of income page" in {
-          val answers = baseAnswers
-            .set(DiscretionYesNoPage, false).success.value
-
-          navigator.nextPage(DiscretionYesNoPage, NormalMode, answers)
-            .mustBe(rts.ShareOfIncomeController.onPageLoad(NormalMode))
-        }
-      }
-
-      "Share of income page -> Address yes no page" in {
-        navigator.nextPage(ShareOfIncomePage, NormalMode, baseAnswers)
-          .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
-      }
-
-      "Address yes no page" when {
-        "-> Yes -> Address in the UK yes no page" in {
-          val answers = baseAnswers
-            .set(AddressYesNoPage, true).success.value
-
-          navigator.nextPage(AddressYesNoPage, NormalMode, answers)
-            .mustBe(rts.AddressUkYesNoController.onPageLoad(NormalMode))
-        }
-
-        "-> No" when {
-          "NormalMode" must {
-            "-> Start date page" in {
-              val answers = baseAnswers
-                .set(AddressYesNoPage, false).success.value
-
-              navigator.nextPage(AddressYesNoPage, NormalMode, answers)
-                .mustBe(rts.StartDateController.onPageLoad())
-            }
-          }
-
-          "CheckMode" must {
-            "-> Check your answers page" in {
-              val answers = baseAnswers
-                .set(IndexPage, index).success.value
-                .set(AddressYesNoPage, false).success.value
-
-              navigator.nextPage(AddressYesNoPage, CheckMode, answers)
-                .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
-            }
-          }
-        }
-      }
-
-      "Address in the UK yes no page" when {
-        "-> Yes -> UK address page" in {
-          val answers = baseAnswers
-            .set(AddressUkYesNoPage, true).success.value
-
-          navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
-            .mustBe(rts.UkAddressController.onPageLoad(NormalMode))
-        }
-
-        "-> No -> Non-UK address page" in {
-          val answers = baseAnswers
-            .set(AddressUkYesNoPage, false).success.value
-
-          navigator.nextPage(AddressUkYesNoPage, NormalMode, answers)
-            .mustBe(rts.NonUkAddressController.onPageLoad(NormalMode))
-        }
-      }
-
-      "UK address page" when {
-        "NormalMode" must {
-          "-> Start date page" in {
-            navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
-              .mustBe(rts.StartDateController.onPageLoad())
-          }
-        }
-
-        "CheckMode" must {
-          "-> Check your answers page" in {
-            val answers = baseAnswers
-              .set(IndexPage, index).success.value
-
-            navigator.nextPage(UkAddressPage, CheckMode, answers)
-              .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
-          }
-        }
-      }
-
-      "Non-UK address page" when {
-        "NormalMode" must {
-          "-> Start date page" in {
-            navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
-              .mustBe(rts.StartDateController.onPageLoad())
-          }
-        }
-
-        "CheckMode" must {
-          "-> Check your answers page" in {
-            val answers = baseAnswers
-              .set(IndexPage, index).success.value
-
-            navigator.nextPage(NonUkAddressPage, CheckMode, answers)
-              .mustBe(amendRts.CheckDetailsController.renderFromUserAnswers(index))
-          }
-        }
-      }
-
-      "Start date page -> Check your answers page" in {
-        navigator.nextPage(StartDatePage, NormalMode, baseAnswers)
-          .mustBe(rts.CheckDetailsController.onPageLoad())
-      }
-    }
-
-    "5mld" when {
-
       "taxable" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
         "Name page -> Discretion yes no page" in {
           navigator.nextPage(NamePage, NormalMode, baseAnswers)
@@ -329,7 +200,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
 
       "non-taxable" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "Name page -> Country of residence yes no page" in {
           navigator.nextPage(NamePage, NormalMode, baseAnswers)
@@ -411,6 +282,5 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
             .mustBe(rts.CheckDetailsController.onPageLoad())
         }
       }
-    }
   }
 }

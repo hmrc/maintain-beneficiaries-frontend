@@ -32,11 +32,7 @@ class EmploymentRelatedBeneficiaryNavigator extends Navigator {
     routes(mode)(page)(userAnswers)
 
   private def simpleNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
-    case NamePage => ua => if (ua.is5mldEnabled) {
-      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
-    } else {
-      rts.AddressYesNoController.onPageLoad(mode)
-    }
+    case NamePage => _ => rts.CountryOfResidenceYesNoController.onPageLoad(mode)
     case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidenceQuestions(ua, mode)
     case UkAddressPage | NonUkAddressPage => _ => rts.DescriptionController.onPageLoad(mode)
     case DescriptionPage => _ => rts.NumberOfBeneficiariesController.onPageLoad(mode)

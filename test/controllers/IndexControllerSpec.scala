@@ -41,7 +41,6 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
   val identifier = "1234567890"
   val startDate: LocalDate = LocalDate.parse("2019-06-01")
   val trustType: TypeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust
-  val is5mldEnabled = false
   val isTaxable = false
   val isUnderlyingData5mld = false
 
@@ -53,9 +52,6 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
       .thenReturn(Future.successful(HttpResponse(OK, "")))
-
-    when(mockTrustsStoreService.is5mldEnabled()(any(), any()))
-      .thenReturn(Future.successful(is5mldEnabled))
 
     when(mockTrustsConnector.isTrust5mld(any())(any(), any()))
       .thenReturn(Future.successful(isUnderlyingData5mld))
@@ -94,7 +90,6 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       uaCaptor.getValue.identifier mustBe identifier
       uaCaptor.getValue.whenTrustSetup mustBe startDate
       uaCaptor.getValue.trustType.get mustBe trustType
-      uaCaptor.getValue.is5mldEnabled mustBe is5mldEnabled
       uaCaptor.getValue.isTaxable mustBe isTaxable
       uaCaptor.getValue.isUnderlyingData5mld mustBe isUnderlyingData5mld
       uaCaptor.getValue.migratingFromNonTaxableToTaxable mustBe migratingFromNonTaxableToTaxable
@@ -133,7 +128,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       application.stop()
     }
 
-    "default isTaxable to true if trustTaxable is None i.e. 4mld" in {
+    "default isTaxable to true if trustTaxable is None" in {
 
       when(mockTrustsConnector.getTrustDetails(any())(any(), any()))
         .thenReturn(Future.successful(TrustDetails(startDate = startDate, typeOfTrust = Some(trustType), trustTaxable = None)))

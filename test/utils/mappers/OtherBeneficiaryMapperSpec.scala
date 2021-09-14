@@ -17,11 +17,11 @@
 package utils.mappers
 
 import base.SpecBase
-import utils.Constants.GB
 import models.beneficiaries.OtherBeneficiary
 import models.{NonUkAddress, UkAddress}
 import pages.other._
 import pages.other.add.StartDatePage
+import utils.Constants.GB
 
 import java.time.LocalDate
 
@@ -45,80 +45,6 @@ class OtherBeneficiaryMapperSpec extends SpecBase {
     }
 
     "generate other beneficiary model" when {
-
-      "4mld" when {
-
-        "no address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(DescriptionPage, description).success.value
-            .set(DiscretionYesNoPage, true).success.value
-            .set(AddressYesNoPage, false).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe OtherBeneficiary(
-            description = description,
-            address = None,
-            income = None,
-            incomeDiscretionYesNo = Some(true),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(DescriptionPage, description).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, true).success.value
-            .set(UkAddressPage, ukAddress).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe OtherBeneficiary(
-            description = description,
-            address = Some(ukAddress),
-            income = Some(share.toString),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "non-UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(DescriptionPage, description).success.value
-            .set(DiscretionYesNoPage, false).success.value
-            .set(ShareOfIncomePage, share).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, false).success.value
-            .set(NonUkAddressPage, nonUkAddress).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe OtherBeneficiary(
-            description = description,
-            address = Some(nonUkAddress),
-            income = Some(share.toString),
-            incomeDiscretionYesNo = Some(false),
-            countryOfResidence = None,
-            entityStart = date,
-            provisional = true
-          )
-        }
-      }
-
-      "5mld" when {
 
         "taxable" when {
 
@@ -264,7 +190,6 @@ class OtherBeneficiaryMapperSpec extends SpecBase {
             )
           }
         }
-      }
     }
   }
 }

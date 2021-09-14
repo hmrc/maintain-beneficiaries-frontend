@@ -16,10 +16,10 @@
 
 package utils.mappers
 
-import java.time.LocalDate
-
 import base.SpecBase
 import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
+
+import java.time.LocalDate
 
 class ClassOfBeneficiaryMapperSpec extends SpecBase {
 

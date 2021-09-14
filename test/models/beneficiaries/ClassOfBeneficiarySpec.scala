@@ -16,10 +16,10 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
-
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
+
+import java.time.LocalDate
 
 class ClassOfBeneficiarySpec extends WordSpec with MustMatchers {
 

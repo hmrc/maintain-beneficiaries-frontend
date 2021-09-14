@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock.{get, okJson, urlEqualTo, _}
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.HowManyBeneficiaries.Over501

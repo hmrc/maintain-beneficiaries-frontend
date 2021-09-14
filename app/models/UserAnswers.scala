@@ -30,7 +30,6 @@ final case class UserAnswers(internalId: String,
                              trustType: Option[TypeOfTrust],
                              data: JsObject = Json.obj(),
                              updatedAt: LocalDateTime = LocalDateTime.now,
-                             is5mldEnabled: Boolean,
                              isTaxable: Boolean,
                              isUnderlyingData5mld: Boolean,
                              migratingFromNonTaxableToTaxable: Boolean) {
@@ -115,7 +114,6 @@ object UserAnswers {
       (__ \ "trustType").readNullable[TypeOfTrust] and
       (__ \ "data").read[JsObject] and
       (__ \ "updatedAt").read(MongoDateTimeFormats.localDateTimeRead) and
-      (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
       (__ \ "isTaxable").readWithDefault[Boolean](true) and
       (__ \ "isUnderlyingData5mld").readWithDefault[Boolean](false) and
       (__ \ "migratingFromNonTaxableToTaxable").readWithDefault[Boolean](false)
@@ -128,7 +126,6 @@ object UserAnswers {
       (__ \ "trustType").writeNullable[TypeOfTrust] and
       (__ \ "data").write[JsObject] and
       (__ \ "updatedAt").write(MongoDateTimeFormats.localDateTimeWrite) and
-      (__ \ "is5mldEnabled").write[Boolean] and
       (__ \ "isTaxable").write[Boolean] and
       (__ \ "isUnderlyingData5mld").write[Boolean] and
       (__ \ "migratingFromNonTaxableToTaxable").write[Boolean]

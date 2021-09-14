@@ -16,13 +16,11 @@
 
 package controllers.companyoremploymentrelated.employment.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over1
-import models.{Description, UkAddress}
 import models.beneficiaries.EmploymentRelatedBeneficiary
+import models.{Description, UkAddress}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
@@ -37,6 +35,7 @@ import uk.gov.hmrc.http.HttpResponse
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import views.html.companyoremploymentrelated.employment.amend.CheckDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {

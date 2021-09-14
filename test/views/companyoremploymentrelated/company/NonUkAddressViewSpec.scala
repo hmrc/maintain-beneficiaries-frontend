@@ -16,6 +16,7 @@
 
 package views.companyoremploymentrelated.company
 
+import controllers.companyoremploymentrelated.company.routes
 import forms.NonUkAddressFormProvider
 import models.{NonUkAddress, NormalMode}
 import play.api.data.Form
@@ -23,7 +24,6 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.NonUkAddressViewBehaviours
-import controllers.companyoremploymentrelated.company.routes
 import views.html.companyoremploymentrelated.company.NonUkAddressView
 
 class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {

@@ -16,8 +16,6 @@
 
 package generators
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -25,6 +23,8 @@ import org.scalatest.TryValues
 import pages.QuestionPage
 import pages.individualbeneficiary.NamePage
 import play.api.libs.json.{JsValue, Json}
+
+import java.time.LocalDate
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
@@ -54,7 +54,6 @@ trait UserAnswersGenerator extends TryValues {
           case (obj, (path, value)) =>
             obj.setObject(path.path, value).get
         },
-        is5mldEnabled = false,
         isTaxable = true,
         isUnderlyingData5mld = false,
         migratingFromNonTaxableToTaxable = false
