@@ -17,11 +17,11 @@
 package extractors
 
 import base.SpecBase
-import utils.Constants.GB
 import models.HowManyBeneficiaries.Over1
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import models.{Description, HowManyBeneficiaries, NonUkAddress, UkAddress, UserAnswers}
 import pages.companyoremploymentrelated.employment._
+import utils.Constants.GB
 
 import java.time.LocalDate
 
@@ -30,7 +30,6 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
   private val index: Int = 0
 
   private val name: String = "Employment Related Name"
-  private val utr: String = "1234567890"
   private val description: Description = Description("Employment Related Description", None,  None, None, None)
   private val howManyBeneficiaries: HowManyBeneficiaries = Over1
   private val date: LocalDate = LocalDate.parse("1996-02-03")
@@ -44,118 +43,11 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
 
     "Populate user answers" when {
 
-      "4mld" when {
-
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true, isUnderlyingData5mld = false)
-
-        "has no address" in {
-
-          val beneficiary = EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = None,
-            description = description,
-            howManyBeneficiaries = howManyBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-
-          val result = extractor(baseAnswers, beneficiary, index).get
-
-          result.get(IndexPage).get mustBe index
-          result.get(NamePage).get mustBe name
-          result.get(UtrPage) mustBe None
-          result.get(AddressYesNoPage).get mustBe false
-          result.get(AddressUkYesNoPage) mustBe None
-          result.get(UkAddressPage) mustBe None
-          result.get(NonUkAddressPage) mustBe None
-          result.get(DescriptionPage).get mustBe description
-          result.get(NumberOfBeneficiariesPage).get mustBe howManyBeneficiaries
-        }
-
-        "has a UK address" in {
-
-          val beneficiary = EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(ukAddress),
-            description = description,
-            howManyBeneficiaries = howManyBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-
-          val result = extractor(baseAnswers, beneficiary, index).get
-
-          result.get(IndexPage).get mustBe index
-          result.get(NamePage).get mustBe name
-          result.get(UtrPage) mustBe None
-          result.get(AddressYesNoPage).get mustBe true
-          result.get(AddressUkYesNoPage).get mustBe true
-          result.get(UkAddressPage).get mustBe ukAddress
-          result.get(NonUkAddressPage) mustBe None
-          result.get(DescriptionPage).get mustBe description
-          result.get(NumberOfBeneficiariesPage).get mustBe howManyBeneficiaries
-        }
-
-        "has a non UK address" in {
-
-          val beneficiary = EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(nonUkAddress),
-            description = description,
-            howManyBeneficiaries = howManyBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-
-          val result = extractor(baseAnswers, beneficiary, index).get
-
-          result.get(IndexPage).get mustBe index
-          result.get(NamePage).get mustBe name
-          result.get(UtrPage) mustBe None
-          result.get(AddressYesNoPage).get mustBe true
-          result.get(AddressUkYesNoPage).get mustBe false
-          result.get(UkAddressPage) mustBe None
-          result.get(NonUkAddressPage).get mustBe nonUkAddress
-          result.get(DescriptionPage).get mustBe description
-          result.get(NumberOfBeneficiariesPage).get mustBe howManyBeneficiaries
-        }
-
-        "has a UTR" in {
-
-          val beneficiary = EmploymentRelatedBeneficiary(
-            name = name,
-            utr = Some(utr),
-            address = None,
-            description = description,
-            howManyBeneficiaries = howManyBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-
-          val result = extractor(baseAnswers, beneficiary, index).get
-
-          result.get(IndexPage).get mustBe index
-          result.get(NamePage).get mustBe name
-          result.get(UtrPage).get mustBe utr
-          result.get(AddressYesNoPage).get mustBe false
-          result.get(AddressUkYesNoPage) mustBe None
-          result.get(UkAddressPage) mustBe None
-          result.get(NonUkAddressPage) mustBe None
-          result.get(DescriptionPage).get mustBe description
-          result.get(NumberOfBeneficiariesPage).get mustBe howManyBeneficiaries
-        }
-      }
-
-      "5mld" when {
-
         "taxable" when {
 
           "underlying trust data is 4mld" when {
 
-            val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = false)
+            val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true, isUnderlyingData5mld = false)
 
             "has no country of residence" in {
 
@@ -189,7 +81,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
 
           "underlying trust data is 5mld" when {
 
-            val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true, isUnderlyingData5mld = true)
+            val baseAnswers = emptyUserAnswers.copy(isTaxable = true, isUnderlyingData5mld = true)
 
             "has no country of residence" in {
 
@@ -282,7 +174,7 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
 
         "non-taxable" when {
 
-          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false, isUnderlyingData5mld = true)
+          val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = false, isUnderlyingData5mld = true)
 
           "has no country of residence" in {
 
@@ -342,7 +234,6 @@ class EmploymentRelatedBeneficiaryExtractorSpec extends SpecBase {
             result.get(NumberOfBeneficiariesPage).get mustBe howManyBeneficiaries
           }
         }
-      }
     }
   }
 }

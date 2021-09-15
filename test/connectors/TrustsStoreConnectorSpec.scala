@@ -17,17 +17,11 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{urlEqualTo, _}
-import models.FeatureResponse
+import com.github.tomakehurst.wiremock.client.WireMock._
 import models.TaskStatus.Completed
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import play.api.http.Status
-import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
-
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 
 class TrustsStoreConnectorSpec extends SpecBase
   with ScalaFutures
@@ -90,70 +84,6 @@ class TrustsStoreConnectorSpec extends SpecBase
         }
 
         application.stop()
-      }
-    }
-
-    ".getFeature" must {
-
-      val feature = "5mld"
-      val url = s"/trusts-store/features/$feature"
-
-      "return a feature flag of true if 5mld is enabled" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts-store.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustsStoreConnector]
-
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(
-                  Json.stringify(
-                    Json.toJson(FeatureResponse(feature, isEnabled = true))
-                  )
-                )
-            )
-        )
-
-        val result = Await.result(connector.getFeature(feature), Duration.Inf)
-        result mustBe FeatureResponse(feature, isEnabled = true)
-      }
-
-      "return a feature flag of false if 5mld is not enabled" in {
-
-        val application = applicationBuilder()
-          .configure(
-            Seq(
-              "microservice.services.trusts-store.port" -> server.port(),
-              "auditing.enabled" -> false
-            ): _*
-          ).build()
-
-        val connector = application.injector.instanceOf[TrustsStoreConnector]
-
-        server.stubFor(
-          get(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(
-                  Json.stringify(
-                    Json.toJson(FeatureResponse(feature, isEnabled = false))
-                  )
-                )
-            )
-        )
-
-        val result = Await.result(connector.getFeature(feature), Duration.Inf)
-        result mustBe FeatureResponse(feature, isEnabled = false)
       }
     }
 

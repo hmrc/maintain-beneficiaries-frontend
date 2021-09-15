@@ -37,12 +37,12 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
   private def simpleNavigation(mode: Mode): PartialFunction[Page, UserAnswers => Call] = {
     case RoleInCompanyPage => _ => rts.DateOfBirthYesNoController.onPageLoad(mode)
     case DateOfBirthPage => ua => navigateAwayFromDateOfBirthPages(ua, mode)
-    case IncomePercentagePage => ua => navigateAwayFromShareOfIncomeQuestions(ua, mode)
+    case IncomePercentagePage => ua => rts.CountryOfNationalityYesNoController.onPageLoad(mode)
     case CountryOfNationalityPage => ua => navigateAwayFromCountryOfNationalityQuestions(ua, mode)
-    case NationalInsuranceNumberPage => ua => navigateAwayFromNinoQuestion(ua, mode)
+    case NationalInsuranceNumberPage => ua => rts.CountryOfResidenceYesNoController.onPageLoad(mode)
     case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidencyQuestions(ua, mode)
     case UkAddressPage | NonUkAddressPage => navigateAwayFromAddressQuestions(mode, _)
-    case PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => ua => navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
+    case PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => ua => rts.MentalCapacityYesNoController.onPageLoad(mode)
     case MentalCapacityYesNoPage => ua => navigateAwayFromMentalCapacityPage(ua, mode)
     case StartDatePage => _ => addRts.CheckDetailsController.onPageLoad()
   }
@@ -57,7 +57,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case IncomeDiscretionYesNoPage => ua => yesNoNav(
       ua = ua,
       fromPage = IncomeDiscretionYesNoPage,
-      yesCall = navigateAwayFromShareOfIncomeQuestions(ua, mode),
+      yesCall = rts.CountryOfNationalityYesNoController.onPageLoad(mode),
       noCall = rts.IncomePercentageController.onPageLoad(mode)
     )
     case CountryOfNationalityYesNoPage => ua => yesNoNav(
@@ -77,7 +77,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         ua = ua,
         fromPage = NationalInsuranceNumberYesNoPage,
         yesCall = rts.NationalInsuranceNumberController.onPageLoad(mode),
-        noCall = navigateAwayFromNinoYesNoQuestion(ua, mode)
+        noCall = rts.CountryOfResidenceYesNoController.onPageLoad(mode)
       )
     case CountryOfResidenceYesNoPage => ua => yesNoNav(
         ua = ua,
@@ -97,7 +97,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         ua = ua,
         fromPage = AddressYesNoPage,
         yesCall = rts.LiveInTheUkYesNoController.onPageLoad(mode),
-        noCall = navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
+        noCall = rts.MentalCapacityYesNoController.onPageLoad(mode)
       )
     case LiveInTheUkYesNoPage => ua =>
         yesNoNav(ua, LiveInTheUkYesNoPage, rts.UkAddressController.onPageLoad(mode), rts.NonUkAddressController.onPageLoad(mode))
@@ -108,14 +108,14 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         ua = ua,
         fromPage = IdCardDetailsYesNoPage,
         yesCall = rts.IdCardDetailsController.onPageLoad(mode),
-        noCall = navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
+        noCall = rts.MentalCapacityYesNoController.onPageLoad(mode)
       )
     case PassportOrIdCardDetailsYesNoPage => ua =>
       yesNoNav(
         ua = ua,
         fromPage = PassportOrIdCardDetailsYesNoPage,
         yesCall = rts.PassportOrIdCardDetailsController.onPageLoad(mode),
-        noCall = navigateToMentalCapacityOrVulnerableQuestions(ua, mode)
+        noCall = rts.MentalCapacityYesNoController.onPageLoad(mode)
       )
   }
 
@@ -124,14 +124,6 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
       rts.IncomeDiscretionYesNoController.onPageLoad(mode)
     } else {
       rts.CountryOfNationalityYesNoController.onPageLoad(mode)
-    }
-  }
-
-  private def navigateAwayFromShareOfIncomeQuestions(ua: UserAnswers, mode: Mode): Call = {
-    if (ua.is5mldEnabled) {
-      rts.CountryOfNationalityYesNoController.onPageLoad(mode)
-    } else {
-      rts.NationalInsuranceNumberYesNoController.onPageLoad(mode)
     }
   }
 
@@ -147,22 +139,6 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     (ua.get(NationalInsuranceNumberYesNoPage), ua.isTaxable) match {
       case (Some(true), _) | (_, false) => rts.MentalCapacityYesNoController.onPageLoad(mode)
       case (_, true) => rts.AddressYesNoController.onPageLoad(mode)
-    }
-  }
-
-  private def navigateAwayFromNinoYesNoQuestion(ua: UserAnswers, mode: Mode): Call = {
-    if (ua.is5mldEnabled) {
-      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
-    } else {
-      rts.AddressYesNoController.onPageLoad(mode)
-    }
-  }
-
-  private def navigateAwayFromNinoQuestion(ua: UserAnswers, mode: Mode): Call = {
-    if (ua.is5mldEnabled) {
-      rts.CountryOfResidenceYesNoController.onPageLoad(mode)
-    } else {
-      rts.VPE1FormYesNoController.onPageLoad(mode)
     }
   }
 
@@ -193,14 +169,6 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     answers.get(IndexPage) match {
       case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
       case None => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
-
-  private def navigateToMentalCapacityOrVulnerableQuestions(ua: UserAnswers, mode: Mode): Call = {
-    if (ua.is5mldEnabled) {
-      rts.MentalCapacityYesNoController.onPageLoad(mode)
-    } else {
-      rts.VPE1FormYesNoController.onPageLoad(mode)
     }
   }
 

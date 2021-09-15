@@ -16,8 +16,6 @@
 
 package controllers.companyoremploymentrelated.employment.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import models.Description
@@ -38,6 +36,7 @@ import uk.gov.hmrc.http.HttpResponse
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import views.html.companyoremploymentrelated.employment.amend.CheckDetailsUtrView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {

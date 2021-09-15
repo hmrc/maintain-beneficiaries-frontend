@@ -16,13 +16,13 @@
 
 package views.charityortrust.trust
 
-import java.time.LocalDate
-
 import forms.DateAddedToTrustFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.charityortrust.trust.StartDateView
+
+import java.time.LocalDate
 
 class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 

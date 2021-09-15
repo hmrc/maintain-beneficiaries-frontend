@@ -16,12 +16,12 @@
 
 package views.companyoremploymentrelated.company
 
+import controllers.companyoremploymentrelated.company.routes
 import forms.StringFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
-import controllers.companyoremploymentrelated.company.routes
-import models.NormalMode
 import views.html.companyoremploymentrelated.company.NameView
 
 class NameViewSpec extends StringViewBehaviours {

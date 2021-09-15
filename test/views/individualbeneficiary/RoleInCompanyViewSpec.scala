@@ -17,8 +17,8 @@
 package views.individualbeneficiary
 
 import forms.RoleInCompanyFormProvider
-import models.{Name, NormalMode}
 import models.beneficiaries.RoleInCompany
+import models.{Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.OptionsViewBehaviours

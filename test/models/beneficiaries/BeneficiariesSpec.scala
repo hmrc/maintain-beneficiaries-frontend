@@ -16,11 +16,12 @@
 
 package models.beneficiaries
 
-import java.time.LocalDate
 import base.SpecBase
 import models.HowManyBeneficiaries.Over1
 import models.{Description, Name}
 import viewmodels.RadioOption
+
+import java.time.LocalDate
 
 class BeneficiariesSpec extends SpecBase {
 

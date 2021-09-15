@@ -43,7 +43,6 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
     identifier = "UTRUTRUTR",
     whenTrustSetup = LocalDate.now(),
     trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
-    is5mldEnabled = false,
     isTaxable = true,
     isUnderlyingData5mld = false,
     migratingFromNonTaxableToTaxable = false

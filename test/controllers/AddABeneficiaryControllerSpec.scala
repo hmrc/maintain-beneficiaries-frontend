@@ -21,7 +21,7 @@ import connectors.{TrustConnector, TrustsStoreConnector}
 import forms.{AddABeneficiaryFormProvider, YesNoFormProvider}
 import models.HowManyBeneficiaries.Over201
 import models.TaskStatus.Completed
-import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, IndividualBeneficiary, _}
+import models.beneficiaries._
 import models.{AddABeneficiary, Description, Name, NationalInsuranceNumber, RemoveBeneficiary, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{any, eq => eqTo}

@@ -16,8 +16,6 @@
 
 package controllers.classofbeneficiary.amend
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import forms.DescriptionFormProvider
@@ -33,6 +31,7 @@ import services.TrustService
 import uk.gov.hmrc.http.HttpResponse
 import views.html.classofbeneficiary.amend.DescriptionView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {

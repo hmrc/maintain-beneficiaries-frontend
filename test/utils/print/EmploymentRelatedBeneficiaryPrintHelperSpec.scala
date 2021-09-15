@@ -16,13 +16,14 @@
 
 package utils.print
 
-import java.time.LocalDate
 import base.SpecBase
 import controllers.companyoremploymentrelated.employment.routes._
 import models.{CheckMode, Description, HowManyBeneficiaries, NonUkAddress, NormalMode, UkAddress}
 import pages.companyoremploymentrelated.employment._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
+
+import java.time.LocalDate
 
 class EmploymentRelatedBeneficiaryPrintHelperSpec extends SpecBase {
 

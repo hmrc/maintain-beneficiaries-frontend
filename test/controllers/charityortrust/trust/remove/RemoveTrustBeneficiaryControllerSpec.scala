@@ -16,8 +16,6 @@
 
 package controllers.charityortrust.trust.remove
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
@@ -33,6 +31,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.charityortrust.trust.remove.RemoveIndexView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class RemoveTrustBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {

@@ -16,13 +16,13 @@
 
 package models.beneficiaries
 
-import utils.Constants.GB
-
-import java.time.LocalDate
 import models.HowManyBeneficiaries._
 import models.{Description, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
+import utils.Constants.GB
+
+import java.time.LocalDate
 
 class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
   

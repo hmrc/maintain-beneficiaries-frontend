@@ -16,14 +16,14 @@
 
 package utils.print
 
-import java.time.LocalDate
-
 import base.SpecBase
 import controllers.charityortrust.trust.routes._
 import models.{CheckMode, NonUkAddress, NormalMode, UkAddress}
 import pages.charityortrust.trust._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
+
+import java.time.LocalDate
 
 class TrustBeneficiaryPrintHelperSpec extends SpecBase {
 

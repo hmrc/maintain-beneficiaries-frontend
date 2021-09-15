@@ -29,105 +29,9 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
   "Employment related beneficiary navigator" when {
 
-    "4mld" must {
-
-      val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
-
-      "Name page -> Address yes no page" in {
-        navigator.nextPage(NamePage, NormalMode, baseAnswers)
-          .mustBe(AddressYesNoController.onPageLoad(NormalMode))
-      }
-
-      "Address yes no page" when {
-
-        val page = AddressYesNoPage
-
-        "-> Yes -> Address in the UK yes no page" in {
-          val answers = baseAnswers
-            .set(page, true).success.value
-
-          navigator.nextPage(page, NormalMode, answers)
-            .mustBe(AddressUkYesNoController.onPageLoad(NormalMode))
-        }
-
-        "-> No -> Description page" in {
-          val answers = baseAnswers
-            .set(page, false).success.value
-
-          navigator.nextPage(page, NormalMode, answers)
-            .mustBe(DescriptionController.onPageLoad(NormalMode))
-        }
-      }
-
-      "Address in the UK yes no page" when {
-
-        val page = AddressUkYesNoPage
-
-        "-> Yes -> UK address page" in {
-          val answers = baseAnswers
-            .set(page, true).success.value
-
-          navigator.nextPage(page, NormalMode, answers)
-            .mustBe(UkAddressController.onPageLoad(NormalMode))
-        }
-
-        "-> No => Non-UK address page" in {
-          val answers = baseAnswers
-            .set(page, false).success.value
-
-          navigator.nextPage(page, NormalMode, answers)
-            .mustBe(NonUkAddressController.onPageLoad(NormalMode))
-        }
-      }
-
-      "UK address page -> Description page" in {
-        navigator.nextPage(UkAddressPage, NormalMode, baseAnswers)
-          .mustBe(DescriptionController.onPageLoad(NormalMode))
-      }
-
-      "Non-UK address page -> Description page" in {
-        navigator.nextPage(NonUkAddressPage, NormalMode, baseAnswers)
-          .mustBe(DescriptionController.onPageLoad(NormalMode))
-      }
-
-      "Description page -> Number of beneficiaries page" in {
-        navigator.nextPage(DescriptionPage, NormalMode, baseAnswers)
-          .mustBe(NumberOfBeneficiariesController.onPageLoad(NormalMode))
-      }
-
-      "Number of beneficiaries page" when {
-
-        val page = NumberOfBeneficiariesPage
-
-        "NormalMode" must {
-          "-> Start date page" in {
-            navigator.nextPage(page, NormalMode, baseAnswers)
-              .mustBe(StartDateController.onPageLoad())
-          }
-        }
-
-        "CheckMode" must {
-          "-> Check your answers page" in {
-            val answers = baseAnswers
-              .set(IndexPage, index).success.value
-
-            navigator.nextPage(page, CheckMode, answers)
-              .mustBe(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-          }
-        }
-      }
-
-      "Start date page -> Check your answers page" in {
-        navigator.nextPage(StartDatePage, baseAnswers)
-          .mustBe(CheckDetailsController.onPageLoad())
-      }
-    }
-
-    "5mld" when {
-
       "taxable" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = true)
 
         "Name page -> Country of residence yes no page" in {
           navigator.nextPage(NamePage, NormalMode, baseAnswers)
@@ -268,7 +172,7 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
 
       "non-taxable" must {
 
-        val baseAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+        val baseAnswers = emptyUserAnswers.copy(isTaxable = false)
 
         "Name page -> Country of residence yes no page" in {
           navigator.nextPage(NamePage, NormalMode, baseAnswers)
@@ -354,6 +258,5 @@ class EmploymentRelatedBeneficiaryNavigatorSpec extends SpecBase with ScalaCheck
             .mustBe(CheckDetailsController.onPageLoad())
         }
       }
-    }
   }
 }

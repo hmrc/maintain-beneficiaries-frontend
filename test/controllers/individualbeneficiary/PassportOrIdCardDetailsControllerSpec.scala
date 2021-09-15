@@ -16,8 +16,6 @@
 
 package controllers.individualbeneficiary
 
-import java.time.LocalDate
-
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.CombinedPassportOrIdCardDetailsFormProvider
@@ -28,8 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.individualbeneficiary.NamePage
-import pages.individualbeneficiary.PassportOrIdCardDetailsPage
+import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -37,6 +34,7 @@ import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {

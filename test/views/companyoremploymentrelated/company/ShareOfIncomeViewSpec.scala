@@ -16,12 +16,12 @@
 
 package views.companyoremploymentrelated.company
 
+import controllers.companyoremploymentrelated.company.routes
 import forms.IncomePercentageFormProvider
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
-import controllers.companyoremploymentrelated.company.routes
-import models.NormalMode
 import views.html.companyoremploymentrelated.company.ShareOfIncomeView
 
 class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {

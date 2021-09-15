@@ -16,12 +16,12 @@
 
 package forms.behaviours
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import models.{IdCard, Passport}
 import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 trait DateBehaviours extends FieldBehaviours {
 

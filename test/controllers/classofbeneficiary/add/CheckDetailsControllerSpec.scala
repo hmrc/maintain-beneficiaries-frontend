@@ -16,8 +16,6 @@
 
 package controllers.classofbeneficiary.add
 
-import java.time.LocalDate
-
 import base.SpecBase
 import connectors.TrustConnector
 import models.beneficiaries.TypeOfBeneficiaryToAdd
@@ -35,6 +33,7 @@ import uk.gov.hmrc.http.HttpResponse
 import utils.print.ClassOfBeneficiaryPrintHelper
 import views.html.classofbeneficiary.add.CheckDetailsView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {

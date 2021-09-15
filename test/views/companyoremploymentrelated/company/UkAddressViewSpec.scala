@@ -16,12 +16,12 @@
 
 package views.companyoremploymentrelated.company
 
+import controllers.companyoremploymentrelated.company.routes
 import forms.UkAddressFormProvider
 import models.{NormalMode, UkAddress}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
-import controllers.companyoremploymentrelated.company.routes
 import views.html.companyoremploymentrelated.company.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {

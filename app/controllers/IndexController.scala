@@ -43,14 +43,12 @@ class IndexController @Inject()(
 
       for {
         details <- trustsConnector.getTrustDetails(identifier)
-        is5mldEnabled <- trustsStoreService.is5mldEnabled()
         isUnderlyingData5mld <- trustsConnector.isTrust5mld(identifier)
         taxableMigrationFlag <- trustsConnector.getTrustMigrationFlag(identifier)
         ua <- Future.successful {
           request.userAnswers match {
             case Some(userAnswers) => userAnswers.copy(
               trustType = details.typeOfTrust,
-              is5mldEnabled = is5mldEnabled,
               isTaxable = details.isTaxable,
               isUnderlyingData5mld = isUnderlyingData5mld,
               migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
@@ -60,7 +58,6 @@ class IndexController @Inject()(
               identifier = identifier,
               whenTrustSetup = details.startDate,
               trustType = details.typeOfTrust,
-              is5mldEnabled = is5mldEnabled,
               isTaxable = details.isTaxable,
               isUnderlyingData5mld = isUnderlyingData5mld,
               migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable

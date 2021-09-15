@@ -17,10 +17,10 @@
 package utils.mappers
 
 import base.SpecBase
-import utils.Constants.GB
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import models.{Description, HowManyBeneficiaries, NonUkAddress, UkAddress}
 import pages.companyoremploymentrelated.employment._
+import utils.Constants.GB
 
 import java.time.LocalDate
 
@@ -45,81 +45,6 @@ class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
     }
 
     "generate employment related beneficiary model" when {
-
-      "4mld" when {
-
-        "no address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(AddressYesNoPage, false).success.value
-            .set(DescriptionPage, description).success.value
-            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = None,
-            description = description,
-            howManyBeneficiaries = numberOfBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, true).success.value
-            .set(UkAddressPage, ukAddress).success.value
-            .set(DescriptionPage, description).success.value
-            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(ukAddress),
-            description = description,
-            howManyBeneficiaries = numberOfBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-        }
-
-        "non-UK address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(NamePage, name).success.value
-            .set(AddressYesNoPage, true).success.value
-            .set(AddressUkYesNoPage, false).success.value
-            .set(NonUkAddressPage, nonUkAddress).success.value
-            .set(DescriptionPage, description).success.value
-            .set(NumberOfBeneficiariesPage, numberOfBeneficiaries).success.value
-            .set(StartDatePage, date).success.value
-
-          val result = mapper(userAnswers).get
-
-          result mustBe EmploymentRelatedBeneficiary(
-            name = name,
-            utr = None,
-            address = Some(nonUkAddress),
-            description = description,
-            howManyBeneficiaries = numberOfBeneficiaries,
-            entityStart = date,
-            provisional = true
-          )
-        }
-      }
-
-      "5mld" when {
 
         "taxable" when {
 
@@ -277,7 +202,6 @@ class EmploymentRelatedBeneficiaryMapperSpec extends SpecBase {
             )
           }
         }
-      }
     }
   }
 }

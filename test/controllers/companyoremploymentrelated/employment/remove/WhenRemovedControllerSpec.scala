@@ -16,7 +16,6 @@
 
 package controllers.companyoremploymentrelated.employment.remove
 
-import java.time.{LocalDate, ZoneOffset}
 import base.SpecBase
 import connectors.TrustConnector
 import forms.DateRemovedFromTrustFormProvider
@@ -34,6 +33,7 @@ import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
 import views.html.companyoremploymentrelated.employment.remove.WhenRemovedView
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {

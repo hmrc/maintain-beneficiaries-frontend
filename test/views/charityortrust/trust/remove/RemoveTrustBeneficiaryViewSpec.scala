@@ -16,12 +16,12 @@
 
 package views.charityortrust.trust.remove
 
+import controllers.charityortrust.trust.remove.routes
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
 import views.html.charityortrust.trust.remove.RemoveIndexView
-import controllers.charityortrust.trust.remove.routes
 
 class RemoveTrustBeneficiaryViewSpec extends YesNoViewBehaviours {
 
