@@ -17,8 +17,8 @@
 package extractors
 
 import base.SpecBase
+import models.UserAnswers
 import models.beneficiaries.TrustBeneficiary
-import models.{NonUkAddress, UkAddress, UserAnswers}
 import pages.charityortrust.trust._
 import utils.Constants.GB
 

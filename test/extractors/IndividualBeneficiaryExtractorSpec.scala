@@ -17,8 +17,9 @@
 package extractors
 
 import base.SpecBase
+import models.YesNoDontKnow.{No, Yes}
 import models.beneficiaries.IndividualBeneficiary
-import models.{CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, Passport, UkAddress, UserAnswers}
+import models.{CombinedPassportOrIdCard, IdCard, Name, Passport, UserAnswers}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add._
 import pages.individualbeneficiary.amend._
@@ -160,7 +161,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
                 incomeDiscretionYesNo = Some(false),
                 countryOfResidence = Some(GB),
                 nationality = Some(GB),
-                mentalCapacityYesNo = Some(true),
+                mentalCapacityYesNo = Some(Yes),
                 entityStart = date,
                 provisional = true
               )
@@ -190,7 +191,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               result.get(IdCardDetailsPage) mustBe None
               result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
               result.get(PassportOrIdCardDetailsPage) mustBe None
-              result.get(MentalCapacityYesNoPage).get mustBe true
+              result.get(MentalCapacityYesNoPage).get mustBe Yes
               result.get(StartDatePage).get mustBe date
               result.get(IndexPage).get mustBe index
             }
@@ -208,7 +209,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
                 incomeDiscretionYesNo = Some(true),
                 countryOfResidence = Some(country),
                 nationality = Some(country),
-                mentalCapacityYesNo = Some(false),
+                mentalCapacityYesNo = Some(No),
                 entityStart = date,
                 provisional = true
               )
@@ -238,7 +239,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               result.get(IdCardDetailsPage) mustBe None
               result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
               result.get(PassportOrIdCardDetailsPage) mustBe None
-              result.get(MentalCapacityYesNoPage).get mustBe false
+              result.get(MentalCapacityYesNoPage).get mustBe No
               result.get(StartDatePage).get mustBe date
               result.get(IndexPage).get mustBe index
             }
@@ -310,7 +311,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               incomeDiscretionYesNo = None,
               countryOfResidence = Some(GB),
               nationality = Some(GB),
-              mentalCapacityYesNo = Some(true),
+              mentalCapacityYesNo = Some(Yes),
               entityStart = date,
               provisional = true
             )
@@ -340,7 +341,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IdCardDetailsPage) mustBe None
             result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
             result.get(PassportOrIdCardDetailsPage) mustBe None
-            result.get(MentalCapacityYesNoPage).get mustBe true
+            result.get(MentalCapacityYesNoPage).get mustBe Yes
             result.get(StartDatePage).get mustBe date
             result.get(IndexPage).get mustBe index
           }
@@ -358,7 +359,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               incomeDiscretionYesNo = None,
               countryOfResidence = Some(country),
               nationality = Some(country),
-              mentalCapacityYesNo = Some(false),
+              mentalCapacityYesNo = Some(No),
               entityStart = date,
               provisional = true
             )
@@ -388,7 +389,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IdCardDetailsPage) mustBe None
             result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
             result.get(PassportOrIdCardDetailsPage) mustBe None
-            result.get(MentalCapacityYesNoPage).get mustBe false
+            result.get(MentalCapacityYesNoPage).get mustBe No
             result.get(StartDatePage).get mustBe date
             result.get(IndexPage).get mustBe index
           }
@@ -411,7 +412,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               incomeDiscretionYesNo = None,
               countryOfResidence = Some(GB),
               nationality = Some(GB),
-              mentalCapacityYesNo = Some(true),
+              mentalCapacityYesNo = Some(Yes),
               entityStart = date,
               provisional = true
             )
@@ -441,7 +442,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IdCardDetailsPage) mustBe None
             result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
             result.get(PassportOrIdCardDetailsPage) mustBe None
-            result.get(MentalCapacityYesNoPage).get mustBe true
+            result.get(MentalCapacityYesNoPage).get mustBe Yes
             result.get(StartDatePage).get mustBe date
             result.get(IndexPage).get mustBe index
           }
@@ -459,7 +460,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               incomeDiscretionYesNo = Some(true),
               countryOfResidence = Some(GB),
               nationality = Some(GB),
-              mentalCapacityYesNo = Some(true),
+              mentalCapacityYesNo = Some(Yes),
               entityStart = date,
               provisional = true
             )
@@ -489,7 +490,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IdCardDetailsPage) mustBe None
             result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
             result.get(PassportOrIdCardDetailsPage) mustBe None
-            result.get(MentalCapacityYesNoPage).get mustBe true
+            result.get(MentalCapacityYesNoPage).get mustBe Yes
             result.get(StartDatePage).get mustBe date
             result.get(IndexPage).get mustBe index
           }
@@ -507,7 +508,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               incomeDiscretionYesNo = Some(false),
               countryOfResidence = Some(GB),
               nationality = Some(GB),
-              mentalCapacityYesNo = Some(true),
+              mentalCapacityYesNo = Some(Yes),
               entityStart = date,
               provisional = true
             )
@@ -537,7 +538,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IdCardDetailsPage) mustBe None
             result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
             result.get(PassportOrIdCardDetailsPage) mustBe None
-            result.get(MentalCapacityYesNoPage).get mustBe true
+            result.get(MentalCapacityYesNoPage).get mustBe Yes
             result.get(StartDatePage).get mustBe date
             result.get(IndexPage).get mustBe index
           }
@@ -563,7 +564,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           incomeDiscretionYesNo = Some(true),
           countryOfResidence = Some(GB),
           nationality = Some(GB),
-          mentalCapacityYesNo = Some(true),
+          mentalCapacityYesNo = Some(Yes),
           entityStart = date,
           provisional = true
         )
@@ -593,7 +594,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(IdCardDetailsPage) mustBe None
         result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
         result.get(PassportOrIdCardDetailsPage)  mustBe None
-        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(MentalCapacityYesNoPage).get mustBe Yes
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
       }
@@ -610,7 +611,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           incomeDiscretionYesNo = Some(true),
           countryOfResidence = Some(GB),
           nationality = Some(GB),
-          mentalCapacityYesNo = Some(true),
+          mentalCapacityYesNo = Some(Yes),
           entityStart = date,
           provisional = true
         )
@@ -640,7 +641,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(IdCardDetailsPage) mustBe Some(idCard)
         result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
         result.get(PassportOrIdCardDetailsPage) mustBe None
-        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(MentalCapacityYesNoPage).get mustBe Yes
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
       }
@@ -659,7 +660,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
           incomeDiscretionYesNo = Some(true),
           countryOfResidence = Some(GB),
           nationality = Some(GB),
-          mentalCapacityYesNo = Some(true),
+          mentalCapacityYesNo = Some(Yes),
           entityStart = date,
           provisional = true
         )
@@ -689,7 +690,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
         result.get(IdCardDetailsPage) mustBe None
         result.get(PassportOrIdCardDetailsYesNoPage).get mustBe true
         result.get(PassportOrIdCardDetailsPage) mustBe Some(combined)
-        result.get(MentalCapacityYesNoPage).get mustBe true
+        result.get(MentalCapacityYesNoPage).get mustBe Yes
         result.get(StartDatePage).get mustBe date
         result.get(IndexPage).get mustBe index
       }

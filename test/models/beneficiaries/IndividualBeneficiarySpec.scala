@@ -16,7 +16,8 @@
 
 package models.beneficiaries
 
-import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
+import models.YesNoDontKnow.{DontKnow, No, Yes}
+import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress, YesNoDontKnow}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 
@@ -25,6 +26,7 @@ import java.time.LocalDate
 class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
   private val testDateOfBirth = Some(LocalDate.of(1970, 2, 28))
   private val testEntityStart = LocalDate.of(2017, 2, 28)
+  private val date: LocalDate = LocalDate.parse("1996-02-03")
 
   "IndividualBeneficiary" must {
 
@@ -80,7 +82,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -132,7 +134,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -173,7 +175,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -211,7 +213,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -267,7 +269,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -322,7 +324,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("10000"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(false),
             entityStart = testEntityStart,
             provisional = false
@@ -376,7 +378,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -414,7 +416,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -452,7 +454,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -490,7 +492,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = Some(true),
             entityStart = testEntityStart,
             provisional = false
@@ -529,7 +531,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
+            mentalCapacityYesNo = Some(DontKnow),
             incomeDiscretionYesNo = None,
             entityStart = testEntityStart,
             provisional = false
@@ -567,7 +569,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = Some("GB"),
             countryOfResidence = Some("GB"),
-            mentalCapacityYesNo = Some(false),
+            mentalCapacityYesNo = Some(No),
             incomeDiscretionYesNo = None,
             entityStart = testEntityStart,
             provisional = false
@@ -604,7 +606,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(true),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -656,7 +657,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -705,7 +705,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -750,7 +749,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -791,7 +789,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -833,7 +830,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -875,7 +871,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = Some("25"),
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = Some(false),
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -922,7 +917,6 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = None,
             countryOfResidence = None,
-            mentalCapacityYesNo = None,
             incomeDiscretionYesNo = None,
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -959,7 +953,7 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
             income = None,
             nationality = Some("GB"),
             countryOfResidence = Some("GB"),
-            mentalCapacityYesNo = Some(true),
+            mentalCapacityYesNo = Some(Yes),
             incomeDiscretionYesNo = None,
             entityStart = LocalDate.parse("2020-03-27"),
             provisional = false
@@ -987,5 +981,99 @@ class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
       }
 
     }
+
+    "parse the mental capacity question when beneficiary has mental capacity" in {
+      val json = Json.parse(
+        s"""
+           |{
+           | "name": {
+           |   "firstName": "John",
+           |   "lastName": "Smith"
+           | },
+           | "legallyIncapable": false,
+           | "entityStart": "$date",
+           | "provisional": false
+           |}
+           |""".stripMargin)
+
+      json.as[IndividualBeneficiary] mustBe IndividualBeneficiary(
+        name = Name("John", None, "Smith"),
+        dateOfBirth = None,
+        identification = None,
+        address = None,
+        vulnerableYesNo = None,
+        roleInCompany = None,
+        income = None,
+        incomeDiscretionYesNo = None,
+        countryOfResidence = None,
+        nationality = None,
+        mentalCapacityYesNo = Some(Yes),
+        entityStart = date,
+        provisional = false
+      )
+    }
+
+    "parse the mental capacity question when beneficiary does not have mental capacity" in {
+      val json = Json.parse(
+        s"""
+           |{
+           | "name": {
+           |   "firstName": "John",
+           |   "lastName": "Smith"
+           | },
+           | "legallyIncapable": true,
+           | "entityStart": "$date",
+           | "provisional": false
+           |}
+           |""".stripMargin)
+
+      json.as[IndividualBeneficiary] mustBe IndividualBeneficiary(
+        name = Name("John", None, "Smith"),
+        dateOfBirth = None,
+        identification = None,
+        address = None,
+        vulnerableYesNo = None,
+        roleInCompany = None,
+        income = None,
+        incomeDiscretionYesNo = None,
+        countryOfResidence = None,
+        nationality = None,
+        mentalCapacityYesNo = Some(No),
+        entityStart = date,
+        provisional = false
+      )
+    }
+
+    "parse the mental capacity question when mental capacity is not known" in {
+      val json = Json.parse(
+        s"""
+           |{
+           | "name": {
+           |   "firstName": "John",
+           |   "lastName": "Smith"
+           | },
+           | "entityStart": "$date",
+           | "provisional": false
+           |}
+           |""".stripMargin)
+
+      json.as[IndividualBeneficiary] mustBe IndividualBeneficiary(
+        name = Name("John", None, "Smith"),
+        dateOfBirth = None,
+        identification = None,
+        address = None,
+        vulnerableYesNo = None,
+        roleInCompany = None,
+        income = None,
+        incomeDiscretionYesNo = None,
+        countryOfResidence = None,
+        nationality = None,
+        mentalCapacityYesNo = Some(DontKnow),
+        entityStart = date,
+        provisional = false
+      )
+    }
+
   }
+
 }

@@ -17,8 +17,8 @@
 package extractors
 
 import base.SpecBase
+import models.UserAnswers
 import models.beneficiaries.OtherBeneficiary
-import models.{NonUkAddress, UkAddress, UserAnswers}
 import pages.other._
 import pages.other.add.StartDatePage
 import pages.other.amend.IndexPage

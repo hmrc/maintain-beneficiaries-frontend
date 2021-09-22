@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import generators.Generators
 import models.HowManyBeneficiaries.Over501
+import models.YesNoDontKnow.DontKnow
 import models.beneficiaries._
 import models.{BeneficiaryType, Description, Name, RemoveBeneficiary, TaxableMigrationFlag, TrustDetails, TypeOfTrust}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -91,6 +92,7 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
     roleInCompany = None,
     income = None,
     incomeDiscretionYesNo = Some(true),
+    mentalCapacityYesNo = Some(DontKnow),
     entityStart = LocalDate.parse("2000-01-01"),
     provisional = false
   )

@@ -36,6 +36,12 @@ trait ModelGenerators {
     }
   }
 
+  implicit lazy val arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] = {
+    Arbitrary {
+      Gen.oneOf(YesNoDontKnow.values)
+    }
+  }
+
   implicit lazy val arbitraryIdCard: Arbitrary[IdCard] =
     Arbitrary {
       for {

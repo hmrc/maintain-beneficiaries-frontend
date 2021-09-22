@@ -17,8 +17,8 @@
 package extractors
 
 import base.SpecBase
+import models.UserAnswers
 import models.beneficiaries.CompanyBeneficiary
-import models.{NonUkAddress, UkAddress, UserAnswers}
 import pages.companyoremploymentrelated.company._
 import utils.Constants.GB
 
