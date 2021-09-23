@@ -17,9 +17,10 @@
 package models.beneficiaries
 
 import models.TypeOfTrust.EmployeeRelated
+import models.YesNoDontKnow.{No, Yes}
 
 import java.time.LocalDate
-import models.{Address, IndividualIdentification, Name, TypeOfTrust}
+import models.{Address, IndividualIdentification, Name, TypeOfTrust, YesNoDontKnow}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -33,7 +34,7 @@ final case class IndividualBeneficiary(name: Name,
                                        incomeDiscretionYesNo: Option[Boolean] = None,
                                        countryOfResidence: Option[String] = None,
                                        nationality: Option[String] = None,
-                                       mentalCapacityYesNo: Option[Boolean] = None,
+                                       mentalCapacityYesNo: Option[YesNoDontKnow] = None,
                                        entityStart: LocalDate,
                                        provisional: Boolean) extends IncomeBeneficiary {
 
@@ -53,6 +54,19 @@ final case class IndividualBeneficiary(name: Name,
 
 object IndividualBeneficiary extends BeneficiaryReads {
 
+  def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
+    (__ \ 'legallyIncapable).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+      Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
+    }
+
+  def legallyIncapableWrites: Writes[YesNoDontKnow] = new Writes[YesNoDontKnow] {
+    override def writes(o: YesNoDontKnow): JsValue = o match {
+      case Yes => JsBoolean(false)
+      case No => JsBoolean(true)
+      case _ => JsNull
+    }
+  }
+
   implicit val reads: Reads[IndividualBeneficiary] = (
     (__ \ 'name).read[Name] and
       (__ \ 'dateOfBirth).readNullable[LocalDate] and
@@ -64,7 +78,7 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
       (__ \ 'countryOfResidence).readNullable[String] and
       (__ \ 'nationality).readNullable[String] and
-      (__ \ 'legallyIncapable).readNullable[Boolean].map(_.map(!_)) and
+      readMentalCapacity and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map{
@@ -89,7 +103,7 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
       (__ \ 'countryOfResidence).writeNullable[String] and
       (__ \ 'nationality).writeNullable[String] and
-      (__ \ 'legallyIncapable).writeNullable[Boolean](x => JsBoolean(!x)) and
+      (__ \ 'legallyIncapable).writeNullable[YesNoDontKnow](legallyIncapableWrites) and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(IndividualBeneficiary.unapply))

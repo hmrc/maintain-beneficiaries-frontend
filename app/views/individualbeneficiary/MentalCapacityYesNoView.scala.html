@@ -15,12 +15,12 @@
  *@
 
 @import controllers.individualbeneficiary.routes._
-@import views.html.components.{ErrorSummary, SubmitButton, InputYesNo, BulletList, Heading}
+@import views.html.components.{ErrorSummary, SubmitButton, InputYesNoDontKnow, BulletList, Heading}
 
 @this(
     main_template: MainTemplate,
     errorSummary: ErrorSummary,
-    inputYesNo: InputYesNo,
+    inputYesNoDontKnow: InputYesNoDontKnow,
     submitButton: SubmitButton,
     bulletList: BulletList,
     formHelper: FormWithCSRF,
@@ -30,17 +30,25 @@
 @(form: Form[_], mode: Mode, name: String)(implicit request: Request[_], messages: Messages)
 
 @content = {
-<p>@messages("individualBeneficiary.mentalCapacityYesNo.p1")</p>
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p1")</p>
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p2")</p>
 
-@bulletList(
-"individualBeneficiary.mentalCapacityYesNo",
-    List(
-        "bulletpoint1",
-        "bulletpoint2",
-        "bulletpoint3",
-        "bulletpoint4"
+    @bulletList(
+    "individualBeneficiary.mentalCapacityYesNo",
+        List(
+            "bulletpoint1",
+            "bulletpoint2",
+            "bulletpoint3",
+            "bulletpoint4"
+            )
         )
-    )
+
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p3")</p>
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p4")</p>
+
+    <h2>@messages("individualBeneficiary.mentalCapacityYesNo.heading2")</h2>
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p5")</p>
+    <p>@messages("individualBeneficiary.mentalCapacityYesNo.p6")</p>
 }
 
 @main_template(
@@ -56,7 +64,7 @@
 
         @content
 
-        @inputYesNo(
+        @inputYesNoDontKnow(
             field = form("value"),
             label = messages("individualBeneficiary.mentalCapacityYesNo.heading", name),
             legendClass = Some("govuk-visually-hidden"),

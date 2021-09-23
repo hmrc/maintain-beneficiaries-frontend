@@ -19,9 +19,8 @@ package controllers.individualbeneficiary
 import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
-import forms.YesNoFormProvider
-import javax.inject.Inject
-import models.Mode
+import forms.YesNoDontKnowFormProvider
+import models.{Mode, YesNoDontKnow}
 import navigation.Navigator
 import pages.individualbeneficiary.MentalCapacityYesNoPage
 import play.api.data.Form
@@ -31,6 +30,7 @@ import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.individualbeneficiary.MentalCapacityYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MentalCapacityYesNoController @Inject()(
@@ -39,11 +39,11 @@ class MentalCapacityYesNoController @Inject()(
                                                    @IndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
-                                                   formProvider: YesNoFormProvider,
+                                                   formProvider: YesNoDontKnowFormProvider,
                                                    view: MentalCapacityYesNoView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.mentalCapacityYesNo")
+  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.mentalCapacityYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
       implicit request =>

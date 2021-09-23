@@ -17,6 +17,7 @@
 package utils.mappers
 
 import base.SpecBase
+import models.YesNoDontKnow.{No, Yes}
 import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add.StartDatePage
@@ -49,7 +50,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(IncomeDiscretionYesNoPage, true).success.value
               .set(CountryOfNationalityYesNoPage, false).success.value
               .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, No).success.value
               .set(NationalInsuranceNumberYesNoPage, true).success.value
               .set(NationalInsuranceNumberPage, nino).success.value
               .set(VPE1FormYesNoPage, false).success.value
@@ -64,7 +65,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(No)
             result.identification mustBe Some(NationalInsuranceNumber(nino))
             result.address mustBe None
             result.vulnerableYesNo mustBe Some(false)
@@ -84,7 +85,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(CountryOfNationalityUkYesNoPage, true).success.value
               .set(CountryOfResidenceYesNoPage, true).success.value
               .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, Yes).success.value
               .set(NationalInsuranceNumberYesNoPage, true).success.value
               .set(NationalInsuranceNumberPage, nino).success.value
               .set(VPE1FormYesNoPage, false).success.value
@@ -99,7 +100,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(Yes)
             result.identification mustBe Some(NationalInsuranceNumber(nino))
             result.address mustBe None
             result.vulnerableYesNo mustBe Some(false)
@@ -118,7 +119,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(DateOfBirthPage, dateOfBirth).success.value
               .set(CountryOfNationalityYesNoPage, false).success.value
               .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, No).success.value
               .set(StartDatePage, startDate).success.value
 
             val result = mapper(userAnswers).get
@@ -130,7 +131,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(No)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
@@ -147,7 +148,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(CountryOfNationalityUkYesNoPage, true).success.value
               .set(CountryOfResidenceYesNoPage, true).success.value
               .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, Yes).success.value
               .set(StartDatePage, startDate).success.value
 
             val result = mapper(userAnswers).get
@@ -159,7 +160,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(Yes)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
@@ -187,7 +188,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(IncomeDiscretionYesNoPage, true).success.value
               .set(CountryOfNationalityYesNoPage, false).success.value
               .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, false).success.value
+              .set(MentalCapacityYesNoPage, No).success.value
               .set(NationalInsuranceNumberYesNoPage, false).success.value
               .set(AddressYesNoPage, true).success.value
               .set(LiveInTheUkYesNoPage, false).success.value
@@ -206,7 +207,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe None
             result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(false)
+            result.mentalCapacityYesNo mustBe Some(No)
             result.identification mustBe Some(passport)
             result.address mustBe Some(nonUkAddress)
             result.vulnerableYesNo mustBe Some(false)
@@ -229,7 +230,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
               .set(CountryOfNationalityUkYesNoPage, true).success.value
               .set(CountryOfResidenceYesNoPage, true).success.value
               .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, true).success.value
+              .set(MentalCapacityYesNoPage, Yes).success.value
               .set(StartDatePage, startDate).success.value
 
             val result = mapper(userAnswers).get
@@ -241,7 +242,7 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
             result.income mustBe None
             result.countryOfResidence mustBe Some("GB")
             result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(true)
+            result.mentalCapacityYesNo mustBe Some(Yes)
             result.identification mustBe None
             result.address mustBe None
             result.vulnerableYesNo mustBe None
