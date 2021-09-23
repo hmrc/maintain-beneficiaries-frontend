@@ -17,7 +17,7 @@
 package extractors
 
 import base.SpecBase
-import models.YesNoDontKnow.{No, Yes}
+import models.YesNoDontKnow.{DontKnow, No, Yes}
 import models.beneficiaries.IndividualBeneficiary
 import models.{CombinedPassportOrIdCard, IdCard, Name, Passport, UserAnswers}
 import pages.individualbeneficiary._
@@ -167,7 +167,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               )
 
               val result = extractor(baseAnswers, individual, index).get
-              
+
               result.get(NamePage).get mustBe name
               result.get(DateOfBirthYesNoPage).get mustBe true
               result.get(DateOfBirthPage).get mustBe date
@@ -195,6 +195,54 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               result.get(StartDatePage).get mustBe date
               result.get(IndexPage).get mustBe index
             }
+
+              "has UK country of nationality,  UK country of residence and don't know mental capacity" in {
+
+                val individual = IndividualBeneficiary(
+                  name = name,
+                  dateOfBirth = Some(date),
+                  identification = None,
+                  address = None,
+                  vulnerableYesNo = Some(false),
+                  roleInCompany = None,
+                  income = Some(income.toString),
+                  incomeDiscretionYesNo = Some(false),
+                  countryOfResidence = Some(GB),
+                  nationality = Some(GB),
+                  mentalCapacityYesNo = Some(DontKnow),
+                  entityStart = date,
+                  provisional = true
+                )
+
+                val result = extractor(baseAnswers, individual, index).get
+
+                result.get(NamePage).get mustBe name
+                result.get(DateOfBirthYesNoPage).get mustBe true
+                result.get(DateOfBirthPage).get mustBe date
+                result.get(IncomeDiscretionYesNoPage).get mustBe false
+                result.get(IncomePercentagePage).get mustBe income
+                result.get(CountryOfNationalityYesNoPage).get mustBe true
+                result.get(CountryOfNationalityUkYesNoPage).get mustBe true
+                result.get(CountryOfNationalityPage).get mustBe GB
+                result.get(CountryOfResidenceYesNoPage).get mustBe true
+                result.get(CountryOfResidenceUkYesNoPage).get mustBe true
+                result.get(CountryOfResidencePage).get mustBe GB
+                result.get(NationalInsuranceNumberYesNoPage).get mustBe false
+                result.get(NationalInsuranceNumberPage) mustBe None
+                result.get(AddressYesNoPage).get mustBe false
+                result.get(LiveInTheUkYesNoPage) mustBe None
+                result.get(UkAddressPage) mustBe None
+                result.get(NonUkAddressPage) mustBe None
+                result.get(PassportDetailsYesNoPage) mustBe None
+                result.get(PassportDetailsPage) mustBe None
+                result.get(IdCardDetailsYesNoPage) mustBe None
+                result.get(IdCardDetailsPage) mustBe None
+                result.get(PassportOrIdCardDetailsYesNoPage) mustBe None
+                result.get(PassportOrIdCardDetailsPage) mustBe None
+                result.get(MentalCapacityYesNoPage).get mustBe DontKnow
+                result.get(StartDatePage).get mustBe date
+                result.get(IndexPage).get mustBe index
+              }
 
             "has non-UK country of nationality, on-UK country of residence and no mental capacity" in {
 
