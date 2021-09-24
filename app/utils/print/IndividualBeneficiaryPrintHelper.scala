@@ -32,6 +32,9 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
 
     val bound = answerRowConverter.bind(userAnswers, name)
 
+    val changeLinkOrNone: (Boolean, String) => Option[String] =
+      (adding: Boolean, route: String) => if(adding) Some(route) else None
+
     def answerRows: Seq[AnswerRow] = {
       val mode: Mode = if (adding) NormalMode else CheckMode
       Seq(
@@ -57,8 +60,8 @@ class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowCo
         bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", Some(PassportDetailsController.onPageLoad(mode).url)),
         bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", IdCardDetailsYesNoController.onPageLoad(mode).url),
         bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", Some(IdCardDetailsController.onPageLoad(mode).url)),
-        bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url),
-        bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", Some(PassportOrIdCardDetailsController.onPageLoad(mode).url)),
+        bound.yesNoQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", changeLinkOrNone(adding, PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url)),
+        bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", changeLinkOrNone(adding, PassportOrIdCardDetailsController.onPageLoad(mode).url)),
         bound.enumQuestion(MentalCapacityYesNoPage, "individualBeneficiary.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(mode).url, "site"),
         bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", VPE1FormYesNoController.onPageLoad(mode).url),
         if (mode == NormalMode) bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", StartDateController.onPageLoad().url) else None

@@ -6,6 +6,7 @@ site.hidden-delete = Tynnu {0}
 site.hidden-edit = Newid {0}
 site.hidden-update = Diweddaru {0}
 site.change.details = Newid manylion
+site.cannot.change = Dim modd newid
 site.no = Na
 site.yes = Iawn
 site.iDontKnow=Nid wyf yn gwybod
@@ -381,8 +382,11 @@ individualBeneficiary.startDate.error.required = Mae’n rhaid i’r dyddiad yr 
 individualBeneficiary.startDate.error.invalid = Nodwch ddyddiad go iawn
 individualBeneficiary.startDate.error.future = Mae’n rhaid i’r dyddiad yr ychwanegwyd y buddiolwr unigol at yr ymddiriedolaeth fod heddiw neu yn y gorffennol
 individualBeneficiary.startDate.error.past = Ni all y dyddiad yr ychwanegwyd y buddiolwr unigol at yr ymddiriedolaeth fod cyn dyddiad dechrau’r ymddiriedolaeth
+
 individualBeneficiary.checkDetails.title = Gwiriwch fanylion y buddiolwr unigol
 individualBeneficiary.checkDetails.heading = Gwiriwch fanylion y buddiolwr unigol
+individualBeneficiary.cannotChange.p1 = Does dim modd newid peth o’r wybodaeth rydym yn gofyn amdani ynghylch y buddiolwr.
+individualBeneficiary.cannotChange.p2 = Os oes angen i chi ddiweddaru manylion y buddiolwr, bydd yn rhaid i chi ei dynnu ac yna ei ychwanegu fel buddiolwr newydd.
 
 individualBeneficiary.countryOfNationalityYesNo.title=A ydych yn gwybod gwlad cenedligrwydd y buddiolwr unigol?
 individualBeneficiary.countryOfNationalityYesNo.heading=A ydych yn gwybod gwlad cenedligrwydd {0}?

@@ -42,7 +42,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
     case NationalInsuranceNumberPage => ua => rts.CountryOfResidenceYesNoController.onPageLoad(mode)
     case CountryOfResidencePage => ua => navigateAwayFromCountryOfResidencyQuestions(ua, mode)
     case UkAddressPage | NonUkAddressPage => navigateAwayFromAddressQuestions(mode, _)
-    case PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => ua => rts.MentalCapacityYesNoController.onPageLoad(mode)
+    case PassportDetailsPage | IdCardDetailsPage | PassportOrIdCardDetailsPage => ua => navigateAwayFromPassportIdCardCombined(mode)
     case MentalCapacityYesNoPage => ua => navigateAwayFromMentalCapacityPage(ua, mode)
     case StartDatePage => _ => addRts.CheckDetailsController.onPageLoad()
   }
@@ -111,12 +111,11 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
         noCall = rts.MentalCapacityYesNoController.onPageLoad(mode)
       )
     case PassportOrIdCardDetailsYesNoPage => ua =>
-      yesNoNav(
-        ua = ua,
-        fromPage = PassportOrIdCardDetailsYesNoPage,
-        yesCall = rts.PassportOrIdCardDetailsController.onPageLoad(mode),
-        noCall = rts.MentalCapacityYesNoController.onPageLoad(mode)
-      )
+      if (mode == NormalMode) {
+        yesNoNav(ua, PassportOrIdCardDetailsYesNoPage, rts.PassportOrIdCardDetailsController.onPageLoad(mode), rts.MentalCapacityYesNoController.onPageLoad(mode))
+      } else {
+        rts.MentalCapacityYesNoController.onPageLoad(mode)
+      }
   }
 
   private def navigateAwayFromDateOfBirthPages(ua: UserAnswers, mode: Mode): Call = {
@@ -144,10 +143,18 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
 
   private def navigateAwayFromAddressQuestions(mode: Mode, ua: UserAnswers): Call = {
     if (ua.get(PassportOrIdCardDetailsPage).isDefined || ua.get(PassportOrIdCardDetailsYesNoPage).isDefined) {
-      rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
+      if (mode == NormalMode) {
+        rts.PassportOrIdCardDetailsYesNoController.onPageLoad(mode)
+      } else {
+        rts.MentalCapacityYesNoController.onPageLoad(mode)
+      }
     } else {
       rts.PassportDetailsYesNoController.onPageLoad(mode)
     }
+  }
+
+  private def navigateAwayFromPassportIdCardCombined(mode: Mode): Call = {
+    rts.MentalCapacityYesNoController.onPageLoad(mode)
   }
 
   private def navigateAwayFromMentalCapacityPage(ua: UserAnswers, mode: Mode): Call = {

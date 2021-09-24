@@ -16,69 +16,38 @@
 
 package controllers.individualbeneficiary
 
-import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
-import forms.CombinedPassportOrIdCardDetailsFormProvider
-import javax.inject.Inject
-import models.DetailsType.{Combined, CombinedProvisional}
 import models.Mode
-import navigation.Navigator
-import pages.individualbeneficiary.PassportOrIdCardDetailsPage
+import pages.individualbeneficiary.amend.IndexPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.countryOptions.CountryOptions
-import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
 
 class PassportOrIdCardDetailsController @Inject()(
                                                    override val messagesApi: MessagesApi,
-                                                   playbackRepository: PlaybackRepository,
-                                                   @IndividualBeneficiary navigator: Navigator,
                                                    standardActionSets: StandardActionSets,
                                                    nameAction: NameRequiredAction,
-                                                   formProvider: CombinedPassportOrIdCardDetailsFormProvider,
-                                                   countryOptions: CountryOptions,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: PassportOrIdCardDetailsView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   val controllerComponents: MessagesControllerComponents
+                                                 ) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetails")
+  private def route()(implicit request: BeneficiaryNameRequest[AnyContent]) =
+    request.userAnswers.get(IndexPage) match {
+      case Some(index) =>
+        Redirect(amend.routes.CheckDetailsController.renderFromUserAnswers(index))
+      case None =>
+        Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+    }
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(PassportOrIdCardDetailsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode, request.beneficiaryName, countryOptions.options))
+      route()
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName, countryOptions.options))),
-
-        newAnswer =>
-          for {
-            maybeOldAnswer <- Future.successful(request.userAnswers.get(PassportOrIdCardDetailsPage))
-            detailsType = {
-              maybeOldAnswer match {
-                case Some(oldAnswer) if oldAnswer.number == newAnswer.number && !oldAnswer.detailsType.isProvisional => Combined
-                case _ => CombinedProvisional
-              }
-            }
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsPage, newAnswer.copy(detailsType = detailsType)))
-            _ <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsPage, mode, updatedAnswers))
-
-      )
+      route()
   }
 }

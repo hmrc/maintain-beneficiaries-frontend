@@ -7,6 +7,7 @@ site.hidden-delete = Remove {0}
 site.hidden-edit = Change {0}
 site.hidden-update = Update {0}
 site.change.details = Change details
+site.cannot.change = Cannot change
 site.no = No
 site.yes = Yes
 site.iDontKnow = I don’t know
@@ -477,6 +478,8 @@ individualBeneficiary.mentalCapacityYesNo.p6 = Where a person does not have ment
 
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
+individualBeneficiary.cannotChange.p1 = Some of the information we ask about the beneficiary cannot be changed.
+individualBeneficiary.cannotChange.p2 = If you need to update the beneficiary's details, you will need to remove them, then add them as a new beneficiary.
 
 # Remove
 

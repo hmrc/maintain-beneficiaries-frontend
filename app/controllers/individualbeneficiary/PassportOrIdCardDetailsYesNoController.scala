@@ -16,58 +16,38 @@
 
 package controllers.individualbeneficiary
 
-import config.annotations.IndividualBeneficiary
-import controllers.actions.StandardActionSets
 import controllers.actions.individual.NameRequiredAction
-import forms.YesNoFormProvider
-import javax.inject.Inject
+import controllers.actions.{BeneficiaryNameRequest, StandardActionSets}
 import models.Mode
-import navigation.Navigator
-import pages.individualbeneficiary.PassportOrIdCardDetailsYesNoPage
+import pages.individualbeneficiary.amend.IndexPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.individualbeneficiary.PassportOrIdCardDetailsYesNoView
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
 
 class PassportOrIdCardDetailsYesNoController @Inject()(
                                                         override val messagesApi: MessagesApi,
-                                                        sessionRepository: PlaybackRepository,
-                                                        @IndividualBeneficiary navigator: Navigator,
                                                         standardActionSets: StandardActionSets,
                                                         nameAction: NameRequiredAction,
-                                                        formProvider: YesNoFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: PassportOrIdCardDetailsYesNoView
-                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                        val controllerComponents: MessagesControllerComponents
+                                                      ) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetailsYesNo")
+  private def route()(implicit request: BeneficiaryNameRequest[AnyContent]) =
+    request.userAnswers.get(IndexPage) match {
+      case Some(index) =>
+        Redirect(amend.routes.CheckDetailsController.renderFromUserAnswers(index))
+      case None =>
+        Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+    }
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.get(PassportOrIdCardDetailsYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode, request.beneficiaryName))
+      route()
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PassportOrIdCardDetailsYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, updatedAnswers))
-      )
+      route()
   }
 }
