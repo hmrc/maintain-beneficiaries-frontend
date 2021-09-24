@@ -24,6 +24,7 @@ import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.individualbeneficiary.amend.IndexPage
 import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -35,64 +36,62 @@ import scala.concurrent.Future
 
 class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.passportOrIdCardDetailsYesNo")
-  val name = Name("FirstName", None, "LastName")
+  private val name = Name("FirstName", None, "LastName")
 
-  val baseAnswers: UserAnswers = emptyUserAnswers
+  private val index = 0
+
+  private val mode: Mode = NormalMode
+
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(NamePage, name).success.value
+    .set(IndexPage, index).success.value
 
-  val mode: Mode = NormalMode
-  lazy val passportOrIdCardDetailsYesNoRoute = routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url
+  private lazy val passportOrIdCardDetailsYesNoRoute = routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url
+
+  private lazy val checkDetailsRoute =
+    controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(index).url
 
   "PassportOrIdCardDetailsYesNo Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "redirect to check details for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, passportOrIdCardDetailsYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[PassportOrIdCardDetailsYesNoView]
+      status(result) mustEqual SEE_OTHER
 
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, mode, name.displayName)(request, messages).toString
+      redirectLocation(result).value mustEqual checkDetailsRoute
 
       application.stop()
     }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+    "redirect to check details when previously answered" in {
 
-      val userAnswers = baseAnswers.set(PassportOrIdCardDetailsYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(PassportOrIdCardDetailsYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, passportOrIdCardDetailsYesNoRoute)
 
-      val view = application.injector.instanceOf[PassportOrIdCardDetailsYesNoView]
-
       val result = route(application, request).value
 
-      status(result) mustEqual OK
+      status(result) mustEqual SEE_OTHER
 
-      contentAsString(result) mustEqual
-        view(form.fill(true), mode, name.displayName)(request, messages).toString
+      redirectLocation(result).value mustEqual checkDetailsRoute
 
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the check details when valid data is submitted" in {
 
       val mockPlaybackRepository = mock[PlaybackRepository]
 
       when(mockPlaybackRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers))
-        .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
 
       val request =
@@ -103,29 +102,7 @@ class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
-
-      application.stop()
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
-
-      val request =
-        FakeRequest(POST, passportOrIdCardDetailsYesNoRoute)
-          .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
-
-      val view = application.injector.instanceOf[PassportOrIdCardDetailsYesNoView]
-
-      val result = route(application, request).value
-
-      status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, mode, name.displayName)(request, messages).toString
+      redirectLocation(result).value mustEqual checkDetailsRoute
 
       application.stop()
     }

@@ -465,7 +465,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
             "combined passport/id card details present" in {
               navigator.nextPage(UkAddressPage, mode, combinedBaseAnswers)
-                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+                .mustBe(controllers.individualbeneficiary.routes.MentalCapacityYesNoController.onPageLoad(mode))
             }
           }
 
@@ -485,30 +485,30 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
 
             "combined passport/id card details present" in {
               navigator.nextPage(NonUkAddressPage, mode, combinedBaseAnswers)
-                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+                .mustBe(controllers.individualbeneficiary.routes.MentalCapacityYesNoController.onPageLoad(mode))
             }
 
             "no combined passport/id present but we do have the combined yes no page (the user has made edits to get to this)" in {
               val combinedYesNoBaseAnswers = baseAnswers.set(PassportOrIdCardDetailsYesNoPage, false).success.value
               navigator.nextPage(NonUkAddressPage, mode, combinedYesNoBaseAnswers)
-                .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode))
+                .mustBe(controllers.individualbeneficiary.routes.MentalCapacityYesNoController.onPageLoad(mode))
             }
           }
 
-          "Do you know passport or ID card details page -> Yes -> Passport or ID card details page" in {
+          "Do you know passport or ID card details page -> Yes -> Check details page" in {
             val answers = baseAnswers
               .set(PassportOrIdCardDetailsYesNoPage, true).success.value
 
             navigator.nextPage(PassportOrIdCardDetailsYesNoPage, mode, answers)
-              .mustBe(controllers.individualbeneficiary.routes.PassportOrIdCardDetailsController.onPageLoad(mode))
+              .mustBe(controllers.individualbeneficiary.routes.MentalCapacityYesNoController.onPageLoad(mode))
           }
 
-          "Passport or ID card details page -> Mental Capacity Yes No page" in {
+          "Passport or ID card details page -> Check details page" in {
             navigator.nextPage(PassportDetailsPage, mode, baseAnswers)
               .mustBe(controllers.individualbeneficiary.routes.MentalCapacityYesNoController.onPageLoad(mode))
           }
 
-          "Do you know passport or ID card details page -> No -> Mental Capacity Yes No page" in {
+          "Do you know passport or ID card details page -> No -> Check details page" in {
             val answers = baseAnswers
               .set(PassportOrIdCardDetailsYesNoPage, false).success.value
 
