@@ -471,7 +471,7 @@ individualBeneficiary.mentalCapacityYesNo.bulletpoint2 = learning disability
 individualBeneficiary.mentalCapacityYesNo.bulletpoint3 = dementia or a related condition
 individualBeneficiary.mentalCapacityYesNo.bulletpoint4 = being unable to communicate
 individualBeneficiary.mentalCapacityYesNo.p3 = HMRC will assume that the beneficiary does have mental capacity, unless you tell HMRC that they do not have mental capacity.
-individualBeneficiary.mentalCapacityYesNo.p4 = If you are not certain whether the beneficiary has mental capacity, select 'I don't know'.
+individualBeneficiary.mentalCapacityYesNo.p4 = If you are not certain whether the beneficiary has mental capacity, select ‘I don‘t know‘.
 individualBeneficiary.mentalCapacityYesNo.heading2 = Why HMRC are asking this question
 individualBeneficiary.mentalCapacityYesNo.p5 = Normally, HMRC can share a person’s data under the Money Laundering and Terrorist Financing (Amendment) Regulations 2020.
 individualBeneficiary.mentalCapacityYesNo.p6 = Where a person does not have mental capacity, HMRC are required to not share their personal data.
@@ -479,7 +479,7 @@ individualBeneficiary.mentalCapacityYesNo.p6 = Where a person does not have ment
 individualBeneficiary.checkDetails.title = Check individual beneficiary details
 individualBeneficiary.checkDetails.heading = Check individual beneficiary details
 individualBeneficiary.cannotChange.p1 = Some of the information we ask about the beneficiary cannot be changed.
-individualBeneficiary.cannotChange.p2 = If you need to update the beneficiary's details, you will need to remove them, then add them as a new beneficiary.
+individualBeneficiary.cannotChange.p2 = If you need to update the beneficiary‘s details, you will need to remove them, then add them as a new beneficiary.
 
 # Remove
 
@@ -1006,7 +1006,7 @@ beneficiariesMoreInformation.p2 = You need to give different information for eac
 beneficiariesMoreInformation.subheading = Individual Beneficiaries
 beneficiariesMoreInformation.p3 = For individual beneficiaries, you need to tell HMRC:
 beneficiariesMoreInformation.b1 = if the trustees have discretion over how much income the beneficiaries get
-beneficiariesMoreInformation.b2 = what percentage of the trust's assets the beneficiaries are entitled to
+beneficiariesMoreInformation.b2 = what percentage of the trust‘s assets the beneficiaries are entitled to
 beneficiariesMoreInformation.b3 = if a vulnerable person election form (VPE1) was submitted to HMRC for any of the beneficiaries
 beneficiariesMoreInformation.subheading2 = Individual beneficiaries with an employment related trust
 beneficiariesMoreInformation.p4 = For individual beneficiaries with an employment related trust, you need to tell HMRC:
@@ -1017,5 +1017,5 @@ beneficiariesMoreInformation.b7 = if a vulnerable person election form (VPE1) wa
 beneficiariesMoreInformation.subheading3 = Business, charity, trust, or other beneficiaries
 beneficiariesMoreInformation.p5 = For beneficiaries that are a business, charity, trust, or other, you need to tell HMRC:
 beneficiariesMoreInformation.b8 = if the trustees have discretion over how much income the beneficiaries get
-beneficiariesMoreInformation.b9 = what percentage of the trust's assets the beneficiaries are entitled to
+beneficiariesMoreInformation.b9 = what percentage of the trust‘s assets the beneficiaries are entitled to
 beneficiariesMoreInformation.p6 = ‘Other’ beneficiaries refers to beneficiaries that do not fit into any of the other categories mentioned.
