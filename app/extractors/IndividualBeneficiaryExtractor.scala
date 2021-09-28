@@ -74,8 +74,7 @@ class IndividualBeneficiaryExtractor extends BeneficiaryExtractor[IndividualBene
       )
   }
 
-  private def extractIdentification(individualBeneficiary: IndividualBeneficiary,
-                                    answers: UserAnswers): Try[UserAnswers] = {
+  private def extractIdentification(individualBeneficiary: IndividualBeneficiary, answers: UserAnswers): Try[UserAnswers] = {
     if (answers.isTaxable) {
       individualBeneficiary.identification match {
         case Some(NationalInsuranceNumber(nino)) =>
