@@ -78,7 +78,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def yesNoQuestion(query: Gettable[Boolean],
+    def yesNoPassportOrIdQuestion(query: Gettable[Boolean],
                       labelKey: String,
                       changeUrl: Option[String]): Option[AnswerRow] = {
       val format = (x: Boolean) => checkAnswersFormatters.yesOrNo(x)
