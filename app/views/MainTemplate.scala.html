@@ -81,7 +81,7 @@
     headerBlock = Some(hmrcStandardHeader(
     serviceUrl = Some(appConfig.loginContinueUrl),
     signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
-    phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
+    phaseBanner = None
 )),
     beforeContentBlock = Some(beforeContentBlock),
     scriptsBlock = Some(hmrcScripts()),
