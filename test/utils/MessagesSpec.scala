@@ -27,7 +27,7 @@ class MessagesSpec extends SpecBase {
 
   override lazy val fakeApplication: Application = new GuiceApplicationBuilder()
     .configure(
-      Map("application.langs" -> "en,cy", "features.welsh-translation" -> true)
+      Map("application.langs" -> "en,cy", "features.welsh-language-support" -> true)
     )
     .build()
 
@@ -42,8 +42,9 @@ class MessagesSpec extends SpecBase {
       messagesApi.messages.keys must contain theSameElementsAs Vector("en", "cy", "default", "default.play")
     }
 
-    "have the same amount of messages for en and cy" in {
-      val englishMessageCount = messagesApi.messages("en").size + frameworkProvidedKeys.size
+    "have messages for default and cy only" in {
+      messagesApi.messages("en").size mustBe 0
+      val englishMessageCount = messagesApi.messages("default").size - commonProvidedKeys.size
 
       messagesApi.messages("cy").size mustBe englishMessageCount
     }
@@ -51,21 +52,21 @@ class MessagesSpec extends SpecBase {
 
   "All message files" should {
     "have the same set of keys" in {
-      withClue(mismatchingKeys(englishMessages.keySet, welshMessages.keySet)) {
-        assert(welshMessages.keySet equals englishMessages.keySet)
+      withClue(mismatchingKeys(defaultMessages.keySet, welshMessages.keySet)) {
+        assert(welshMessages.keySet equals defaultMessages.keySet)
       }
     }
     "not have the same messages" in {
-      val same = englishMessages.keys.collect({
-        case key if englishMessages.get(key) == welshMessages.get(key) =>
-          (key, englishMessages.get(key))
+      val same = defaultMessages.keys.collect({
+        case key if defaultMessages.get(key) == welshMessages.get(key) && !key.contains(".url") =>
+          (key, defaultMessages.get(key))
       })
 
       // 94% of app needs to be translated into Welsh. 94% allows for:
       //   - Messages which just can't be different from English
       //     E.g. addresses, acronyms, numbers, etc.
       //   - Content which is pending translation to Welsh
-      same.size.toDouble / englishMessages.size.toDouble < 0.06 mustBe true
+      same.size.toDouble / defaultMessages.size.toDouble < 0.06 mustBe true
     }
     "have a non-empty message for each key" in {
       assertNonEmptyValuesForDefaultMessages()
@@ -76,7 +77,7 @@ class MessagesSpec extends SpecBase {
       assertCorrectUseOfQuotesForWelshMessages()
     }
     "have a resolvable message for keys which take args" in {
-      val englishWithArgsMsgKeys = englishMessages collect { case (key, value) if countArgs(value) > 0 => key }
+      val englishWithArgsMsgKeys = defaultMessages collect { case (key, value) if countArgs(value) > 0 => key }
       val welshWithArgsMsgKeys = welshMessages collect { case (key, value) if countArgs(value) > 0     => key }
       val missingFromEnglish = englishWithArgsMsgKeys.toList diff welshWithArgsMsgKeys.toList
       val missingFromWelsh = welshWithArgsMsgKeys.toList diff englishWithArgsMsgKeys.toList
@@ -89,7 +90,7 @@ class MessagesSpec extends SpecBase {
       englishWithArgsMsgKeys.size mustBe welshWithArgsMsgKeys.size
     }
     "have the same args in the same order for all keys which take args" in {
-      val englishWithArgsMsgKeysAndArgList = englishMessages collect {
+      val englishWithArgsMsgKeysAndArgList = defaultMessages collect {
         case (key, value) if countArgs(value) > 0 => (key, listArgs(value))
       }
       val welshWithArgsMsgKeysAndArgList = welshMessages collect {
@@ -116,11 +117,11 @@ class MessagesSpec extends SpecBase {
 
   private def listArgs(msg: String) = toArgArray(msg).mkString
 
-  private def assertNonEmptyValuesForDefaultMessages() = assertNonEmptyNonTemporaryValues("Default", englishMessages)
+  private def assertNonEmptyValuesForDefaultMessages() = assertNonEmptyNonTemporaryValues("Default", defaultMessages)
 
   private def assertNonEmptyValuesForWelshMessages() = assertNonEmptyNonTemporaryValues("Welsh", welshMessages)
 
-  private def assertCorrectUseOfQuotesForDefaultMessages() = assertCorrectUseOfQuotes("Default", englishMessages)
+  private def assertCorrectUseOfQuotesForDefaultMessages() = assertCorrectUseOfQuotes("Default", defaultMessages)
 
   private def assertCorrectUseOfQuotesForWelshMessages() = assertCorrectUseOfQuotes("Welsh", welshMessages)
 
@@ -144,9 +145,9 @@ class MessagesSpec extends SpecBase {
 
   private lazy val displayLine = "\n" + ("@" * 42) + "\n"
 
-  private lazy val englishMessages: Map[String, String] = getExpectedMessages("en") -- frameworkProvidedKeys
+  private lazy val defaultMessages: Map[String, String] = getExpectedMessages("default") -- commonProvidedKeys
 
-  private lazy val welshMessages: Map[String, String] = getExpectedMessages("cy") -- frameworkProvidedKeys
+  private lazy val welshMessages: Map[String, String] = getExpectedMessages("cy")
 
   private def getExpectedMessages(languageCode: String) =
     messagesApi.messages.getOrElse(languageCode, throw new Exception(s"Missing messages for $languageCode"))
@@ -161,45 +162,8 @@ class MessagesSpec extends SpecBase {
     test1 ++ test2
   }
 
-  private val frameworkProvidedKeys = Set(
-    "back.text",
-    "date.input.day",
-    "date.input.month",
-    "date.input.year",
-    "footer.accessibility.text",
-    "footer.contact.text",
-    "footer.contact.url",
-    "footer.cookies.text",
-    "footer.cookies.url",
-    "footer.govukHelp.text",
-    "footer.govukHelp.url",
-    "footer.privacy.text",
-    "footer.privacy.url",
-    "footer.termsConditions.text",
-    "footer.termsConditions.url",
-    "footer.welshHelp.text",
-    "footer.welshHelp.url",
-    "global.error.InternalServerError500.heading",
-    "global.error.InternalServerError500.message",
-    "global.error.InternalServerError500.title",
-    "global.error.fallbackClientError4xx.heading",
-    "global.error.fallbackClientError4xx.message",
-    "global.error.fallbackClientError4xx.title",
-    "govukErrorMessage.visuallyHiddenText",
-    "header.govuk.url",
-    "language.day.plural",
-    "language.day.singular",
-    "language.month",
-    "language.to",
-    "phase.banner.after",
-    "phase.banner.before",
-    "phase.banner.link",
-    "global.error.badRequest400.heading",
-    "global.error.badRequest400.message",
-    "global.error.badRequest400.title",
-    "global.error.pageNotFound404.heading",
-    "global.error.pageNotFound404.message",
-    "global.error.pageNotFound404.title"
+  private val commonProvidedKeys = Set(
+    "this.section.is"
   )
 
 }
