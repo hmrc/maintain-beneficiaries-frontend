@@ -285,8 +285,8 @@ individualBeneficiary.shareOfIncome.heading = What percentage of the trust’s i
 individualBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
 individualBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the individual beneficiary is entitled to
-individualBeneficiary.shareOfIncome.error.integer = The percentage of the trust's income the beneficiary is entitled to must be a whole number
-individualBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust's income the beneficiary is entitled to must be a whole number
+individualBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+individualBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 individualBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the individual beneficiary is entitled to must be 100 or less
 
 individualBeneficiary.countryOfNationalityYesNo.title = Do you know the individual beneficiary’s country of nationality?
@@ -533,8 +533,8 @@ charityBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the 
 charityBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
 charityBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the charity beneficiary is entitled to
-charityBeneficiary.shareOfIncome.error.integer = The percentage of the trust's income the beneficiary is entitled to must be a whole number
-charityBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust's income the beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+charityBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 charityBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the charity beneficiary is entitled to must be 100 or less
 
 charityBeneficiary.countryOfResidenceYesNo.title = Do you know the charity beneficiary’s country of residence?
@@ -628,8 +628,8 @@ trustBeneficiary.shareOfIncome.heading = What percentage of the trust’s income
 trustBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the trust’s income is {0} entitled to?
 trustBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 trustBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the trust beneficiary is entitled to
-trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust's income the beneficiary is entitled to must be a whole number
-trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust's income the beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+trustBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 trustBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the trust beneficiary is entitled to must be 100 or less
 
 trustBeneficiary.countryOfResidenceYesNo.title = Do you know the trust beneficiary’s country of residence?
@@ -724,8 +724,8 @@ otherBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the tr
 otherBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
 otherBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the other beneficiary is entitled to
-otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust's income the beneficiary is entitled to must be a whole number
-otherBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust's income the beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+otherBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 otherBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the other beneficiary is entitled to must be 100 or less
 
 otherBeneficiary.countryOfResidenceYesNo.title = Do you know the other beneficiary’s country of residence?
@@ -823,8 +823,8 @@ companyBeneficiary.shareOfIncome.checkYourAnswersLabel = What percentage of the 
 companyBeneficiary.shareOfIncome.hint = Round this down to a whole number.
 
 companyBeneficiary.shareOfIncome.error.required = Enter what percentage of the trust’s income the company beneficiary is entitled to
-companyBeneficiary.shareOfIncome.error.integer = The percentage of the trust's income the beneficiary is entitled to must be a whole number
-companyBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust's income the beneficiary is entitled to must be a whole number
+companyBeneficiary.shareOfIncome.error.integer = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
+companyBeneficiary.shareOfIncome.error.non_numeric = The percentage of the trust’s income the beneficiary is entitled to must be a whole number
 companyBeneficiary.shareOfIncome.error.less_than_100 = The percentage of the trust’s income the company beneficiary is entitled to must be 100 or less
 
 companyBeneficiary.countryOfResidenceYesNo.title = Do you know the company beneficiary’s country of residence?
