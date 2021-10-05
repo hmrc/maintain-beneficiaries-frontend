@@ -434,8 +434,12 @@ individualBeneficiary.mentalCapacityYesNo.bulletpoint4=methu â chyfathrebu
 individualBeneficiary.mentalCapacityYesNo.p3=Os nad ydych yn siŵr a oes gan y buddiolwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
 individualBeneficiary.mentalCapacityYesNo.p4=Bydd CThEM yn cymryd bod gan y buddiolwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
 individualBeneficiary.mentalCapacityYesNo.heading2=Pam mae CThEM yn gofyn y cwestiwn hwn
-individualBeneficiary.mentalCapacityYesNo.p5=Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
-individualBeneficiary.mentalCapacityYesNo.p6=Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
+individualBeneficiary.mentalCapacityYesNo.p5=O dan amgylchiadau cyfyngedig penodol, caiff CThEM rannu data personol o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+individualBeneficiary.mentalCapacityYesNo.p6=Pan nad oes gan berson alluedd meddyliol, ni fydd CThEM yn rhannu data personol y person hwnnw.
+
+individualBeneficiary.mentalCapacityYesNo.under16.p1 = Os yw’r buddiolwr o dan 16 oed, mae’n rhaid i chi wneud un o’r canlynol:
+individualBeneficiary.mentalCapacityYesNo.under16.b1 = dewis ‘Iawn’ neu ‘Na’ os ydych yn gwybod a fydd gan y buddiolwr alluedd meddyliol neu beidio pan fydd yn troi’n 16 oed
+individualBeneficiary.mentalCapacityYesNo.under16.b2 = dewis ‘Nid wyf yn gwybod’, a dod yn ôl i’r gwasanaeth hwn pan fydd y buddiolwr yn troi’n 16 oed er mwn diweddaru’r wybodaeth hon
 
 removeIndividualBeneficiaryYesNo.title = A ydych yn siŵr eich bod am dynnu’r buddiolwr unigol?
 removeIndividualBeneficiaryYesNo.heading = A ydych yn siŵr eich bod am dynnu {0}?
