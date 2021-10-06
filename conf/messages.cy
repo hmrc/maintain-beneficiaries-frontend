@@ -49,6 +49,13 @@ site.address.nonUk.line3 = Cyfeiriad - llinell 3 (dewisol)
 site.address.nonUk.country = Gwlad
 site.address.country.select=Dewiswch wlad
 
+pageNotFound.title = Heb ddod o hyd i’r dudalen
+pageNotFound.heading = Heb ddod o hyd i’r dudalen
+pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
+pageNotFound.p2 = Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
+pageNotFound.p3 = Os yw’r cyfeiriad gwe yn gywir, neu eich bod wedi dewis cysylltiad neu fotwm, {0}.
+pageNotFound.link = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM i siarad â rhywun ynghylch ymddiriedolaeth (yn agor tab newydd)
+
 timeout.title = Bydd eich cais yn dod i ben cyn hir
 timeout.message = Byddwn yn ailosod eich cais os na fyddwch yn ymateb cyn pen
 timeout.keep-alive-button = Mynd yn eich blaen â’r cais
