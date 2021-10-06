@@ -17,20 +17,15 @@
 package controllers.individualbeneficiary
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
-import forms.YesNoFormProvider
 import models.{Mode, Name, NormalMode, UserAnswers}
-import navigation.Navigator
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.amend.IndexPage
 import pages.individualbeneficiary.{NamePage, PassportOrIdCardDetailsYesNoPage}
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
-import views.html.individualbeneficiary.PassportOrIdCardDetailsYesNoView
 
 import scala.concurrent.Future
 

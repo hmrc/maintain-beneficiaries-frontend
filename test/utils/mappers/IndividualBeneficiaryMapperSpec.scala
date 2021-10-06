@@ -18,7 +18,7 @@ package utils.mappers
 
 import base.SpecBase
 import models.YesNoDontKnow.{No, Yes}
-import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
+import models.{CombinedPassportOrIdCard, Name, NationalInsuranceNumber, NonUkAddress}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add.StartDatePage
 
