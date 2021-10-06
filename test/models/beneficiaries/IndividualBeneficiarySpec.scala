@@ -17,7 +17,7 @@
 package models.beneficiaries
 
 import models.YesNoDontKnow.{DontKnow, No, Yes}
-import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress, YesNoDontKnow}
+import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.libs.json.Json
 

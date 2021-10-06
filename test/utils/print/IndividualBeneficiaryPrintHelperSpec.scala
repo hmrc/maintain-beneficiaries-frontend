@@ -21,7 +21,7 @@ import controllers.individualbeneficiary.add.routes._
 import controllers.individualbeneficiary.routes._
 import models.YesNoDontKnow.{DontKnow, Yes}
 import models.beneficiaries.RoleInCompany.NA
-import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Mode, Name, NonUkAddress, NormalMode, Passport, UkAddress}
+import models.{CheckMode, CombinedPassportOrIdCard, IdCard, Name, NonUkAddress, NormalMode, Passport, UkAddress}
 import pages.individualbeneficiary._
 import pages.individualbeneficiary.add.StartDatePage
 import play.twirl.api.Html
