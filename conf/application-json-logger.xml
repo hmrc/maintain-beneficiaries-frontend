@@ -14,7 +14,7 @@
     <logger name="extractors" level="${logger.application:-INFO}"/>
     <logger name="services" level="${logger.application:-INFO}"/>
 
-    <root level="${logger.application:-WARN}">
+    <root level="${logger.application:-ERROR}">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
