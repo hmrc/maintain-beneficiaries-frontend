@@ -26,6 +26,7 @@ import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(internalId: String,
                              identifier: String,
+                             sessionId: String,
                              whenTrustSetup: LocalDate,
                              trustType: Option[TypeOfTrust],
                              data: JsObject = Json.obj(),
@@ -110,6 +111,7 @@ object UserAnswers {
   implicit lazy val reads: Reads[UserAnswers] = (
     (__ \ "internalId").read[String] and
       ((__ \ "utr").read[String] or (__ \ "identifier").read[String]) and
+      (__ \ "sessionId").read[String] and
       (__ \ "whenTrustSetup").read[LocalDate] and
       (__ \ "trustType").readNullable[TypeOfTrust] and
       (__ \ "data").read[JsObject] and
@@ -122,6 +124,7 @@ object UserAnswers {
   implicit lazy val writes: Writes[UserAnswers] = (
     (__ \ "internalId").write[String] and
       (__ \ "identifier").write[String] and
+      (__ \ "sessionId").write[String] and
       (__ \ "whenTrustSetup").write[LocalDate] and
       (__ \ "trustType").writeNullable[TypeOfTrust] and
       (__ \ "data").write[JsObject] and
