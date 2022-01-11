@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
   override val lastUpdatedIndexName: String = "user-answers-updated-at-index"
 
   override def idIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
-    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending),
-    name = Some("internal-id-and-utr-compound-index"),
+    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending, "newId" -> IndexType.Ascending),
+    name = Some("internal-id-and-utr-and-newId-compound-index"),
     expireAfterSeconds = None,
     options = BSONDocument.empty,
     unique = false,
@@ -66,13 +66,14 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
     wildcardProjection = None
   )
 
-  private def selector(internalId: String, utr: String): JsObject = Json.obj(
+  private def selector(internalId: String, utr: String, sessionId: String): JsObject = Json.obj(
     "internalId" -> internalId,
-    "utr" -> utr
+    "utr" -> utr,
+    "newId" -> s"$internalId-$utr-$sessionId"
   )
 
-  override def get(internalId: String, utr: String): Future[Option[UserAnswers]] = {
-    findCollectionAndUpdate[UserAnswers](selector(internalId, utr))
+  override def get(internalId: String, utr: String, sessionId: String): Future[Option[UserAnswers]] = {
+    findCollectionAndUpdate[UserAnswers](selector(internalId, utr, sessionId))
   }
 
   override def set(userAnswers: UserAnswers): Future[Boolean] = {
@@ -83,23 +84,23 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
 
     for {
       col <- collection
-      r <- col.update(ordered = false).one(selector(userAnswers.internalId, userAnswers.identifier), modifier, upsert = true, multi = false)
+      r <- col.update(ordered = false).one(selector(userAnswers.internalId, userAnswers.identifier, userAnswers.sessionId), modifier, upsert = true, multi = false)
     } yield r.ok
   }
 
-  override def resetCache(internalId: String, utr: String): Future[Option[JsObject]] = {
+  override def resetCache(internalId: String, utr: String, sessionId: String): Future[Option[JsObject]] = {
     for {
       col <- collection
-      r <- col.findAndRemove(selector(internalId, utr), None, None, WriteConcern.Default, None, None, Seq.empty)
+      r <- col.findAndRemove(selector(internalId, utr, sessionId), None, None, WriteConcern.Default, None, None, Seq.empty)
     } yield r.value
   }
 }
 
 trait PlaybackRepository {
 
-  def get(internalId: String, utr: String): Future[Option[UserAnswers]]
+  def get(internalId: String, utr: String, sessionId: String): Future[Option[UserAnswers]]
 
   def set(userAnswers: UserAnswers): Future[Boolean]
 
-  def resetCache(internalId: String, utr: String): Future[Option[JsObject]]
+  def resetCache(internalId: String, utr: String, sessionId: String): Future[Option[JsObject]]
 }

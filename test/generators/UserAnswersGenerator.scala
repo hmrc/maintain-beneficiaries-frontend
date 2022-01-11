@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ trait UserAnswersGenerator extends TryValues {
       for {
         id <- nonEmptyString
         utr <- nonEmptyString
+        sessionId <- nonEmptyString
         data <- generators match {
           case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
           case _ => Gen.mapOf(oneOf(generators))
@@ -48,6 +49,7 @@ trait UserAnswersGenerator extends TryValues {
       } yield UserAnswers(
         internalId = id,
         identifier = utr,
+        sessionId = sessionId,
         whenTrustSetup = LocalDate.now(),
         trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
         data = data.foldLeft(Json.obj()) {

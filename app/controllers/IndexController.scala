@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-
 import javax.inject.Inject
+import utils.Session
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
@@ -56,6 +57,7 @@ class IndexController @Inject()(
             case None => UserAnswers(
               internalId = request.user.internalId,
               identifier = identifier,
+              sessionId = Session.id(hc),
               whenTrustSetup = details.startDate,
               trustType = details.typeOfTrust,
               isTaxable = details.isTaxable,

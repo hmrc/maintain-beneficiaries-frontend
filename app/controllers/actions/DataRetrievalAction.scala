@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.{ActiveSessionRepository, PlaybackRepository}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,9 +42,11 @@ class DataRetrievalActionImpl @Inject()(
       )
     }
 
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
     activeSessionRepository.get(request.user.internalId) flatMap {
       case Some(session) =>
-        playbackRepository.get(request.user.internalId, session.utr) map {
+        playbackRepository.get(request.user.internalId, session.utr, Session.id(hc)) map {
           case None =>
             createdOptionalDataRequest(request, None)
           case Some(userAnswers) =>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.BodyParsers
 import repositories.{ActiveSessionRepository, PlaybackRepository}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
-
 import java.time.LocalDate
 
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
@@ -37,10 +36,12 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
   final val WELSH = "cy"
 
   lazy val userInternalId = "internalId"
+  lazy val userSessionId = "sessionId"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(
     internalId = userInternalId,
     identifier = "UTRUTRUTR",
+    sessionId = userSessionId,
     whenTrustSetup = LocalDate.now(),
     trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
     isTaxable = true,
