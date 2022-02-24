@@ -42,8 +42,8 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
   override val lastUpdatedIndexName: String = "user-answers-updated-at-index"
 
   override def idIndex: Aux[BSONSerializationPack.type] = Index.apply(BSONSerializationPack)(
-    key = Seq("internalId" -> IndexType.Ascending, "utr" -> IndexType.Ascending, "newId" -> IndexType.Ascending),
-    name = Some("internal-id-and-utr-and-newId-compound-index"),
+    key = Seq("newId" -> IndexType.Ascending),
+    name = Some("internal-id-and-utr-and-sessionId-compound-index"),
     expireAfterSeconds = None,
     options = BSONDocument.empty,
     unique = false,
@@ -67,8 +67,6 @@ class PlaybackRepositoryImpl @Inject()(mongo: MongoDriver,
   )
 
   private def selector(internalId: String, utr: String, sessionId: String): JsObject = Json.obj(
-    "internalId" -> internalId,
-    "utr" -> utr,
     "newId" -> s"$internalId-$utr-$sessionId"
   )
 
