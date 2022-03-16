@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import resources._
+@import views.html.helper.CSPNonce
 
 @this(
     appConfig: FrontendAppConfig,
@@ -63,7 +64,7 @@
     @hmrcLanguageSelectHelper()
     @if(showBackLink) {
         @govukBackLink(BackLink(
-        attributes = Map("id" -> "back-link"), classes="js-enabled", href="javascript:history.back()", content = HtmlContent(messages("site.back"))
+        attributes = Map("id" -> "back-link"), classes="js-enabled",  href="javascript:history.back()", content = HtmlContent(messages("site.back"))
         ))
     }
 }
@@ -76,6 +77,7 @@
 @govukLayout(
     pageTitle = Some(breadcrumbTitle(title)),
     headBlock = Some(hmrcHead(
+    nonce = CSPNonce.get,
     headBlock = Some(headScripts)
 )),
     headerBlock = Some(hmrcStandardHeader(
@@ -84,6 +86,6 @@
     phaseBanner = None
 )),
     beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts()),
+    scriptsBlock = Some(hmrcScripts(nonce = CSPNonce.get)),
     footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)
