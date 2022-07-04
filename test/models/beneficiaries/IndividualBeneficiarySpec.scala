@@ -18,12 +18,13 @@ package models.beneficiaries
 
 import models.YesNoDontKnow.{DontKnow, No, Yes}
 import models.{Name, NationalInsuranceNumber, NonUkAddress, UkAddress}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
 import java.time.LocalDate
 
-class IndividualBeneficiarySpec extends WordSpec with MustMatchers {
+class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
   private val testDateOfBirth = Some(LocalDate.of(1970, 2, 28))
   private val testEntityStart = LocalDate.of(2017, 2, 28)
   private val date: LocalDate = LocalDate.parse("1996-02-03")

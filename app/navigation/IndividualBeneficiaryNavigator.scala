@@ -175,7 +175,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
   private def checkDetailsRoute(answers: UserAnswers): Call = {
     answers.get(IndexPage) match {
       case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
-      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case None => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -204,7 +204,7 @@ class IndividualBeneficiaryNavigator @Inject()() extends Navigator {
   private def modeNav(answers: UserAnswers) : Call = {
     answers.get(IndexPage) match {
       case None =>
-        controllers.routes.SessionExpiredController.onPageLoad()
+        controllers.routes.SessionExpiredController.onPageLoad
       case Some(x) =>
         amendRts.CheckDetailsController.renderFromUserAnswers(x)
     }

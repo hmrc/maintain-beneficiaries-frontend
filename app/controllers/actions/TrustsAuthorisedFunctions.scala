@@ -29,7 +29,7 @@ class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnec
     case _: NoActiveSession =>
       redirectToLogin
     case _: AuthorisationException =>
-      Redirect(controllers.routes.UnauthorisedController.onPageLoad())
+      Redirect(controllers.routes.UnauthorisedController.onPageLoad)
   }
 
   def redirectToLogin: Result = {

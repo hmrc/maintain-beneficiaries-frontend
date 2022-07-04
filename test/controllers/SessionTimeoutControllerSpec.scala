@@ -46,7 +46,7 @@ class SessionTimeoutControllerSpec extends SpecBase {
         val fakeRequest: Request[AnyContent] = FakeRequest().withSession()
         val res = TestSessionTimeoutController.timeout(fakeRequest)
         status(res) mustEqual SEE_OTHER
-        redirectLocation(res).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(res).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
       }
     }
   }

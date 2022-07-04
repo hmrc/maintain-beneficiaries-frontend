@@ -29,7 +29,7 @@ class UnauthorisedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.UnauthorisedController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.UnauthorisedController.onPageLoad.url)
 
       val result = route(application, request).value
 
