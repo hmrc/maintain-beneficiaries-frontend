@@ -18,13 +18,14 @@ package models.beneficiaries
 
 import models.HowManyBeneficiaries._
 import models.{Description, NonUkAddress, UkAddress}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 import utils.Constants.GB
 
 import java.time.LocalDate
 
-class EmploymentRelatedBeneficiarySpec extends WordSpec with MustMatchers {
+class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
   
   private val name = "Large Beneficiary"
   private val description = "Description"

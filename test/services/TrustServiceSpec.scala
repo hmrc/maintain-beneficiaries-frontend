@@ -23,7 +23,8 @@ import models.{BeneficiaryType, Description, Name, NationalInsuranceNumber, Remo
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -33,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class TrustServiceSpec extends FreeSpec with MockitoSugar with MustMatchers with ScalaFutures {
+class TrustServiceSpec extends AnyFreeSpec with MockitoSugar with Matchers with ScalaFutures {
 
   private val identifier: String = "1234567890"
   implicit val hc: HeaderCarrier = HeaderCarrier()

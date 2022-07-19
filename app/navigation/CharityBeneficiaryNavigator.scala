@@ -96,7 +96,7 @@ class CharityBeneficiaryNavigator @Inject()() extends Navigator {
   private def checkDetailsRoute(answers: UserAnswers): Call = {
     answers.get(IndexPage) match {
       case Some(x) => amendRts.CheckDetailsController.renderFromUserAnswers(x)
-      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case None => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 

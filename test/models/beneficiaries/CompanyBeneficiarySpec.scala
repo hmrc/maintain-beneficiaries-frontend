@@ -17,12 +17,13 @@
 package models.beneficiaries
 
 import models.{NonUkAddress, UkAddress}
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
 import java.time.LocalDate
 
-class CompanyBeneficiarySpec extends WordSpec with MustMatchers {
+class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
 
   "CompanyBeneficiary" must {
     "deserialise from backend JSON" when {
