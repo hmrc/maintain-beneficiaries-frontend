@@ -16,7 +16,9 @@
 
 package forms
 
+import forms.helpers.WhitespaceHelper._
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.Description
 import play.api.data.Form
@@ -35,37 +37,41 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
           )
         ),
       "description1" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(70, s"$prefix.error.length"),
             regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
           )
         )
-      ),
+      ).transform(emptyToNone, identity[Option[String]]),
       "description2" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(70, s"$prefix.error.length"),
             regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
           )
         )
-      ),
+      ).transform(emptyToNone, identity[Option[String]]),
       "description3" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(70, s"$prefix.error.length"),
             regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
           )
         )
-      ),
+      ).transform(emptyToNone, identity[Option[String]]),
       "description4" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(70, s"$prefix.error.length"),
             regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
           )
         )
-      )
+      ).transform(emptyToNone, identity[Option[String]])
     )(Description.apply)(Description.unapply)
   )
 }
