@@ -111,6 +111,21 @@ class UkAddressFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.addressLineRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  line3  ", "line4" -> "line4", "postcode" -> "AB12CD"))
+      result.value.value.line3 mustBe Some("line3")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "  ", "line4" -> "line4", "postcode" -> "AB12CD"))
+      result.value.value.line3 mustBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "", "line4" -> "line4", "postcode" -> "AB12CD"))
+      result.value.value.line3 mustBe None
+    }
   }
 
   ".line4" must {
@@ -131,6 +146,21 @@ class UkAddressFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.addressLineRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "line3", "line4" -> "  line4  ", "postcode" -> "AB12CD"))
+      result.value.value.line4 mustBe Some("line4")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "line3", "line4" -> "  ", "postcode" -> "AB12CD"))
+      result.value.value.line4 mustBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("line1" -> "line1", "line2" -> "line2", "line3" -> "line3", "line4" -> "", "postcode" -> "AB12CD"))
+      result.value.value.line4 mustBe None
+    }
   }
 
   ".postcode" must {
