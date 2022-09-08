@@ -16,7 +16,9 @@
 
 package forms
 
+import forms.helpers.WhitespaceHelper._
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.Name
 import play.api.data.Form
@@ -35,12 +37,13 @@ class NameFormProvider @Inject() extends Mappings {
           )
         ),
       "middleName" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(35, s"$prefix.error.middleName.length"),
             regexp(Validation.nameRegex, s"$prefix.error.middleName.invalid"))
         )
-      ),
+      ).transform(emptyToNone, identity[Option[String]]),
       "lastName" -> text(s"$prefix.error.lastName.required")
         .verifying(
           firstError(

@@ -16,7 +16,9 @@
 
 package forms
 
+import forms.helpers.WhitespaceHelper._
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.NonUkAddress
 import play.api.data.{Form, Forms}
@@ -44,11 +46,12 @@ class NonUkAddressFormProvider @Inject() extends Mappings {
             )),
       "line3" ->
         optional(Forms.text
+          .transform(trimWhitespace, identity[String])
           .verifying(
             firstError(
               maxLength(35, "nonUkAddress.error.line3.length"),
               regexp(Validation.addressLineRegex, "nonUkAddress.error.line3.invalidCharacters")
-            ))),
+            ))).transform(emptyToNone, identity[Option[String]]),
       "country" ->
         text("nonUkAddress.error.country.required")
           .verifying(
