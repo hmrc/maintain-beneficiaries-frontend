@@ -20,17 +20,17 @@ import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
 import models.beneficiaries.{Beneficiaries, CompanyBeneficiary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.companyoremploymentrelated.company.RemoveYesNoPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.companyoremploymentrelated.company.remove.RemoveIndexView
-
 import java.time.LocalDate
 import scala.concurrent.Future
 
@@ -39,7 +39,7 @@ class RemoveCompanyBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
   val messagesPrefix = "removeCompanyBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
-  lazy val form = formProvider(messagesPrefix)
+  lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
   lazy val name : String = "Some Name 1"
 

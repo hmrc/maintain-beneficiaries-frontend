@@ -21,7 +21,7 @@ import config.annotations.IndividualBeneficiary
 import forms.PassportDetailsFormProvider
 import models.{Mode, Name, NormalMode, Passport, UserAnswers}
 import navigation.Navigator
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{NamePage, PassportDetailsPage}
@@ -33,7 +33,6 @@ import repositories.PlaybackRepository
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.PassportDetailsView
-
 import java.time.LocalDate
 import scala.concurrent.Future
 

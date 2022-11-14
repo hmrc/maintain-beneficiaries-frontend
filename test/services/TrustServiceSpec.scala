@@ -20,7 +20,7 @@ import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over101
 import models.beneficiaries._
 import models.{BeneficiaryType, Description, Name, NationalInsuranceNumber, RemoveBeneficiary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.must.Matchers

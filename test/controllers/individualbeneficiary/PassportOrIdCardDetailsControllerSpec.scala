@@ -18,7 +18,7 @@ package controllers.individualbeneficiary
 
 import base.SpecBase
 import models.{CombinedPassportOrIdCard, Mode, Name, NormalMode, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar

@@ -19,7 +19,7 @@ package controllers.charityortrust.charity.amend
 import base.SpecBase
 import connectors.TrustConnector
 import models.beneficiaries.{CharityOrTrustToAdd, TypeOfBeneficiaryToAdd}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar

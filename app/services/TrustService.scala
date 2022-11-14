@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
 
-  override def getBeneficiaries(utr: String)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[Beneficiaries] =
+  override def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] =
     connector.getBeneficiaries(utr)
 
   override def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
@@ -87,7 +87,7 @@ trait TrustService {
 
   def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary]
 
-  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc:HeaderCarrier, ec:ExecutionContext): Future[HttpResponse]
+  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 
   def getIndividualNinos(identifier: String, index: Option[Int])
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]]

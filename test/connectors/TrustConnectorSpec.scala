@@ -64,23 +64,41 @@ class TrustConnectorSpec extends SpecBase with Generators with ScalaFutures
   private val beneficiariesUrl: String = s"$trustsUrl/beneficiaries"
 
   private def getTrustDetailsUrl(identifier: String) = s"$trustsUrl/trust-details/$identifier/transformed"
+
   private def getBeneficiariesUrl(identifier: String) = s"$beneficiariesUrl/$identifier/transformed"
+
   private def addClassOfBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-unidentified/$identifier"
+
   private def amendClassOfBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-unidentified/$identifier/$index"
+
   private def addIndividualBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-individual/$identifier"
+
   private def amendIndividualBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-individual/$identifier/$index"
+
   private def addCharityBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-charity/$identifier"
+
   private def amendCharityBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-charity/$identifier/$index"
+
   private def addTrustBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-trust/$identifier"
+
   private def amendTrustBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-trust/$identifier/$index"
+
   private def addCompanyBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-company/$identifier"
+
   private def amendCompanyBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-company/$identifier/$index"
+
   private def addEmploymentRelatedBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-large/$identifier"
+
   private def amendEmploymentRelatedBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-large/$identifier/$index"
+
   private def addOtherBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/add-other/$identifier"
+
   private def amendOtherBeneficiaryUrl(identifier: String, index: Int) = s"$beneficiariesUrl/amend-other/$identifier/$index"
+
   private def removeBeneficiaryUrl(identifier: String) = s"$beneficiariesUrl/$identifier/remove"
+
   private def isTrust5mldUrl(identifier: String) = s"$trustsUrl/$identifier/is-trust-5mld"
+
   private def getTrustMigrationFlagUrl(identifier: String) = s"/trusts/$identifier/taxable-migration/migrating-to-taxable"
 
   private val individualBeneficiary = IndividualBeneficiary(

@@ -22,7 +22,7 @@ import forms.DateRemovedFromTrustFormProvider
 import models.Description
 import models.HowManyBeneficiaries.Over201
 import models.beneficiaries.{Beneficiaries, EmploymentRelatedBeneficiary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
@@ -47,7 +47,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
   val index = 0
 
   val name = "Some Name 1"
-  val mockConnector = mock[TrustConnector]
+  val mockConnector: TrustConnector = mock[TrustConnector]
 
   val fakeService = new TrustServiceImpl(mockConnector)
 

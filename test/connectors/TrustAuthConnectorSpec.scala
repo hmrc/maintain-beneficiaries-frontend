@@ -34,6 +34,7 @@ class TrustAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockHe
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   private val authorisedUrl: String = s"/trusts-auth/agent-authorised"
+
   private def authorisedUrlFor(utr: String): String = s"/trusts-auth/authorised/$utr"
 
   private def responseFromJson(json: JsValue) = {
@@ -41,6 +42,7 @@ class TrustAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockHe
   }
 
   private def allowedResponse = responseFromJson(Json.obj("authorised" -> true))
+
   private def allowedAgentResponse = responseFromJson(Json.obj("arn" -> "SomeArn"))
 
   private def redirectResponse(redirectUrl: String) = responseFromJson(Json.obj("redirectUrl" -> redirectUrl))

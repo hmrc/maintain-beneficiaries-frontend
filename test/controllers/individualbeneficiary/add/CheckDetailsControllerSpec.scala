@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import base.SpecBase
 import connectors.TrustConnector
 import models.Name
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
