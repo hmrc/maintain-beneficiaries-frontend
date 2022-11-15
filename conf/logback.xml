@@ -58,6 +58,9 @@
     <logger name="connectors" level="INFO"/>
 
     <logger name="connector" level="INFO">
+
+    <logger name="org.mongodb.driver" level="INFO"/>
+
         <appender-ref ref="STDOUT"/>
     </logger>
 

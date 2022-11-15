@@ -50,6 +50,7 @@ trait UserAnswersGenerator extends TryValues {
         internalId = id,
         identifier = utr,
         sessionId = sessionId,
+        newId = s"$id-$utr-$sessionId",
         whenTrustSetup = LocalDate.now(),
         trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
         data = data.foldLeft(Json.obj()) {

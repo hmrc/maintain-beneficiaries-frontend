@@ -21,7 +21,7 @@ import forms.AddBeneficiaryTypeFormProvider
 import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
 import navigation.BeneficiaryNavigator
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AddNowPage

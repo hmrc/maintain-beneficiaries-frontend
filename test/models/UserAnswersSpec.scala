@@ -38,6 +38,7 @@ class UserAnswersSpec extends SpecBase {
         internalId = "ID",
         identifier = "UTRUTRUTR",
         sessionId = "sessionId",
+        newId = "ID-UTRUTRUTR-sessionId",
         whenTrustSetup = LocalDate.of(1999, 10, 20),
         trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
         data = json,
@@ -56,6 +57,7 @@ class UserAnswersSpec extends SpecBase {
       val internalId: String = "internalId"
       val identifier: String = "1234567890"
       val sessionId: String = "sessionId"
+      val newId = s"$internalId-$identifier-$sessionId"
       val date: String = "2000-01-01"
       val trustType: TypeOfTrust = EmployeeRelated
       val dateTime: String = "2020-01-01T09:30:15"
@@ -68,6 +70,7 @@ class UserAnswersSpec extends SpecBase {
             |  "internalId": "$internalId",
             |  "utr": "$identifier",
             |  "sessionId": "$sessionId",
+            |  "newId": "$newId",
             |  "whenTrustSetup": "$date",
             |  "trustType": "$trustType",
             |  "data": {},
@@ -82,6 +85,7 @@ class UserAnswersSpec extends SpecBase {
           internalId = internalId,
           identifier = identifier,
           sessionId = sessionId,
+          newId = s"$internalId-$identifier-$sessionId",
           whenTrustSetup = LocalDate.parse(date),
           trustType = Some(trustType),
           data = Json.obj(),
@@ -100,6 +104,7 @@ class UserAnswersSpec extends SpecBase {
              |  "internalId": "$internalId",
              |  "identifier": "$identifier",
              |  "sessionId": "$sessionId",
+             |  "newId": "$internalId-$identifier-$sessionId",
              |  "whenTrustSetup": "$date",
              |  "trustType": "$trustType",
              |  "data": {},
@@ -114,6 +119,7 @@ class UserAnswersSpec extends SpecBase {
           internalId = internalId,
           identifier = identifier,
           sessionId = sessionId,
+          newId = s"$internalId-$identifier-$sessionId",
           whenTrustSetup = LocalDate.parse(date),
           trustType = Some(trustType),
           data = Json.obj(),

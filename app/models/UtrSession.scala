@@ -18,7 +18,7 @@ package models
 
 import java.time.LocalDateTime
 
-import play.api.libs.json.{OWrites, Reads, __}
+import play.api.libs.json.{Format, OWrites, Reads, __}
 
 final case class UtrSession(internalId: String,
                             utr: String,
@@ -26,6 +26,8 @@ final case class UtrSession(internalId: String,
                            )
 
 object UtrSession {
+
+  implicit lazy val formats: Format[UtrSession] = Format(reads, writes)
 
   implicit lazy val reads: Reads[UtrSession] = {
 

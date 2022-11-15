@@ -20,17 +20,18 @@ import base.SpecBase
 import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.classofbeneficiary.RemoveYesNoPage
+import play.api.data.Form
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.classofbeneficiary.remove.RemoveIndexView
-
 import java.time.LocalDate
 import scala.concurrent.Future
 
@@ -39,9 +40,9 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
   val messagesPrefix = "removeClassOfBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
-  lazy val form = formProvider(messagesPrefix)
+  lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveClassOfBeneficiaryController.onSubmit(0)
+  lazy val formRoute: Call = routes.RemoveClassOfBeneficiaryController.onSubmit(0)
 
   lazy val description : String = "Some Description 1"
 

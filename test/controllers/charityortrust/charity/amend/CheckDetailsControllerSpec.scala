@@ -22,7 +22,7 @@ import extractors.CharityBeneficiaryExtractor
 import handlers.ErrorHandler
 import models.CheckMode
 import models.beneficiaries.CharityBeneficiary
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures

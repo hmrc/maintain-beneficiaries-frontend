@@ -21,7 +21,7 @@ import connectors.TrustConnector
 import models.HowManyBeneficiaries.Over1
 import models.beneficiaries.EmploymentRelatedBeneficiary
 import models.{Description, UkAddress}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
@@ -75,7 +75,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK and the correct view for a GET for a given index" in {
 
-      val mockService : TrustService = mock[TrustService]
+      val mockService: TrustService = mock[TrustService]
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(

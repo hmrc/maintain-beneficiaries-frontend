@@ -16,6 +16,7 @@
 
 package base
 
+import java.time.{LocalDate, LocalDateTime}
 import controllers.actions._
 import models.{TypeOfTrust, UserAnswers}
 import navigation.FakeNavigator
@@ -26,8 +27,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.BodyParsers
 import repositories.{ActiveSessionRepository, PlaybackRepository}
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
-import java.time.LocalDate
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
   this: TestSuite =>
@@ -36,12 +36,15 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
   final val WELSH = "cy"
 
   lazy val userInternalId = "internalId"
+  lazy val userUtr = "UTRUTRUTR"
   lazy val userSessionId = "sessionId"
+  lazy val newId = s"$userInternalId-$userUtr-$userSessionId"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(
     internalId = userInternalId,
-    identifier = "UTRUTRUTR",
+    identifier = userUtr,
     sessionId = userSessionId,
+    newId = newId,
     whenTrustSetup = LocalDate.now(),
     trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
     isTaxable = true,
@@ -53,9 +56,8 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
 
   val fakeNavigator = new FakeNavigator()
 
-  protected def applicationBuilder(userAnswers: Option[models.UserAnswers] = None,
-                                   affinityGroup: AffinityGroup = AffinityGroup.Organisation,
-                                   enrolments: Enrolments = Enrolments(Set.empty[Enrolment])): GuiceApplicationBuilder =
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                                   affinityGroup: AffinityGroup = AffinityGroup.Organisation): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].toInstance(new FakeIdentifierAction(bodyParsers, affinityGroup)),

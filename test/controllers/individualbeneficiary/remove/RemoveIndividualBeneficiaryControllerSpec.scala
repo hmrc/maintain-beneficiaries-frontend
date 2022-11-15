@@ -21,18 +21,21 @@ import connectors.TrustConnector
 import forms.RemoveIndexFormProvider
 import models.Name
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.individualbeneficiary.remove.RemoveYesNoPage
+import play.api.data.Form
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import views.html.individualbeneficiary.remove.RemoveIndexView
-
 import java.time.LocalDate
+
+
 import scala.concurrent.Future
 
 class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
@@ -40,9 +43,9 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
   val messagesPrefix = "removeIndividualBeneficiaryYesNo"
 
   lazy val formProvider = new RemoveIndexFormProvider()
-  lazy val form = formProvider(messagesPrefix)
+  lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  lazy val formRoute = routes.RemoveIndividualBeneficiaryController.onSubmit(0)
+  lazy val formRoute: Call = routes.RemoveIndividualBeneficiaryController.onSubmit(0)
 
   lazy val name : Name = Name("First", None, "Last")
 
