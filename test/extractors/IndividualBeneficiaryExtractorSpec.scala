@@ -66,7 +66,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               )
 
               val result = extractor(baseAnswers, individual, index).get
-              
+
               result.get(NamePage).get mustBe name
               result.get(DateOfBirthYesNoPage).get mustBe true
               result.get(DateOfBirthPage).get mustBe date
@@ -119,7 +119,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               )
 
               val result = extractor(baseAnswers, individual, index).get
-              
+
               result.get(NamePage).get mustBe name
               result.get(DateOfBirthYesNoPage).get mustBe true
               result.get(DateOfBirthPage).get mustBe date
@@ -263,7 +263,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
               )
 
               val result = extractor(baseAnswers, individual, index).get
-              
+
               result.get(NamePage).get mustBe name
               result.get(DateOfBirthYesNoPage).get mustBe true
               result.get(DateOfBirthPage).get mustBe date
@@ -317,7 +317,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             )
 
             val result = extractor(baseAnswers, individual, index).get
-            
+
             result.get(NamePage).get mustBe name
             result.get(DateOfBirthYesNoPage).get mustBe true
             result.get(DateOfBirthPage).get mustBe date
@@ -365,7 +365,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             )
 
             val result = extractor(baseAnswers, individual, index).get
-            
+
             result.get(NamePage).get mustBe name
             result.get(DateOfBirthYesNoPage).get mustBe true
             result.get(DateOfBirthPage).get mustBe date
@@ -413,7 +413,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             )
 
             val result = extractor(baseAnswers, individual, index).get
-            
+
             result.get(NamePage).get mustBe name
             result.get(DateOfBirthYesNoPage).get mustBe true
             result.get(DateOfBirthPage).get mustBe date
@@ -442,7 +442,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             result.get(IndexPage).get mustBe index
           }
         }
-        
+
         "migrating from non-taxable to taxable" when {
 
           val baseAnswers: UserAnswers = emptyUserAnswers.copy(isUnderlyingData5mld = true, migratingFromNonTaxableToTaxable = true)
@@ -466,7 +466,7 @@ class IndividualBeneficiaryExtractorSpec extends SpecBase {
             )
 
             val result = extractor(baseAnswers, individual, index).get
-            
+
             result.get(NamePage).get mustBe name
             result.get(DateOfBirthYesNoPage).get mustBe true
             result.get(DateOfBirthPage).get mustBe date

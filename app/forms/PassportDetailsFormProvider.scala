@@ -17,18 +17,19 @@
 package forms
 
 import config.FrontendAppConfig
-import forms.mappings.Mappings
-import javax.inject.Inject
+import forms.mappings.{Constraints, Mappings}
 import models.Passport
+import models.beneficiaries.Beneficiaries
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import forms.mappings.Constraints
+
+import javax.inject.Inject
 
 class PassportDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings with Constraints {
-  val maxLengthCountryField = 100
-  val maxLengthNumberField = 30
+  private val maxLengthCountryField = 100
+  private val maxLengthNumberField = 30
 
-  def withPrefix(prefix: String): Form[Passport] = Form(
+  def withPrefix(prefix: String, beneficiaries: Beneficiaries): Form[Passport] = Form(
     mapping(
       "country" -> text(s"$prefix.passportDetails.country.error.required")
         .verifying(
@@ -42,7 +43,8 @@ class PassportDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extend
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.passportDetails.number.error.length"),
             regexp(Validation.passportOrIdCardNumberRegEx, s"$prefix.passportDetails.number.error.invalid"),
-            nonEmptyString("number", s"$prefix.passportDetails.number.error.required")
+            nonEmptyString("number", s"$prefix.passportDetails.number.error.required"),
+            uniquePassportNumber(beneficiaries, s"$prefix.passportDetails.number.error.unique")
           )
         ),
       "expiryDate" -> localDate(

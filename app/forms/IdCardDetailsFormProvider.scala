@@ -18,17 +18,19 @@ package forms
 
 import config.FrontendAppConfig
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.IdCard
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import forms.mappings.Constraints
+import models.beneficiaries.Beneficiaries
 
 class IdCardDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings with Constraints {
   val maxLengthCountryField = 100
   val maxLengthNumberField = 30
 
-  def withPrefix(prefix: String): Form[IdCard] = Form(
+  def withPrefix(prefix: String, beneficiaries: Beneficiaries): Form[IdCard] = Form(
     mapping(
       "country" -> text(s"$prefix.idCardDetails.country.error.required")
         .verifying(
@@ -42,7 +44,8 @@ class IdCardDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends 
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.idCardDetails.number.error.length"),
             regexp(Validation.passportOrIdCardNumberRegEx, s"$prefix.idCardDetails.number.error.invalid"),
-            nonEmptyString("number", s"$prefix.idCardDetails.number.error.required")
+            nonEmptyString("number", s"$prefix.idCardDetails.number.error.required"),
+            uniqueIDCardNumber(beneficiaries, s"$prefix.idCardDetails.number.error.unique")
           )
         ),
       "expiryDate" -> localDate(

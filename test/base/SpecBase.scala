@@ -16,7 +16,6 @@
 
 package base
 
-import java.time.{LocalDate, LocalDateTime}
 import controllers.actions._
 import models.{TypeOfTrust, UserAnswers}
 import navigation.FakeNavigator
@@ -28,6 +27,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.BodyParsers
 import repositories.{ActiveSessionRepository, PlaybackRepository}
 import uk.gov.hmrc.auth.core.AffinityGroup
+
+import java.time.LocalDate
 
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
   this: TestSuite =>

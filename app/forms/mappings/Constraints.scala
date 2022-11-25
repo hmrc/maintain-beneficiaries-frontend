@@ -17,6 +17,7 @@
 package forms.mappings
 
 import forms.mappings.Formatters.formatNino
+import models.beneficiaries.Beneficiaries
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import uk.gov.hmrc.domain.Nino
 
@@ -141,4 +142,14 @@ trait Constraints {
       nino =>
         if (ninos.map(formatNino).contains(formatNino(nino))) Invalid(notUniqueKey) else Valid
     }
+
+  protected def uniquePassportNumber(beneficiaries: Beneficiaries, errorKey: String): Constraint[String] =
+  Constraint {
+    number => if(beneficiaries.individualHasUniquePassportNumber(number)) Valid else Invalid(errorKey)
+  }
+
+  protected def uniqueIDCardNumber(beneficiaries: Beneficiaries, errorKey: String): Constraint[String] =
+  Constraint {
+    number => if(beneficiaries.individualHasUniqueIdCardNumber(number)) Valid else Invalid(errorKey)
+  }
 }

@@ -17,27 +17,28 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import models.{IdCard, Name}
+import models.{Name, Passport}
 import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import play.api.data.FormError
 
 import java.time.LocalDate
 
-class IdCardDetailsFormProviderSpec extends StringFieldBehaviours {
+class PassportDetailsFormProviderSpec extends StringFieldBehaviours {
 
-  private val countryRequiredKey = "individualBeneficiary.idCardDetails.country.error.required"
-  private val countryLengthKey = "individualBeneficiary.idCardDetails.country.error.length"
+  private val prefix = "individualBeneficiary"
+  private val underTest = new PassportDetailsFormProvider(frontendAppConfig)
+  private val form = underTest.withPrefix(prefix, Beneficiaries())
+
+  private val countryRequiredKey = s"$prefix.passportDetails.country.error.required"
+  private val countryLengthKey = s"$prefix.passportDetails.country.error.length"
   private val maxLengthCountryField = 100
 
-  private val numberRequiredKey = "individualBeneficiary.idCardDetails.number.error.required"
-  private val numberInvalidKey = "individualBeneficiary.idCardDetails.number.error.invalid"
-  private val numberLengthKey = "individualBeneficiary.idCardDetails.number.error.length"
-  private val uniqueNumberKey = "individualBeneficiary.idCardDetails.number.error.unique"
+  private val numberRequiredKey = s"$prefix.passportDetails.number.error.required"
+  private val numberInvalidKey = s"$prefix.passportDetails.number.error.invalid"
+  private val numberLengthKey = s"$prefix.passportDetails.number.error.length"
+  private val uniqueNumberKey = s"$prefix.passportDetails.number.error.unique"
   private val maxLengthNumberField = 30
 
-  private val beneficiaries: Beneficiaries = Beneficiaries()
-
-  private val form = new IdCardDetailsFormProvider(frontendAppConfig).withPrefix("individualBeneficiary", beneficiaries)
 
   ".country" must {
 
@@ -63,7 +64,8 @@ class IdCardDetailsFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".number" must {
+  "number" must {
+
     val fieldName = "number"
 
     behave like fieldThatBindsValidData(
@@ -93,39 +95,33 @@ class IdCardDetailsFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, numberRequiredKey)
     )
 
-    "bind form when the id card number is unique" in {
-      val idCardNumber = "111"
+    val passportNumber = "123"
+    val individualBeneficiary = IndividualBeneficiary(
+      name = Name(firstName = "First", middleName = None, lastName = "Last"),
+      dateOfBirth = None,
+      identification = Some(Passport("country", passportNumber, LocalDate.now())),
+      address = None,
+      entityStart = LocalDate.parse("2020-02-02"),
+      vulnerableYesNo = Some(false),
+      roleInCompany = None,
+      income = None,
+      incomeDiscretionYesNo = Some(false),
+      provisional = false
+    )
 
-      val result = form.bind(Map(fieldName -> idCardNumber)).apply(fieldName)
+    "bind form when the passport number is unique" in {
+      val result = form.bind(Map(fieldName -> passportNumber)).apply(fieldName)
       result.errors mustEqual Seq.empty
-      result.value mustBe Some(idCardNumber)
+      result.value mustBe Some(passportNumber)
     }
 
-    "not bind form and return a form error when the id card number isn't unique" in {
-      val idCardNumber = "111"
-
-      val individualBeneficiary = IndividualBeneficiary(
-        name = Name(firstName = "First", middleName = None, lastName = "Last"),
-        dateOfBirth = None,
-        identification = Some(IdCard("country", idCardNumber, LocalDate.now())),
-        address = None,
-        entityStart = LocalDate.parse("2020-02-02"),
-        vulnerableYesNo = Some(false),
-        roleInCompany = None,
-        income = None,
-        incomeDiscretionYesNo = Some(false),
-        provisional = false
-      )
-
-      val form = new IdCardDetailsFormProvider(frontendAppConfig)
-        .withPrefix("individualBeneficiary", beneficiaries.copy(List(individualBeneficiary)))
-
+    "not bind form and return a form error when the passport number isn't unique" in {
+      val form = underTest.withPrefix(prefix, Beneficiaries(List(individualBeneficiary)))
       val formError = FormError(fieldName, uniqueNumberKey)
 
-      val result = form.bind(Map(fieldName -> idCardNumber)).apply(fieldName)
+      val result = form.bind(Map(fieldName -> passportNumber)).apply(fieldName)
       result.errors mustEqual Seq(formError)
-      result.value mustBe Some(idCardNumber)
+      result.value mustBe Some(passportNumber)
     }
-
   }
 }

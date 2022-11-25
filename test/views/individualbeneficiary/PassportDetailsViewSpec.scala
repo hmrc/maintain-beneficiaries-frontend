@@ -17,6 +17,7 @@
 package views.individualbeneficiary
 
 import forms.PassportDetailsFormProvider
+import models.beneficiaries.Beneficiaries
 import models.{Name, NormalMode, Passport}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -27,9 +28,12 @@ import views.html.individualbeneficiary.PassportDetailsView
 
 class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
 
-  val messageKeyPrefix = "individualBeneficiary.passportDetails"
-  val name: Name = Name("First", Some("Middle"), "Last")
-  override val form: Form[Passport] = new PassportDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
+  private val messageKeyPrefix = "individualBeneficiary.passportDetails"
+  private val name: Name = Name("First", Some("Middle"), "Last")
+
+  private val beneficiaries: Beneficiaries = Beneficiaries()
+
+  override val form: Form[Passport] = new PassportDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix, beneficiaries)
 
   "PassportDetails view" must {
 

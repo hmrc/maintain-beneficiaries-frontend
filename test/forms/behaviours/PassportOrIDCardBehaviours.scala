@@ -108,5 +108,4 @@ trait PassportOrIDCardBehaviours extends FormSpec
     }
   }
 
-
 }

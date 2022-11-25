@@ -311,12 +311,12 @@ class BeneficiaryNavigatorSpec extends SpecBase {
         }
       }
     }
-    
+
     ".addBeneficiaryNowRoute" when {
-      
+
       "individual" must {
         "redirect to individual name page" in {
-          
+
           navigator.addBeneficiaryNowRoute(TypeOfBeneficiaryToAdd.Individual).url mustBe
             controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode).url
         }
