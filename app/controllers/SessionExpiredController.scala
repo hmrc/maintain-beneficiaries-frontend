@@ -34,6 +34,6 @@ class SessionExpiredController @Inject()(
   }
 
   def onSubmit: Action[AnyContent] = Action { _ =>
-    Redirect(appConfig.loginUrl)
+    Redirect(s"${appConfig.loginUrl}?continue=${appConfig.loginContinueUrl}&origin=${appConfig.appName}")
   }
 }
