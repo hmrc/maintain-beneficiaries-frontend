@@ -25,7 +25,7 @@ import play.api.data.{Form, FormError}
 
 class IncomePercentageMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues
   with Mappings {
-  
+
   val prefix = "prefix"
 
   val form = Form(

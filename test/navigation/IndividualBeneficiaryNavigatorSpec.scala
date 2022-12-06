@@ -31,7 +31,7 @@ class IndividualBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropert
   val navigator = new IndividualBeneficiaryNavigator
 
   "Individual beneficiary navigator" when {
-    
+
       "taxable" must {
 
         "add journey" must {

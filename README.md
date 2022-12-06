@@ -17,9 +17,9 @@ provide test coverage reports.
 
 Use the following commands to run the tests with coverage and generate a report.
 
-Run unit and integration tests:
+Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests and integration tests with scalastyle and checks for dependency updates:
 ```
-sbt clean coverage test it:test coverageReport
+./run_all_tests.sh
 ```
 
 Unit tests only:

@@ -18,7 +18,7 @@ package models.beneficiaries
 
 import base.SpecBase
 import models.HowManyBeneficiaries.Over1
-import models.{Description, Name}
+import models.{CombinedPassportOrIdCard, Description, IdCard, Name, Passport}
 import viewmodels.RadioOption
 
 import java.time.LocalDate
@@ -163,7 +163,63 @@ class BeneficiariesSpec extends SpecBase {
 
     }
 
+    ".individualHasUniquePassportNumber(...)" must {
+      "return true when the passport number doesn't equal the other passport numbers in the list" in {
+        val passportData = Passport(countryOfIssue = "country", number = "1122", expirationDate = LocalDate.now().plusYears(2))
+        val individualDetails = List(
+          individualBeneficiary.copy(identification = Some(passportData)),
+          individualBeneficiary.copy(identification = Some(passportData.copy(number = "2233")))
+        )
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
+        beneficiaries.individualHasUniquePassportNumber(passportNo = "3344") mustBe true
+      }
+
+      "return false when the passport number is equal to another passport number in the list" in {
+        val passportData = Passport(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
+        val individualDetails = List(
+          individualBeneficiary.copy(identification = Some(passportData)),
+          individualBeneficiary.copy(identification = Some(passportData.copy(number = "22222")))
+        )
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+
+        beneficiaries.individualHasUniquePassportNumber(passportNo = "11111") mustBe false
+      }
+
+      "return true when the passport number is equal to another form of identification" in {
+        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
+        val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+
+        beneficiaries.individualHasUniquePassportNumber(passportNo = "11111") mustBe true
+      }
+    }
+
+    ".individualHasUniqueIdCardNumber(...)" must {
+      "return true when the ID Card number doesn't equal the other ID Card numbers in the list" in {
+        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now())
+        val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+
+        beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "333333") mustBe true
+      }
+
+      "return false when the ID Card number is equal to another ID Card number in the list" in {
+        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(5))
+        val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+
+        beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "11111") mustBe false
+      }
+
+      "return true when the ID Card number is equal to another form of identification" in {
+        val idCardData = CombinedPassportOrIdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(5))
+        val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
+        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+
+        beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "11111") mustBe true
+      }
+    }
   }
 
 }

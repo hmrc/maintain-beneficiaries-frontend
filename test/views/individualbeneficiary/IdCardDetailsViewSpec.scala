@@ -17,6 +17,7 @@
 package views.individualbeneficiary
 
 import forms.IdCardDetailsFormProvider
+import models.beneficiaries.Beneficiaries
 import models.{IdCard, Name, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -29,7 +30,9 @@ class IdCardDetailsViewSpec extends QuestionViewBehaviours[IdCard] {
 
   val messageKeyPrefix = "individualBeneficiary.idCardDetails"
   val name: Name = Name("First", Some("Middle"), "Last")
-  override val form: Form[IdCard] = new IdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
+  private val beneficiaries: Beneficiaries = Beneficiaries()
+
+  override val form: Form[IdCard] = new IdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix, beneficiaries)
 
   "IdCardDetails view" must {
 

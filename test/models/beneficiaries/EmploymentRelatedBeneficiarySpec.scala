@@ -26,7 +26,7 @@ import utils.Constants.GB
 import java.time.LocalDate
 
 class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
-  
+
   private val name = "Large Beneficiary"
   private val description = "Description"
   private val utr = "3570719187"

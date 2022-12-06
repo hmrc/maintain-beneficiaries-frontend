@@ -17,19 +17,23 @@
 package controllers.individualbeneficiary
 
 import base.SpecBase
-import config.annotations.IndividualBeneficiary
+import config.annotations
 import forms.IdCardDetailsFormProvider
+import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import models.{IdCard, Mode, Name, NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{IdCardDetailsPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
+import services.TrustServiceImpl
 import utils.InputOption
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.IdCardDetailsView
@@ -37,32 +41,59 @@ import views.html.individualbeneficiary.IdCardDetailsView
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
+class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {
 
   val formProvider = new IdCardDetailsFormProvider(frontendAppConfig)
-  private def form = formProvider.withPrefix("individualBeneficiary")
+  private def form: Form[IdCard] = formProvider.withPrefix("individualBeneficiary", beneficiaries)
 
-  def onwardRoute: Call = Call("GET", "/foo")
-  val name: Name = Name("FirstName", None, "LastName")
+  private val mockTrustsService = mock[TrustServiceImpl]
 
-  val baseAnswers: UserAnswers = emptyUserAnswers
+  private def onwardRoute: Call = Call("GET", "/foo")
+  private val name: Name = Name("FirstName", None, "LastName")
+
+  private val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
-  val mode: Mode = NormalMode
+  private val mode: Mode = NormalMode
   
-  val idCardDetailsRoute: String = routes.IdCardDetailsController.onPageLoad(mode).url
+  private val idCardDetailsRoute: String = routes.IdCardDetailsController.onPageLoad(mode).url
 
-  val getRequest = FakeRequest(GET, idCardDetailsRoute)
+  private val getRequest = FakeRequest(GET, idCardDetailsRoute)
 
-  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-  val validData: IdCard = IdCard("country", "card number", LocalDate.of(2020, 1, 1))
+  private val validData: IdCard = IdCard("country", "card number", LocalDate.of(2020, 1, 1))
+
+  private val individualBeneficiary = IndividualBeneficiary(
+    name = Name("First", None, "last"),
+    dateOfBirth = None,
+    identification = Some(validData),
+    address = None,
+    vulnerableYesNo = None,
+    roleInCompany = None,
+    income = None  ,
+    incomeDiscretionYesNo = None,
+    entityStart = LocalDate.parse("2019-02-03"),
+    provisional = false
+  )
+
+  private val beneficiaries: Beneficiaries = Beneficiaries(
+    List(individualBeneficiary)
+  )
+
+  override protected def beforeEach(): Unit = {
+    reset(mockTrustsService)
+    when(mockTrustsService.getBeneficiaries(any())(any(), any()))
+      .thenReturn(Future.successful(beneficiaries))
+  }
 
   "IdCardDetails Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers))
+        .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
+        .build()
 
       val result = route(application, getRequest).value
 
@@ -82,7 +113,9 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
         .set(NamePage, name).success.value
         .set(IdCardDetailsPage, validData).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
+        .build()
 
       val view = application.injector.instanceOf[IdCardDetailsView]
 
@@ -104,7 +137,8 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
-          .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(bind[Navigator].qualifiedWith(classOf[annotations.IndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
 
           .build()
 
@@ -129,7 +163,9 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers))
+        .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
+        .build()
 
       val request =
         FakeRequest(POST, idCardDetailsRoute)
@@ -151,7 +187,9 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
+        .build()
 
       val result = route(application, getRequest).value
 
@@ -163,7 +201,9 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
+        .build()
 
       val request =
         FakeRequest(POST, idCardDetailsRoute)

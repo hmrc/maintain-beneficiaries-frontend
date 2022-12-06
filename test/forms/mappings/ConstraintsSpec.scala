@@ -17,6 +17,8 @@
 package forms.mappings
 
 import generators.Generators
+import models.{IdCard, Name, Passport}
+import models.beneficiaries.{Beneficiaries, IndividualBeneficiary}
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -26,7 +28,6 @@ import play.api.data.validation.{Invalid, Valid}
 import java.time.LocalDate
 
 class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with Generators  with Constraints {
-
 
   "firstError" must {
 
@@ -186,6 +187,56 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
       }
+    }
+  }
+
+  "uniquePassportNumber(...)" must {
+    "return valid when individualHasUniquePassportNumber is true" in {
+      val result = uniquePassportNumber(Beneficiaries(), "error.unique.passportNumber")("number")
+      result mustEqual Valid
+    }
+
+    "return invalid when individualHasUniquePassportNumber is false" in {
+      val individualBeneficiary = IndividualBeneficiary(
+        name = Name(firstName = "First", middleName = None, lastName = "Last"),
+        dateOfBirth = None,
+        identification = Some(Passport("country","number",LocalDate.now().plusYears(5))),
+        address = None,
+        entityStart = LocalDate.parse("2020-02-02"),
+        vulnerableYesNo = Some(false),
+        roleInCompany = None,
+        income = None,
+        incomeDiscretionYesNo = Some(false),
+        provisional = false
+      )
+
+      val result = uniquePassportNumber(Beneficiaries(List(individualBeneficiary)), "error.unique.passportNumber")("number")
+      result mustEqual Invalid("error.unique.passportNumber")
+    }
+  }
+
+  "uniqueIDCardNumber(...)" must {
+    "return valid when individualHasUniqueIdCardNumber is true" in {
+      val result = uniqueIDCardNumber(Beneficiaries(), "error.unique.idCard")("number")
+      result mustEqual Valid
+    }
+
+    "return invalid when individualHasUniqueIdCardNumber is false" in {
+      val individualBeneficiary = IndividualBeneficiary(
+        name = Name(firstName = "First", middleName = None, lastName = "Last"),
+        dateOfBirth = None,
+        identification = Some(IdCard("country", "number", LocalDate.now())),
+        address = None,
+        entityStart = LocalDate.parse("2020-02-02"),
+        vulnerableYesNo = Some(false),
+        roleInCompany = None,
+        income = None,
+        incomeDiscretionYesNo = Some(false),
+        provisional = false
+      )
+
+      val result = uniqueIDCardNumber(Beneficiaries(List(individualBeneficiary)), "error.unique.idCard")("number")
+      result mustEqual Invalid("error.unique.idCard")
     }
   }
 }

@@ -23,7 +23,7 @@ import viewmodels.addAnother.AddRow
 import views.ViewSpecBase
 
 trait TabularDataViewBehaviours extends ViewSpecBase {
-  
+
   private def complete(migrating: Boolean): String = if (migrating) "nomoreinfoneeded" else "complete"
   private def inProgress(migrating: Boolean): String = if (migrating) "moreinfoneeded" else "inprogress"
 

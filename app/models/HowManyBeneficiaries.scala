@@ -57,5 +57,5 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
     case Over501 => JsString("501")
     case Over1001 => JsString("1001")
   }
-  
+
 }

@@ -20,13 +20,16 @@ import config.annotations.IndividualBeneficiary
 import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import forms.IdCardDetailsFormProvider
+
 import javax.inject.Inject
 import models.Mode
+import models.beneficiaries.Beneficiaries
 import navigation.Navigator
 import pages.individualbeneficiary.IdCardDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
+import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
 import views.html.individualbeneficiary.IdCardDetailsView
@@ -36,6 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdCardDetailsController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: PlaybackRepository,
+                                         trustService: TrustService,
                                          @IndividualBeneficiary navigator: Navigator,
                                          standardActionSets: StandardActionSets,
                                          nameAction: NameRequiredAction,
@@ -45,31 +49,36 @@ class IdCardDetailsController @Inject()(
                                          val countryOptions: CountryOptions
                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider.withPrefix("individualBeneficiary")
+  private def form(beneficiaries: Beneficiaries) = formProvider.withPrefix("individualBeneficiary", beneficiaries)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(IdCardDetailsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+      trustService.getBeneficiaries(request.userAnswers.identifier).map { beneficiaries =>
+        val preparedForm = request.userAnswers.get(IdCardDetailsPage) match {
+          case None => form(beneficiaries)
+          case Some(value) => form(beneficiaries).fill(value)
+        }
 
-      Ok(view(preparedForm, mode, countryOptions.options, request.beneficiaryName))
+        Ok(view(preparedForm, mode, countryOptions.options, request.beneficiaryName))
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, countryOptions.options, request.beneficiaryName))),
+      trustService.getBeneficiaries(request.userAnswers.identifier).flatMap { beneficiaries =>
+        form(beneficiaries).bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, mode, countryOptions.options, request.beneficiaryName))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IdCardDetailsPage, mode, updatedAnswers))
-      )
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(IdCardDetailsPage, value))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(IdCardDetailsPage, mode, updatedAnswers))
+        )
+      }
+
   }
 }

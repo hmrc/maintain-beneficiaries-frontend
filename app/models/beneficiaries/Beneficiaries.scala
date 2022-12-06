@@ -17,6 +17,7 @@
 package models.beneficiaries
 
 import models.beneficiaries.TypeOfBeneficiaryToAdd._
+import models.{IdCard, Passport}
 import play.api.i18n.{Messages, MessagesProvider}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
@@ -73,6 +74,7 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
             recurse(uncombinedOptions.tail, combinedOptions :+ uncombinedOptions.head)
         }
       }
+
       recurse(uncombinedOptions, Nil)
     }
 
@@ -88,6 +90,23 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
     }
   }
 
+  def individualHasUniquePassportNumber(passportNo: String): Boolean = {
+    individualDetails.forall {
+      _.identification match {
+        case Some(passport: Passport) => passport.number != passportNo
+        case _ => true
+      }
+    }
+  }
+
+  def individualHasUniqueIdCardNumber(idCardNo: String): Boolean = {
+    individualDetails.forall {
+      _.identification match {
+        case Some(idCard: IdCard) => idCard.number != idCardNo
+        case _ => true
+      }
+    }
+  }
 }
 
 object Beneficiaries {
