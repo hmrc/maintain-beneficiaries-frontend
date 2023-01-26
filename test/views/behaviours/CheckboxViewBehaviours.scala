@@ -42,7 +42,7 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
         for {
           (_, i) <- options.zipWithIndex
         } yield {
-          assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
+          assertRenderedByClass(doc, form(fieldKey)(s"[$i]").id)
         }
       }
 
@@ -99,7 +99,7 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
 
       "show an error summary" in {
         val doc = asDocument(createView(form.withError(FormError(fieldKey, "error.invalid"))))
-        assertRenderedById(doc, "error-summary-title")
+        assertRenderedByClass(doc, "error-summary-title")
       }
 
       "show an error associated with the value field" in {

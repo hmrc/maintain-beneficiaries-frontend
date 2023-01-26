@@ -51,7 +51,7 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
 
           s"contain an input for $field" in {
             val doc = asDocument(createView(form))
-            assertRenderedById(doc, field._1)
+            assertRenderedByClass(doc, field._1)
           }
         }
 
@@ -78,7 +78,7 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
           "show an error summary" in {
 
             val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
-            assertRenderedById(doc, "error-summary-title")
+            assertRenderedByClass(doc, "error-summary-title")
           }
 
           s"show an error in the label for field '$field'" in {
