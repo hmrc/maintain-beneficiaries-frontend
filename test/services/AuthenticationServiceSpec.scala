@@ -64,7 +64,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
 
         whenReady(service.authenticateForUtr[AnyContent](utr)) {
           result =>
-            result.right.value mustBe dataRequest
+            result.value mustBe dataRequest
         }
       }
     }
@@ -112,7 +112,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
 
         whenReady(service.authenticateAgent()) {
           result =>
-            result.right.value mustBe "SomeARN"
+            result.value mustBe "SomeARN"
         }
       }
     }
