@@ -43,8 +43,8 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
         "contain an input for the value" in {
 
           val doc = asDocument(createView(form))
-          assertRenderedByClass(doc, "value-yes")
-          assertRenderedByClass(doc, "value-no")
+          assertRenderedById(doc, "value-yes")
+          assertRenderedById(doc, "value-no")
         }
 
         "have no values checked when rendered with no form" in {

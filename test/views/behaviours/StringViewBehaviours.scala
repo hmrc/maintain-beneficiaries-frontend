@@ -45,7 +45,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "contain an input for the value" in {
 
           val doc = asDocument(createView(form))
-          assertRenderedByClass(doc, "value")
+          assertRenderedById(doc, "value")
         }
       }
 
@@ -63,7 +63,7 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
         "show an error summary" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertRenderedByClass(doc, "error-summary-title")
+          assertRenderedByClass(doc, "govuk-error-summary")
         }
 
         "show an error associated to the value field" in {

@@ -81,12 +81,12 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list-heading--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list--${inProgress(migrating)}")
         assertNotRenderedById(doc, s"data-list--${complete(migrating)}")
         assertNotRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
@@ -104,12 +104,12 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list-heading--${complete(migrating)}")
+        assertRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list--${complete(migrating)}")
+        assertRenderedById(doc, s"data-list--${complete(migrating)}")
         assertNotRenderedById(doc, s"data-list--${inProgress(migrating)}")
         assertNotRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
       }
@@ -130,14 +130,14 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
 
       "render a h2" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list-heading--${inProgress(migrating)}")
-        assertRenderedByClass(doc, s"data-list-heading--${complete(migrating)}")
+        assertRenderedById(doc, s"data-list-heading--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list-heading--${complete(migrating)}")
       }
 
       "render an add to list" in {
         val doc = asDocument(view)
-        assertRenderedByClass(doc, s"data-list--${inProgress(migrating)}")
-        assertRenderedByClass(doc, s"data-list--${complete(migrating)}")
+        assertRenderedById(doc, s"data-list--${inProgress(migrating)}")
+        assertRenderedById(doc, s"data-list--${complete(migrating)}")
       }
 
       "render a row for each data item" in {
