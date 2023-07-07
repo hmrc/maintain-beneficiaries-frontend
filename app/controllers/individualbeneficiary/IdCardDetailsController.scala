@@ -60,7 +60,7 @@ class IdCardDetailsController @Inject()(
           case Some(value) => form(beneficiaries).fill(value)
         }
 
-        Ok(view(preparedForm, mode, countryOptions.options, request.beneficiaryName))
+        Ok(view(preparedForm, mode, countryOptions.options(), request.beneficiaryName))
       }
   }
 
@@ -70,7 +70,7 @@ class IdCardDetailsController @Inject()(
       trustService.getBeneficiaries(request.userAnswers.identifier).flatMap { beneficiaries =>
         form(beneficiaries).bindFromRequest().fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode, countryOptions.options, request.beneficiaryName))),
+            Future.successful(BadRequest(view(formWithErrors, mode, countryOptions.options(), request.beneficiaryName))),
 
           value =>
             for {

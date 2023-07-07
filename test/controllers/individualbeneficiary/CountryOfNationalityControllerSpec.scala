@@ -38,11 +38,11 @@ class CountryOfNationalityControllerSpec extends SpecBase {
   private val name: Name = Name("FirstName", None, "LastName")
   private val onwardRoute = Call("GET", "/foo")
 
-  val validAnswer: String = "France"
+  private val validAnswer: String = "France"
 
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-  val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
   "CountryOfNationalityController" must {
 

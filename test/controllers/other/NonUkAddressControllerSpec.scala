@@ -19,7 +19,7 @@ package controllers.other
 import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.NonUkAddressFormProvider
-import models.{Mode, NonUkAddress, NormalMode}
+import models.{Mode, NonUkAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.{DescriptionPage, NonUkAddressPage}
@@ -40,9 +40,9 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val description: String = "Other"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-  val baseAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
   "NonUkAddress Controller" must {
 

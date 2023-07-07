@@ -19,5 +19,5 @@ package pages.companyoremploymentrelated
 import play.api.libs.json.JsPath
 
 package object company {
-  val basePath = JsPath \ 'company
+  val basePath: JsPath = JsPath \ Symbol("company")
 }

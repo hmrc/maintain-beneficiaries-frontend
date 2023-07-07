@@ -40,7 +40,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
 
   val validAnswer: String = "France"
 
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 

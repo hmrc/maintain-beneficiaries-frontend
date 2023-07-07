@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = route, 'autoComplete -> "off") {
+    @formHelper(action = route, Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

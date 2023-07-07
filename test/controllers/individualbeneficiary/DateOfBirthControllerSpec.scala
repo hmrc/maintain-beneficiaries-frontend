@@ -41,13 +41,13 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new DateFormProvider(frontendAppConfig)
   private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val dateOfBirthRoute = routes.DateOfBirthController.onPageLoad(NormalMode).url
+  lazy val dateOfBirthRoute: String = routes.DateOfBirthController.onPageLoad(NormalMode).url
 
-  val name = Name("New", None, "Beneficiary")
+  val name: Name = Name("New", None, "Beneficiary")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
@@ -76,7 +76,7 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name.displayName)(getRequest, messages).toString
+        view(form, NormalMode, name.displayName)(getRequest(), messages).toString
 
       application.stop()
     }

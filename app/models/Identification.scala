@@ -26,10 +26,10 @@ sealed trait IndividualIdentification
 
 object IndividualIdentification {
   implicit val reads: Reads[IndividualIdentification] = {
-    (__ \ 'passport \ 'detailsType).readWithDefault[DetailsType](DetailsType.Combined).flatMap {
-      case DetailsType.Passport => (__ \ 'passport).read[Passport].widen[IndividualIdentification]
-      case DetailsType.IdCard => (__ \ 'passport).read[IdCard].widen[IndividualIdentification]
-      case _ => (__ \ 'passport).read[CombinedPassportOrIdCard].widen[IndividualIdentification]
+    (__ \ Symbol("passport") \ Symbol("detailsType")).readWithDefault[DetailsType](DetailsType.Combined).flatMap {
+      case DetailsType.Passport => (__ \ Symbol("passport")).read[Passport].widen[IndividualIdentification]
+      case DetailsType.IdCard => (__ \ Symbol("passport")).read[IdCard].widen[IndividualIdentification]
+      case _ => (__ \ Symbol("passport")).read[CombinedPassportOrIdCard].widen[IndividualIdentification]
     } orElse __.read[NationalInsuranceNumber].widen[IndividualIdentification]
   }
 

@@ -63,7 +63,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = MentalCapacityYesNoController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = MentalCapacityYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

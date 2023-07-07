@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = ShareOfIncomeController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = ShareOfIncomeController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

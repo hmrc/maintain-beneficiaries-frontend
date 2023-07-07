@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = WhenRemovedController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = WhenRemovedController.onSubmit(index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

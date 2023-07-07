@@ -55,7 +55,7 @@ final case class IndividualBeneficiary(name: Name,
 object IndividualBeneficiary extends BeneficiaryReads {
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ 'legallyIncapable).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+    (__ \ Symbol("legallyIncapable")).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
       Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
     }
 
@@ -68,16 +68,16 @@ object IndividualBeneficiary extends BeneficiaryReads {
   }
 
   implicit val reads: Reads[IndividualBeneficiary] = (
-    (__ \ 'name).read[Name] and
-      (__ \ 'dateOfBirth).readNullable[LocalDate] and
-      __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ 'identification)) and
-      __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
-      (__ \ 'vulnerableBeneficiary).readNullable[Boolean] and
-      (__ \ 'beneficiaryType).readNullable[RoleInCompany] and
-      (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ 'countryOfResidence).readNullable[String] and
-      (__ \ 'nationality).readNullable[String] and
+    (__ \ Symbol("name")).read[Name] and
+      (__ \ Symbol("dateOfBirth")).readNullable[LocalDate] and
+      __.lazyRead(readNullableAtSubPath[IndividualIdentification](__ \ Symbol("identification"))) and
+      __.lazyRead(readNullableAtSubPath[Address](__ \ Symbol("identification") \ Symbol("address"))) and
+      (__ \ Symbol("vulnerableBeneficiary")).readNullable[Boolean] and
+      (__ \ Symbol("beneficiaryType")).readNullable[RoleInCompany] and
+      (__ \ Symbol("beneficiaryShareOfIncome")).readNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).readNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).readNullable[String] and
+      (__ \ Symbol("nationality")).readNullable[String] and
       readMentalCapacity and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
@@ -93,17 +93,17 @@ object IndividualBeneficiary extends BeneficiaryReads {
   }
 
   implicit val writes: Writes[IndividualBeneficiary] = (
-    (__ \ 'name).write[Name] and
-      (__ \ 'dateOfBirth).writeNullable[LocalDate] and
-      (__ \ 'identification).writeNullable[IndividualIdentification] and
-      (__ \ 'identification \ 'address).writeNullable[Address] and
-      (__ \ 'vulnerableBeneficiary).writeNullable[Boolean] and
-      (__ \ 'beneficiaryType).writeNullable[RoleInCompany] and
-      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
-      (__ \ 'countryOfResidence).writeNullable[String] and
-      (__ \ 'nationality).writeNullable[String] and
-      (__ \ 'legallyIncapable).writeNullable[YesNoDontKnow](legallyIncapableWrites) and
+    (__ \ Symbol("name")).write[Name] and
+      (__ \ Symbol("dateOfBirth")).writeNullable[LocalDate] and
+      (__ \ Symbol("identification")).writeNullable[IndividualIdentification] and
+      (__ \ Symbol("identification") \ Symbol("address")).writeNullable[Address] and
+      (__ \ Symbol("vulnerableBeneficiary")).writeNullable[Boolean] and
+      (__ \ Symbol("beneficiaryType")).writeNullable[RoleInCompany] and
+      (__ \ Symbol("beneficiaryShareOfIncome")).writeNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).writeNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).writeNullable[String] and
+      (__ \ Symbol("nationality")).writeNullable[String] and
+      (__ \ Symbol("legallyIncapable")).writeNullable[YesNoDontKnow](legallyIncapableWrites) and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(IndividualBeneficiary.unapply))

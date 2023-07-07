@@ -40,7 +40,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   private def form = formProvider.withPrefixAndEntityStartDate("charityBeneficiary.whenRemoved", LocalDate.now())
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
   val index = 0
 
@@ -49,7 +49,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val fakeService = new TrustServiceImpl(mockConnector)
 
-  lazy val dateRemovedFromTrustRoute = routes.WhenRemovedController.onPageLoad(index).url
+  lazy val dateRemovedFromTrustRoute: String = routes.WhenRemovedController.onPageLoad(index).url
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, dateRemovedFromTrustRoute)
@@ -62,7 +62,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  def charityBeneficiary(id: Int) = CharityBeneficiary(
+  def charityBeneficiary(id: Int): CharityBeneficiary = CharityBeneficiary(
     name = s"Charity Name $id",
     utr = None,
     address = None,
@@ -90,7 +90,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, beneficiaries(index).name)(getRequest, messages).toString
+        view(form, index, beneficiaries(index).name)(getRequest(), messages).toString
 
       application.stop()
     }

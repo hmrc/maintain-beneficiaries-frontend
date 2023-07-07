@@ -51,7 +51,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val fakeService = new TrustServiceImpl(mockConnector)
 
-  lazy val dateRemovedFromTrustRoute = routes.WhenRemovedController.onPageLoad(index).url
+  lazy val dateRemovedFromTrustRoute: String = routes.WhenRemovedController.onPageLoad(index).url
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, dateRemovedFromTrustRoute)
@@ -64,7 +64,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  def employmentBeneficiary(id: Int) = EmploymentRelatedBeneficiary(
+  def employmentBeneficiary(id: Int): EmploymentRelatedBeneficiary = EmploymentRelatedBeneficiary(
     name = s"Some Name $id",
     utr = None,
     address = None,
@@ -93,7 +93,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, name)(getRequest, messages).toString
+        view(form, index, name)(getRequest(), messages).toString
 
       application.stop()
     }

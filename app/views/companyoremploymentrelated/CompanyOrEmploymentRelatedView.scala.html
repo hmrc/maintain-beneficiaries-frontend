@@ -33,7 +33,7 @@
     showBackLink = true
     ) {
 
-    @formHelper(action = CompanyOrEmploymentRelatedController.onSubmit(), 'autoComplete -> "off") {
+    @formHelper(action = CompanyOrEmploymentRelatedController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors, CompanyOrEmploymentRelatedToAdd.options.toSeq)
 

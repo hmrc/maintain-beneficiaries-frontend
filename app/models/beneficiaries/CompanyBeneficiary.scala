@@ -34,12 +34,12 @@ case class CompanyBeneficiary(name: String,
 object CompanyBeneficiary extends BeneficiaryReads {
 
   implicit val reads: Reads[CompanyBeneficiary] = (
-    (__ \ 'organisationName).read[String] and
-      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
-      __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
-      (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ 'countryOfResidence).readNullable[String] and
+    (__ \ Symbol("organisationName")).read[String] and
+      __.lazyRead(readNullableAtSubPath[String](__ \ Symbol("identification") \ Symbol("utr"))) and
+      __.lazyRead(readNullableAtSubPath[Address](__ \ Symbol("identification") \ Symbol("address"))) and
+      (__ \ Symbol("beneficiaryShareOfIncome")).readNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).readNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map {
@@ -54,12 +54,12 @@ object CompanyBeneficiary extends BeneficiaryReads {
   }
 
   implicit val writes: Writes[CompanyBeneficiary] = (
-    (__ \ 'organisationName).write[String] and
-      (__ \ 'identification \ 'utr).writeNullable[String] and
-      (__ \ 'identification \ 'address).writeNullable[Address] and
-      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
-      (__ \ 'countryOfResidence).writeNullable[String] and
+    (__ \ Symbol("organisationName")).write[String] and
+      (__ \ Symbol("identification") \ Symbol("utr")).writeNullable[String] and
+      (__ \ Symbol("identification") \ Symbol("address")).writeNullable[Address] and
+      (__ \ Symbol("beneficiaryShareOfIncome")).writeNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).writeNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(CompanyBeneficiary.unapply))

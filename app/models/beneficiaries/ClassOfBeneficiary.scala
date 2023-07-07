@@ -32,14 +32,14 @@ final case class ClassOfBeneficiary(description: String,
 object ClassOfBeneficiary {
 
   implicit val reads: Reads[ClassOfBeneficiary] = (
-    (__ \ 'description).read[String] and
-      (__ \ 'entityStart).read[LocalDate] and
-      (__ \ 'lineNo).readNullable[String].map(_.isEmpty)
+    (__ \ Symbol("description")).read[String] and
+      (__ \ Symbol("entityStart")).read[LocalDate] and
+      (__ \ Symbol("lineNo")).readNullable[String].map(_.isEmpty)
     ).apply(ClassOfBeneficiary.apply _)
 
   implicit val writes: Writes[ClassOfBeneficiary] = (
-    (__ \ 'description).write[String] and
-      (__ \ 'entityStart).write[LocalDate] and
+    (__ \ Symbol("description")).write[String] and
+      (__ \ Symbol("entityStart")).write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(ClassOfBeneficiary.unapply))
 

@@ -56,7 +56,7 @@
 
     <p>@messages("beneficiariesMoreInformation.p6")</p>
 
-     @formHelper(action = BeneficiariesInformationController.onSubmit(), 'autoComplete -> "off") {
+     @formHelper(action = BeneficiariesInformationController.onSubmit(), Symbol("autoComplete") -> "off") {
         @button(Some(messages("site.continue")))
     }
 

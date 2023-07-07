@@ -19,5 +19,5 @@ package pages
 import play.api.libs.json.JsPath
 
 package object other {
-  val basePath = JsPath \ 'other
+  val basePath: JsPath = JsPath \ Symbol("other")
 }
