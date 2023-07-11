@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-@formHelper(action = AddABeneficiaryController.submitOne(), 'autoComplete -> "off") {
+@formHelper(action = AddABeneficiaryController.submitOne(), Symbol("autoComplete") -> "off") {
 
     @errorSummary(form.errors)
 

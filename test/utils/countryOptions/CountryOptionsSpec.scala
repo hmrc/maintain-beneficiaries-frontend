@@ -35,10 +35,10 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
         .build()
 
       val messagesApi = app.injector.instanceOf[MessagesApi]
-      implicit val messages = MessagesImpl(lang = Lang(ENGLISH), messagesApi = messagesApi)
+      implicit val messages: MessagesImpl = MessagesImpl(lang = Lang(ENGLISH), messagesApi = messagesApi)
 
       val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
-      countryOption.options mustEqual Seq(InputOption("ES", "Spain"), InputOption("GB", "United Kingdom"))
+      countryOption.options() mustEqual Seq(InputOption("ES", "Spain"), InputOption("GB", "United Kingdom"))
 
       application.stop()
     }
@@ -52,10 +52,10 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
         .build()
 
       val messagesApi = app.injector.instanceOf[MessagesApi]
-      implicit val messages = MessagesImpl(lang = Lang(WELSH), messagesApi = messagesApi)
+      implicit val messages: MessagesImpl = MessagesImpl(lang = Lang(WELSH), messagesApi = messagesApi)
 
       val countryOption: CountryOptions = application.injector.instanceOf[CountryOptions]
-      countryOption.options mustEqual Seq(InputOption("ES", "Sbaen"), InputOption("GB", "Y Deyrnas Unedig"))
+      countryOption.options() mustEqual Seq(InputOption("ES", "Sbaen"), InputOption("GB", "Y Deyrnas Unedig"))
 
       application.stop()
     }
@@ -69,7 +69,7 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
         .build()
 
       an[ConfigException.BadValue] shouldBe thrownBy {
-        application.injector.instanceOf[CountryOptions].options
+        application.injector.instanceOf[CountryOptions].options()
       }
 
       application.stop()

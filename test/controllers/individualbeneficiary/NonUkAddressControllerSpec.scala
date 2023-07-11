@@ -26,7 +26,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{NamePage, NonUkAddressPage}
 import play.api.inject.bind
-import play.api.mvc.Call
+import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
@@ -48,9 +48,9 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(NormalMode).url
 
-  val getRequest = FakeRequest(GET, nonUkAddressRoute)
+  val getRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, nonUkAddressRoute)
 
-  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   val validData: NonUkAddress = NonUkAddress("line1", "line2", None, "country")
 

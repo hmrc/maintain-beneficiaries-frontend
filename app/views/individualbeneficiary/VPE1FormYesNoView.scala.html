@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = VPE1FormYesNoController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = VPE1FormYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

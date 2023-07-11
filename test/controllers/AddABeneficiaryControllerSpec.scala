@@ -177,7 +177,8 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
   }
 
   override def beforeEach(): Unit = {
-    reset(mockStoreConnector, mockViewHelper)
+    reset(mockStoreConnector)
+    reset(mockViewHelper)
     when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, Nil))
 
     when(mockStoreConnector.updateTaskStatus(any(), any())(any(), any()))
@@ -464,7 +465,7 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual controllers.routes.AddNowController.onPageLoad().url
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(playbackRepository).set(uaCaptor.capture)
         uaCaptor.getValue.data mustBe Json.obj()
       }

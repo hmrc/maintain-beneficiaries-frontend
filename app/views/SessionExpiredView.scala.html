@@ -37,7 +37,7 @@
 <p class="govuk-body">@messages("session_expired.guidance")</p>
 <p class="govuk-body">@messages("session_expired.guidance.2")</p>
 
-    @formHelper(action = SessionExpiredController.onSubmit, 'autoComplete -> "off") {
+    @formHelper(action = SessionExpiredController.onSubmit, Symbol("autoComplete") -> "off") {
         @submitButton(Some(messages("site.sign_in")))
     }
 }

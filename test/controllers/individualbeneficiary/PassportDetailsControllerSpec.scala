@@ -84,7 +84,7 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
 
   private val getRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, passportDetailsRoute)
 
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
   "PassportDetails Controller" must {
 

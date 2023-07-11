@@ -19,5 +19,5 @@ package pages
 import play.api.libs.json.JsPath
 
 package object individualbeneficiary {
-  val basePath: JsPath = JsPath \ 'individualBeneficiary
+  val basePath: JsPath = JsPath \ Symbol("individualBeneficiary")
 }

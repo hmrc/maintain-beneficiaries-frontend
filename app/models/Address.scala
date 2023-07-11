@@ -30,19 +30,19 @@ case class UkAddress (line1: String,
 object UkAddress {
 
   implicit val reads: Reads[UkAddress] =
-    ((__ \ 'line1).read[String] and
-      (__ \ 'line2).read[String] and
-      (__ \ 'line3).readNullable[String] and
-      (__ \ 'line4).readNullable[String] and
-      (__ \ 'postCode).read[String]).apply(UkAddress.apply _)
+    ((__ \ Symbol("line1")).read[String] and
+      (__ \ Symbol("line2")).read[String] and
+      (__ \ Symbol("line3")).readNullable[String] and
+      (__ \ Symbol("line4")).readNullable[String] and
+      (__ \ Symbol("postCode")).read[String]).apply(UkAddress.apply _)
 
   implicit val writes: Writes[UkAddress] =
-    ((__ \ 'line1).write[String] and
-      (__ \ 'line2).write[String] and
-      (__ \ 'line3).writeNullable[String] and
-      (__ \ 'line4).writeNullable[String] and
-      (__ \ 'postCode).write[String] and
-      (__ \ 'country).write[String]
+    ((__ \ Symbol("line1")).write[String] and
+      (__ \ Symbol("line2")).write[String] and
+      (__ \ Symbol("line3")).writeNullable[String] and
+      (__ \ Symbol("line4")).writeNullable[String] and
+      (__ \ Symbol("postCode")).write[String] and
+      (__ \ Symbol("country")).write[String]
       ).apply(address => (
       address.line1,
       address.line2,

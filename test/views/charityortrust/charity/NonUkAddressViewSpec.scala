@@ -37,7 +37,7 @@ class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
     val view = viewFor[NonUkAddressView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, countryOptions, name)(fakeRequest, messages)

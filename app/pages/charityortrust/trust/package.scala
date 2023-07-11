@@ -19,5 +19,5 @@ package pages.charityortrust
 import play.api.libs.json.JsPath
 
 package object trust {
-  val basePath = JsPath \ 'trust
+  val basePath: JsPath = JsPath \ Symbol("trust")
 }

@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = RemoveCompanyBeneficiaryController.onSubmit(index), 'autoComplete -> "off") {
+    @formHelper(action = RemoveCompanyBeneficiaryController.onSubmit(index), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

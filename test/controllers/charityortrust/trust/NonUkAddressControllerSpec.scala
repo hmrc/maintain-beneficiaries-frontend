@@ -39,9 +39,9 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val name: String = "Trust"
   private val onwardRoute = Call("GET", "/foo")
   private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
-  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-  val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
+  private val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
   "NonUkAddress Controller" must {
 

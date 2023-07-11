@@ -73,7 +73,11 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private val fakeAnswerSection = AnswerSection(Some("Heading"), Nil)
 
   override def beforeEach(): Unit = {
-    reset(mockService, mockExtractor, mockPrintHelper, mockMapper, mockTrustConnector)
+    reset(mockService)
+    reset(mockExtractor)
+    reset(mockPrintHelper)
+    reset(mockMapper)
+    reset(mockTrustConnector)
 
     when(mockExtractor.apply(any(), any(), any())).thenReturn(Success(emptyUserAnswers))
 

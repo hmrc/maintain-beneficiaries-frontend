@@ -48,7 +48,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
   private val name = Name("New", None, "Beneficiary")
 
-  val baseAnswers: UserAnswers = emptyUserAnswers
+  private val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
@@ -71,7 +71,7 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, name.displayName)(getRequest, messages).toString
+        view(form, NormalMode, name.displayName)(getRequest(), messages).toString
 
       application.stop()
     }

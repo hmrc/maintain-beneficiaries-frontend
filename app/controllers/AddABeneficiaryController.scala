@@ -90,7 +90,7 @@ class AddABeneficiaryController @Inject()(
               Ok(completeView(
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
-                heading = beneficiaries.addToHeading,
+                heading = beneficiaries.addToHeading(),
                 migrating = migratingFromNonTaxableToTaxable
               ))
             } else {
@@ -101,7 +101,7 @@ class AddABeneficiaryController @Inject()(
                 form = addAnotherForm,
                 inProgressBeneficiaries = beneficiaryRows.inProgress,
                 completeBeneficiaries = beneficiaryRows.complete,
-                heading = beneficiaries.addToHeading,
+                heading = beneficiaries.addToHeading(),
                 maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
                 migrating = migratingFromNonTaxableToTaxable
               ))
@@ -155,7 +155,7 @@ class AddABeneficiaryController @Inject()(
                 formWithErrors,
                 rows.inProgress,
                 rows.complete,
-                beneficiaries.addToHeading,
+                beneficiaries.addToHeading(),
                 maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
                 migrating = migratingFromNonTaxableToTaxable
               )

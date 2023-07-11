@@ -19,7 +19,7 @@ package controllers.individualbeneficiary.add
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.DateAddedToTrustFormProvider
-import models.Name
+import models.{Name, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -43,15 +43,15 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
   private val date: LocalDate = LocalDate.parse("2019-02-03")
   private def form: Form[LocalDate] = formProvider.withPrefixAndTrustStartDate("individualBeneficiary.startDate", date)
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val startDateRoute = routes.StartDateController.onPageLoad().url
+  lazy val startDateRoute: String = routes.StartDateController.onPageLoad().url
 
-  val name = Name("New", None, "Beneficiary")
+  val name: Name = Name("New", None, "Beneficiary")
 
-  val baseAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
+  val baseAnswers: UserAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
     .set(NamePage, name).success.value
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
@@ -78,7 +78,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, name.displayName)(getRequest, messages).toString
+        view(form, name.displayName)(getRequest(), messages).toString
 
       application.stop()
     }

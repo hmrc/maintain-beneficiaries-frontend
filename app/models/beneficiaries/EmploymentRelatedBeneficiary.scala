@@ -37,23 +37,23 @@ case class EmploymentRelatedBeneficiary(name: String,
 object EmploymentRelatedBeneficiary extends BeneficiaryReads {
 
   implicit val reads: Reads[EmploymentRelatedBeneficiary] = (
-    (__ \ 'organisationName).read[String] and
-      __.lazyRead(readNullableAtSubPath[String](__ \ 'identification \ 'utr)) and
-      __.lazyRead(readNullableAtSubPath[Address](__ \ 'identification \ 'address)) and
+    (__ \ Symbol("organisationName")).read[String] and
+      __.lazyRead(readNullableAtSubPath[String](__ \ Symbol("identification") \ Symbol("utr"))) and
+      __.lazyRead(readNullableAtSubPath[Address](__ \ Symbol("identification") \ Symbol("address"))) and
       __.read[Description] and
-      (__ \ 'numberOfBeneficiary).read[HowManyBeneficiaries] and
-      (__ \ 'countryOfResidence).readNullable[String] and
-      (__ \ 'entityStart).read[LocalDate] and
+      (__ \ Symbol("numberOfBeneficiary")).read[HowManyBeneficiaries] and
+      (__ \ Symbol("countryOfResidence")).readNullable[String] and
+      (__ \ Symbol("entityStart")).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     )(EmploymentRelatedBeneficiary.apply _)
 
   implicit val writes: Writes[EmploymentRelatedBeneficiary] = (
-    (__ \ 'organisationName).write[String] and
-      (__ \ 'identification \ 'utr).writeNullable[String] and
-      (__ \ 'identification \ 'address).writeNullable[Address] and
+    (__ \ Symbol("organisationName")).write[String] and
+      (__ \ Symbol("identification") \ Symbol("utr")).writeNullable[String] and
+      (__ \ Symbol("identification") \ Symbol("address")).writeNullable[Address] and
       __.write[Description] and
-      (__ \ 'numberOfBeneficiary).write[HowManyBeneficiaries] and
-      (__ \ 'countryOfResidence).writeNullable[String] and
+      (__ \ Symbol("numberOfBeneficiary")).write[HowManyBeneficiaries] and
+      (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     )(unlift(EmploymentRelatedBeneficiary.unapply))

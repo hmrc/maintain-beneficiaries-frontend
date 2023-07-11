@@ -33,11 +33,11 @@ final case class OtherBeneficiary(description: String,
 object OtherBeneficiary {
 
   implicit val reads: Reads[OtherBeneficiary] = (
-    (__ \ 'description).read[String] and
-      (__ \ 'address).readNullable[Address] and
-      (__ \ 'beneficiaryShareOfIncome).readNullable[String] and
-      (__ \ 'beneficiaryDiscretion).readNullable[Boolean] and
-      (__ \ 'countryOfResidence).readNullable[String] and
+    (__ \ Symbol("description")).read[String] and
+      (__ \ Symbol("address")).readNullable[Address] and
+      (__ \ Symbol("beneficiaryShareOfIncome")).readNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).readNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
     ).tupled.map {
@@ -52,11 +52,11 @@ object OtherBeneficiary {
   }
 
   implicit val writes: Writes[OtherBeneficiary] = (
-    (__ \ 'description).write[String] and
-      (__ \ 'address).writeNullable[Address] and
-      (__ \ 'beneficiaryShareOfIncome).writeNullable[String] and
-      (__ \ 'beneficiaryDiscretion).writeNullable[Boolean] and
-      (__ \ 'countryOfResidence).writeNullable[String] and
+    (__ \ Symbol("description")).write[String] and
+      (__ \ Symbol("address")).writeNullable[Address] and
+      (__ \ Symbol("beneficiaryShareOfIncome")).writeNullable[String] and
+      (__ \ Symbol("beneficiaryDiscretion")).writeNullable[Boolean] and
+      (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
     ).apply(unlift(OtherBeneficiary.unapply))

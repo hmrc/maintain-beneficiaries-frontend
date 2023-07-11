@@ -45,7 +45,8 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
   val isUnderlyingData5mld = false
 
   override def beforeEach(): Unit = {
-    reset(playbackRepository, mockTrustsStoreService)
+    reset(playbackRepository)
+    reset(mockTrustsStoreService)
 
     when(playbackRepository.set(any()))
       .thenReturn(Future.successful(true))
