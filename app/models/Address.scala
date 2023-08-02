@@ -52,7 +52,7 @@ object UkAddress {
       "GB"
     ))
 
-  implicit val format = Format[UkAddress](reads, writes)
+  implicit val format: Format[UkAddress] = Format[UkAddress](reads, writes)
 }
 
 case class NonUkAddress (line1: String,
@@ -61,7 +61,7 @@ case class NonUkAddress (line1: String,
                          country: String) extends Address
 
 object NonUkAddress {
-  implicit val format = Json.format[NonUkAddress]
+  implicit val format: OFormat[NonUkAddress] = Json.format[NonUkAddress]
 }
 
 object Address {
