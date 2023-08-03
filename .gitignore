@@ -1,9 +1,6 @@
-.*
 project/metals.sbt
 .bloop
 .metals
-!.gitignore
-!.scalafmt.conf
 .cache
 /.classpath
 db
@@ -35,4 +32,4 @@ test-result
 tmp
 .idea_modules
 bin
-.bsp/sbt.json
+.bsp
