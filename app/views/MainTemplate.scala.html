@@ -76,13 +76,14 @@
 @govukLayout(
     pageTitle = Some(breadcrumbTitle(title)),
     headBlock = Some(hmrcHead(
-    headBlock = Some(headScripts)
-)),
+        headBlock = Some(headScripts)
+    )),
     headerBlock = Some(hmrcStandardHeader(
-    serviceUrl = Some(appConfig.loginContinueUrl),
-    signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
-    phaseBanner = None
-)),
+        serviceUrl = Some(appConfig.loginContinueUrl),
+        signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
+        phaseBanner = None
+    )),
     beforeContentBlock = Some(beforeContentBlock),
+    scriptsBlock = Some(hmrcScripts()),
     footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)

@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-@import views.html.helper.CSPNonce
+@import views.ViewUtils._
 
 @this(
     govukInput: GovukInput,
@@ -49,6 +49,45 @@
     @maxWords.filter(_ > 0).map {value => data-maxwords="@value"}
 }
 
+@charactersUnderLimitText = @{
+    Some(Map(
+        "other" -> "Mae gennych %{count} o gymeriadau yn weddill",
+        "one" -> "Mae gennych 1 cymeriad yn weddill"
+    ))
+}
+
+@charactersOverLimitText = @{
+    Some(Map(
+        "other" -> "Mae gennych %{count} o gymeriadau yn ormod",
+        "one" -> "Mae gennych 1 cymeriad yn ormod"
+    ))
+}
+
+@wordsUnderLimitText = @{
+    Some(Map(
+        "other" -> "Mae gennych %{count} o eiriau yn weddill",
+        "one" -> "Mae gennych 1 gair yn weddill"
+    ))
+}
+
+@wordsOverLimitText = @{
+    Some(Map(
+        "other" -> "Mae gennych %{count} o eiriau yn ormod",
+        "one" -> "Mae gennych 1 gair yn ormod"
+    ))
+}
+
+@welshAttrs = {
+    @govukPluralisedI18nAttributes("characters-under-limit", charactersUnderLimitText)
+    @govukPluralisedI18nAttributes("characters-over-limit", charactersOverLimitText)
+    data-i18n.characters-at-limit="Mae gennych 0 o eiriau yn weddill"
+    @govukPluralisedI18nAttributes("words-under-limit", wordsUnderLimitText)
+    @govukPluralisedI18nAttributes("words-over-limit", wordsOverLimitText)
+    data-i18n.words-at-limit="Mae gennych 0 o eiriau yn weddill"
+
+    @attrs
+}
+
 @labelClasses = @{
     if (isPageHeading) "govuk-label--l"
     else if (isLabelHidden) "govuk-visually-hidden"
@@ -57,7 +96,7 @@
 }
 
 @defining(if(messages.lang.code == "cy") Cy else En) { messagesLanguage =>
-    <div class="hmrc-character-count" data-module="hmrc-character-count" data-language="@{messagesLanguage.code}" @attrs>
+    <div class="govuk-character-count" data-module="govuk-character-count" data-language="@{messagesLanguage.code}" @{if(messagesLanguage == Cy) welshAttrs else attrs}>
         @govukInput(
             Input(
                 id = id,
@@ -77,25 +116,23 @@
                 inputmode = inputMode,
                 prefix = prefix.map(prefix => PrefixOrSuffix(content = Text(prefix))),
                 suffix = suffix.map(suffix => PrefixOrSuffix(content = Text(suffix))),
-                classes = "hmrc-js-character-count " + inputClass.getOrElse("")
+                classes = "govuk-js-character-count " + inputClass.getOrElse("")
             ).withFormField(field)
         )
         @if(messagesLanguage == Cy) {
             @govukHint(Hint(
                 content = Text("Gallwch nodi hyd at " + maxLength.getOrElse(maxWords.getOrElse(0)) + {if(maxWords.isDefined) " o eiriau" else " o gymeriadau"}),
                 id = Some(id + "-info"),
-                classes = "hmrc-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
+                classes = "govuk-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
                 attributes = Map("aria-live" -> "polite")
             ))
         } else {
             @govukHint(Hint(
                 content = Text("You can enter up to " + maxLength.getOrElse(maxWords.getOrElse(0)) + {if(maxWords.isDefined) " words" else " characters"}),
                 id = Some(id + "-info"),
-                classes = "hmrc-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
+                classes = "govuk-character-count__message" + {if (countMessageClasses == "") "" else " " + countMessageClasses},
                 attributes = Map("aria-live" -> "polite")
             ))
         }
     </div>
 }
-
-
