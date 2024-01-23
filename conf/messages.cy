@@ -195,7 +195,7 @@ classOfBeneficiary.description.heading = Beth yw’r disgrifiad ar gyfer dosbart
 classOfBeneficiary.description.checkYourAnswersLabel = Beth yw’r disgrifiad ar gyfer dosbarth y buddiolwyr?
 classOfBeneficiary.description.hint = Er enghraifft wyrion ac wyresau’r dyfodol a gor-wyrion a gor-wyresau’r dyfodol.
 classOfBeneficiary.description.error.required = Nodwch y disgrifiad ar gyfer dosbarth y buddiolwyr
-classOfBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad ar gyfer dosbarth y buddiolwyr gynnwys y llythrennau a i z, rhifau, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+classOfBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad o’r dosbarth o fuddiolwyr gynnwys y llythrennau a-z, y rhifau 0-9, a chymeriadau arbennig megis ampersandau, collnodau, ôl-slaesau, cysylltnodau a bylchau yn unig
 classOfBeneficiary.description.error.length = Mae’n rhaid i’r disgrifiad ar gyfer dosbarth y buddiolwyr fod yn 56 cymeriad neu lai
 classOfBeneficiary.description.return.link = Dychwelyd i ychwanegu buddiolwr
 
