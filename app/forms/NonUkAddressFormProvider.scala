@@ -45,8 +45,7 @@ class NonUkAddressFormProvider @Inject() extends Mappings {
               regexp(Validation.addressLineRegex, "nonUkAddress.error.line2.invalidCharacters")
             )),
       "line3" ->
-        optional(Forms.text
-          .transform(trimWhitespace, identity[String])
+        optional(text()
           .verifying(
             firstError(
               maxLength(35, "nonUkAddress.error.line3.length"),
