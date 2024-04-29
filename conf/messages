@@ -722,7 +722,7 @@ otherBeneficiary.description.heading = What is the description of the other bene
 otherBeneficiary.description.checkYourAnswersLabel = What is the description of the other beneficiary?
 otherBeneficiary.description.hint = Do not include named or specific individuals, they must be listed as individual beneficiaries.
 otherBeneficiary.description.error.required = Enter the description of the other beneficiary
-otherBeneficiary.description.error.invalidFormat = The description of the other beneficiary must only include letters a to z, numbers, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+otherBeneficiary.description.error.invalidFormat = The description of the other beneficiary must only contain the letters a to z, the numbers 0 to 9, and special characters such as ampersands, apostrophes, backslashes, hyphens and spaces
 otherBeneficiary.description.error.length = The description of the other beneficiary must be 70 characters or less
 
 otherBeneficiary.discretionYesNo.title = Do the trustees have discretion over how much income the other beneficiary may get?
