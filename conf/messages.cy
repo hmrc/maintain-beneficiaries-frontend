@@ -629,7 +629,7 @@ otherBeneficiary.description.heading = Beth yw’r disgrifiad o’r buddiolwr ar
 otherBeneficiary.description.checkYourAnswersLabel = Beth yw’r disgrifiad o’r buddiolwr arall?
 otherBeneficiary.description.hint = Peidiwch â chynnwys unigolion a enwyd nac unigolion penodol – rhaid iddynt gael eu rhestru fel buddiolwyr unigol.
 otherBeneficiary.description.error.required = Nodwch y disgrifiad o’r buddiolwr arall
-otherBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad o’r buddiolwr arall gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, comas, blaenslaesau, atalnodau llawn, cysylltnodau, cromfachau crwn a bylchau yn unig
+otherBeneficiary.description.error.invalidFormat = Mae’n rhaid i’r disgrifiad o’r buddiolwr arall gynnwys y llythrennau a-z, y rhifau 0-9, a chymeriadau arbennig megis ampersandau, collnodau, ôl-slaesau, cysylltnodau a bylchau yn unig
 otherBeneficiary.description.error.length = Mae’n rhaid i’r disgrifiad o’r buddiolwr arall fod yn 70 o gymeriadau neu lai
 
 otherBeneficiary.discretionYesNo.title = A oes gan yr ymddiriedolwyr ddisgresiwn ynghylch faint o incwm y gallai’r buddiolwr hwn ei gael?
