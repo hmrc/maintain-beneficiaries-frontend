@@ -4,7 +4,7 @@ This service is responsible for updating the information held about a beneficiar
 
 To run locally using the micro-service provided by the service manager:
 
-```
+```bash
 sm2 --start MAINTAIN_TRUST_ALL
 ```
 
@@ -20,12 +20,12 @@ provide test coverage reports.
 Use the following commands to run the tests with coverage and generate a report.
 
 Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests and integration tests with scalastyle and checks for dependency updates:
-```
+```bash
 ./run_all_tests.sh
 ```
 
 Unit tests only:
-```
+```bash
 sbt clean coverage test coverageReport
 ```
 
