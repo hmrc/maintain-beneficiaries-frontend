@@ -27,13 +27,13 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
 
   val errorKey = "value"
   val errorMessage = "error.number"
-  val error = FormError(errorKey, errorMessage)
+  val error: FormError = FormError(errorKey, errorMessage)
 
   val form: Form[UkAddress]
 
   def ukAddressPage(createView: Form[UkAddress] => HtmlFormat.Appendable,
                     messageKeyPrefix: Option[String],
-                    args : String*) = {
+                    args : String*): Unit = {
 
     val prefix = messageKeyPrefix.getOrElse("site.address.uk")
 

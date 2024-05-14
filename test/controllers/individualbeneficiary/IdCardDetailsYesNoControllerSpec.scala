@@ -26,7 +26,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{IdCardDetailsYesNoPage, NamePage}
 import play.api.inject.bind
-import play.api.mvc.Call
+import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.PlaybackRepository
@@ -48,7 +48,7 @@ class IdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
   val mode: Mode = NormalMode
   val idCardDetailsYesNoRoute: String = routes.IdCardDetailsYesNoController.onPageLoad(mode).url
 
-  val getRequest = FakeRequest(GET, idCardDetailsYesNoRoute)
+  val getRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, idCardDetailsYesNoRoute)
 
   "IdCardDetailsYesNo Controller" must {
 

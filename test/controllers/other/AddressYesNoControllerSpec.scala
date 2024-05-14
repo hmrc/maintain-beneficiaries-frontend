@@ -19,7 +19,7 @@ package controllers.other
 import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.YesNoFormProvider
-import models.{Mode, NormalMode}
+import models.{Mode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.{AddressYesNoPage, DescriptionPage}
@@ -38,7 +38,7 @@ class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val description: String = "Other"
   private val onwardRoute = Call("GET", "/foo")
 
-  val baseAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
+  val baseAnswers: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
   "AddressYesNo Controller" must {
 

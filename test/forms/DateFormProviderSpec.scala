@@ -17,13 +17,13 @@
 package forms
 
 import forms.behaviours.DateBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 import java.time.{LocalDate, ZoneOffset}
 
 class DateFormProviderSpec extends DateBehaviours {
 
-  val form = new DateFormProvider(frontendAppConfig).withPrefix("individualBeneficiary.dateOfBirth")
+  val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withPrefix("individualBeneficiary.dateOfBirth")
 
   private val min = frontendAppConfig.minDate
   private val max = LocalDate.now(ZoneOffset.UTC)

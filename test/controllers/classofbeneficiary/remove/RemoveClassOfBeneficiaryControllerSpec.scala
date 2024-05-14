@@ -48,15 +48,15 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def classOfBeneficiary(id: Int, provisional : Boolean) = ClassOfBeneficiary(
+  def classOfBeneficiary(id: Int, provisional : Boolean): ClassOfBeneficiary = ClassOfBeneficiary(
     description = s"Some Description $id",
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
   )
 
-  val expectedResult = classOfBeneficiary(2, provisional = true)
+  val expectedResult: ClassOfBeneficiary = classOfBeneficiary(2, provisional = true)
 
-  val beneficiaries = List(
+  val beneficiaries: List[ClassOfBeneficiary] = List(
     classOfBeneficiary(1, provisional = false),
     expectedResult,
     classOfBeneficiary(3, provisional = true)

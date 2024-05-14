@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class StringFormProviderSpec extends StringFieldBehaviours {
@@ -29,7 +29,7 @@ class StringFormProviderSpec extends StringFieldBehaviours {
   val invalidFormatKey = s"$prefix.error.invalidFormat"
   val maxLength = 56
 
-  val form = new StringFormProvider().withPrefix(prefix, maxLength)
+  val form: Form[String] = new StringFormProvider().withPrefix(prefix, maxLength)
 
   ".value" must {
 

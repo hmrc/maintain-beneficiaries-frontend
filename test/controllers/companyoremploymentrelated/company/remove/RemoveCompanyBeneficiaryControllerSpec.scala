@@ -45,7 +45,7 @@ class RemoveCompanyBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def companyBeneficiary(id: Int, provisional : Boolean) = CompanyBeneficiary(
+  def companyBeneficiary(id: Int, provisional : Boolean): CompanyBeneficiary = CompanyBeneficiary(
     name = s"Some Name $id",
     utr = None,
     address = None,
@@ -55,9 +55,9 @@ class RemoveCompanyBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     provisional = provisional
   )
 
-  val expectedResult = companyBeneficiary(2, provisional = true)
+  val expectedResult: CompanyBeneficiary = companyBeneficiary(2, provisional = true)
 
-  val beneficiaries = List(
+  val beneficiaries: List[CompanyBeneficiary] = List(
     companyBeneficiary(1, provisional = false),
     expectedResult,
     companyBeneficiary(3, provisional = true)

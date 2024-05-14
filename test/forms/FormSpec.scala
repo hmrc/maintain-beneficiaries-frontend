@@ -35,7 +35,7 @@ trait FormSpec extends SpecBase with OptionValues {
     )
   }
 
-  def error(key: String, value: String, args: Any*) = Seq(FormError(key, value, args))
+  def error(key: String, value: String, args: Any*): Seq[FormError] = Seq(FormError(key, value, args))
 
   lazy val emptyForm: Map[String, String] = Map[String, String]()
 }

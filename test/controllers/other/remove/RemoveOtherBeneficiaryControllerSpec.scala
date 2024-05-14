@@ -45,7 +45,7 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def otherBeneficiary(id: Int, provisional : Boolean) = OtherBeneficiary(
+  def otherBeneficiary(id: Int, provisional : Boolean): OtherBeneficiary = OtherBeneficiary(
     description = s"Some Description $id",
     address = None,
     income = None,
@@ -54,9 +54,9 @@ class RemoveOtherBeneficiaryControllerSpec extends SpecBase with ScalaCheckPrope
     provisional = provisional
   )
 
-  val expectedResult = otherBeneficiary(2, provisional = true)
+  val expectedResult: OtherBeneficiary = otherBeneficiary(2, provisional = true)
 
-  val beneficiaries = List(
+  val beneficiaries: List[OtherBeneficiary] = List(
     otherBeneficiary(1, provisional = false),
     expectedResult,
     otherBeneficiary(3, provisional = true)

@@ -27,14 +27,14 @@ trait NonUkAddressViewBehaviours extends ViewBehaviours {
 
   val errorKey = "value"
   val errorMessage = "error.number"
-  val error = FormError(errorKey, errorMessage)
+  val error: FormError = FormError(errorKey, errorMessage)
 
   val form: Form[NonUkAddress]
 
   def nonUkAddressPage(createView: Form[NonUkAddress] => HtmlFormat.Appendable,
                        titleMessagePrefix: Option[String],
                        expectedFormAction: String,
-                       args: String*) = {
+                       args: String*): Unit = {
 
     val titlePrefix = titleMessagePrefix.getOrElse("site.address.nonUk")
 

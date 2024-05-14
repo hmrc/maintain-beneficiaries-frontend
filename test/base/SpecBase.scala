@@ -19,9 +19,10 @@ package base
 import controllers.actions._
 import models.{TypeOfTrust, UserAnswers}
 import navigation.FakeNavigator
-import org.scalatest.{BeforeAndAfter, TestSuite, TryValues}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.{EitherValues, OptionValues, TryValues}
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice._
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.BodyParsers
@@ -30,11 +31,24 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 
 import java.time.LocalDate
 
-trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeTrustsApp {
-  this: TestSuite =>
+trait SpecBase extends PlaySpec
+  with GuiceOneAppPerSuite
+  with TryValues
+  with ScalaFutures
+  with IntegrationPatience
+  with Mocked
+  with FakeTrustsApp
+  with OptionValues
+  with EitherValues {
 
-  final val ENGLISH = "en"
-  final val WELSH = "cy"
+  val defaultAppConfigurations: Map[String, Any] = Map(
+    "auditing.enabled" -> false,
+    "metrics.enabled" -> false,
+    "play.filters.disabled" -> List("play.filters.csrf.CSRFFilter", "play.filters.csp.CSPFilter")
+  )
+
+  val ENGLISH = "en"
+  val WELSH = "cy"
 
   lazy val userInternalId = "internalId"
   lazy val userUtr = "UTRUTRUTR"
@@ -53,12 +67,12 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
     migratingFromNonTaxableToTaxable = false
   )
 
-  val bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
+  def bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
 
   val fakeNavigator = new FakeNavigator()
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
-                                   affinityGroup: AffinityGroup = AffinityGroup.Organisation): GuiceApplicationBuilder =
+  def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                         affinityGroup: AffinityGroup = AffinityGroup.Organisation): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].toInstance(new FakeIdentifierAction(bodyParsers, affinityGroup)),
@@ -68,6 +82,6 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
         bind[PlaybackRepository].toInstance(playbackRepository),
         bind[ActiveSessionRepository].toInstance(mockSessionRepository)
       )
-}
+      .configure(defaultAppConfigurations)
 
-trait SpecBase extends PlaySpec with SpecBaseHelpers
+}

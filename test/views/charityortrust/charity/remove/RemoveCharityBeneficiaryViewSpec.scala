@@ -26,7 +26,7 @@ import views.html.charityortrust.charity.remove.RemoveIndexView
 class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "removeCharityBeneficiaryYesNo"
-  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
+  val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Trustee Name"
   val index = 0
 

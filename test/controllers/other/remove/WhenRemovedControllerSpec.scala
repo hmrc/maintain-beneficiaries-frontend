@@ -71,7 +71,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     provisional = false
   )
 
-  val beneficiaries = List(otherBeneficiary(1), otherBeneficiary(2), otherBeneficiary(3))
+  val beneficiaries: List[OtherBeneficiary] = List(otherBeneficiary(1), otherBeneficiary(2), otherBeneficiary(3))
 
   "WhenRemoved Controller" must {
 

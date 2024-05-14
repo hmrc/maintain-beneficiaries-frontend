@@ -30,8 +30,8 @@ sbt clean coverage test coverageReport
 ```
 
 Integration tests only:
-```
-sbt clean coverage IntegrationTest/test coverageReport
+```bash
+sbt clean coverage it/Test/test coverageReport
 ```
 
 ### License

@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class YesNoFormProviderSpec extends BooleanFieldBehaviours {
 
@@ -25,7 +25,7 @@ class YesNoFormProviderSpec extends BooleanFieldBehaviours {
   val requiredKey = s"$messagePrefix.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new YesNoFormProvider().withPrefix(messagePrefix)
+  val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messagePrefix)
 
   ".value" must {
 

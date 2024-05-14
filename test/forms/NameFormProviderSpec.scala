@@ -17,13 +17,14 @@
 package forms
 
 import forms.behaviours.{OptionalFieldBehaviours, StringFieldBehaviours}
-import play.api.data.FormError
+import models.Name
+import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehaviours {
 
   val messageKeyPrefix = "individualBeneficiary.name"
-  val form = new NameFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Name] = new NameFormProvider().withPrefix(messageKeyPrefix)
 
   val maxLength = 35
   val minLength = 1

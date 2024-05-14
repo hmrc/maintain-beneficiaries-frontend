@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.DateBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 import java.time.{LocalDate, ZoneOffset}
 
@@ -26,7 +26,7 @@ class DateRemovedFromTrustFormProviderSpec extends DateBehaviours {
   private val max = LocalDate.now(ZoneOffset.UTC)
   private val entityStartDate = LocalDate.of(2020, 1, 1)
 
-  val form = new DateRemovedFromTrustFormProvider().withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", entityStartDate)
+  val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider().withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", entityStartDate)
 
   ".value" should {
 

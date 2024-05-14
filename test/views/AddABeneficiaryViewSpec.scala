@@ -28,14 +28,14 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
   val featureUnavailable: Option[String] = Some("/feature-not-available")
 
-  val completeBeneficiaries = Seq(
+  val completeBeneficiaries: Seq[AddRow] = Seq(
     AddRow("beneficiary one", "Individual Beneficiary", featureUnavailable, featureUnavailable),
     AddRow("beneficiary two", "Individual Beneficiary", featureUnavailable, featureUnavailable),
     AddRow("beneficiary three", "Individual Beneficiary", featureUnavailable, featureUnavailable),
     AddRow("class of beneficiary", "Class of beneficiaries", featureUnavailable, featureUnavailable)
   )
 
-  val inProgressBeneficiaries = Seq(
+  val inProgressBeneficiaries: Seq[AddRow] = Seq(
     AddRow("beneficiary four", "Individual Beneficiary", featureUnavailable, featureUnavailable),
     AddRow("beneficiary five", "Individual Beneficiary", featureUnavailable, featureUnavailable),
     AddRow("beneficiary six", "Individual Beneficiary", featureUnavailable, featureUnavailable),
