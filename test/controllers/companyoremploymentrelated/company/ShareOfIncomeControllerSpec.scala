@@ -19,7 +19,7 @@ package controllers.companyoremploymentrelated.company
 import base.SpecBase
 import config.annotations.CompanyBeneficiary
 import forms.IncomePercentageFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.companyoremploymentrelated.company.{NamePage, ShareOfIncomePage}
@@ -38,7 +38,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = 50
 
-  val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
+  val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
   "ShareOfIncome Controller" must {
 

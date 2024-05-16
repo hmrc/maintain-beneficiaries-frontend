@@ -42,7 +42,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   private def form = formProvider.withPrefixAndEntityStartDate("employmentBeneficiary.whenRemoved", LocalDate.now())
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
   val index = 0
 
@@ -74,7 +74,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     provisional = false
   )
 
-  val beneficiaries = List(employmentBeneficiary(1), employmentBeneficiary(2), employmentBeneficiary(3))
+  val beneficiaries: List[EmploymentRelatedBeneficiary] = List(employmentBeneficiary(1), employmentBeneficiary(2), employmentBeneficiary(3))
 
   "WhenRemoved Controller" must {
 

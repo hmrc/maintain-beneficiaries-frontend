@@ -19,7 +19,7 @@ package controllers.other
 import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.UkAddressFormProvider
-import models.{Mode, NormalMode, UkAddress}
+import models.{Mode, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.{DescriptionPage, UkAddressPage}
@@ -39,7 +39,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = UkAddress("Line 1", "Line 2", None, None, "NE11NE")
 
-  val baseAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
+  val baseAnswers: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
   "UkAddress Controller" must {
 

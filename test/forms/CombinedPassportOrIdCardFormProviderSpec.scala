@@ -17,7 +17,8 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import models.CombinedPassportOrIdCard
+import play.api.data.{Form, FormError}
 
 class CombinedPassportOrIdCardFormProviderSpec extends StringFieldBehaviours {
 
@@ -28,7 +29,7 @@ class CombinedPassportOrIdCardFormProviderSpec extends StringFieldBehaviours {
   val maxLengthCountryField = 100
   val maxLengthNumberField = 30
 
-  val form = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(prefix)
+  val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(prefix)
 
   ".country" must {
 

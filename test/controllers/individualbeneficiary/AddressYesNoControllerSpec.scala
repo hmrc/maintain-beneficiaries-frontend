@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{AddressYesNoPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -36,16 +37,16 @@ import scala.concurrent.Future
 
 class AddressYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.addressYesNo")
-  val name = Name("FirstName", None, "LastName")
+  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.addressYesNo")
+  val name: Name = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
-  lazy val addressYesNoControllerRoute = routes.AddressYesNoController.onPageLoad(NormalMode).url
+  lazy val addressYesNoControllerRoute: String = routes.AddressYesNoController.onPageLoad(NormalMode).url
 
   "AddressYesNo Controller" must {
 

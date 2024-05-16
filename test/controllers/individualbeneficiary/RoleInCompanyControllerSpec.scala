@@ -19,6 +19,7 @@ package controllers.individualbeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.RoleInCompanyFormProvider
+import models.beneficiaries.RoleInCompany
 import models.beneficiaries.RoleInCompany.Director
 import models.{Name, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -26,6 +27,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{NamePage, RoleInCompanyPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -37,16 +39,16 @@ import scala.concurrent.Future
 
 class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new RoleInCompanyFormProvider()
-  val form = formProvider()
-  val name = Name("FirstName", None, "LastName")
+  val form: Form[RoleInCompany] = formProvider()
+  val name: Name = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
-  lazy val roleInCompanyControllerRoute = routes.RoleInCompanyController.onPageLoad(NormalMode).url
+  lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(NormalMode).url
 
   "AddressYesNo Controller" must {
 

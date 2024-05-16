@@ -28,7 +28,7 @@ class IncomePercentageMappingsSpec extends AnyFreeSpec with Matchers with ScalaC
 
   val prefix = "prefix"
 
-  val form = Form(
+  val form: Form[Int] = Form(
     "value" -> incomePercentage(prefix)
   )
 

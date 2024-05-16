@@ -18,7 +18,7 @@ package controllers.individualbeneficiary
 
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
-import forms.{YesNoDontKnowFormProvider}
+import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow.Yes
 import models.{Name, NormalMode, UserAnswers, YesNoDontKnow}
 import navigation.{FakeNavigator, Navigator}

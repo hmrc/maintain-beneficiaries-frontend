@@ -19,7 +19,7 @@ package controllers.charityortrust.trust
 import base.SpecBase
 import config.annotations.TrustBeneficiary
 import forms.YesNoFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.charityortrust.trust.{AddressUkYesNoPage, NamePage}
@@ -37,7 +37,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val name: String = "Trust"
   private val onwardRoute = Call("GET", "/foo")
 
-  val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
+  val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
   "AddressUkYesNo Controller" must {
 

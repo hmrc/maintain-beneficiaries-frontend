@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{NamePage, NonUkAddressPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.FakeRequest
@@ -38,9 +39,9 @@ import scala.concurrent.Future
 
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  val form = new NonUkAddressFormProvider().apply()
+  val form: Form[NonUkAddress] = new NonUkAddressFormProvider().apply()
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
   val name: Name = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers

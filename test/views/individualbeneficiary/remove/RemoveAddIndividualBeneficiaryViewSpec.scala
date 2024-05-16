@@ -26,7 +26,7 @@ import views.html.individualbeneficiary.remove.RemoveIndexView
 class RemoveAddIndividualBeneficiaryViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "removeIndividualBeneficiaryYesNo"
-  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
+  val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Trustee Name"
   val index = 0
 

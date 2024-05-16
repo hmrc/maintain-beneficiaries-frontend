@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{NamePage, VPE1FormYesNoPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -36,16 +37,16 @@ import scala.concurrent.Future
 
 class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.vpe1FormYesNo")
-  val name = Name("FirstName", None, "LastName")
+  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.vpe1FormYesNo")
+  val name: Name = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(NamePage, name).success.value
 
-  lazy val vpe1FormControllerRoute = routes.VPE1FormYesNoController.onPageLoad(NormalMode).url
+  lazy val vpe1FormControllerRoute: String = routes.VPE1FormYesNoController.onPageLoad(NormalMode).url
 
   "Individual Beneficiary VEP1 Form Controller" must {
 

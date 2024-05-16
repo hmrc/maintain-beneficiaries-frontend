@@ -69,7 +69,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val view = application.injector.instanceOf[CheckDetailsView]
       val printHelper = application.injector.instanceOf[EmploymentRelatedBeneficiaryPrintHelper]
-      val answerSection = printHelper(userAnswers, true, name)
+      val answerSection = printHelper(userAnswers, provisional = true, name)
 
       status(result) mustEqual OK
 

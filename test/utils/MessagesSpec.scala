@@ -17,19 +17,14 @@
 package utils
 
 import base.SpecBase
-import play.api.Application
+import play.api.Logger
 import play.api.i18n.{Lang, Messages}
-import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.util.matching.Regex
 
 class MessagesSpec extends SpecBase {
 
-  override lazy val fakeApplication: Application = new GuiceApplicationBuilder()
-    .configure(
-      Map("application.langs" -> "en,cy", "features.welsh-language-support" -> true)
-    )
-    .build()
+  private val logger = Logger(this.getClass)
 
   override implicit lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en"), Lang("cy")))
 
@@ -58,8 +53,8 @@ class MessagesSpec extends SpecBase {
     }
     "not have the same messages" in {
       val same = defaultMessages.keys.collect({
-        case key if defaultMessages.get(key) == welshMessages.get(key) && !key.contains(".url") =>
-          (key, defaultMessages.get(key))
+        case messageKey if defaultMessages.get(messageKey) == welshMessages.get(messageKey) && !messageKey.contains(".url") =>
+          (messageKey, defaultMessages.get(messageKey))
       })
 
       // 94% of app needs to be translated into Welsh. 94% allows for:
@@ -77,33 +72,33 @@ class MessagesSpec extends SpecBase {
       assertCorrectUseOfQuotesForWelshMessages()
     }
     "have a resolvable message for keys which take args" in {
-      val englishWithArgsMsgKeys = defaultMessages collect { case (key, value) if countArgs(value) > 0 => key }
-      val welshWithArgsMsgKeys = welshMessages collect { case (key, value) if countArgs(value) > 0     => key }
+      val englishWithArgsMsgKeys = defaultMessages collect { case (messageKey, messageValue) if countArgs(messageValue) > 0 => messageKey }
+      val welshWithArgsMsgKeys = welshMessages collect { case (messageKey, messageValue) if countArgs(messageValue) > 0     => messageKey }
       val missingFromEnglish = englishWithArgsMsgKeys.toList diff welshWithArgsMsgKeys.toList
       val missingFromWelsh = welshWithArgsMsgKeys.toList diff englishWithArgsMsgKeys.toList
-      missingFromEnglish foreach { key =>
-        println(s"Key which has arguments in English but not in Welsh: $key")
+      missingFromEnglish foreach { messageKey =>
+        logger.info(s"Key which has arguments in English but not in Welsh: $messageKey")
       }
-      missingFromWelsh foreach { key =>
-        println(s"Key which has arguments in Welsh but not in English: $key")
+      missingFromWelsh foreach { messageKey =>
+        logger.info(s"Key which has arguments in Welsh but not in English: $messageKey")
       }
       englishWithArgsMsgKeys.size mustBe welshWithArgsMsgKeys.size
     }
     "have the same args in the same order for all keys which take args" in {
       val englishWithArgsMsgKeysAndArgList = defaultMessages collect {
-        case (key, value) if countArgs(value) > 0 => (key, listArgs(value))
+        case (messageKey, messageValue) if countArgs(messageValue) > 0 => (messageKey, listArgs(messageValue))
       }
       val welshWithArgsMsgKeysAndArgList = welshMessages collect {
-        case (key, value) if countArgs(value) > 0 => (key, listArgs(value))
+        case (messageKey, messageValue) if countArgs(messageValue) > 0 => (messageKey, listArgs(messageValue))
       }
       val mismatchedArgSequences = englishWithArgsMsgKeysAndArgList collect {
-        case (key, engArgSeq) if engArgSeq != welshWithArgsMsgKeysAndArgList(key) =>
-          (key, engArgSeq, welshWithArgsMsgKeysAndArgList(key))
+        case (messageKey, engArgSeq) if engArgSeq != welshWithArgsMsgKeysAndArgList(messageKey) =>
+          (messageKey, engArgSeq, welshWithArgsMsgKeysAndArgList(messageKey))
       }
       mismatchedArgSequences foreach {
-        case (key, engArgSeq, welshArgSeq) =>
-          println(
-            s"key which has different arguments or order of arguments between English and Welsh: $key -- English arg seq=$engArgSeq and Welsh arg seq=$welshArgSeq")
+        case (messageKey, engArgSeq, welshArgSeq) =>
+          logger.info(
+            s"key which has different arguments or order of arguments between English and Welsh: $messageKey -- English arg seq=$engArgSeq and Welsh arg seq=$welshArgSeq")
       }
       mismatchedArgSequences.size mustBe 0
     }
@@ -111,32 +106,32 @@ class MessagesSpec extends SpecBase {
 
   private def isInteger(s: String): Boolean = s forall Character.isDigit
 
-  private def toArgArray(msg: String) = msg.split("\\{|\\}").map(_.trim()).filter(isInteger(_))
+  private def toArgArray(msg: String) = msg.split("\\{|\\}").map(_.trim()).filter(isInteger)
 
-  private def countArgs(msg: String) = toArgArray(msg).size
+  private def countArgs(msg: String) = toArgArray(msg).length
 
   private def listArgs(msg: String) = toArgArray(msg).mkString
 
-  private def assertNonEmptyValuesForDefaultMessages() = assertNonEmptyNonTemporaryValues("Default", defaultMessages)
+  private def assertNonEmptyValuesForDefaultMessages(): Unit = assertNonEmptyNonTemporaryValues("Default", defaultMessages)
 
-  private def assertNonEmptyValuesForWelshMessages() = assertNonEmptyNonTemporaryValues("Welsh", welshMessages)
+  private def assertNonEmptyValuesForWelshMessages(): Unit = assertNonEmptyNonTemporaryValues("Welsh", welshMessages)
 
-  private def assertCorrectUseOfQuotesForDefaultMessages() = assertCorrectUseOfQuotes("Default", defaultMessages)
+  private def assertCorrectUseOfQuotesForDefaultMessages(): Unit = assertCorrectUseOfQuotes("Default", defaultMessages)
 
-  private def assertCorrectUseOfQuotesForWelshMessages() = assertCorrectUseOfQuotes("Welsh", welshMessages)
+  private def assertCorrectUseOfQuotesForWelshMessages(): Unit = assertCorrectUseOfQuotes("Welsh", welshMessages)
 
-  private def assertNonEmptyNonTemporaryValues(label: String, messages: Map[String, String]) = messages.foreach {
-    case (key: String, value: String) =>
-      withClue(s"In $label, there is an empty value for the key:[$key][$value]") {
-        value.trim.isEmpty mustBe false
+  private def assertNonEmptyNonTemporaryValues(label: String, messages: Map[String, String]): Unit = messages.foreach {
+    case (messageKey: String, messageValue: String) =>
+      withClue(s"In $label, there is an empty value for the key:[$messageKey][$messageValue]") {
+        messageValue.trim.isEmpty mustBe false
       }
   }
 
-  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]) = messages.foreach {
-    case (key: String, value: String) =>
-      withClue(s"In $label, there is an unescaped or invalid quote:[$key][$value]") {
-        MatchSingleQuoteOnly.findFirstIn(value).isDefined mustBe false
-        MatchBacktickQuoteOnly.findFirstIn(value).isDefined mustBe false
+  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]): Unit = messages.foreach {
+    case (messageKey: String, messageValue: String) =>
+      withClue(s"In $label, there is an unescaped or invalid quote:[$messageKey][$messageValue]") {
+        MatchSingleQuoteOnly.findFirstIn(messageValue).isDefined mustBe false
+        MatchBacktickQuoteOnly.findFirstIn(messageValue).isDefined mustBe false
       }
   }
 
@@ -149,10 +144,10 @@ class MessagesSpec extends SpecBase {
 
   private lazy val welshMessages: Map[String, String] = getExpectedMessages("cy")
 
-  private def getExpectedMessages(languageCode: String) =
+  private def getExpectedMessages(languageCode: String): Map[String, String] =
     messagesApi.messages.getOrElse(languageCode, throw new Exception(s"Missing messages for $languageCode"))
 
-  private def mismatchingKeys(defaultKeySet: Set[String], welshKeySet: Set[String]) = {
+  private def mismatchingKeys(defaultKeySet: Set[String], welshKeySet: Set[String]): String = {
     val test1 =
       listMissingMessageKeys("The following message keys are missing from Welsh Set:", defaultKeySet.diff(welshKeySet))
     val test2 = listMissingMessageKeys(

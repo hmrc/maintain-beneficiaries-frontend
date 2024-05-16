@@ -19,6 +19,7 @@ package controllers.other.add
 import base.SpecBase
 import config.annotations.OtherBeneficiary
 import forms.DateAddedToTrustFormProvider
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.other.DescriptionPage
@@ -41,7 +42,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
   private val onwardRoute = Call("GET", "/foo")
   private val answer = LocalDate.parse("2019-02-03")
 
-  val baseAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
+  val baseAnswers: UserAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
     .set(DescriptionPage, description).success.value
 
   "NonUkAddress Controller" must {

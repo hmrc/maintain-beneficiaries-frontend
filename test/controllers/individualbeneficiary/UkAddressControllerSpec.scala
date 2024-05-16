@@ -36,14 +36,14 @@ import scala.concurrent.Future
 
 class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val form = new UkAddressFormProvider()()
 
-  val name = Name("FirstName", None, "LastName")
-  val validAnswer = UkAddress("value 1", "value 2", None, None, "AB1 1AB")
+  val name: Name = Name("FirstName", None, "LastName")
+  val validAnswer: UkAddress = UkAddress("value 1", "value 2", None, None, "AB1 1AB")
 
-  lazy val ukAddressControllerRoute = routes.UkAddressController.onPageLoad(NormalMode).url
+  lazy val ukAddressControllerRoute: String = routes.UkAddressController.onPageLoad(NormalMode).url
 
   "UkAddress Controller" must {
 

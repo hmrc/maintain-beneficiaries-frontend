@@ -19,12 +19,13 @@ package controllers.individualbeneficiary
 import base.SpecBase
 import config.annotations.IndividualBeneficiary
 import forms.YesNoFormProvider
-import models.{Name, NormalMode}
+import models.{Name, NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.individualbeneficiary.{IncomeDiscretionYesNoPage, NamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -36,13 +37,13 @@ import scala.concurrent.Future
 class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
+  val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
 
-  lazy val incomeDiscretionYesNoRoute = routes.IncomeDiscretionYesNoController.onPageLoad(NormalMode).url
+  lazy val incomeDiscretionYesNoRoute: String = routes.IncomeDiscretionYesNoController.onPageLoad(NormalMode).url
 
-  val name = Name("New", None, "Beneficiary")
+  val name: Name = Name("New", None, "Beneficiary")
 
-  override val emptyUserAnswers = super.emptyUserAnswers
+  override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
     .set(NamePage, name).success.value
 
   "Individual Beneficiary DateOfBirthYesNoPage Controller" must {

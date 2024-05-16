@@ -32,8 +32,8 @@ import java.time.LocalDate
 class IndividualBeneficiaryPrintHelperSpec extends SpecBase {
 
   val name: Name = Name("First", Some("Middle"), "Last")
-  val ukAddress = UkAddress("value 1", "value 2", None, None, "AB1 1AB")
-  val nonUkAddress = NonUkAddress("value 1", "value 2", None, "DE")
+  val ukAddress: UkAddress = UkAddress("value 1", "value 2", None, None, "AB1 1AB")
+  val nonUkAddress: NonUkAddress = NonUkAddress("value 1", "value 2", None, "DE")
   val nationality: String = "DE"
   val residence: String = "FR"
 

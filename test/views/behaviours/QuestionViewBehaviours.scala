@@ -206,7 +206,7 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
                          createView: Form[A] => HtmlFormat.Appendable,
                          messageKeyPrefix: String,
                          dateKey: String,
-                         args: String*) = {
+                         args: String*): Unit = {
 
     val dateFields = Seq(s"$dateKey.day", s"$dateKey.month", s"$dateKey.year")
 

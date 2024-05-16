@@ -26,7 +26,7 @@ import views.html.companyoremploymentrelated.company.remove.RemoveIndexView
 class RemoveCompanyBeneficiaryViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "removeCompanyBeneficiaryYesNo"
-  val form = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
+  val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
   val name = "Name"
   val index = 0
 

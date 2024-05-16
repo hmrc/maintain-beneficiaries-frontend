@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {
 
-  val name = Name("FirstName", None, "LastName")
+  val name: Name = Name("FirstName", None, "LastName")
 
   private val mode: Mode = NormalMode
 
@@ -42,12 +42,12 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar w
     .set(NamePage, name).success.value
     .set(IndexPage, index).success.value
 
-  lazy val passportOrIdCardDetailsRoute = routes.PassportOrIdCardDetailsController.onPageLoad(mode).url
+  lazy val passportOrIdCardDetailsRoute: String = routes.PassportOrIdCardDetailsController.onPageLoad(mode).url
 
   private lazy val checkDetailsRoute =
     controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(index).url
 
-  val validData = CombinedPassportOrIdCard("country", "number", LocalDate.parse("2020-02-03"))
+  val validData: CombinedPassportOrIdCard = CombinedPassportOrIdCard("country", "number", LocalDate.parse("2020-02-03"))
 
   override def beforeEach(): Unit = {
     reset(playbackRepository)

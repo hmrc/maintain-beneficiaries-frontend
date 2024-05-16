@@ -48,7 +48,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def charityBeneficiary(id: Int, provisional : Boolean) = CharityBeneficiary(
+  def charityBeneficiary(id: Int, provisional : Boolean): CharityBeneficiary = CharityBeneficiary(
     name = s"Charity Name $id",
     utr = None,
     address = None,
@@ -58,7 +58,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     provisional = provisional
   )
 
-  val beneficiaries = List(
+  val beneficiaries: List[CharityBeneficiary] = List(
     charityBeneficiary(1, provisional = false),
     charityBeneficiary(2, provisional = true),
     charityBeneficiary(3, provisional = true)
