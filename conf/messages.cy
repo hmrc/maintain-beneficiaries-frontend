@@ -825,7 +825,6 @@ employmentBeneficiary.description.caption=Grwpiau buddiolwr sy’n ymwneud â ch
 employmentBeneficiary.description.hint=Peidiwch â chynnwys cyflogeion a enwyd na chyflogeion penodol, megis cyfarwyddwyr. Mae’n rhaid iddynt gael eu rhestru fel buddiolwyr unigol.
 employmentBeneficiary.description.title=Rhoi disgrifiad ar gyfer pob grŵp buddiolwr
 
-
 employmentBeneficiary.numberOfBeneficiaries.title = Beth yw amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth?
 employmentBeneficiary.numberOfBeneficiaries.heading = Beth yw amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth?
 employmentBeneficiary.numberOfBeneficiaries.checkYourAnswersLabel = Beth yw amcangyfrif o nifer y buddiolwyr a ddelir yn yr ymddiriedolaeth?
