@@ -952,18 +952,32 @@ employmentBeneficiary.ukAddress.checkYourAnswersLabel = What is {0}’s address?
 
 employmentBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s address?
 
-employmentBeneficiary.description.title = What is the description of the beneficiary?
-employmentBeneficiary.description.heading = What is the description of the beneficiary?
+employmentBeneficiary.description.title = Give a description of each beneficiary group
+employmentBeneficiary.description.heading = Give a description of each beneficiary group
+employmentBeneficiary.description.heading.caption = Employment related beneficiary groups
 employmentBeneficiary.description.checkYourAnswersLabel = What is the description of the beneficiary?
 employmentBeneficiary.description.hint = Do not include named or specific employees such as directors, they must be listed as individual beneficiaries.
-employmentBeneficiary.description.description1 = Description 1
-employmentBeneficiary.description.description2 = Description 2 (optional)
-employmentBeneficiary.description.description3 = Description 3 (optional)
-employmentBeneficiary.description.description4 = Description 4 (optional)
-employmentBeneficiary.description.description5 = Description 5 (optional)
-employmentBeneficiary.description.error.required = Enter a description of the beneficiary
-employmentBeneficiary.description.error.invalid = The description must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
-employmentBeneficiary.description.error.length = The description must be 70 characters each or less
+
+employmentBeneficiary.description.description1 = First beneficiary group
+employmentBeneficiary.description.description2 = Second beneficiary group (optional)
+employmentBeneficiary.description.description3 = Third beneficiary group (optional)
+employmentBeneficiary.description.description4 = Fourth beneficiary group (optional)
+employmentBeneficiary.description.description5 = Fifth beneficiary group (optional)
+
+employmentBeneficiary.description.error.required = Enter a description for the first beneficiary group
+
+employmentBeneficiary.description.error.invalid = Description of first beneficiary group must only include letters a to z, numbers 0 to 9 and special characters such as ampersands, apostrophes, backward slashes, hyphens and spaces
+employmentBeneficiary.description.error.invalid1 = Description of second beneficiary group must only include letters a to z, numbers 0 to 9 and special characters such as ampersands, apostrophes, backward slashes, hyphens and spaces
+employmentBeneficiary.description.error.invalid2 = Description of third beneficiary group must only include letters a to z, numbers 0 to 9 and special characters such as ampersands, apostrophes, backward slashes, hyphens and spaces
+employmentBeneficiary.description.error.invalid3 = Description of fourth beneficiary group must only include letters a to z, numbers 0 to 9 and special characters such as ampersands, apostrophes, backward slashes, hyphens and spaces
+employmentBeneficiary.description.error.invalid4 = Description of fifth beneficiary group must only include letters a to z, numbers 0 to 9 and special characters such as ampersands, apostrophes, backward slashes, hyphens and spaces
+
+employmentBeneficiary.description.error.length = Description of first beneficiary group must be 70 characters or less
+employmentBeneficiary.description.error.length1 = Description of second beneficiary group must be 70 characters or less
+employmentBeneficiary.description.error.length2 = Description of third beneficiary group must be 70 characters or less
+employmentBeneficiary.description.error.length3 = Description of fourth beneficiary group must be 70 characters or less
+employmentBeneficiary.description.error.length4 = Description of fifth beneficiary group must be 70 characters or less
+
 
 employmentBeneficiary.numberOfBeneficiaries.title = What is the approximate number of beneficiaries held in the trust?
 employmentBeneficiary.numberOfBeneficiaries.heading = What is the approximate number of beneficiaries held in the trust?
