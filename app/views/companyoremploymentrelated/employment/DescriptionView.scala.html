@@ -41,10 +41,10 @@
 
          <h1 class="govuk-heading-l">
              <span class="govuk-caption-l">@messages("employmentBeneficiary.description.caption")</span>
-             @heading("employmentBeneficiary.description.heading")
+             @messages("employmentBeneficiary.description.heading")
          </h1>
 
-         <span id="form-hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</span>
+         <div id="hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</div>
 
         @characterCount(
             field = form("description"),
