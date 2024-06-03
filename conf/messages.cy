@@ -805,10 +805,10 @@ employmentBeneficiary.nonUkAddress.checkYourAnswersLabel = Beth yw cyfeiriad {0}
 
 employmentBeneficiary.description.checkYourAnswersLabel=Rhoi disgrifiad ar gyfer pob grŵp buddiolwr
 employmentBeneficiary.description.description=Y grŵp buddiolwr cyntaf
-employmentBeneficiary.description.description1=Yr ail grŵp buddiolwr (opsiynol)
-employmentBeneficiary.description.description2=Y trydydd grŵp buddiolwr (opsiynol)
-employmentBeneficiary.description.description3=Y pedwerydd grŵp buddiolwr (opsiynol)
-employmentBeneficiary.description.description4=Y pumed grŵp buddiolwr (opsiynol)
+employmentBeneficiary.description.description1=Yr ail grŵp buddiolwr (dewisol)
+employmentBeneficiary.description.description2=Y trydydd grŵp buddiolwr (dewisol)
+employmentBeneficiary.description.description3=Y pedwerydd grŵp buddiolwr (dewisol)
+employmentBeneficiary.description.description4=Y pumed grŵp buddiolwr (dewisol)
 employmentBeneficiary.description.error.invalid=Mae’n rhaid i’r disgrifiad o’r grŵp buddiolwr cyntaf gynnwys y llythrennau a-z, y rhifau 0-9, a chymeriadau arbennig megis ampersandau, collnodau, ôl-slaesau, cysylltnodau a bylchau yn unig
 employmentBeneficiary.description.error.invalid1=Mae’n rhaid i’r disgrifiad o’r ail grŵp buddiolwr gynnwys y llythrennau a-z, y rhifau 0-9, a chymeriadau arbennig megis ampersandau, collnodau, ôl-slaesau, cysylltnodau a bylchau yn unig
 employmentBeneficiary.description.error.invalid2=Mae’n rhaid i’r disgrifiad o’r trydydd grŵp buddiolwr gynnwys y llythrennau a-z, y rhifau 0-9, a chymeriadau arbennig megis ampersandau, collnodau, ôl-slaesau, cysylltnodau a bylchau yn unig
