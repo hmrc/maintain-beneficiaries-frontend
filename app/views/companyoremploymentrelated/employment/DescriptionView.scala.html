@@ -39,17 +39,18 @@
 
          <fieldset class="govuk-fieldset" aria-describedby="form-hint">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                @heading("employmentBeneficiary.description.heading")
-            </legend>
+         <h1 class="govuk-heading-l">
+             <span class="govuk-caption-l">@messages("employmentBeneficiary.description.caption")</span>
+             @messages("employmentBeneficiary.description.heading")
+         </h1>
 
-         <span id="form-hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</span>
+         <div id="hint" class="govuk-hint">@messages("employmentBeneficiary.description.hint")</div>
 
         @characterCount(
             field = form("description"),
             id = "description",
             name = "description",
-            label = messages("employmentBeneficiary.description.description1"),
+            label = messages("employmentBeneficiary.description.description"),
             isLabelHidden = false,
             isPageHeading = false,
             inputClass = Some("govuk-!-width-two-thirds"),
@@ -60,7 +61,7 @@
             field = form("description1"),
             id = "description1",
             name = "description1",
-            label = messages("employmentBeneficiary.description.description2"),
+            label = messages("employmentBeneficiary.description.description1"),
             isLabelHidden = false,
             isPageHeading = false,
             inputClass = Some("govuk-!-width-two-thirds"),
@@ -71,7 +72,7 @@
             field = form("description2"),
             id = "description2",
             name = "description2",
-            label = messages("employmentBeneficiary.description.description3"),
+            label = messages("employmentBeneficiary.description.description2"),
             isLabelHidden = false,
             isPageHeading = false,
             inputClass = Some("govuk-!-width-two-thirds"),
@@ -82,7 +83,7 @@
             field = form("description3"),
             id = "description3",
             name = "description3",
-            label = messages("employmentBeneficiary.description.description4"),
+            label = messages("employmentBeneficiary.description.description3"),
             isLabelHidden = false,
             isPageHeading = false,
             inputClass = Some("govuk-!-width-two-thirds"),
@@ -93,7 +94,7 @@
             field = form("description4"),
             id = "description4",
             name = "description4",
-            label = messages("employmentBeneficiary.description.description5"),
+            label = messages("employmentBeneficiary.description.description4"),
             isLabelHidden = false,
             isPageHeading = false,
             inputClass = Some("govuk-!-width-two-thirds"),

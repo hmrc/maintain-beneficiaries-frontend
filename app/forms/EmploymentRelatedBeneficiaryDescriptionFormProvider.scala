@@ -40,8 +40,8 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
         .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
-            maxLength(70, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
+            maxLength(70, s"$prefix.error.length1"),
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalid1")
           )
         )
       ).transform(emptyToNone, identity[Option[String]]),
@@ -49,8 +49,8 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
         .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
-            maxLength(70, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
+            maxLength(70, s"$prefix.error.length2"),
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalid2")
           )
         )
       ).transform(emptyToNone, identity[Option[String]]),
@@ -58,8 +58,8 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
         .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
-            maxLength(70, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
+            maxLength(70, s"$prefix.error.length3"),
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalid3")
           )
         )
       ).transform(emptyToNone, identity[Option[String]]),
@@ -67,8 +67,8 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
         .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
-            maxLength(70, s"$prefix.error.length"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
+            maxLength(70, s"$prefix.error.length4"),
+            regexp(Validation.descriptionRegex, s"$prefix.error.invalid4")
           )
         )
       ).transform(emptyToNone, identity[Option[String]])
