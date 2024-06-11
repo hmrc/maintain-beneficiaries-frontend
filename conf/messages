@@ -955,7 +955,7 @@ employmentBeneficiary.nonUkAddress.checkYourAnswersLabel = What is {0}’s addre
 employmentBeneficiary.description.title = Give a description of each beneficiary group
 employmentBeneficiary.description.heading = Give a description of each beneficiary group
 employmentBeneficiary.description.caption = Employment related beneficiary groups
-employmentBeneficiary.description.checkYourAnswersLabel = What is the description of the beneficiary?
+employmentBeneficiary.description.checkYourAnswersLabel = Give a description of each beneficiary group
 employmentBeneficiary.description.hint = Do not include named or specific employees such as directors, they must be listed as individual beneficiaries.
 
 employmentBeneficiary.description.description = First beneficiary group
