@@ -15,6 +15,7 @@
  *@
 
 @import utils.InputOption
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 
 @this(
 govukSelect: GovukSelect
@@ -48,7 +49,8 @@ selectAttribute: Map[String, String] = Map.empty
  selected = field.value.contains(valueOption.value)
  )
 ),
- formGroupClasses = formGroupClasses.mkString(" "),
+ formGroup = FormGroup.empty,
+ classes = formGroupClasses.mkString(" "),
  attributes = selectAttribute,
  errorMessage = field.error.map(err => ErrorMessage.errorMessageWithDefaultStringsTranslated(content = Text(messages(err.message, err.args: _*))))
  )
