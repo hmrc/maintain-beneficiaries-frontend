@@ -280,7 +280,7 @@ trait ViewBehaviours extends ViewSpecBase {
       assertRenderedByClass(doc, "govuk-warning-text")
       assertRenderedByClass(doc, "govuk-warning-text__icon")
       assertRenderedByClass(doc, "govuk-warning-text__text")
-//      assertRenderedByClass(doc, "govuk-warning-text__assistive")
+      assertRenderedByClass(doc, "govuk-warning-text__assistive")
     }
   }
 }
