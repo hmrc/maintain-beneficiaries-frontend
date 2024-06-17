@@ -117,7 +117,7 @@ trait ViewSpecBase extends SpecBase {
     assert(doc.getElementById(id).hasClass(expectedClass), s"\n\nElement $id does not have class $expectedClass")
   }
 
-  def assertRenderedByClass(doc: Document, cssClass: String): Assertion =
+  def assertRenderedByClass(doc: Element, cssClass: String): Assertion =
     assert(doc.getElementsByClass(cssClass)!= null, "\n\nElement " + cssClass + " was not rendered on the page.\n")
 
   def assertNotRenderedByClass(doc: Document, className: String): Assertion = {
