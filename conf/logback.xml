@@ -20,7 +20,7 @@
             <pattern>%message%n</pattern>
         </encoder>
     </appender>
-    
+
     <logger name="uk.gov" level="WARN"/>
 
     <logger name="play.api.mvc.LegacySessionCookieBaker" level="OFF"/>

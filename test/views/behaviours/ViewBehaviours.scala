@@ -22,6 +22,9 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
+  private def findBannerTitle(view:HtmlFormat.Appendable):String =
+    asDocument(view).getElementsByClass("govuk-header__link govuk-header__service-name").html()
+
   def normalPage(view: HtmlFormat.Appendable,
                  messageKeyPrefix: String,
                  expectedGuidanceKeys: String*): Unit = {
@@ -32,9 +35,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
-          bannerTitle.html() mustBe messages("service.name")
+          findBannerTitle(view) mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -74,9 +75,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
-          bannerTitle.html() mustBe messages("service.name")
+          findBannerTitle(view) mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -116,9 +115,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
-          bannerTitle.html() mustBe messages("service.name")
+          findBannerTitle(view) mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -153,9 +150,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-          val doc = asDocument(view)
-          val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
-          bannerTitle.html() mustBe messages("service.name")
+          findBannerTitle(view) mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -280,7 +275,7 @@ trait ViewBehaviours extends ViewSpecBase {
       assertRenderedByClass(doc, "govuk-warning-text")
       assertRenderedByClass(doc, "govuk-warning-text__icon")
       assertRenderedByClass(doc, "govuk-warning-text__text")
-      assertRenderedByClass(doc, "govuk-warning-text__assistive")
+      assertRenderedByClass(doc.getElementsByClass("govuk-warning-text__text").first(), "govuk-visually-hidden")
     }
   }
 }
