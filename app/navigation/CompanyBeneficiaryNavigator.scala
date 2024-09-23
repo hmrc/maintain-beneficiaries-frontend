@@ -56,7 +56,7 @@ class CompanyBeneficiaryNavigator @Inject()() extends Navigator {
       ua = ua,
       fromPage = CountryOfResidenceYesNoPage,
       yesCall = rts.CountryOfResidenceUkYesNoController.onPageLoad(mode),
-      noCall = rts.AddressYesNoController.onPageLoad(mode)
+      noCall = navigateAwayFromCountryOfResidenceQuestions(ua, mode)
     )
     case CountryOfResidenceUkYesNoPage => ua => yesNoNav(
       ua = ua,
