@@ -221,7 +221,7 @@ class TrustBeneficiaryNavigatorSpec extends SpecBase with ScalaCheckPropertyChec
               .set(CountryOfResidenceYesNoPage, false).success.value
 
             navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, answers)
-              .mustBe(rts.AddressYesNoController.onPageLoad(NormalMode))
+              .mustBe(rts.StartDateController.onPageLoad())
           }
         }
 
