@@ -58,7 +58,7 @@ class WhenRemovedController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error showing the user the other beneficiary to remove, problem getting other beneficiary $index from trusts service ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
       }
   }
 
@@ -84,7 +84,7 @@ class WhenRemovedController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error removing an other beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
       }
   }
 }

@@ -22,8 +22,8 @@ import javax.inject.Inject
 import models.{TrustAuthInternalServerError, TrustAuthResponse}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.client.HttpClientV2
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[TrustAuthConnectorImpl])
@@ -32,14 +32,14 @@ trait TrustAuthConnector {
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
 }
 
-class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConfig)
+class TrustAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppConfig)
   extends TrustAuthConnector with Logging {
 
   private val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
 
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.GET[TrustAuthResponse](s"$baseUrl/agent-authorised").recoverWith {
+        http.get(url"$baseUrl/agent-authorised").execute[TrustAuthResponse].recoverWith {
       case e =>
         logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)
@@ -48,7 +48,7 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClient, config: FrontendAppConf
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.GET[TrustAuthResponse](s"$baseUrl/authorised/$utr").recoverWith {
+          http.get(url"$baseUrl/authorised/$utr").execute[TrustAuthResponse].recoverWith {
       case e =>
         logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)

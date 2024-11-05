@@ -39,7 +39,7 @@ class AuthenticationServiceImpl @Inject()(trustAuthConnector: TrustAuthConnector
       case TrustAuthDenied(redirectUrl) => Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         logger.warn(s"[Authentication][Session ID: ${utils.Session.id(hc)}] Unable to authenticate agent with trusts-auth")
-        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate)))
+        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate.toString)))
     }  }
 
   override def authenticateForUtr[A](utr: String)
@@ -49,7 +49,7 @@ class AuthenticationServiceImpl @Inject()(trustAuthConnector: TrustAuthConnector
       case TrustAuthDenied(redirectUrl) => Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         logger.warn(s"[Authentication][UTR: $utr][Session ID: ${utils.Session.id(hc)}] Unable to authenticate with trusts-auth")
-        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate)))
+        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate.toString)))
     }
   }
 

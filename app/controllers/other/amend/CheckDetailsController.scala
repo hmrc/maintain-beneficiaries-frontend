@@ -88,7 +88,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting other beneficiary $index ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
       }
   }
 
@@ -109,7 +109,7 @@ class CheckDetailsController @Inject()(
         logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
           s" error mapping user answers to other beneficiary $index, isNew: $provisional")
 
-        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
       }
   }
 }

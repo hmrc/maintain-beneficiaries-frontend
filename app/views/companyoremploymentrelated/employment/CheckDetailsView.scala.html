@@ -28,7 +28,7 @@
     govukSummaryList: GovukSummaryList
 )
 
-@(answerSection: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(answerSection: Seq[Section])(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = messages("employmentBeneficiary.checkDetails.title"),

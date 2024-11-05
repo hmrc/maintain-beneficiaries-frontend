@@ -42,7 +42,7 @@
     timeoutEnabled: Boolean = true,
     canSignOut: Boolean = true,
     showBackLink: Boolean = false
-)(mainContent: Html)(implicit request: Request[_], messages: Messages)
+)(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
 
 @headScripts = {
 @if(timeoutEnabled) {

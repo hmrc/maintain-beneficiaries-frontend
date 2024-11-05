@@ -26,7 +26,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[_], options: List[RadioOption])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], options: List[RadioOption])(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("addNow.title")}",

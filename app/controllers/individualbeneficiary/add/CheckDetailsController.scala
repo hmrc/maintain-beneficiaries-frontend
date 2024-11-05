@@ -63,7 +63,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error in mapping user answers to IndividualBeneficiary")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
         case Some(beneficiary) =>
           connector.addIndividualBeneficiary(request.userAnswers.identifier, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
