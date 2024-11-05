@@ -19,7 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import models.beneficiaries._
 import models.{RemoveBeneficiary, TaxableMigrationFlag, TrustDetails}
-import play.api.libs.json.{JsString, JsValue, Json}
+import play.api.libs.json.{JsString, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
