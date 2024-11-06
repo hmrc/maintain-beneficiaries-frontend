@@ -18,6 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.TaskStatus.TaskStatus
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -30,7 +31,9 @@ class TrustsStoreConnector @Inject()(http: HttpClientV2, config: FrontendAppConf
   def updateTaskStatus(identifier: String, taskStatus: TaskStatus)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"${config.trustsStoreUrl}/trusts-store/maintain/tasks/update-beneficiaries/$identifier"
-        http.post(url"$url").execute[HttpResponse]
+    http.post(url"$url").
+      withBody(Json.toJson(taskStatus)).
+      execute[HttpResponse]
   }
 
 }
