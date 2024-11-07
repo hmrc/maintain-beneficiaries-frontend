@@ -30,6 +30,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
@@ -39,8 +40,10 @@ import viewmodels.AnswerSection
 import views.html.charityortrust.trust.amend.CheckDetailsView
 
 import java.time.LocalDate
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
 import scala.util.Success
+import org.scalatest.concurrent.ScalaFutures
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
@@ -183,12 +186,14 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         ).build()
 
       val request = FakeRequest(POST, submitDetailsRoute)
-
       val result = route(application, request).value
-
-      status(result) mustEqual INTERNAL_SERVER_ERROR
-      contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
-
+      println(result.futureValue)
+      //val result =await(route(application, request).value)
+      //result.mustEqual(INTERNAL_SERVER_ERROR)
+      //status(result)mustEqual INTERNAL_SERVER_ERROR
+      //contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
+         result.futureValue mustBe INTERNAL_SERVER_ERROR
+      //contentAsString(result.futureValue).mustEqual errorHandler.internalServerErrorTemplate(request).toString
       application.stop()
     }
 

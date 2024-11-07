@@ -69,7 +69,7 @@ class RemoveOtherBeneficiaryController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting other beneficiary $index from trusts service ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
 
   }
@@ -109,7 +109,7 @@ class RemoveOtherBeneficiaryController @Inject()(
                 logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
                   s" error removing an other beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
 
-                Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+                errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))

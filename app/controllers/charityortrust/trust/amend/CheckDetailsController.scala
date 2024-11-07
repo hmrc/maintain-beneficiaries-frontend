@@ -92,7 +92,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting trust beneficiary $index ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
 
@@ -113,7 +113,7 @@ class CheckDetailsController @Inject()(
         logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
           s" error mapping user answers to trust beneficiary $index, isNew: $provisional")
 
-        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
 }

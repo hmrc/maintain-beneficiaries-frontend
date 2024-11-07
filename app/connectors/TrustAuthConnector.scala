@@ -29,6 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @ImplementedBy(classOf[TrustAuthConnectorImpl])
 trait TrustAuthConnector {
   def agentIsAuthorised()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
+
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
 }
 
@@ -39,7 +40,7 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppCo
 
   override def agentIsAuthorised()
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-        http.get(url"$baseUrl/agent-authorised").execute[TrustAuthResponse].recoverWith {
+    http.get(url"$baseUrl/agent-authorised").execute[TrustAuthResponse].recoverWith {
       case e =>
         logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)
@@ -48,7 +49,7 @@ class TrustAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppCo
 
   override def authorisedForUtr(utr: String)
                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-          http.get(url"$baseUrl/authorised/$utr").execute[TrustAuthResponse].recoverWith {
+    http.get(url"$baseUrl/authorised/$utr").execute[TrustAuthResponse].recoverWith {
       case e =>
         logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}")
         Future.successful(TrustAuthInternalServerError)

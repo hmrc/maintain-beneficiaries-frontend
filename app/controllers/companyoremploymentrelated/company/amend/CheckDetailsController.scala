@@ -91,7 +91,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error getting company beneficiary $index ${e.getMessage}")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
 
@@ -112,7 +112,7 @@ class CheckDetailsController @Inject()(
         logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
           s" error mapping user answers to company beneficiary $index")
 
-        Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate.toString))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
 }
