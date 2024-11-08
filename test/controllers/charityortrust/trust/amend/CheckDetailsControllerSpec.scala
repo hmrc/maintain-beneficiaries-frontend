@@ -186,23 +186,13 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         ).build()
 
       val request = FakeRequest(POST, submitDetailsRoute)
+
       val result = route(application, request).value
-      //status(result) mustEqual INTERNAL_SERVER_ERROR
-      //contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
-      //println(result.futureValue)
-      //val result =await(route(application, request).value)
-      //result.mustEqual(INTERNAL_SERVER_ERROR)
-      //status(result)mustEqual INTERNAL_SERVER_ERROR
-      //contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
+      status(result) mustEqual INTERNAL_SERVER_ERROR
 
-      //status(result) mustBe INTERNAL_SERVER_ERROR
-      //Future {
-       // status(result) mustEqual INTERNAL_SERVER_ERROR
-      //contentAsString(result) must not equal  errorHandler.internalServerErrorTemplate(request).toString
+      contentAsString(result) mustEqual Await.result(errorHandler.internalServerErrorTemplate(request), 5.seconds).toString()
 
-    //}
-    val status = Await.result(result, 5.seconds) // Blocking wait for future
-      status shouldEqual 500
+
       application.stop()
     }
   }
