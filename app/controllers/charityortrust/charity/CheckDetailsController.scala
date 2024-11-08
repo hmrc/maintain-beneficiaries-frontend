@@ -31,7 +31,7 @@ import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.CheckDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,

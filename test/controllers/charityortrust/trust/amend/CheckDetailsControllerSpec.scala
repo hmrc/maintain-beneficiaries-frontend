@@ -190,8 +190,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
       status(result) mustEqual INTERNAL_SERVER_ERROR
 
-      contentAsString(result) mustEqual Await.result(errorHandler.internalServerErrorTemplate(request), 5.seconds).toString()
-
+      contentAsString(result) mustEqual Await.result(errorHandler.internalServerErrorTemplate(request), 5.seconds).toString
 
       application.stop()
     }

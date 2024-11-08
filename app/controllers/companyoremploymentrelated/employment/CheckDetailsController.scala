@@ -31,7 +31,7 @@ import utils.print.EmploymentRelatedBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.companyoremploymentrelated.employment.CheckDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,

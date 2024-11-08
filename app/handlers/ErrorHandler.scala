@@ -23,12 +23,13 @@ import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.{ErrorTemplate, PageNotFoundView}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
 class ErrorHandler @Inject()(
                               val messagesApi: MessagesApi,
                               view: ErrorTemplate,
                               notFoundView: PageNotFoundView
-                            ) (implicit val ec : ExecutionContext)extends FrontendErrorHandler with I18nSupport {
+                            )(implicit val ec: ExecutionContext) extends FrontendErrorHandler with I18nSupport {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit rh: RequestHeader): Future[Html] = Future.successful {
@@ -37,7 +38,7 @@ class ErrorHandler @Inject()(
   }
 
 
-  override def notFoundTemplate(implicit request: RequestHeader): Future[Html]=Future.successful {
-    notFoundView ()
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = Future.successful {
+    notFoundView()
   }
 }
