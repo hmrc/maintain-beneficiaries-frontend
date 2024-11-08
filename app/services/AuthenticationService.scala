@@ -30,17 +30,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthenticationServiceImpl @Inject()(trustAuthConnector: TrustAuthConnector,
                                           errorHandler: ErrorHandler
-                                         ) (implicit ec: ExecutionContext) extends AuthenticationService with Logging {
+                                         )(implicit ec: ExecutionContext) extends AuthenticationService with Logging {
 
   override def authenticateAgent[A]()
-                                (implicit request: Request[A], hc: HeaderCarrier): Future[Either[Result, String]] = {
+                                   (implicit request: Request[A], hc: HeaderCarrier): Future[Either[Result, String]] = {
     trustAuthConnector.agentIsAuthorised().flatMap {
       case TrustAuthAgentAllowed(arn) => Future.successful(Right(arn))
       case TrustAuthDenied(redirectUrl) => Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         logger.warn(s"[Authentication][Session ID: ${utils.Session.id(hc)}] Unable to authenticate agent with trusts-auth")
-        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate.toString)))
-    }  }
+        errorHandler.internalServerErrorTemplate.map(html => Left(InternalServerError(html)))
+    }
+  }
 
   override def authenticateForUtr[A](utr: String)
                                     (implicit request: DataRequest[A], hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]] = {
@@ -49,7 +50,7 @@ class AuthenticationServiceImpl @Inject()(trustAuthConnector: TrustAuthConnector
       case TrustAuthDenied(redirectUrl) => Future.successful(Left(Redirect(redirectUrl)))
       case _ =>
         logger.warn(s"[Authentication][UTR: $utr][Session ID: ${utils.Session.id(hc)}] Unable to authenticate with trusts-auth")
-        Future.successful(Left(InternalServerError(errorHandler.internalServerErrorTemplate.toString)))
+        errorHandler.internalServerErrorTemplate.map(html => Left(InternalServerError(html)))
     }
   }
 
@@ -58,6 +59,7 @@ class AuthenticationServiceImpl @Inject()(trustAuthConnector: TrustAuthConnector
 trait AuthenticationService {
   def authenticateAgent[A]()
                           (implicit request: Request[A], hc: HeaderCarrier): Future[Either[Result, String]]
+
   def authenticateForUtr[A](utr: String)
                            (implicit request: DataRequest[A],
                             hc: HeaderCarrier): Future[Either[Result, DataRequest[A]]]
