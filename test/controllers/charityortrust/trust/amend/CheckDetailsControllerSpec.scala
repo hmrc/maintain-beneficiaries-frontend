@@ -29,8 +29,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.{await, defaultAwaitTimeout, status, _}
 import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
@@ -44,6 +43,7 @@ import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}
 import scala.util.Success
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
 
@@ -187,15 +187,23 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val request = FakeRequest(POST, submitDetailsRoute)
       val result = route(application, request).value
-      println(result.futureValue)
+      //status(result) mustEqual INTERNAL_SERVER_ERROR
+      //contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
+      //println(result.futureValue)
       //val result =await(route(application, request).value)
       //result.mustEqual(INTERNAL_SERVER_ERROR)
       //status(result)mustEqual INTERNAL_SERVER_ERROR
       //contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
-         result.futureValue mustBe INTERNAL_SERVER_ERROR
-      //contentAsString(result.futureValue).mustEqual errorHandler.internalServerErrorTemplate(request).toString
+
+      //status(result) mustBe INTERNAL_SERVER_ERROR
+      //Future {
+       // status(result) mustEqual INTERNAL_SERVER_ERROR
+      //contentAsString(result) must not equal  errorHandler.internalServerErrorTemplate(request).toString
+
+    //}
+    val status = Await.result(result, 5.seconds) // Blocking wait for future
+      status shouldEqual 500
       application.stop()
     }
-
   }
 }
