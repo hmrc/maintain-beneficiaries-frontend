@@ -25,7 +25,7 @@
     characterCount: InputTextCharacterCount
 )
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("classOfBeneficiary.description.title")}",

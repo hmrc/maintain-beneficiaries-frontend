@@ -39,7 +39,8 @@ import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsView
 
 import java.time.LocalDate
-import scala.concurrent.Future
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, Future}
 import scala.util.Success
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
@@ -187,7 +188,7 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       status(result) mustEqual INTERNAL_SERVER_ERROR
-      contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).toString
+      contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).futureValue.toString()
 
       application.stop()
     }

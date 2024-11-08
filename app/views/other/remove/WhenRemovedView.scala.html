@@ -25,7 +25,7 @@
     errorSummary: ErrorSummary
 )
 
-@(form: Form[_], index: Int, description: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, description: String)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("otherBeneficiary.whenRemoved.title", description)}",

@@ -31,7 +31,7 @@ import utils.print.ClassOfBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.classofbeneficiary.add.CheckDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -61,7 +61,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error in mapping user answers to ClassOfBeneficiary")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
         case Some(beneficiary) =>
           connector.addClassOfBeneficiary(request.userAnswers.identifier, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

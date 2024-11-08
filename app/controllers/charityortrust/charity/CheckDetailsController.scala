@@ -31,7 +31,7 @@ import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.CheckDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CheckDetailsController @Inject()(
                                         override val messagesApi: MessagesApi,
@@ -63,7 +63,7 @@ class CheckDetailsController @Inject()(
           logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
             s" error in mapping user answers to CharityBeneficiary")
 
-          Future.successful(InternalServerError(errorHandler.internalServerErrorTemplate))
+          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
         case Some(beneficiary) =>
           connector.addCharityBeneficiary(request.userAnswers.identifier, beneficiary).map(_ =>
             Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())

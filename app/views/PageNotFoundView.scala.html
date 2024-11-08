@@ -23,7 +23,7 @@ config: FrontendAppConfig,
 heading: Heading
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @mainTemplate(
 title = messages("pageNotFound.title"),

@@ -23,7 +23,7 @@
     headingI: Heading
 )
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
 
 @contentHeader = {
     @headingI(heading)

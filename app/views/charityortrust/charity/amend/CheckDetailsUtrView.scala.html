@@ -28,7 +28,7 @@
     answerSectionNoChange: AnswerSectionNoChange
 )
 
-@(answerSection: AnswerSection, name: String)(implicit request: Request[_], messages: Messages)
+@(answerSection: AnswerSection, name: String)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = messages("charityBeneficiary.checkDetails.title"),
