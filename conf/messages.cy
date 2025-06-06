@@ -13,7 +13,7 @@ site.iDontKnow=Nid wyf yn gwybod
 site.dontKnow=Nid wyf yn gwybod neu heb ei ddarparu
 site.or=neu
 site.continue = Yn eich blaen
-service.name = Cofrestru Ymddiriedolaeth a’i Chynnal
+service.name = Rheoli ymddiriedolaeth
 site.service_section=Buddiolwyr
 site.textarea.char_limit = (Y terfyn yw {0} o gymeriadau)
 site.sign_in=Mewngofnodi
@@ -70,7 +70,7 @@ agentNotAuthorised.p3 = Mae’n rhaid i’r ymddiriedolwr a hawliodd yr ymddirie
 agentNotAuthorised.p4 = Os oes angen help arnoch gyda’r gwasanaeth hwn
 agentNotAuthorised.p4.a = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEF (yn agor ffenestr neu dab newydd).
 agentNotAuthorised.p5 = Gallwch
-agentNotAuthorised.p5.a = ddychwelyd i gofrestru ymddiriedolaeth a’i chynnal ar gyfer cleient.
+agentNotAuthorised.p5.a = ddychwelyd i gofrestru neu reoli ymddiriedolaeth ar ran cleient
 
 createAgentServicesAccount.title=Creu cyfrif gwasanaethau asiant
 createAgentServicesAccount.heading=Creu cyfrif gwasanaethau asiant
@@ -130,7 +130,7 @@ date.year = Blwyddyn
 session_expired.title = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading = Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.guidance = Mae’r manylion a roddwyd gennych wedi’u dileu gan nad ydych wedi mynd yn eich blaen â’r gwasanaeth ers 15 munud.
-session_expired.guidance.2 = Bydd angen i chi fewngofnodi i barhau i gynnal yr ymddiriedolaeth.
+session_expired.guidance.2 = Bydd angen i chi fewngofnodi i barhau i reoli’r ymddiriedolaeth.
 
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
