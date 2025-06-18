@@ -14,7 +14,7 @@ site.iDontKnow = I don’t know
 site.dontKnow = I don’t know or not provided
 site.or = or
 site.continue = Continue
-service.name = Register and Maintain a Trust
+service.name = Manage a trust
 site.service_section = Beneficiaries
 site.textarea.char_limit = (Limit is {0} characters)
 site.sign_out = Sign out
@@ -75,7 +75,7 @@ agentNotAuthorised.p3 = The trustee who claimed the trust must use the same Gove
 agentNotAuthorised.p4 = If you need help with this service
 agentNotAuthorised.p4.a = contact the trusts helpline (opens in a new window or tab).
 agentNotAuthorised.p5 = You can
-agentNotAuthorised.p5.a = return to register and maintain a trust for a client.
+agentNotAuthorised.p5.a = return to register or manage a trust for a client
 
 createAgentServicesAccount.title = Create an agent services account
 createAgentServicesAccount.heading = Create an agent services account
@@ -136,7 +136,7 @@ date.year = Year
 session_expired.title = For your security, we signed you out
 session_expired.heading = For your security, we signed you out
 session_expired.guidance = This is because you have been inactive on the service for 15 minutes.
-session_expired.guidance.2 = You will need to sign in to continue maintaining the trust.
+session_expired.guidance.2 = You will need to sign in to continue managing the trust.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
