@@ -19,7 +19,7 @@ provide test coverage reports.
 
 Use the following commands to run the tests with coverage and generate a report.
 
-Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests and integration tests with scalastyle and checks for dependency updates:
+Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests and integration tests and checks for dependency updates:
 ```bash
 ./run_all_tests.sh
 ```
