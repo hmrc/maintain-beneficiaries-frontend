@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
 
       when(mockTrustConnector.amendTrustBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
 
-      val request = FakeRequest(POST, submitDetailsUtrRoute)
+      val request = FakeRequest(POST, submitDetailsUtrRoute).withFormUrlEncodedBody("value" -> "")
 
       val result = route(application, request).value
 

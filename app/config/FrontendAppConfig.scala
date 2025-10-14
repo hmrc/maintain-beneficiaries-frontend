@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@ import controllers.routes
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
 import play.api.mvc.Call
-import java.time.LocalDate
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration,
-                                   contactFrontendConfig: ContactFrontendConfig) {
+                                   contactFrontendConfig: ContactFrontendConfig,
+                                   servicesConfig: ServicesConfig) {
   val repositoryKey: String = "beneficiaries"
 
   final val ENGLISH = "en"
@@ -52,11 +54,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
   lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
   lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
 
-  lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
+  lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
-  lazy val trustAuthUrl: String = configuration.get[Service]("microservice.services.trusts-auth").baseUrl
+  lazy val trustAuthUrl: String = servicesConfig.baseUrl("trusts-auth")
 
-  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
+  lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
           bind[TrustService].toInstance(mockTrustService)
         ).build()
 
-      val request = FakeRequest(POST, addNowRoute)
+      val request = FakeRequest(POST, addNowRoute).withFormUrlEncodedBody("value" -> "")
 
       val boundForm = form.bind(Map("value" -> ""))
 
