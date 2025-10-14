@@ -37,10 +37,8 @@ import utils.mappers.IndividualBeneficiaryMapper
 import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.individualbeneficiary.amend.CheckDetailsView
-
 import java.time.LocalDate
-import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.util.Success
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
