@@ -30,7 +30,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 class FrontendAppConfig @Inject() (configuration: Configuration,
                                    contactFrontendConfig: ContactFrontendConfig,
                                    servicesConfig: ServicesConfig) {
-  val repositoryKey: String = "beneficiaries"
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
