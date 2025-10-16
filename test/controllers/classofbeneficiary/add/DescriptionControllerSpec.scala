@@ -37,7 +37,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, descriptionRoute).withFormUrlEncodedBody(("value" -> ""))
+      val request = FakeRequest(GET, descriptionRoute)
 
       val view = application.injector.instanceOf[DescriptionView]
 

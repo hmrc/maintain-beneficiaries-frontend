@@ -17,7 +17,6 @@
 package config
 
 import controllers.routes
-import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
 import play.api.mvc.Call
 
@@ -27,32 +26,31 @@ import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration,
-                                   contactFrontendConfig: ContactFrontendConfig,
-                                   servicesConfig: ServicesConfig) {
-  val repositoryKey: String = "beneficiaries"
+class FrontendAppConfig @Inject() (
+                                    contactFrontendConfig: ContactFrontendConfig,
+                                    servicesConfig: ServicesConfig
+                                  ) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
   final val UK_COUNTRY_CODE = "GB"
 
-
-  val appName: String = configuration.get[String]("appName")
+  val appName: String = servicesConfig.getString("appName")
 
   val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
-  lazy val maintainATrustOverview: String = configuration.get[String]("urls.maintainATrustOverview")
+  lazy val maintainATrustOverview: String = servicesConfig.getString("urls.maintainATrustOverview")
 
-  lazy val loginUrl: String = configuration.get[String]("urls.login")
+  lazy val loginUrl: String = servicesConfig.getString("urls.login")
 
-  lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
+  lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
+  lazy val logoutUrl: String = servicesConfig.getString("urls.logout")
 
   lazy val logoutAudit: Boolean =
-    configuration.get[Boolean]("microservice.services.features.auditing.logout")
+    servicesConfig.getBoolean("microservice.services.features.auditing.logout")
 
-  lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
-  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
+  lazy val countdownLength: Int = servicesConfig.getInt("timeout.countdown")
+  lazy val timeoutLength: Int = servicesConfig.getInt("timeout.length")
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
@@ -60,11 +58,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
 
   lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
-  lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
-  lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
+  lazy val locationCanonicalList: String = servicesConfig.getString("location.canonical.list.all")
+  lazy val locationCanonicalListCY: String = servicesConfig.getString("location.canonical.list.allCY")
 
   lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("microservice.services.features.welsh-translation")
+    servicesConfig.getBoolean("microservice.services.features.welsh-translation")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
@@ -76,7 +74,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
 
   private def getDate(entry: String): LocalDate = {
 
-    def getInt(path: String): Int = configuration.get[Int](path)
+    def getInt(path: String): Int = servicesConfig.getInt(path)
 
     LocalDate.of(
       getInt(s"dates.$entry.year"),
@@ -94,11 +92,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
       case _ => "urls.trustsHelpline"
     }
 
-    configuration.get[String](path)
+    servicesConfig.getString(path)
   }
 
-
-  val cachettlplaybackInSeconds: Long = configuration.get[Long]("mongodb.playback.ttlSeconds")
-  val cachettlSessionInSeconds: Long = configuration.get[Long]("mongodb.session.ttlSeconds")
-  val dropIndexes: Boolean = configuration.getOptional[Boolean]("microservice.services.features.mongo.dropIndexes").getOrElse(false)
+  val cachettlplaybackInSeconds: Long = servicesConfig.getString("mongodb.playback.ttlSeconds").toLong
+  val cachettlSessionInSeconds: Long = servicesConfig.getString("mongodb.session.ttlSeconds").toLong
+  val dropIndexes: Boolean = servicesConfig.getBoolean("microservice.services.features.mongo.dropIndexes")
 }

@@ -43,7 +43,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, nameRoute).withFormUrlEncodedBody(("value" -> ""))
+      val request = FakeRequest(GET, nameRoute)
 
       val view = application.injector.instanceOf[NameView]
 
