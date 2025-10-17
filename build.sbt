@@ -1,4 +1,3 @@
-import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings
 
 ThisBuild / scalaVersion := "2.13.16"
@@ -8,6 +7,7 @@ lazy val microservice = Project("maintain-beneficiaries-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
+    CodeCoverageSettings(),
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
@@ -25,10 +25,6 @@ lazy val microservice = Project("maintain-beneficiaries-frontend", file("."))
       "controllers.routes._"
     ),
     PlayKeys.playDefaultPort := 9793,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*components.*;.*Mode.*;.*Routes.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 88,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
     libraryDependencies ++= AppDependencies(),
     // concatenate js
     Concat.groups := Seq(

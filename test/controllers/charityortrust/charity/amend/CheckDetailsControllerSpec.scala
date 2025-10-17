@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,8 @@ import utils.mappers.CharityBeneficiaryMapper
 import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.charity.amend.CheckDetailsView
-
 import java.time.LocalDate
-import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.util.Success
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach {
