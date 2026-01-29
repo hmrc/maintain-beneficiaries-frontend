@@ -29,7 +29,7 @@ import views.html.companyoremploymentrelated.company.NonUkAddressView
 class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
   val messageKeyPrefix = "site.address.nonUk"
-  val name: String = "Company"
+  val name: String     = "Company"
 
   override val form: Form[NonUkAddress] = new NonUkAddressFormProvider().apply()
 
@@ -55,4 +55,5 @@ class NonUkAddressViewSpec extends NonUkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

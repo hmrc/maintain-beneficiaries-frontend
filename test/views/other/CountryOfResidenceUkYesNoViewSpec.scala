@@ -26,7 +26,7 @@ import views.html.other.CountryOfResidenceUkYesNoView
 
 class CountryOfResidenceUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "otherBeneficiary.countryOfResidenceUkYesNo"
+  val messageKeyPrefix    = "otherBeneficiary.countryOfResidenceUkYesNo"
   val description: String = "Other"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
@@ -42,8 +42,15 @@ class CountryOfResidenceUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(description), routes.CountryOfResidenceUkYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(description),
+      routes.CountryOfResidenceUkYesNoController.onSubmit(NormalMode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -26,11 +26,11 @@ import java.time.LocalDate
 
 class EntityStartViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "classOfBeneficiary.entityStart"
-  val date: LocalDate = LocalDate.parse("2019-02-03")
+  val messageKeyPrefix      = "classOfBeneficiary.entityStart"
+  val date: LocalDate       = LocalDate.parse("2019-02-03")
   val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, date)
   val view: EntityStartView = viewFor[EntityStartView](Some(emptyUserAnswers))
-  val description: String = "Description"
+  val description: String   = "Description"
 
   "EntityStart view" must {
 

@@ -22,7 +22,7 @@ object TaskStatus extends Enumeration {
 
   type TaskStatus = Value
 
-  val Completed: Value = Value("completed")
+  val Completed: Value  = Value("completed")
   val InProgress: Value = Value("in-progress")
 
   implicit val writes: Writes[Value] = Writes.enumNameWrites

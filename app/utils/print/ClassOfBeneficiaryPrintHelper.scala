@@ -22,17 +22,26 @@ import pages.classofbeneficiary.{DescriptionPage, EntityStartPage}
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class ClassOfBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class ClassOfBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
   def apply(userAnswers: UserAnswers, description: String)(implicit messages: Messages): AnswerSection = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, description)
 
     def answerRows: Seq[AnswerRow] = Seq(
-      bound.stringQuestion(DescriptionPage, "classOfBeneficiary.description", controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url),
-      bound.dateQuestion(EntityStartPage, "classOfBeneficiary.entityStart", controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
+      bound.stringQuestion(
+        DescriptionPage,
+        "classOfBeneficiary.description",
+        controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url
+      ),
+      bound.dateQuestion(
+        EntityStartPage,
+        "classOfBeneficiary.entityStart",
+        controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url
+      )
     ).flatten
 
     AnswerSection(headingKey = None, answerRows)
   }
+
 }

@@ -28,12 +28,11 @@ class IdentificationSpec extends SpecBase {
     "read from json" when {
 
       val country = "GB"
-      val number = "1234567890"
-      val date = "2000-01-01"
+      val number  = "1234567890"
+      val date    = "2000-01-01"
 
       "passport" in {
-        val json = Json.parse(
-          s"""
+        val json = Json.parse(s"""
              |{
              |  "passport": {
              |    "countryOfIssue": "$country",
@@ -49,8 +48,7 @@ class IdentificationSpec extends SpecBase {
       }
 
       "id card" in {
-        val json = Json.parse(
-          s"""
+        val json = Json.parse(s"""
              |{
              |  "passport": {
              |    "countryOfIssue": "$country",
@@ -66,8 +64,7 @@ class IdentificationSpec extends SpecBase {
       }
 
       "passport or id card" in {
-        val json = Json.parse(
-          s"""
+        val json = Json.parse(s"""
              |{
              |  "passport": {
              |    "countryOfIssue": "$country",
@@ -82,8 +79,7 @@ class IdentificationSpec extends SpecBase {
       }
 
       "nino" in {
-        val json = Json.parse(
-          s"""
+        val json = Json.parse(s"""
              |{
              |  "nino": "$number"
              |}

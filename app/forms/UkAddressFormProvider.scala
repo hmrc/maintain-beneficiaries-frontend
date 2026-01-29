@@ -28,44 +28,53 @@ class UkAddressFormProvider @Inject() extends Mappings {
 
   def apply(): Form[UkAddress] = Form(
     mapping(
-      "line1" ->
+      "line1"    ->
         text("ukAddress.error.line1.required")
           .verifying(
             firstError(
               nonEmptyString("line1", "ukAddress.error.line1.required"),
               maxLength(35, "ukAddress.error.line1.length"),
               regexp(Validation.addressLineRegex, "ukAddress.error.line1.invalidCharacters")
-            )),
-      "line2" ->
+            )
+          ),
+      "line2"    ->
         text("ukAddress.error.line2.required")
           .verifying(
             firstError(
               nonEmptyString("line2", "ukAddress.error.line2.required"),
               maxLength(35, "ukAddress.error.line2.length"),
               regexp(Validation.addressLineRegex, "ukAddress.error.line2.invalidCharacters")
-            )),
-      "line3" ->
-        optional(text()
-          .verifying(
-            firstError(
-              maxLength(35, "ukAddress.error.line3.length"),
-              regexp(Validation.addressLineRegex, "ukAddress.error.line3.invalidCharacters")
-            ))).transform(emptyToNone, identity[Option[String]]),
-      "line4" ->
-        optional(text()
-          .verifying(
-            firstError(
-              maxLength(35, "ukAddress.error.line4.length"),
-              regexp(Validation.addressLineRegex, "ukAddress.error.line4.invalidCharacters")
-            ))).transform(emptyToNone, identity[Option[String]]),
-
+            )
+          ),
+      "line3"    ->
+        optional(
+          text()
+            .verifying(
+              firstError(
+                maxLength(35, "ukAddress.error.line3.length"),
+                regexp(Validation.addressLineRegex, "ukAddress.error.line3.invalidCharacters")
+              )
+            )
+        ).transform(emptyToNone, identity[Option[String]]),
+      "line4"    ->
+        optional(
+          text()
+            .verifying(
+              firstError(
+                maxLength(35, "ukAddress.error.line4.length"),
+                regexp(Validation.addressLineRegex, "ukAddress.error.line4.invalidCharacters")
+              )
+            )
+        ).transform(emptyToNone, identity[Option[String]]),
       "postcode" ->
         postcode("ukAddress.error.postcode.required")
           .verifying(
             firstError(
               nonEmptyString("postcode", "ukAddress.error.postcode.required"),
               regexp(Validation.postcodeRegex, "ukAddress.error.postcode.invalidCharacters")
-            ))
+            )
+          )
     )(UkAddress.apply)(UkAddress.unapply)
   )
+
 }

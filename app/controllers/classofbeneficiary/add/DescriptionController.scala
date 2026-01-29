@@ -33,37 +33,34 @@ import views.html.classofbeneficiary.add.DescriptionView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionController @Inject()(
-                                       val controllerComponents: MessagesControllerComponents,
-                                       standardActionSets: StandardActionSets,
-                                       formProvider: DescriptionFormProvider,
-                                       connector: TrustConnector,
-                                       view: DescriptionView,
-                                       trustService: TrustService,
-                                       repository: PlaybackRepository,
-                                       @ClassOfBeneficiary navigator: Navigator
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class DescriptionController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: DescriptionFormProvider,
+  connector: TrustConnector,
+  view: DescriptionView,
+  trustService: TrustService,
+  repository: PlaybackRepository,
+  @ClassOfBeneficiary navigator: Navigator
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description", 56)
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(DescriptionPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(DescriptionPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DescriptionPage, value))
@@ -71,4 +68,5 @@ class DescriptionController @Inject()(
           } yield Redirect(navigator.nextPage(DescriptionPage, updatedAnswers))
       )
   }
+
 }

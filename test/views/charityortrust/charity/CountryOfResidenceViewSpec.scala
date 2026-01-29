@@ -28,7 +28,7 @@ import views.html.charityortrust.charity.CountryOfResidenceView
 class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
   val messageKeyPrefix = "charityBeneficiary.countryOfResidence"
-  val name: String = "Charity"
+  val name: String     = "Charity"
 
   val form: Form[String] = new CountryFormProvider().withPrefix(messageKeyPrefix)
 
@@ -49,4 +49,5 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

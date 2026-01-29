@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new DateFormProvider(frontendAppConfig)
+  val formProvider                  = new DateFormProvider(frontendAppConfig)
   private def form: Form[LocalDate] = formProvider.withPrefix("individualBeneficiary.dateOfBirth")
 
   def onwardRoute: Call = Call("GET", "/foo")
@@ -50,7 +50,9 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
   val name: Name = Name("New", None, "Beneficiary")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, dateOfBirthRoute)
@@ -84,8 +86,12 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(DateOfBirthPage, validAnswer).success.value
-        .set(NamePage, name).success.value
+        .set(DateOfBirthPage, validAnswer)
+        .success
+        .value
+        .set(NamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -170,4 +176,5 @@ class DateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

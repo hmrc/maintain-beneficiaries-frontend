@@ -29,24 +29,26 @@ case object AddNowPage extends QuestionPage[TypeOfBeneficiaryToAdd] {
 
   override def toString: String = "addNow"
 
-  override def cleanup(value: Option[TypeOfBeneficiaryToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TypeOfBeneficiaryToAdd], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
 
       case Some(Individual) =>
-        userAnswers.deleteAtPath(classofbeneficiary.basePath)
+        userAnswers
+          .deleteAtPath(classofbeneficiary.basePath)
           .flatMap(_.deleteAtPath(charityortrust.basePath))
 
       case Some(ClassOfBeneficiaries) =>
-        userAnswers.deleteAtPath(individualbeneficiary.basePath)
+        userAnswers
+          .deleteAtPath(individualbeneficiary.basePath)
           .flatMap(_.deleteAtPath(charityortrust.basePath))
 
       case Some(CharityOrTrust) =>
-        userAnswers.deleteAtPath(individualbeneficiary.basePath)
+        userAnswers
+          .deleteAtPath(individualbeneficiary.basePath)
           .flatMap(_.deleteAtPath(classofbeneficiary.basePath))
 
       case _ =>
         super.cleanup(value, userAnswers)
     }
-  }
 
 }

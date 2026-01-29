@@ -39,7 +39,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val messagesPrefix = "removeCharityBeneficiaryYesNo"
 
-  lazy val formProvider = new RemoveIndexFormProvider()
+  lazy val formProvider        = new RemoveIndexFormProvider()
   lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
   lazy val formRoute: Call = routes.RemoveCharityBeneficiaryController.onSubmit(0)
@@ -48,7 +48,7 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def charityBeneficiary(id: Int, provisional : Boolean): CharityBeneficiary = CharityBeneficiary(
+  def charityBeneficiary(id: Int, provisional: Boolean): CharityBeneficiary = CharityBeneficiary(
     name = s"Charity Name $id",
     utr = None,
     address = None,
@@ -95,7 +95,9 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       val index = 0
 
       val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true).success.value
+        .set(RemoveYesNoPage, true)
+        .success
+        .value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, beneficiaries, Nil)))
@@ -121,12 +123,16 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
 
       val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true).success.value
+        .set(RemoveYesNoPage, true)
+        .success
+        .value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request = FakeRequest(GET, routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)
 
@@ -184,7 +190,9 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.charityortrust.charity.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.charityortrust.charity.remove.routes.WhenRemovedController
+          .onPageLoad(0)
+          .url
 
         application.stop()
       }
@@ -224,7 +232,9 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       val index = 0
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request =
         FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index).url)
@@ -280,4 +290,5 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       application.stop()
     }
   }
+
 }

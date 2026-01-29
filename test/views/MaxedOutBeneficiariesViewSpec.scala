@@ -29,7 +29,8 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
 
   val featureUnavailable: Option[String] = Some("/feature-not-available")
 
-  val rows: List[AddRow] = List(AddRow("Charity", "", featureUnavailable, featureUnavailable), AddRow("Trust", "", None, None))
+  val rows: List[AddRow] =
+    List(AddRow("Charity", "", featureUnavailable, featureUnavailable), AddRow("Trust", "", None, None))
 
   def applyView(migrating: Boolean): HtmlFormat.Appendable =
     view.apply(rows, rows, "Add a beneficiary", migrating)(fakeRequest, messages)
@@ -55,7 +56,10 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
           val doc = asDocument(view)
 
           assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details."
+          )
         }
 
         behave like pageWithWarning(applyView(migrating))
@@ -89,7 +93,10 @@ class MaxedOutBeneficiariesViewSpec extends OptionsViewBehaviours with TabularDa
           val doc = asDocument(view)
 
           assertContainsText(doc, "You cannot enter another beneficiary as you have entered a maximum of 175.")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add, write to HMRC with their details."
+          )
         }
       }
     }

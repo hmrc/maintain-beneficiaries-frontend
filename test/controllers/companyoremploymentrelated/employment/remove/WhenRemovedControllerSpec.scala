@@ -46,7 +46,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val index = 0
 
-  val name = "Some Name 1"
+  val name                          = "Some Name 1"
   val mockConnector: TrustConnector = mock[TrustConnector]
 
   val fakeService = new TrustServiceImpl(mockConnector)
@@ -74,7 +74,8 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     provisional = false
   )
 
-  val beneficiaries: List[EmploymentRelatedBeneficiary] = List(employmentBeneficiary(1), employmentBeneficiary(2), employmentBeneficiary(3))
+  val beneficiaries: List[EmploymentRelatedBeneficiary] =
+    List(employmentBeneficiary(1), employmentBeneficiary(2), employmentBeneficiary(3))
 
   "WhenRemoved Controller" must {
 
@@ -84,7 +85,8 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, beneficiaries, Nil, Nil, Nil)))
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val result = route(application, getRequest()).value
 
@@ -122,7 +124,8 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request =
         FakeRequest(POST, dateRemovedFromTrustRoute)
@@ -172,7 +175,9 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val result = route(application, getRequest()).value
 
@@ -183,4 +188,5 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

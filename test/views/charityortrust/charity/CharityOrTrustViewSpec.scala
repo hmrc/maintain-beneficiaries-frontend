@@ -28,7 +28,7 @@ class CharityOrTrustViewSpec extends OptionsViewBehaviours {
   val messageKeyPrefix = "charityOrTrust"
 
   val form: Form[CharityOrTrustToAdd] = new CharityOrTrustBeneficiaryTypeFormProvider()()
-  val view: CharityOrTrustView = viewFor[CharityOrTrustView](Some(emptyUserAnswers))
+  val view: CharityOrTrustView        = viewFor[CharityOrTrustView](Some(emptyUserAnswers))
 
   "CharityOrTrust view" must {
 

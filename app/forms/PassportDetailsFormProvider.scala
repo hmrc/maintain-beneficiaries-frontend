@@ -25,20 +25,20 @@ import play.api.data.Forms.mapping
 
 import javax.inject.Inject
 
-class PassportDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings with Constraints {
+class PassportDetailsFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings with Constraints {
   private val maxLengthCountryField = 100
-  private val maxLengthNumberField = 30
+  private val maxLengthNumberField  = 30
 
   def withPrefix(prefix: String, beneficiaries: Beneficiaries): Form[Passport] = Form(
     mapping(
-      "country" -> text(s"$prefix.passportDetails.country.error.required")
+      "country"    -> text(s"$prefix.passportDetails.country.error.required")
         .verifying(
           firstError(
             maxLength(maxLengthCountryField, s"$prefix.passportDetails.country.error.length"),
             nonEmptyString("country", s"$prefix.passportDetails.country.error.required")
           )
         ),
-      "number" -> text(s"$prefix.passportDetails.number.error.required")
+      "number"     -> text(s"$prefix.passportDetails.number.error.required")
         .verifying(
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.passportDetails.number.error.length"),
@@ -48,20 +48,29 @@ class PassportDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extend
           )
         ),
       "expiryDate" -> localDate(
-        invalidKey     = s"$prefix.passportDetails.expiryDate.error.invalid",
+        invalidKey = s"$prefix.passportDetails.expiryDate.error.invalid",
         allRequiredKey = s"$prefix.passportDetails.expiryDate.error.required.all",
         twoRequiredKey = s"$prefix.passportDetails.expiryDate.error.required.two",
-        requiredKey    = s"$prefix.passportDetails.expiryDate.error.required"
-      ).verifying(firstError(
-        maxDate(
-          appConfig.maxDate,
-          s"$prefix.passportDetails.expiryDate.error.future", "day", "month", "year"
-        ),
-        minDate(
-          appConfig.minDate,
-          s"$prefix.passportDetails.expiryDate.error.past", "day", "month", "year"
+        requiredKey = s"$prefix.passportDetails.expiryDate.error.required"
+      ).verifying(
+        firstError(
+          maxDate(
+            appConfig.maxDate,
+            s"$prefix.passportDetails.expiryDate.error.future",
+            "day",
+            "month",
+            "year"
+          ),
+          minDate(
+            appConfig.minDate,
+            s"$prefix.passportDetails.expiryDate.error.past",
+            "day",
+            "month",
+            "year"
+          )
         )
-      ))
+      )
     )(Passport.apply)(Passport.unapply)
   )
+
 }

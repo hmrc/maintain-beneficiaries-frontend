@@ -27,7 +27,7 @@ import views.html.individualbeneficiary.IncomeDiscretionYesNoView
 class IncomeDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "individualBeneficiary.incomeDiscretionYesNo"
-  val name: Name = Name("First", None, "Last")
+  val name: Name       = Name("First", None, "Last")
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -42,8 +42,15 @@ class IncomeDiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.IncomeDiscretionYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name.displayName),
+      routes.IncomeDiscretionYesNoController.onSubmit(NormalMode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

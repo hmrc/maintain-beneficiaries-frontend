@@ -24,10 +24,15 @@ import views.ViewSpecBase
 
 trait TabularDataViewBehaviours extends ViewSpecBase {
 
-  private def complete(migrating: Boolean): String = if (migrating) "nomoreinfoneeded" else "complete"
+  private def complete(migrating: Boolean): String   = if (migrating) "nomoreinfoneeded" else "complete"
   private def inProgress(migrating: Boolean): String = if (migrating) "moreinfoneeded" else "inprogress"
 
-  private def assertDataList(doc: Document, parentElementId: String, data: Seq[AddRow], migratingAndMoreInfoNeeded: Boolean = false): Unit = {
+  private def assertDataList(
+    doc: Document,
+    parentElementId: String,
+    data: Seq[AddRow],
+    migratingAndMoreInfoNeeded: Boolean = false
+  ): Unit = {
 
     val container = doc.getElementById(parentElementId)
 
@@ -58,7 +63,7 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def pageWithNoTabularData(view: HtmlFormat.Appendable, migrating: Boolean): Unit = {
+  def pageWithNoTabularData(view: HtmlFormat.Appendable, migrating: Boolean): Unit =
 
     "behave like a page with no tabular data" when {
 
@@ -73,9 +78,8 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
         assertElementNotPresent(doc, "dl")
       }
     }
-  }
 
-  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit = {
+  def pageWithInProgressTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit =
 
     "behave like a page with incomplete tabular data" should {
 
@@ -96,9 +100,8 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
         assertDataList(doc, s"data-list--${inProgress(migrating)}", data, migrating)
       }
     }
-  }
 
-  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit = {
+  def pageWithCompleteTabularData(view: HtmlFormat.Appendable, data: Seq[AddRow], migrating: Boolean): Unit =
 
     "behave like a page with complete tabular data" should {
 
@@ -119,12 +122,13 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
         assertDataList(doc, s"data-list--${complete(migrating)}", data)
       }
     }
-  }
 
-  def pageWithTabularData(view: HtmlFormat.Appendable,
-                          inProgressData: Seq[AddRow],
-                          completeData: Seq[AddRow],
-                          migrating: Boolean): Unit = {
+  def pageWithTabularData(
+    view: HtmlFormat.Appendable,
+    inProgressData: Seq[AddRow],
+    completeData: Seq[AddRow],
+    migrating: Boolean
+  ): Unit =
 
     "behave like a page with complete and incomplete tabular data" should {
 
@@ -146,6 +150,5 @@ trait TabularDataViewBehaviours extends ViewSpecBase {
         assertDataList(doc, s"data-list--${complete(migrating)}", completeData)
       }
     }
-  }
 
 }

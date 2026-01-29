@@ -22,11 +22,12 @@ import java.time.LocalDate
 import play.api.libs.functional.syntax.{unlift, _}
 import play.api.libs.json.{Reads, Writes, __}
 
-final case class ClassOfBeneficiary(description: String,
-                                    entityStart: LocalDate,
-                                    provisional: Boolean) extends Beneficiary {
+final case class ClassOfBeneficiary(description: String, entityStart: LocalDate, provisional: Boolean)
+    extends Beneficiary {
 
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = true
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean =
+    true
+
 }
 
 object ClassOfBeneficiary {
@@ -35,12 +36,12 @@ object ClassOfBeneficiary {
     (__ \ Symbol("description")).read[String] and
       (__ \ Symbol("entityStart")).read[LocalDate] and
       (__ \ Symbol("lineNo")).readNullable[String].map(_.isEmpty)
-    ).apply(ClassOfBeneficiary.apply _)
+  ).apply(ClassOfBeneficiary.apply _)
 
   implicit val writes: Writes[ClassOfBeneficiary] = (
     (__ \ Symbol("description")).write[String] and
       (__ \ Symbol("entityStart")).write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(ClassOfBeneficiary.unapply))
+  ).apply(unlift(ClassOfBeneficiary.unapply))
 
 }

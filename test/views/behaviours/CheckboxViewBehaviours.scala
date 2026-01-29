@@ -22,16 +22,18 @@ import viewmodels.RadioOption
 
 trait CheckboxViewBehaviours[A] extends ViewBehaviours {
 
-  def checkboxPage(form: Form[Set[A]],
-                   createView: Form[Set[A]] => HtmlFormat.Appendable,
-                   messageKeyPrefix: String,
-                   options: Seq[RadioOption],
-                   fieldKey: String = "value",
-                   legend: Option[String] = None): Unit = {
+  def checkboxPage(
+    form: Form[Set[A]],
+    createView: Form[Set[A]] => HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    options: Seq[RadioOption],
+    fieldKey: String = "value",
+    legend: Option[String] = None
+  ): Unit =
 
     "behave like a checkbox page" must {
       "contain a legend for the question" in {
-        val doc = asDocument(createView(form))
+        val doc     = asDocument(createView(form))
         val legends = doc.getElementsByTag("legend")
         legends.size mustBe 1
         legends.text contains legend.getOrElse(messages(s"$messageKeyPrefix.heading"))
@@ -41,9 +43,7 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
         val doc = asDocument(createView(form))
         for {
           (_, i) <- options.zipWithIndex
-        } yield {
-          assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
-        }
+        } yield assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
       }
 
       "contain a label for each input" in {
@@ -60,37 +60,32 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
         val doc = asDocument(createView(form))
         for {
           (_, i) <- options.zipWithIndex
-        } yield {
-          assert(!doc.getElementById(form(fieldKey)(s"[$i]").id).hasAttr("checked"))
-        }
+        } yield assert(!doc.getElementById(form(fieldKey)(s"[$i]").id).hasAttr("checked"))
       }
 
-      options.zipWithIndex.foreach {
-        case (checkboxOption, i) =>
-          s"have correct value checked when value `${checkboxOption.value}` is given" in {
-            val data: Map[String, String] =
-              Map(s"$fieldKey[$i]" -> checkboxOption.value)
+      options.zipWithIndex.foreach { case (checkboxOption, i) =>
+        s"have correct value checked when value `${checkboxOption.value}` is given" in {
+          val data: Map[String, String] =
+            Map(s"$fieldKey[$i]" -> checkboxOption.value)
 
-            val doc = asDocument(createView(form.bind(data)))
-            val field = form(fieldKey)(s"[$i]")
+          val doc   = asDocument(createView(form.bind(data)))
+          val field = form(fieldKey)(s"[$i]")
 
-            assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
+          assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
 
-            options.zipWithIndex.foreach {
-              case (option, j) =>
-                if (option != checkboxOption) {
-                  val field = form(fieldKey)(s"[$j]")
-                  assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
-                }
+          options.zipWithIndex.foreach { case (option, j) =>
+            if (option != checkboxOption) {
+              val field = form(fieldKey)(s"[$j]")
+              assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
             }
           }
+        }
       }
 
       "not render an error summary" in {
         val doc = asDocument(createView(form))
         assertNotRenderedByClass(doc, "govuk-error-summary")
       }
-
 
       "show error in the title" in {
         val doc = asDocument(createView(form.withError(FormError(fieldKey, "error.invalid"))))
@@ -103,11 +98,11 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
       }
 
       "show an error associated with the value field" in {
-        val doc = asDocument(createView(form.withError(FormError(fieldKey, "error.invalid"))))
+        val doc       = asDocument(createView(form.withError(FormError(fieldKey, "error.invalid"))))
         val errorSpan = doc.getElementsByClass("error-message").first
         errorSpan.text mustBe s"""${messages("site.error")} ${messages("error-invalid")}"""
         doc.getElementsByTag("fieldset").first.attr("aria-describedby") contains errorSpan.attr("id")
       }
     }
-  }
+
 }

@@ -28,7 +28,7 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
 
   def withPrefix(prefix: String): Form[Description] = Form(
     mapping(
-      "description" -> text(s"$prefix.error.required")
+      "description"  -> text(s"$prefix.error.required")
         .verifying(
           firstError(
             maxLength(70, s"$prefix.error.length"),
@@ -36,42 +36,47 @@ class EmploymentRelatedBeneficiaryDescriptionFormProvider @Inject() extends Mapp
             regexp(Validation.descriptionRegex, s"$prefix.error.invalid")
           )
         ),
-      "description1" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(70, s"$prefix.error.length1"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid1")
+      "description1" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(70, s"$prefix.error.length1"),
+              regexp(Validation.descriptionRegex, s"$prefix.error.invalid1")
+            )
           )
-        )
       ).transform(emptyToNone, identity[Option[String]]),
-      "description2" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(70, s"$prefix.error.length2"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid2")
+      "description2" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(70, s"$prefix.error.length2"),
+              regexp(Validation.descriptionRegex, s"$prefix.error.invalid2")
+            )
           )
-        )
       ).transform(emptyToNone, identity[Option[String]]),
-      "description3" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(70, s"$prefix.error.length3"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid3")
+      "description3" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(70, s"$prefix.error.length3"),
+              regexp(Validation.descriptionRegex, s"$prefix.error.invalid3")
+            )
           )
-        )
       ).transform(emptyToNone, identity[Option[String]]),
-      "description4" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(70, s"$prefix.error.length4"),
-            regexp(Validation.descriptionRegex, s"$prefix.error.invalid4")
+      "description4" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(70, s"$prefix.error.length4"),
+              regexp(Validation.descriptionRegex, s"$prefix.error.invalid4")
+            )
           )
-        )
       ).transform(emptyToNone, identity[Option[String]])
     )(Description.apply)(Description.unapply)
   )
+
 }

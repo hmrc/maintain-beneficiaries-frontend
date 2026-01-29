@@ -41,4 +41,5 @@ class IdCardDetailsYesNoPageSpec extends PageBehaviours {
       userAnswers.get.get(IdCardDetailsPage) mustNot be(defined)
     }
   }
+
 }

@@ -36,8 +36,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
       "taxable" when {
 
         "with UK address" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -71,13 +70,15 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             name = Name("Nicola", Some("Andrey"), "Jackson"),
             dateOfBirth = testDateOfBirth,
             identification = None,
-            address = Some(UkAddress(
-              "Suite 10",
-              "Wealthy Arena",
-              Some("Trafagar Square"),
-              Some("London"),
-              "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                "Suite 10",
+                "Wealthy Arena",
+                Some("Trafagar Square"),
+                Some("London"),
+                "SE2 2HB"
+              )
+            ),
             vulnerableYesNo = Some(true),
             roleInCompany = None,
             income = Some("10"),
@@ -91,8 +92,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with foreign address" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -124,12 +124,14 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             name = Name("Nicola", Some("Andrey"), "Jackson"),
             dateOfBirth = testDateOfBirth,
             identification = None,
-            address = Some(NonUkAddress(
-              "123 Sesame Street",
-              "Hollywood, CA",
-              Some("314159"),
-              "US"
-            )),
+            address = Some(
+              NonUkAddress(
+                "123 Sesame Street",
+                "Hollywood, CA",
+                Some("314159"),
+                "US"
+              )
+            ),
             roleInCompany = None,
             vulnerableYesNo = Some(true),
             income = Some("10"),
@@ -143,8 +145,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with nino" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -184,8 +185,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with no identification" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -223,8 +223,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
         "there is conflicting income info" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -258,13 +257,15 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             name = Name("Nicola", Some("Andrey"), "Jackson"),
             dateOfBirth = testDateOfBirth,
             identification = None,
-            address = Some(UkAddress(
-              "Suite 10",
-              "Wealthy Arena",
-              Some("Trafagar Square"),
-              Some("London"),
-              "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                "Suite 10",
+                "Wealthy Arena",
+                Some("Trafagar Square"),
+                Some("London"),
+                "SE2 2HB"
+              )
+            ),
             vulnerableYesNo = Some(true),
             roleInCompany = None,
             income = None,
@@ -279,8 +280,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
         "there is no discretion for income info" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -313,13 +313,15 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             name = Name("Nicola", Some("Andrey"), "Jackson"),
             dateOfBirth = testDateOfBirth,
             identification = None,
-            address = Some(UkAddress(
-              "Suite 10",
-              "Wealthy Arena",
-              Some("Trafagar Square"),
-              Some("London"),
-              "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                "Suite 10",
+                "Wealthy Arena",
+                Some("Trafagar Square"),
+                Some("London"),
+                "SE2 2HB"
+              )
+            ),
             vulnerableYesNo = Some(true),
             roleInCompany = None,
             income = Some("10000"),
@@ -334,8 +336,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
         "there is no income at all" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -367,13 +368,15 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             name = Name("Nicola", Some("Andrey"), "Jackson"),
             dateOfBirth = testDateOfBirth,
             identification = None,
-            address = Some(UkAddress(
-              "Suite 10",
-              "Wealthy Arena",
-              Some("Trafagar Square"),
-              Some("London"),
-              "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                "Suite 10",
+                "Wealthy Arena",
+                Some("Trafagar Square"),
+                Some("London"),
+                "SE2 2HB"
+              )
+            ),
             vulnerableYesNo = Some(true),
             roleInCompany = None,
             income = None,
@@ -386,8 +389,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
           )
         }
         "with director employment type" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -424,8 +426,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
           )
         }
         "with employee employment type" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -462,8 +463,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
           )
         }
         "with NA employment type" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -505,8 +505,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
       "non-taxable" when {
 
         "there is no country of nationality, no country of residence, no legally incapable" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -540,8 +539,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is country of nationality, country of residence, legally incapable" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |    "lineNo": "1",
               |    "bpMatchStatus": "01",
@@ -585,7 +583,6 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
       "taxable" when {
 
-
         "with UK address in" in {
           val individual = IndividualBeneficiary(
             name = Name(
@@ -595,13 +592,15 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             ),
             dateOfBirth = None,
             identification = None,
-            address = Some(UkAddress(
-              line1 = "Line 1",
-              line2 = "Line 2",
-              line3 = None,
-              line4 = None,
-              postcode = "NE11ZZ"
-            )),
+            address = Some(
+              UkAddress(
+                line1 = "Line 1",
+                line2 = "Line 2",
+                line3 = None,
+                line4 = None,
+                postcode = "NE11ZZ"
+              )
+            ),
             vulnerableYesNo = Some(false),
             roleInCompany = None,
             income = None,
@@ -614,8 +613,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustEqual Json.parse(
-            """
+          asJson mustEqual Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -647,12 +645,14 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
             ),
             dateOfBirth = Some(LocalDate.parse("2020-10-05")),
             identification = None,
-            address = Some(NonUkAddress(
-              line1 = "Line 1",
-              line2 = "Line 2",
-              line3 = None,
-              country = "DE"
-            )),
+            address = Some(
+              NonUkAddress(
+                line1 = "Line 1",
+                line2 = "Line 2",
+                line3 = None,
+                country = "DE"
+              )
+            ),
             vulnerableYesNo = Some(false),
             roleInCompany = None,
             income = Some("25"),
@@ -665,8 +665,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -713,8 +712,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -757,8 +755,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -797,8 +794,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -838,8 +834,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -879,8 +874,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustBe Json.parse(
-            """
+          asJson mustBe Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -925,8 +919,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustEqual Json.parse(
-            """
+          asJson mustEqual Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -962,8 +955,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
 
           val asJson = Json.toJson(individual)
 
-          asJson mustEqual Json.parse(
-            """
+          asJson mustEqual Json.parse("""
               |{
               |    "name": {
               |    "firstName": "First",
@@ -984,8 +976,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
     }
 
     "parse the mental capacity question when beneficiary has mental capacity" in {
-      val json = Json.parse(
-        s"""
+      val json = Json.parse(s"""
            |{
            | "name": {
            |   "firstName": "John",
@@ -1015,8 +1006,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
     }
 
     "parse the mental capacity question when beneficiary does not have mental capacity" in {
-      val json = Json.parse(
-        s"""
+      val json = Json.parse(s"""
            |{
            | "name": {
            |   "firstName": "John",
@@ -1046,8 +1036,7 @@ class IndividualBeneficiarySpec extends AnyWordSpec with Matchers {
     }
 
     "parse the mental capacity question when mental capacity is not known" in {
-      val json = Json.parse(
-        s"""
+      val json = Json.parse(s"""
            |{
            | "name": {
            |   "firstName": "John",

@@ -39,16 +39,16 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
   val messagesPrefix = "removeClassOfBeneficiaryYesNo"
 
-  lazy val formProvider = new RemoveIndexFormProvider()
+  lazy val formProvider        = new RemoveIndexFormProvider()
   lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
   lazy val formRoute: Call = routes.RemoveClassOfBeneficiaryController.onSubmit(0)
 
-  lazy val description : String = "Some Description 1"
+  lazy val description: String = "Some Description 1"
 
   val mockConnector: TrustConnector = mock[TrustConnector]
 
-  def classOfBeneficiary(id: Int, provisional : Boolean): ClassOfBeneficiary = ClassOfBeneficiary(
+  def classOfBeneficiary(id: Int, provisional: Boolean): ClassOfBeneficiary = ClassOfBeneficiary(
     description = s"Some Description $id",
     entityStart = LocalDate.parse("2019-02-28"),
     provisional = provisional
@@ -83,7 +83,10 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       status(result) mustEqual OK
 
-      contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(request, messages).toString
+      contentAsString(result) mustEqual view(messagesPrefix, form, index, description, formRoute)(
+        request,
+        messages
+      ).toString
 
       application.stop()
     }
@@ -91,12 +94,16 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true).success.value
+        .set(RemoveYesNoPage, true)
+        .success
+        .value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(Beneficiaries(Nil, beneficiaries, Nil, Nil, Nil, Nil, Nil)))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)
 
@@ -115,12 +122,16 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
     "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
 
       val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true).success.value
+        .set(RemoveYesNoPage, true)
+        .success
+        .value
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request = FakeRequest(GET, routes.RemoveClassOfBeneficiaryController.onPageLoad(0).url)
 
@@ -178,7 +189,9 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(0).url
+        redirectLocation(result).value mustEqual controllers.classofbeneficiary.remove.routes.WhenRemovedController
+          .onPageLoad(0)
+          .url
 
         application.stop()
       }
@@ -218,7 +231,9 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       val index = 0
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request =
         FakeRequest(POST, routes.RemoveClassOfBeneficiaryController.onSubmit(index).url)
@@ -274,4 +289,5 @@ class RemoveClassOfBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
       application.stop()
     }
   }
+
 }

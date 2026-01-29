@@ -38,17 +38,25 @@ import scala.concurrent.Future
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   private val description: String = "Other"
-  private val date: LocalDate = LocalDate.parse("2019-02-03")
+  private val date: LocalDate     = LocalDate.parse("2019-02-03")
 
-  private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad().url
+  private lazy val checkDetailsRoute  = routes.CheckDetailsController.onPageLoad().url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit().url
-  private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
+  private lazy val onwardRoute        = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
-    .set(DescriptionPage, description).success.value
-    .set(DiscretionYesNoPage, true).success.value
-    .set(AddressYesNoPage, false).success.value
-    .set(StartDatePage, date).success.value
+    .set(DescriptionPage, description)
+    .success
+    .value
+    .set(DiscretionYesNoPage, true)
+    .success
+    .value
+    .set(AddressYesNoPage, false)
+    .success
+    .value
+    .set(StartDatePage, date)
+    .success
+    .value
 
   "CheckDetails Controller" must {
 
@@ -60,8 +68,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[OtherBeneficiaryPrintHelper]
+      val view          = application.injector.instanceOf[CheckDetailsView]
+      val printHelper   = application.injector.instanceOf[OtherBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, provisional = true, description)
 
       status(result) mustEqual OK
@@ -79,7 +87,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.addOtherBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockTrustConnector.addOtherBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -93,4 +102,5 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
   }
+
 }

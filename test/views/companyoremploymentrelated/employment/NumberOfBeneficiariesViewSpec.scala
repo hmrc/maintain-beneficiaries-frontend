@@ -28,7 +28,7 @@ class NumberOfBeneficiariesViewSpec extends OptionsViewBehaviours {
   val messageKeyPrefix = "employmentBeneficiary.numberOfBeneficiaries"
 
   val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
-  val view: NumberOfBeneficiariesView = viewFor[NumberOfBeneficiariesView](Some(emptyUserAnswers))
+  val view: NumberOfBeneficiariesView  = viewFor[NumberOfBeneficiariesView](Some(emptyUserAnswers))
 
   "NumberOfBeneficiaries view" must {
 

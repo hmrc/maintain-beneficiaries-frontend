@@ -31,29 +31,30 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 
 import java.time.LocalDate
 
-trait SpecBase extends PlaySpec
-  with GuiceOneAppPerSuite
-  with TryValues
-  with ScalaFutures
-  with IntegrationPatience
-  with Mocked
-  with FakeTrustsApp
-  with OptionValues
-  with EitherValues {
+trait SpecBase
+    extends PlaySpec
+    with GuiceOneAppPerSuite
+    with TryValues
+    with ScalaFutures
+    with IntegrationPatience
+    with Mocked
+    with FakeTrustsApp
+    with OptionValues
+    with EitherValues {
 
   val defaultAppConfigurations: Map[String, Any] = Map(
-    "auditing.enabled" -> false,
-    "metrics.enabled" -> false,
+    "auditing.enabled"      -> false,
+    "metrics.enabled"       -> false,
     "play.filters.disabled" -> List("play.filters.csrf.CSRFFilter", "play.filters.csp.CSPFilter")
   )
 
   val ENGLISH = "en"
-  val WELSH = "cy"
+  val WELSH   = "cy"
 
   lazy val userInternalId = "internalId"
-  lazy val userUtr = "UTRUTRUTR"
-  lazy val userSessionId = "sessionId"
-  lazy val newId = s"$userInternalId-$userUtr-$userSessionId"
+  lazy val userUtr        = "UTRUTRUTR"
+  lazy val userSessionId  = "sessionId"
+  lazy val newId          = s"$userInternalId-$userUtr-$userSessionId"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(
     internalId = userInternalId,
@@ -71,8 +72,10 @@ trait SpecBase extends PlaySpec
 
   val fakeNavigator = new FakeNavigator()
 
-  def applicationBuilder(userAnswers: Option[UserAnswers] = None,
-                         affinityGroup: AffinityGroup = AffinityGroup.Organisation): GuiceApplicationBuilder =
+  def applicationBuilder(
+    userAnswers: Option[UserAnswers] = None,
+    affinityGroup: AffinityGroup = AffinityGroup.Organisation
+  ): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].toInstance(new FakeIdentifierAction(bodyParsers, affinityGroup)),

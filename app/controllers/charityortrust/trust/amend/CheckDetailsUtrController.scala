@@ -27,25 +27,25 @@ import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
 import views.html.charityortrust.trust.amend.CheckDetailsUtrView
 
-class CheckDetailsUtrController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsUtrView,
-                                        val appConfig: FrontendAppConfig,
-                                        printHelper: TrustBeneficiaryPrintHelper,
-                                        nameAction: NameRequiredAction
-                                      ) extends FrontendBaseController with I18nSupport {
+class CheckDetailsUtrController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsUtrView,
+  val appConfig: FrontendAppConfig,
+  printHelper: TrustBeneficiaryPrintHelper,
+  nameAction: NameRequiredAction
+) extends FrontendBaseController with I18nSupport {
 
   private val provisional: Boolean = false
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
-    implicit request =>
-      val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
-      Ok(view(section, request.beneficiaryName))
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) { implicit request =>
+    val section: AnswerSection = printHelper(request.userAnswers, provisional, request.beneficiaryName)
+    Ok(view(section, request.beneficiaryName))
   }
 
   def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-      Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+    Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
   }
+
 }

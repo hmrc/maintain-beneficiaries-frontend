@@ -23,7 +23,7 @@ import pages.individualbeneficiary.NamePage
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
-  this : Generators =>
+  this: Generators =>
 
   implicit lazy val arbitraryNameUserAnswersEntry: Arbitrary[(NamePage.type, JsValue)] =
     Arbitrary {

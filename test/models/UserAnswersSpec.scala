@@ -47,20 +47,24 @@ class UserAnswersSpec extends SpecBase {
         migratingFromNonTaxableToTaxable = false
       )
 
-      ua.deleteAtPath(JsPath \ "field" \ "innerfield") mustBe Success(ua.copy(data = Json.obj(
-        "field" -> Json.obj()
-      )))
+      ua.deleteAtPath(JsPath \ "field" \ "innerfield") mustBe Success(
+        ua.copy(data =
+          Json.obj(
+            "field" -> Json.obj()
+          )
+        )
+      )
     }
 
     "read successfully" when {
 
-      val internalId: String = "internalId"
-      val identifier: String = "1234567890"
-      val sessionId: String = "sessionId"
-      val newId = s"$internalId-$identifier-$sessionId"
-      val date: String = "2000-01-01"
+      val internalId: String     = "internalId"
+      val identifier: String     = "1234567890"
+      val sessionId: String      = "sessionId"
+      val newId                  = s"$internalId-$identifier-$sessionId"
+      val date: String           = "2000-01-01"
       val trustType: TypeOfTrust = EmployeeRelated
-      val dateTime: String = "2020-01-01T09:30:15"
+      val dateTime: String       = "2020-01-01T09:30:15"
 
       "identifier key is 'utr'" in {
 
@@ -131,4 +135,5 @@ class UserAnswersSpec extends SpecBase {
       }
     }
   }
+
 }

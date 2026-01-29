@@ -26,9 +26,9 @@ import views.html.other.AddressYesNoView
 
 class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "otherBeneficiary.addressYesNo"
+  val messageKeyPrefix    = "otherBeneficiary.addressYesNo"
   val description: String = "Other"
-  val mode: Mode = NormalMode
+  val mode: Mode          = NormalMode
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -43,8 +43,15 @@ class AddressYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(description), routes.AddressYesNoController.onSubmit(mode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(description),
+      routes.AddressYesNoController.onSubmit(mode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -30,12 +30,13 @@ object BeneficiaryType {
   case object OtherBeneficiary extends BeneficiaryType
 
   implicit val writes: Writes[BeneficiaryType] = Writes {
-    case IndividualBeneficiary => JsString("individualDetails")
-    case ClassOfBeneficiary => JsString("unidentified")
-    case CompanyBeneficiary => JsString("company")
+    case IndividualBeneficiary        => JsString("individualDetails")
+    case ClassOfBeneficiary           => JsString("unidentified")
+    case CompanyBeneficiary           => JsString("company")
     case EmploymentRelatedBeneficiary => JsString("large")
-    case TrustBeneficiary => JsString("trust")
-    case CharityBeneficiary => JsString("charity")
-    case OtherBeneficiary => JsString("other")
+    case TrustBeneficiary             => JsString("trust")
+    case CharityBeneficiary           => JsString("charity")
+    case OtherBeneficiary             => JsString("other")
   }
+
 }

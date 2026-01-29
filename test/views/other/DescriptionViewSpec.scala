@@ -26,9 +26,9 @@ import views.html.other.DescriptionView
 
 class DescriptionViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "otherBeneficiary.description"
-  val mode: Mode = NormalMode
-  val form: Form[String] = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 70)
+  val messageKeyPrefix      = "otherBeneficiary.description"
+  val mode: Mode            = NormalMode
+  val form: Form[String]    = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 70)
   val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
 
   "Description view" must {
@@ -42,9 +42,9 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
     behave like pageWithHint(form, applyView, messageKeyPrefix + ".hint")
 
-    behave like stringPage(form, applyView, messageKeyPrefix, None,
-      routes.DescriptionController.onSubmit(mode).url)
+    behave like stringPage(form, applyView, messageKeyPrefix, None, routes.DescriptionController.onSubmit(mode).url)
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

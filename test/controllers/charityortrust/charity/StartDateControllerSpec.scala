@@ -34,15 +34,21 @@ import java.time.LocalDate
 
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
-  private val date: LocalDate = LocalDate.parse("2019-02-01")
-  private val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("charityBeneficiary.startDate", date)
-  private val startDateRoute: String = routes.StartDateController.onPageLoad().url
-  private val name: String = "Charity"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = LocalDate.parse("2019-02-03")
+  private val date: LocalDate        = LocalDate.parse("2019-02-01")
 
-  val baseAnswers: UserAnswers = emptyUserAnswers.copy(whenTrustSetup = date)
-    .set(NamePage, name).success.value
+  private val form: Form[LocalDate]  =
+    new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("charityBeneficiary.startDate", date)
+
+  private val startDateRoute: String = routes.StartDateController.onPageLoad().url
+  private val name: String           = "Charity"
+  private val onwardRoute            = Call("GET", "/foo")
+  private val answer                 = LocalDate.parse("2019-02-03")
+
+  val baseAnswers: UserAnswers = emptyUserAnswers
+    .copy(whenTrustSetup = date)
+    .set(NamePage, name)
+    .success
+    .value
 
   "NonUkAddress Controller" must {
 
@@ -90,7 +96,8 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, startDateRoute)
@@ -126,7 +133,7 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, name)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -164,4 +171,5 @@ class StartDateControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

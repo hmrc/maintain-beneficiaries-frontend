@@ -30,12 +30,15 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
   case object Over1001 extends WithName("over1001") with HowManyBeneficiaries
 
   val values: List[HowManyBeneficiaries] = List(
-    Over1, Over101, Over201, Over501, Over1001
+    Over1,
+    Over101,
+    Over201,
+    Over501,
+    Over1001
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("numberOfBeneficiaries", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("numberOfBeneficiaries", value.toString)
   }
 
   implicit val enumerable: Enumerable[HowManyBeneficiaries] =
@@ -43,18 +46,18 @@ object HowManyBeneficiaries extends Enumerable.Implicits {
 
   implicit val reads: Reads[HowManyBeneficiaries] =
     __.read[String].map(_.toInt).map {
-      case x if 0 to 100 contains x => Over1
+      case x if 0 to 100 contains x   => Over1
       case x if 101 to 200 contains x => Over101
       case x if 201 to 500 contains x => Over201
       case x if 501 to 999 contains x => Over501
-      case _ => Over1001
+      case _                          => Over1001
     }
 
   implicit val writes: Writes[HowManyBeneficiaries] = Writes {
-    case Over1 => JsString("1")
-    case Over101 => JsString("101")
-    case Over201 => JsString("201")
-    case Over501 => JsString("501")
+    case Over1    => JsString("1")
+    case Over101  => JsString("101")
+    case Over201  => JsString("201")
+    case Over501  => JsString("501")
     case Over1001 => JsString("1001")
   }
 

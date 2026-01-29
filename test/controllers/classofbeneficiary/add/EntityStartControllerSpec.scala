@@ -30,10 +30,13 @@ import java.time.LocalDate
 
 class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
-  val date: LocalDate = LocalDate.parse("2019-02-03")
-  val form: Form[LocalDate] = new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.entityStart", date)
+  val date: LocalDate               = LocalDate.parse("2019-02-03")
+
+  val form: Form[LocalDate]         =
+    new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.entityStart", date)
+
   lazy val entityStartRoute: String = routes.EntityStartController.onPageLoad().url
-  val description: String = "Description"
+  val description: String           = "Description"
 
   val answersWithDescription: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
@@ -87,7 +90,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       val request =
         FakeRequest(POST, entityStartRoute)
           .withFormUrlEncodedBody(
-            "value.day" -> date.getDayOfMonth.toString,
+            "value.day"   -> date.getDayOfMonth.toString,
             "value.month" -> date.getMonthValue.toString,
             "value.year"  -> date.getYear.toString
           )
@@ -118,7 +121,7 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, description)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -151,4 +154,5 @@ class EntityStartControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

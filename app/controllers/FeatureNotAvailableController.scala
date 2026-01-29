@@ -23,12 +23,13 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FeatureNotAvailableView
 
 @Singleton
-class FeatureNotAvailableController @Inject()(
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: FeatureNotAvailableView
-                                             ) extends FrontendBaseController with I18nSupport {
+class FeatureNotAvailableController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  view: FeatureNotAvailableView
+) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
+
 }

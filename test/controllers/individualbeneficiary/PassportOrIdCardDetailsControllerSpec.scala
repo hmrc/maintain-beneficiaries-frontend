@@ -39,8 +39,12 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar w
   private val index = 0
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(IndexPage, index).success.value
+    .set(NamePage, name)
+    .success
+    .value
+    .set(IndexPage, index)
+    .success
+    .value
 
   lazy val passportOrIdCardDetailsRoute: String = routes.PassportOrIdCardDetailsController.onPageLoad(mode).url
 
@@ -63,7 +67,6 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar w
       val request = FakeRequest(GET, passportOrIdCardDetailsRoute)
 
       val result = route(application, request).value
-
 
       status(result) mustEqual SEE_OTHER
 
@@ -96,12 +99,12 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar w
 
       val request = FakeRequest(POST, passportOrIdCardDetailsRoute)
         .withFormUrlEncodedBody(
-          "country" -> validData.countryOfIssue,
-          "number" -> validData.number,
-          "expiryDate.day" -> validData.expirationDate.getDayOfMonth.toString,
+          "country"          -> validData.countryOfIssue,
+          "number"           -> validData.number,
+          "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
           "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
-          "expiryDate.year" -> validData.expirationDate.getYear.toString,
-          "detailsType" -> validData.detailsType.toString
+          "expiryDate.year"  -> validData.expirationDate.getYear.toString,
+          "detailsType"      -> validData.detailsType.toString
         )
 
       val result = route(application, request).value
@@ -145,4 +148,5 @@ class PassportOrIdCardDetailsControllerSpec extends SpecBase with MockitoSugar w
       application.stop()
     }
   }
+
 }

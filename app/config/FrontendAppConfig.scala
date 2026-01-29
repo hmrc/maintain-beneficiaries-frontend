@@ -26,30 +26,31 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class FrontendAppConfig @Inject() (
-                                    contactFrontendConfig: ContactFrontendConfig,
-                                    servicesConfig: ServicesConfig
-                                  ) {
+  contactFrontendConfig: ContactFrontendConfig,
+  servicesConfig: ServicesConfig
+) {
 
-  final val ENGLISH = "en"
-  final val WELSH = "cy"
+  final val ENGLISH         = "en"
+  final val WELSH           = "cy"
   final val UK_COUNTRY_CODE = "GB"
 
   val appName: String = servicesConfig.getString("appName")
 
-  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val betaFeedbackUrl =
+    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val maintainATrustOverview: String = servicesConfig.getString("urls.maintainATrustOverview")
 
   lazy val loginUrl: String = servicesConfig.getString("urls.login")
 
   lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
-  lazy val logoutUrl: String = servicesConfig.getString("urls.logout")
+  lazy val logoutUrl: String        = servicesConfig.getString("urls.logout")
 
   lazy val logoutAudit: Boolean =
     servicesConfig.getBoolean("microservice.services.features.auditing.logout")
 
   lazy val countdownLength: Int = servicesConfig.getInt("timeout.countdown")
-  lazy val timeoutLength: Int = servicesConfig.getInt("timeout.length")
+  lazy val timeoutLength: Int   = servicesConfig.getInt("timeout.length")
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
@@ -57,7 +58,7 @@ class FrontendAppConfig @Inject() (
 
   lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
-  lazy val locationCanonicalList: String = servicesConfig.getString("location.canonical.list.all")
+  lazy val locationCanonicalList: String   = servicesConfig.getString("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = servicesConfig.getString("location.canonical.list.allCY")
 
   lazy val languageTranslationEnabled: Boolean =
@@ -88,13 +89,13 @@ class FrontendAppConfig @Inject() (
   def helplineUrl(implicit messages: Messages): String = {
     val path = messages.lang.code match {
       case WELSH => "urls.welshHelpline"
-      case _ => "urls.trustsHelpline"
+      case _     => "urls.trustsHelpline"
     }
 
     servicesConfig.getString(path)
   }
 
   val cachettlplaybackInSeconds: Long = servicesConfig.getString("mongodb.playback.ttlSeconds").toLong
-  val cachettlSessionInSeconds: Long = servicesConfig.getString("mongodb.session.ttlSeconds").toLong
-  val dropIndexes: Boolean = servicesConfig.getBoolean("microservice.services.features.mongo.dropIndexes")
+  val cachettlSessionInSeconds: Long  = servicesConfig.getString("mongodb.session.ttlSeconds").toLong
+  val dropIndexes: Boolean            = servicesConfig.getBoolean("microservice.services.features.mongo.dropIndexes")
 }

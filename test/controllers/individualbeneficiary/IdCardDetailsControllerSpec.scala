@@ -43,19 +43,21 @@ import scala.concurrent.Future
 
 class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {
 
-  val formProvider = new IdCardDetailsFormProvider(frontendAppConfig)
+  val formProvider               = new IdCardDetailsFormProvider(frontendAppConfig)
   private def form: Form[IdCard] = formProvider.withPrefix("individualBeneficiary", beneficiaries)
 
   private val mockTrustsService = mock[TrustServiceImpl]
 
   private def onwardRoute: Call = Call("GET", "/foo")
-  private val name: Name = Name("FirstName", None, "LastName")
+  private val name: Name        = Name("FirstName", None, "LastName")
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   private val mode: Mode = NormalMode
-  
+
   private val idCardDetailsRoute: String = routes.IdCardDetailsController.onPageLoad(mode).url
 
   private val getRequest = FakeRequest(GET, idCardDetailsRoute)
@@ -71,7 +73,7 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with Before
     address = None,
     vulnerableYesNo = None,
     roleInCompany = None,
-    income = None  ,
+    income = None,
     incomeDiscretionYesNo = None,
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
@@ -110,8 +112,12 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with Before
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(NamePage, name).success.value
-        .set(IdCardDetailsPage, validData).success.value
+        .set(NamePage, name)
+        .success
+        .value
+        .set(IdCardDetailsPage, validData)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
@@ -137,16 +143,17 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with Before
 
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
-          .overrides(bind[Navigator].qualifiedWith(classOf[annotations.IndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[annotations.IndividualBeneficiary]).toInstance(fakeNavigator)
+          )
           .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
-
           .build()
 
       val request =
         FakeRequest(POST, idCardDetailsRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
             "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
             "expiryDate.year"  -> validData.expirationDate.getYear.toString
@@ -208,8 +215,8 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with Before
       val request =
         FakeRequest(POST, idCardDetailsRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
             "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
             "expiryDate.year"  -> validData.expirationDate.getYear.toString
@@ -224,4 +231,5 @@ class IdCardDetailsControllerSpec extends SpecBase with MockitoSugar with Before
       application.stop()
     }
   }
+
 }

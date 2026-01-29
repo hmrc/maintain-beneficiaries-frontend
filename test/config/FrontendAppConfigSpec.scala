@@ -30,7 +30,9 @@ class FrontendAppConfigSpec extends SpecBase {
         "return trusts helpline URL" in {
           val messages = MessagesImpl(Lang("en"), messagesApi)
 
-          config.helplineUrl(messages) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
+          config.helplineUrl(
+            messages
+          ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
         }
       }
 
@@ -38,9 +40,12 @@ class FrontendAppConfigSpec extends SpecBase {
         "return Welsh language helpline URL" in {
           val messages = MessagesImpl(Lang("cy"), messagesApi)
 
-          config.helplineUrl(messages) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
+          config.helplineUrl(
+            messages
+          ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
         }
       }
     }
   }
+
 }

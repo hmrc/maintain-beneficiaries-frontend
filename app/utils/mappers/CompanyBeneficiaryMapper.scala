@@ -36,16 +36,16 @@ class CompanyBeneficiaryMapper extends Mapper[CompanyBeneficiary] {
       readCountryOfResidence and
       StartDatePage.path.read[LocalDate] and
       Reads(_ => JsSuccess(true))
-    )(CompanyBeneficiary.apply _)
+  )(CompanyBeneficiary.apply _)
 
-  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
-  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean]    = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress]       = UkAddressPage
   override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
 
   override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
 
-  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean]   = CountryOfResidenceYesNoPage
   override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
-  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+  override def countryOfResidencePage: QuestionPage[String]         = CountryOfResidencePage
 
 }

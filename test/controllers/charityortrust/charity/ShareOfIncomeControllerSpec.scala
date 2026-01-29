@@ -32,11 +32,11 @@ import views.html.charityortrust.charity.ShareOfIncomeView
 
 class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Int] = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
+  private val form: Form[Int]            = new IncomePercentageFormProvider().withPrefix("charityBeneficiary.shareOfIncome")
   private val shareOfIncomeRoute: String = routes.ShareOfIncomeController.onPageLoad(NormalMode).url
-  private val name: String = "Charity"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = 50
+  private val name: String               = "Charity"
+  private val onwardRoute                = Call("GET", "/foo")
+  private val answer                     = 50
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
@@ -86,7 +86,8 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shareOfIncomeRoute)
@@ -118,7 +119,7 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, name)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -152,4 +153,5 @@ class ShareOfIncomeControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

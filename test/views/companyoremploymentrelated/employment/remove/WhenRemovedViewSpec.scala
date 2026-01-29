@@ -27,8 +27,8 @@ import java.time.LocalDate
 class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "employmentBeneficiary.whenRemoved"
-  val index = 0
-  val name = "Name"
+  val index            = 0
+  val name             = "Name"
 
   override val form: Form[LocalDate] = new DateRemovedFromTrustFormProvider()
     .withPrefixAndEntityStartDate(messageKeyPrefix, LocalDate.now())
@@ -59,4 +59,5 @@ class WhenRemovedViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

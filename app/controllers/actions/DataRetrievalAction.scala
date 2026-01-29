@@ -27,35 +27,36 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionImpl @Inject()(
-                                         val activeSessionRepository: ActiveSessionRepository,
-                                         val playbackRepository: PlaybackRepository
-                                       )(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
+class DataRetrievalActionImpl @Inject() (
+  val activeSessionRepository: ActiveSessionRepository,
+  val playbackRepository: PlaybackRepository
+)(implicit val executionContext: ExecutionContext)
+    extends DataRetrievalAction {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 
-    def createdOptionalDataRequest(request: IdentifierRequest[A], userAnswers: Option[UserAnswers]) = {
+    def createdOptionalDataRequest(request: IdentifierRequest[A], userAnswers: Option[UserAnswers]) =
       OptionalDataRequest(
         request.request,
         userAnswers,
         request.user
       )
-    }
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     activeSessionRepository.get(request.user.internalId) flatMap {
       case Some(session) =>
         playbackRepository.get(request.user.internalId, session.utr, Session.id(hc)) map {
-          case None =>
+          case None              =>
             createdOptionalDataRequest(request, None)
           case Some(userAnswers) =>
             createdOptionalDataRequest(request, Some(userAnswers))
         }
-      case None =>
+      case None          =>
         Future.successful(createdOptionalDataRequest(request, None))
     }
   }
+
 }
 
 trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]

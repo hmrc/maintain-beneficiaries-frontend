@@ -28,7 +28,7 @@ class CompanyOrEmploymentRelatedViewSpec extends OptionsViewBehaviours {
   val messageKeyPrefix = "companyOrEmploymentRelated"
 
   val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
-  val view: CompanyOrEmploymentRelatedView = viewFor[CompanyOrEmploymentRelatedView](Some(emptyUserAnswers))
+  val view: CompanyOrEmploymentRelatedView        = viewFor[CompanyOrEmploymentRelatedView](Some(emptyUserAnswers))
 
   "CompanyOrEmploymentRelated view" must {
 

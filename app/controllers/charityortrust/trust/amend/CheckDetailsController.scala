@@ -37,28 +37,28 @@ import views.html.charityortrust.trust.amend.CheckDetailsView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDetailsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        service: TrustService,
-                                        connector: TrustConnector,
-                                        val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: TrustBeneficiaryPrintHelper,
-                                        mapper: TrustBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        extractor: TrustBeneficiaryExtractor,
-                                        errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CheckDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsView,
+  service: TrustService,
+  connector: TrustConnector,
+  val appConfig: FrontendAppConfig,
+  playbackRepository: PlaybackRepository,
+  printHelper: TrustBeneficiaryPrintHelper,
+  mapper: TrustBeneficiaryMapper,
+  nameAction: NameRequiredAction,
+  extractor: TrustBeneficiaryExtractor,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val provisional: Boolean = false
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result = {
+  private def render(userAnswers: UserAnswers, index: Int, name: String)(implicit
+    request: Request[AnyContent]
+  ): Result = {
     val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(Seq(section), index))
   }
@@ -67,53 +67,53 @@ class CheckDetailsController @Inject()(
 
   def extractAndRedirect(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = true)
 
-  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      service.getTrustBeneficiary(request.userAnswers.identifier, index) flatMap {
-        trust =>
-          val extractedAnswers = extractor(request.userAnswers, trust, index)
-          for {
-            extractedF <- Future.fromTry(extractedAnswers)
-            _ <- playbackRepository.set(extractedF)
-          } yield {
-            if (trust.utr.isDefined) {
-              Redirect(controllers.charityortrust.trust.amend.routes.CheckDetailsUtrController.onPageLoad())
+  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.async { implicit request =>
+      service.getTrustBeneficiary(request.userAnswers.identifier, index) flatMap { trust =>
+        val extractedAnswers = extractor(request.userAnswers, trust, index)
+        for {
+          extractedF <- Future.fromTry(extractedAnswers)
+          _          <- playbackRepository.set(extractedF)
+        } yield
+          if (trust.utr.isDefined) {
+            Redirect(controllers.charityortrust.trust.amend.routes.CheckDetailsUtrController.onPageLoad())
+          } else {
+            if (redirect) {
+              Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode))
             } else {
-              if (redirect) {
-                Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode))
-              } else {
-                render(extractedF, index, trust.name)
-              }
+              render(extractedF, index, trust.name)
             }
           }
-      } recoverWith {
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting trust beneficiary $index ${e.getMessage}")
+      } recoverWith { case e =>
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error getting trust beneficiary $index ${e.getMessage}"
+        )
 
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
-  }
+    }
 
   def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      mapper(request.userAnswers).map {
-        beneficiary =>
-          connector.amendTrustBeneficiary(request.userAnswers.identifier, index, beneficiary).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
-      }.getOrElse {
-        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-          s" error mapping user answers to trust beneficiary $index, isNew: $provisional")
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    mapper(request.userAnswers)
+      .map { beneficiary =>
+        connector
+          .amendTrustBeneficiary(request.userAnswers.identifier, index, beneficiary)
+          .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+      }
+      .getOrElse {
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error mapping user answers to trust beneficiary $index, isNew: $provisional"
+        )
 
         errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
+
 }

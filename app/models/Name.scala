@@ -19,10 +19,10 @@ package models
 import play.api.libs.json._
 
 case class Name(firstName: String, middleName: Option[String], lastName: String) {
-  lazy val displayName : String = firstName + " " + lastName
+  lazy val displayName: String = firstName + " " + lastName
 
-  private val middleNameFormatted = middleName.fold(" ")(m => s" $m ")
-  lazy val displayFullName : String = firstName + middleNameFormatted + lastName
+  private val middleNameFormatted  = middleName.fold(" ")(m => s" $m ")
+  lazy val displayFullName: String = firstName + middleNameFormatted + lastName
 }
 
 object Name {

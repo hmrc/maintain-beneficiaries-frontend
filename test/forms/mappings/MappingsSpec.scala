@@ -34,7 +34,9 @@ object MappingsSpec {
 
     implicit val fooEnumerable: Enumerable[Foo] =
       Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
   }
+
 }
 
 class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mappings {
@@ -69,7 +71,7 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
     }
 
     "return a custom error message" in {
-      val form = Form("value" -> text("custom.error"))
+      val form   = Form("value" -> text("custom.error"))
       val result = form.bind(Map("value" -> ""))
       result.errors must contain(FormError("value", "custom.error"))
     }
@@ -167,4 +169,5 @@ class MappingsSpec extends AnyWordSpec with Matchers with OptionValues with Mapp
       result.errors must contain(FormError("value", "error.required"))
     }
   }
+
 }

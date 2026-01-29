@@ -35,25 +35,25 @@ import views.html.individualbeneficiary.IncomePercentageView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IncomePercentageController @Inject()(
-                                val controllerComponents: MessagesControllerComponents,
-                                standardActionSets: StandardActionSets,
-                                nameAction: NameRequiredAction,
-                                formProvider: IncomePercentageFormProvider,
-                                connector: TrustConnector,
-                                view: IncomePercentageView,
-                                trustService: TrustService,
-                                repository: PlaybackRepository,
-                                @IndividualBeneficiary navigator: Navigator
-                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IncomePercentageController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: IncomePercentageFormProvider,
+  connector: TrustConnector,
+  view: IncomePercentageView,
+  trustService: TrustService,
+  repository: PlaybackRepository,
+  @IndividualBeneficiary navigator: Navigator
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("individualBeneficiary.shareOfIncome")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(IncomePercentagePage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
@@ -62,16 +62,16 @@ class IncomePercentageController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePercentagePage, value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomePercentagePage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomePercentagePage, value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(IncomePercentagePage, mode, updatedAnswers))
+        )
   }
+
 }

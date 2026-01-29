@@ -23,30 +23,33 @@ import viewmodels.{AnswerRow, AnswerSection, RepeaterAnswerSection, Section}
 
 object SectionFormatter {
 
-  def formatSections(answerSections: Seq[Section])(implicit messages: Messages): Seq[SummaryListRow] = {
+  def formatSections(answerSections: Seq[Section])(implicit messages: Messages): Seq[SummaryListRow] =
     answerSections.flatMap {
-      case a: AnswerSection => formatAnswerSection(a)
+      case a: AnswerSection         => formatAnswerSection(a)
       case _: RepeaterAnswerSection => throw new NotImplementedError("Not used anywhere in code.")
     }
-  }
 
-  private def formatAnswerSection(section: AnswerSection)(implicit messages: Messages): Seq[SummaryListRow] = {
-    section.rows.zipWithIndex.map {
-      case (row: AnswerRow, i: Int) =>
-        SummaryListRow(
-          key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label, row.labelArg))),
-          value = Value(HtmlContent(row.answer)),
-          actions = Option(Actions(items = Seq(ActionItem(
-            href = row.changeUrl.getOrElse(""),
-            classes = s"change-link-$i",
-            visuallyHiddenText = Some(messages(row.label, row.labelArg)),
-            content = row.changeUrl match {
-              case Some(_) => Text(messages("site.edit"))
-              case _ => Text(messages("site.cannot.change"))
-            }
-          ))))
+  private def formatAnswerSection(section: AnswerSection)(implicit messages: Messages): Seq[SummaryListRow] =
+    section.rows.zipWithIndex.map { case (row: AnswerRow, i: Int) =>
+      SummaryListRow(
+        key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label, row.labelArg))),
+        value = Value(HtmlContent(row.answer)),
+        actions = Option(
+          Actions(items =
+            Seq(
+              ActionItem(
+                href = row.changeUrl.getOrElse(""),
+                classes = s"change-link-$i",
+                visuallyHiddenText = Some(messages(row.label, row.labelArg)),
+                content = row.changeUrl match {
+                  case Some(_) => Text(messages("site.edit"))
+                  case _       => Text(messages("site.cannot.change"))
+                }
+              )
+            )
+          )
         )
+      )
     }
-  }
 
 }

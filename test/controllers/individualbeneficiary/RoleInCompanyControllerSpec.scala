@@ -41,12 +41,14 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new RoleInCompanyFormProvider()
+  val formProvider              = new RoleInCompanyFormProvider()
   val form: Form[RoleInCompany] = formProvider()
-  val name: Name = Name("FirstName", None, "LastName")
+  val name: Name                = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   lazy val roleInCompanyControllerRoute: String = routes.RoleInCompanyController.onPageLoad(NormalMode).url
 
@@ -170,4 +172,5 @@ class RoleInCompanyControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

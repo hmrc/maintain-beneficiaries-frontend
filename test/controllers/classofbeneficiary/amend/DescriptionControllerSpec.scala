@@ -36,16 +36,21 @@ import scala.concurrent.Future
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[String] = new DescriptionFormProvider().withPrefix("classOfBeneficiary.description", 56)
-  val index = 0
+  val form: Form[String]            = new DescriptionFormProvider().withPrefix("classOfBeneficiary.description", 56)
+  val index                         = 0
   lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad(index).url
-  val description: String = "Description"
-  val date: LocalDate = LocalDate.parse("2019-02-28")
+  val description: String           = "Description"
+  val date: LocalDate               = LocalDate.parse("2019-02-28")
 
   val mockTrustConnector: TrustConnector = mock[TrustConnector]
 
   when(mockTrustConnector.getBeneficiaries(any())(any(), any()))
-    .thenReturn(Future.successful(Beneficiaries(Nil, List(ClassOfBeneficiary(description, date, provisional = false)), Nil, Nil, Nil, Nil, Nil)))
+    .thenReturn(
+      Future.successful(
+        Beneficiaries(Nil, List(ClassOfBeneficiary(description, date, provisional = false)), Nil, Nil, Nil, Nil, Nil)
+      )
+    )
+
   when(mockTrustConnector.amendClassOfBeneficiary(any(), any(), any())(any(), any()))
     .thenReturn(Future.successful(HttpResponse(OK, "")))
 
@@ -61,7 +66,8 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, descriptionRoute)
 
@@ -117,7 +123,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, index)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -151,4 +157,5 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

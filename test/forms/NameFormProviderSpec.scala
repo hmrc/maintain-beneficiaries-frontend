@@ -31,10 +31,10 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
 
   ".firstName" must {
 
-    val fieldName = "firstName"
+    val fieldName   = "firstName"
     val requiredKey = s"$messageKeyPrefix.error.firstName.required"
-    val lengthKey = s"$messageKeyPrefix.error.firstName.length"
-    val regex = "^[A-Za-z0-9 ,.()/&'-]*$"
+    val lengthKey   = s"$messageKeyPrefix.error.firstName.length"
+    val regex       = "^[A-Za-z0-9 ,.()/&'-]*$"
 
     behave like fieldThatBindsValidData(
       form,
@@ -67,8 +67,7 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
     val fieldName = "middleName"
     val lengthKey = s"$messageKeyPrefix.error.middleName.length"
     val maxLength = 35
-    val regex = "^[A-Za-z0-9 ,.()/&'-]*$"
-
+    val regex     = "^[A-Za-z0-9 ,.()/&'-]*$"
 
     behave like fieldWithMaxLength(
       form,
@@ -77,10 +76,7 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
-    behave like optionalField(
-      form,
-      fieldName,
-      validDataGenerator = RegexpGen.from(regex))
+    behave like optionalField(form, fieldName, validDataGenerator = RegexpGen.from(regex))
 
     "bind whitespace trim values" in {
       val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
@@ -100,10 +96,10 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
 
   ".lastName" must {
 
-    val fieldName = "lastName"
+    val fieldName   = "lastName"
     val requiredKey = s"$messageKeyPrefix.error.lastName.required"
-    val lengthKey = s"$messageKeyPrefix.error.lastName.length"
-    val regex = "^[A-Za-z0-9 ,.()/&'-]*$"
+    val lengthKey   = s"$messageKeyPrefix.error.lastName.length"
+    val regex       = "^[A-Za-z0-9 ,.()/&'-]*$"
 
     behave like fieldThatBindsValidData(
       form,
@@ -130,4 +126,5 @@ class NameFormProviderSpec extends StringFieldBehaviours with OptionalFieldBehav
       requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
     )
   }
+
 }

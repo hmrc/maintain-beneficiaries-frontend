@@ -27,7 +27,7 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
   "CheckDetails view" must {
     val index = 0
-    val view = viewFor[CheckDetailsView](Some(emptyUserAnswers))
+    val view  = viewFor[CheckDetailsView](Some(emptyUserAnswers))
 
     def applyView(): HtmlFormat.Appendable =
       view.apply(Seq(AnswerSection(None, Seq())), index)(fakeRequest, messages)
@@ -38,5 +38,5 @@ class CheckDetailsViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView())
   }
-}
 
+}

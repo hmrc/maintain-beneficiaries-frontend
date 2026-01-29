@@ -27,28 +27,26 @@ import scala.util.Try
 
 class CharityBeneficiaryExtractor extends BeneficiaryExtractor[CharityBeneficiary] {
 
-  override def apply(answers: UserAnswers,
-                     charityBeneficiary: CharityBeneficiary,
-                     index: Int): Try[UserAnswers] = {
+  override def apply(answers: UserAnswers, charityBeneficiary: CharityBeneficiary, index: Int): Try[UserAnswers] =
 
-    super.apply(answers, charityBeneficiary, index)
+    super
+      .apply(answers, charityBeneficiary, index)
       .flatMap(answers => extractUserAnswersForOrgBeneficiary(answers, charityBeneficiary))
-  }
 
   override def namePage: QuestionPage[String] = NamePage
 
   override def utrPage: QuestionPage[String] = UtrPage
 
   override def shareOfIncomeYesNoPage: QuestionPage[Boolean] = DiscretionYesNoPage
-  override def shareOfIncomePage: QuestionPage[Int] = ShareOfIncomePage
+  override def shareOfIncomePage: QuestionPage[Int]          = ShareOfIncomePage
 
-  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean]   = CountryOfResidenceYesNoPage
   override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
-  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+  override def countryOfResidencePage: QuestionPage[String]         = CountryOfResidencePage
 
-  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
-  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
-  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def addressYesNoPage: QuestionPage[Boolean]      = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean]    = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress]       = UkAddressPage
   override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
 
   override def startDatePage: QuestionPage[LocalDate] = StartDatePage

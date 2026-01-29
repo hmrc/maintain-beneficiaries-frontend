@@ -28,9 +28,10 @@ import views.html.individualbeneficiary.PassportOrIdCardDetailsView
 class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPassportOrIdCard] {
 
   val messageKeyPrefix = "individualBeneficiary.passportOrIdCardDetails"
-  val name: Name = Name("First", Some("Middle"), "Last")
+  val name: Name       = Name("First", Some("Middle"), "Last")
 
-  override val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
+  override val form: Form[CombinedPassportOrIdCard] =
+    new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
   "PassportOrIdCardDetails view" must {
 
@@ -59,4 +60,5 @@ class PassportOrIdCardDetailsViewSpec extends QuestionViewBehaviours[CombinedPas
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

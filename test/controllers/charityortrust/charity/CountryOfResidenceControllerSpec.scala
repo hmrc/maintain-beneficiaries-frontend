@@ -33,10 +33,10 @@ import views.html.charityortrust.charity.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase {
 
-  private val form: Form[String] = new CountryFormProvider().withPrefix("charityBeneficiary.countryOfResidence")
+  private val form: Form[String]      = new CountryFormProvider().withPrefix("charityBeneficiary.countryOfResidence")
   private val onPageLoadRoute: String = routes.CountryOfResidenceController.onPageLoad(NormalMode).url
-  private val name: String = "Charity"
-  private val onwardRoute = Call("GET", "/foo")
+  private val name: String            = "Charity"
+  private val onwardRoute             = Call("GET", "/foo")
 
   private val validAnswer: String = "France"
 
@@ -90,7 +90,8 @@ class CountryOfResidenceControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, onPageLoadRoute)
@@ -122,7 +123,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, name, countryOptions)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -156,4 +157,5 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

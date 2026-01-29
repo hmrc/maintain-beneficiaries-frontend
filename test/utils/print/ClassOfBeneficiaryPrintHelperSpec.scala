@@ -26,7 +26,7 @@ import java.time.LocalDate
 class ClassOfBeneficiaryPrintHelperSpec extends SpecBase {
 
   val description: String = "Description"
-  val date: LocalDate = LocalDate.parse("2019-02-03")
+  val date: LocalDate     = LocalDate.parse("2019-02-03")
 
   "ClassOfBeneficiaryPrintHelper" must {
 
@@ -35,17 +35,30 @@ class ClassOfBeneficiaryPrintHelperSpec extends SpecBase {
       val helper = injector.instanceOf[ClassOfBeneficiaryPrintHelper]
 
       val userAnswers = emptyUserAnswers
-        .set(DescriptionPage, description).success.value
-        .set(EntityStartPage, date).success.value
+        .set(DescriptionPage, description)
+        .success
+        .value
+        .set(EntityStartPage, date)
+        .success
+        .value
 
       val result = helper(userAnswers, description)
       result mustBe AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow(label = messages("classOfBeneficiary.description.checkYourAnswersLabel"), answer = Html("Description"), changeUrl = Some(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url)),
-          AnswerRow(label = messages("classOfBeneficiary.entityStart.checkYourAnswersLabel", description), answer = Html("3 February 2019"), changeUrl = Some(controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url))
+          AnswerRow(
+            label = messages("classOfBeneficiary.description.checkYourAnswersLabel"),
+            answer = Html("Description"),
+            changeUrl = Some(controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad().url)
+          ),
+          AnswerRow(
+            label = messages("classOfBeneficiary.entityStart.checkYourAnswersLabel", description),
+            answer = Html("3 February 2019"),
+            changeUrl = Some(controllers.classofbeneficiary.add.routes.EntityStartController.onPageLoad().url)
+          )
         )
       )
     }
   }
+
 }

@@ -33,41 +33,41 @@ import views.html.charityortrust.charity.ShareOfIncomeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ShareOfIncomeController @Inject()(
-                                         val controllerComponents: MessagesControllerComponents,
-                                         standardActionSets: StandardActionSets,
-                                         formProvider: IncomePercentageFormProvider,
-                                         view: ShareOfIncomeView,
-                                         repository: PlaybackRepository,
-                                         @CharityBeneficiary navigator: Navigator,
-                                         nameAction: NameRequiredAction
-                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ShareOfIncomeController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: IncomePercentageFormProvider,
+  view: ShareOfIncomeView,
+  repository: PlaybackRepository,
+  @CharityBeneficiary navigator: Navigator,
+  nameAction: NameRequiredAction
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Int] = formProvider.withPrefix("charityBeneficiary.shareOfIncome")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(ShareOfIncomePage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, mode, request.beneficiaryName))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.andThen(nameAction).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(ShareOfIncomePage, mode, updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShareOfIncomePage, value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ShareOfIncomePage, mode, updatedAnswers))
-      )
-  }
 }

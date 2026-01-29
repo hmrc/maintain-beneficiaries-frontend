@@ -24,10 +24,10 @@ class DescriptionFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "otherBeneficiary.description"
 
-  val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
+  val requiredKey      = s"$prefix.error.required"
+  val lengthKey        = s"$prefix.error.length"
   val invalidFormatKey = s"$prefix.error.invalidFormat"
-  val maxLength = 70
+  val maxLength        = 70
 
   val form: Form[String] = new DescriptionFormProvider().withPrefix(prefix, maxLength)
 
@@ -68,4 +68,5 @@ class DescriptionFormProviderSpec extends StringFieldBehaviours {
       error = FormError(fieldName, invalidFormatKey, Seq(Validation.descriptionRegex))
     )
   }
+
 }

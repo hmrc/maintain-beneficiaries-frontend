@@ -33,39 +33,40 @@ import views.html.classofbeneficiary.add.CheckDetailsView
 
 import scala.concurrent.ExecutionContext
 
-class CheckDetailsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        connector: TrustConnector,
-                                        val appConfig: FrontendAppConfig,
-                                        printHelper: ClassOfBeneficiaryPrintHelper,
-                                        mapper: ClassOfBeneficiaryMapper,
-                                        descriptionAction: DescriptionRequiredAction,
-                                        errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CheckDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsView,
+  connector: TrustConnector,
+  val appConfig: FrontendAppConfig,
+  printHelper: ClassOfBeneficiaryPrintHelper,
+  mapper: ClassOfBeneficiaryMapper,
+  descriptionAction: DescriptionRequiredAction,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
-
       val section: AnswerSection = printHelper(request.userAnswers, request.description)
       Ok(view(Seq(section)))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    mapper(request.userAnswers) match {
+      case None              =>
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error in mapping user answers to ClassOfBeneficiary"
+        )
 
-      mapper(request.userAnswers) match {
-        case None =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error in mapping user answers to ClassOfBeneficiary")
-
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-        case Some(beneficiary) =>
-          connector.addClassOfBeneficiary(request.userAnswers.identifier, beneficiary).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
-      }
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+      case Some(beneficiary) =>
+        connector
+          .addClassOfBeneficiary(request.userAnswers.identifier, beneficiary)
+          .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+    }
   }
+
 }

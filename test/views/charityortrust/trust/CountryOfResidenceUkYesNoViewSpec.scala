@@ -27,7 +27,7 @@ import views.html.charityortrust.trust.CountryOfResidenceUkYesNoView
 class CountryOfResidenceUkYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "trustBeneficiary.countryOfResidenceUkYesNo"
-  val name: String = "Trust"
+  val name: String     = "Trust"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -42,8 +42,15 @@ class CountryOfResidenceUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.CountryOfResidenceUkYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name),
+      routes.CountryOfResidenceUkYesNoController.onSubmit(NormalMode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

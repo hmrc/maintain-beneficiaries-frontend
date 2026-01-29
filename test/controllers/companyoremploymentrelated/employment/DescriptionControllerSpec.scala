@@ -32,10 +32,12 @@ import views.html.companyoremploymentrelated.employment.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Description] = new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix("employmentBeneficiary.description")
+  private val form: Form[Description]  =
+    new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix("employmentBeneficiary.description")
+
   private val descriptionRoute: String = routes.DescriptionController.onPageLoad(NormalMode).url
   private val description: Description = Description("Description", None, None, None, None)
-  private val onwardRoute = Call("GET", "/foo")
+  private val onwardRoute              = Call("GET", "/foo")
 
   "Description Controller" must {
 
@@ -82,8 +84,11 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, descriptionRoute)
@@ -115,7 +120,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -149,4 +154,5 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

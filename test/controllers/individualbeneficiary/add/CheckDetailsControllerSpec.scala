@@ -38,24 +38,40 @@ import scala.concurrent.Future
 
 class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  private lazy val checkDetailsRoute = routes.CheckDetailsController.onPageLoad().url
+  private lazy val checkDetailsRoute  = routes.CheckDetailsController.onPageLoad().url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit().url
-  private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
+  private lazy val onwardRoute        = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
-  private val name = Name("First", None, "Last")
+  private val name        = Name("First", None, "Last")
   private val dateOfBirth = LocalDate.parse("2010-02-03")
-  private val nino = "AA123456A"
-  private val startDate = LocalDate.parse("2019-03-09")
+  private val nino        = "AA123456A"
+  private val startDate   = LocalDate.parse("2019-03-09")
 
   private val userAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(DateOfBirthPage, dateOfBirth).success.value
-    .set(NationalInsuranceNumberYesNoPage, true).success.value
-    .set(NationalInsuranceNumberPage, nino).success.value
-    .set(AddressYesNoPage, false).success.value
-    .set(VPE1FormYesNoPage, false).success.value
-    .set(IncomeDiscretionYesNoPage, true).success.value
-    .set(StartDatePage, startDate).success.value
+    .set(NamePage, name)
+    .success
+    .value
+    .set(DateOfBirthPage, dateOfBirth)
+    .success
+    .value
+    .set(NationalInsuranceNumberYesNoPage, true)
+    .success
+    .value
+    .set(NationalInsuranceNumberPage, nino)
+    .success
+    .value
+    .set(AddressYesNoPage, false)
+    .success
+    .value
+    .set(VPE1FormYesNoPage, false)
+    .success
+    .value
+    .set(IncomeDiscretionYesNoPage, true)
+    .success
+    .value
+    .set(StartDatePage, startDate)
+    .success
+    .value
 
   "CheckDetails Controller" must {
 
@@ -67,8 +83,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
+      val view          = application.injector.instanceOf[CheckDetailsView]
+      val printHelper   = application.injector.instanceOf[IndividualBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, adding = true, name.displayName)
 
       status(result) mustEqual OK
@@ -86,7 +102,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.addIndividualBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockTrustConnector.addIndividualBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -100,4 +117,5 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
   }
+
 }

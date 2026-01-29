@@ -30,18 +30,17 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
   private def switchLanguageRoute(lang: String): String = routes.LanguageSwitchController.switchToLanguage(lang).url
 
-  private val english = "english"
-  private val welsh = "cymraeg"
+  private val english         = "english"
+  private val welsh           = "cymraeg"
   private val fakeUrl: String = "fakeUrl"
 
-  private lazy val contactConfig = injector.instanceOf[ContactFrontendConfig]
+  private lazy val contactConfig  = injector.instanceOf[ContactFrontendConfig]
   private lazy val servicesConfig = injector.instanceOf[ServicesConfig]
 
-  def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig = {
+  def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig =
     new FrontendAppConfig(contactConfig, servicesConfig) {
       override lazy val languageTranslationEnabled: Boolean = languageToggleEnabled
     }
-  }
 
   "LanguageSwitch Controller" when {
 
@@ -142,4 +141,5 @@ class LanguageSwitchControllerSpec extends SpecBase {
       }
     }
   }
+
 }

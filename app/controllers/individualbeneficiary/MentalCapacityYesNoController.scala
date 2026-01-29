@@ -33,36 +33,35 @@ import views.html.individualbeneficiary.MentalCapacityYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class MentalCapacityYesNoController @Inject()(
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   repository: PlaybackRepository,
-                                                   @IndividualBeneficiary navigator: Navigator,
-                                                   standardActionSets: StandardActionSets,
-                                                   nameAction: NameRequiredAction,
-                                                   formProvider: YesNoDontKnowFormProvider,
-                                                   view: MentalCapacityYesNoView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class MentalCapacityYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  repository: PlaybackRepository,
+  @IndividualBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoDontKnowFormProvider,
+  view: MentalCapacityYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[YesNoDontKnow] = formProvider.withPrefix("individualBeneficiary.mentalCapacityYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
-      implicit request =>
+    implicit request =>
+      val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-        val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage) match {
-          case None => form
-          case Some(value) => form.fill(value)
-        }
+      Ok(view(preparedForm, mode, request.beneficiaryName))
+  }
 
-        Ok(view(preparedForm, mode, request.beneficiaryName))
-    }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction).async {
-      implicit request =>
-
-        form.bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
-
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.andThen(nameAction).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage, value))
@@ -70,4 +69,5 @@ class MentalCapacityYesNoController @Inject()(
             } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage, mode, updatedAnswers))
         )
     }
+
 }

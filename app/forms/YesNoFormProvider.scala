@@ -26,4 +26,5 @@ class YesNoFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean(s"$prefix.error.required")
     )
+
 }

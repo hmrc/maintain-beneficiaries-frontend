@@ -26,10 +26,10 @@ import views.html.individualbeneficiary.RoleInCompanyView
 
 class RoleInCompanyViewSpec extends OptionsViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.roleInCompany"
-  val name: Name = Name("First", None, "Last")
+  val messageKeyPrefix          = "individualBeneficiary.roleInCompany"
+  val name: Name                = Name("First", None, "Last")
   val form: Form[RoleInCompany] = new RoleInCompanyFormProvider()()
-  val view: RoleInCompanyView = viewFor[RoleInCompanyView](Some(emptyUserAnswers))
+  val view: RoleInCompanyView   = viewFor[RoleInCompanyView](Some(emptyUserAnswers))
 
   "RoleInCompany view" must {
 

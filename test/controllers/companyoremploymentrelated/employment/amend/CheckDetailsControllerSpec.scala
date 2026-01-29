@@ -42,15 +42,15 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   private val index = 0
 
-  private lazy val checkDetailsRoute = routes.CheckDetailsController.extractAndRender(index).url
+  private lazy val checkDetailsRoute  = routes.CheckDetailsController.extractAndRender(index).url
   private lazy val submitDetailsRoute = routes.CheckDetailsController.onSubmit(index).url
 
   private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
-  private val name = "Employment Name"
+  private val name        = "Employment Name"
   private val description = Description("Some Description", None, None, None, None)
-  private val startDate = LocalDate.parse("2019-03-09")
-  private val address = UkAddress("Line 1", "Line 2", None, None, "NE98 1ZZ")
+  private val startDate   = LocalDate.parse("2019-03-09")
+  private val address     = UkAddress("Line 1", "Line 2", None, None, "NE98 1ZZ")
 
   private val employmentBeneficiary = EmploymentRelatedBeneficiary(
     name = "Employment Name",
@@ -63,13 +63,27 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   )
 
   private val userAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(AddressYesNoPage, true).success.value
-    .set(AddressUkYesNoPage, true).success.value
-    .set(UkAddressPage, address).success.value
-    .set(DescriptionPage, description).success.value
-    .set(NumberOfBeneficiariesPage, Over1).success.value
-    .set(StartDatePage, startDate).success.value
+    .set(NamePage, name)
+    .success
+    .value
+    .set(AddressYesNoPage, true)
+    .success
+    .value
+    .set(AddressUkYesNoPage, true)
+    .success
+    .value
+    .set(UkAddressPage, address)
+    .success
+    .value
+    .set(DescriptionPage, description)
+    .success
+    .value
+    .set(NumberOfBeneficiariesPage, Over1)
+    .success
+    .value
+    .set(StartDatePage, startDate)
+    .success
+    .value
 
   "CheckDetails Controller" must {
 
@@ -90,8 +104,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsView]
-      val printHelper = application.injector.instanceOf[EmploymentRelatedBeneficiaryPrintHelper]
+      val view          = application.injector.instanceOf[CheckDetailsView]
+      val printHelper   = application.injector.instanceOf[EmploymentRelatedBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, provisional = false, name)
 
       status(result) mustEqual OK
@@ -109,7 +123,8 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.amendEmploymentRelatedBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockTrustConnector.amendEmploymentRelatedBeneficiary(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -123,4 +138,5 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
   }
+
 }

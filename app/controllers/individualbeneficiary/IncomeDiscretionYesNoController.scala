@@ -32,24 +32,24 @@ import views.html.individualbeneficiary.IncomeDiscretionYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IncomeDiscretionYesNoController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 playbackRepository: PlaybackRepository,
-                                                 @IndividualBeneficiary navigator: Navigator,
-                                                 standardActionSets: StandardActionSets,
-                                                 nameAction: NameRequiredAction,
-                                                 formProvider: YesNoFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: IncomeDiscretionYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IncomeDiscretionYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  playbackRepository: PlaybackRepository,
+  @IndividualBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  formProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: IncomeDiscretionYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(IncomeDiscretionYesNoPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
@@ -58,16 +58,16 @@ class IncomeDiscretionYesNoController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen nameAction).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeDiscretionYesNoPage, value))
-            _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.beneficiaryName))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(IncomeDiscretionYesNoPage, value))
+              _              <- playbackRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(IncomeDiscretionYesNoPage, mode, updatedAnswers))
+        )
   }
+
 }

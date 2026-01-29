@@ -26,19 +26,16 @@ import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionRequiredAction @Inject()(val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionTransformer[DataRequest, DescriptionRequest] with I18nSupport {
+class DescriptionRequiredAction @Inject() (val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+    extends ActionTransformer[DataRequest, DescriptionRequest] with I18nSupport {
 
-  override protected def transform[A](request: DataRequest[A]): Future[DescriptionRequest[A]] = {
-    Future.successful(actions.DescriptionRequest[A](request,
-      getDescription(request)
-    ))
-  }
+  override protected def transform[A](request: DataRequest[A]): Future[DescriptionRequest[A]] =
+    Future.successful(actions.DescriptionRequest[A](request, getDescription(request)))
 
-  private def getDescription[A](request: DataRequest[A]): String = {
+  private def getDescription[A](request: DataRequest[A]): String =
     request.userAnswers.get(DescriptionPage) match {
       case Some(description) => description
-      case None => request.messages(messagesApi)("classOfBeneficiary.description.default")
+      case None              => request.messages(messagesApi)("classOfBeneficiary.description.default")
     }
-  }
+
 }

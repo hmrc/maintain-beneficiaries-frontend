@@ -25,10 +25,10 @@ import java.time.LocalDate
 
 class CompanyBeneficiaryMapperSpec extends SpecBase {
 
-  val name: String = "Company"
-  val share: Int = 50
-  val date: LocalDate = LocalDate.parse("2019-02-03")
-  val ukAddress: UkAddress = UkAddress("Line 1", "Line 2", None, None, "postcode")
+  val name: String               = "Company"
+  val share: Int                 = 50
+  val date: LocalDate            = LocalDate.parse("2019-02-03")
+  val ukAddress: UkAddress       = UkAddress("Line 1", "Line 2", None, None, "postcode")
   val nonUkAddress: NonUkAddress = NonUkAddress("Line 1", "Line 2", None, "FR")
 
   "CompanyBeneficiaryMapper" must {
@@ -43,157 +43,234 @@ class CompanyBeneficiaryMapperSpec extends SpecBase {
 
     "generate company beneficiary model" when {
 
-        "taxable" when {
+      "taxable" when {
 
-          "no country of residence" in {
+        "no country of residence" in {
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DiscretionYesNoPage, true).success.value
-              .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(AddressYesNoPage, true).success.value
-              .set(AddressUkYesNoPage, true).success.value
-              .set(UkAddressPage, ukAddress).success.value
-              .set(StartDatePage, date).success.value
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DiscretionYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
+            .set(AddressYesNoPage, true)
+            .success
+            .value
+            .set(AddressUkYesNoPage, true)
+            .success
+            .value
+            .set(UkAddressPage, ukAddress)
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
 
-            val result = mapper(userAnswers).get
+          val result = mapper(userAnswers).get
 
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = Some(ukAddress),
-              income = None,
-              incomeDiscretionYesNo = Some(true),
-              countryOfResidence = None,
-              entityStart = date,
-              provisional = true
-            )
-          }
-
-          "UK country of residence" in {
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DiscretionYesNoPage, false).success.value
-              .set(ShareOfIncomePage, share).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(AddressYesNoPage, true).success.value
-              .set(AddressUkYesNoPage, true).success.value
-              .set(UkAddressPage, ukAddress).success.value
-              .set(StartDatePage, date).success.value
-
-            val result = mapper(userAnswers).get
-
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = Some(ukAddress),
-              income = Some("50"),
-              incomeDiscretionYesNo = Some(false),
-              countryOfResidence = Some("GB"),
-              entityStart = date,
-              provisional = true
-            )
-          }
-
-          "non-UK country of residence" in {
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DiscretionYesNoPage, false).success.value
-              .set(ShareOfIncomePage, share).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, false).success.value
-              .set(CountryOfResidencePage, "FR").success.value
-              .set(AddressYesNoPage, true).success.value
-              .set(AddressUkYesNoPage, false).success.value
-              .set(NonUkAddressPage, nonUkAddress).success.value
-              .set(StartDatePage, date).success.value
-
-            val result = mapper(userAnswers).get
-
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = Some(nonUkAddress),
-              income = Some("50"),
-              incomeDiscretionYesNo = Some(false),
-              countryOfResidence = Some("FR"),
-              entityStart = date,
-              provisional = true
-            )
-          }
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(ukAddress),
+            income = None,
+            incomeDiscretionYesNo = Some(true),
+            countryOfResidence = None,
+            entityStart = date,
+            provisional = true
+          )
         }
 
-        "non-taxable" when {
+        "UK country of residence" in {
 
-          "no country of residence" in {
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DiscretionYesNoPage, false)
+            .success
+            .value
+            .set(ShareOfIncomePage, share)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, true)
+            .success
+            .value
+            .set(AddressYesNoPage, true)
+            .success
+            .value
+            .set(AddressUkYesNoPage, true)
+            .success
+            .value
+            .set(UkAddressPage, ukAddress)
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(StartDatePage, date).success.value
+          val result = mapper(userAnswers).get
 
-            val result = mapper(userAnswers).get
-
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = None,
-              countryOfResidence = None,
-              entityStart = date,
-              provisional = true
-            )
-          }
-
-          "UK country of residence" in {
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(StartDatePage, date).success.value
-
-            val result = mapper(userAnswers).get
-
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = None,
-              countryOfResidence = Some("GB"),
-              entityStart = date,
-              provisional = true
-            )
-          }
-
-          "non-UK country of residence" in {
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, false).success.value
-              .set(CountryOfResidencePage, "FR").success.value
-              .set(StartDatePage, date).success.value
-
-            val result = mapper(userAnswers).get
-
-            result mustBe CompanyBeneficiary(
-              name = name,
-              utr = None,
-              address = None,
-              income = None,
-              incomeDiscretionYesNo = None,
-              countryOfResidence = Some("FR"),
-              entityStart = date,
-              provisional = true
-            )
-          }
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(ukAddress),
+            income = Some("50"),
+            incomeDiscretionYesNo = Some(false),
+            countryOfResidence = Some("GB"),
+            entityStart = date,
+            provisional = true
+          )
         }
+
+        "non-UK country of residence" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DiscretionYesNoPage, false)
+            .success
+            .value
+            .set(ShareOfIncomePage, share)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidencePage, "FR")
+            .success
+            .value
+            .set(AddressYesNoPage, true)
+            .success
+            .value
+            .set(AddressUkYesNoPage, false)
+            .success
+            .value
+            .set(NonUkAddressPage, nonUkAddress)
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = Some(nonUkAddress),
+            income = Some("50"),
+            incomeDiscretionYesNo = Some(false),
+            countryOfResidence = Some("FR"),
+            entityStart = date,
+            provisional = true
+          )
+        }
+      }
+
+      "non-taxable" when {
+
+        "no country of residence" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = None,
+            entityStart = date,
+            provisional = true
+          )
+        }
+
+        "UK country of residence" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, true)
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = Some("GB"),
+            entityStart = date,
+            provisional = true
+          )
+        }
+
+        "non-UK country of residence" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidencePage, "FR")
+            .success
+            .value
+            .set(StartDatePage, date)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result mustBe CompanyBeneficiary(
+            name = name,
+            utr = None,
+            address = None,
+            income = None,
+            incomeDiscretionYesNo = None,
+            countryOfResidence = Some("FR"),
+            entityStart = date,
+            provisional = true
+          )
+        }
+      }
     }
   }
+
 }

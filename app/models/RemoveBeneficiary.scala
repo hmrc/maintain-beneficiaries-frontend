@@ -20,12 +20,12 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Json, Writes}
 
-case class RemoveBeneficiary(`type`: BeneficiaryType, index : Int, endDate: LocalDate)
+case class RemoveBeneficiary(`type`: BeneficiaryType, index: Int, endDate: LocalDate)
 
 object RemoveBeneficiary {
 
-  implicit val writes : Writes[RemoveBeneficiary] = Json.writes[RemoveBeneficiary]
+  implicit val writes: Writes[RemoveBeneficiary] = Json.writes[RemoveBeneficiary]
 
-  def apply(`type`: BeneficiaryType, index: Int): RemoveBeneficiary =  RemoveBeneficiary(`type`, index, LocalDate.now)
+  def apply(`type`: BeneficiaryType, index: Int): RemoveBeneficiary = RemoveBeneficiary(`type`, index, LocalDate.now)
 
 }

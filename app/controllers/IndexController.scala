@@ -31,56 +31,59 @@ import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndexController @Inject()(
-                                 val controllerComponents: MessagesControllerComponents,
-                                 actions: StandardActionSets,
-                                 cacheRepository: PlaybackRepository,
-                                 trustsConnector: TrustConnector,
-                                 trustsStoreService: TrustsStoreService
-                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class IndexController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  actions: StandardActionSets,
+  cacheRepository: PlaybackRepository,
+  trustsConnector: TrustConnector,
+  trustsStoreService: TrustsStoreService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad(identifier: String): Action[AnyContent] = (actions.auth andThen actions.saveSession(identifier) andThen actions.getData).async {
-    implicit request =>
-
+  def onPageLoad(identifier: String): Action[AnyContent] =
+    (actions.auth andThen actions.saveSession(identifier) andThen actions.getData).async { implicit request =>
       for {
-        details <- trustsConnector.getTrustDetails(identifier)
+        details              <- trustsConnector.getTrustDetails(identifier)
         isUnderlyingData5mld <- trustsConnector.isTrust5mld(identifier)
         taxableMigrationFlag <- trustsConnector.getTrustMigrationFlag(identifier)
-        ua <- Future.successful {
-          request.userAnswers match {
-            case Some(userAnswers) => userAnswers.copy(
-              trustType = details.typeOfTrust,
-              isTaxable = details.isTaxable,
-              isUnderlyingData5mld = isUnderlyingData5mld,
-              migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
-            )
-            case None => {
-              val internalId = request.user.internalId
-              val id = identifier
-              val sessionId = Session.id(hc)
-              UserAnswers(
-                internalId = internalId,
-                identifier = id,
-                sessionId = sessionId,
-                newId = s"$internalId-$id-$sessionId",
-                whenTrustSetup = details.startDate,
-                trustType = details.typeOfTrust,
-                isTaxable = details.isTaxable,
-                isUnderlyingData5mld = isUnderlyingData5mld,
-                migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
-              )
-            }
-          }
-        }
-        _ <- cacheRepository.set(ua)
-        _ <- trustsStoreService.updateTaskStatus(identifier, InProgress)
+        ua                   <- Future.successful {
+                                  request.userAnswers match {
+                                    case Some(userAnswers) =>
+                                      userAnswers.copy(
+                                        trustType = details.typeOfTrust,
+                                        isTaxable = details.isTaxable,
+                                        isUnderlyingData5mld = isUnderlyingData5mld,
+                                        migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
+                                      )
+                                    case None              =>
+                                      val internalId = request.user.internalId
+                                      val id         = identifier
+                                      val sessionId  = Session.id(hc)
+                                      UserAnswers(
+                                        internalId = internalId,
+                                        identifier = id,
+                                        sessionId = sessionId,
+                                        newId = s"$internalId-$id-$sessionId",
+                                        whenTrustSetup = details.startDate,
+                                        trustType = details.typeOfTrust,
+                                        isTaxable = details.isTaxable,
+                                        isUnderlyingData5mld = isUnderlyingData5mld,
+                                        migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable
+                                      )
+                                  }
+                                }
+        _                    <- cacheRepository.set(ua)
+        _                    <- trustsStoreService.updateTaskStatus(identifier, InProgress)
       } yield {
-        logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] user has started maintaining beneficiaries")
+        logger.info(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] user has started maintaining beneficiaries"
+        )
         if (taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
           Redirect(controllers.transition.routes.BeneficiariesInformationController.onPageLoad())
         } else {
           Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
         }
       }
-  }
+    }
+
 }

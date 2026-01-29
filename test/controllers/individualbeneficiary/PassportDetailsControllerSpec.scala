@@ -54,7 +54,7 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
     address = None,
     vulnerableYesNo = None,
     roleInCompany = None,
-    income = None  ,
+    income = None,
     incomeDiscretionYesNo = None,
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
@@ -70,16 +70,18 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
       .thenReturn(Future.successful(beneficiaries))
   }
 
-  private val formProvider = new PassportDetailsFormProvider(frontendAppConfig)
+  private val formProvider         = new PassportDetailsFormProvider(frontendAppConfig)
   private def form: Form[Passport] = formProvider.withPrefix("individualBeneficiary", beneficiaries)
 
   private def onwardRoute: Call = Call("GET", "/foo")
-  private val name: Name = Name("FirstName", None, "LastName")
+  private val name: Name        = Name("FirstName", None, "LastName")
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
-  private val mode: Mode = NormalMode
+  private val mode: Mode                   = NormalMode
   private val passportDetailsRoute: String = routes.PassportDetailsController.onPageLoad(mode).url
 
   private val getRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, passportDetailsRoute)
@@ -109,8 +111,12 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(NamePage, name).success.value
-        .set(PassportDetailsPage, validData).success.value
+        .set(NamePage, name)
+        .success
+        .value
+        .set(PassportDetailsPage, validData)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
@@ -136,15 +142,17 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
 
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
-          .overrides(bind[Navigator].qualifiedWith(classOf[annotations.IndividualBeneficiary]).toInstance(fakeNavigator))
+          .overrides(
+            bind[Navigator].qualifiedWith(classOf[annotations.IndividualBeneficiary]).toInstance(fakeNavigator)
+          )
           .overrides(bind[TrustServiceImpl].toInstance(mockTrustsService))
           .build()
 
       val request =
         FakeRequest(POST, passportDetailsRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
             "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
             "expiryDate.year"  -> validData.expirationDate.getYear.toString
@@ -206,8 +214,8 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
       val request =
         FakeRequest(POST, passportDetailsRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> validData.expirationDate.getDayOfMonth.toString,
             "expiryDate.month" -> validData.expirationDate.getMonthValue.toString,
             "expiryDate.year"  -> validData.expirationDate.getYear.toString
@@ -222,4 +230,5 @@ class PassportDetailsControllerSpec extends SpecBase with MockitoSugar with Befo
       application.stop()
     }
   }
+
 }

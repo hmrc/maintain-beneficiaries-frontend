@@ -27,4 +27,5 @@ class RoleInCompanyFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[RoleInCompany]("individualBeneficiary.roleInCompany.error.required")
     )
+
 }

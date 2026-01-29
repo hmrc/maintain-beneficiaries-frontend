@@ -27,4 +27,5 @@ class CharityOrTrustBeneficiaryTypeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[CharityOrTrustToAdd]("charityOrTrust.error.required")
     )
+
 }

@@ -30,11 +30,11 @@ case object CompanyOrEmploymentRelatedPage extends QuestionPage[CompanyOrEmploym
 
   override def toString: String = "companyOrEmploymentRelated"
 
-  override def cleanup(value: Option[CompanyOrEmploymentRelatedToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[CompanyOrEmploymentRelatedToAdd], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(Company) => userAnswers.deleteAtPath(employment.basePath)
+      case Some(Company)           => userAnswers.deleteAtPath(employment.basePath)
       case Some(EmploymentRelated) => userAnswers.deleteAtPath(company.basePath)
-      case _ => super.cleanup(value, userAnswers)
+      case _                       => super.cleanup(value, userAnswers)
     }
-  }
+
 }

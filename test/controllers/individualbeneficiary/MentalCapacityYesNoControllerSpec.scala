@@ -32,10 +32,12 @@ import views.html.individualbeneficiary.MentalCapacityYesNoView
 
 class MentalCapacityYesNoControllerSpec extends SpecBase {
 
-  private val form: Form[YesNoDontKnow] = new YesNoDontKnowFormProvider().withPrefix("individualBeneficiary.mentalCapacityYesNo")
-  private val onPageLoadRoute: String = routes.MentalCapacityYesNoController.onPageLoad(NormalMode).url
-  private val name: Name = Name("FirstName", None, "LastName")
-  private val onwardRoute = Call("GET", "/foo")
+  private val form: Form[YesNoDontKnow] =
+    new YesNoDontKnowFormProvider().withPrefix("individualBeneficiary.mentalCapacityYesNo")
+
+  private val onPageLoadRoute: String   = routes.MentalCapacityYesNoController.onPageLoad(NormalMode).url
+  private val name: Name                = Name("FirstName", None, "LastName")
+  private val onwardRoute               = Call("GET", "/foo")
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
@@ -85,7 +87,8 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, onPageLoadRoute)
@@ -117,7 +120,7 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, name.displayName)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -151,4 +154,5 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -29,4 +29,5 @@ class NamePageSpec extends PageBehaviours {
 
     beRemovable[Name](NamePage)
   }
+
 }

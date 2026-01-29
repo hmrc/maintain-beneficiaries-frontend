@@ -24,7 +24,7 @@ import java.time.LocalDate
 class ClassOfBeneficiaryMapperSpec extends SpecBase {
 
   val description: String = "Description"
-  val date: LocalDate = LocalDate.parse("2019-02-03")
+  val date: LocalDate     = LocalDate.parse("2019-02-03")
 
   "ClassOfBeneficiaryMapper" must {
 
@@ -39,8 +39,12 @@ class ClassOfBeneficiaryMapperSpec extends SpecBase {
     "generate class of beneficiary model" in {
 
       val userAnswers = emptyUserAnswers
-        .set(DescriptionPage, description).success.value
-        .set(EntityStartPage, date).success.value
+        .set(DescriptionPage, description)
+        .success
+        .value
+        .set(EntityStartPage, date)
+        .success
+        .value
 
       val result = mapper(userAnswers).get
 
@@ -49,4 +53,5 @@ class ClassOfBeneficiaryMapperSpec extends SpecBase {
 
     }
   }
+
 }

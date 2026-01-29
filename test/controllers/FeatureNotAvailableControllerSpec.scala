@@ -46,4 +46,5 @@ class FeatureNotAvailableControllerSpec extends SpecBase {
     }
 
   }
+
 }

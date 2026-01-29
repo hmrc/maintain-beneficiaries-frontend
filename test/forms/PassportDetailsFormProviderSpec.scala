@@ -25,20 +25,19 @@ import java.time.LocalDate
 
 class PassportDetailsFormProviderSpec extends StringFieldBehaviours {
 
-  private val prefix = "individualBeneficiary"
+  private val prefix    = "individualBeneficiary"
   private val underTest = new PassportDetailsFormProvider(frontendAppConfig)
-  private val form = underTest.withPrefix(prefix, Beneficiaries())
+  private val form      = underTest.withPrefix(prefix, Beneficiaries())
 
-  private val countryRequiredKey = s"$prefix.passportDetails.country.error.required"
-  private val countryLengthKey = s"$prefix.passportDetails.country.error.length"
+  private val countryRequiredKey    = s"$prefix.passportDetails.country.error.required"
+  private val countryLengthKey      = s"$prefix.passportDetails.country.error.length"
   private val maxLengthCountryField = 100
 
-  private val numberRequiredKey = s"$prefix.passportDetails.number.error.required"
-  private val numberInvalidKey = s"$prefix.passportDetails.number.error.invalid"
-  private val numberLengthKey = s"$prefix.passportDetails.number.error.length"
-  private val uniqueNumberKey = s"$prefix.passportDetails.number.error.unique"
+  private val numberRequiredKey    = s"$prefix.passportDetails.number.error.required"
+  private val numberInvalidKey     = s"$prefix.passportDetails.number.error.invalid"
+  private val numberLengthKey      = s"$prefix.passportDetails.number.error.length"
+  private val uniqueNumberKey      = s"$prefix.passportDetails.number.error.unique"
   private val maxLengthNumberField = 30
-
 
   ".country" must {
 
@@ -95,7 +94,7 @@ class PassportDetailsFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, numberRequiredKey)
     )
 
-    val passportNumber = "123"
+    val passportNumber        = "123"
     val individualBeneficiary = IndividualBeneficiary(
       name = Name(firstName = "First", middleName = None, lastName = "Last"),
       dateOfBirth = None,
@@ -116,7 +115,7 @@ class PassportDetailsFormProviderSpec extends StringFieldBehaviours {
     }
 
     "not bind form and return a form error when the passport number isn't unique" in {
-      val form = underTest.withPrefix(prefix, Beneficiaries(List(individualBeneficiary)))
+      val form      = underTest.withPrefix(prefix, Beneficiaries(List(individualBeneficiary)))
       val formError = FormError(fieldName, uniqueNumberKey)
 
       val result = form.bind(Map(fieldName -> passportNumber)).apply(fieldName)
@@ -124,4 +123,5 @@ class PassportDetailsFormProviderSpec extends StringFieldBehaviours {
       result.value mustBe Some(passportNumber)
     }
   }
+
 }

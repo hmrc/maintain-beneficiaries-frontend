@@ -28,14 +28,13 @@ import java.time.LocalDate
 class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "individualBeneficiary.dateOfBirth"
-  val name: Name = Name("First", Some("Middle"), "Last")
+  val name: Name       = Name("First", Some("Middle"), "Last")
 
   override val form: Form[LocalDate] = new DateFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix)
 
   "DateOfBirth view" must {
 
     val view = viewFor[DateOfBirthView](Some(emptyUserAnswers))
-
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, name.displayName)(fakeRequest, messages)
@@ -57,4 +56,5 @@ class DateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

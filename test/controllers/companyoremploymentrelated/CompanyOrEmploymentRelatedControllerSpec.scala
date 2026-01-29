@@ -29,9 +29,11 @@ import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
 class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[CompanyOrEmploymentRelatedToAdd] = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
-  lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
-  val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type = CompanyOrEmploymentRelatedToAdd.Company
+  val form: Form[CompanyOrEmploymentRelatedToAdd]                                               = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
+  lazy val companyOrEmploymentRelatedRoute: String                                              = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
+
+  val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type =
+    CompanyOrEmploymentRelatedToAdd.Company
 
   "CompanyOrEmploymentRelatedController Controller" must {
 
@@ -55,7 +57,8 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val answers = emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
+      val answers =
+        emptyUserAnswers.set(CompanyOrEmploymentRelatedPage, companyOrEmploymentRelatedBeneficiaryAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -86,7 +89,9 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.company.routes.NameController
+        .onPageLoad(NormalMode)
+        .url
 
       application.stop()
     }
@@ -103,7 +108,9 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.companyoremploymentrelated.employment.routes.NameController
+        .onPageLoad(NormalMode)
+        .url
 
       application.stop()
     }
@@ -159,4 +166,5 @@ class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSuga
       application.stop()
     }
   }
+
 }

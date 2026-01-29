@@ -69,4 +69,5 @@ class HowManyBeneficiariesSpec extends SpecBase with ScalaCheckPropertyChecks {
       }
     }
   }
+
 }

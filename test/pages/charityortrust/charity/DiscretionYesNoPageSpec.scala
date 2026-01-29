@@ -32,7 +32,9 @@ class DiscretionYesNoPageSpec extends PageBehaviours {
       "YES selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(ShareOfIncomePage, 50).success.value
+          .set(ShareOfIncomePage, 50)
+          .success
+          .value
 
         val result = userAnswers.set(DiscretionYesNoPage, true).success.value
 
@@ -40,4 +42,5 @@ class DiscretionYesNoPageSpec extends PageBehaviours {
       }
     }
   }
+
 }

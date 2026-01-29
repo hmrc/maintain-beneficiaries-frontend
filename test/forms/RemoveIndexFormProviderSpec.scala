@@ -22,7 +22,7 @@ import play.api.data.FormError
 class RemoveIndexFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "removeIndex.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new RemoveIndexFormProvider()("removeIndex")
 
@@ -42,4 +42,5 @@ class RemoveIndexFormProviderSpec extends BooleanFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

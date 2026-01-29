@@ -33,26 +33,27 @@ trait TrustAuthConnector {
   def authorisedForUtr(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse]
 }
 
-class TrustAuthConnectorImpl @Inject()(http: HttpClientV2, config: FrontendAppConfig)
-  extends TrustAuthConnector with Logging {
+class TrustAuthConnectorImpl @Inject() (http: HttpClientV2, config: FrontendAppConfig)
+    extends TrustAuthConnector with Logging {
 
   private val baseUrl: String = config.trustAuthUrl + "/trusts-auth"
 
-  override def agentIsAuthorised()
-                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.get(url"$baseUrl/agent-authorised").execute[TrustAuthResponse].recoverWith {
-      case e =>
-        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}")
-        Future.successful(TrustAuthInternalServerError)
+  override def agentIsAuthorised()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] =
+    http.get(url"$baseUrl/agent-authorised").execute[TrustAuthResponse].recoverWith { case e =>
+      logger.warn(
+        s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate agent due to an exception ${e.getMessage}"
+      )
+      Future.successful(TrustAuthInternalServerError)
     }
-  }
 
-  override def authorisedForUtr(utr: String)
-                               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] = {
-    http.get(url"$baseUrl/authorised/$utr").execute[TrustAuthResponse].recoverWith {
-      case e =>
-        logger.warn(s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}")
-        Future.successful(TrustAuthInternalServerError)
+  override def authorisedForUtr(
+    utr: String
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TrustAuthResponse] =
+    http.get(url"$baseUrl/authorised/$utr").execute[TrustAuthResponse].recoverWith { case e =>
+      logger.warn(
+        s"[Session ID: ${utils.Session.id(hc)}] unable to authenticate organisation for $utr due to an exception ${e.getMessage}"
+      )
+      Future.successful(TrustAuthInternalServerError)
     }
-  }
+
 }

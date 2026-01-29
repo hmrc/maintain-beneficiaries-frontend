@@ -23,9 +23,13 @@ import pages.charityortrust.trust._
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class TrustBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
+  def apply(
+    userAnswers: UserAnswers,
+    provisional: Boolean,
+    name: String
+  )(implicit messages: Messages): AnswerSection = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
@@ -33,20 +37,56 @@ class TrustBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConvert
       val mode: Mode = if (provisional) NormalMode else CheckMode
       Seq(
         bound.stringQuestion(NamePage, "trustBeneficiary.name", NameController.onPageLoad(mode).url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "trustBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
-        bound.percentageQuestion(ShareOfIncomePage, "trustBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
+        bound.yesNoQuestion(
+          DiscretionYesNoPage,
+          "trustBeneficiary.discretionYesNo",
+          DiscretionYesNoController.onPageLoad(mode).url
+        ),
+        bound.percentageQuestion(
+          ShareOfIncomePage,
+          "trustBeneficiary.shareOfIncome",
+          ShareOfIncomeController.onPageLoad(mode).url
+        ),
         if (mode == CheckMode) bound.stringQuestion(UtrPage, "trustBeneficiary.checkDetails.utr", "") else None,
-        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "trustBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "trustBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "trustBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressYesNoPage, "trustBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "trustBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(
+          CountryOfResidenceYesNoPage,
+          "trustBeneficiary.countryOfResidenceYesNo",
+          CountryOfResidenceYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceUkYesNoPage,
+          "trustBeneficiary.countryOfResidenceUkYesNo",
+          CountryOfResidenceUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.countryQuestion(
+          CountryOfResidenceUkYesNoPage,
+          CountryOfResidencePage,
+          "trustBeneficiary.countryOfResidence",
+          CountryOfResidenceController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressYesNoPage,
+          "trustBeneficiary.addressYesNo",
+          AddressYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressUkYesNoPage,
+          "trustBeneficiary.addressUkYesNo",
+          AddressUkYesNoController.onPageLoad(mode).url
+        ),
         bound.addressQuestion(UkAddressPage, "trustBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-        bound.addressQuestion(NonUkAddressPage, "trustBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
-        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url) else None
+        bound.addressQuestion(
+          NonUkAddressPage,
+          "trustBeneficiary.nonUkAddress",
+          NonUkAddressController.onPageLoad(mode).url
+        ),
+        if (mode == NormalMode)
+          bound.dateQuestion(StartDatePage, "trustBeneficiary.startDate", StartDateController.onPageLoad().url)
+        else None
       ).flatten
     }
 
     AnswerSection(headingKey = None, rows = answerRows)
   }
+
 }

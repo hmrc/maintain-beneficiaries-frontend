@@ -31,7 +31,9 @@ class BeneficiariesInformationViewSpec extends ViewBehaviours {
 
     behave like normalPageTitleWithSectionSubheading(applyView, "beneficiariesMoreInformation")
 
-    behave like pageWithGuidance(applyView, "beneficiariesMoreInformation",
+    behave like pageWithGuidance(
+      applyView,
+      "beneficiariesMoreInformation",
       "p1",
       "p2",
       "subheading",
@@ -49,6 +51,8 @@ class BeneficiariesInformationViewSpec extends ViewBehaviours {
       "p5",
       "b8",
       "b9",
-      "p6")
+      "p6"
+    )
   }
+
 }

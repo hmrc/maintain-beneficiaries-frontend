@@ -36,4 +36,5 @@ class IncomeDiscretionYesNoPageSpec extends PageBehaviours {
       userAnswers.get.get(IncomePercentagePage) mustNot be(defined)
     }
   }
+
 }

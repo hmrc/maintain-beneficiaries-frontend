@@ -29,4 +29,5 @@ class NumberOfBeneficiariesPageSpec extends PageBehaviours {
 
     beRemovable[HowManyBeneficiaries](NumberOfBeneficiariesPage)
   }
+
 }
