@@ -29,8 +29,8 @@ import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
 class CompanyOrEmploymentRelatedControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[CompanyOrEmploymentRelatedToAdd]                                               = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
-  lazy val companyOrEmploymentRelatedRoute: String                                              = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
+  val form: Form[CompanyOrEmploymentRelatedToAdd]  = new CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider()()
+  lazy val companyOrEmploymentRelatedRoute: String = routes.CompanyOrEmploymentRelatedController.onPageLoad().url
 
   val companyOrEmploymentRelatedBeneficiaryAnswer: CompanyOrEmploymentRelatedToAdd.Company.type =
     CompanyOrEmploymentRelatedToAdd.Company

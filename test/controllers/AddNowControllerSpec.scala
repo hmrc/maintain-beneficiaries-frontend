@@ -40,8 +40,8 @@ import scala.concurrent.Future
 
 class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[TypeOfBeneficiaryToAdd]                                           = new AddBeneficiaryTypeFormProvider()()
-  lazy val addNowRoute: String                                                     = routes.AddNowController.onPageLoad().url
+  val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
+  lazy val addNowRoute: String           = routes.AddNowController.onPageLoad().url
 
   val classOfBeneficiariesAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type =
     TypeOfBeneficiaryToAdd.ClassOfBeneficiaries

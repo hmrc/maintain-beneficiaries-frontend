@@ -34,9 +34,9 @@ import java.time.LocalDate
 
 class StartDateControllerSpec extends SpecBase with MockitoSugar {
 
-  private val date: LocalDate        = LocalDate.parse("2019-02-01")
+  private val date: LocalDate = LocalDate.parse("2019-02-01")
 
-  private val form: Form[LocalDate]  =
+  private val form: Form[LocalDate] =
     new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("charityBeneficiary.startDate", date)
 
   private val startDateRoute: String = routes.StartDateController.onPageLoad().url

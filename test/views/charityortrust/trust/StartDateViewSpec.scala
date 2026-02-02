@@ -34,7 +34,7 @@ class StartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
   val form: Form[LocalDate] =
     new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate(messageKeyPrefix, startDate)
 
-  val view: StartDateView   = viewFor[StartDateView](Some(emptyUserAnswers))
+  val view: StartDateView = viewFor[StartDateView](Some(emptyUserAnswers))
 
   "StartDate view" must {
 

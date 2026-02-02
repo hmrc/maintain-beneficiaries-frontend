@@ -30,9 +30,9 @@ import java.time.LocalDate
 
 class EntityStartControllerSpec extends SpecBase with MockitoSugar {
 
-  val date: LocalDate               = LocalDate.parse("2019-02-03")
+  val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  val form: Form[LocalDate]         =
+  val form: Form[LocalDate] =
     new DateAddedToTrustFormProvider().withPrefixAndTrustStartDate("classOfBeneficiary.entityStart", date)
 
   lazy val entityStartRoute: String = routes.EntityStartController.onPageLoad().url

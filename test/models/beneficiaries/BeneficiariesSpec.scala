@@ -93,16 +93,16 @@ class BeneficiariesSpec extends SpecBase {
     provisional = false
   )
 
-  private val individualBeneficiaires: List[IndividualBeneficiary]               = List.fill(25)(individualBeneficiary)
-  private val classesOfBeneficiaires: List[ClassOfBeneficiary]                   = List.fill(25)(classOfBeneficiaries)
-  private val charityBeneficiaires: List[CharityBeneficiary]                     = List.fill(25)(charityBeneficiary)
-  private val trustBeneficiaires: List[TrustBeneficiary]                         = List.fill(25)(trustBeneficiary)
-  private val companyBeneficiaires: List[CompanyBeneficiary]                     = List.fill(25)(companyBeneficiary)
+  private val individualBeneficiaires: List[IndividualBeneficiary] = List.fill(25)(individualBeneficiary)
+  private val classesOfBeneficiaires: List[ClassOfBeneficiary]     = List.fill(25)(classOfBeneficiaries)
+  private val charityBeneficiaires: List[CharityBeneficiary]       = List.fill(25)(charityBeneficiary)
+  private val trustBeneficiaires: List[TrustBeneficiary]           = List.fill(25)(trustBeneficiary)
+  private val companyBeneficiaires: List[CompanyBeneficiary]       = List.fill(25)(companyBeneficiary)
 
   private val employmentRelatedBeneficiaires: List[EmploymentRelatedBeneficiary] =
     List.fill(25)(employmentRelatedBeneficiary)
 
-  private val otherBeneficiaires: List[OtherBeneficiary]                         = List.fill(25)(otherBeneficiary)
+  private val otherBeneficiaires: List[OtherBeneficiary] = List.fill(25)(otherBeneficiary)
 
   "Beneficiaries" must {
 

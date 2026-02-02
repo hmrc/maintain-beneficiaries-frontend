@@ -32,7 +32,7 @@ import views.html.companyoremploymentrelated.employment.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Description]  =
+  private val form: Form[Description] =
     new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix("employmentBeneficiary.description")
 
   private val descriptionRoute: String = routes.DescriptionController.onPageLoad(NormalMode).url
