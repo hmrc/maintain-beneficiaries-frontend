@@ -23,9 +23,13 @@ import pages.charityortrust.charity._
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class CharityBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
+  def apply(
+    userAnswers: UserAnswers,
+    provisional: Boolean,
+    name: String
+  )(implicit messages: Messages): AnswerSection = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
@@ -33,17 +37,52 @@ class CharityBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConve
       val mode: Mode = if (provisional) NormalMode else CheckMode
       Seq(
         bound.stringQuestion(NamePage, "charityBeneficiary.name", NameController.onPageLoad(mode).url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "charityBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
-        bound.percentageQuestion(ShareOfIncomePage, "charityBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
+        bound.yesNoQuestion(
+          DiscretionYesNoPage,
+          "charityBeneficiary.discretionYesNo",
+          DiscretionYesNoController.onPageLoad(mode).url
+        ),
+        bound.percentageQuestion(
+          ShareOfIncomePage,
+          "charityBeneficiary.shareOfIncome",
+          ShareOfIncomeController.onPageLoad(mode).url
+        ),
         if (mode == CheckMode) bound.stringQuestion(UtrPage, "charityBeneficiary.checkDetails.utr", "") else None,
-        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "charityBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "charityBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "charityBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressYesNoPage, "charityBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "charityBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.yesNoQuestion(
+          CountryOfResidenceYesNoPage,
+          "charityBeneficiary.countryOfResidenceYesNo",
+          CountryOfResidenceYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceUkYesNoPage,
+          "charityBeneficiary.countryOfResidenceUkYesNo",
+          CountryOfResidenceUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.countryQuestion(
+          CountryOfResidenceUkYesNoPage,
+          CountryOfResidencePage,
+          "charityBeneficiary.countryOfResidence",
+          CountryOfResidenceController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressYesNoPage,
+          "charityBeneficiary.addressYesNo",
+          AddressYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressUkYesNoPage,
+          "charityBeneficiary.addressUkYesNo",
+          AddressUkYesNoController.onPageLoad(mode).url
+        ),
         bound.addressQuestion(UkAddressPage, "charityBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-        bound.addressQuestion(NonUkAddressPage, "charityBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
-        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url) else None
+        bound.addressQuestion(
+          NonUkAddressPage,
+          "charityBeneficiary.nonUkAddress",
+          NonUkAddressController.onPageLoad(mode).url
+        ),
+        if (mode == NormalMode)
+          bound.dateQuestion(StartDatePage, "charityBeneficiary.startDate", StartDateController.onPageLoad().url)
+        else None
       ).flatten
     }
 

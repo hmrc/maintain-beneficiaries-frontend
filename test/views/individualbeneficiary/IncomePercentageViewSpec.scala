@@ -27,9 +27,9 @@ import views.html.individualbeneficiary.IncomePercentageView
 class IncomePercentageViewSpec extends QuestionViewBehaviours[Int] {
 
   val messageKeyPrefix = "individualBeneficiary.shareOfIncome"
-  val name: Name = Name("First", None, "Last")
+  val name: Name       = Name("First", None, "Last")
 
-  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Int]            = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
   val view: IncomePercentageView = viewFor[IncomePercentageView](Some(emptyUserAnswers))
 
   "ShareOfIncome view" must {

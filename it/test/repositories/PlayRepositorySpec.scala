@@ -30,16 +30,22 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
-class PlayRepositorySpec extends AnyWordSpec with Matchers
-  with ScalaFutures with OptionValues with MongoSupport with MongoSuite with BeforeAndAfterEach {
+class PlayRepositorySpec
+    extends AnyWordSpec
+    with Matchers
+    with ScalaFutures
+    with OptionValues
+    with MongoSupport
+    with MongoSuite
+    with BeforeAndAfterEach {
 
   override def beforeEach(): Unit =
     Await.result(repository.collection.deleteMany(BsonDocument()).toFuture(), Duration.Inf)
 
   val internalId = "Int-328969d0-557e-4559-sdba-074d0597107e"
   val identifier = "Testing"
-  val sessionId = "Test"
-  val newId = s"$internalId-$identifier-$sessionId"
+  val sessionId  = "Test"
+  val newId      = s"$internalId-$identifier-$sessionId"
 
   def defaultUserAnswers(): UserAnswers =
     UserAnswers(
@@ -53,7 +59,8 @@ class PlayRepositorySpec extends AnyWordSpec with Matchers
       isTaxable = false,
       isUnderlyingData5mld = false,
       migratingFromNonTaxableToTaxable = false,
-      trustType = None)
+      trustType = None
+    )
 
   lazy val repository: PlaybackRepositoryImpl = new PlaybackRepositoryImpl(mongoComponent, config)
 
@@ -77,9 +84,8 @@ class PlayRepositorySpec extends AnyWordSpec with Matchers
 
     "must return the userAnswers after update" in {
       val userAnswers: UserAnswers = defaultUserAnswers()
-      val userAnswers2 = userAnswers.copy(data = Json.obj("key" -> "123"),
-        isUnderlyingData5mld = true,
-        isTaxable = false)
+      val userAnswers2             =
+        userAnswers.copy(data = Json.obj("key" -> "123"), isUnderlyingData5mld = true, isTaxable = false)
 
       repository.get(internalId, identifier, sessionId).futureValue mustBe None
 
@@ -88,7 +94,7 @@ class PlayRepositorySpec extends AnyWordSpec with Matchers
       val dbUserAnswer = repository.get(internalId, identifier, sessionId).futureValue
       dbUserAnswer.map(_.copy(updatedAt = userAnswers.updatedAt)) mustBe Some(userAnswers)
 
-      //update
+      // update
 
       repository.set(userAnswers2).futureValue mustBe true
 

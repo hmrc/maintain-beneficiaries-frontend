@@ -21,6 +21,7 @@ import javax.inject.Inject
 import play.api.data.Form
 
 class DescriptionFormProvider @Inject() extends Mappings {
+
   def withPrefix(prefix: String, length: Int): Form[String] =
     Form(
       "value" -> text(s"$prefix.error.required")
@@ -32,4 +33,5 @@ class DescriptionFormProvider @Inject() extends Mappings {
           )
         )
     )
+
 }

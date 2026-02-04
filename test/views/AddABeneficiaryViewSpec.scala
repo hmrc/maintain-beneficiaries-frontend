@@ -48,12 +48,14 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
 
   val view: AddABeneficiaryView = viewFor[AddABeneficiaryView](Some(emptyUserAnswers))
 
-  def applyConfiguredView(form: Form[_],
-                          inProgressBeneficiaries: Seq[AddRow],
-                          completeBeneficiaries: Seq[AddRow],
-                          count: Int,
-                          maxedOut: List[String],
-                          migrating: Boolean): HtmlFormat.Appendable = {
+  def applyConfiguredView(
+    form: Form[_],
+    inProgressBeneficiaries: Seq[AddRow],
+    completeBeneficiaries: Seq[AddRow],
+    count: Int,
+    maxedOut: List[String],
+    migrating: Boolean
+  ): HtmlFormat.Appendable = {
     val title = if (count > 1) s"The trust has $count beneficiaries" else "Add a beneficiary"
     view.apply(form, inProgressBeneficiaries, completeBeneficiaries, title, maxedOut, migrating)(fakeRequest, messages)
   }
@@ -158,7 +160,8 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
       }
 
       "there is one maxed out beneficiary" must {
-        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
+        val viewWithData =
+          applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
 
         behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
 
@@ -172,7 +175,10 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
           val doc = asDocument(viewWithData)
 
           assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details."
+          )
         }
 
         behave like pageWithWarning(applyView(form))
@@ -187,7 +193,14 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
       }
 
       "there are many maxed out beneficiaries" must {
-        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"), migrating)
+        val viewWithData = applyConfiguredView(
+          form,
+          inProgressBeneficiaries,
+          completeBeneficiaries,
+          8,
+          List("Charity", "Individual"),
+          migrating
+        )
 
         behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
 
@@ -203,7 +216,10 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
           assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
           assertContainsText(doc, "Charity")
           assertContainsText(doc, "Individual")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details."
+          )
         }
 
         behave like pageWithWarning(applyView(form))
@@ -276,7 +292,8 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
       }
 
       "there is one maxed out beneficiary" must {
-        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
+        val viewWithData =
+          applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity"), migrating)
 
         behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
 
@@ -290,12 +307,22 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
           val doc = asDocument(viewWithData)
 
           assertContainsText(doc, "You cannot add another charity as you have entered a maximum of 25.")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add within this type, write to HMRC with their details."
+          )
         }
       }
 
       "there are many maxed out beneficiaries" must {
-        val viewWithData = applyConfiguredView(form, inProgressBeneficiaries, completeBeneficiaries, 8, List("Charity", "Individual"), migrating)
+        val viewWithData = applyConfiguredView(
+          form,
+          inProgressBeneficiaries,
+          completeBeneficiaries,
+          8,
+          List("Charity", "Individual"),
+          migrating
+        )
 
         behave like dynamicTitlePage(viewWithData, "addABeneficiary.count", "8")
 
@@ -311,7 +338,10 @@ class AddABeneficiaryViewSpec extends OptionsViewBehaviours with TabularDataView
           assertContainsText(doc, "You have entered the maximum number of beneficiaries for:")
           assertContainsText(doc, "Charity")
           assertContainsText(doc, "Individual")
-          assertContainsText(doc, "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details.")
+          assertContainsText(
+            doc,
+            "Check the beneficiaries you have added. If you have further beneficiaries to add within these types, write to HMRC with their details."
+          )
         }
       }
     }

@@ -31,9 +31,9 @@ import views.html.individualbeneficiary.NameView
 
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form = new NameFormProvider().withPrefix("individualBeneficiary.name")
+  private val form           = new NameFormProvider().withPrefix("individualBeneficiary.name")
   private lazy val nameRoute = routes.NameController.onPageLoad(NormalMode).url
-  private val name = Name("First", Some("Middle"), "Last")
+  private val name           = Name("First", Some("Middle"), "Last")
 
   "Individual Beneficiary Name Controller" must {
 
@@ -116,7 +116,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -150,4 +150,5 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

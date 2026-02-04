@@ -32,45 +32,41 @@ import views.html.charityortrust.CharityOrTrustView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CharityOrTrustController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          standardActionSets: StandardActionSets,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: CharityOrTrustView,
-                                          formProvider: CharityOrTrustBeneficiaryTypeFormProvider,
-                                          repository: PlaybackRepository
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CharityOrTrustController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CharityOrTrustView,
+  formProvider: CharityOrTrustBeneficiaryTypeFormProvider,
+  repository: PlaybackRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[CharityOrTrustToAdd] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(CharityOrTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharityOrTrustPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            value match {
-              case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
-              case Trust => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
-            }
+            _              <- repository.set(updatedAnswers)
+          } yield value match {
+            case Charity => Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode))
+            case Trust   => Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode))
           }
       )
   }
+
 }

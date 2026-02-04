@@ -25,14 +25,14 @@ import java.time.LocalDate
 
 class IdCardDetailsFormProviderSpec extends StringFieldBehaviours {
 
-  private val countryRequiredKey = "individualBeneficiary.idCardDetails.country.error.required"
-  private val countryLengthKey = "individualBeneficiary.idCardDetails.country.error.length"
+  private val countryRequiredKey    = "individualBeneficiary.idCardDetails.country.error.required"
+  private val countryLengthKey      = "individualBeneficiary.idCardDetails.country.error.length"
   private val maxLengthCountryField = 100
 
-  private val numberRequiredKey = "individualBeneficiary.idCardDetails.number.error.required"
-  private val numberInvalidKey = "individualBeneficiary.idCardDetails.number.error.invalid"
-  private val numberLengthKey = "individualBeneficiary.idCardDetails.number.error.length"
-  private val uniqueNumberKey = "individualBeneficiary.idCardDetails.number.error.unique"
+  private val numberRequiredKey    = "individualBeneficiary.idCardDetails.number.error.required"
+  private val numberInvalidKey     = "individualBeneficiary.idCardDetails.number.error.invalid"
+  private val numberLengthKey      = "individualBeneficiary.idCardDetails.number.error.length"
+  private val uniqueNumberKey      = "individualBeneficiary.idCardDetails.number.error.unique"
   private val maxLengthNumberField = 30
 
   private val beneficiaries: Beneficiaries = Beneficiaries()
@@ -128,4 +128,5 @@ class IdCardDetailsFormProviderSpec extends StringFieldBehaviours {
     }
 
   }
+
 }

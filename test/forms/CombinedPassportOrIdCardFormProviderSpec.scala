@@ -24,12 +24,13 @@ class CombinedPassportOrIdCardFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "individualBeneficiary.passportOrIdCardDetails"
 
-  val requiredKey = s"$prefix.country.error.required"
-  val lengthKey = s"$prefix.country.error.length"
+  val requiredKey           = s"$prefix.country.error.required"
+  val lengthKey             = s"$prefix.country.error.length"
   val maxLengthCountryField = 100
-  val maxLengthNumberField = 30
+  val maxLengthNumberField  = 30
 
-  val form: Form[CombinedPassportOrIdCard] = new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(prefix)
+  val form: Form[CombinedPassportOrIdCard] =
+    new CombinedPassportOrIdCardDetailsFormProvider(frontendAppConfig).withPrefix(prefix)
 
   ".country" must {
 
@@ -54,6 +55,5 @@ class CombinedPassportOrIdCardFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
-
 
 }

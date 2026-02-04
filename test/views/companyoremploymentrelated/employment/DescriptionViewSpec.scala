@@ -29,7 +29,7 @@ class DescriptionViewSpec extends QuestionViewBehaviours[Description] {
   val messageKeyPrefix = "employmentBeneficiary.description"
 
   val form: Form[Description] = new EmploymentRelatedBeneficiaryDescriptionFormProvider().withPrefix(messageKeyPrefix)
-  val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
+  val view: DescriptionView   = viewFor[DescriptionView](Some(emptyUserAnswers))
 
   "Description view" must {
 

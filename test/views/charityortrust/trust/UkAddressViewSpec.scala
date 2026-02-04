@@ -27,7 +27,7 @@ import views.html.charityortrust.trust.UkAddressView
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
   val messageKeyPrefix = "site.address.uk"
-  val name: String = "Trust"
+  val name: String     = "Trust"
 
   override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
 
@@ -51,4 +51,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

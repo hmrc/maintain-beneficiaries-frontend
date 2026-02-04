@@ -39,12 +39,14 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.vpe1FormYesNo")
-  val name: Name = Name("FirstName", None, "LastName")
+  val name: Name          = Name("FirstName", None, "LastName")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   lazy val vpe1FormControllerRoute: String = routes.VPE1FormYesNoController.onPageLoad(NormalMode).url
 
@@ -97,7 +99,6 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(bind[Navigator].qualifiedWith(classOf[IndividualBeneficiary]).toInstance(fakeNavigator))
-
           .build()
 
       val request =
@@ -167,4 +168,5 @@ class VPE1FormYesNoControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

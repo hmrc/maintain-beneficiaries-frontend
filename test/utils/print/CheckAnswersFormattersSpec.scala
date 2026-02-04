@@ -33,7 +33,6 @@ class CheckAnswersFormattersSpec extends SpecBase {
       MessagesImpl(lang, messagesApi)
     }
 
-
     ".formatDate" when {
 
       def messages(langCode: String): MessagesImpl = {
@@ -63,13 +62,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
     ".formatNino" must {
 
       "format a nino with prefix and suffix" in {
-        val nino = "JP121212A"
+        val nino   = "JP121212A"
         val result = checkAnswersFormatters.formatNino(nino)
         result mustBe Html("JP 12 12 12 A")
       }
 
       "suppress IllegalArgumentException and not format nino" in {
-        val nino = "JP121212"
+        val nino   = "JP121212"
         val result = checkAnswersFormatters.formatNino(nino)
         result mustBe Html("JP121212")
       }
@@ -86,13 +85,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
 
             "number 4 digits or more" in {
               val passportOrIdCard = CombinedPassportOrIdCard("FR", "1234567890", date)
-              val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
+              val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
               result mustBe Html("France<br />Number ending 7890<br />3 February 1996")
             }
 
             "number less than 4 digits" in {
               val passportOrIdCard = CombinedPassportOrIdCard("FR", "1", date)
-              val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
+              val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
               result mustBe Html("France<br />Number ending 1<br />3 February 1996")
             }
           }
@@ -101,13 +100,13 @@ class CheckAnswersFormattersSpec extends SpecBase {
 
             "number 4 digits or more" in {
               val passportOrIdCard = CombinedPassportOrIdCard("FR", "1234567890", date)
-              val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
+              val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
               result mustBe Html("Ffrainc<br />Rhif sy’n gorffen gyda 7890<br />3 Chwefror 1996")
             }
 
             "number less than 4 digits" in {
               val passportOrIdCard = CombinedPassportOrIdCard("FR", "1", date)
-              val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
+              val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
               result mustBe Html("Ffrainc<br />Rhif sy’n gorffen gyda 1<br />3 Chwefror 1996")
             }
           }
@@ -120,14 +119,14 @@ class CheckAnswersFormattersSpec extends SpecBase {
           "English" in {
 
             val passportOrIdCard = CombinedPassportOrIdCard("FR", "1234567890", date, DetailsType.Passport)
-            val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
+            val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("en"))
             result mustBe Html("France<br />1234567890<br />3 February 1996")
           }
 
           "Welsh" in {
 
             val passportOrIdCard = CombinedPassportOrIdCard("FR", "1234567890", date, DetailsType.IdCard)
-            val result = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
+            val result           = checkAnswersFormatters.formatPassportOrIdCardDetails(passportOrIdCard)(messages("cy"))
             result mustBe Html("Ffrainc<br />1234567890<br />3 Chwefror 1996")
           }
         }

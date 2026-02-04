@@ -22,16 +22,20 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-case class EmploymentRelatedBeneficiary(name: String,
-                                        utr: Option[String],
-                                        address: Option[Address],
-                                        description: Description,
-                                        howManyBeneficiaries: HowManyBeneficiaries,
-                                        countryOfResidence: Option[String] = None,
-                                        entityStart: LocalDate,
-                                        provisional: Boolean) extends Beneficiary {
+case class EmploymentRelatedBeneficiary(
+  name: String,
+  utr: Option[String],
+  address: Option[Address],
+  description: Description,
+  howManyBeneficiaries: HowManyBeneficiaries,
+  countryOfResidence: Option[String] = None,
+  entityStart: LocalDate,
+  provisional: Boolean
+) extends Beneficiary {
 
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = true
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean =
+    true
+
 }
 
 object EmploymentRelatedBeneficiary extends BeneficiaryReads {
@@ -45,7 +49,7 @@ object EmploymentRelatedBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).readNullable[String] and
       (__ \ Symbol("entityStart")).read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    )(EmploymentRelatedBeneficiary.apply _)
+  )(EmploymentRelatedBeneficiary.apply _)
 
   implicit val writes: Writes[EmploymentRelatedBeneficiary] = (
     (__ \ Symbol("organisationName")).write[String] and
@@ -56,6 +60,6 @@ object EmploymentRelatedBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    )(unlift(EmploymentRelatedBeneficiary.unapply))
+  )(unlift(EmploymentRelatedBeneficiary.unapply))
 
 }

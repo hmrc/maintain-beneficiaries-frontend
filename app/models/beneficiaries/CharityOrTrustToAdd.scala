@@ -29,12 +29,12 @@ object CharityOrTrustToAdd extends Enumerable.Implicits {
   case object Trust extends WithName("trust") with CharityOrTrustToAdd
 
   val values: List[CharityOrTrustToAdd] = List(
-    Charity, Trust
+    Charity,
+    Trust
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[CharityOrTrustToAdd] =

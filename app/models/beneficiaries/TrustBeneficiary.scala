@@ -22,14 +22,16 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-final case class TrustBeneficiary(name: String,
-                                  utr: Option[String],
-                                  address: Option[Address],
-                                  income: Option[String],
-                                  incomeDiscretionYesNo: Option[Boolean],
-                                  countryOfResidence: Option[String] = None,
-                                  entityStart: LocalDate,
-                                  provisional: Boolean) extends OrgBeneficiary
+final case class TrustBeneficiary(
+  name: String,
+  utr: Option[String],
+  address: Option[Address],
+  income: Option[String],
+  incomeDiscretionYesNo: Option[Boolean],
+  countryOfResidence: Option[String] = None,
+  entityStart: LocalDate,
+  provisional: Boolean
+) extends OrgBeneficiary
 
 object TrustBeneficiary extends BeneficiaryReads {
 
@@ -42,15 +44,24 @@ object TrustBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    ).tupled.map {
-    case (name, None, None, None, None, country, entityStart, provisional) =>
+  ).tupled.map {
+    case (name, None, None, None, None, country, entityStart, provisional)      =>
       TrustBeneficiary(name, None, None, None, None, country, entityStart, provisional)
-    case (name, utr, address, None, _, country, entityStart, provisional) =>
+    case (name, utr, address, None, _, country, entityStart, provisional)       =>
       TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
     case (name, utr, address, _, Some(true), country, entityStart, provisional) =>
       TrustBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
-    case (name, utr, address, income, _, country, entityStart, provisional) =>
-      TrustBeneficiary(name, utr, address, income, incomeDiscretionYesNo = Some(false), country, entityStart, provisional)
+    case (name, utr, address, income, _, country, entityStart, provisional)     =>
+      TrustBeneficiary(
+        name,
+        utr,
+        address,
+        income,
+        incomeDiscretionYesNo = Some(false),
+        country,
+        entityStart,
+        provisional
+      )
   }
 
   implicit val writes: Writes[TrustBeneficiary] = (
@@ -62,6 +73,6 @@ object TrustBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(TrustBeneficiary.unapply))
+  ).apply(unlift(TrustBeneficiary.unapply))
 
 }

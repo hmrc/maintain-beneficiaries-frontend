@@ -30,4 +30,5 @@ class StartDatePageSpec extends PageBehaviours {
 
     beRemovable[LocalDate](StartDatePage)
   }
+
 }

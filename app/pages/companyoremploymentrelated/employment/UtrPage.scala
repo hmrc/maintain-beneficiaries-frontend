@@ -25,4 +25,3 @@ case object UtrPage extends QuestionPage[String] {
 
   override def toString: String = "utr"
 }
-

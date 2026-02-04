@@ -32,10 +32,10 @@ import views.html.charityortrust.trust.DiscretionYesNoView
 
 class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("trustBeneficiary.discretionYesNo")
+  private val form: Form[Boolean]          = new YesNoFormProvider().withPrefix("trustBeneficiary.discretionYesNo")
   private val discretionYesNoRoute: String = routes.DiscretionYesNoController.onPageLoad(NormalMode).url
-  private val name: String = "Trust"
-  private val onwardRoute = Call("GET", "/foo")
+  private val name: String                 = "Trust"
+  private val onwardRoute                  = Call("GET", "/foo")
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
@@ -85,7 +85,8 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[TrustBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, discretionYesNoRoute)
@@ -117,7 +118,7 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, name)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -151,4 +152,5 @@ class DiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

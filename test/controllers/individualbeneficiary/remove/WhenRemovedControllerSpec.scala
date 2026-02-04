@@ -45,7 +45,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
   val index = 0
 
-  val name: Name = Name("First", None, "Last")
+  val name: Name                    = Name("First", None, "Last")
   val mockConnector: TrustConnector = mock[TrustConnector]
 
   val fakeService = new TrustServiceImpl(mockConnector)
@@ -76,7 +76,8 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
     provisional = false
   )
 
-  val beneficiaries: List[IndividualBeneficiary] = List(individualBeneficiary(1), individualBeneficiary(2), individualBeneficiary(3))
+  val beneficiaries: List[IndividualBeneficiary] =
+    List(individualBeneficiary(1), individualBeneficiary(2), individualBeneficiary(3))
 
   "WhenRemoved Controller" must {
 
@@ -85,7 +86,9 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.successful(Beneficiaries(beneficiaries, Nil, Nil, Nil, Nil, Nil, Nil)))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val result = route(application, getRequest()).value
 
@@ -99,10 +102,10 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "redirect to the next page when valid data is submitted" in {
 
-      when(mockConnector.removeBeneficiary(any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(200, "")))
+      when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200, "")))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -122,7 +125,9 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val request =
         FakeRequest(POST, dateRemovedFromTrustRoute)
@@ -172,7 +177,9 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).overrides(bind[TrustConnector].toInstance(mockConnector)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
 
       val result = route(application, getRequest()).value
 
@@ -183,4 +190,5 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

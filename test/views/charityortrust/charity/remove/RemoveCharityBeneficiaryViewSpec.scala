@@ -25,10 +25,10 @@ import views.html.charityortrust.charity.remove.RemoveIndexView
 
 class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeCharityBeneficiaryYesNo"
+  val messageKeyPrefix    = "removeCharityBeneficiaryYesNo"
   val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
-  val name = "Trustee Name"
-  val index = 0
+  val name                = "Trustee Name"
+  val index               = 0
 
   "removeCharityBeneficiary view" must {
 
@@ -41,6 +41,13 @@ class RemoveCharityBeneficiaryViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveCharityBeneficiaryController.onSubmit(index).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name),
+      routes.RemoveCharityBeneficiaryController.onSubmit(index).url
+    )
   }
+
 }

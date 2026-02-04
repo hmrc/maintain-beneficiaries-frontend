@@ -33,41 +33,41 @@ import views.html.other.DiscretionYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DiscretionYesNoController @Inject()(
-                                           val controllerComponents: MessagesControllerComponents,
-                                           standardActionSets: StandardActionSets,
-                                           formProvider: YesNoFormProvider,
-                                           view: DiscretionYesNoView,
-                                           repository: PlaybackRepository,
-                                           @OtherBeneficiary navigator: Navigator,
-                                           descriptionAction: DescriptionRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class DiscretionYesNoController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: YesNoFormProvider,
+  view: DiscretionYesNoView,
+  repository: PlaybackRepository,
+  @OtherBeneficiary navigator: Navigator,
+  descriptionAction: DescriptionRequiredAction
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider.withPrefix("otherBeneficiary.discretionYesNo")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(DiscretionYesNoPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, mode, request.description))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.andThen(descriptionAction).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.description))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage, value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(DiscretionYesNoPage, mode, updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, request.description))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(DiscretionYesNoPage, value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(DiscretionYesNoPage, mode, updatedAnswers))
-      )
-  }
 }

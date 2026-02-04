@@ -22,14 +22,16 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-case class CompanyBeneficiary(name: String,
-                              utr: Option[String],
-                              address: Option[Address],
-                              income: Option[String],
-                              incomeDiscretionYesNo: Option[Boolean],
-                              countryOfResidence: Option[String] = None,
-                              entityStart: LocalDate,
-                              provisional: Boolean) extends OrgBeneficiary
+case class CompanyBeneficiary(
+  name: String,
+  utr: Option[String],
+  address: Option[Address],
+  income: Option[String],
+  incomeDiscretionYesNo: Option[Boolean],
+  countryOfResidence: Option[String] = None,
+  entityStart: LocalDate,
+  provisional: Boolean
+) extends OrgBeneficiary
 
 object CompanyBeneficiary extends BeneficiaryReads {
 
@@ -42,15 +44,42 @@ object CompanyBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).readNullable[String] and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    ).tupled.map {
-    case (name, None, None, None, None, country, entityStart, provisional) =>
+  ).tupled.map {
+    case (name, None, None, None, None, country, entityStart, provisional)      =>
       CompanyBeneficiary(name, None, None, None, None, country, entityStart, provisional)
-    case (name, utr, address, None, _, country, entityStart, provisional) =>
-      CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
+    case (name, utr, address, None, _, country, entityStart, provisional)       =>
+      CompanyBeneficiary(
+        name,
+        utr,
+        address,
+        None,
+        incomeDiscretionYesNo = Some(true),
+        country,
+        entityStart,
+        provisional
+      )
     case (name, utr, address, _, Some(true), country, entityStart, provisional) =>
-      CompanyBeneficiary(name, utr, address, None, incomeDiscretionYesNo = Some(true), country, entityStart, provisional)
-    case (name, utr, address, income, _, country, entityStart, provisional) =>
-      CompanyBeneficiary(name, utr, address, income, incomeDiscretionYesNo = Some(false), country, entityStart, provisional)
+      CompanyBeneficiary(
+        name,
+        utr,
+        address,
+        None,
+        incomeDiscretionYesNo = Some(true),
+        country,
+        entityStart,
+        provisional
+      )
+    case (name, utr, address, income, _, country, entityStart, provisional)     =>
+      CompanyBeneficiary(
+        name,
+        utr,
+        address,
+        income,
+        incomeDiscretionYesNo = Some(false),
+        country,
+        entityStart,
+        provisional
+      )
   }
 
   implicit val writes: Writes[CompanyBeneficiary] = (
@@ -62,6 +91,6 @@ object CompanyBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("countryOfResidence")).writeNullable[String] and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(CompanyBeneficiary.unapply))
+  ).apply(unlift(CompanyBeneficiary.unapply))
 
 }

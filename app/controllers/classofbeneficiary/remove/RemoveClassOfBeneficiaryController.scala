@@ -33,16 +33,17 @@ import views.html.classofbeneficiary.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveClassOfBeneficiaryController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    repository: PlaybackRepository,
-                                                    standardActionSets: StandardActionSets,
-                                                    trustService: TrustService,
-                                                    formProvider: RemoveIndexFormProvider,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: RemoveIndexView,
-                                                    errorHandler: ErrorHandler
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class RemoveClassOfBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  standardActionSets: StandardActionSets,
+  trustService: TrustService,
+  formProvider: RemoveIndexFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveIndexView,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def formRoute(index: Int): Call =
     controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
@@ -51,73 +52,78 @@ class RemoveClassOfBeneficiaryController @Inject()(
 
   private val form = formProvider.apply(messagesPrefix)
 
-  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
+  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
+      Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+    } recoverWith {
+      case iobe: IndexOutOfBoundsException =>
+        logger.warn(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" rror getting class of beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
+        )
 
-      trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
-        beneficiary =>
-          Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
-      } recoverWith {
-        case iobe: IndexOutOfBoundsException =>
-          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" rror getting class of beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException")
+        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+      case e                               =>
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error getting class of beneficiary $index from trusts service ${e.getMessage}"
+        )
 
-          Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting class of beneficiary $index from trusts service ${e.getMessage}")
-
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
 
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) => {
-          trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
-            beneficiary =>
-              BadRequest(view(messagesPrefix, formWithErrors, index, beneficiary.description, formRoute(index)))
-          }
-        },
-        value => {
-
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) =>
+          trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
+            BadRequest(view(messagesPrefix, formWithErrors, index, beneficiary.description, formRoute(index)))
+          },
+        value =>
           if (value) {
 
-            trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).flatMap {
-              beneficiary =>
-                if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.identifier, RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)).map { _ =>
-                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                      s" removed new class of beneficiary $index")
+            trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).flatMap { beneficiary =>
+              if (beneficiary.provisional) {
+                trustService
+                  .removeBeneficiary(
+                    request.userAnswers.identifier,
+                    RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index)
+                  )
+                  .map { _ =>
+                    logger.info(
+                      s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                        s" removed new class of beneficiary $index"
+                    )
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   }
-                } else {
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
-                    _ <- repository.set(updatedAnswers)
-                  } yield {
-                    Redirect(controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url)
-                  }
-                }
-            } recoverWith {
-              case e =>
-                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing a class of beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
+              } else {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
+                  _              <- repository.set(updatedAnswers)
+                } yield Redirect(
+                  controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url
+                )
+              }
+            } recoverWith { case e =>
+              logger.error(
+                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                  s" error removing a class of beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
+              )
 
-                errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))
           }
-        }
       )
   }
+
 }

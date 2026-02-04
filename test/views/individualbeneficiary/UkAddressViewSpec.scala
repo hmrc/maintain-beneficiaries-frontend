@@ -26,9 +26,9 @@ import views.html.individualbeneficiary.UkAddressView
 
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.ukAddress"
-  val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
+  val messageKeyPrefix               = "individualBeneficiary.ukAddress"
+  val name: Name                     = Name("First", Some("Middle"), "Last")
+  val mode: Mode                     = NormalMode
   override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
 
   "UkAddressView" must {
@@ -51,4 +51,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

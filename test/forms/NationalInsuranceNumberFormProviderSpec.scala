@@ -24,9 +24,9 @@ class NationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "individualBeneficiary.nationalInsuranceNumber"
 
-  val requiredKey = s"$prefix.error.required"
+  val requiredKey      = s"$prefix.error.required"
   val invalidFormatKey = s"$prefix.error.invalidFormat"
-  val notUniqueKey = s"$prefix.error.notUnique"
+  val notUniqueKey     = s"$prefix.error.notUnique"
 
   val form: Form[String] = new NationalInsuranceNumberFormProvider().apply(prefix, Nil)
 
@@ -60,4 +60,5 @@ class NationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
       notUniqueError = FormError(fieldName, notUniqueKey)
     )
   }
+
 }

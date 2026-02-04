@@ -27,7 +27,7 @@ import views.html.companyoremploymentrelated.company.UkAddressView
 class UkAddressViewSpec extends UkAddressViewBehaviours {
 
   val messageKeyPrefix = "site.address.uk"
-  val name: String = "Company"
+  val name: String     = "Company"
 
   override val form: Form[UkAddress] = new UkAddressFormProvider().apply()
 
@@ -51,4 +51,5 @@ class UkAddressViewSpec extends UkAddressViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

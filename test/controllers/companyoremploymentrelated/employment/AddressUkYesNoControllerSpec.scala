@@ -32,10 +32,10 @@ import views.html.companyoremploymentrelated.employment.AddressUkYesNoView
 
 class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[Boolean] = new YesNoFormProvider().withPrefix("employmentBeneficiary.addressUkYesNo")
+  private val form: Form[Boolean]         = new YesNoFormProvider().withPrefix("employmentBeneficiary.addressUkYesNo")
   private val addressUkYesNoRoute: String = routes.AddressUkYesNoController.onPageLoad(NormalMode).url
-  private val name: String = "Large"
-  private val onwardRoute = Call("GET", "/foo")
+  private val name: String                = "Large"
+  private val onwardRoute                 = Call("GET", "/foo")
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(NamePage, name).success.value
 
@@ -84,8 +84,11 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, addressUkYesNoRoute)
@@ -117,7 +120,7 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, name)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -151,4 +154,5 @@ class AddressUkYesNoControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

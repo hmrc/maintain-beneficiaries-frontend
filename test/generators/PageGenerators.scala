@@ -23,4 +23,5 @@ trait PageGenerators {
 
   implicit lazy val arbitraryNamePage: Arbitrary[NamePage.type] =
     Arbitrary(NamePage)
+
 }

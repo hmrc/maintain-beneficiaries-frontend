@@ -26,9 +26,9 @@ import java.time.LocalDate
 
 class IndividualBeneficiaryMapperSpec extends SpecBase {
 
-  private val name = Name("First", None, "Last")
-  private val dateOfBirth = LocalDate.parse("2010-02-03")
-  private val startDate = LocalDate.parse("2019-03-09")
+  private val name         = Name("First", None, "Last")
+  private val dateOfBirth  = LocalDate.parse("2010-02-03")
+  private val startDate    = LocalDate.parse("2019-03-09")
   private val nonUkAddress = NonUkAddress("line1", "line2", Some("line3"), "country")
 
   "IndividualBeneficiaryMapper" when {
@@ -37,220 +37,349 @@ class IndividualBeneficiaryMapperSpec extends SpecBase {
 
     "adding" must {
 
-        "taxable" when {
+      "taxable" when {
 
-          "no country of nationality, no country of residence, not legally incapable" in {
+        "no country of nationality, no country of residence, not legally incapable" in {
 
-            val nino = "AA123456A"
+          val nino = "AA123456A"
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(IncomeDiscretionYesNoPage, true).success.value
-              .set(CountryOfNationalityYesNoPage, false).success.value
-              .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, No).success.value
-              .set(NationalInsuranceNumberYesNoPage, true).success.value
-              .set(NationalInsuranceNumberPage, nino).success.value
-              .set(VPE1FormYesNoPage, false).success.value
-              .set(StartDatePage, startDate).success.value
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(IncomeDiscretionYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, No)
+            .success
+            .value
+            .set(NationalInsuranceNumberYesNoPage, true)
+            .success
+            .value
+            .set(NationalInsuranceNumberPage, nino)
+            .success
+            .value
+            .set(VPE1FormYesNoPage, false)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
 
-            val result = mapper(userAnswers).get
+          val result = mapper(userAnswers).get
 
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe Some(true)
-            result.income mustBe None
-            result.countryOfResidence mustBe None
-            result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(No)
-            result.identification mustBe Some(NationalInsuranceNumber(nino))
-            result.address mustBe None
-            result.vulnerableYesNo mustBe Some(false)
-            result.entityStart mustBe startDate
-          }
-
-          "UK country of nationality, UK country of residence, legally incapable" in {
-
-            val nino = "AA123456A"
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(IncomeDiscretionYesNoPage, true).success.value
-              .set(CountryOfNationalityYesNoPage, true).success.value
-              .set(CountryOfNationalityUkYesNoPage, true).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, Yes).success.value
-              .set(NationalInsuranceNumberYesNoPage, true).success.value
-              .set(NationalInsuranceNumberPage, nino).success.value
-              .set(VPE1FormYesNoPage, false).success.value
-              .set(StartDatePage, startDate).success.value
-
-            val result = mapper(userAnswers).get
-
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe Some(true)
-            result.income mustBe None
-            result.countryOfResidence mustBe Some("GB")
-            result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(Yes)
-            result.identification mustBe Some(NationalInsuranceNumber(nino))
-            result.address mustBe None
-            result.vulnerableYesNo mustBe Some(false)
-            result.entityStart mustBe startDate
-          }
-
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income                mustBe None
+          result.countryOfResidence    mustBe None
+          result.nationality           mustBe None
+          result.mentalCapacityYesNo   mustBe Some(No)
+          result.identification        mustBe Some(NationalInsuranceNumber(nino))
+          result.address               mustBe None
+          result.vulnerableYesNo       mustBe Some(false)
+          result.entityStart           mustBe startDate
         }
 
-        "non-taxable" when {
+        "UK country of nationality, UK country of residence, legally incapable" in {
 
-          "no country of nationality, no country of residence, not legally incapable" in {
+          val nino = "AA123456A"
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(CountryOfNationalityYesNoPage, false).success.value
-              .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, No).success.value
-              .set(StartDatePage, startDate).success.value
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(IncomeDiscretionYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityUkYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, true)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, Yes)
+            .success
+            .value
+            .set(NationalInsuranceNumberYesNoPage, true)
+            .success
+            .value
+            .set(NationalInsuranceNumberPage, nino)
+            .success
+            .value
+            .set(VPE1FormYesNoPage, false)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
 
-            val result = mapper(userAnswers).get
+          val result = mapper(userAnswers).get
 
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe None
-            result.income mustBe None
-            result.countryOfResidence mustBe None
-            result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(No)
-            result.identification mustBe None
-            result.address mustBe None
-            result.vulnerableYesNo mustBe None
-            result.entityStart mustBe startDate
-          }
-
-          "UK country of nationality, UK country of residence, and legally incapable" in {
-
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(CountryOfNationalityYesNoPage, true).success.value
-              .set(CountryOfNationalityUkYesNoPage, true).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, Yes).success.value
-              .set(StartDatePage, startDate).success.value
-
-            val result = mapper(userAnswers).get
-
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe None
-            result.income mustBe None
-            result.countryOfResidence mustBe Some("GB")
-            result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(Yes)
-            result.identification mustBe None
-            result.address mustBe None
-            result.vulnerableYesNo mustBe None
-            result.entityStart mustBe startDate
-          }
-
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income                mustBe None
+          result.countryOfResidence    mustBe Some("GB")
+          result.nationality           mustBe Some("GB")
+          result.mentalCapacityYesNo   mustBe Some(Yes)
+          result.identification        mustBe Some(NationalInsuranceNumber(nino))
+          result.address               mustBe None
+          result.vulnerableYesNo       mustBe Some(false)
+          result.entityStart           mustBe startDate
         }
+
+      }
+
+      "non-taxable" when {
+
+        "no country of nationality, no country of residence, not legally incapable" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, No)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe None
+          result.income                mustBe None
+          result.countryOfResidence    mustBe None
+          result.nationality           mustBe None
+          result.mentalCapacityYesNo   mustBe Some(No)
+          result.identification        mustBe None
+          result.address               mustBe None
+          result.vulnerableYesNo       mustBe None
+          result.entityStart           mustBe startDate
+        }
+
+        "UK country of nationality, UK country of residence, and legally incapable" in {
+
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityUkYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, true)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, Yes)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
+
+          val result = mapper(userAnswers).get
+
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe None
+          result.income                mustBe None
+          result.countryOfResidence    mustBe Some("GB")
+          result.nationality           mustBe Some("GB")
+          result.mentalCapacityYesNo   mustBe Some(Yes)
+          result.identification        mustBe None
+          result.address               mustBe None
+          result.vulnerableYesNo       mustBe None
+          result.entityStart           mustBe startDate
+        }
+
+      }
 
     }
 
     "amending" must {
 
-        "taxable" when {
+      "taxable" when {
 
-          "UK country of nationality, UK country of residence, and legally incapable" in {
+        "UK country of nationality, UK country of residence, and legally incapable" in {
 
-            val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+          val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
 
-            val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
+          val passport = CombinedPassportOrIdCard("SP", "123456789", LocalDate.of(2024, 8, 16))
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(IncomeDiscretionYesNoPage, true).success.value
-              .set(CountryOfNationalityYesNoPage, false).success.value
-              .set(CountryOfResidenceYesNoPage, false).success.value
-              .set(MentalCapacityYesNoPage, No).success.value
-              .set(NationalInsuranceNumberYesNoPage, false).success.value
-              .set(AddressYesNoPage, true).success.value
-              .set(LiveInTheUkYesNoPage, false).success.value
-              .set(NonUkAddressPage, nonUkAddress).success.value
-              .set(PassportOrIdCardDetailsYesNoPage, true).success.value
-              .set(PassportOrIdCardDetailsPage, passport).success.value
-              .set(VPE1FormYesNoPage, false).success.value
-              .set(StartDatePage, startDate).success.value
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(IncomeDiscretionYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, No)
+            .success
+            .value
+            .set(NationalInsuranceNumberYesNoPage, false)
+            .success
+            .value
+            .set(AddressYesNoPage, true)
+            .success
+            .value
+            .set(LiveInTheUkYesNoPage, false)
+            .success
+            .value
+            .set(NonUkAddressPage, nonUkAddress)
+            .success
+            .value
+            .set(PassportOrIdCardDetailsYesNoPage, true)
+            .success
+            .value
+            .set(PassportOrIdCardDetailsPage, passport)
+            .success
+            .value
+            .set(VPE1FormYesNoPage, false)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
 
-            val result = mapper(userAnswers).get
+          val result = mapper(userAnswers).get
 
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe Some(true)
-            result.income mustBe None
-            result.countryOfResidence mustBe None
-            result.nationality mustBe None
-            result.mentalCapacityYesNo mustBe Some(No)
-            result.identification mustBe Some(passport)
-            result.address mustBe Some(nonUkAddress)
-            result.vulnerableYesNo mustBe Some(false)
-            result.entityStart mustBe startDate
-          }
-
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe Some(true)
+          result.income                mustBe None
+          result.countryOfResidence    mustBe None
+          result.nationality           mustBe None
+          result.mentalCapacityYesNo   mustBe Some(No)
+          result.identification        mustBe Some(passport)
+          result.address               mustBe Some(nonUkAddress)
+          result.vulnerableYesNo       mustBe Some(false)
+          result.entityStart           mustBe startDate
         }
 
-        "non-taxable" when {
+      }
 
-          "UK country of nationality, UK country of residence, and legally incapable" in {
+      "non-taxable" when {
 
-            val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
+        "UK country of nationality, UK country of residence, and legally incapable" in {
 
-            val userAnswers = emptyUserAnswers
-              .set(NamePage, name).success.value
-              .set(DateOfBirthYesNoPage, true).success.value
-              .set(DateOfBirthPage, dateOfBirth).success.value
-              .set(CountryOfNationalityYesNoPage, true).success.value
-              .set(CountryOfNationalityUkYesNoPage, true).success.value
-              .set(CountryOfResidenceYesNoPage, true).success.value
-              .set(CountryOfResidenceUkYesNoPage, true).success.value
-              .set(MentalCapacityYesNoPage, Yes).success.value
-              .set(StartDatePage, startDate).success.value
+          val mapper = injector.instanceOf[IndividualBeneficiaryMapper]
 
-            val result = mapper(userAnswers).get
+          val userAnswers = emptyUserAnswers
+            .set(NamePage, name)
+            .success
+            .value
+            .set(DateOfBirthYesNoPage, true)
+            .success
+            .value
+            .set(DateOfBirthPage, dateOfBirth)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityUkYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceUkYesNoPage, true)
+            .success
+            .value
+            .set(MentalCapacityYesNoPage, Yes)
+            .success
+            .value
+            .set(StartDatePage, startDate)
+            .success
+            .value
 
-            result.name mustBe name
-            result.roleInCompany mustBe None
-            result.dateOfBirth mustBe Some(dateOfBirth)
-            result.incomeDiscretionYesNo mustBe None
-            result.income mustBe None
-            result.countryOfResidence mustBe Some("GB")
-            result.nationality mustBe Some("GB")
-            result.mentalCapacityYesNo mustBe Some(Yes)
-            result.identification mustBe None
-            result.address mustBe None
-            result.vulnerableYesNo mustBe None
-            result.entityStart mustBe startDate
-          }
+          val result = mapper(userAnswers).get
 
+          result.name                  mustBe name
+          result.roleInCompany         mustBe None
+          result.dateOfBirth           mustBe Some(dateOfBirth)
+          result.incomeDiscretionYesNo mustBe None
+          result.income                mustBe None
+          result.countryOfResidence    mustBe Some("GB")
+          result.nationality           mustBe Some("GB")
+          result.mentalCapacityYesNo   mustBe Some(Yes)
+          result.identification        mustBe None
+          result.address               mustBe None
+          result.vulnerableYesNo       mustBe None
+          result.entityStart           mustBe startDate
         }
+
+      }
 
     }
   }
+
 }

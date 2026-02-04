@@ -18,7 +18,9 @@ package utils.print
 
 import com.google.inject.Inject
 import models.beneficiaries.RoleInCompany
-import models.{Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, Name, Passport, UserAnswers}
+import models.{
+  Address, CombinedPassportOrIdCard, Description, HowManyBeneficiaries, IdCard, Name, Passport, UserAnswers
+}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.{Html, HtmlFormat}
@@ -28,147 +30,138 @@ import java.time.LocalDate
 
 import pages.QuestionPage
 
-class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatters) {
+class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatters) {
 
-  def bind(userAnswers: UserAnswers, name: String)
-          (implicit messages: Messages): Bound = new Bound(userAnswers, name)
+  def bind(userAnswers: UserAnswers, name: String)(implicit messages: Messages): Bound = new Bound(userAnswers, name)
 
-  class Bound(userAnswers: UserAnswers, name: String)
-             (implicit messages: Messages) {
+  class Bound(userAnswers: UserAnswers, name: String)(implicit messages: Messages) {
 
-    def nameQuestion(query: Gettable[Name],
-                     labelKey: String,
-                     changeUrl: String): Option[AnswerRow] = {
+    def nameQuestion(query: Gettable[Name], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: Name) => HtmlFormat.escape(x.displayFullName)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def roleInCompanyQuestion(query: Gettable[RoleInCompany],
-                              labelKey: String,
-                              changeUrl: String): Option[AnswerRow] = {
+    def roleInCompanyQuestion(
+      query: Gettable[RoleInCompany],
+      labelKey: String,
+      changeUrl: String
+    ): Option[AnswerRow] = {
       val format = (x: RoleInCompany) => checkAnswersFormatters.formatRoleInCompany(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def stringQuestion(query: Gettable[String],
-                       labelKey: String,
-                       changeUrl: String): Option[AnswerRow] = {
+    def stringQuestion(query: Gettable[String], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: String) => HtmlFormat.escape(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def percentageQuestion(query: Gettable[Int],
-                           labelKey: String,
-                           changeUrl: String): Option[AnswerRow] = {
+    def percentageQuestion(query: Gettable[Int], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: Int) => checkAnswersFormatters.percentage(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def intQuestion(query: Gettable[Int],
-                    labelKey: String,
-                    changeUrl: String): Option[AnswerRow] = {
+    def intQuestion(query: Gettable[Int], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: Int) => HtmlFormat.escape(x.toString)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def yesNoQuestion(query: Gettable[Boolean],
-                      labelKey: String,
-                      changeUrl: String): Option[AnswerRow] = {
+    def yesNoQuestion(query: Gettable[Boolean], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: Boolean) => checkAnswersFormatters.yesOrNo(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def yesNoPassportOrIdQuestion(query: Gettable[Boolean],
-                      labelKey: String,
-                      changeUrl: Option[String]): Option[AnswerRow] = {
+    def yesNoPassportOrIdQuestion(
+      query: Gettable[Boolean],
+      labelKey: String,
+      changeUrl: Option[String]
+    ): Option[AnswerRow] = {
       val format = (x: Boolean) => checkAnswersFormatters.yesOrNo(x)
       question(query, labelKey, format, changeUrl)
     }
 
-    def dateQuestion(query: Gettable[LocalDate],
-                     labelKey: String,
-                     changeUrl: String): Option[AnswerRow] = {
+    def dateQuestion(query: Gettable[LocalDate], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: LocalDate) => checkAnswersFormatters.formatDate(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def ninoQuestion(query: Gettable[String],
-                     labelKey: String,
-                     changeUrl: String): Option[AnswerRow] = {
+    def ninoQuestion(query: Gettable[String], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: String) => checkAnswersFormatters.formatNino(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def addressQuestion[T <: Address](query: Gettable[T],
-                                      labelKey: String,
-                                      changeUrl: String)
-                                     (implicit reads: Reads[T]): Option[AnswerRow] = {
+    def addressQuestion[T <: Address](query: Gettable[T], labelKey: String, changeUrl: String)(implicit
+      reads: Reads[T]
+    ): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.formatAddress(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def passportDetailsQuestion(query: Gettable[Passport],
-                                labelKey: String,
-                                changeUrl: Option[String]): Option[AnswerRow] = {
+    def passportDetailsQuestion(
+      query: Gettable[Passport],
+      labelKey: String,
+      changeUrl: Option[String]
+    ): Option[AnswerRow] = {
       val format = (x: Passport) => checkAnswersFormatters.formatPassportOrIdCardDetails(x.asCombined)
       question(query, labelKey, format, changeUrl)
     }
 
-    def idCardDetailsQuestion(query: Gettable[IdCard],
-                              labelKey: String,
-                              changeUrl: Option[String]): Option[AnswerRow] = {
+    def idCardDetailsQuestion(
+      query: Gettable[IdCard],
+      labelKey: String,
+      changeUrl: Option[String]
+    ): Option[AnswerRow] = {
       val format = (x: IdCard) => checkAnswersFormatters.formatPassportOrIdCardDetails(x.asCombined)
       question(query, labelKey, format, changeUrl)
     }
 
-    def passportOrIdCardDetailsQuestion(query: QuestionPage[CombinedPassportOrIdCard],
-                                        labelKey: String,
-                                        changeUrl: Option[String]): Option[AnswerRow] = {
+    def passportOrIdCardDetailsQuestion(
+      query: QuestionPage[CombinedPassportOrIdCard],
+      labelKey: String,
+      changeUrl: Option[String]
+    ): Option[AnswerRow] = {
       val format = (x: CombinedPassportOrIdCard) => checkAnswersFormatters.formatPassportOrIdCardDetails(x)
       question(query, labelKey, format, changeUrl)
     }
 
-    def descriptionQuestion(query: Gettable[Description],
-                            labelKey: String,
-                            changeUrl: String): Option[AnswerRow] = {
+    def descriptionQuestion(query: Gettable[Description], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: Description) => checkAnswersFormatters.formatDescription(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def numberOfBeneficiariesQuestion(query: Gettable[HowManyBeneficiaries],
-                                      labelKey: String,
-                                      changeUrl: String): Option[AnswerRow] = {
+    def numberOfBeneficiariesQuestion(
+      query: Gettable[HowManyBeneficiaries],
+      labelKey: String,
+      changeUrl: String
+    ): Option[AnswerRow] = {
       val format = (x: HowManyBeneficiaries) => checkAnswersFormatters.formatNumberOfBeneficiaries(x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    def countryQuestion(isUkQuery: Gettable[Boolean],
-                        query: Gettable[String],
-                        labelKey: String,
-                        changeUrl: String): Option[AnswerRow] = {
+    def countryQuestion(
+      isUkQuery: Gettable[Boolean],
+      query: Gettable[String],
+      labelKey: String,
+      changeUrl: String
+    ): Option[AnswerRow] =
       userAnswers.get(isUkQuery) flatMap {
         case false =>
           val format = (x: String) => checkAnswersFormatters.country(x)
           question(query, labelKey, format, Some(changeUrl))
-        case _ =>
+        case _     =>
           None
       }
-    }
 
-    def enumQuestion[T](query: Gettable[T],
-                        labelKey: String,
-                        changeUrl: String,
-                        enumPrefix: String)
-                       (implicit messages:Messages, rds: Reads[T]): Option[AnswerRow] = {
+    def enumQuestion[T](query: Gettable[T], labelKey: String, changeUrl: String, enumPrefix: String)(implicit
+      messages: Messages,
+      rds: Reads[T]
+    ): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.formatEnum(enumPrefix, x)
       question(query, labelKey, format, Some(changeUrl))
     }
 
-    private def question[T](query: Gettable[T],
-                            labelKey: String,
-                            format: T => Html,
-                            changeUrl: Option[String])
-                           (implicit rds: Reads[T]): Option[AnswerRow] = {
+    private def question[T](query: Gettable[T], labelKey: String, format: T => Html, changeUrl: Option[String])(implicit
+      rds: Reads[T]
+    ): Option[AnswerRow] =
       userAnswers.get(query) map { x =>
         AnswerRow(
           label = messages(s"$labelKey.checkYourAnswersLabel", name),
@@ -176,6 +169,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
           changeUrl = changeUrl
         )
       }
-    }
+
   }
+
 }

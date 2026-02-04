@@ -28,14 +28,16 @@ object RoleInCompany extends Enumerable.Implicits {
   case object NA extends WithName("NA") with RoleInCompany
 
   val values: List[RoleInCompany] = List(
-    Director, Employee, NA
+    Director,
+    Employee,
+    NA
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("individualBeneficiary.roleInCompany", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("individualBeneficiary.roleInCompany", value.toString)
   }
 
   implicit val enumerable: Enumerable[RoleInCompany] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

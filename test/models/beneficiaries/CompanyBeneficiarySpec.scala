@@ -31,8 +31,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
       "taxable" when {
 
         "there is conflicting income info" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -61,8 +60,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is no discretion for income info" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -90,8 +88,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a UTR" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "236",
               |  "bpMatchStatus": "01",
@@ -118,8 +115,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a UK address" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -146,13 +142,15 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
           beneficiary mustBe CompanyBeneficiary(
             name = "Nelson Ltd ",
             utr = None,
-            address = Some(UkAddress(
-              line1 = "Suite 10",
-              line2 = "Wealthy Arena",
-              line3 = Some("Trafagar Square"),
-              line4 = Some("London"),
-              postcode = "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                line1 = "Suite 10",
+                line2 = "Wealthy Arena",
+                line3 = Some("Trafagar Square"),
+                line4 = Some("London"),
+                postcode = "SE2 2HB"
+              )
+            ),
             income = Some("10000"),
             incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
@@ -162,8 +160,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a non-UK address" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -188,12 +185,14 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
           beneficiary mustBe CompanyBeneficiary(
             name = "Nelson Ltd ",
             utr = None,
-            address = Some(NonUkAddress(
-              line1 = "Suite 10",
-              line2 = "Wealthy Arena",
-              line3 = Some("Paris"),
-              country = "FR"
-            )),
+            address = Some(
+              NonUkAddress(
+                line1 = "Suite 10",
+                line2 = "Wealthy Arena",
+                line3 = Some("Paris"),
+                country = "FR"
+              )
+            ),
             income = Some("10000"),
             incomeDiscretionYesNo = Some(false),
             countryOfResidence = None,
@@ -203,8 +202,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -236,8 +234,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
       "non-taxable" when {
 
         "there is no country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -264,8 +261,7 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "1",
               |  "bpMatchStatus": "01",
@@ -294,4 +290,5 @@ class CompanyBeneficiarySpec extends AnyWordSpec with Matchers {
       }
     }
   }
+
 }

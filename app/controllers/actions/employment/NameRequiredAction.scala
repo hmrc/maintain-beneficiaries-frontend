@@ -26,19 +26,16 @@ import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameRequiredAction @Inject()(val executionContext: ExecutionContext, val messagesApi: MessagesApi)
-  extends ActionTransformer[DataRequest, BeneficiaryNameRequest] with I18nSupport {
+class NameRequiredAction @Inject() (val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+    extends ActionTransformer[DataRequest, BeneficiaryNameRequest] with I18nSupport {
 
-  override protected def transform[A](request: DataRequest[A]): Future[BeneficiaryNameRequest[A]] = {
-    Future.successful(actions.BeneficiaryNameRequest[A](request,
-      getName(request)
-    ))
-  }
+  override protected def transform[A](request: DataRequest[A]): Future[BeneficiaryNameRequest[A]] =
+    Future.successful(actions.BeneficiaryNameRequest[A](request, getName(request)))
 
-  private def getName[A](request: DataRequest[A]): String = {
+  private def getName[A](request: DataRequest[A]): String =
     request.userAnswers.get(NamePage) match {
       case Some(name) => name
-      case _ => request.messages(messagesApi)("employmentBeneficiary.name.default")
+      case _          => request.messages(messagesApi)("employmentBeneficiary.name.default")
     }
-  }
+
 }

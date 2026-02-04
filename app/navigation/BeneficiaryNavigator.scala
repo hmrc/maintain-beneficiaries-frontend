@@ -36,28 +36,30 @@ class BeneficiaryNavigator {
     )
 
     routes.filter(_._1.size < MAX) match {
-      case (_, x) :: Nil =>
+      case (_, x) :: Nil                                                                                 =>
         x
       case (x, _) :: (y, _) :: Nil if x == beneficiaries.company && y == beneficiaries.employmentRelated =>
         addBeneficiaryNowRoute(CompanyOrEmploymentRelated)
-      case (x, _) :: (y, _) :: Nil if x == beneficiaries.trust && y == beneficiaries.charity =>
+      case (x, _) :: (y, _) :: Nil if x == beneficiaries.trust && y == beneficiaries.charity             =>
         addBeneficiaryNowRoute(CharityOrTrust)
-      case _ =>
+      case _                                                                                             =>
         controllers.routes.AddNowController.onPageLoad()
     }
   }
 
-  def addBeneficiaryNowRoute(`type`: TypeOfBeneficiaryToAdd): Call = {
+  def addBeneficiaryNowRoute(`type`: TypeOfBeneficiaryToAdd): Call =
     `type` match {
-      case Individual => controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode)
-      case ClassOfBeneficiaries => controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad()
-      case CompanyOrEmploymentRelated => controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad()
-      case Company => controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode)
-      case EmploymentRelated => controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode)
-      case CharityOrTrust => controllers.charityortrust.routes.CharityOrTrustController.onPageLoad()
-      case Trust => controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode)
-      case Charity => controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode)
-      case Other => controllers.other.routes.DescriptionController.onPageLoad(NormalMode)
+      case Individual                 => controllers.individualbeneficiary.routes.NameController.onPageLoad(NormalMode)
+      case ClassOfBeneficiaries       => controllers.classofbeneficiary.add.routes.DescriptionController.onPageLoad()
+      case CompanyOrEmploymentRelated =>
+        controllers.companyoremploymentrelated.routes.CompanyOrEmploymentRelatedController.onPageLoad()
+      case Company                    => controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode)
+      case EmploymentRelated          =>
+        controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode)
+      case CharityOrTrust             => controllers.charityortrust.routes.CharityOrTrustController.onPageLoad()
+      case Trust                      => controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode)
+      case Charity                    => controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode)
+      case Other                      => controllers.other.routes.DescriptionController.onPageLoad(NormalMode)
     }
-  }
+
 }

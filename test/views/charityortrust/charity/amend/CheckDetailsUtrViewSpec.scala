@@ -40,5 +40,5 @@ class CheckDetailsUtrViewSpec extends ViewBehaviours {
 
     behave like pageWithASubmitButton(applyView())
   }
-}
 
+}

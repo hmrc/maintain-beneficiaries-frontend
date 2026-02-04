@@ -39,22 +39,36 @@ import scala.concurrent.Future
 
 class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  private val name: String = "Charity"
-  private val utr: String = "UTRUTRUTR"
+  private val name: String    = "Charity"
+  private val utr: String     = "UTRUTRUTR"
   private val date: LocalDate = LocalDate.parse("2019-02-03")
 
-  private lazy val checkDetailsUtrRoute = routes.CheckDetailsUtrController.onPageLoad().url
+  private lazy val checkDetailsUtrRoute  = routes.CheckDetailsUtrController.onPageLoad().url
   private lazy val submitDetailsUtrRoute = routes.CheckDetailsUtrController.onSubmit().url
-  private lazy val onwardRoute = controllers.routes.AddABeneficiaryController.onPageLoad().url
+  private lazy val onwardRoute           = controllers.routes.AddABeneficiaryController.onPageLoad().url
 
   private val userAnswers = emptyUserAnswers
-    .set(AddNowPage, TypeOfBeneficiaryToAdd.CharityOrTrust).success.value
-    .set(CharityOrTrustPage, CharityOrTrustToAdd.Charity).success.value
-    .set(NamePage, name).success.value
-    .set(UtrPage, utr).success.value
-    .set(DiscretionYesNoPage, true).success.value
-    .set(AddressYesNoPage, false).success.value
-    .set(StartDatePage, date).success.value
+    .set(AddNowPage, TypeOfBeneficiaryToAdd.CharityOrTrust)
+    .success
+    .value
+    .set(CharityOrTrustPage, CharityOrTrustToAdd.Charity)
+    .success
+    .value
+    .set(NamePage, name)
+    .success
+    .value
+    .set(UtrPage, utr)
+    .success
+    .value
+    .set(DiscretionYesNoPage, true)
+    .success
+    .value
+    .set(AddressYesNoPage, false)
+    .success
+    .value
+    .set(StartDatePage, date)
+    .success
+    .value
 
   "CheckDetails Controller" must {
 
@@ -66,8 +80,8 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CheckDetailsUtrView]
-      val printHelper = application.injector.instanceOf[CharityBeneficiaryPrintHelper]
+      val view          = application.injector.instanceOf[CheckDetailsUtrView]
+      val printHelper   = application.injector.instanceOf[CharityBeneficiaryPrintHelper]
       val answerSection = printHelper(userAnswers, provisional = false, name)
 
       status(result) mustEqual OK
@@ -85,7 +99,8 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
           .overrides(bind[TrustConnector].toInstance(mockTrustConnector))
           .build()
 
-      when(mockTrustConnector.amendCharityBeneficiary(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockTrustConnector.amendCharityBeneficiary(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val request = FakeRequest(POST, submitDetailsUtrRoute)
 
@@ -99,4 +114,5 @@ class CheckDetailsUtrControllerSpec extends SpecBase with MockitoSugar with Scal
     }
 
   }
+
 }

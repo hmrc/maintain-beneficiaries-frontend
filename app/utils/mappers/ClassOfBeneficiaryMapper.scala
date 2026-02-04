@@ -29,6 +29,6 @@ class ClassOfBeneficiaryMapper extends Mapper[ClassOfBeneficiary] {
     DescriptionPage.path.read[String] and
       EntityStartPage.path.read[LocalDate] and
       Reads(_ => JsSuccess(true))
-    )(ClassOfBeneficiary.apply _)
+  )(ClassOfBeneficiary.apply _)
 
 }

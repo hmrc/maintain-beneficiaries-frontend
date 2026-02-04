@@ -32,8 +32,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
 
         "with UK address" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "262",
               |  "description": "Beneficiary Other 1",
@@ -53,13 +52,15 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
 
           beneficiary mustBe OtherBeneficiary(
             description = "Beneficiary Other 1",
-            address = Some(UkAddress(
-              "Ben Other Line 1",
-              "Ben Other Line 2",
-              Some("Ben Other Line 3"),
-              Some("Ben Other Line 4"),
-              "AB1 2BA"
-            )),
+            address = Some(
+              UkAddress(
+                "Ben Other Line 1",
+                "Ben Other Line 2",
+                Some("Ben Other Line 3"),
+                Some("Ben Other Line 4"),
+                "AB1 2BA"
+              )
+            ),
             income = None,
             incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
@@ -70,8 +71,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
 
         "with foreign address" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "263",
               |  "description": "Beneficiary Other 24",
@@ -89,12 +89,14 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
 
           beneficiary mustBe OtherBeneficiary(
             description = "Beneficiary Other 24",
-            address = Some(NonUkAddress(
-              "Ben Other Line 1",
-              "Ben Other Line 2",
-              Some("Ben Other Line 3"),
-              "RU"
-            )),
+            address = Some(
+              NonUkAddress(
+                "Ben Other Line 1",
+                "Ben Other Line 2",
+                Some("Ben Other Line 3"),
+                "RU"
+              )
+            ),
             income = None,
             incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
@@ -104,8 +106,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with no identification" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "274",
               |  "description": "Beneficiary Other 13",
@@ -129,8 +130,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is conflicting income info" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "276",
               |  "description": "Beneficiary Other 15",
@@ -154,8 +154,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is no discretion for income info" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "275",
               |  "description": "Beneficiary Other 14",
@@ -178,8 +177,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is no income at all" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "274",
               |  "description": "Beneficiary Other 13",
@@ -198,13 +196,15 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
           val beneficiary = json.as[OtherBeneficiary]
           beneficiary mustBe OtherBeneficiary(
             description = "Beneficiary Other 13",
-            address = Some(UkAddress(
-              "Ben Other Line 1",
-              "Ben Other Line 2",
-              Some("Ben Other Line 3"),
-              Some("Ben Other Line 4"),
-              "AB1 2BA"
-            )),
+            address = Some(
+              UkAddress(
+                "Ben Other Line 1",
+                "Ben Other Line 2",
+                Some("Ben Other Line 3"),
+                Some("Ben Other Line 4"),
+                "AB1 2BA"
+              )
+            ),
             income = None,
             incomeDiscretionYesNo = Some(true),
             countryOfResidence = None,
@@ -214,8 +214,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "274",
               |  "description": "Beneficiary Other 13",
@@ -242,8 +241,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
       "non-taxable" when {
 
         "there is no country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "274",
               |  "description": "Beneficiary Other 13",
@@ -265,8 +263,7 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a country of residence" in {
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               |  "lineNo": "274",
               |  "description": "Beneficiary Other 13",
@@ -290,4 +287,5 @@ class OtherBeneficiarySpec extends AnyWordSpec with Matchers {
       }
     }
   }
+
 }

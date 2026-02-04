@@ -31,4 +31,5 @@ class FeatureNotAvailableViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "featureNotAvailable")
   }
+
 }

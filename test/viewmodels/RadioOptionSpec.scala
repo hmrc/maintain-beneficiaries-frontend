@@ -31,4 +31,5 @@ class RadioOptionSpec extends SpecBase {
       radioOption.messageKey mustEqual "prefix.option"
     }
   }
+
 }

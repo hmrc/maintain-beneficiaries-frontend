@@ -21,11 +21,8 @@ import play.api.libs.json._
 
 sealed trait Address
 
-case class UkAddress (line1: String,
-                      line2: String,
-                      line3: Option[String],
-                      line4: Option[String],
-                      postcode: String) extends Address
+case class UkAddress(line1: String, line2: String, line3: Option[String], line4: Option[String], postcode: String)
+    extends Address
 
 object UkAddress {
 
@@ -42,36 +39,35 @@ object UkAddress {
       (__ \ Symbol("line3")).writeNullable[String] and
       (__ \ Symbol("line4")).writeNullable[String] and
       (__ \ Symbol("postCode")).write[String] and
-      (__ \ Symbol("country")).write[String]
-      ).apply(address => (
-      address.line1,
-      address.line2,
-      address.line3,
-      address.line4,
-      address.postcode,
-      "GB"
-    ))
+      (__ \ Symbol("country")).write[String]).apply(address =>
+      (
+        address.line1,
+        address.line2,
+        address.line3,
+        address.line4,
+        address.postcode,
+        "GB"
+      )
+    )
 
   implicit val format: Format[UkAddress] = Format[UkAddress](reads, writes)
 }
 
-case class NonUkAddress (line1: String,
-                         line2: String,
-                         line3: Option[String] = None,
-                         country: String) extends Address
+case class NonUkAddress(line1: String, line2: String, line3: Option[String] = None, country: String) extends Address
 
 object NonUkAddress {
   implicit val format: OFormat[NonUkAddress] = Json.format[NonUkAddress]
 }
 
 object Address {
+
   implicit val reads: Reads[Address] =
     __.read[UkAddress](UkAddress.reads).widen[Address] orElse
-    __.read[NonUkAddress](NonUkAddress.format).widen[Address]
+      __.read[NonUkAddress](NonUkAddress.format).widen[Address]
 
   implicit val writes: Writes[Address] = Writes {
-    case a:UkAddress => Json.toJson(a)(UkAddress.writes)
-    case a:NonUkAddress => Json.toJson(a)(NonUkAddress.format)
+    case a: UkAddress    => Json.toJson(a)(UkAddress.writes)
+    case a: NonUkAddress => Json.toJson(a)(NonUkAddress.format)
   }
-}
 
+}

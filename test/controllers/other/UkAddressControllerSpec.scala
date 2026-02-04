@@ -32,12 +32,12 @@ import views.html.other.UkAddressView
 
 class UkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[UkAddress] = new UkAddressFormProvider()()
-  private val mode: Mode = NormalMode
+  private val form: Form[UkAddress]  = new UkAddressFormProvider()()
+  private val mode: Mode             = NormalMode
   private val ukAddressRoute: String = routes.UkAddressController.onPageLoad(mode).url
-  private val description: String = "Other"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = UkAddress("Line 1", "Line 2", None, None, "NE11NE")
+  private val description: String    = "Other"
+  private val onwardRoute            = Call("GET", "/foo")
+  private val answer                 = UkAddress("Line 1", "Line 2", None, None, "NE11NE")
 
   val baseAnswers: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
 
@@ -87,7 +87,8 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, ukAddressRoute)
@@ -119,7 +120,7 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, mode, description)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -153,4 +154,5 @@ class UkAddressControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

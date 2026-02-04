@@ -27,9 +27,9 @@ class DescriptionViewSpec extends StringViewBehaviours {
 
   val messageKeyPrefix = "classOfBeneficiary.description"
 
-  val form: Form[String] = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 56)
+  val form: Form[String]    = new DescriptionFormProvider().withPrefix(messageKeyPrefix, 56)
   val view: DescriptionView = viewFor[DescriptionView](Some(emptyUserAnswers))
-  val index = 0
+  val index                 = 0
 
   "Description view" must {
 

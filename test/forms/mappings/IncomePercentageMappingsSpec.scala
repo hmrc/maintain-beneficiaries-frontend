@@ -23,8 +23,8 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.{Form, FormError}
 
-class IncomePercentageMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues
-  with Mappings {
+class IncomePercentageMappingsSpec
+    extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues with Mappings {
 
   val prefix = "prefix"
 
@@ -80,4 +80,5 @@ class IncomePercentageMappingsSpec extends AnyFreeSpec with Matchers with ScalaC
 
     result.errors must contain only FormError("value", s"$prefix.error.less_than_100")
   }
+
 }

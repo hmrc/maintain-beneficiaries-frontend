@@ -36,8 +36,15 @@ object TypeOfBeneficiaryToAdd extends Enumerable.Implicits {
   case object EmploymentRelated extends WithName("employmentRelated") with TypeOfBeneficiaryToAdd
 
   val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other,
-    Charity, Trust, Company, EmploymentRelated
+    Individual,
+    ClassOfBeneficiaries,
+    CharityOrTrust,
+    CompanyOrEmploymentRelated,
+    Other,
+    Charity,
+    Trust,
+    Company,
+    EmploymentRelated
   )
 
   implicit val enumerable: Enumerable[TypeOfBeneficiaryToAdd] =

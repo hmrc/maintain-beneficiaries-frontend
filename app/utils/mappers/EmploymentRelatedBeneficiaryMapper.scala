@@ -36,14 +36,14 @@ class EmploymentRelatedBeneficiaryMapper extends Mapper[EmploymentRelatedBenefic
       readCountryOfResidence and
       StartDatePage.path.read[LocalDate] and
       Reads(_ => JsSuccess(true))
-    )(EmploymentRelatedBeneficiary.apply _)
+  )(EmploymentRelatedBeneficiary.apply _)
 
-  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
-  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean]    = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress]       = UkAddressPage
   override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
 
-  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean]   = CountryOfResidenceYesNoPage
   override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
-  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+  override def countryOfResidencePage: QuestionPage[String]         = CountryOfResidencePage
 
 }

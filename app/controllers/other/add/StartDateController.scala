@@ -31,24 +31,25 @@ import views.html.other.add.StartDateView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class StartDateController @Inject()(
-                                     override val messagesApi: MessagesApi,
-                                     playbackRepository: PlaybackRepository,
-                                     @OtherBeneficiary navigator: Navigator,
-                                     standardActionSets: StandardActionSets,
-                                     descriptionAction: DescriptionRequiredAction,
-                                     formProvider: DateAddedToTrustFormProvider,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     view: StartDateView
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class StartDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  playbackRepository: PlaybackRepository,
+  @OtherBeneficiary navigator: Navigator,
+  standardActionSets: StandardActionSets,
+  descriptionAction: DescriptionRequiredAction,
+  formProvider: DateAddedToTrustFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: StartDateView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction) {
     implicit request =>
-
-      val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
+      val form =
+        formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
       val preparedForm = request.userAnswers.get(StartDatePage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
@@ -57,18 +58,19 @@ class StartDateController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (standardActionSets.verifiedForUtr andThen descriptionAction).async {
     implicit request =>
+      val form =
+        formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
 
-      val form = formProvider.withPrefixAndTrustStartDate("otherBeneficiary.startDate", request.userAnswers.whenTrustSetup)
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
-            _              <- playbackRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, request.description))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(StartDatePage, value))
+              _              <- playbackRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(StartDatePage, updatedAnswers))
+        )
   }
+
 }

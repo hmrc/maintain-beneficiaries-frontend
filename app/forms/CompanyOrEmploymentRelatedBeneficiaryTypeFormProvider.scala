@@ -27,4 +27,5 @@ class CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider @Inject() extends Ma
     Form(
       "value" -> enumerable[CompanyOrEmploymentRelatedToAdd]("companyOrEmploymentRelated.error.required")
     )
+
 }

@@ -25,29 +25,73 @@ import pages.other.add.StartDatePage
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class OtherBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class OtherBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def apply(userAnswers: UserAnswers, provisional: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
+  def apply(
+    userAnswers: UserAnswers,
+    provisional: Boolean,
+    name: String
+  )(implicit messages: Messages): AnswerSection = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
     def answerRows: Seq[AnswerRow] = {
       val mode: Mode = if (provisional) NormalMode else CheckMode
       Seq(
-        bound.stringQuestion(DescriptionPage, "otherBeneficiary.description", DescriptionController.onPageLoad(mode).url),
-        bound.yesNoQuestion(DiscretionYesNoPage, "otherBeneficiary.discretionYesNo", DiscretionYesNoController.onPageLoad(mode).url),
-        bound.percentageQuestion(ShareOfIncomePage, "otherBeneficiary.shareOfIncome", ShareOfIncomeController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "otherBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "otherBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "otherBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressYesNoPage, "otherBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressUkYesNoPage, "otherBeneficiary.addressUkYesNo", AddressUkYesNoController.onPageLoad(mode).url),
+        bound.stringQuestion(
+          DescriptionPage,
+          "otherBeneficiary.description",
+          DescriptionController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          DiscretionYesNoPage,
+          "otherBeneficiary.discretionYesNo",
+          DiscretionYesNoController.onPageLoad(mode).url
+        ),
+        bound.percentageQuestion(
+          ShareOfIncomePage,
+          "otherBeneficiary.shareOfIncome",
+          ShareOfIncomeController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceYesNoPage,
+          "otherBeneficiary.countryOfResidenceYesNo",
+          CountryOfResidenceYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceUkYesNoPage,
+          "otherBeneficiary.countryOfResidenceUkYesNo",
+          CountryOfResidenceUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.countryQuestion(
+          CountryOfResidenceUkYesNoPage,
+          CountryOfResidencePage,
+          "otherBeneficiary.countryOfResidence",
+          CountryOfResidenceController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressYesNoPage,
+          "otherBeneficiary.addressYesNo",
+          AddressYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressUkYesNoPage,
+          "otherBeneficiary.addressUkYesNo",
+          AddressUkYesNoController.onPageLoad(mode).url
+        ),
         bound.addressQuestion(UkAddressPage, "otherBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-        bound.addressQuestion(NonUkAddressPage, "otherBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
-        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "otherBeneficiary.startDate", StartDateController.onPageLoad().url) else None
+        bound.addressQuestion(
+          NonUkAddressPage,
+          "otherBeneficiary.nonUkAddress",
+          NonUkAddressController.onPageLoad(mode).url
+        ),
+        if (mode == NormalMode)
+          bound.dateQuestion(StartDatePage, "otherBeneficiary.startDate", StartDateController.onPageLoad().url)
+        else None
       ).flatten
     }
 
     AnswerSection(headingKey = None, rows = answerRows)
   }
+
 }

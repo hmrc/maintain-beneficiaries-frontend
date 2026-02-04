@@ -33,9 +33,9 @@ import views.html.charityortrust.charity.NameView
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[String] = new StringFormProvider().withPrefix("charityBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad(NormalMode).url
-  private val name: String = "Charity"
-  private val onwardRoute = Call("GET", "/foo")
+  private val nameRoute: String  = routes.NameController.onPageLoad(NormalMode).url
+  private val name: String       = "Charity"
+  private val onwardRoute        = Call("GET", "/foo")
 
   "Name Controller" must {
 
@@ -83,7 +83,8 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[CharityBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -102,7 +103,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(POST, nameRoute).withFormUrlEncodedBody(("value" -> ""))
+      val request = FakeRequest(POST, nameRoute).withFormUrlEncodedBody("value" -> "")
 
       val boundForm = form.bind(Map("value" -> ""))
 
@@ -115,7 +116,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -149,4 +150,5 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

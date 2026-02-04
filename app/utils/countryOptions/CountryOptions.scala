@@ -24,13 +24,11 @@ import play.api.i18n.Messages
 import play.api.libs.json.Json
 import utils.InputOption
 
-
 @Singleton
-class CountryOptions @Inject()(environment: Environment, config: FrontendAppConfig) {
+class CountryOptions @Inject() (environment: Environment, config: FrontendAppConfig) {
 
-  def options()(implicit messages: Messages): Seq[InputOption] = {
+  def options()(implicit messages: Messages): Seq[InputOption] =
     CountryOptions.getCountries(environment, getFileName())
-  }
 
   def getFileName()(implicit messages: Messages): String = {
     val isWelsh = messages.lang.code == config.WELSH
@@ -41,18 +39,19 @@ class CountryOptions @Inject()(environment: Environment, config: FrontendAppConf
 
 object CountryOptions {
 
-  def getCountries(environment: Environment, fileName: String): Seq[InputOption] = {
-    environment.resourceAsStream(fileName).flatMap {
-      in =>
+  def getCountries(environment: Environment, fileName: String): Seq[InputOption] =
+    environment
+      .resourceAsStream(fileName)
+      .flatMap { in =>
         val locationJsValue = Json.parse(in)
         Json.fromJson[Seq[Seq[String]]](locationJsValue).asOpt.map {
           _.map { countryList =>
             InputOption(countryList(1).replaceAll("country:", ""), countryList.head)
           }.sortBy(x => x.label.toLowerCase)
         }
-    }.getOrElse {
-      throw new ConfigException.BadValue(fileName, "country json does not exist")
-    }
-  }
+      }
+      .getOrElse {
+        throw new ConfigException.BadValue(fileName, "country json does not exist")
+      }
 
 }

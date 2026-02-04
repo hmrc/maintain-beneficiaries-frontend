@@ -25,10 +25,10 @@ import views.html.other.remove.RemoveIndexView
 
 class RemoveOtherBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeOtherBeneficiaryYesNo"
+  val messageKeyPrefix    = "removeOtherBeneficiaryYesNo"
   val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
-  val description = "Description"
-  val index = 0
+  val description         = "Description"
+  val index               = 0
 
   "RemoveOtherBeneficiary view" must {
 
@@ -41,6 +41,13 @@ class RemoveOtherBeneficiaryViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(description), routes.RemoveOtherBeneficiaryController.onSubmit(index).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(description),
+      routes.RemoveOtherBeneficiaryController.onSubmit(index).url
+    )
   }
+
 }

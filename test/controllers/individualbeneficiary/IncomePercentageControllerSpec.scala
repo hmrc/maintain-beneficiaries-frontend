@@ -37,7 +37,7 @@ import scala.concurrent.Future
 
 class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
 
-  private val formProvider = new IncomePercentageFormProvider()
+  private val formProvider    = new IncomePercentageFormProvider()
   private def form: Form[Int] = formProvider.withPrefix("individualBeneficiary.shareOfIncome")
 
   private def onwardRoute = Call("GET", "/foo")
@@ -49,7 +49,9 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
   private val name = Name("New", None, "Beneficiary")
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, incomePercentageRoute)
@@ -79,8 +81,12 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(IncomePercentagePage, validAnswer).success.value
-        .set(NamePage, name).success.value
+        .set(IncomePercentagePage, validAnswer)
+        .success
+        .value
+        .set(NamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -165,4 +171,5 @@ class IncomePercentageControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

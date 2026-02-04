@@ -18,7 +18,9 @@ package controllers
 
 import base.SpecBase
 import forms.AddBeneficiaryTypeFormProvider
-import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
+import models.beneficiaries.TypeOfBeneficiaryToAdd.{
+  CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix
+}
 import models.beneficiaries.{Beneficiaries, ClassOfBeneficiary, TypeOfBeneficiaryToAdd}
 import navigation.BeneficiaryNavigator
 import org.mockito.ArgumentMatchers.any
@@ -39,8 +41,10 @@ import scala.concurrent.Future
 class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
   val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
-  lazy val addNowRoute: String = routes.AddNowController.onPageLoad().url
-  val classOfBeneficiariesAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type = TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
+  lazy val addNowRoute: String           = routes.AddNowController.onPageLoad().url
+
+  val classOfBeneficiariesAnswer: TypeOfBeneficiaryToAdd.ClassOfBeneficiaries.type =
+    TypeOfBeneficiaryToAdd.ClassOfBeneficiaries
 
   val mockTrustService: TrustService = mock[TrustService]
 
@@ -48,12 +52,15 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
     .thenReturn(Future.successful(Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil)))
 
   val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+    Individual,
+    ClassOfBeneficiaries,
+    CharityOrTrust,
+    CompanyOrEmploymentRelated,
+    Other
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption(prefix, value.toString)
   }
 
   "AddNow Controller" must {
@@ -63,7 +70,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -86,7 +94,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -111,7 +120,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
         .overrides(
           bind[TrustService].toInstance(mockTrustService),
           bind[BeneficiaryNavigator].toInstance(mockNavigator)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(POST, addNowRoute)
         .withFormUrlEncodedBody(("value", classOfBeneficiariesAnswer.toString))
@@ -130,7 +140,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(POST, addNowRoute)
 
@@ -145,7 +156,7 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, options)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -153,7 +164,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None)
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -170,7 +182,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None)
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request =
         FakeRequest(POST, addNowRoute)
@@ -199,7 +212,8 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(Some(emptyUserAnswers))
         .overrides(
           bind[TrustService].toInstance(mockTrustService)
-        ).build()
+        )
+        .build()
 
       val request = FakeRequest(GET, addNowRoute)
 
@@ -216,4 +230,5 @@ class AddNowControllerSpec extends SpecBase with MockitoSugar {
 
     }
   }
+
 }

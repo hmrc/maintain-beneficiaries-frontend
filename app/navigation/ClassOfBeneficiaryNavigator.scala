@@ -23,12 +23,12 @@ import pages.Page
 import pages.classofbeneficiary._
 import play.api.mvc.Call
 
-class ClassOfBeneficiaryNavigator @Inject()() extends Navigator {
+class ClassOfBeneficiaryNavigator @Inject() () extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call = page match {
     case DescriptionPage => rts.EntityStartController.onPageLoad()
     case EntityStartPage => rts.CheckDetailsController.onPageLoad()
-    case _ => controllers.routes.IndexController.onPageLoad(userAnswers.identifier)
+    case _               => controllers.routes.IndexController.onPageLoad(userAnswers.identifier)
   }
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = nextPage(page, userAnswers)

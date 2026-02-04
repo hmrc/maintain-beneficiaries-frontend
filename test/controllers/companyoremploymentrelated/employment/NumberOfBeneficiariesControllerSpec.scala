@@ -32,10 +32,10 @@ import views.html.companyoremploymentrelated.employment.NumberOfBeneficiariesVie
 
 class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[HowManyBeneficiaries] = new NumberOfBeneficiariesFormProvider()()
-  private val numberOfBeneficiariesRoute: String = routes.NumberOfBeneficiariesController.onPageLoad(NormalMode).url
+  private val form: Form[HowManyBeneficiaries]            = new NumberOfBeneficiariesFormProvider()()
+  private val numberOfBeneficiariesRoute: String          = routes.NumberOfBeneficiariesController.onPageLoad(NormalMode).url
   private val numberOfBeneficiaries: HowManyBeneficiaries = HowManyBeneficiaries.Over201
-  private val onwardRoute = Call("GET", "/foo")
+  private val onwardRoute                                 = Call("GET", "/foo")
 
   "NumberOfBeneficiaries Controller" must {
 
@@ -82,8 +82,11 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, numberOfBeneficiariesRoute)
@@ -115,7 +118,7 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -149,4 +152,5 @@ class NumberOfBeneficiariesControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

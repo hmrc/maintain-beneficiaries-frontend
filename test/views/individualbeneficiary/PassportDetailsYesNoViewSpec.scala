@@ -26,8 +26,8 @@ import views.html.individualbeneficiary.PassportDetailsYesNoView
 
 class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.passportDetailsYesNo"
-  val name: Name = Name("First", Some("Middle"), "Last")
+  val messageKeyPrefix    = "individualBeneficiary.passportDetailsYesNo"
+  val name: Name          = Name("First", Some("Middle"), "Last")
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "PassportDetailsYesNo view" must {
@@ -41,8 +41,15 @@ class PassportDetailsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.PassportDetailsYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name.displayName),
+      routes.PassportDetailsYesNoController.onSubmit(NormalMode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

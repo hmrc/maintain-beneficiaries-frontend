@@ -30,37 +30,35 @@ import views.html.classofbeneficiary.amend.DescriptionView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionController @Inject()(
-                                       val controllerComponents: MessagesControllerComponents,
-                                       standardActionSets: StandardActionSets,
-                                       formProvider: DescriptionFormProvider,
-                                       connector: TrustConnector,
-                                       view: DescriptionView,
-                                       trustService: TrustService
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class DescriptionController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: DescriptionFormProvider,
+  connector: TrustConnector,
+  view: DescriptionView,
+  trustService: TrustService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description", 56)
 
-  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
-        case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
-        case _ => Ok(view(form, index))
-      }
+  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
+      case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
+      case _                                     => Ok(view(form, index))
+    }
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, index))),
-
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, index))),
         value =>
-          connector.amendClassOfBeneficiary(request.userAnswers.identifier, index, value).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
+          connector
+            .amendClassOfBeneficiary(request.userAnswers.identifier, index, value)
+            .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
       )
   }
+
 }

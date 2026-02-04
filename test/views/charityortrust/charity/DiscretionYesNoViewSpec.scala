@@ -27,7 +27,7 @@ import views.html.charityortrust.charity.DiscretionYesNoView
 class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "charityBeneficiary.discretionYesNo"
-  val name: String = "Charity"
+  val name: String     = "Charity"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
@@ -42,8 +42,15 @@ class DiscretionYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.DiscretionYesNoController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name),
+      routes.DiscretionYesNoController.onSubmit(NormalMode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

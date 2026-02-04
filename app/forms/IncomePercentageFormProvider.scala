@@ -26,4 +26,5 @@ class IncomePercentageFormProvider @Inject() extends Mappings {
     Form(
       "value" -> incomePercentage(prefix)
     )
+
 }

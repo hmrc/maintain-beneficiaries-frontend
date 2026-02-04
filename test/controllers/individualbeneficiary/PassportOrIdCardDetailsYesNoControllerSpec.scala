@@ -38,10 +38,15 @@ class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSu
   private val mode: Mode = NormalMode
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage, name).success.value
-    .set(IndexPage, index).success.value
+    .set(NamePage, name)
+    .success
+    .value
+    .set(IndexPage, index)
+    .success
+    .value
 
-  private lazy val passportOrIdCardDetailsYesNoRoute = routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url
+  private lazy val passportOrIdCardDetailsYesNoRoute =
+    routes.PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url
 
   private lazy val checkDetailsRoute =
     controllers.individualbeneficiary.amend.routes.CheckDetailsController.renderFromUserAnswers(index).url
@@ -134,4 +139,5 @@ class PassportOrIdCardDetailsYesNoControllerSpec extends SpecBase with MockitoSu
       application.stop()
     }
   }
+
 }

@@ -47,16 +47,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with BeforeAndAfterEach {
 
-  lazy val getRoute: String = controllers.routes.AddABeneficiaryController.onPageLoad().url
-  lazy val submitAnotherRoute: String = controllers.routes.AddABeneficiaryController.submitAnother().url
-  lazy val submitYesNoRoute: String = controllers.routes.AddABeneficiaryController.submitOne().url
+  lazy val getRoute: String            = controllers.routes.AddABeneficiaryController.onPageLoad().url
+  lazy val submitAnotherRoute: String  = controllers.routes.AddABeneficiaryController.submitAnother().url
+  lazy val submitYesNoRoute: String    = controllers.routes.AddABeneficiaryController.submitOne().url
   lazy val submitCompleteRoute: String = controllers.routes.AddABeneficiaryController.submitComplete().url
 
-  val mockStoreConnector: TrustsStoreConnector = mock[TrustsStoreConnector]
+  val mockStoreConnector: TrustsStoreConnector  = mock[TrustsStoreConnector]
   val mockViewHelper: AddABeneficiaryViewHelper = mock[AddABeneficiaryViewHelper]
 
   val addTrusteeForm: Form[AddABeneficiary] = new AddABeneficiaryFormProvider()()
-  val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
+  val yesNoForm: Form[Boolean]              = new YesNoFormProvider().withPrefix("addABeneficiaryYesNo")
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = Name(firstName = "First", middleName = None, lastName = "Last"),
@@ -145,35 +145,55 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
   class FakeService(data: Beneficiaries) extends TrustService {
 
-    override def getBeneficiaries(utr: String)
-                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
+    override def getBeneficiaries(
+      utr: String
+    )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] = Future.successful(data)
 
-    override def getUnidentifiedBeneficiary(utr: String, index: Int)
-                                           (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] = ???
+    override def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[ClassOfBeneficiary] = ???
 
-    override def getIndividualBeneficiary(utr: String, index: Int)
-                                         (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary] = ???
+    override def getIndividualBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[IndividualBeneficiary] = ???
 
-    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)
-                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = ???
+    override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext
+    ): Future[HttpResponse] = ???
 
-    override def getCharityBeneficiary(utr: String, index: Int)
-                                      (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] = ???
+    override def getCharityBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[CharityBeneficiary] = ???
 
-    override def getOtherBeneficiary(utr: String, index: Int)
-                                    (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] = ???
+    override def getOtherBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[OtherBeneficiary] = ???
 
-    override def getTrustBeneficiary(utr: String, index: Int)
-                                    (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] = ???
+    override def getTrustBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[TrustBeneficiary] = ???
 
-    override def getCompanyBeneficiary(utr: String, index: Int)
-                                      (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] = ???
+    override def getCompanyBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[CompanyBeneficiary] = ???
 
-    override def getEmploymentBeneficiary(utr: String, index: Int)
-                                         (implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] = ???
+    override def getEmploymentBeneficiary(utr: String, index: Int)(implicit
+      hc: HeaderCarrier,
+      ex: ExecutionContext
+    ): Future[EmploymentRelatedBeneficiary] = ???
 
-    override def getIndividualNinos(identifier: String, index: Option[Int])
-                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]] = ???
+    override def getIndividualNinos(identifier: String, index: Option[Int])(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext
+    ): Future[List[String]] = ???
+
   }
 
   override def beforeEach(): Unit = {
@@ -329,10 +349,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         def runTest(migrating: Boolean) = {
           val fakeService = new FakeService(beneficiaries)
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
-            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+              .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+              .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+              .build()
 
           val request = FakeRequest(GET, getRoute)
 
@@ -342,18 +363,23 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view(addTrusteeForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating)(request, messages).toString
+          contentAsString(result) mustEqual view(
+            addTrusteeForm,
+            Nil,
+            Nil,
+            "The trust has 7 beneficiaries",
+            Nil,
+            migrating
+          )(request, messages).toString
 
           application.stop()
         }
 
-        "migrating" in {
+        "migrating" in
           runTest(true)
-        }
 
-        "not migrating" in {
+        "not migrating" in
           runTest(false)
-        }
       }
 
       "redirect to the maintain task list when the user says they are done" in {
@@ -406,10 +432,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         def runTest(migrating: Boolean) = {
           val fakeService = new FakeService(beneficiaries)
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
-            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+              .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+              .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+              .build()
 
           val request = FakeRequest(POST, submitAnotherRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
@@ -422,18 +449,19 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
           status(result) mustEqual BAD_REQUEST
 
-          contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating)(request, messages).toString
+          contentAsString(result) mustEqual view(boundForm, Nil, Nil, "The trust has 7 beneficiaries", Nil, migrating)(
+            request,
+            messages
+          ).toString
 
           application.stop()
         }
 
-        "migrating" in {
+        "migrating" in
           runTest(true)
-        }
 
-        "not migrating" in {
+        "not migrating" in
           runTest(false)
-        }
       }
 
       "clear out the user answers when starting a new journey and redirect to what type of beneficiary page" in {
@@ -441,9 +469,15 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         val mockTrustConnector = mock[TrustConnector]
 
         val userAnswers = emptyUserAnswers
-          .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries).success.value
-          .set(DescriptionPage, "Description").success.value
-          .set(EntityStartPage, LocalDate.parse("2019-02-03")).success.value
+          .set(AddNowPage, TypeOfBeneficiaryToAdd.ClassOfBeneficiaries)
+          .success
+          .value
+          .set(DescriptionPage, "Description")
+          .success
+          .value
+          .set(EntityStartPage, LocalDate.parse("2019-02-03"))
+          .success
+          .value
 
         reset(playbackRepository)
 
@@ -493,10 +527,11 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
           when(mockViewHelper.rows(any(), any(), any())(any())).thenReturn(AddToRows(Nil, completedRows))
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
-            .overrides(bind(classOf[TrustService]).toInstance(fakeService))
-            .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
-            .build()
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = migrating)))
+              .overrides(bind(classOf[TrustService]).toInstance(fakeService))
+              .overrides(bind(classOf[AddABeneficiaryViewHelper]).toInstance(mockViewHelper))
+              .build()
 
           val request = FakeRequest(GET, getRoute)
 
@@ -508,20 +543,21 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
 
           val content = contentAsString(result)
 
-          content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries", migrating)(request, messages).toString
+          content mustEqual view(Nil, completedRows, "The trust has 175 beneficiaries", migrating)(
+            request,
+            messages
+          ).toString
           content must include("You cannot enter another beneficiary as you have entered a maximum of 175.")
           content must include("If you have further beneficiaries to add, write to HMRC with their details.")
 
           application.stop()
         }
 
-        "migrating" in {
+        "migrating" in
           runTest(true)
-        }
 
-        "not migrating" in {
+        "not migrating" in
           runTest(false)
-        }
       }
 
       "return correct view when one type of beneficiary is maxed out" in {
@@ -548,7 +584,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         val result = route(application, request).value
 
         contentAsString(result) must include("You cannot add another charity as you have entered a maximum of 25.")
-        contentAsString(result) must include("If you have further beneficiaries to add within this type, write to HMRC with their details.")
+        contentAsString(result) must include(
+          "If you have further beneficiaries to add within this type, write to HMRC with their details."
+        )
 
         application.stop()
 
@@ -578,7 +616,9 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
         val result = route(application, request).value
 
         contentAsString(result) must include("You have entered the maximum number of beneficiaries for:")
-        contentAsString(result) must include("If you have further beneficiaries to add within these types, write to HMRC with their details.")
+        contentAsString(result) must include(
+          "If you have further beneficiaries to add within these types, write to HMRC with their details."
+        )
 
         application.stop()
 
@@ -609,4 +649,5 @@ class AddABeneficiaryControllerSpec extends SpecBase with ScalaFutures with Befo
       }
     }
   }
+
 }

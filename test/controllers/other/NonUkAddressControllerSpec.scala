@@ -34,12 +34,12 @@ import views.html.other.NonUkAddressView
 
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
-  private val mode: Mode = NormalMode
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(mode).url
-  private val description: String = "Other"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
+  private val form: Form[NonUkAddress]         = new NonUkAddressFormProvider()()
+  private val mode: Mode                       = NormalMode
+  private val nonUkAddressRoute: String        = routes.NonUkAddressController.onPageLoad(mode).url
+  private val description: String              = "Other"
+  private val onwardRoute                      = Call("GET", "/foo")
+  private val answer                           = NonUkAddress("Line 1", "Line 2", None, "DE")
   private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   private val baseAnswers: UserAnswers = emptyUserAnswers.set(DescriptionPage, description).success.value
@@ -90,7 +90,8 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith(classOf[OtherBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nonUkAddressRoute)
@@ -122,7 +123,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, mode, countryOptions, description)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -156,4 +157,5 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

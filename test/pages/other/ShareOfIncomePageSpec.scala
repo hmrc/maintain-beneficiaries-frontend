@@ -28,4 +28,5 @@ class ShareOfIncomePageSpec extends PageBehaviours {
 
     beRemovable[Int](ShareOfIncomePage)
   }
+
 }

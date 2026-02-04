@@ -29,6 +29,7 @@ import play.api.libs.json._
 trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generators with OptionValues {
 
   class BeRetrievable[A] {
+
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {
 
       "return None" when {
@@ -42,10 +43,9 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
               userAnswers <- arbitrary[UserAnswers]
             } yield (page, userAnswers.remove(page).success.value)
 
-            forAll(gen) {
-              case (page, userAnswers) =>
+            forAll(gen) { case (page, userAnswers) =>
 
-                userAnswers.get(page) must be(empty)
+              userAnswers.get(page) must be(empty)
             }
           }
         }
@@ -63,19 +63,20 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
               userAnswers <- arbitrary[UserAnswers]
             } yield (page, savedValue, userAnswers.set(page, savedValue).success.value)
 
-            forAll(gen) {
-              case (page, savedValue, userAnswers) =>
+            forAll(gen) { case (page, savedValue, userAnswers) =>
 
-                userAnswers.get(page).value mustEqual savedValue
+              userAnswers.get(page).value mustEqual savedValue
             }
           }
         }
       }
     }
+
   }
 
   class BeSettable[A] {
-    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {
+
+    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
 
       "be able to be set on UserAnswers" in {
 
@@ -85,18 +86,18 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
           userAnswers <- arbitrary[UserAnswers]
         } yield (page, newValue, userAnswers)
 
-        forAll(gen) {
-          case (page, newValue, userAnswers) =>
+        forAll(gen) { case (page, newValue, userAnswers) =>
 
-            val updatedAnswers = userAnswers.set(page, newValue).success.value
-            updatedAnswers.get(page).value mustEqual newValue
+          val updatedAnswers = userAnswers.set(page, newValue).success.value
+          updatedAnswers.get(page).value mustEqual newValue
         }
       }
-    }
+
   }
 
   class BeRemovable[A] {
-    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {
+
+    def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
 
       "be able to be removed from UserAnswers" in {
 
@@ -106,14 +107,13 @@ trait PageBehaviours extends SpecBase with ScalaCheckPropertyChecks with Generat
           userAnswers <- arbitrary[UserAnswers]
         } yield (page, userAnswers.set(page, savedValue).success.value)
 
-        forAll(gen) {
-          case (page, userAnswers) =>
+        forAll(gen) { case (page, userAnswers) =>
 
-            val updatedAnswers = userAnswers.remove(page).success.value
-            updatedAnswers.get(page) must be(empty)
+          val updatedAnswers = userAnswers.remove(page).success.value
+          updatedAnswers.get(page) must be(empty)
         }
       }
-    }
+
   }
 
   def beRetrievable[A]: BeRetrievable[A] = new BeRetrievable[A]

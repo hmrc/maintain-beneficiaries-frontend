@@ -18,7 +18,9 @@ package views
 
 import forms.AddBeneficiaryTypeFormProvider
 import models.beneficiaries.TypeOfBeneficiaryToAdd
-import models.beneficiaries.TypeOfBeneficiaryToAdd.{CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix}
+import models.beneficiaries.TypeOfBeneficiaryToAdd.{
+  CharityOrTrust, ClassOfBeneficiaries, CompanyOrEmploymentRelated, Individual, Other, prefix
+}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewmodels.RadioOption
@@ -30,15 +32,18 @@ class AddNowViewSpec extends OptionsViewBehaviours {
   val messageKeyPrefix = "addNow"
 
   val form: Form[TypeOfBeneficiaryToAdd] = new AddBeneficiaryTypeFormProvider()()
-  val view: AddNowView = viewFor[AddNowView](Some(emptyUserAnswers))
+  val view: AddNowView                   = viewFor[AddNowView](Some(emptyUserAnswers))
 
   val values: List[TypeOfBeneficiaryToAdd] = List(
-    Individual, ClassOfBeneficiaries, CharityOrTrust, CompanyOrEmploymentRelated, Other
+    Individual,
+    ClassOfBeneficiaries,
+    CharityOrTrust,
+    CompanyOrEmploymentRelated,
+    Other
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption(prefix, value.toString)
   }
 
   "Description view" must {

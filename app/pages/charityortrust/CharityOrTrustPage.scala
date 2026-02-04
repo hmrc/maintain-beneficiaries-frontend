@@ -30,10 +30,10 @@ case object CharityOrTrustPage extends QuestionPage[CharityOrTrustToAdd] {
 
   override def toString: String = "charityOrTrust"
 
-  override def cleanup(value: Option[CharityOrTrustToAdd], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[CharityOrTrustToAdd], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(Trust) => userAnswers.deleteAtPath(charity.basePath)
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
+
 }

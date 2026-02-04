@@ -24,32 +24,34 @@ import models.{Address, IndividualIdentification, Name, TypeOfTrust, YesNoDontKn
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-final case class IndividualBeneficiary(name: Name,
-                                       dateOfBirth: Option[LocalDate],
-                                       identification: Option[IndividualIdentification],
-                                       address: Option[Address],
-                                       vulnerableYesNo: Option[Boolean] = None,
-                                       roleInCompany: Option[RoleInCompany],
-                                       income: Option[String],
-                                       incomeDiscretionYesNo: Option[Boolean] = None,
-                                       countryOfResidence: Option[String] = None,
-                                       nationality: Option[String] = None,
-                                       mentalCapacityYesNo: Option[YesNoDontKnow] = None,
-                                       entityStart: LocalDate,
-                                       provisional: Boolean) extends IncomeBeneficiary {
+final case class IndividualBeneficiary(
+  name: Name,
+  dateOfBirth: Option[LocalDate],
+  identification: Option[IndividualIdentification],
+  address: Option[Address],
+  vulnerableYesNo: Option[Boolean] = None,
+  roleInCompany: Option[RoleInCompany],
+  income: Option[String],
+  incomeDiscretionYesNo: Option[Boolean] = None,
+  countryOfResidence: Option[String] = None,
+  nationality: Option[String] = None,
+  mentalCapacityYesNo: Option[YesNoDontKnow] = None,
+  entityStart: LocalDate,
+  provisional: Boolean
+) extends IncomeBeneficiary {
 
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean =
     if (migratingFromNonTaxableToTaxable) {
       super.hasRequiredData(migratingFromNonTaxableToTaxable, trustType) &&
-        vulnerableYesNo.isDefined &&
-        (trustType match {
-          case Some(EmployeeRelated) => roleInCompany.isDefined
-          case _ => true
-        })
+      vulnerableYesNo.isDefined &&
+      (trustType match {
+        case Some(EmployeeRelated) => roleInCompany.isDefined
+        case _                     => true
+      })
     } else {
       true
     }
-  }
+
 }
 
 object IndividualBeneficiary extends BeneficiaryReads {
@@ -62,8 +64,8 @@ object IndividualBeneficiary extends BeneficiaryReads {
   def legallyIncapableWrites: Writes[YesNoDontKnow] = new Writes[YesNoDontKnow] {
     override def writes(o: YesNoDontKnow): JsValue = o match {
       case Yes => JsBoolean(false)
-      case No => JsBoolean(true)
-      case _ => JsNull
+      case No  => JsBoolean(true)
+      case _   => JsNull
     }
   }
 
@@ -81,15 +83,127 @@ object IndividualBeneficiary extends BeneficiaryReads {
       readMentalCapacity and
       (__ \ "entityStart").read[LocalDate] and
       (__ \ "provisional").readWithDefault(false)
-    ).tupled.map{
-    case (name, dob, None, None, None, None, None, None, country, nationality, mentalCapacity, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, None, None, None, None, None, None, country, nationality, mentalCapacity, entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable, employment, None, _, country, nationality, mentalCapacity, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, mentalCapacity, entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable, employment, _, Some(true), country, nationality, mentalCapacity, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, None, incomeDiscretionYesNo = Some(true), country, nationality, mentalCapacity, entityStart, provisional)
-    case (name, dob, nino, identification, vulnerable,  employment, income, _, country, nationality, mentalCapacity, entityStart, provisional) =>
-      IndividualBeneficiary(name, dob, nino, identification, vulnerable, employment, income, incomeDiscretionYesNo = Some(false), country, nationality, mentalCapacity, entityStart, provisional)
+  ).tupled.map {
+    case (
+          name,
+          dob,
+          None,
+          None,
+          None,
+          None,
+          None,
+          None,
+          country,
+          nationality,
+          mentalCapacity,
+          entityStart,
+          provisional
+        ) =>
+      IndividualBeneficiary(
+        name,
+        dob,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        country,
+        nationality,
+        mentalCapacity,
+        entityStart,
+        provisional
+      )
+    case (
+          name,
+          dob,
+          nino,
+          identification,
+          vulnerable,
+          employment,
+          None,
+          _,
+          country,
+          nationality,
+          mentalCapacity,
+          entityStart,
+          provisional
+        ) =>
+      IndividualBeneficiary(
+        name,
+        dob,
+        nino,
+        identification,
+        vulnerable,
+        employment,
+        None,
+        incomeDiscretionYesNo = Some(true),
+        country,
+        nationality,
+        mentalCapacity,
+        entityStart,
+        provisional
+      )
+    case (
+          name,
+          dob,
+          nino,
+          identification,
+          vulnerable,
+          employment,
+          _,
+          Some(true),
+          country,
+          nationality,
+          mentalCapacity,
+          entityStart,
+          provisional
+        ) =>
+      IndividualBeneficiary(
+        name,
+        dob,
+        nino,
+        identification,
+        vulnerable,
+        employment,
+        None,
+        incomeDiscretionYesNo = Some(true),
+        country,
+        nationality,
+        mentalCapacity,
+        entityStart,
+        provisional
+      )
+    case (
+          name,
+          dob,
+          nino,
+          identification,
+          vulnerable,
+          employment,
+          income,
+          _,
+          country,
+          nationality,
+          mentalCapacity,
+          entityStart,
+          provisional
+        ) =>
+      IndividualBeneficiary(
+        name,
+        dob,
+        nino,
+        identification,
+        vulnerable,
+        employment,
+        income,
+        incomeDiscretionYesNo = Some(false),
+        country,
+        nationality,
+        mentalCapacity,
+        entityStart,
+        provisional
+      )
   }
 
   implicit val writes: Writes[IndividualBeneficiary] = (
@@ -106,6 +220,6 @@ object IndividualBeneficiary extends BeneficiaryReads {
       (__ \ Symbol("legallyIncapable")).writeNullable[YesNoDontKnow](legallyIncapableWrites) and
       (__ \ "entityStart").write[LocalDate] and
       (__ \ "provisional").write[Boolean]
-    ).apply(unlift(IndividualBeneficiary.unapply))
+  ).apply(unlift(IndividualBeneficiary.unapply))
 
 }

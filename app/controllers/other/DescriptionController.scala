@@ -32,35 +32,32 @@ import views.html.other.DescriptionView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DescriptionController @Inject()(
-                                       val controllerComponents: MessagesControllerComponents,
-                                       standardActionSets: StandardActionSets,
-                                       formProvider: DescriptionFormProvider,
-                                       view: DescriptionView,
-                                       repository: PlaybackRepository,
-                                       @OtherBeneficiary navigator: Navigator
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class DescriptionController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: DescriptionFormProvider,
+  view: DescriptionView,
+  repository: PlaybackRepository,
+  @OtherBeneficiary navigator: Navigator
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[String] = formProvider.withPrefix("otherBeneficiary.description", 70)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(DescriptionPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(DescriptionPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
+  def onSubmit(mode: Mode): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(DescriptionPage, value))
@@ -68,4 +65,5 @@ class DescriptionController @Inject()(
           } yield Redirect(navigator.nextPage(DescriptionPage, mode, updatedAnswers))
       )
   }
+
 }

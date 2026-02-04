@@ -28,4 +28,5 @@ class DescriptionPageSpec extends PageBehaviours {
 
     beRemovable[String](DescriptionPage)
   }
+
 }

@@ -25,10 +25,10 @@ import views.html.companyoremploymentrelated.employment.remove.RemoveIndexView
 
 class RemoveEmploymentBeneficiaryViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "removeEmploymentBeneficiaryYesNo"
+  val messageKeyPrefix    = "removeEmploymentBeneficiaryYesNo"
   val form: Form[Boolean] = (new YesNoFormProvider).withPrefix(messageKeyPrefix)
-  val name = "Name"
-  val index = 0
+  val name                = "Name"
+  val index               = 0
 
   "RemoveEmploymentBeneficiary view" must {
 
@@ -41,6 +41,13 @@ class RemoveEmploymentBeneficiaryViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name), routes.RemoveEmploymentBeneficiaryController.onSubmit(index).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name),
+      routes.RemoveEmploymentBeneficiaryController.onSubmit(index).url
+    )
   }
+
 }

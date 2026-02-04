@@ -33,48 +33,47 @@ import views.html.classofbeneficiary.add.EntityStartView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EntityStartController @Inject()(
-                                       val controllerComponents: MessagesControllerComponents,
-                                       standardActionSets: StandardActionSets,
-                                       formProvider: DateAddedToTrustFormProvider,
-                                       connector: TrustConnector,
-                                       view: EntityStartView,
-                                       trustService: TrustService,
-                                       repository: PlaybackRepository,
-                                       @ClassOfBeneficiary navigator: Navigator,
-                                       descriptionAction: DescriptionRequiredAction
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class EntityStartController @Inject() (
+  val controllerComponents: MessagesControllerComponents,
+  standardActionSets: StandardActionSets,
+  formProvider: DateAddedToTrustFormProvider,
+  connector: TrustConnector,
+  view: EntityStartView,
+  trustService: TrustService,
+  repository: PlaybackRepository,
+  @ClassOfBeneficiary navigator: Navigator,
+  descriptionAction: DescriptionRequiredAction
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val prefix: String = "classOfBeneficiary.entityStart"
 
   def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction) {
     implicit request =>
-
       val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
 
       val preparedForm = request.userAnswers.get(EntityStartPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, request.description))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(descriptionAction).async {
-    implicit request =>
-
+  def onSubmit(): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.andThen(descriptionAction).async { implicit request =>
       val form = formProvider.withPrefixAndTrustStartDate(prefix, request.userAnswers.whenTrustSetup)
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, request.description))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EntityStartPage, value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EntityStartPage, updatedAnswers))
-      )
-  }
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, request.description))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(EntityStartPage, value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(EntityStartPage, updatedAnswers))
+        )
+    }
 
 }

@@ -26,48 +26,154 @@ import pages.individualbeneficiary.PassportOrIdCardDetailsYesNoPage
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class IndividualBeneficiaryPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class IndividualBeneficiaryPrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
   def apply(userAnswers: UserAnswers, adding: Boolean, name: String)(implicit messages: Messages): AnswerSection = {
 
     val bound = answerRowConverter.bind(userAnswers, name)
 
     val changeLinkOrNone: (Boolean, String) => Option[String] =
-      (adding: Boolean, route: String) => if(adding) Some(route) else None
+      (adding: Boolean, route: String) => if (adding) Some(route) else None
 
     def answerRows: Seq[AnswerRow] = {
       val mode: Mode = if (adding) NormalMode else CheckMode
       Seq(
         bound.nameQuestion(NamePage, "individualBeneficiary.name", NameController.onPageLoad(mode).url),
-        bound.roleInCompanyQuestion(RoleInCompanyPage, "individualBeneficiary.roleInCompany", RoleInCompanyController.onPageLoad(mode).url),
-        bound.yesNoQuestion(DateOfBirthYesNoPage, "individualBeneficiary.dateOfBirthYesNo", DateOfBirthYesNoController.onPageLoad(mode).url),
-        bound.dateQuestion(DateOfBirthPage, "individualBeneficiary.dateOfBirth", DateOfBirthController.onPageLoad(mode).url),
-        bound.yesNoQuestion(IncomeDiscretionYesNoPage, "individualBeneficiary.incomeDiscretionYesNo", IncomeDiscretionYesNoController.onPageLoad(mode).url),
-        bound.percentageQuestion(IncomePercentagePage, "individualBeneficiary.shareOfIncome", IncomePercentageController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfNationalityYesNoPage, "individualBeneficiary.countryOfNationalityYesNo", CountryOfNationalityYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfNationalityUkYesNoPage, "individualBeneficiary.countryOfNationalityUkYesNo", CountryOfNationalityUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfNationalityUkYesNoPage, CountryOfNationalityPage, "individualBeneficiary.countryOfNationality", CountryOfNationalityController.onPageLoad(mode).url),
-        bound.yesNoQuestion(NationalInsuranceNumberYesNoPage, "individualBeneficiary.nationalInsuranceNumberYesNo", NationalInsuranceNumberYesNoController.onPageLoad(mode).url),
-        bound.ninoQuestion(NationalInsuranceNumberPage, "individualBeneficiary.nationalInsuranceNumber", NationalInsuranceNumberController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceYesNoPage, "individualBeneficiary.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(CountryOfResidenceUkYesNoPage, "individualBeneficiary.countryOfResidenceUkYesNo", CountryOfResidenceUkYesNoController.onPageLoad(mode).url),
-        bound.countryQuestion(CountryOfResidenceUkYesNoPage, CountryOfResidencePage, "individualBeneficiary.countryOfResidence", CountryOfResidenceController.onPageLoad(mode).url),
-        bound.yesNoQuestion(AddressYesNoPage, "individualBeneficiary.addressYesNo", AddressYesNoController.onPageLoad(mode).url),
-        bound.yesNoQuestion(LiveInTheUkYesNoPage, "individualBeneficiary.liveInTheUkYesNo", LiveInTheUkYesNoController.onPageLoad(mode).url),
-        bound.addressQuestion(UkAddressPage, "individualBeneficiary.ukAddress", UkAddressController.onPageLoad(mode).url),
-        bound.addressQuestion(NonUkAddressPage, "individualBeneficiary.nonUkAddress", NonUkAddressController.onPageLoad(mode).url),
-        bound.yesNoQuestion(PassportDetailsYesNoPage, "individualBeneficiary.passportDetailsYesNo", PassportDetailsYesNoController.onPageLoad(mode).url),
-        bound.passportDetailsQuestion(PassportDetailsPage, "individualBeneficiary.passportDetails", Some(PassportDetailsController.onPageLoad(mode).url)),
-        bound.yesNoQuestion(IdCardDetailsYesNoPage, "individualBeneficiary.idCardDetailsYesNo", IdCardDetailsYesNoController.onPageLoad(mode).url),
-        bound.idCardDetailsQuestion(IdCardDetailsPage, "individualBeneficiary.idCardDetails", Some(IdCardDetailsController.onPageLoad(mode).url)),
-        bound.yesNoPassportOrIdQuestion(PassportOrIdCardDetailsYesNoPage, "individualBeneficiary.passportOrIdCardDetailsYesNo", changeLinkOrNone(adding, PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url)),
-        bound.passportOrIdCardDetailsQuestion(PassportOrIdCardDetailsPage, "individualBeneficiary.passportOrIdCardDetails", changeLinkOrNone(adding, PassportOrIdCardDetailsController.onPageLoad(mode).url)),
-        bound.enumQuestion(MentalCapacityYesNoPage, "individualBeneficiary.mentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(mode).url, "site"),
-        bound.yesNoQuestion(VPE1FormYesNoPage, "individualBeneficiary.vpe1FormYesNo", VPE1FormYesNoController.onPageLoad(mode).url),
-        if (mode == NormalMode) bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", StartDateController.onPageLoad().url) else None
+        bound.roleInCompanyQuestion(
+          RoleInCompanyPage,
+          "individualBeneficiary.roleInCompany",
+          RoleInCompanyController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          DateOfBirthYesNoPage,
+          "individualBeneficiary.dateOfBirthYesNo",
+          DateOfBirthYesNoController.onPageLoad(mode).url
+        ),
+        bound.dateQuestion(
+          DateOfBirthPage,
+          "individualBeneficiary.dateOfBirth",
+          DateOfBirthController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          IncomeDiscretionYesNoPage,
+          "individualBeneficiary.incomeDiscretionYesNo",
+          IncomeDiscretionYesNoController.onPageLoad(mode).url
+        ),
+        bound.percentageQuestion(
+          IncomePercentagePage,
+          "individualBeneficiary.shareOfIncome",
+          IncomePercentageController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfNationalityYesNoPage,
+          "individualBeneficiary.countryOfNationalityYesNo",
+          CountryOfNationalityYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfNationalityUkYesNoPage,
+          "individualBeneficiary.countryOfNationalityUkYesNo",
+          CountryOfNationalityUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.countryQuestion(
+          CountryOfNationalityUkYesNoPage,
+          CountryOfNationalityPage,
+          "individualBeneficiary.countryOfNationality",
+          CountryOfNationalityController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          NationalInsuranceNumberYesNoPage,
+          "individualBeneficiary.nationalInsuranceNumberYesNo",
+          NationalInsuranceNumberYesNoController.onPageLoad(mode).url
+        ),
+        bound.ninoQuestion(
+          NationalInsuranceNumberPage,
+          "individualBeneficiary.nationalInsuranceNumber",
+          NationalInsuranceNumberController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceYesNoPage,
+          "individualBeneficiary.countryOfResidenceYesNo",
+          CountryOfResidenceYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          CountryOfResidenceUkYesNoPage,
+          "individualBeneficiary.countryOfResidenceUkYesNo",
+          CountryOfResidenceUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.countryQuestion(
+          CountryOfResidenceUkYesNoPage,
+          CountryOfResidencePage,
+          "individualBeneficiary.countryOfResidence",
+          CountryOfResidenceController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          AddressYesNoPage,
+          "individualBeneficiary.addressYesNo",
+          AddressYesNoController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          LiveInTheUkYesNoPage,
+          "individualBeneficiary.liveInTheUkYesNo",
+          LiveInTheUkYesNoController.onPageLoad(mode).url
+        ),
+        bound.addressQuestion(
+          UkAddressPage,
+          "individualBeneficiary.ukAddress",
+          UkAddressController.onPageLoad(mode).url
+        ),
+        bound.addressQuestion(
+          NonUkAddressPage,
+          "individualBeneficiary.nonUkAddress",
+          NonUkAddressController.onPageLoad(mode).url
+        ),
+        bound.yesNoQuestion(
+          PassportDetailsYesNoPage,
+          "individualBeneficiary.passportDetailsYesNo",
+          PassportDetailsYesNoController.onPageLoad(mode).url
+        ),
+        bound.passportDetailsQuestion(
+          PassportDetailsPage,
+          "individualBeneficiary.passportDetails",
+          Some(PassportDetailsController.onPageLoad(mode).url)
+        ),
+        bound.yesNoQuestion(
+          IdCardDetailsYesNoPage,
+          "individualBeneficiary.idCardDetailsYesNo",
+          IdCardDetailsYesNoController.onPageLoad(mode).url
+        ),
+        bound.idCardDetailsQuestion(
+          IdCardDetailsPage,
+          "individualBeneficiary.idCardDetails",
+          Some(IdCardDetailsController.onPageLoad(mode).url)
+        ),
+        bound.yesNoPassportOrIdQuestion(
+          PassportOrIdCardDetailsYesNoPage,
+          "individualBeneficiary.passportOrIdCardDetailsYesNo",
+          changeLinkOrNone(adding, PassportOrIdCardDetailsYesNoController.onPageLoad(mode).url)
+        ),
+        bound.passportOrIdCardDetailsQuestion(
+          PassportOrIdCardDetailsPage,
+          "individualBeneficiary.passportOrIdCardDetails",
+          changeLinkOrNone(adding, PassportOrIdCardDetailsController.onPageLoad(mode).url)
+        ),
+        bound.enumQuestion(
+          MentalCapacityYesNoPage,
+          "individualBeneficiary.mentalCapacityYesNo",
+          MentalCapacityYesNoController.onPageLoad(mode).url,
+          "site"
+        ),
+        bound.yesNoQuestion(
+          VPE1FormYesNoPage,
+          "individualBeneficiary.vpe1FormYesNo",
+          VPE1FormYesNoController.onPageLoad(mode).url
+        ),
+        if (mode == NormalMode)
+          bound.dateQuestion(StartDatePage, "individualBeneficiary.startDate", StartDateController.onPageLoad().url)
+        else None
       ).flatten
     }
 
     AnswerSection(headingKey = None, rows = answerRows)
   }
+
 }

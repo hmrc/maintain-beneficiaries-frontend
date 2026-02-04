@@ -25,46 +25,71 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrustServiceImpl @Inject()(connector: TrustConnector) extends TrustService {
+class TrustServiceImpl @Inject() (connector: TrustConnector) extends TrustService {
 
   override def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries] =
     connector.getBeneficiaries(utr)
 
-  override def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary] =
+  override def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[ClassOfBeneficiary] =
     getBeneficiaries(utr).map(_.unidentified(index))
 
-  override def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary] =
+  override def getCharityBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[CharityBeneficiary] =
     getBeneficiaries(utr).map(_.charity(index))
 
-  override def getIndividualBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary] =
+  override def getIndividualBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[IndividualBeneficiary] =
     getBeneficiaries(utr).map(_.individualDetails(index))
 
-  override def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary] =
+  override def getOtherBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[OtherBeneficiary] =
     getBeneficiaries(utr).map(_.other(index))
 
-  override def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary] =
+  override def getTrustBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[TrustBeneficiary] =
     getBeneficiaries(utr).map(_.trust(index))
 
-  override def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary] =
+  override def getCompanyBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[CompanyBeneficiary] =
     getBeneficiaries(utr).map(_.company(index))
 
-  override def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary] =
+  override def getEmploymentBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[EmploymentRelatedBeneficiary] =
     getBeneficiaries(utr).map(_.employmentRelated(index))
 
-  override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+  override def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse] =
     connector.removeBeneficiary(utr, beneficiary)
 
-  override def getIndividualNinos(identifier: String, index: Option[Int])
-                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]] = {
-    getBeneficiaries(identifier).map(_.individualDetails
-      .zipWithIndex
-      .filterNot(x => index.contains(x._2))
-      .flatMap(_._1.identification)
-      .collect {
-        case NationalInsuranceNumber(nino) => nino
-      }
+  override def getIndividualNinos(identifier: String, index: Option[Int])(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[List[String]] =
+    getBeneficiaries(identifier).map(
+      _.individualDetails.zipWithIndex
+        .filterNot(x => index.contains(x._2))
+        .flatMap(_._1.identification)
+        .collect { case NationalInsuranceNumber(nino) =>
+          nino
+        }
     )
-  }
 
 }
 
@@ -73,22 +98,49 @@ trait TrustService {
 
   def getBeneficiaries(utr: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Beneficiaries]
 
-  def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[ClassOfBeneficiary]
+  def getUnidentifiedBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[ClassOfBeneficiary]
 
-  def getCharityBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CharityBeneficiary]
+  def getCharityBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[CharityBeneficiary]
 
-  def getIndividualBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[IndividualBeneficiary]
+  def getIndividualBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[IndividualBeneficiary]
 
-  def getOtherBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[OtherBeneficiary]
+  def getOtherBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[OtherBeneficiary]
 
-  def getTrustBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[TrustBeneficiary]
+  def getTrustBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[TrustBeneficiary]
 
-  def getCompanyBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[CompanyBeneficiary]
+  def getCompanyBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[CompanyBeneficiary]
 
-  def getEmploymentBeneficiary(utr: String, index: Int)(implicit hc: HeaderCarrier, ex: ExecutionContext): Future[EmploymentRelatedBeneficiary]
+  def getEmploymentBeneficiary(utr: String, index: Int)(implicit
+    hc: HeaderCarrier,
+    ex: ExecutionContext
+  ): Future[EmploymentRelatedBeneficiary]
 
-  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
+  def removeBeneficiary(utr: String, beneficiary: RemoveBeneficiary)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse]
 
-  def getIndividualNinos(identifier: String, index: Option[Int])
-                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[List[String]]
+  def getIndividualNinos(identifier: String, index: Option[Int])(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[List[String]]
+
 }

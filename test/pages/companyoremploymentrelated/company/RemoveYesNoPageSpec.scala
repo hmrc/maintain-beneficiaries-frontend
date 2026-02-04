@@ -28,4 +28,5 @@ class RemoveYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](RemoveYesNoPage)
   }
+
 }

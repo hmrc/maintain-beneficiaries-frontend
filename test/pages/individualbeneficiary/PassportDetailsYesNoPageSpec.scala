@@ -53,4 +53,5 @@ class PassportDetailsYesNoPageSpec extends PageBehaviours {
       userAnswers.get.get(PassportDetailsPage) mustNot be(defined)
     }
   }
+
 }

@@ -28,4 +28,5 @@ class WithNameSpec extends AnyWordSpec with Matchers {
       Foo.toString mustEqual "bar"
     }
   }
+
 }

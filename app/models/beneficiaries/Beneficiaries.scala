@@ -24,29 +24,31 @@ import play.api.libs.json.{Reads, __}
 import utils.Constants.MAX
 import viewmodels.RadioOption
 
-case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
-                         unidentified: List[ClassOfBeneficiary] = Nil,
-                         company: List[CompanyBeneficiary] = Nil,
-                         employmentRelated: List[EmploymentRelatedBeneficiary] = Nil,
-                         trust: List[TrustBeneficiary] = Nil,
-                         charity: List[CharityBeneficiary] = Nil,
-                         other: List[OtherBeneficiary] = Nil) {
+case class Beneficiaries(
+  individualDetails: List[IndividualBeneficiary] = Nil,
+  unidentified: List[ClassOfBeneficiary] = Nil,
+  company: List[CompanyBeneficiary] = Nil,
+  employmentRelated: List[EmploymentRelatedBeneficiary] = Nil,
+  trust: List[TrustBeneficiary] = Nil,
+  charity: List[CharityBeneficiary] = Nil,
+  other: List[OtherBeneficiary] = Nil
+) {
 
   def isEmpty: Boolean = this match {
     case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) => true
-    case _ => false
+    case _                                                => false
   }
 
-  type BeneficiaryOption = (Int, TypeOfBeneficiaryToAdd)
+  type BeneficiaryOption  = (Int, TypeOfBeneficiaryToAdd)
   type BeneficiaryOptions = List[BeneficiaryOption]
 
   def addToHeading()(implicit mp: MessagesProvider): String =
     (individualDetails ++ unidentified ++ company ++ employmentRelated ++ trust ++ charity ++ other).size match {
       case c if c > 1 => Messages("addABeneficiary.count.heading", c)
-      case _ => Messages("addABeneficiary.heading")
+      case _          => Messages("addABeneficiary.heading")
     }
 
-  private val options: BeneficiaryOptions = {
+  private val options: BeneficiaryOptions =
     (individualDetails.size, Individual) ::
       (unidentified.size, ClassOfBeneficiaries) ::
       (charity.size, Charity) ::
@@ -55,61 +57,57 @@ case class Beneficiaries(individualDetails: List[IndividualBeneficiary] = Nil,
       (employmentRelated.size, EmploymentRelated) ::
       (other.size, Other) ::
       Nil
-  }
 
   val nonMaxedOutOptions: List[RadioOption] = {
 
     def combineOptions(uncombinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
       @scala.annotation.tailrec
-      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions = {
+      def recurse(uncombinedOptions: BeneficiaryOptions, combinedOptions: BeneficiaryOptions): BeneficiaryOptions =
         uncombinedOptions match {
-          case Nil => combinedOptions
-          case List(head, next, _*) if head._2 == Charity && next._2 == Trust =>
+          case Nil                                                                        => combinedOptions
+          case List(head, next, _*) if head._2 == Charity && next._2 == Trust             =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, CharityOrTrust)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
           case List(head, next, _*) if head._2 == Company && next._2 == EmploymentRelated =>
             val combinedOption: BeneficiaryOption = (head._1 + next._1, CompanyOrEmploymentRelated)
             recurse(uncombinedOptions.tail.tail, combinedOptions :+ combinedOption)
-          case _ =>
+          case _                                                                          =>
             recurse(uncombinedOptions.tail, combinedOptions :+ uncombinedOptions.head)
         }
-      }
 
       recurse(uncombinedOptions, Nil)
     }
 
-    combineOptions(options.filter(x => x._1 < MAX)).map {
-      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
+    combineOptions(options.filter(x => x._1 < MAX)).map { x =>
+      RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
   }
 
-  val maxedOutOptions: List[RadioOption] = {
-
-    options.filter(x => x._1 >= MAX).map {
-      x => RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
+  val maxedOutOptions: List[RadioOption] =
+    options.filter(x => x._1 >= MAX).map { x =>
+      RadioOption(TypeOfBeneficiaryToAdd.prefix, x._2.toString)
     }
-  }
 
-  def individualHasUniquePassportNumber(passportNo: String): Boolean = {
+  def individualHasUniquePassportNumber(passportNo: String): Boolean =
     individualDetails.forall {
       _.identification match {
         case Some(passport: Passport) => passport.number != passportNo
-        case _ => true
+        case _                        => true
       }
     }
-  }
 
-  def individualHasUniqueIdCardNumber(idCardNo: String): Boolean = {
+  def individualHasUniqueIdCardNumber(idCardNo: String): Boolean =
     individualDetails.forall {
       _.identification match {
         case Some(idCard: IdCard) => idCard.number != idCardNo
-        case _ => true
+        case _                    => true
       }
     }
-  }
+
 }
 
 object Beneficiaries {
+
   implicit val reads: Reads[Beneficiaries] = (
     (__ \ "beneficiary" \ "individualDetails").readWithDefault[List[IndividualBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "unidentified").readWithDefault[List[ClassOfBeneficiary]](Nil)
@@ -118,5 +116,6 @@ object Beneficiaries {
       and (__ \ "beneficiary" \ "trust").readWithDefault[List[TrustBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "charity").readWithDefault[List[CharityBeneficiary]](Nil)
       and (__ \ "beneficiary" \ "other").readWithDefault[List[OtherBeneficiary]](Nil)
-    ).apply(Beneficiaries.apply _)
+  ).apply(Beneficiaries.apply _)
+
 }

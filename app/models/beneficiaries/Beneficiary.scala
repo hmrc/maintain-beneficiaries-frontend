@@ -32,37 +32,39 @@ trait IncomeBeneficiary extends Beneficiary {
   val countryOfResidence: Option[String]
   val address: Option[Address]
 
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean =
     if (migratingFromNonTaxableToTaxable) {
       (incomeDiscretionYesNo, income) match {
-        case (None, None) => false
+        case (None, None)        => false
         case (Some(false), None) => false
-        case _ => true
+        case _                   => true
       }
     } else {
       true
     }
-  }
+
 }
 
 trait OrgBeneficiary extends IncomeBeneficiary {
   val name: String
   val utr: Option[String]
 
-  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean = {
+  override def hasRequiredData(migratingFromNonTaxableToTaxable: Boolean, trustType: Option[TypeOfTrust]): Boolean =
     if (utr.isEmpty) {
       super.hasRequiredData(migratingFromNonTaxableToTaxable, trustType)
     } else {
       true
     }
-  }
+
 }
 
 trait BeneficiaryReads {
+
   def readNullableAtSubPath[T: Reads](subPath: JsPath): Reads[Option[T]] = Reads(
     _.transform(subPath.json.pick)
       .flatMap(_.validate[T])
       .map(Some(_))
       .recoverWith(_ => JsSuccess(None))
   )
+
 }

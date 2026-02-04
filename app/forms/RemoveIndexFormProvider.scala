@@ -23,14 +23,15 @@ import play.api.data.Form
 
 trait RemoveForm {
 
-  def apply(prefix : String) : Form[Boolean]
+  def apply(prefix: String): Form[Boolean]
 
 }
 
 class RemoveIndexFormProvider @Inject() extends Mappings with RemoveForm {
 
-  override def apply(prefix : String): Form[Boolean] =
+  override def apply(prefix: String): Form[Boolean] =
     Form(
       "value" -> boolean(s"$prefix.error.required")
     )
+
 }

@@ -28,26 +28,28 @@ import scala.util.Try
 
 class EmploymentRelatedBeneficiaryExtractor extends BeneficiaryExtractor[EmploymentRelatedBeneficiary] {
 
-  override def apply(answers: UserAnswers,
-                     employmentRelatedBeneficiary: EmploymentRelatedBeneficiary,
-                     index: Int): Try[UserAnswers] = {
+  override def apply(
+    answers: UserAnswers,
+    employmentRelatedBeneficiary: EmploymentRelatedBeneficiary,
+    index: Int
+  ): Try[UserAnswers] =
 
-    super.apply(answers, employmentRelatedBeneficiary, index)
+    super
+      .apply(answers, employmentRelatedBeneficiary, index)
       .flatMap(_.set(NamePage, employmentRelatedBeneficiary.name))
       .flatMap(_.set(UtrPage, employmentRelatedBeneficiary.utr))
       .flatMap(answers => extractCountryOfResidence(employmentRelatedBeneficiary.countryOfResidence, answers))
       .flatMap(answers => extractAddress(employmentRelatedBeneficiary.address, answers))
       .flatMap(_.set(DescriptionPage, employmentRelatedBeneficiary.description))
       .flatMap(_.set(NumberOfBeneficiariesPage, employmentRelatedBeneficiary.howManyBeneficiaries))
-  }
 
-  override def countryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceYesNoPage
+  override def countryOfResidenceYesNoPage: QuestionPage[Boolean]   = CountryOfResidenceYesNoPage
   override def ukCountryOfResidenceYesNoPage: QuestionPage[Boolean] = CountryOfResidenceUkYesNoPage
-  override def countryOfResidencePage: QuestionPage[String] = CountryOfResidencePage
+  override def countryOfResidencePage: QuestionPage[String]         = CountryOfResidencePage
 
-  override def addressYesNoPage: QuestionPage[Boolean] = AddressYesNoPage
-  override def ukAddressYesNoPage: QuestionPage[Boolean] = AddressUkYesNoPage
-  override def ukAddressPage: QuestionPage[UkAddress] = UkAddressPage
+  override def addressYesNoPage: QuestionPage[Boolean]      = AddressYesNoPage
+  override def ukAddressYesNoPage: QuestionPage[Boolean]    = AddressUkYesNoPage
+  override def ukAddressPage: QuestionPage[UkAddress]       = UkAddressPage
   override def nonUkAddressPage: QuestionPage[NonUkAddress] = NonUkAddressPage
 
   override def startDatePage: QuestionPage[LocalDate] = StartDatePage

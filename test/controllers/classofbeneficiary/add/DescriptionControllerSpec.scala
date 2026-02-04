@@ -27,9 +27,9 @@ import views.html.classofbeneficiary.add.DescriptionView
 
 class DescriptionControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[String] = new DescriptionFormProvider().withPrefix("classOfBeneficiary.description", 56)
+  val form: Form[String]            = new DescriptionFormProvider().withPrefix("classOfBeneficiary.description", 56)
   lazy val descriptionRoute: String = routes.DescriptionController.onPageLoad().url
-  val description: String = "Description"
+  val description: String           = "Description"
 
   "Description Controller" must {
 
@@ -106,7 +106,7 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -140,4 +140,5 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

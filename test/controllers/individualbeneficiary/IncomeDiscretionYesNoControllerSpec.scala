@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("individualBeneficiary.incomeDiscretionYesNo")
 
   lazy val incomeDiscretionYesNoRoute: String = routes.IncomeDiscretionYesNoController.onPageLoad(NormalMode).url
@@ -44,7 +44,9 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
   val name: Name = Name("New", None, "Beneficiary")
 
   override val emptyUserAnswers: UserAnswers = super.emptyUserAnswers
-    .set(NamePage, name).success.value
+    .set(NamePage, name)
+    .success
+    .value
 
   "Individual Beneficiary DateOfBirthYesNoPage Controller" must {
 
@@ -164,4 +166,5 @@ class IncomeDiscretionYesNoControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

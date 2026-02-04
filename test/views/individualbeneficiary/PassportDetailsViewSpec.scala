@@ -29,11 +29,12 @@ import views.html.individualbeneficiary.PassportDetailsView
 class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
 
   private val messageKeyPrefix = "individualBeneficiary.passportDetails"
-  private val name: Name = Name("First", Some("Middle"), "Last")
+  private val name: Name       = Name("First", Some("Middle"), "Last")
 
   private val beneficiaries: Beneficiaries = Beneficiaries()
 
-  override val form: Form[Passport] = new PassportDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix, beneficiaries)
+  override val form: Form[Passport] =
+    new PassportDetailsFormProvider(frontendAppConfig).withPrefix(messageKeyPrefix, beneficiaries)
 
   "PassportDetails view" must {
 
@@ -62,4 +63,5 @@ class PassportDetailsViewSpec extends QuestionViewBehaviours[Passport] {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

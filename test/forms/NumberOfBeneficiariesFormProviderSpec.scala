@@ -26,13 +26,13 @@ class NumberOfBeneficiariesFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "employmentBeneficiary.numberOfBeneficiaries.error.required"
 
     behave like optionsField[HowManyBeneficiaries](
       form,
       fieldName,
-      validValues  = HowManyBeneficiaries.values,
+      validValues = HowManyBeneficiaries.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 
@@ -42,4 +42,5 @@ class NumberOfBeneficiariesFormProviderSpec extends OptionFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

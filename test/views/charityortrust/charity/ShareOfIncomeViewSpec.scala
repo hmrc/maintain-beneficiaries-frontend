@@ -27,9 +27,9 @@ import views.html.charityortrust.charity.ShareOfIncomeView
 class ShareOfIncomeViewSpec extends QuestionViewBehaviours[Int] {
 
   val messageKeyPrefix = "charityBeneficiary.shareOfIncome"
-  val name: String = "Charity"
+  val name: String     = "Charity"
 
-  val form: Form[Int] = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
+  val form: Form[Int]         = new IncomePercentageFormProvider().withPrefix(messageKeyPrefix)
   val view: ShareOfIncomeView = viewFor[ShareOfIncomeView](Some(emptyUserAnswers))
 
   "ShareOfIncome view" must {

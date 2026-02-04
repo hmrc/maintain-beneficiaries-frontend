@@ -26,20 +26,20 @@ import play.api.data.Forms.mapping
 import forms.mappings.Constraints
 import models.beneficiaries.Beneficiaries
 
-class IdCardDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings with Constraints {
+class IdCardDetailsFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings with Constraints {
   val maxLengthCountryField = 100
-  val maxLengthNumberField = 30
+  val maxLengthNumberField  = 30
 
   def withPrefix(prefix: String, beneficiaries: Beneficiaries): Form[IdCard] = Form(
     mapping(
-      "country" -> text(s"$prefix.idCardDetails.country.error.required")
+      "country"    -> text(s"$prefix.idCardDetails.country.error.required")
         .verifying(
           firstError(
             maxLength(maxLengthCountryField, s"$prefix.idCardDetails.country.error.length"),
             nonEmptyString("country", s"$prefix.idCardDetails.country.error.required")
           )
         ),
-      "number" -> text(s"$prefix.idCardDetails.number.error.required")
+      "number"     -> text(s"$prefix.idCardDetails.number.error.required")
         .verifying(
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.idCardDetails.number.error.length"),
@@ -49,20 +49,29 @@ class IdCardDetailsFormProvider @Inject()(appConfig: FrontendAppConfig) extends 
           )
         ),
       "expiryDate" -> localDate(
-        invalidKey     = s"$prefix.idCardDetails.expiryDate.error.invalid",
+        invalidKey = s"$prefix.idCardDetails.expiryDate.error.invalid",
         allRequiredKey = s"$prefix.idCardDetails.expiryDate.error.required.all",
         twoRequiredKey = s"$prefix.idCardDetails.expiryDate.error.required.two",
-        requiredKey    = s"$prefix.idCardDetails.expiryDate.error.required"
-      ).verifying(firstError(
-        maxDate(
-          appConfig.maxDate,
-          s"$prefix.idCardDetails.expiryDate.error.future", "day", "month", "year"
-        ),
-        minDate(
-          appConfig.minDate,
-          s"$prefix.idCardDetails.expiryDate.error.past", "day", "month", "year"
+        requiredKey = s"$prefix.idCardDetails.expiryDate.error.required"
+      ).verifying(
+        firstError(
+          maxDate(
+            appConfig.maxDate,
+            s"$prefix.idCardDetails.expiryDate.error.future",
+            "day",
+            "month",
+            "year"
+          ),
+          minDate(
+            appConfig.minDate,
+            s"$prefix.idCardDetails.expiryDate.error.past",
+            "day",
+            "month",
+            "year"
+          )
         )
-      ))
+      )
     )(IdCard.apply)(IdCard.unapply)
   )
+
 }

@@ -28,4 +28,5 @@ class IndexPageSpec extends PageBehaviours {
 
     beRemovable[Int](IndexPage)
   }
+
 }

@@ -32,12 +32,12 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
 
   private val index = 0
 
-  private val name = Name(firstName = "Joe", middleName = None, lastName = "Bloggs")
+  private val name        = Name(firstName = "Joe", middleName = None, lastName = "Bloggs")
   private val companyName = "Name"
   private val description = "Description"
 
   private val income = "50"
-  private val utr = "utr"
+  private val utr    = "utr"
 
   private val individualBeneficiary = IndividualBeneficiary(
     name = name,
@@ -128,8 +128,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = name.displayName,
                 typeLabel = "Named individual",
-                changeUrl = Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -148,8 +154,11 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = description,
                 typeLabel = "Class of beneficiaries",
-                changeUrl = Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(index).url),
-                removeUrl = Some(controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(index).url)
+                changeUrl =
+                  Some(controllers.classofbeneficiary.amend.routes.DescriptionController.onPageLoad(index).url),
+                removeUrl = Some(
+                  controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onPageLoad(index).url
+                )
               )
             )
           )
@@ -168,8 +177,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named company",
-                changeUrl = Some(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController
+                    .extractAndRender(index)
+                    .url
+                ),
+                removeUrl = Some(
+                  controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -188,8 +205,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Employment related",
-                changeUrl = Some(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.companyoremploymentrelated.employment.remove.routes.RemoveEmploymentBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsController
+                    .extractAndRender(index)
+                    .url
+                ),
+                removeUrl = Some(
+                  controllers.companyoremploymentrelated.employment.remove.routes.RemoveEmploymentBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -208,8 +233,12 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named trust",
-                changeUrl = Some(controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url
+                )
               )
             )
           )
@@ -228,8 +257,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named charity",
-                changeUrl = Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -270,8 +305,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = name.displayName,
                 typeLabel = "Named individual",
-                changeUrl = Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
-                removeUrl = Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRedirect(index).url
+                ),
+                removeUrl = Some(
+                  controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             ),
             complete = Nil
@@ -280,7 +321,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion and share of income not answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(vulnerableYesNo = Some(true)))),
+              beneficiaries =
+                Beneficiaries(individualDetails = List(individualBeneficiary.copy(vulnerableYesNo = Some(true)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -290,7 +332,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income not answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              beneficiaries = Beneficiaries(individualDetails =
+                List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(false)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -300,7 +344,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "vulnerable not answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
+              beneficiaries =
+                Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -310,7 +355,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "role in company not answered for employee-related trust" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))),
+              beneficiaries = Beneficiaries(individualDetails =
+                List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
               trustType = Some(EmployeeRelated)
             )
@@ -326,8 +373,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named company",
-                changeUrl = Some(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
-                removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController
+                    .extractAndRedirect(index)
+                    .url
+                ),
+                removeUrl = Some(
+                  controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             ),
             complete = Nil
@@ -346,7 +401,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income not answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              beneficiaries =
+                Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -361,8 +417,12 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named trust",
-                changeUrl = Some(controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
-                removeUrl = Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRedirect(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url
+                )
               )
             ),
             complete = Nil
@@ -396,8 +456,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named charity",
-                changeUrl = Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRedirect(index).url),
-                removeUrl = Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRedirect(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             ),
             complete = Nil
@@ -416,7 +482,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income not answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
+              beneficiaries =
+                Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -470,8 +537,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = name.displayName,
                 typeLabel = "Named individual",
-                changeUrl = Some(controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.individualbeneficiary.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.individualbeneficiary.remove.routes.RemoveIndividualBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -481,7 +554,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             "discretion true and vulnerable answered" in {
 
               val result = viewHelper.rows(
-                beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))),
+                beneficiaries = Beneficiaries(individualDetails =
+                  List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))
+                ),
                 migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
               )
 
@@ -491,7 +566,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             "discretion false and share of income and vulnerable answered" in {
 
               val result = viewHelper.rows(
-                beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))),
+                beneficiaries = Beneficiaries(individualDetails =
+                  List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true)))
+                ),
                 migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
               )
 
@@ -504,7 +581,15 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             "discretion true and vulnerable and role in company answered" in {
 
               val result = viewHelper.rows(
-                beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(true), vulnerableYesNo = Some(true), roleInCompany = Some(Director)))),
+                beneficiaries = Beneficiaries(individualDetails =
+                  List(
+                    individualBeneficiary.copy(
+                      incomeDiscretionYesNo = Some(true),
+                      vulnerableYesNo = Some(true),
+                      roleInCompany = Some(Director)
+                    )
+                  )
+                ),
                 migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
                 trustType = Some(EmployeeRelated)
               )
@@ -515,7 +600,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
             "discretion false and share of income, vulnerable and role in company answered" in {
 
               val result = viewHelper.rows(
-                beneficiaries = Beneficiaries(individualDetails = List(individualBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income), vulnerableYesNo = Some(true), roleInCompany = Some(Director)))),
+                beneficiaries = Beneficiaries(individualDetails =
+                  List(
+                    individualBeneficiary.copy(
+                      incomeDiscretionYesNo = Some(false),
+                      income = Some(income),
+                      vulnerableYesNo = Some(true),
+                      roleInCompany = Some(Director)
+                    )
+                  )
+                ),
                 migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
                 trustType = Some(EmployeeRelated)
               )
@@ -533,8 +627,16 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named company",
-                changeUrl = Some(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsController
+                    .extractAndRender(index)
+                    .url
+                ),
+                removeUrl = Some(
+                  controllers.companyoremploymentrelated.company.remove.routes.RemoveCompanyBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -542,7 +644,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion true" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
+              beneficiaries =
+                Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -552,7 +655,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(company = List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))),
+              beneficiaries = Beneficiaries(company =
+                List(companyBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -578,8 +683,12 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named trust",
-                changeUrl = Some(controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.trust.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.trust.remove.routes.RemoveTrustBeneficiaryController.onPageLoad(index).url
+                )
               )
             )
           )
@@ -597,7 +706,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(trust = List(trustBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))),
+              beneficiaries = Beneficiaries(trust =
+                List(trustBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -623,8 +734,14 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
               AddRow(
                 name = companyName,
                 typeLabel = "Named charity",
-                changeUrl = Some(controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(index).url),
-                removeUrl = Some(controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
+                changeUrl = Some(
+                  controllers.charityortrust.charity.amend.routes.CheckDetailsController.extractAndRender(index).url
+                ),
+                removeUrl = Some(
+                  controllers.charityortrust.charity.remove.routes.RemoveCharityBeneficiaryController
+                    .onPageLoad(index)
+                    .url
+                )
               )
             )
           )
@@ -632,7 +749,8 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion true" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
+              beneficiaries =
+                Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(true)))),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -642,7 +760,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(charity = List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))),
+              beneficiaries = Beneficiaries(charity =
+                List(charityBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -687,7 +807,9 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
           "discretion false and share of income answered" in {
 
             val result = viewHelper.rows(
-              beneficiaries = Beneficiaries(other = List(otherBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))),
+              beneficiaries = Beneficiaries(other =
+                List(otherBeneficiary.copy(incomeDiscretionYesNo = Some(false), income = Some(income)))
+              ),
               migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable
             )
 
@@ -697,4 +819,5 @@ class AddABeneficiaryViewHelperSpec extends SpecBase {
       }
     }
   }
+
 }

@@ -33,9 +33,9 @@ import views.html.companyoremploymentrelated.employment.NameView
 class NameControllerSpec extends SpecBase with MockitoSugar {
 
   private val form: Form[String] = new StringFormProvider().withPrefix("employmentBeneficiary.name", 105)
-  private val nameRoute: String = routes.NameController.onPageLoad(NormalMode).url
-  private val name: String = "Large"
-  private val onwardRoute = Call("GET", "/foo")
+  private val nameRoute: String  = routes.NameController.onPageLoad(NormalMode).url
+  private val name: String       = "Large"
+  private val onwardRoute        = Call("GET", "/foo")
 
   "Name Controller" must {
 
@@ -82,8 +82,11 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nameRoute)
@@ -115,7 +118,7 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -149,4 +152,5 @@ class NameControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

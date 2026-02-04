@@ -34,11 +34,11 @@ import views.html.companyoremploymentrelated.employment.NonUkAddressView
 
 class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  private val form: Form[NonUkAddress] = new NonUkAddressFormProvider()()
-  private val nonUkAddressRoute: String = routes.NonUkAddressController.onPageLoad(NormalMode).url
-  private val name: String = "Large"
-  private val onwardRoute = Call("GET", "/foo")
-  private val answer = NonUkAddress("Line 1", "Line 2", None, "DE")
+  private val form: Form[NonUkAddress]         = new NonUkAddressFormProvider()()
+  private val nonUkAddressRoute: String        = routes.NonUkAddressController.onPageLoad(NormalMode).url
+  private val name: String                     = "Large"
+  private val onwardRoute                      = Call("GET", "/foo")
+  private val answer                           = NonUkAddress("Line 1", "Line 2", None, "DE")
   private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   private val baseAnswers = emptyUserAnswers.set(NamePage, name).success.value
@@ -88,8 +88,11 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].qualifiedWith(classOf[EmploymentRelatedBeneficiary]).toInstance(new FakeNavigator(onwardRoute))
-          ).build()
+            bind[Navigator]
+              .qualifiedWith(classOf[EmploymentRelatedBeneficiary])
+              .toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
 
       val request =
         FakeRequest(POST, nonUkAddressRoute)
@@ -121,7 +124,7 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       contentAsString(result) mustEqual
         view(boundForm, NormalMode, countryOptions, name)(request, messages).toString
 
-       application.stop()
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
@@ -155,4 +158,5 @@ class NonUkAddressControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

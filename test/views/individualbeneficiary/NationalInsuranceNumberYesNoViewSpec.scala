@@ -26,9 +26,9 @@ import views.html.individualbeneficiary.NationalInsuranceNumberYesNoView
 
 class NationalInsuranceNumberYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "individualBeneficiary.nationalInsuranceNumberYesNo"
-  val name: Name = Name("First", Some("Middle"), "Last")
-  val mode: Mode = NormalMode
+  val messageKeyPrefix    = "individualBeneficiary.nationalInsuranceNumberYesNo"
+  val name: Name          = Name("First", Some("Middle"), "Last")
+  val mode: Mode          = NormalMode
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "NationalInsuranceNumberYesNo view" must {
@@ -42,8 +42,15 @@ class NationalInsuranceNumberYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(name.displayName), routes.NationalInsuranceNumberYesNoController.onSubmit(mode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      Some(name.displayName),
+      routes.NationalInsuranceNumberYesNoController.onSubmit(mode).url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

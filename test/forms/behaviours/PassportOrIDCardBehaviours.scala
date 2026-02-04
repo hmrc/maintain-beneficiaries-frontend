@@ -24,64 +24,53 @@ import play.api.data.{Form, FormError}
 
 import java.time.LocalDate
 
-trait PassportOrIDCardBehaviours extends FormSpec
-  with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
+trait PassportOrIDCardBehaviours
+    extends FormSpec with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
 
-  def passportOrIDCardDateField(form: Form[Passport], key: String): Unit = {
+  def passportOrIDCardDateField(form: Form[Passport], key: String): Unit =
 
     "bind a valid date" in {
 
       val generator = datesBetween(LocalDate.now.minusYears(90), LocalDate.now.plusYears(90))
 
-      forAll(generator -> "valid dates") {
-        date =>
+      forAll(generator -> "valid dates") { date =>
+        val data = Map(
+          s"$key.day"   -> date.getDayOfMonth.toString,
+          s"$key.month" -> date.getMonthValue.toString,
+          s"$key.year"  -> date.getYear.toString
+        )
 
-          val data = Map(
-            s"$key.day"   -> date.getDayOfMonth.toString,
-            s"$key.month" -> date.getMonthValue.toString,
-            s"$key.year"  -> date.getYear.toString
-          )
+        val result = form.bind(data).apply("expiryDate")
 
-          val result = form.bind(data).apply("expiryDate")
-
-          result.errors mustBe empty
+        result.errors mustBe empty
       }
     }
-  }
 
-  def passportNumberField(form: Form[_],
-                          fieldName: String,
-                          invalidError: FormError): Unit = {
+  def passportNumberField(form: Form[_], fieldName: String, invalidError: FormError): Unit =
 
     s"not bind strings which do not match valid passport number format " in {
       val generator = stringsWithMaxLength(30)
-      forAll(generator) {
-        string =>
-          whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
-            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors mustEqual Seq(invalidError)
-          }
+      forAll(generator) { string =>
+        whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(invalidError)
+        }
       }
     }
-  }
 
-  def cardNumberField(form: Form[_],
-                      fieldName: String,
-                      invalidError: FormError): Unit = {
+  def cardNumberField(form: Form[_], fieldName: String, invalidError: FormError): Unit =
 
     s"not bind strings which do not match valid ID card number format " in {
       val generator = stringsWithMaxLength(30)
-      forAll(generator) {
-        string =>
-          whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
-            val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors mustEqual Seq(invalidError)
-          }
+      forAll(generator) { string =>
+        whenever(!string.matches(Validation.passportOrIdCardNumberRegEx)) {
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(invalidError)
+        }
       }
     }
-  }
 
-  def mandatoryPassportOrIdDateField(form: Form[Passport], key: String, requiredAllKey: String): Unit = {
+  def mandatoryPassportOrIdDateField(form: Form[Passport], key: String, requiredAllKey: String): Unit =
 
     "fail to bind an empty date" in {
 
@@ -89,10 +78,8 @@ trait PassportOrIDCardBehaviours extends FormSpec
 
       result.errors must contain(FormError(key, requiredAllKey, List("day", "month", "year")))
     }
-  }
 
-
-  def passportOrIDCardInvalidDateField(form: Form[Passport], key: String, requiredAllKey: String): Unit = {
+  def passportOrIDCardInvalidDateField(form: Form[Passport], key: String, requiredAllKey: String): Unit =
 
     "not bind a invalid date" in {
 
@@ -106,6 +93,5 @@ trait PassportOrIDCardBehaviours extends FormSpec
 
       result.errors must contain(FormError(key, requiredAllKey, List("day", "month", "year")))
     }
-  }
 
 }

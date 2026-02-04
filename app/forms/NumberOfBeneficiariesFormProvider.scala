@@ -27,4 +27,5 @@ class NumberOfBeneficiariesFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[HowManyBeneficiaries]("employmentBeneficiary.numberOfBeneficiaries.error.required")
     )
+
 }

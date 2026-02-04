@@ -27,10 +27,10 @@ import java.time.LocalDate
 
 class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
 
-  private val name = "Large Beneficiary"
+  private val name        = "Large Beneficiary"
   private val description = "Description"
-  private val utr = "3570719187"
-  private val date = "2019-09-23"
+  private val utr         = "3570719187"
+  private val date        = "2019-09-23"
 
   "EmploymentRelatedBeneficiary" must {
 
@@ -39,8 +39,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
       "taxable" when {
 
         "with UK address" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -67,13 +66,15 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
           beneficiary mustBe EmploymentRelatedBeneficiary(
             name = name,
             utr = None,
-            address = Some(UkAddress(
-              "Suite 10",
-              "Wealthy Arena",
-              Some("Trafagar Square"),
-              Some("London"),
-              "SE2 2HB"
-            )),
+            address = Some(
+              UkAddress(
+                "Suite 10",
+                "Wealthy Arena",
+                Some("Trafagar Square"),
+                Some("London"),
+                "SE2 2HB"
+              )
+            ),
             description = Description(description, None, None, None, None),
             howManyBeneficiaries = Over1001,
             entityStart = LocalDate.parse(date),
@@ -82,8 +83,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with foreign address" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -108,12 +108,14 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
           beneficiary mustBe EmploymentRelatedBeneficiary(
             name = name,
             utr = None,
-            address = Some(NonUkAddress(
-              "123 Sesame Street",
-              "Hollywood, CA",
-              Some("314159"),
-              "US"
-            )),
+            address = Some(
+              NonUkAddress(
+                "123 Sesame Street",
+                "Hollywood, CA",
+                Some("314159"),
+                "US"
+              )
+            ),
             description = Description(description, None, None, None, None),
             howManyBeneficiaries = Over201,
             entityStart = LocalDate.parse(date),
@@ -122,8 +124,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with multiple descriptions" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -148,7 +149,13 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
             name = name,
             utr = Some(utr),
             address = None,
-            description = Description(description, Some("Description 2"), Some("Description 3"), Some("Description 4"), Some("Description 5")),
+            description = Description(
+              description,
+              Some("Description 2"),
+              Some("Description 3"),
+              Some("Description 4"),
+              Some("Description 5")
+            ),
             howManyBeneficiaries = Over101,
             entityStart = LocalDate.parse(date),
             provisional = false
@@ -156,8 +163,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with utr" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -186,8 +192,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "with no identification" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -216,8 +221,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
       "non-taxable" when {
 
         "there is no country of residence" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -244,8 +248,7 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
         }
 
         "there is a country of residence" in {
-          val json = Json.parse(
-            s"""
+          val json = Json.parse(s"""
                |{
                |  "lineNo": "260",
                |  "bpMatchStatus": "01",
@@ -274,4 +277,5 @@ class EmploymentRelatedBeneficiarySpec extends AnyWordSpec with Matchers {
       }
     }
   }
+
 }

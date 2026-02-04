@@ -39,109 +39,113 @@ import views.html.{AddABeneficiaryView, AddABeneficiaryYesNoView, MaxedOutBenefi
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddABeneficiaryController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           repository: PlaybackRepository,
-                                           trustService: TrustService,
-                                           standardActionSets: StandardActionSets,
-                                           addAnotherFormProvider: AddABeneficiaryFormProvider,
-                                           yesNoFormProvider: YesNoFormProvider,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           addAnotherView: AddABeneficiaryView,
-                                           yesNoView: AddABeneficiaryYesNoView,
-                                           completeView: MaxedOutBeneficiariesView,
-                                           val appConfig: FrontendAppConfig,
-                                           trustStoreConnector: TrustsStoreConnector,
-                                           errorHandler: ErrorHandler,
-                                           viewHelper: AddABeneficiaryViewHelper,
-                                           navigator: BeneficiaryNavigator
-                                         )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
+class AddABeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  trustService: TrustService,
+  standardActionSets: StandardActionSets,
+  addAnotherFormProvider: AddABeneficiaryFormProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  addAnotherView: AddABeneficiaryView,
+  yesNoView: AddABeneficiaryYesNoView,
+  completeView: MaxedOutBeneficiariesView,
+  val appConfig: FrontendAppConfig,
+  trustStoreConnector: TrustsStoreConnector,
+  errorHandler: ErrorHandler,
+  viewHelper: AddABeneficiaryViewHelper,
+  navigator: BeneficiaryNavigator
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
-  private val addAnotherForm : Form[AddABeneficiary] = addAnotherFormProvider()
-  private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
+  private val addAnotherForm: Form[AddABeneficiary] = addAnotherFormProvider()
+  private val yesNoForm: Form[Boolean]              = yesNoFormProvider.withPrefix("addABeneficiaryYesNo")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    (for {
+      beneficiaries  <- trustService.getBeneficiaries(request.userAnswers.identifier)
+      updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
+      _              <- repository.set(updatedAnswers)
+    } yield beneficiaries match {
+      case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
+        logger.info(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" asking user if they want to add a beneficiary, no beneficiaries in trust"
+        )
 
-      (for {
-        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.identifier)
-        updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
-        _ <- repository.set(updatedAnswers)
-      } yield {
-        beneficiaries match {
-          case Beneficiaries(Nil, Nil, Nil, Nil, Nil, Nil, Nil) =>
-            logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-              s" asking user if they want to add a beneficiary, no beneficiaries in trust")
+        Ok(yesNoView(yesNoForm))
+      case _                                                =>
 
-            Ok(yesNoView(yesNoForm))
-          case _ =>
+        val beneficiaryRows = viewHelper.rows(
+          beneficiaries = beneficiaries,
+          migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
+          trustType = updatedAnswers.trustType
+        )
 
-            val beneficiaryRows = viewHelper.rows(
-              beneficiaries = beneficiaries,
-              migratingFromNonTaxableToTaxable = migratingFromNonTaxableToTaxable,
-              trustType = updatedAnswers.trustType
+        if (beneficiaries.nonMaxedOutOptions.isEmpty) {
+          logger.info(
+            s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+              s" showing user their beneficiaries, maximum number of beneficiaries reached"
+          )
+
+          Ok(
+            completeView(
+              inProgressBeneficiaries = beneficiaryRows.inProgress,
+              completeBeneficiaries = beneficiaryRows.complete,
+              heading = beneficiaries.addToHeading(),
+              migrating = migratingFromNonTaxableToTaxable
             )
+          )
+        } else {
+          logger.info(
+            s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+              s" showing user their beneficiaries, user is not at the maximum beneficiaries"
+          )
 
-            if (beneficiaries.nonMaxedOutOptions.isEmpty) {
-              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                s" showing user their beneficiaries, maximum number of beneficiaries reached")
-
-              Ok(completeView(
-                inProgressBeneficiaries = beneficiaryRows.inProgress,
-                completeBeneficiaries = beneficiaryRows.complete,
-                heading = beneficiaries.addToHeading(),
-                migrating = migratingFromNonTaxableToTaxable
-              ))
-            } else {
-              logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                s" showing user their beneficiaries, user is not at the maximum beneficiaries")
-
-              Ok(addAnotherView(
-                form = addAnotherForm,
-                inProgressBeneficiaries = beneficiaryRows.inProgress,
-                completeBeneficiaries = beneficiaryRows.complete,
-                heading = beneficiaries.addToHeading(),
-                maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
-                migrating = migratingFromNonTaxableToTaxable
-              ))
-            }
+          Ok(
+            addAnotherView(
+              form = addAnotherForm,
+              inProgressBeneficiaries = beneficiaryRows.inProgress,
+              completeBeneficiaries = beneficiaryRows.complete,
+              heading = beneficiaries.addToHeading(),
+              maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
+              migrating = migratingFromNonTaxableToTaxable
+            )
+          )
         }
-      }) recoverWith {
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" unable to show add to page due to an error getting beneficiaries from trusts ${e.getMessage}")
+    }) recoverWith { case e =>
+      logger.error(
+        s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+          s" unable to show add to page due to an error getting beneficiaries from trusts ${e.getMessage}"
+      )
 
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+      errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
   }
 
-  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
-
-      yesNoForm.bindFromRequest().fold(
-        (formWithErrors: Form[_]) => {
-          Future.successful(BadRequest(yesNoView(formWithErrors)))
-        },
-        addNow => {
+  def submitOne(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    yesNoForm
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(yesNoView(formWithErrors))),
+        addNow =>
           if (addNow) {
 
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
-              _ <- repository.set(updatedAnswers)
+              _              <- repository.set(updatedAnswers)
             } yield Redirect(controllers.routes.AddNowController.onPageLoad())
           } else {
             submitComplete()(request)
           }
-        }
       )
   }
 
-  def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
-
-      trustService.getBeneficiaries(request.userAnswers.identifier).flatMap { beneficiaries =>
-        addAnotherForm.bindFromRequest().fold(
+  def submitAnother(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    trustService.getBeneficiaries(request.userAnswers.identifier).flatMap { beneficiaries =>
+      addAnotherForm
+        .bindFromRequest()
+        .fold(
           (formWithErrors: Form[_]) => {
 
             val rows = viewHelper.rows(
@@ -150,22 +154,24 @@ class AddABeneficiaryController @Inject()(
               trustType = request.userAnswers.trustType
             )
 
-            Future.successful(BadRequest(
-              addAnotherView(
-                formWithErrors,
-                rows.inProgress,
-                rows.complete,
-                beneficiaries.addToHeading(),
-                maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
-                migrating = migratingFromNonTaxableToTaxable
+            Future.successful(
+              BadRequest(
+                addAnotherView(
+                  formWithErrors,
+                  rows.inProgress,
+                  rows.complete,
+                  beneficiaries.addToHeading(),
+                  maxedOut = beneficiaries.maxedOutOptions.map(_.messageKey),
+                  migrating = migratingFromNonTaxableToTaxable
+                )
               )
-            ))
+            )
           },
           {
             case AddABeneficiary.YesNow =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.cleanup)
-                _ <- repository.set(updatedAnswers)
+                _              <- repository.set(updatedAnswers)
               } yield Redirect(navigator.addBeneficiaryRoute(beneficiaries))
 
             case AddABeneficiary.YesLater =>
@@ -175,31 +181,28 @@ class AddABeneficiaryController @Inject()(
               submitComplete()(request)
           }
         )
-      } recoverWith {
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}")
+    } recoverWith { case e =>
+      logger.error(
+        s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+          s" unable add a new beneficiary due to an error getting beneficiaries from trusts ${e.getMessage}"
+      )
 
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+      errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
   }
 
-  def submitComplete(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
-
-      for {
-        beneficiaries <- trustService.getBeneficiaries(request.userAnswers.identifier)
-        _ <- if (beneficiaries.isEmpty) {
-          Future.successful(())
-        } else {
-          trustStoreConnector.updateTaskStatus(request.userAnswers.identifier, Completed).map(_ => ())
-        }
-      } yield {
-        Redirect(appConfig.maintainATrustOverview)
-      }
+  def submitComplete(): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    for {
+      beneficiaries <- trustService.getBeneficiaries(request.userAnswers.identifier)
+      _             <- if (beneficiaries.isEmpty) {
+                         Future.successful(())
+                       } else {
+                         trustStoreConnector.updateTaskStatus(request.userAnswers.identifier, Completed).map(_ => ())
+                       }
+    } yield Redirect(appConfig.maintainATrustOverview)
   }
 
-  private def migratingFromNonTaxableToTaxable(implicit request: DataRequest[AnyContent]): Boolean = {
+  private def migratingFromNonTaxableToTaxable(implicit request: DataRequest[AnyContent]): Boolean =
     request.userAnswers.migratingFromNonTaxableToTaxable
-  }
+
 }

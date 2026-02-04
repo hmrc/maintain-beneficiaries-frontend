@@ -33,88 +33,92 @@ import views.html.other.remove.RemoveIndexView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveOtherBeneficiaryController @Inject()(
-                                                  override val messagesApi: MessagesApi,
-                                                  repository: PlaybackRepository,
-                                                  standardActionSets: StandardActionSets,
-                                                  trustService: TrustService,
-                                                  formProvider: RemoveIndexFormProvider,
-                                                  val controllerComponents: MessagesControllerComponents,
-                                                  view: RemoveIndexView,
-                                                  errorHandler: ErrorHandler
-                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class RemoveOtherBeneficiaryController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  standardActionSets: StandardActionSets,
+  trustService: TrustService,
+  formProvider: RemoveIndexFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveIndexView,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val messagesPrefix: String = "removeOtherBeneficiaryYesNo"
 
   private val form = formProvider.apply(messagesPrefix)
 
-  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
+  def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    trustService.getOtherBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
+      Ok(view(preparedForm, index, beneficiary.description))
+    } recoverWith {
+      case iobe: IndexOutOfBoundsException =>
+        logger.warn(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error getting other beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
+        )
 
-      trustService.getOtherBeneficiary(request.userAnswers.identifier, index).map {
-        beneficiary =>
-          Ok(view(preparedForm, index, beneficiary.description))
-      } recoverWith {
-        case iobe: IndexOutOfBoundsException =>
-          logger.warn(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting other beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException")
+        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+      case e                               =>
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error getting other beneficiary $index from trusts service ${e.getMessage}"
+        )
 
-          Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting other beneficiary $index from trusts service ${e.getMessage}")
-
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
 
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) => {
-          trustService.getOtherBeneficiary(request.userAnswers.identifier, index).map {
-            beneficiary =>
-              BadRequest(view(formWithErrors, index, beneficiary.description))
-          }
-        },
-        value => {
-
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) =>
+          trustService.getOtherBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
+            BadRequest(view(formWithErrors, index, beneficiary.description))
+          },
+        value =>
           if (value) {
 
-            trustService.getOtherBeneficiary(request.userAnswers.identifier, index).flatMap {
-              beneficiary =>
-                if (beneficiary.provisional) {
-                  trustService.removeBeneficiary(request.userAnswers.identifier, RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index)).map { _ =>
-                    logger.info(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                      s" removed new other beneficiary $index")
+            trustService.getOtherBeneficiary(request.userAnswers.identifier, index).flatMap { beneficiary =>
+              if (beneficiary.provisional) {
+                trustService
+                  .removeBeneficiary(
+                    request.userAnswers.identifier,
+                    RemoveBeneficiary(BeneficiaryType.OtherBeneficiary, index)
+                  )
+                  .map { _ =>
+                    logger.info(
+                      s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                        s" removed new other beneficiary $index"
+                    )
                     Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
                   }
-                } else {
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
-                    _ <- repository.set(updatedAnswers)
-                  } yield {
-                    Redirect(controllers.other.remove.routes.WhenRemovedController.onPageLoad(index).url)
-                  }
-                }
-            } recoverWith {
-              case e =>
-                logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing an other beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}")
+              } else {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveYesNoPage, value))
+                  _              <- repository.set(updatedAnswers)
+                } yield Redirect(controllers.other.remove.routes.WhenRemovedController.onPageLoad(index).url)
+              }
+            } recoverWith { case e =>
+              logger.error(
+                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                  s" error removing an other beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
+              )
 
-                errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))
           }
-        }
       )
   }
+
 }

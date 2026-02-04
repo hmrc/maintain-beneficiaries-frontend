@@ -33,7 +33,9 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
 
       "YES selected" in {
         val userAnswers = emptyUserAnswers
-          .set(NonUkAddressPage, NonUkAddress("Line 1", "Line 2", None, "FR")).success.value
+          .set(NonUkAddressPage, NonUkAddress("Line 1", "Line 2", None, "FR"))
+          .success
+          .value
 
         val result = userAnswers.set(AddressUkYesNoPage, true).success.value
 
@@ -43,7 +45,9 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
       "NO selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(UkAddressPage, UkAddress("Line 1", "Line 2", None, None, "AB1 1AB")).success.value
+          .set(UkAddressPage, UkAddress("Line 1", "Line 2", None, None, "AB1 1AB"))
+          .success
+          .value
 
         val result = userAnswers.set(AddressUkYesNoPage, false).success.value
 
@@ -51,4 +55,5 @@ class AddressUkYesNoPageSpec extends PageBehaviours {
       }
     }
   }
+
 }

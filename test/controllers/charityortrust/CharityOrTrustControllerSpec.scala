@@ -29,8 +29,8 @@ import views.html.charityortrust.CharityOrTrustView
 
 class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
-  val form: Form[CharityOrTrustToAdd] = new CharityOrTrustBeneficiaryTypeFormProvider()()
-  lazy val charityOrTrustRoute: String = routes.CharityOrTrustController.onPageLoad().url
+  val form: Form[CharityOrTrustToAdd]                                   = new CharityOrTrustBeneficiaryTypeFormProvider()()
+  lazy val charityOrTrustRoute: String                                  = routes.CharityOrTrustController.onPageLoad().url
   val charityOrTrustBeneficiaryAnswer: CharityOrTrustToAdd.Charity.type = CharityOrTrustToAdd.Charity
 
   "AddNow Controller" must {
@@ -86,7 +86,9 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.charityortrust.charity.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.charityortrust.charity.routes.NameController
+        .onPageLoad(NormalMode)
+        .url
 
       application.stop()
     }
@@ -103,7 +105,9 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.charityortrust.trust.routes.NameController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual controllers.charityortrust.trust.routes.NameController
+        .onPageLoad(NormalMode)
+        .url
 
       application.stop()
     }
@@ -159,4 +163,5 @@ class CharityOrTrustControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

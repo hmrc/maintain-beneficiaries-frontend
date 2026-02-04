@@ -37,28 +37,28 @@ import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDetailsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        service: TrustService,
-                                        connector: TrustConnector,
-                                        val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: CompanyBeneficiaryPrintHelper,
-                                        mapper: CompanyBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        extractor: CompanyBeneficiaryExtractor,
-                                        errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CheckDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsView,
+  service: TrustService,
+  connector: TrustConnector,
+  val appConfig: FrontendAppConfig,
+  playbackRepository: PlaybackRepository,
+  printHelper: CompanyBeneficiaryPrintHelper,
+  mapper: CompanyBeneficiaryMapper,
+  nameAction: NameRequiredAction,
+  extractor: CompanyBeneficiaryExtractor,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val provisional: Boolean = false
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result = {
+  private def render(userAnswers: UserAnswers, index: Int, name: String)(implicit
+    request: Request[AnyContent]
+  ): Result = {
     val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(Seq(section), index))
   }
@@ -67,52 +67,52 @@ class CheckDetailsController @Inject()(
 
   def extractAndRedirect(index: Int): Action[AnyContent] = extractAndDoAction(index, redirect = true)
 
-  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap {
-        company =>
-          for {
-            extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
-            _ <- playbackRepository.set(extractedAnswers)
-          } yield {
-            if (company.utr.isDefined) {
-              Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
+  private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
+    standardActionSets.verifiedForUtr.async { implicit request =>
+      service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap { company =>
+        for {
+          extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
+          _                <- playbackRepository.set(extractedAnswers)
+        } yield
+          if (company.utr.isDefined) {
+            Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
+          } else {
+            if (redirect) {
+              Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode))
             } else {
-              if (redirect) {
-                Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode))
-              } else {
-                render(extractedAnswers, index, company.name)
-              }
+              render(extractedAnswers, index, company.name)
             }
           }
-      } recoverWith {
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting company beneficiary $index ${e.getMessage}")
+      } recoverWith { case e =>
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error getting company beneficiary $index ${e.getMessage}"
+        )
 
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
-  }
+    }
 
   def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      mapper(request.userAnswers).map {
-        beneficiary =>
-          connector.amendCompanyBeneficiary(request.userAnswers.identifier, index, beneficiary).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
-      }.getOrElse {
-        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-          s" error mapping user answers to company beneficiary $index")
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    mapper(request.userAnswers)
+      .map { beneficiary =>
+        connector
+          .amendCompanyBeneficiary(request.userAnswers.identifier, index, beneficiary)
+          .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+      }
+      .getOrElse {
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error mapping user answers to company beneficiary $index"
+        )
 
         errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
+
 }

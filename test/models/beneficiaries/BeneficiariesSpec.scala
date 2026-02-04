@@ -32,7 +32,7 @@ class BeneficiariesSpec extends SpecBase {
     address = None,
     vulnerableYesNo = Some(false),
     roleInCompany = None,
-    income = None  ,
+    income = None,
     incomeDiscretionYesNo = Some(true),
     entityStart = LocalDate.parse("2019-02-03"),
     provisional = false
@@ -94,11 +94,14 @@ class BeneficiariesSpec extends SpecBase {
   )
 
   private val individualBeneficiaires: List[IndividualBeneficiary] = List.fill(25)(individualBeneficiary)
-  private val classesOfBeneficiaires: List[ClassOfBeneficiary] = List.fill(25)(classOfBeneficiaries)
-  private val charityBeneficiaires: List[CharityBeneficiary] = List.fill(25)(charityBeneficiary)
-  private val trustBeneficiaires: List[TrustBeneficiary] = List.fill(25)(trustBeneficiary)
-  private val companyBeneficiaires: List[CompanyBeneficiary] = List.fill(25)(companyBeneficiary)
-  private val employmentRelatedBeneficiaires: List[EmploymentRelatedBeneficiary] = List.fill(25)(employmentRelatedBeneficiary)
+  private val classesOfBeneficiaires: List[ClassOfBeneficiary]     = List.fill(25)(classOfBeneficiaries)
+  private val charityBeneficiaires: List[CharityBeneficiary]       = List.fill(25)(charityBeneficiary)
+  private val trustBeneficiaires: List[TrustBeneficiary]           = List.fill(25)(trustBeneficiary)
+  private val companyBeneficiaires: List[CompanyBeneficiary]       = List.fill(25)(companyBeneficiary)
+
+  private val employmentRelatedBeneficiaires: List[EmploymentRelatedBeneficiary] =
+    List.fill(25)(employmentRelatedBeneficiary)
+
   private val otherBeneficiaires: List[OtherBeneficiary] = List.fill(25)(otherBeneficiary)
 
   "Beneficiaries" must {
@@ -109,9 +112,17 @@ class BeneficiariesSpec extends SpecBase {
 
       beneficiaries.nonMaxedOutOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
-        RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
+        RadioOption(
+          "whatTypeOfBeneficiary.classOfBeneficiaries",
+          "classOfBeneficiaries",
+          "whatTypeOfBeneficiary.classOfBeneficiaries"
+        ),
         RadioOption("whatTypeOfBeneficiary.charityOrTrust", "charityOrTrust", "whatTypeOfBeneficiary.charityOrTrust"),
-        RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
+        RadioOption(
+          "whatTypeOfBeneficiary.companyOrEmploymentRelated",
+          "companyOrEmploymentRelated",
+          "whatTypeOfBeneficiary.companyOrEmploymentRelated"
+        ),
         RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
       )
 
@@ -125,9 +136,17 @@ class BeneficiariesSpec extends SpecBase {
 
       beneficiaries.nonMaxedOutOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
-        RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
+        RadioOption(
+          "whatTypeOfBeneficiary.classOfBeneficiaries",
+          "classOfBeneficiaries",
+          "whatTypeOfBeneficiary.classOfBeneficiaries"
+        ),
         RadioOption("whatTypeOfBeneficiary.trust", "trust", "whatTypeOfBeneficiary.trust"),
-        RadioOption("whatTypeOfBeneficiary.companyOrEmploymentRelated", "companyOrEmploymentRelated", "whatTypeOfBeneficiary.companyOrEmploymentRelated"),
+        RadioOption(
+          "whatTypeOfBeneficiary.companyOrEmploymentRelated",
+          "companyOrEmploymentRelated",
+          "whatTypeOfBeneficiary.companyOrEmploymentRelated"
+        ),
         RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
       )
 
@@ -153,11 +172,19 @@ class BeneficiariesSpec extends SpecBase {
 
       beneficiaries.maxedOutOptions mustBe List(
         RadioOption("whatTypeOfBeneficiary.individual", "individual", "whatTypeOfBeneficiary.individual"),
-        RadioOption("whatTypeOfBeneficiary.classOfBeneficiaries", "classOfBeneficiaries", "whatTypeOfBeneficiary.classOfBeneficiaries"),
+        RadioOption(
+          "whatTypeOfBeneficiary.classOfBeneficiaries",
+          "classOfBeneficiaries",
+          "whatTypeOfBeneficiary.classOfBeneficiaries"
+        ),
         RadioOption("whatTypeOfBeneficiary.charity", "charity", "whatTypeOfBeneficiary.charity"),
         RadioOption("whatTypeOfBeneficiary.trust", "trust", "whatTypeOfBeneficiary.trust"),
         RadioOption("whatTypeOfBeneficiary.company", "company", "whatTypeOfBeneficiary.company"),
-        RadioOption("whatTypeOfBeneficiary.employmentRelated", "employmentRelated", "whatTypeOfBeneficiary.employmentRelated"),
+        RadioOption(
+          "whatTypeOfBeneficiary.employmentRelated",
+          "employmentRelated",
+          "whatTypeOfBeneficiary.employmentRelated"
+        ),
         RadioOption("whatTypeOfBeneficiary.other", "other", "whatTypeOfBeneficiary.other")
       )
 
@@ -165,31 +192,34 @@ class BeneficiariesSpec extends SpecBase {
 
     ".individualHasUniquePassportNumber(...)" must {
       "return true when the passport number doesn't equal the other passport numbers in the list" in {
-        val passportData = Passport(countryOfIssue = "country", number = "1122", expirationDate = LocalDate.now().plusYears(2))
+        val passportData      =
+          Passport(countryOfIssue = "country", number = "1122", expirationDate = LocalDate.now().plusYears(2))
         val individualDetails = List(
           individualBeneficiary.copy(identification = Some(passportData)),
           individualBeneficiary.copy(identification = Some(passportData.copy(number = "2233")))
         )
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniquePassportNumber(passportNo = "3344") mustBe true
       }
 
       "return false when the passport number is equal to another passport number in the list" in {
-        val passportData = Passport(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
+        val passportData      =
+          Passport(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
         val individualDetails = List(
           individualBeneficiary.copy(identification = Some(passportData)),
           individualBeneficiary.copy(identification = Some(passportData.copy(number = "22222")))
         )
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniquePassportNumber(passportNo = "11111") mustBe false
       }
 
       "return true when the passport number is equal to another form of identification" in {
-        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
+        val idCardData        =
+          IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(2))
         val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniquePassportNumber(passportNo = "11111") mustBe true
       }
@@ -197,25 +227,30 @@ class BeneficiariesSpec extends SpecBase {
 
     ".individualHasUniqueIdCardNumber(...)" must {
       "return true when the ID Card number doesn't equal the other ID Card numbers in the list" in {
-        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now())
+        val idCardData        = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now())
         val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "333333") mustBe true
       }
 
       "return false when the ID Card number is equal to another ID Card number in the list" in {
-        val idCardData = IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(5))
+        val idCardData        =
+          IdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(5))
         val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "11111") mustBe false
       }
 
       "return true when the ID Card number is equal to another form of identification" in {
-        val idCardData = CombinedPassportOrIdCard(countryOfIssue = "country", number = "11111", expirationDate = LocalDate.now().plusYears(5))
+        val idCardData        = CombinedPassportOrIdCard(
+          countryOfIssue = "country",
+          number = "11111",
+          expirationDate = LocalDate.now().plusYears(5)
+        )
         val individualDetails = List(individualBeneficiary.copy(identification = Some(idCardData)))
-        val beneficiaries = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
+        val beneficiaries     = Beneficiaries(individualDetails, Nil, Nil, Nil, Nil, Nil, Nil)
 
         beneficiaries.individualHasUniqueIdCardNumber(idCardNo = "11111") mustBe true
       }

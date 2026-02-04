@@ -29,16 +29,15 @@ object CompanyOrEmploymentRelatedToAdd extends Enumerable.Implicits {
   case object EmploymentRelated extends WithName("employmentRelated") with CompanyOrEmploymentRelatedToAdd
 
   val values: List[CompanyOrEmploymentRelatedToAdd] = List(
-    Company, EmploymentRelated
+    Company,
+    EmploymentRelated
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[CompanyOrEmploymentRelatedToAdd] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
 }
-

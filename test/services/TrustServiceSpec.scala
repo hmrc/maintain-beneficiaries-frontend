@@ -36,13 +36,17 @@ import scala.concurrent.{Await, Future}
 
 class TrustServiceSpec extends AnyFreeSpec with MockitoSugar with Matchers with ScalaFutures {
 
-  private val identifier: String = "1234567890"
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  private val identifier: String    = "1234567890"
+  implicit val hc: HeaderCarrier    = HeaderCarrier()
   val mockConnector: TrustConnector = mock[TrustConnector]
-  val service = new TrustServiceImpl(mockConnector)
+  val service                       = new TrustServiceImpl(mockConnector)
 
   val individual: IndividualBeneficiary = IndividualBeneficiary(
-    name = Name(firstName = "1234567890 QwErTyUiOp ,.(/)&'- name", middleName = None, lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"),
+    name = Name(
+      firstName = "1234567890 QwErTyUiOp ,.(/)&'- name",
+      middleName = None,
+      lastName = "1234567890 QwErTyUiOp ,.(/)&'- name"
+    ),
     dateOfBirth = Some(LocalDate.parse("1983-09-24")),
     identification = None,
     address = None,
@@ -114,17 +118,19 @@ class TrustServiceSpec extends AnyFreeSpec with MockitoSugar with Matchers with 
     "get beneficiaries" in {
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(
-          Beneficiaries(
-            List(individual),
-            List(classOf),
-            List(companyBeneficiary),
-            List(employmentRelatedBeneficiary),
-            List(trustBeneficiary),
-            List(charityBeneficiary),
-            List(otherBeneficiary)
+        .thenReturn(
+          Future.successful(
+            Beneficiaries(
+              List(individual),
+              List(classOf),
+              List(companyBeneficiary),
+              List(employmentRelatedBeneficiary),
+              List(trustBeneficiary),
+              List(charityBeneficiary),
+              List(otherBeneficiary)
+            )
           )
-        ))
+        )
 
       val result = service.getBeneficiaries(identifier)
 
@@ -146,7 +152,19 @@ class TrustServiceSpec extends AnyFreeSpec with MockitoSugar with Matchers with 
       val index = 0
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.successful(Beneficiaries(List(individual), List(classOf), Nil, Nil, List(trustBeneficiary), Nil, List(otherBeneficiary))))
+        .thenReturn(
+          Future.successful(
+            Beneficiaries(
+              List(individual),
+              List(classOf),
+              Nil,
+              Nil,
+              List(trustBeneficiary),
+              Nil,
+              List(otherBeneficiary)
+            )
+          )
+        )
 
       whenReady(service.getUnidentifiedBeneficiary(identifier, index)) {
         _ mustBe classOf
@@ -171,10 +189,8 @@ class TrustServiceSpec extends AnyFreeSpec with MockitoSugar with Matchers with 
       when(mockConnector.removeBeneficiary(any(), any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
 
-      val trustee: RemoveBeneficiary = RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary,
-        index = 0,
-        endDate = LocalDate.now()
-      )
+      val trustee: RemoveBeneficiary =
+        RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index = 0, endDate = LocalDate.now())
 
       val result = service.removeBeneficiary(identifier, trustee)
 

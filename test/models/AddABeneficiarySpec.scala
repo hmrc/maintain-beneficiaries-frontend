@@ -32,10 +32,8 @@ class AddABeneficiarySpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
       val gen = Gen.oneOf(AddABeneficiary.values.toSeq)
 
-      forAll(gen) {
-        addABeneficiary =>
-
-          JsString(addABeneficiary.toString).validate[AddABeneficiary].asOpt.value mustEqual addABeneficiary
+      forAll(gen) { addABeneficiary =>
+        JsString(addABeneficiary.toString).validate[AddABeneficiary].asOpt.value mustEqual addABeneficiary
       }
     }
 
@@ -43,10 +41,8 @@ class AddABeneficiarySpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
       val gen = arbitrary[String] suchThat (!AddABeneficiary.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[AddABeneficiary] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[AddABeneficiary] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +50,10 @@ class AddABeneficiarySpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
       val gen = Gen.oneOf(AddABeneficiary.values.toSeq)
 
-      forAll(gen) {
-        addABeneficiary =>
-
-          Json.toJson(addABeneficiary) mustEqual JsString(addABeneficiary.toString)
+      forAll(gen) { addABeneficiary =>
+        Json.toJson(addABeneficiary) mustEqual JsString(addABeneficiary.toString)
       }
     }
   }
+
 }

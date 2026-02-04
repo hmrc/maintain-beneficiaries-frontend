@@ -24,10 +24,10 @@ class StringFormProviderSpec extends StringFieldBehaviours {
 
   val prefix = "classOfBeneficiary.description"
 
-  val requiredKey = s"$prefix.error.required"
-  val lengthKey = s"$prefix.error.length"
+  val requiredKey      = s"$prefix.error.required"
+  val lengthKey        = s"$prefix.error.length"
   val invalidFormatKey = s"$prefix.error.invalidFormat"
-  val maxLength = 56
+  val maxLength        = 56
 
   val form: Form[String] = new StringFormProvider().withPrefix(prefix, maxLength)
 
@@ -68,4 +68,5 @@ class StringFormProviderSpec extends StringFieldBehaviours {
       error = FormError(fieldName, invalidFormatKey, Seq(Validation.nameRegex))
     )
   }
+
 }

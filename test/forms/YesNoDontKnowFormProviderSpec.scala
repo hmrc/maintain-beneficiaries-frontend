@@ -25,7 +25,7 @@ class YesNoDontKnowFormProviderSpec extends OptionFieldBehaviours {
   val prefix = "yesNoDontKnow"
 
   val requiredKey = s"$prefix.error.required"
-  val invalidKey = s"error.invalid"
+  val invalidKey  = s"error.invalid"
 
   val form: Form[YesNoDontKnow] = new YesNoDontKnowFormProvider().withPrefix(prefix)
 
@@ -47,4 +47,5 @@ class YesNoDontKnowFormProviderSpec extends OptionFieldBehaviours {
     )
 
   }
+
 }

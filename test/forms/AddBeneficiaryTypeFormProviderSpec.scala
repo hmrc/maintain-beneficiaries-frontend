@@ -26,13 +26,13 @@ class AddBeneficiaryTypeFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "addNow.error.required"
 
     behave like optionsField[TypeOfBeneficiaryToAdd](
       form,
       fieldName,
-      validValues  = TypeOfBeneficiaryToAdd.values,
+      validValues = TypeOfBeneficiaryToAdd.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 
@@ -42,4 +42,5 @@ class AddBeneficiaryTypeFormProviderSpec extends OptionFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

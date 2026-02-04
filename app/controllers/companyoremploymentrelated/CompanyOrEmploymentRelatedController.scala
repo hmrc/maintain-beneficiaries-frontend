@@ -32,45 +32,43 @@ import views.html.companyoremploymentrelated.CompanyOrEmploymentRelatedView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CompanyOrEmploymentRelatedController @Inject()(
-                                                      override val messagesApi: MessagesApi,
-                                                      standardActionSets: StandardActionSets,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      view: CompanyOrEmploymentRelatedView,
-                                                      formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
-                                                      repository: PlaybackRepository
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CompanyOrEmploymentRelatedController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CompanyOrEmploymentRelatedView,
+  formProvider: CompanyOrEmploymentRelatedBeneficiaryTypeFormProvider,
+  repository: PlaybackRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form: Form[CompanyOrEmploymentRelatedToAdd] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForUtr { implicit request =>
+    val preparedForm = request.userAnswers.get(CompanyOrEmploymentRelatedPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(CompanyOrEmploymentRelatedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyOrEmploymentRelatedPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            value match {
-              case Company => Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
-              case EmploymentRelated => Redirect(controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode))
-            }
+            _              <- repository.set(updatedAnswers)
+          } yield value match {
+            case Company           =>
+              Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(NormalMode))
+            case EmploymentRelated =>
+              Redirect(controllers.companyoremploymentrelated.employment.routes.NameController.onPageLoad(NormalMode))
           }
       )
   }
+
 }

@@ -31,7 +31,7 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitrary[(NamePage.type, JsValue)] ::
-    Nil
+      Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 
@@ -39,13 +39,13 @@ trait UserAnswersGenerator extends TryValues {
 
     Arbitrary {
       for {
-        id <- nonEmptyString
-        utr <- nonEmptyString
+        id        <- nonEmptyString
+        utr       <- nonEmptyString
         sessionId <- nonEmptyString
-        data <- generators match {
-          case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
-          case _ => Gen.mapOf(oneOf(generators))
-        }
+        data      <- generators match {
+                       case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
+                       case _   => Gen.mapOf(oneOf(generators))
+                     }
       } yield UserAnswers(
         internalId = id,
         identifier = utr,
@@ -53,9 +53,8 @@ trait UserAnswersGenerator extends TryValues {
         newId = s"$id-$utr-$sessionId",
         whenTrustSetup = LocalDate.now(),
         trustType = Some(TypeOfTrust.WillTrustOrIntestacyTrust),
-        data = data.foldLeft(Json.obj()) {
-          case (obj, (path, value)) =>
-            obj.setObject(path.path, value).get
+        data = data.foldLeft(Json.obj()) { case (obj, (path, value)) =>
+          obj.setObject(path.path, value).get
         },
         isTaxable = true,
         isUnderlyingData5mld = false,
@@ -63,4 +62,5 @@ trait UserAnswersGenerator extends TryValues {
       )
     }
   }
+
 }

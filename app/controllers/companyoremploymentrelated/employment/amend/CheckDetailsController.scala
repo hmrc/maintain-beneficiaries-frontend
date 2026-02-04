@@ -37,74 +37,74 @@ import views.html.companyoremploymentrelated.employment.amend.CheckDetailsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDetailsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        service: TrustService,
-                                        connector: TrustConnector,
-                                        val appConfig: FrontendAppConfig,
-                                        playbackRepository: PlaybackRepository,
-                                        printHelper: EmploymentRelatedBeneficiaryPrintHelper,
-                                        mapper: EmploymentRelatedBeneficiaryMapper,
-                                        nameAction: NameRequiredAction,
-                                        extractor: EmploymentRelatedBeneficiaryExtractor,
-                                        errorHandler: ErrorHandler
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CheckDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsView,
+  service: TrustService,
+  connector: TrustConnector,
+  val appConfig: FrontendAppConfig,
+  playbackRepository: PlaybackRepository,
+  printHelper: EmploymentRelatedBeneficiaryPrintHelper,
+  mapper: EmploymentRelatedBeneficiaryMapper,
+  nameAction: NameRequiredAction,
+  extractor: EmploymentRelatedBeneficiaryExtractor,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val provisional: Boolean = false
 
-  private def render(userAnswers: UserAnswers,
-                     index: Int,
-                     name: String)
-                    (implicit request: Request[AnyContent]): Result=
-  {
+  private def render(userAnswers: UserAnswers, index: Int, name: String)(implicit
+    request: Request[AnyContent]
+  ): Result = {
     val section: AnswerSection = printHelper(userAnswers, provisional, name)
     Ok(view(Seq(section), index))
   }
 
-  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
+  def extractAndRender(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    service.getEmploymentBeneficiary(request.userAnswers.identifier, index) flatMap { employmentBeneficiary =>
+      for {
+        extractedAnswers <- Future.fromTry(extractor(request.userAnswers, employmentBeneficiary, index))
+        _                <- playbackRepository.set(extractedAnswers)
+      } yield
+        if (employmentBeneficiary.utr.isDefined) {
+          Redirect(
+            controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsUtrController.onPageLoad()
+          )
+        } else {
+          render(extractedAnswers, index, employmentBeneficiary.name)
+        }
+    } recoverWith { case e =>
+      logger.error(
+        s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+          s" error showing the user the check answers for employment beneficiary $index ${e.getMessage}"
+      )
 
-      service.getEmploymentBeneficiary(request.userAnswers.identifier, index) flatMap {
-        employmentBeneficiary =>
-          for {
-            extractedAnswers <- Future.fromTry(extractor(request.userAnswers, employmentBeneficiary, index))
-            _ <- playbackRepository.set(extractedAnswers)
-          } yield {
-            if (employmentBeneficiary.utr.isDefined) {
-              Redirect(controllers.companyoremploymentrelated.employment.amend.routes.CheckDetailsUtrController.onPageLoad())
-            } else {
-              render(extractedAnswers, index, employmentBeneficiary.name)
-            }
-          }
-      } recoverWith {
-        case e =>
-          logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the check answers for employment beneficiary $index ${e.getMessage}")
-
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+      errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
   }
 
-  def renderFromUserAnswers(index: Int) : Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
+  def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {
     implicit request =>
       render(request.userAnswers, index, request.beneficiaryName)
   }
 
-  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async {
-    implicit request =>
-
-      mapper(request.userAnswers).map {
-        beneficiary =>
-          connector.amendEmploymentRelatedBeneficiary(request.userAnswers.identifier, index, beneficiary).map(_ =>
-            Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-          )
-      }.getOrElse {
-        logger.error(s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-          s" error mapping user answers to employment beneficiary $index, isNew: $provisional")
+  def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
+    mapper(request.userAnswers)
+      .map { beneficiary =>
+        connector
+          .amendEmploymentRelatedBeneficiary(request.userAnswers.identifier, index, beneficiary)
+          .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
+      }
+      .getOrElse {
+        logger.error(
+          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+            s" error mapping user answers to employment beneficiary $index, isNew: $provisional"
+        )
         errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
   }
+
 }

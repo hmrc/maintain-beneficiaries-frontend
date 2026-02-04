@@ -26,18 +26,18 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
 
-class PassportOrIdCardDetailsController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   standardActionSets: StandardActionSets,
-                                                   nameAction: NameRequiredAction,
-                                                   val controllerComponents: MessagesControllerComponents
-                                                 ) extends FrontendBaseController with I18nSupport {
+class PassportOrIdCardDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  nameAction: NameRequiredAction,
+  val controllerComponents: MessagesControllerComponents
+) extends FrontendBaseController with I18nSupport {
 
   private def route()(implicit request: BeneficiaryNameRequest[AnyContent]) =
     request.userAnswers.get(IndexPage) match {
       case Some(index) =>
         Redirect(amend.routes.CheckDetailsController.renderFromUserAnswers(index))
-      case None =>
+      case None        =>
         Redirect(controllers.routes.SessionExpiredController.onPageLoad)
     }
 
@@ -50,4 +50,5 @@ class PassportOrIdCardDetailsController @Inject()(
     implicit request =>
       route()
   }
+
 }
