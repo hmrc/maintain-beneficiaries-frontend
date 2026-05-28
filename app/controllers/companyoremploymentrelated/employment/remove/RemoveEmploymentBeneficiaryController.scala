@@ -16,10 +16,10 @@
 
 package controllers.companyoremploymentrelated.employment.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.RemoveIndexFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.EmploymentRelatedBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.companyoremploymentrelated.employment.RemoveYesNoPage
 import play.api.Logging
@@ -29,8 +29,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.companyoremploymentrelated.employment.remove.RemoveIndexView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveEmploymentBeneficiaryController @Inject() (
@@ -41,9 +43,10 @@ class RemoveEmploymentBeneficiaryController @Inject() (
   formProvider: RemoveIndexFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveIndexView,
-  errorHandler: ErrorHandler
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val messagesPrefix: String = "removeEmploymentBeneficiaryYesNo"
 
@@ -55,24 +58,19 @@ class RemoveEmploymentBeneficiaryController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    trustService.getEmploymentBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      Ok(view(preparedForm, index, beneficiary.name))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting employment beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
+    trustService
+      .getEmploymentBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        Ok(view(preparedForm, index, beneficiary.name))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(
+          EmploymentRelatedBeneficiary,
+          index,
+          request.userAnswers.identifier,
+          "onPageLoad"
         )
-
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting employment beneficiary $index from trusts service ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+      }
 
   }
 
@@ -111,18 +109,19 @@ class RemoveEmploymentBeneficiaryController @Inject() (
                     .url
                 )
               }
-            } recoverWith { case e =>
-              logger.error(
-                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing an employment beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-              )
-
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))
           }
       )
+      .recoverWith {
+        recoverIndexAndGenericException(
+          EmploymentRelatedBeneficiary,
+          index,
+          request.userAnswers.identifier,
+          "onSubmit"
+        )
+      }
   }
 
 }

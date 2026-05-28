@@ -22,6 +22,7 @@ import controllers.actions._
 import controllers.actions.other.DescriptionRequiredAction
 import extractors.OtherBeneficiaryExtractor
 import handlers.ErrorHandler
+import models.BeneficiaryType.OtherBeneficiary
 import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.OtherBeneficiaryMapper
 import utils.print.OtherBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.other.amend.CheckDetailsView
 
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class CheckDetailsController @Inject() (
   standardActionSets: StandardActionSets,
   val controllerComponents: MessagesControllerComponents,
   view: CheckDetailsView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   service: TrustService,
   connector: TrustConnector,
   val appConfig: FrontendAppConfig,
@@ -50,9 +53,9 @@ class CheckDetailsController @Inject() (
   mapper: OtherBeneficiaryMapper,
   descriptionAction: DescriptionRequiredAction,
   extractor: OtherBeneficiaryExtractor,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val provisional: Boolean = false
 
@@ -69,25 +72,20 @@ class CheckDetailsController @Inject() (
 
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
-      service.getOtherBeneficiary(request.userAnswers.identifier, index) flatMap { other =>
-        val extractedAnswers = extractor(request.userAnswers, other, index)
-        for {
-          extractedF <- Future.fromTry(extractedAnswers)
-          _          <- playbackRepository.set(extractedF)
-        } yield
-          if (redirect) {
-            Redirect(controllers.other.routes.DescriptionController.onPageLoad(CheckMode))
-          } else {
-            render(extractedF, index, other.description)
-          }
-      } recoverWith { case e =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting other beneficiary $index ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+      (for {
+        other           <- service.getOtherBeneficiary(request.userAnswers.identifier, index)
+        extractedAnswers = extractor(request.userAnswers, other, index)
+        extractedF      <- Future.fromTry(extractedAnswers)
+        _               <- playbackRepository.set(extractedF)
+      } yield
+        if (redirect) {
+          Redirect(controllers.other.routes.DescriptionController.onPageLoad(CheckMode))
+        } else {
+          render(extractedF, index, other.description)
+        })
+        .recoverWith {
+          recoverIndexAndGenericException(OtherBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+        }
     }
 
   def renderFromUserAnswers(index: Int): Action[AnyContent] =

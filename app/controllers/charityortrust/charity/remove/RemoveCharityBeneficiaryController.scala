@@ -16,10 +16,10 @@
 
 package controllers.charityortrust.charity.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.RemoveIndexFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.CharityBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.charityortrust.charity.RemoveYesNoPage
 import play.api.Logging
@@ -29,8 +29,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.charityortrust.charity.remove.RemoveIndexView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveCharityBeneficiaryController @Inject() (
@@ -41,9 +43,10 @@ class RemoveCharityBeneficiaryController @Inject() (
   formProvider: RemoveIndexFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveIndexView,
-  errorHandler: ErrorHandler
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val messagesPrefix: String = "removeCharityBeneficiaryYesNo"
 
@@ -55,24 +58,14 @@ class RemoveCharityBeneficiaryController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    trustService.getCharityBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      Ok(view(preparedForm, index, beneficiary.name))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting charity beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
-        )
-
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting charity beneficiary $index from trusts service ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+    trustService
+      .getCharityBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        Ok(view(preparedForm, index, beneficiary.name))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(CharityBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
 
   }
 
@@ -109,18 +102,14 @@ class RemoveCharityBeneficiaryController @Inject() (
                   controllers.charityortrust.charity.remove.routes.WhenRemovedController.onPageLoad(index)
                 )
               }
-            } recoverWith { case e =>
-              logger.error(
-                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing a charity beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-              )
-
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
           }
       )
+      .recoverWith {
+        recoverIndexAndGenericException(CharityBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
   }
 
 }

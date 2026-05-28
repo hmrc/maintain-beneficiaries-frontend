@@ -22,6 +22,7 @@ import controllers.actions._
 import controllers.actions.company.NameRequiredAction
 import extractors.CompanyBeneficiaryExtractor
 import handlers.ErrorHandler
+import models.BeneficiaryType.CompanyBeneficiary
 import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.CompanyBeneficiaryMapper
 import utils.print.CompanyBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.companyoremploymentrelated.company.amend.CheckDetailsView
 
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class CheckDetailsController @Inject() (
   standardActionSets: StandardActionSets,
   val controllerComponents: MessagesControllerComponents,
   view: CheckDetailsView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   service: TrustService,
   connector: TrustConnector,
   val appConfig: FrontendAppConfig,
@@ -50,9 +53,9 @@ class CheckDetailsController @Inject() (
   mapper: CompanyBeneficiaryMapper,
   nameAction: NameRequiredAction,
   extractor: CompanyBeneficiaryExtractor,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val provisional: Boolean = false
 
@@ -70,7 +73,7 @@ class CheckDetailsController @Inject() (
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
       service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap { company =>
-        for {
+        (for {
           extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
           _                <- playbackRepository.set(extractedAnswers)
         } yield
@@ -82,14 +85,9 @@ class CheckDetailsController @Inject() (
             } else {
               render(extractedAnswers, index, company.name)
             }
-          }
-      } recoverWith { case e =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting company beneficiary $index ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+          }).recoverWith {
+          recoverIndexAndGenericException(CompanyBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+        }
       }
     }
 
