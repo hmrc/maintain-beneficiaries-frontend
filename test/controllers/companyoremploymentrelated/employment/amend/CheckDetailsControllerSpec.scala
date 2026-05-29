@@ -33,6 +33,7 @@ import services.TrustService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.EmploymentRelatedBeneficiaryPrintHelper
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.companyoremploymentrelated.employment.amend.CheckDetailsView
 
 import java.time.LocalDate
@@ -133,6 +134,34 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute
+
+      application.stop()
+    }
+
+
+    "return Not Found and the out of bounds page when getEmploymentBeneficiary throws IndexOutOfBoundsException" in {
+
+      val mockService: TrustService = mock[TrustService]
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockService)
+        )
+        .build()
+
+      when(mockService.getEmploymentBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val request = FakeRequest(GET, checkDetailsRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
 
       application.stop()
     }

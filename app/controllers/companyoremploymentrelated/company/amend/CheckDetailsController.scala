@@ -72,22 +72,21 @@ class CheckDetailsController @Inject() (
 
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
-      service.getCompanyBeneficiary(request.userAnswers.identifier, index) flatMap { company =>
-        (for {
-          extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
-          _                <- playbackRepository.set(extractedAnswers)
-        } yield
-          if (company.utr.isDefined) {
-            Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
+      (for {
+        company          <- service.getCompanyBeneficiary(request.userAnswers.identifier, index)
+        extractedAnswers <- Future.fromTry(extractor(request.userAnswers, company, index))
+        _                <- playbackRepository.set(extractedAnswers)
+      } yield
+        if (company.utr.isDefined) {
+          Redirect(controllers.companyoremploymentrelated.company.amend.routes.CheckDetailsUtrController.onPageLoad())
+        } else {
+          if (redirect) {
+            Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode))
           } else {
-            if (redirect) {
-              Redirect(controllers.companyoremploymentrelated.company.routes.NameController.onPageLoad(CheckMode))
-            } else {
-              render(extractedAnswers, index, company.name)
-            }
-          }).recoverWith {
-          recoverIndexAndGenericException(CompanyBeneficiary, index, request.userAnswers.identifier, "onSubmit")
-        }
+            render(extractedAnswers, index, company.name)
+          }
+        }).recoverWith {
+        recoverIndexAndGenericException(CompanyBeneficiary, index, request.userAnswers.identifier, "onSubmit")
       }
     }
 
@@ -111,6 +110,7 @@ class CheckDetailsController @Inject() (
 
         errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
+
   }
 
 }

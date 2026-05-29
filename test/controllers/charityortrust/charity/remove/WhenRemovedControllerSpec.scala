@@ -29,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{TrustService, TrustServiceImpl}
 import uk.gov.hmrc.http.HttpResponse
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.charityortrust.charity.remove.WhenRemovedView
 
 import java.time.{LocalDate, ZoneOffset}
@@ -168,7 +169,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "redirect to the Add Beneficiaries page when we get an IndexOutOfBoundsException" in {
+    "return Not Found and the out of bounds page when we get an IndexOutOfBoundsException" in {
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
@@ -179,9 +180,12 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
 
       val result = route(application, getRequest()).value
 
-      status(result) mustEqual SEE_OTHER
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
 
-      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(getRequest(), messages).toString
 
       application.stop()
     }
