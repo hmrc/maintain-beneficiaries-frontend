@@ -34,15 +34,23 @@ trait IndexAndGenericExceptionRecovery {
   protected def outOfBoundsView: OutOfBoundsPageNotFoundView
   private val className = this.getClass.getName
 
-  protected def recoverIndexAndGenericException(entity: BeneficiaryType, index: Int, identifier: String, callingMethod: String)
-                                               (implicit hc: HeaderCarrier, ec: ExecutionContext, request: RequestHeader): PartialFunction[Throwable, Future[Result]] = {
+  protected def recoverIndexAndGenericException(
+    entity: BeneficiaryType,
+    index: Int,
+    identifier: String,
+    callingMethod: String
+  )(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext,
+    request: RequestHeader
+  ): PartialFunction[Throwable, Future[Result]] = {
     case _: IndexOutOfBoundsException =>
       logger.warn(
         s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] " +
           s"${classNameAndMethod(callingMethod)}: no $entity at index $index, IndexOutOfBoundsException - showing page not found"
       )
       Future.successful(NotFound(outOfBoundsView()))
-    case e =>
+    case e                            =>
       logger.error(
         s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] " +
           s"${classNameAndMethod(callingMethod)}: error at index $index: ${e.getMessage}"

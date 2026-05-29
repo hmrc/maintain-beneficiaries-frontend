@@ -169,7 +169,7 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-    "return Not Found and the out of bounds page when we get an IndexOutOfBoundsException" in {
+    "return Not Found for a GET, showing the out of bounds page on an IndexOutOfBoundsException" in {
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
@@ -179,6 +179,27 @@ class WhenRemovedControllerSpec extends SpecBase with MockitoSugar {
         .build()
 
       val result = route(application, getRequest()).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(getRequest(), messages).toString
+
+      application.stop()
+    }
+
+    "return Not Found for a POST, showing the out of bounds page on an IndexOutOfBoundsException" in {
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
+
+      val result = route(application, postRequest()).value
 
       val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
 

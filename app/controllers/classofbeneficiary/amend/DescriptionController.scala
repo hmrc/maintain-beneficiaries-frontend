@@ -70,9 +70,6 @@ class DescriptionController @Inject() (
             .amendClassOfBeneficiary(request.userAnswers.identifier, index, value)
             .map(_ => Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
       )
-      .recoverWith {
-        recoverIndexAndGenericException(ClassOfBeneficiaryType, index, request.userAnswers.identifier, "onSubmit")
-      }
   }
 
 }

@@ -49,7 +49,7 @@ class RemoveCompanyBeneficiaryController @Inject() (
     extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val messagesPrefix: String = "removeCompanyBeneficiaryYesNo"
-  private val form = formProvider.apply(messagesPrefix)
+  private val form                   = formProvider.apply(messagesPrefix)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
     val preparedForm = request.userAnswers.get(RemoveYesNoPage) match {

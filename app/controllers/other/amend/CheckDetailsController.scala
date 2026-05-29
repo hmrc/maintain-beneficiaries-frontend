@@ -84,7 +84,7 @@ class CheckDetailsController @Inject() (
           render(extractedF, index, other.description)
         })
         .recoverWith {
-          recoverIndexAndGenericException(OtherBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+          recoverIndexAndGenericException(OtherBeneficiary, index, request.userAnswers.identifier, "extractAndDoAction")
         }
     }
 

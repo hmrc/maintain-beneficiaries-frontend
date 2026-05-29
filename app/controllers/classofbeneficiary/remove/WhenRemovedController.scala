@@ -46,36 +46,44 @@ class WhenRemovedController @Inject() (
     extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
-      Ok(view(form, index, beneficiary.description))
-    } recoverWith
-      recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+    trust
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
+        Ok(view(form, index, beneficiary.description))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).flatMap { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.description))),
-          value =>
-            trustService
-              .removeBeneficiary(
-                request.userAnswers.identifier,
-                RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value)
-              )
-              .map { _ =>
-                logger.info(
-                  s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                    s" removed existing class of beneficiary $index"
+    trust
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .flatMap { beneficiary =>
+        val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.description))),
+            value =>
+              trustService
+                .removeBeneficiary(
+                  request.userAnswers.identifier,
+                  RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value)
                 )
-                Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-              }
-        )
-    } recoverWith
-      recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+                .map { _ =>
+                  logger.info(
+                    s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                      s" removed existing class of beneficiary $index"
+                  )
+                  Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                }
+          )
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
 
   }
 

@@ -108,7 +108,7 @@ class RemoveIndividualBeneficiaryController @Inject() (
           }
       )
       .recoverWith {
-        recoverIndexAndGenericException(IndividualBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+        recoverIndexAndGenericException(IndividualBeneficiary, index, request.userAnswers.identifier, "onSubmit")
       }
   }
 

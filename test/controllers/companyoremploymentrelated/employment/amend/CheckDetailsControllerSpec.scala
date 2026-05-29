@@ -138,7 +138,6 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       application.stop()
     }
 
-
     "return Not Found and the out of bounds page when getEmploymentBeneficiary throws IndexOutOfBoundsException" in {
 
       val mockService: TrustService = mock[TrustService]

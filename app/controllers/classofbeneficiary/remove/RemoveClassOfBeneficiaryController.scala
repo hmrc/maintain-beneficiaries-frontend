@@ -61,10 +61,14 @@ class RemoveClassOfBeneficiaryController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
-    } recoverWith
-      recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+    trustService
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
@@ -100,13 +104,6 @@ class RemoveClassOfBeneficiaryController @Inject() (
                   controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url
                 )
               }
-            } recoverWith { case e =>
-              logger.error(
-                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing a class of beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-              )
-
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))

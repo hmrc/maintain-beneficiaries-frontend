@@ -31,7 +31,9 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.charityortrust.charity.remove.RemoveIndexView
+
 import java.time.LocalDate
 import scala.concurrent.Future
 
@@ -116,31 +118,6 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       contentAsString(result) mustEqual
         view(form.fill(true), index, beneficiaries(index).name)(request, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true)
-        .success
-        .value
-
-      when(mockConnector.getBeneficiaries(any())(any(), any()))
-        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[TrustConnector].toInstance(mockConnector))
-        .build()
-
-      val request = FakeRequest(GET, routes.RemoveCharityBeneficiaryController.onPageLoad(0).url)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
 
       application.stop()
     }
@@ -289,6 +266,59 @@ class RemoveCharityBeneficiaryControllerSpec extends SpecBase with ScalaCheckPro
 
       application.stop()
     }
+
+    "return Not Found and the out of bounds page when getCharityBeneficiary throws IndexOutOfBoundsException on a GET" in {
+
+      val index = 0
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
+
+      val request = FakeRequest(GET, routes.RemoveCharityBeneficiaryController.onPageLoad(index).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
+
+      application.stop()
+    }
+
+    "return Not Found and the out of bounds page when RemoveCharityBeneficiaryController throws IndexOutOfBoundsException on a POST" in {
+
+      val index = 0
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val request =
+        FakeRequest(POST, routes.RemoveCharityBeneficiaryController.onSubmit(index).url)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
+
+      application.stop()
+    }
+
   }
 
 }
