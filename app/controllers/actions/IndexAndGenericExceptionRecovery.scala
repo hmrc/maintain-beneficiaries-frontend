@@ -46,19 +46,20 @@ trait IndexAndGenericExceptionRecovery {
   ): PartialFunction[Throwable, Future[Result]] = {
     case _: IndexOutOfBoundsException =>
       logger.warn(
-        s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] " +
-          s"${classNameAndMethod(callingMethod)}: no $entity at index $index, IndexOutOfBoundsException - showing page not found"
+        s"${logStart(identifier, callingMethod)}: " +
+          s"no $entity at index $index, IndexOutOfBoundsException - showing page not found"
       )
+
       Future.successful(NotFound(outOfBoundsView()))
     case e                            =>
-      logger.error(
-        s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] " +
-          s"${classNameAndMethod(callingMethod)}: error at index $index: ${e.getMessage}"
-      )
+      logger.error(s"${logStart(identifier, callingMethod)}: error at index $index: ${e.getMessage}", e)
 
       errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
   }
 
   private def classNameAndMethod(method: String) = s"[$className][$method]"
+
+  private def logStart(identifier: String, callingMethod: String)(implicit hc: HeaderCarrier): String =
+    s"[Session ID: ${utils.Session.id(hc)}][UTR/URN: $identifier] ${classNameAndMethod(callingMethod)}"
 
 }
