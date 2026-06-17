@@ -32,7 +32,7 @@ class OutOfBoundsPageNotFoundViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, messageKeyPrefix, "p1", "p2")
 
-    behave like pageWithBackLink(applyView)
+    behave like pageWithoutBackLink(applyView)
 
     "display the bullet point links with the correct text and hrefs" in {
       val doc = asDocument(applyView)
