@@ -29,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustService
 import uk.gov.hmrc.http.HttpResponse
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.classofbeneficiary.amend.DescriptionView
 
 import java.time.LocalDate
@@ -153,6 +154,31 @@ class DescriptionControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
+
+      application.stop()
+    }
+
+    "return Not Found and the out of bounds page when getUnidentifiedBeneficiary throws IndexOutOfBoundsException" in {
+
+      when(mockTrustService.getUnidentifiedBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockTrustService)
+        )
+        .build()
+
+      val request = FakeRequest(GET, descriptionRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
 
       application.stop()
     }

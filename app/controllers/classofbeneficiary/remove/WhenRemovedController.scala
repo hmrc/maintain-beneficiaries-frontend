@@ -16,18 +16,20 @@
 
 package controllers.classofbeneficiary.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.DateRemovedFromTrustFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.ClassOfBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.classofbeneficiary.remove.WhenRemovedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject() (
@@ -37,62 +39,52 @@ class WhenRemovedController @Inject() (
   trust: TrustService,
   val controllerComponents: MessagesControllerComponents,
   view: WhenRemovedView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   trustService: TrustService,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
-      Ok(view(form, index, beneficiary.description))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the class of beneficiary to remove, problem getting class of beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
-        )
-
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the class of beneficiary to remove, problem getting class of beneficiary $index from trusts service ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+    trust
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
+        Ok(view(form, index, beneficiary.description))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).flatMap { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.description))),
-          value =>
-            trustService
-              .removeBeneficiary(
-                request.userAnswers.identifier,
-                RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value)
-              )
-              .map { _ =>
-                logger.info(
-                  s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                    s" removed existing class of beneficiary $index"
+    trust
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .flatMap { beneficiary =>
+        val form = formProvider.withPrefixAndEntityStartDate("classOfBeneficiary.whenRemoved", beneficiary.entityStart)
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.description))),
+            value =>
+              trustService
+                .removeBeneficiary(
+                  request.userAnswers.identifier,
+                  RemoveBeneficiary(BeneficiaryType.ClassOfBeneficiary, index, value)
                 )
-                Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-              }
-        )
-    } recoverWith { case e =>
-      logger.error(
-        s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-          s" error removing a class of beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-      )
+                .map { _ =>
+                  logger.info(
+                    s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                      s" removed existing class of beneficiary $index"
+                  )
+                  Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                }
+          )
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
 
-      errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
   }
 
 }

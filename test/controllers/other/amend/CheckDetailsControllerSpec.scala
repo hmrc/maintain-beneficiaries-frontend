@@ -36,7 +36,9 @@ import uk.gov.hmrc.http.HttpResponse
 import utils.mappers.OtherBeneficiaryMapper
 import utils.print.OtherBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.other.amend.CheckDetailsView
+
 import java.time.LocalDate
 import scala.concurrent.Future
 import scala.util.Success
@@ -191,6 +193,32 @@ class CheckDetailsControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual INTERNAL_SERVER_ERROR
       contentAsString(result) mustEqual errorHandler.internalServerErrorTemplate(request).futureValue.toString()
+
+      application.stop()
+    }
+
+    "return Not Found and the out of bounds page when getOtherBeneficiary throws IndexOutOfBoundsException" in {
+
+      when(mockService.getOtherBeneficiary(any(), any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[TrustService].toInstance(mockService),
+          bind[OtherBeneficiaryExtractor].toInstance(mockExtractor)
+        )
+        .build()
+
+      val request = FakeRequest(GET, checkDetailsRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
 
       application.stop()
     }

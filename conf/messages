@@ -1045,3 +1045,10 @@ beneficiariesMoreInformation.p5 = For beneficiaries that are a business, charity
 beneficiariesMoreInformation.b8 = if the trustees have discretion over how much income the beneficiaries get
 beneficiariesMoreInformation.b9 = what percentage of the trust’s assets the beneficiaries are entitled to
 beneficiariesMoreInformation.p6 = ‘Other’ beneficiaries refers to beneficiaries that do not fit into any of the other categories mentioned.
+
+outOfBoundsPageNotFound.title = Page not found
+outOfBoundsPageNotFound.heading = Page not found
+outOfBoundsPageNotFound.p1 = The page you are looking for cannot be found.
+outOfBoundsPageNotFound.p2 = To continue making changes to your trust you can:
+outOfBoundsPageNotFound.bullet1 = go to the trust overview
+outOfBoundsPageNotFound.bullet2 = add or change details for a beneficiary

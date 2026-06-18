@@ -16,18 +16,20 @@
 
 package controllers.companyoremploymentrelated.employment.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.DateRemovedFromTrustFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.EmploymentRelatedBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.companyoremploymentrelated.employment.remove.WhenRemovedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhenRemovedController @Inject() (
@@ -37,62 +39,61 @@ class WhenRemovedController @Inject() (
   trust: TrustService,
   val controllerComponents: MessagesControllerComponents,
   view: WhenRemovedView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   trustService: TrustService,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getEmploymentBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("employmentBeneficiary.whenRemoved", beneficiary.entityStart)
-      Ok(view(form, index, beneficiary.name))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the employment beneficiary to remove, problem getting employment beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
-        )
+    trust
+      .getEmploymentBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        val form =
+          formProvider.withPrefixAndEntityStartDate("employmentBeneficiary.whenRemoved", beneficiary.entityStart)
 
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error showing the user the employment beneficiary to remove, problem getting employment beneficiary $index from trusts service ${e.getMessage}"
+        Ok(view(form, index, beneficiary.name))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(
+          EmploymentRelatedBeneficiary,
+          index,
+          request.userAnswers.identifier,
+          "onPageLoad"
         )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trust.getEmploymentBeneficiary(request.userAnswers.identifier, index).flatMap { beneficiary =>
-      val form = formProvider.withPrefixAndEntityStartDate("employmentBeneficiary.whenRemoved", beneficiary.entityStart)
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name))),
-          value =>
-            trustService
-              .removeBeneficiary(
-                request.userAnswers.identifier,
-                RemoveBeneficiary(BeneficiaryType.EmploymentRelatedBeneficiary, index, value)
-              )
-              .map { _ =>
-                logger.info(
-                  s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                    s" removed employment other beneficiary $index"
-                )
-                Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
-              }
-        )
-    } recoverWith { case e =>
-      logger.error(
-        s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-          s" error removing an employment beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-      )
+    trust
+      .getEmploymentBeneficiary(request.userAnswers.identifier, index)
+      .flatMap { beneficiary =>
+        val form =
+          formProvider.withPrefixAndEntityStartDate("employmentBeneficiary.whenRemoved", beneficiary.entityStart)
 
-      errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, beneficiary.name))),
+            value =>
+              trustService
+                .removeBeneficiary(
+                  request.userAnswers.identifier,
+                  RemoveBeneficiary(BeneficiaryType.EmploymentRelatedBeneficiary, index, value)
+                )
+                .map { _ =>
+                  logger.info(
+                    s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
+                      s" removed employment other beneficiary $index"
+                  )
+                  Redirect(controllers.routes.AddABeneficiaryController.onPageLoad())
+                }
+          )
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(EmploymentRelatedBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
+
   }
 
 }

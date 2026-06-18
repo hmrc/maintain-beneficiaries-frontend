@@ -17,17 +17,21 @@
 package controllers.classofbeneficiary.amend
 
 import connectors.TrustConnector
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.DescriptionFormProvider
-import javax.inject.Inject
+import handlers.ErrorHandler
+import models.BeneficiaryType.{ClassOfBeneficiary => ClassOfBeneficiaryType}
 import models.beneficiaries.ClassOfBeneficiary
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.classofbeneficiary.amend.DescriptionView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DescriptionController @Inject() (
@@ -36,17 +40,24 @@ class DescriptionController @Inject() (
   formProvider: DescriptionFormProvider,
   connector: TrustConnector,
   view: DescriptionView,
-  trustService: TrustService
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
+  trustService: TrustService,
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   val form: Form[String] = formProvider.withPrefix("classOfBeneficiary.description", 56)
 
   def onPageLoad(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>
-    trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map {
-      case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
-      case _                                     => Ok(view(form, index))
-    }
+    trustService
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .map {
+        case ClassOfBeneficiary(description, _, _) => Ok(view(form.fill(description), index))
+        case _                                     => Ok(view(form, index))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiaryType, index, request.userAnswers.identifier, "onPageLoad")
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.async { implicit request =>

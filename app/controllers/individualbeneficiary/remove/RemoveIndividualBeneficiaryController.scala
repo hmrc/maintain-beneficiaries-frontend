@@ -16,10 +16,10 @@
 
 package controllers.individualbeneficiary.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.RemoveIndexFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.IndividualBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.individualbeneficiary.remove.RemoveYesNoPage
 import play.api.Logging
@@ -29,8 +29,10 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.individualbeneficiary.remove.RemoveIndexView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveIndividualBeneficiaryController @Inject() (
@@ -41,9 +43,10 @@ class RemoveIndividualBeneficiaryController @Inject() (
   formProvider: RemoveIndexFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveIndexView,
-  errorHandler: ErrorHandler
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val messagesPrefix: String = "removeIndividualBeneficiaryYesNo"
 
@@ -55,24 +58,14 @@ class RemoveIndividualBeneficiaryController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    trustService.getIndividualBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      Ok(view(preparedForm, index, beneficiary.name.displayName))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting individual beneficiary $index from trusts service  ${iobe.getMessage}: IndexOutOfBoundsException"
-        )
-
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting individual beneficiary $index from trusts service ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
+    trustService
+      .getIndividualBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        Ok(view(preparedForm, index, beneficiary.name.displayName))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(IndividualBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
 
   }
 
@@ -109,18 +102,14 @@ class RemoveIndividualBeneficiaryController @Inject() (
                   controllers.individualbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index)
                 )
               }
-            } recoverWith { case e =>
-              logger.error(
-                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing an individual beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-              )
-
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
           }
       )
+      .recoverWith {
+        recoverIndexAndGenericException(IndividualBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
   }
 
 }

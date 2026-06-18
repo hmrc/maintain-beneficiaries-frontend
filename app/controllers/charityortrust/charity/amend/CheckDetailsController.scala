@@ -22,8 +22,7 @@ import controllers.actions._
 import controllers.actions.charity.NameRequiredAction
 import extractors.CharityBeneficiaryExtractor
 import handlers.ErrorHandler
-
-import javax.inject.Inject
+import models.BeneficiaryType.CharityBeneficiary
 import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,8 +33,10 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.CharityBeneficiaryMapper
 import utils.print.CharityBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.charityortrust.charity.amend.CheckDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckDetailsController @Inject() (
@@ -43,6 +44,7 @@ class CheckDetailsController @Inject() (
   standardActionSets: StandardActionSets,
   val controllerComponents: MessagesControllerComponents,
   view: CheckDetailsView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   service: TrustService,
   connector: TrustConnector,
   val appConfig: FrontendAppConfig,
@@ -51,9 +53,9 @@ class CheckDetailsController @Inject() (
   mapper: CharityBeneficiaryMapper,
   nameAction: NameRequiredAction,
   extractor: CharityBeneficiaryExtractor,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val provisional: Boolean = false
 
@@ -70,29 +72,24 @@ class CheckDetailsController @Inject() (
 
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
-      service.getCharityBeneficiary(request.userAnswers.identifier, index) flatMap { charity =>
-        val extractedAnswers = extractor(request.userAnswers, charity, index)
-        for {
-          extractedF <- Future.fromTry(extractedAnswers)
-          _          <- playbackRepository.set(extractedF)
-        } yield
-          if (charity.utr.isDefined) {
-            Redirect(controllers.charityortrust.charity.amend.routes.CheckDetailsUtrController.onPageLoad())
+      (for {
+        charity         <- service.getCharityBeneficiary(request.userAnswers.identifier, index)
+        extractedAnswers = extractor(request.userAnswers, charity, index)
+        extractedF      <- Future.fromTry(extractedAnswers)
+        _               <- playbackRepository.set(extractedF)
+      } yield
+        if (charity.utr.isDefined) {
+          Redirect(controllers.charityortrust.charity.amend.routes.CheckDetailsUtrController.onPageLoad())
+        } else {
+          if (redirect) {
+            Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(CheckMode).url)
           } else {
-            if (redirect) {
-              Redirect(controllers.charityortrust.charity.routes.NameController.onPageLoad(CheckMode).url)
-            } else {
-              render(extractedF, index, charity.name)
-            }
+            render(extractedF, index, charity.name)
           }
-      } recoverWith { case e =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting charity beneficiary $index ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+        })
+        .recoverWith {
+          recoverIndexAndGenericException(CharityBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+        }
     }
 
   def renderFromUserAnswers(index: Int): Action[AnyContent] = standardActionSets.verifiedForUtr.andThen(nameAction) {

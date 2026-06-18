@@ -22,6 +22,7 @@ import controllers.actions._
 import controllers.actions.individual.NameRequiredAction
 import extractors.IndividualBeneficiaryExtractor
 import handlers.ErrorHandler
+import models.BeneficiaryType.IndividualBeneficiary
 import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.IndividualBeneficiaryMapper
 import utils.print.IndividualBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.individualbeneficiary.amend.CheckDetailsView
 
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class CheckDetailsController @Inject() (
   standardActionSets: StandardActionSets,
   val controllerComponents: MessagesControllerComponents,
   view: CheckDetailsView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   service: TrustService,
   connector: TrustConnector,
   val appConfig: FrontendAppConfig,
@@ -50,9 +53,9 @@ class CheckDetailsController @Inject() (
   mapper: IndividualBeneficiaryMapper,
   nameAction: NameRequiredAction,
   extractor: IndividualBeneficiaryExtractor,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val provisional = false
 
@@ -69,24 +72,23 @@ class CheckDetailsController @Inject() (
 
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
-      service.getIndividualBeneficiary(request.userAnswers.identifier, index) flatMap { individual =>
-        val extractedAnswers = extractor(request.userAnswers, individual, index)
-        for {
-          extractedF <- Future.fromTry(extractedAnswers)
-          _          <- playbackRepository.set(extractedF)
-        } yield
-          if (redirect) {
-            Redirect(controllers.individualbeneficiary.routes.NameController.onPageLoad(CheckMode))
-          } else {
-            render(extractedF, index, individual.name.displayName)
-          }
-      } recoverWith { case e =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting individual beneficiary $index ${e.getMessage}"
+      (for {
+        individual      <- service.getIndividualBeneficiary(request.userAnswers.identifier, index)
+        extractedAnswers = extractor(request.userAnswers, individual, index)
+        extractedF      <- Future.fromTry(extractedAnswers)
+        _               <- playbackRepository.set(extractedF)
+      } yield
+        if (redirect) {
+          Redirect(controllers.individualbeneficiary.routes.NameController.onPageLoad(CheckMode))
+        } else {
+          render(extractedF, index, individual.name.displayName)
+        }).recoverWith {
+        recoverIndexAndGenericException(
+          IndividualBeneficiary,
+          index,
+          request.userAnswers.identifier,
+          "extractAndDoAction"
         )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
     }
 

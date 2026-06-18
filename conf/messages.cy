@@ -902,3 +902,10 @@ beneficiariesMoreInformation.p5=Ar gyfer buddiolwyr sydd yn fusnes, elusen, ymdd
 beneficiariesMoreInformation.b8=oes gan yr ymddiriedolwyr ddisgresiwn dros faint o incwm y bydd y buddiolwyr yn ei gael
 beneficiariesMoreInformation.b9=pa ganran o asedion yr ymddiriedolaeth y mae gan y buddiolwyr hawl iddi
 beneficiariesMoreInformation.p6=Mae buddiolwyr ‘eraill’ yn cyfeirio at fuddiolwyr nad ydynt yn rhan o unrhyw un o’r categorïau eraill a nodwyd.
+
+outOfBoundsPageNotFound.title = Heb ddod o hyd i’r dudalen
+outOfBoundsPageNotFound.heading = Heb ddod o hyd i’r dudalen
+outOfBoundsPageNotFound.p1 = Ni ellir dod o hyd i’r dudalen yr ydych yn chwilio amdani.
+outOfBoundsPageNotFound.p2 = Er mwyn parhau i gofrestru ymddiriedolaeth gallwch wneud y canlynol:
+outOfBoundsPageNotFound.bullet1 = mynd i drosolwg yr ymddiriedolaeth
+outOfBoundsPageNotFound.bullet2 = ychwanegu neu newid manylion ar gyfer buddiolwr

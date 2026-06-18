@@ -32,9 +32,10 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.individualbeneficiary.remove.RemoveIndexView
-import java.time.LocalDate
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheckPropertyChecks with ScalaFutures {
@@ -123,27 +124,54 @@ class RemoveIndividualBeneficiaryControllerSpec extends SpecBase with ScalaCheck
       application.stop()
     }
 
-    "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
+    "return Not Found and the out of bounds page when getIndividualBeneficiary throws IndexOutOfBoundsException on a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true)
-        .success
-        .value
+      val index = 0
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[TrustConnector].toInstance(mockConnector))
         .build()
 
-      val request = FakeRequest(GET, routes.RemoveIndividualBeneficiaryController.onPageLoad(0).url)
+      val request = FakeRequest(GET, routes.RemoveIndividualBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
 
-      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
+
+      application.stop()
+    }
+
+    "return Not Found and the out of bounds page when RemoveIndividualBeneficiaryController throws IndexOutOfBoundsException on a POST" in {
+
+      val index = 0
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val request =
+        FakeRequest(POST, routes.RemoveIndividualBeneficiaryController.onSubmit(index).url)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
 
       application.stop()
     }

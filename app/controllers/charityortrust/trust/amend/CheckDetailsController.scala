@@ -22,6 +22,7 @@ import controllers.actions._
 import controllers.actions.trust.NameRequiredAction
 import extractors.TrustBeneficiaryExtractor
 import handlers.ErrorHandler
+import models.BeneficiaryType.TrustBeneficiary
 import models.{CheckMode, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,6 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.mappers.TrustBeneficiaryMapper
 import utils.print.TrustBeneficiaryPrintHelper
 import viewmodels.AnswerSection
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.charityortrust.trust.amend.CheckDetailsView
 
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class CheckDetailsController @Inject() (
   standardActionSets: StandardActionSets,
   val controllerComponents: MessagesControllerComponents,
   view: CheckDetailsView,
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
   service: TrustService,
   connector: TrustConnector,
   val appConfig: FrontendAppConfig,
@@ -50,9 +53,9 @@ class CheckDetailsController @Inject() (
   mapper: TrustBeneficiaryMapper,
   nameAction: NameRequiredAction,
   extractor: TrustBeneficiaryExtractor,
-  errorHandler: ErrorHandler
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private val provisional: Boolean = false
 
@@ -69,28 +72,22 @@ class CheckDetailsController @Inject() (
 
   private def extractAndDoAction(index: Int, redirect: Boolean): Action[AnyContent] =
     standardActionSets.verifiedForUtr.async { implicit request =>
-      service.getTrustBeneficiary(request.userAnswers.identifier, index) flatMap { trust =>
-        val extractedAnswers = extractor(request.userAnswers, trust, index)
-        for {
-          extractedF <- Future.fromTry(extractedAnswers)
-          _          <- playbackRepository.set(extractedF)
-        } yield
-          if (trust.utr.isDefined) {
-            Redirect(controllers.charityortrust.trust.amend.routes.CheckDetailsUtrController.onPageLoad())
+      (for {
+        trust           <- service.getTrustBeneficiary(request.userAnswers.identifier, index)
+        extractedAnswers = extractor(request.userAnswers, trust, index)
+        extractedF      <- Future.fromTry(extractedAnswers)
+        _               <- playbackRepository.set(extractedF)
+      } yield
+        if (trust.utr.isDefined) {
+          Redirect(controllers.charityortrust.trust.amend.routes.CheckDetailsUtrController.onPageLoad())
+        } else {
+          if (redirect) {
+            Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode))
           } else {
-            if (redirect) {
-              Redirect(controllers.charityortrust.trust.routes.NameController.onPageLoad(CheckMode))
-            } else {
-              render(extractedF, index, trust.name)
-            }
+            render(extractedF, index, trust.name)
           }
-      } recoverWith { case e =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting trust beneficiary $index ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+        }).recoverWith {
+        recoverIndexAndGenericException(TrustBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
       }
     }
 

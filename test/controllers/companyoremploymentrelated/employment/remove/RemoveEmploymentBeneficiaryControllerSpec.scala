@@ -32,7 +32,9 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.companyoremploymentrelated.employment.remove.RemoveIndexView
+
 import java.time.LocalDate
 import scala.concurrent.Future
 
@@ -119,27 +121,27 @@ class RemoveEmploymentBeneficiaryControllerSpec extends SpecBase with ScalaCheck
       application.stop()
     }
 
-    "redirect to the add beneficiaries page if we get an Index Not Found Exception" in {
+    "return Not Found and the out of bounds page when getEmploymentBeneficiary throws IndexOutOfBoundsException on a GET" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(RemoveYesNoPage, true)
-        .success
-        .value
+      val index = 0
 
       when(mockConnector.getBeneficiaries(any())(any(), any()))
         .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[TrustConnector].toInstance(mockConnector))
         .build()
 
-      val request = FakeRequest(GET, routes.RemoveEmploymentBeneficiaryController.onPageLoad(0).url)
+      val request = FakeRequest(GET, routes.RemoveEmploymentBeneficiaryController.onPageLoad(index).url)
 
       val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
 
-      redirectLocation(result).value mustEqual controllers.routes.AddABeneficiaryController.onPageLoad().url
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
 
       application.stop()
     }
@@ -290,6 +292,34 @@ class RemoveEmploymentBeneficiaryControllerSpec extends SpecBase with ScalaCheck
 
       application.stop()
     }
+
+    "return Not Found and the out of bounds page when RemoveEmploymentBeneficiaryController throws IndexOutOfBoundsException" in {
+
+      val index = 0
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TrustConnector].toInstance(mockConnector))
+        .build()
+
+      when(mockConnector.getBeneficiaries(any())(any(), any()))
+        .thenReturn(Future.failed(new IndexOutOfBoundsException("")))
+
+      val request =
+        FakeRequest(POST, routes.RemoveEmploymentBeneficiaryController.onSubmit(index).url)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[OutOfBoundsPageNotFoundView]
+
+      status(result) mustEqual NOT_FOUND
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
+
+      application.stop()
+    }
+
   }
 
 }

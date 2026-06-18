@@ -16,10 +16,10 @@
 
 package controllers.classofbeneficiary.remove
 
-import controllers.actions.StandardActionSets
+import controllers.actions.{IndexAndGenericExceptionRecovery, StandardActionSets}
 import forms.RemoveIndexFormProvider
 import handlers.ErrorHandler
-import javax.inject.Inject
+import models.BeneficiaryType.ClassOfBeneficiary
 import models.{BeneficiaryType, RemoveBeneficiary}
 import pages.classofbeneficiary.RemoveYesNoPage
 import play.api.Logging
@@ -29,8 +29,10 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import services.TrustService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.OutOfBoundsPageNotFoundView
 import views.html.classofbeneficiary.remove.RemoveIndexView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveClassOfBeneficiaryController @Inject() (
@@ -41,9 +43,10 @@ class RemoveClassOfBeneficiaryController @Inject() (
   formProvider: RemoveIndexFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveIndexView,
-  errorHandler: ErrorHandler
+  val outOfBoundsView: OutOfBoundsPageNotFoundView,
+  val errorHandler: ErrorHandler
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport with Logging with IndexAndGenericExceptionRecovery {
 
   private def formRoute(index: Int): Call =
     controllers.classofbeneficiary.remove.routes.RemoveClassOfBeneficiaryController.onSubmit(index)
@@ -58,25 +61,14 @@ class RemoveClassOfBeneficiaryController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    trustService.getUnidentifiedBeneficiary(request.userAnswers.identifier, index).map { beneficiary =>
-      Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
-    } recoverWith {
-      case iobe: IndexOutOfBoundsException =>
-        logger.warn(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" rror getting class of beneficiary $index from trusts service ${iobe.getMessage}: IndexOutOfBoundsException"
-        )
-
-        Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad()))
-      case e                               =>
-        logger.error(
-          s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-            s" error getting class of beneficiary $index from trusts service ${e.getMessage}"
-        )
-
-        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-    }
-
+    trustService
+      .getUnidentifiedBeneficiary(request.userAnswers.identifier, index)
+      .map { beneficiary =>
+        Ok(view(messagesPrefix, preparedForm, index, beneficiary.description, formRoute(index)))
+      }
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onPageLoad")
+      }
   }
 
   def onSubmit(index: Int): Action[AnyContent] = standardActionSets.identifiedUserWithData.async { implicit request =>
@@ -112,18 +104,14 @@ class RemoveClassOfBeneficiaryController @Inject() (
                   controllers.classofbeneficiary.remove.routes.WhenRemovedController.onPageLoad(index).url
                 )
               }
-            } recoverWith { case e =>
-              logger.error(
-                s"[Session ID: ${utils.Session.id(hc)}][UTR: ${request.userAnswers.identifier}]" +
-                  s" error removing a class of beneficiary as could not get beneficiary $index from trusts service ${e.getMessage}"
-              )
-
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
             }
           } else {
             Future.successful(Redirect(controllers.routes.AddABeneficiaryController.onPageLoad().url))
           }
       )
+      .recoverWith {
+        recoverIndexAndGenericException(ClassOfBeneficiary, index, request.userAnswers.identifier, "onSubmit")
+      }
   }
 
 }
