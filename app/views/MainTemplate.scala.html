@@ -17,6 +17,8 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import resources._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 
 @this(
     appConfig: FrontendAppConfig,
@@ -30,7 +32,9 @@
     hmrcScripts: HmrcScripts,
     stylesheets: Stylesheets,
     govukBackLink: GovukBackLink,
-    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+    autocompleteCss: HmrcAccessibleAutocompleteCss,
+    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
 )
 
 @(title: String,
@@ -57,6 +61,7 @@
 )}
 
 @stylesheets()
+@autocompleteCss()
 }
 
 @beforeContentBlock = {
@@ -85,6 +90,6 @@
         isWelshTranslationAvailable = true
     )),
     beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts()),
+    scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),
     footerBlock = Some(hmrcStandardFooter())
 )(mainContentWithGetHelp)
