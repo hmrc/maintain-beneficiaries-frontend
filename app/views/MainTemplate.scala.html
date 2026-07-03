@@ -62,8 +62,8 @@
 
 @beforeContentBlock = {
         @if(showBackLink) {
-        @govukBackLink(BackLink(
-        attributes = Map("id" -> "back-link", "data-module" -> "hmrc-back-link"), classes="js-enabled",  href = "#", content = HtmlContent(messages("site.back"))
+            @govukBackLink(BackLink(
+            attributes = Map("id" -> "back-link", "data-module" -> "hmrc-back-link"), classes="js-enabled",  href = "#", content = HtmlContent(messages("site.back"))
         ))
     }
 }
