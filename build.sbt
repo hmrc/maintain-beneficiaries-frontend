@@ -25,8 +25,7 @@ lazy val microservice = Project("maintain-beneficiaries-frontend", file("."))
       "controllers.routes._"
     ),
     PlayKeys.playDefaultPort := 9793,
-    libraryDependencies ++= AppDependencies(),
-
+    libraryDependencies ++= AppDependencies()
   )
 
 lazy val it = project

@@ -44,20 +44,19 @@
 )(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
 
 @additionalHead = {
-@if(timeoutEnabled) {
-    @hmrcTimeoutDialogHelper(
-        signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
-        keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
-        timeout = Some(appConfig.timeoutLength),
-        countdown = Some(appConfig.countdownLength),
-        title = Some(messages("timeout.title")),
-        message = Some(messages("timeout.message")),
-        keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
-)}
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+            keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+            timeout = Some(appConfig.timeoutLength),
+            countdown = Some(appConfig.countdownLength),
+            title = Some(messages("timeout.title")),
+            message = Some(messages("timeout.message")),
+            keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+    )}
 
-@stylesheets()
-@autocompleteCss()
-@autocompleteJavascript()
+    @stylesheets()
+    @autocompleteCss()
 }
 
 @beforeContentBlock = {
@@ -83,6 +82,7 @@
     ),
     templateOverrides = TemplateOverrides(
         additionalHeadBlock = Some(additionalHead),
-        beforeContentBlock = Some(beforeContentBlock)
+        beforeContentBlock = Some(beforeContentBlock),
+        additionalScriptsBlock= Some(autocompleteJavascript())
     )
 ))(mainContentWithGetHelp)
