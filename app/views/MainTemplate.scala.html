@@ -15,21 +15,16 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import resources._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
 
 @this(
     appConfig: FrontendAppConfig,
-    govukLayout: GovukLayout,
-    hmrcHead: HmrcHead,
-    hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+    hmrcStandardPage: HmrcStandardPage,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-    hmrcStandardFooter: HmrcStandardFooter,
-    hmrcStandardHeader: HmrcStandardHeader,
-    standardBetaBanner: StandardBetaBanner,
-    hmrcScripts: HmrcScripts,
     stylesheets: Stylesheets,
     govukBackLink: GovukBackLink,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
@@ -48,27 +43,26 @@
     showBackLink: Boolean = false
 )(mainContent: Html)(implicit request: RequestHeader, messages: Messages)
 
-@headScripts = {
-@if(timeoutEnabled) {
-    @hmrcTimeoutDialogHelper(
-        signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
-        keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
-        timeout = Some(appConfig.timeoutLength),
-        countdown = Some(appConfig.countdownLength),
-        title = Some(messages("timeout.title")),
-        message = Some(messages("timeout.message")),
-        keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
-)}
+@additionalHead = {
+    @if(timeoutEnabled) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = controllers.routes.SessionTimeoutController.timeout.url,
+            keepAliveUrl = Some(controllers.routes.SessionTimeoutController.keepAlive.url),
+            timeout = Some(appConfig.timeoutLength),
+            countdown = Some(appConfig.countdownLength),
+            title = Some(messages("timeout.title")),
+            message = Some(messages("timeout.message")),
+            keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
+    )}
 
-@stylesheets()
-@autocompleteCss()
+    @stylesheets()
+    @autocompleteCss()
 }
 
 @beforeContentBlock = {
-    @hmrcLanguageSelectHelper()
-    @if(showBackLink) {
-        @govukBackLink(BackLink(
-        attributes = Map("id" -> "back-link"), classes="js-enabled",  href="javascript:history.back()", content = HtmlContent(messages("site.back"))
+        @if(showBackLink) {
+            @govukBackLink(BackLink(
+            attributes = Map("id" -> "back-link", "data-module" -> "hmrc-back-link"), classes="js-enabled",  href = "#", content = HtmlContent(messages("site.back"))
         ))
     }
 }
@@ -78,18 +72,17 @@
     @hmrcReportTechnicalIssueHelper()
 }
 
-@govukLayout(
+@hmrcStandardPage(HmrcStandardPageParams(
     pageTitle = Some(breadcrumbTitle(title)),
-    headBlock = Some(hmrcHead(
-        headBlock = Some(headScripts)
-    )),
-    headerBlock = Some(hmrcStandardHeader(
+    serviceName = Some(messages("service.name")),
+    isWelshTranslationAvailable = true,
+    serviceURLs = ServiceURLs(
         serviceUrl = Some(appConfig.loginContinueUrl),
-        signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
-        phaseBanner = None,
-        isWelshTranslationAvailable = true
-    )),
-    beforeContentBlock = Some(beforeContentBlock),
-    scriptsBlock = Some(hmrcScripts(Some(autocompleteJavascript()))),
-    footerBlock = Some(hmrcStandardFooter())
-)(mainContentWithGetHelp)
+        signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None
+    ),
+    templateOverrides = TemplateOverrides(
+        additionalHeadBlock = Some(additionalHead),
+        beforeContentBlock = Some(beforeContentBlock),
+        additionalScriptsBlock= Some(autocompleteJavascript())
+    )
+))(mainContentWithGetHelp)
