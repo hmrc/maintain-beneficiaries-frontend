@@ -26,7 +26,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class FrontendAppConfig @Inject() (
-  contactFrontendConfig: ContactFrontendConfig,
   servicesConfig: ServicesConfig
 ) {
 
@@ -36,15 +35,12 @@ class FrontendAppConfig @Inject() (
 
   val appName: String = servicesConfig.getString("appName")
 
-  val betaFeedbackUrl =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
-
   lazy val maintainATrustOverview: String = servicesConfig.getString("urls.maintainATrustOverview")
 
   lazy val loginUrl: String = servicesConfig.getString("urls.login")
 
   lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
-  lazy val logoutUrl: String        = servicesConfig.getString("urls.logout")
+  lazy val logoutUrl: String        = s"${servicesConfig.getString("urls.logout")}?useServiceNavigation"
 
   lazy val logoutAudit: Boolean =
     servicesConfig.getBoolean("microservice.services.features.auditing.logout")
@@ -61,16 +57,10 @@ class FrontendAppConfig @Inject() (
   lazy val locationCanonicalList: String   = servicesConfig.getString("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = servicesConfig.getString("location.canonical.list.allCY")
 
-  lazy val languageTranslationEnabled: Boolean =
-    servicesConfig.getBoolean("microservice.services.features.welsh-translation")
-
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
     "cymraeg" -> Lang(WELSH)
   )
-
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   private def getDate(entry: String): LocalDate = {
 
