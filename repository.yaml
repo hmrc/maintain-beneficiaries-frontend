@@ -3,6 +3,7 @@ description: This service is responsible for updating the information held about
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 type: Service
 service-type: Frontend
+serviceNowMapping: SNSVC0005913
 test-repositories:
   - maintain-a-trust-performance-tests
   - trusts-acceptance-tests
