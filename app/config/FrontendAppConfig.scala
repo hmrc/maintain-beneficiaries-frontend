@@ -16,12 +16,9 @@
 
 package config
 
-import controllers.routes
 import play.api.i18n.{Lang, Messages}
-import play.api.mvc.Call
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
@@ -40,7 +37,7 @@ class FrontendAppConfig @Inject() (
   lazy val loginUrl: String = servicesConfig.getString("urls.login")
 
   lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
-  lazy val logoutUrl: String        = s"${servicesConfig.getString("urls.logout")}?useServiceNavigation"
+  lazy val logoutUrl: String        = servicesConfig.getString("urls.logout")
 
   lazy val logoutAudit: Boolean =
     servicesConfig.getBoolean("microservice.services.features.auditing.logout")
@@ -56,6 +53,11 @@ class FrontendAppConfig @Inject() (
 
   lazy val locationCanonicalList: String   = servicesConfig.getString("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = servicesConfig.getString("location.canonical.list.allCY")
+
+  lazy val basGatewayBaseUrl: String       = servicesConfig.getString("bas-gateway.host")
+  lazy val feedbackFrontendUrl: String     = s"${servicesConfig.getString("feedback-frontend.url")}?useServiceNavigation"
+  lazy val timeOutUrl: String              = servicesConfig.getString("urls.timeOut")
+  lazy val logoutWithBasGatewayUrl: String = s"$basGatewayBaseUrl$logoutUrl"
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
