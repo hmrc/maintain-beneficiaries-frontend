@@ -43,7 +43,12 @@ class SessionTimeoutController @Inject() (
     logger.info(
       s"[Session ID: ${utils.Session.id(hc)}] user remained inactive on the service, user has been signed out"
     )
-    Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad.url).withNewSession)
+    Future.successful(
+      Redirect(
+        appConfig.logoutWithBasGatewayUrl,
+        Map("continue" -> Seq(appConfig.timeOutUrl))
+      )
+    )
   }
 
 }
